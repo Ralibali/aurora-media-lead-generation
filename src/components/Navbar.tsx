@@ -6,6 +6,7 @@ const Navbar = () => {
 
   const links = [
     { label: "Tjänster", href: "#tjanster" },
+    { label: "Hur vi jobbar", href: "#process" },
     { label: "Kontakt", href: "#kontakt" },
   ];
 
@@ -13,7 +14,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <a href="#" className="font-display text-lg font-bold">
-          aurora media <span className="aurora-text">aB</span>
+          Aurora Media <span className="aurora-text">AB</span>
         </a>
 
         {/* Desktop */}

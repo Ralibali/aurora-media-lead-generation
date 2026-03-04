@@ -1,4 +1,5 @@
 import heroImage from "@/assets/hero-aurora.jpg";
+import { MapPin } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -7,7 +8,7 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroImage}
-          alt="Aurora borealis bakgrund"
+          alt="Aurora Media AB – digital byrå i Linköping"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-background/70" />
@@ -15,21 +16,25 @@ const HeroSection = () => {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center">
-        <p className="text-sm md:text-base uppercase tracking-[0.3em] text-muted-foreground mb-6 animate-fade-in-up">
-          Digital byrå i Sverige
-        </p>
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-          aurora media <span className="aurora-text">aB</span>
+        <div className="flex items-center justify-center gap-2 text-sm md:text-base text-muted-foreground mb-6 animate-fade-in-up">
+          <MapPin className="w-4 h-4 text-primary" />
+          <span className="uppercase tracking-[0.3em]">Digital byrå i Linköping</span>
+        </div>
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-8 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+          Aurora Media <span className="aurora-text">AB</span>
         </h1>
-        <p className="text-lg md:text-xl text-secondary-foreground max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-          Vi hjälper er att växa digitalt – sociala medier, SEO, webbutveckling, fotografering och marknadsföring. Allt under ett tak.
+        <p className="text-lg md:text-xl lg:text-2xl text-secondary-foreground max-w-3xl mx-auto mb-4 animate-fade-in-up leading-relaxed" style={{ animationDelay: "0.2s" }}>
+          Vi hjälper företag i Linköping och hela Sverige att synas, växa och sälja mer online.
+        </p>
+        <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: "0.25s" }}>
+          Sociala medier · SEO · Webbutveckling · Fotografering · Content · Digital annonsering – allt under ett tak, med full transparens.
         </p>
         <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
           <a
             href="#kontakt"
             className="inline-block aurora-gradient text-primary-foreground font-display font-semibold px-8 py-4 rounded-lg text-lg hover:opacity-90 transition-opacity animate-pulse-glow"
           >
-            Kontakta oss
+            Få en kostnadsfri konsultation
           </a>
         </div>
       </div>
