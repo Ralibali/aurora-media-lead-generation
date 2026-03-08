@@ -21,13 +21,14 @@ const HeroSection = () => {
           <span className="uppercase tracking-[0.3em]">Digital byrå i Linköping</span>
         </div>
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-8 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-          Aurora Media <span className="aurora-text">AB</span>
+          Webbbyrå i Linköping –{" "}
+          <span className="aurora-text">Aurora Media AB</span>
         </h1>
         <p className="text-lg md:text-xl lg:text-2xl text-secondary-foreground max-w-3xl mx-auto mb-4 animate-fade-in-up leading-relaxed" style={{ animationDelay: "0.2s" }}>
-          Vi hjälper företag i Linköping och hela Sverige att synas, växa och sälja mer online.
+          Vi hjälper företag i Linköping och hela Sverige att synas, växa och sälja mer online med webbdesign, SEO och digital marknadsföring.
         </p>
         <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: "0.25s" }}>
-          Sociala medier · SEO · Webbutveckling · Fotografering · Content · Digital annonsering – allt under ett tak, med full transparens.
+          Webbdesign · SEO · Google Ads · Sociala medier · Content · Fotografering – allt under ett tak, med full transparens.
         </p>
         <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
           <a
