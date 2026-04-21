@@ -48,6 +48,8 @@ const Footer = () => {
             <p className="label-caps text-[#cfcfc8] mb-4">Navigera</p>
             <ul className="space-y-2 text-sm">
               <li><Link to="/priser" className="text-[#cfcfc8] hover:text-white">Priser</Link></li>
+              <li><Link to="/arbete" className="text-[#cfcfc8] hover:text-white">Arbete</Link></li>
+              <li><Link to="/artiklar" className="text-[#cfcfc8] hover:text-white">Artiklar</Link></li>
               <li><Link to="/om" className="text-[#cfcfc8] hover:text-white">Om</Link></li>
               <li><Link to="/kontakt" className="text-[#cfcfc8] hover:text-white">Kontakt</Link></li>
               <li><Link to="/webbbyra-linkoping" className="text-[#cfcfc8] hover:text-white">Webbyrå Linköping</Link></li>
