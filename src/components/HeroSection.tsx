@@ -92,7 +92,7 @@ const HeroSection = () => {
               <span className="ml-3 font-mono text-xs text-[#7a857f]">~/aurora-media — bash</span>
             </div>
             <pre className="px-5 py-4 font-mono text-[13px] leading-6 min-h-[180px]">
-              {shown.map((l, i) => (
+              {shown.filter(Boolean).map((l, i) => (
                 <div key={i} className={l.startsWith("$") ? "text-[#ededea]" : "text-[#7fd3a8]"}>
                   {l}
                   {i === shown.length - 1 && typing ? <span className="terminal-cursor" /> : null}
