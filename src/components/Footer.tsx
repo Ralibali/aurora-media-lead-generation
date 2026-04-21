@@ -26,7 +26,7 @@ const Footer = () => {
   return (
     <footer className="bg-[#1a3d2e] text-[#ededea]">
       <div className="container mx-auto px-6 py-16">
-        <div className="grid gap-12 md:grid-cols-3">
+        <div className="grid gap-12 md:grid-cols-4">
           <div>
             <p className="font-serif text-2xl mb-4">Aurora Media AB</p>
             <p className="text-sm text-[#cfcfc8] leading-relaxed">
@@ -65,6 +65,22 @@ const Footer = () => {
               <li><Link to="/om" className="text-[#cfcfc8] hover:text-white">Om</Link></li>
               <li><Link to="/kontakt" className="text-[#cfcfc8] hover:text-white">Kontakt</Link></li>
               <li><Link to="/webbbyra-linkoping" className="text-[#cfcfc8] hover:text-white">Webbyrå Linköping</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="label-caps text-[#cfcfc8] mb-4">SaaS-utveckling i</p>
+            <ul className="space-y-2 text-sm">
+              {cityLinks.map((c) => (
+                <li key={c.slug}>
+                  <Link
+                    to={`/saas-utveckling-${c.slug}`}
+                    className="text-[#cfcfc8] hover:text-white transition-colors"
+                  >
+                    {c.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
