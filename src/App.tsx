@@ -12,6 +12,7 @@ import Kontakt from "./pages/Kontakt";
 import WebbyraLinkoping from "./pages/WebbyraLinkoping";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import CityPage from "./pages/CityPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/webbbyra-linkoping" element={<WebbyraLinkoping />} />
             <Route path="/artiklar" element={<Blog />} />
             <Route path="/artiklar/:slug" element={<BlogPost />} />
+            <Route path="/saas-utveckling-:slug" element={<CityPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
