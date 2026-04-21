@@ -14,8 +14,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Space Grotesk"', 'sans-serif'],
-        body: ['"Inter"', 'sans-serif'],
+        serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+        sans: ['Geist', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        display: ['"Instrument Serif"', 'Georgia', 'serif'],
+        body: ['Geist', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -50,11 +53,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        aurora: {
-          glow: "hsl(var(--aurora-glow))",
-          teal: "hsl(var(--aurora-teal))",
-          green: "hsl(var(--aurora-green))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
