@@ -1,0 +1,46 @@
+# Aurora Media AB
+
+> Aurora Media AB bygger SaaS-produkter och interna verktyg åt svenska företag med AI-kodningsverktyg som Lovable, Bolt.new, Emergent och Claude. Baserad i Linköping, Sverige. Levererar på veckor istället för månader. Fast pris från 14 900 kr.
+
+## Tjänster
+- [Prototyp 14 900 kr](https://auroramedia.se/priser): Klickbar MVP på 3-5 dagar
+- [MVP 34 900 kr](https://auroramedia.se/priser): Lanseringsklar SaaS på 2 veckor
+- [Skalbar SaaS 69 000 kr](https://auroramedia.se/priser): Full produkt på 4 veckor
+- [Skräddarsytt från 89 000 kr](https://auroramedia.se/priser): Komplexa projekt
+- [Löpande underhåll 1 990 kr/mån](https://auroramedia.se/priser)
+
+## Verktygsstack
+- Lovable (primärt verktyg för SaaS/MVP)
+- Bolt.new (prototyper)
+- Emergent (komplex arkitektur)
+- Cursor + Claude (custom kod)
+- Supabase (databas/auth/storage)
+- Stripe (betalningar)
+- Fortnox API (svensk bokföring)
+
+## Portfölj (allt byggt av Aurora Media)
+- [Aurora Transport](https://auroratransport.se) – Dispatching-SaaS för transport
+- [Updro](https://updro.se) – Marknadsplats för digitala byråer
+- [AgilityManager](https://agilitymanager.se) – App för svenska agility-förare
+- [Hönsgården](https://honsgarden.se) – Freemium för hönsägare
+- [Odlingsdagboken](https://odlingsdagboken.com) – Odlings-SaaS med AI
+- [GoGlamping Sweden](https://goglampingsweden.se) – Glamping-bokning
+- [Viriditas](https://viriditasmassage.se) – Massagebokning
+
+## Artiklar
+- [Bygga SaaS med AI 2026](https://auroramedia.se/artiklar/bygga-saas-med-ai-2026)
+- [Lovable vs Bolt vs Emergent](https://auroramedia.se/artiklar/lovable-eller-bolt-eller-emergent)
+- [Vad kostar SaaS-utveckling 2026](https://auroramedia.se/artiklar/vad-kostar-saas-utveckling-2026)
+- [Bygga SaaS på 2 veckor](https://auroramedia.se/artiklar/bygga-saas-pa-2-veckor)
+- [AI-kodning i Sverige 2026](https://auroramedia.se/artiklar/ai-kodning-sverige-2026)
+- [SaaS-utvecklare i Linköping](https://auroramedia.se/artiklar/saas-utvecklare-linkoping)
+- [MVP-utveckling för startups](https://auroramedia.se/artiklar/mvp-utveckling-for-startup)
+- [Ersätt Excel med intern app](https://auroramedia.se/artiklar/intern-app-istallet-for-excel)
+- [Bygga SaaS utan utvecklare](https://auroramedia.se/artiklar/saas-for-startup-utan-utvecklare)
+- [Supabase vs Firebase 2026](https://auroramedia.se/artiklar/supabase-eller-firebase-2026)
+- [Fortnox-integration i SaaS](https://auroramedia.se/artiklar/fortnox-integration-saas)
+- [Webbyrå vs AI-byggare](https://auroramedia.se/artiklar/traditionell-webbyra-vs-ai-byggare)
+
+## Kontakt
+info@auroramedia.se – svarar inom 24h vardagar
+Aurora Media AB · Org.nr 559272-0220 · Linköping
