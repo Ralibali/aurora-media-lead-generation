@@ -30,7 +30,8 @@ const HeroSection = () => {
     setTyping(true);
     const interval = setInterval(() => {
       if (lineIdx < current.length) {
-        setShown((prev) => [...prev, current[lineIdx]]);
+        const line = current[lineIdx];
+        setShown((prev) => [...prev, line]);
         lineIdx++;
       } else {
         clearInterval(interval);
