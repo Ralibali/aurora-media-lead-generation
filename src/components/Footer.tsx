@@ -10,6 +10,18 @@ const portfolio = [
   { name: "Viriditas", url: "https://viriditasmassage.se" },
 ];
 
+const cityLinks = [
+  { name: "Linköping", slug: "linkoping" },
+  { name: "Stockholm", slug: "stockholm" },
+  { name: "Göteborg", slug: "goteborg" },
+  { name: "Malmö", slug: "malmo" },
+  { name: "Uppsala", slug: "uppsala" },
+  { name: "Norrköping", slug: "norrkoping" },
+  { name: "Jönköping", slug: "jonkoping" },
+  { name: "Västerås", slug: "vasteras" },
+  { name: "Örebro", slug: "orebro" },
+];
+
 const Footer = () => {
   return (
     <footer className="bg-[#1a3d2e] text-[#ededea]">
