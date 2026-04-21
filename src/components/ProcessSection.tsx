@@ -1,60 +1,45 @@
-import { ArrowRight, Lightbulb, Rocket, BarChart3, RefreshCw } from "lucide-react";
-
 const steps = [
   {
-    icon: Lightbulb,
-    number: "01",
-    title: "Analys & Strategi",
-    description: "Vi börjar med att förstå ert företag, era mål och er målgrupp. Genom en grundlig analys av er nuvarande digitala närvaro identifierar vi möjligheter och skapar en skräddarsydd strategi.",
+    when: "Dag 1",
+    title: "Första samtalet",
+    body: "Du beskriver problemet via mejl eller video-call. Jag säger rakt om det är byggbart, vilket paket som passar och exakt tidsplan. 20–30 min.",
   },
   {
-    icon: Rocket,
-    number: "02",
-    title: "Genomförande",
-    description: "Vi sätter strategin i verket – oavsett om det handlar om att bygga en ny hemsida, lansera annonskampanjer eller skapa innehåll. Vi håller er uppdaterade hela vägen.",
+    when: "Dag 3",
+    title: "Klickbar prototyp",
+    body: "Du loggar in och testar. Inte en Figma-mockup – en verklig app med din data. Din feedback formar resten av bygget.",
   },
   {
-    icon: BarChart3,
-    number: "03",
-    title: "Mätning & Optimering",
-    description: "Vi följer upp resultaten noggrant med analysverktyg. Vad fungerar? Vad kan bli bättre? Vi optimerar löpande för att maximera er avkastning.",
+    when: "Dag 7–14",
+    title: "Produktion",
+    body: "Jag bygger ut funktionalitet, kopplar betalningar, sätter upp domän, dashboards, allt. Du får uppdateringar två gånger i veckan.",
   },
   {
-    icon: RefreshCw,
-    number: "04",
-    title: "Löpande Utveckling",
-    description: "Digital marknadsföring är ingen engångsinsats. Vi jobbar kontinuerligt med att utveckla och förbättra er närvaro för långsiktig tillväxt.",
+    when: "Leveransdagen",
+    title: "Du tar över",
+    body: "Full överlämning. Källkod. Dokumentation. Support ingår 2–4 veckor. Sedan är produkten helt din.",
   },
 ];
 
 const ProcessSection = () => {
   return (
-    <section id="process" className="py-24 md:py-32 bg-card/50 scroll-mt-16">
+    <section className="border-t border-border py-24 md:py-32">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <p className="text-sm uppercase tracking-[0.3em] text-primary mb-4">Hur vi jobbar</p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Från idé till resultat</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Vi tror på ett strukturerat arbetssätt med tydliga steg – så att ni alltid vet vad som händer och varför.
-          </p>
+        <div className="max-w-2xl">
+          <p className="label-caps">Process</p>
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl">Så går det till</h2>
+          <p className="mt-5 text-lg text-muted-foreground">Fyra steg. Inga överraskningar.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, i) => (
-            <div key={step.number} className="relative">
-              <div className="p-8 rounded-xl bg-card aurora-border h-full">
-                <span className="text-4xl font-display font-bold aurora-text opacity-50">{step.number}</span>
-                <div className="w-10 h-10 rounded-lg aurora-gradient flex items-center justify-center my-4">
-                  <step.icon className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <h3 className="text-lg font-display font-semibold mb-3">{step.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{step.description}</p>
+        <div className="mt-14 grid gap-10 md:grid-cols-4">
+          {steps.map((s, i) => (
+            <div key={s.title}>
+              <div className="mb-4 flex items-center gap-3">
+                <span className="font-serif text-3xl text-primary">0{i + 1}</span>
+                <span className="label-caps">{s.when}</span>
               </div>
-              {i < steps.length - 1 && (
-                <div className="hidden lg:flex absolute top-1/2 -right-4 -translate-y-1/2 z-10">
-                  <ArrowRight className="w-6 h-6 text-primary/40" />
-                </div>
-              )}
+              <h3 className="font-serif text-2xl">{s.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
             </div>
           ))}
         </div>

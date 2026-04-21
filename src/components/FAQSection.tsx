@@ -5,82 +5,86 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const faqs = [
+export const faqs = [
   {
-    question: "Vad kostar en hemsida i Linköping?",
-    answer:
-      "Priset varierar beroende på omfattning och funktionalitet. En enklare företagshemsida med 5–10 sidor kostar vanligtvis från 15 000 kr, medan en mer avancerad e-handelslösning eller specialanpassad webbplats kan kosta från 30 000 kr och uppåt. Vi erbjuder alltid en kostnadsfri offert anpassad efter just ert behov.",
+    q: "Varför så mycket billigare än traditionella dev-byråer?",
+    a: "Eftersom jag använder AI för att skriva större delen av koden. En traditionell utvecklare tar 400–1200 kr/h och bygger 1 feature/dag. Jag bygger 5–10 features/dag till fast pris.",
   },
   {
-    question: "Hur lång tid tar det att bygga en hemsida?",
-    answer:
-      "En enklare företagshemsida tar normalt 2–4 veckor att leverera. Mer komplexa projekt som e-handel eller skräddarsydda lösningar kan ta 4–8 veckor beroende på funktionalitet och innehållsleverans från er sida.",
+    q: "Vad händer om Lovable eller Bolt höjer priser eller stängs ner?",
+    a: "Jag är inte låst till ett verktyg. Jag använder Lovable, Bolt, Emergent, Cursor och Claude efter behov. Koden är standard React + Supabase som fungerar var som helst. Du får alltid källkoden.",
   },
   {
-    question: "Varför ska jag välja en lokal webbbyrå i Linköping?",
-    answer:
-      "En lokal webbbyrå förstår den lokala marknaden och kan träffas för personliga möten. Vi på Aurora Media AB finns i Linköping och kan snabbt anpassa strategi efter lokala förutsättningar – det ger bättre resultat för företag som riktar sig mot kunder i Östergötland.",
+    q: "Kan jag få källkoden efter leverans?",
+    a: "Ja, alltid. Du äger allt – kod, design, data, domän. Jag har inga låsningar.",
   },
   {
-    question: "Vad ingår i SEO för företag i Linköping?",
-    answer:
-      "Vår SEO-tjänst inkluderar teknisk SEO-audit, on-page-optimering, sökordanalys, lokal SEO (Google Business Profile), länkbygge och månatliga rapporter. Vi fokuserar på att få ert företag att synas högt i Google för sökord relevanta för Linköping och Östergötland.",
+    q: "Hur fungerar supporten efter leverans?",
+    a: "Prototyp: 1 vecka. MVP: 2 veckor. SaaS: 1 månad. Sedan kan du teckna löpande underhåll för 1 990 kr/mån eller stå på egen hand.",
   },
   {
-    question: "Erbjuder ni WordPress-hemsidor?",
-    answer:
-      "Ja! Vi bygger professionella WordPress-hemsidor optimerade för hastighet, SEO och säkerhet. WordPress är världens mest populära CMS och ger er full kontroll. Vi erbjuder även WooCommerce för e-handel.",
+    q: "Jobbar du ensam eller har du team?",
+    a: "Jag driver Aurora Media AB själv. Det är precis därför jag är snabb och prisvärd – inga mellanled, ingen byråkrati, inga projektledare som ska bokas in.",
   },
   {
-    question: "Hur mycket kostar Google Ads för mitt företag?",
-    answer:
-      "Vi rekommenderar en startbudget på minst 5 000 kr/månad i annonsbudget plus vår administrationsavgift på 15% av spenderat belopp. Den totala kostnaden beror på bransch och konkurrens. Vi ger full transparens – ni ser exakt vart varje krona går.",
+    q: "Kan du ta över ett befintligt projekt?",
+    a: "Ja, om det är byggt i teknologi jag jobbar i (React, Supabase, Next.js, Vue). Jag gör en snabb audit först och ger fast pris på överlämningen.",
   },
   {
-    question: "Kan ni hjälpa till med sociala medier?",
-    answer:
-      "Absolut! Vi erbjuder allt från strategi och innehållsplanering till daglig hantering av Instagram, Facebook, LinkedIn och TikTok. Vi skapar engagerande innehåll, hanterar community management och rapporterar resultat månadsvis.",
+    q: "Vad kostar löpande underhåll?",
+    a: "1 990 kr/mån. Inkluderar bugfixar, säkerhetsuppdateringar, mindre justeringar (upp till 2 timmar/mån). Större features offereras separat.",
   },
   {
-    question: "Jobbar ni bara med företag i Linköping?",
-    answer:
-      "Vi är baserade i Linköping och många av våra kunder finns här, men vi jobbar med företag i hela Sverige. Det digitala arbetssättet gör att vi kan leverera lika bra resultat oavsett var ni befinner er.",
+    q: "Accepterar du fasta retainers istället för enskilda projekt?",
+    a: "Ja. Om du behöver löpande utveckling (t.ex. nya features varje månad) kan vi göra en retainer-modell från 12 000 kr/mån.",
+  },
+  {
+    q: "Hur är det med GDPR och databehandling?",
+    a: "All data lagras i EU (Supabase Frankfurt-region). Jag upprättar personuppgiftsbiträdesavtal vid projektets början och går igenom vilka uppgifter som hanteras var.",
+  },
+  {
+    q: "Vad händer om projektet blir försenat?",
+    a: "Fasta pris gäller. Om jag blir försenad kostar det inte dig något extra. Om du vill lägga till scope är det offert-baserat.",
+  },
+  {
+    q: "Kan du bara hjälpa mig med SEO eller marknadsföring?",
+    a: "Primärt bygger jag produkter. Men om ni har en befintlig produkt och behöver teknisk SEO, jag tar såna projekt också. Timpris 895 kr/h.",
+  },
+  {
+    q: "Var är du baserad?",
+    a: "Linköping, Sverige. Jag jobbar med kunder i hela landet – de flesta möten är digitala.",
   },
 ];
 
-const FAQSection = () => {
+const FAQSection = ({
+  items = faqs,
+  title = "Vanliga frågor",
+}: {
+  items?: typeof faqs;
+  title?: string;
+}) => {
   return (
-    <section id="faq" className="py-24 md:py-32 bg-card/50">
-      <div className="container mx-auto px-6 max-w-3xl">
-        <div className="text-center mb-12">
-          <p className="text-sm uppercase tracking-[0.3em] text-primary mb-4">
-            Vanliga frågor
-          </p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Frågor &amp; svar om webbbyrå i Linköping
-          </h2>
-          <p className="text-muted-foreground text-lg">
-            Här hittar du svar på de vanligaste frågorna vi får från företag i
-            Linköping och Östergötland.
-          </p>
+    <section className="border-t border-border py-24 md:py-32">
+      <div className="container mx-auto px-6">
+        <div className="max-w-2xl">
+          <p className="label-caps">FAQ</p>
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl">{title}</h2>
         </div>
 
-        <Accordion type="single" collapsible className="space-y-3">
-          {faqs.map((faq, i) => (
-            <AccordionItem
-              key={i}
-              value={`faq-${i}`}
-              className="bg-card aurora-border rounded-xl px-6 border"
-            >
-              <AccordionTrigger className="text-left font-display font-semibold text-base md:text-lg py-5 hover:no-underline hover:text-primary transition-colors">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
-                {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <div className="mt-12 max-w-3xl">
+          <Accordion type="single" collapsible className="w-full">
+            {items.map((f, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="border-border">
+                <AccordionTrigger className="text-left font-serif text-lg md:text-xl py-5">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-base leading-relaxed text-muted-foreground">
+                  {f.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       </div>
     </section>
   );
