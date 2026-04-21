@@ -1,26 +1,32 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import StatsSection from "@/components/StatsSection";
-import ServicesSection from "@/components/ServicesSection";
+import TrustBarSection from "@/components/TrustBarSection";
+import PaketSection from "@/components/PaketSection";
+import ToolsStackSection from "@/components/ToolsStackSection";
+import PortfolioSection from "@/components/PortfolioSection";
 import ProcessSection from "@/components/ProcessSection";
-import WhyUsSection from "@/components/WhyUsSection";
-import CTABanner from "@/components/CTABanner";
+import VarforSnabbtSection from "@/components/VarforSnabbtSection";
+import TargetAudienceSection from "@/components/TargetAudienceSection";
 import FAQSection from "@/components/FAQSection";
-import ContactSection from "@/components/ContactSection";
+import CTABanner from "@/components/CTABanner";
 import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <HeroSection />
-      <StatsSection />
-      <ServicesSection />
-      <ProcessSection />
-      <WhyUsSection />
-      <CTABanner />
-      <FAQSection />
-      <ContactSection />
+      <main>
+        <HeroSection />
+        <TrustBarSection />
+        <PaketSection />
+        <ToolsStackSection />
+        <PortfolioSection />
+        <ProcessSection />
+        <VarforSnabbtSection />
+        <TargetAudienceSection />
+        <FAQSection />
+        <CTABanner />
+      </main>
       <Footer />
     </div>
   );
