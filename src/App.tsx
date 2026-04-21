@@ -32,7 +32,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ContactModalProvider>
-      </Toaster>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
