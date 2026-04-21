@@ -57,7 +57,7 @@ const CityPage = () => {
       makesOffer: paket.map((p) => ({
         "@type": "Offer",
         name: p.name,
-        price: String(p.priceNum ?? p.price).replace(/\D/g, ""),
+        price: p.price.replace(/\D/g, "") || "0",
         priceCurrency: "SEK",
       })),
     });
@@ -138,10 +138,10 @@ const CityPage = () => {
                 <div key={p.name} className="rounded-xl border border-border bg-background p-6">
                   <p className="label-caps">{p.name}</p>
                   <p className="mt-3 font-serif text-2xl">{p.price}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{p.tagline}</p>
-                  {p.bullets && (
+                  <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
+                  {p.features && (
                     <ul className="mt-4 space-y-2 text-sm">
-                      {p.bullets.slice(0, 4).map((b: string) => (
+                      {p.features.slice(0, 4).map((b: string) => (
                         <li key={b} className="flex gap-2">
                           <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                           <span>{b}</span>
