@@ -8,6 +8,7 @@ export const cases = [
     tagline: "Dispatching-SaaS för svenska transportbolag. CJ Bemanning var första kunden.",
     label: "FEATURED · TRANSPORT · B2B",
     meta: "3 veckor · Lovable · Supabase · Stripe · Fortnox",
+    platforms: "WEB",
     featured: true,
   },
   {
@@ -16,20 +17,23 @@ export const cases = [
     tagline: "Marknadsplats där företag jämför offerter från digitala byråer.",
     label: "MARKNADSPLATS",
     meta: "4 veckor · Stripe Connect",
+    platforms: "WEB",
   },
   {
     name: "AgilityManager",
     domain: "agilitymanager.se",
-    tagline: "Träningsapp för svenska agility-förare.",
+    tagline: "Träningsapp för svenska agility-förare. iOS + Android planerade 2026.",
     label: "KONSUMENT · SAAS",
     meta: "3 veckor · Firecrawl",
+    platforms: "WEB",
   },
   {
     name: "Hönsgården",
     domain: "honsgarden.se",
-    tagline: "Freemium-app för svenska hönsägare.",
+    tagline: "Freemium-app för svenska hönsägare. Webb + Google Play-app via Capacitor.",
     label: "KONSUMENT · MOBIL",
-    meta: "2 veckor · RevenueCat",
+    meta: "2 veckor · RevenueCat · Capacitor",
+    platforms: "WEB + PLAY",
   },
   {
     name: "Odlingsdagboken",
@@ -37,6 +41,7 @@ export const cases = [
     tagline: "Svensk odlings-SaaS med AI-coach.",
     label: "KONSUMENT · AI",
     meta: "3 veckor · Claude API",
+    platforms: "WEB",
   },
   {
     name: "GoGlamping Sweden",
@@ -44,6 +49,7 @@ export const cases = [
     tagline: "Bokningssajt för glamping vid Göta kanal.",
     label: "BOKNING",
     meta: "2 veckor · Sirvoy",
+    platforms: "WEB",
   },
   {
     name: "Viriditas",
@@ -51,6 +57,7 @@ export const cases = [
     tagline: "Bokningssajt för massagemottagning.",
     label: "BOKNING",
     meta: "1 vecka · React + Vite",
+    platforms: "WEB",
   },
 ];
 

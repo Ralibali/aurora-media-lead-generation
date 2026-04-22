@@ -15,12 +15,50 @@ import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 const tillagg = [
   { name: "Hemsida", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
   { name: "E-handel", price: "Från 19 900 kr", to: "/tjanster/ehandel" },
+  { name: "Mobilapp – PWA", price: "6 900 kr (2–3 dagar extra)", to: "/tjanster/mobilapp" },
+  { name: "Mobilapp – Capacitor (iOS + Android)", price: "24 900 kr (1–2 v extra)", to: "/tjanster/mobilapp" },
+  { name: "Mobilapp – Native", price: "Från 89 000 kr (4–8 v)", to: "/tjanster/mobilapp" },
   { name: "SEO", price: "Från 2 490 kr", to: "/tjanster/seo" },
   { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
   { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
   { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
   { name: "Grafisk profil", price: "Från 5 900 kr", to: "/tjanster/grafisk-profil" },
   { name: "Fotografering", price: "4 900 kr/halvdag", to: "/tjanster/fotografering" },
+];
+
+const kombos = [
+  {
+    name: "SaaS + App",
+    paket: "Kombination – SaaS + app",
+    price: "Från 59 800 kr",
+    breakdown: "34 900 MVP + 24 900 Capacitor",
+    time: "3–4 veckor",
+    desc: "Full SaaS på webben plus iOS + Android. Lanserad i båda app-butikerna.",
+  },
+  {
+    name: "Webb + SEO",
+    paket: "Hemsida",
+    price: "Från 9 800 kr",
+    breakdown: "4 900 landningssida + 4 900 SEO",
+    time: "5–7 dagar",
+    desc: "Enkel hemsida som direkt är SEO-optimerad från start.",
+  },
+  {
+    name: "E-handel + Meta Ads",
+    paket: "E-handel",
+    price: "Från 23 800 kr",
+    breakdown: "19 900 butik + 3 900 Ads-setup",
+    time: "2 veckor",
+    desc: "Shopify- eller WooCommerce-butik med första Meta-kampanjen igång.",
+  },
+  {
+    name: "Full launch-paket",
+    paket: "Kombination – SaaS + app",
+    price: "Från 99 600 kr",
+    breakdown: "69 000 SaaS + 24 900 app + 5 700 grund-SEO",
+    time: "5–6 veckor",
+    desc: "Live på webben, i App Store, på Google Play, SEO optimerad. Redo för första kunden dag ett.",
+  },
 ];
 
 const lopande = [
