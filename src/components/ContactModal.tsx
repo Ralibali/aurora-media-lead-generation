@@ -145,8 +145,13 @@ const ContactDialog = ({
         body: parsed.data,
       });
       if (error) throw error;
+      setSubmittedLabel(leadLabel || (selectedOption ? selectedOption.label : paketValue));
+      setSubmittedEmail(parsed.data.email);
       setDone(true);
-      toast.success("Tack! Jag hör av mig inom 24 timmar.");
+      toast.success(
+        `Tack! Din förfrågan om "${selectedOption?.label ?? paketValue}" är mottagen. Jag svarar inom 24 timmar.`,
+        { duration: 6000 }
+      );
       form.reset();
       setMessageValue("");
       setMessageTouched(false);
