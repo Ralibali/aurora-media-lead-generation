@@ -137,7 +137,7 @@ const HeroSection = () => {
 
               <motion.button
                 ref={secondaryMagnet.ref as React.RefObject<HTMLButtonElement>}
-                style={{ x: secondaryMagnet.x, y: secondaryMagnet.y }}
+                style={{ x: secondaryMagnet.x, y: secondaryMagnet.y, scale: secondaryMagnet.scale }}
                 onClick={() =>
                   document
                     .getElementById("portfolj")
