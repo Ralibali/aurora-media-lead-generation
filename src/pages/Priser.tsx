@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Check, ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
+import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { paket } from "@/components/PaketSection";
 import { useContactModal } from "@/components/ContactModal";
@@ -90,13 +90,6 @@ const prisFaqs = [
   { q: "Kan jag kombinera paket?", a: "Ja. Många kunder börjar med Prototyp, beslutar sig för MVP eller SaaS, och uppgraderar då till differensen. Du betalar aldrig dubbelt." },
 ];
 
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-};
-
 const Priser = () => {
   const { open } = useContactModal();
 
@@ -121,7 +114,7 @@ const Priser = () => {
         {/* Hero */}
         <section className="pt-16 pb-12 md:pt-24 md:pb-16">
           <div className="container mx-auto px-6 max-w-4xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Priser</p>
               <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
                 Fast pris. <em className="italic text-primary">Inga timmar.</em>
@@ -130,7 +123,7 @@ const Priser = () => {
                 Du vet exakt vad du betalar innan vi börjar. Ingen löpande räkning, inga
                 "det blev lite mer komplext än vi trodde". Inga sex-månaders bindningar.
               </p>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 
@@ -139,12 +132,10 @@ const Priser = () => {
           <div className="container mx-auto px-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {paket.map((p, i) => (
-                <motion.div
+                <Reveal
                   key={p.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5, delay: i * 0.06 }}
+                  delay={i * 0.06}
+                  duration={0.6}
                   className={`relative flex flex-col rounded-xl border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                     p.featured ? "border-primary shadow-md" : "border-border hover:border-primary/50"
                   }`}
@@ -173,7 +164,7 @@ const Priser = () => {
                   >
                     {p.cta}
                   </Button>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -182,12 +173,12 @@ const Priser = () => {
         {/* Comparison table */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6">
-            <motion.div {...fadeUp} className="max-w-2xl">
+            <Reveal className="max-w-2xl">
               <p className="label-caps">Jämförelse</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Vad ingår var?
               </h2>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-12 overflow-x-auto rounded-xl border border-border bg-card">
               <table className="w-full min-w-[720px] text-left text-sm">
@@ -228,7 +219,7 @@ const Priser = () => {
         {/* Tilläggstjänster */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Tilläggstjänster</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Resten av paletten.
@@ -236,7 +227,7 @@ const Priser = () => {
               <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
                 Allt annat jag levererar – samma fast-pris-approach.
               </p>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-10 divide-y divide-border border-y border-border">
               {tillagg.map((t) => (
@@ -262,7 +253,7 @@ const Priser = () => {
         {/* Vanliga kombinationer */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Kombo-paket</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Vanliga kombinationer.
@@ -270,16 +261,15 @@ const Priser = () => {
               <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
                 Spara tid genom att paketera flera tjänster från start. Samma fasta priser, ett projekt.
               </p>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-10 grid gap-5 sm:grid-cols-2">
               {kombos.map((k, i) => (
-                <motion.div
+                <Reveal
                   key={k.name}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  delay={i * 0.06}
+                  y={16}
+                  duration={0.5}
                   className="flex flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md"
                 >
                   <p className="label-caps">{k.name}</p>
@@ -296,7 +286,7 @@ const Priser = () => {
                   >
                     Få offert
                   </Button>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -305,27 +295,26 @@ const Priser = () => {
         {/* Löpande priser */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Löpande priser</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Efter leverans.
               </h2>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-10 grid gap-5 md:grid-cols-3">
               {lopande.map((l, i) => (
-                <motion.div
+                <Reveal
                   key={l.name}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  delay={i * 0.06}
+                  y={16}
+                  duration={0.5}
                   className="rounded-xl border border-border bg-card p-7"
                 >
                   <p className="label-caps">{l.name}</p>
                   <p className="mt-3 font-serif text-2xl md:text-3xl">{l.price}</p>
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{l.desc}</p>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -334,7 +323,7 @@ const Priser = () => {
         {/* Betalning + Garanti */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl grid gap-12 md:grid-cols-2 md:gap-16">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Betalningsvillkor</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Hur det funkar.
@@ -357,9 +346,9 @@ const Priser = () => {
                   Alla priser exklusive 25 % moms
                 </li>
               </ul>
-            </motion.div>
+            </Reveal>
 
-            <motion.div {...fadeUp} className="rounded-xl border border-primary/30 bg-primary/5 p-8">
+            <Reveal delay={0.08} className="rounded-xl border border-primary/30 bg-primary/5 p-8">
               <p className="label-caps text-primary">Garanti</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Du tar ingen risk.
@@ -368,7 +357,7 @@ const Priser = () => {
                 Om prototypen dag 3 inte motsvarar förväntningarna, betalar du inget och behåller
                 vi var sin lärdom. Inga 6-månaderskontrakt. Inga uppsägningstider för paket.
               </p>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 

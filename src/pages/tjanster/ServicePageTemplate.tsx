@@ -1,11 +1,11 @@
 import { useEffect, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Check, ChevronRight, ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import FAQSection from "@/components/FAQSection";
+import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
@@ -44,13 +44,6 @@ export type ServicePageProps = {
   related: RelatedService[];
   extra?: ReactNode; // e.g. comparison table for Hemsidor
   postFaq?: ReactNode; // optional block rendered directly after FAQ
-};
-
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
 };
 
 /**
@@ -145,7 +138,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         {/* Hero */}
         <section className="pt-10 pb-16 md:pt-16 md:pb-20">
           <div className="container mx-auto px-6 max-w-4xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">{props.label ?? "Tilläggstjänst"}</p>
               <h1 className="mt-5 font-serif text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.05] tracking-[-0.02em]">
                 {props.title}
@@ -170,32 +163,32 @@ const ServicePageTemplate = (props: ServicePageProps) => {
                   <Link to="/tjanster">Andra tjänster</Link>
                 </Button>
               </div>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 
         {/* What's included */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-4xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Vad som ingår</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Det här får du.
               </h2>
-            </motion.div>
+            </Reveal>
             <ul className="mt-10 grid gap-3 sm:grid-cols-2">
               {props.includes.map((item, i) => (
-                <motion.li
+                <Reveal
                   key={item}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.04 }}
+                  as="li"
+                  delay={i * 0.04}
+                  y={12}
+                  duration={0.5}
                   className="flex items-start gap-3 text-base text-foreground/85"
                 >
                   <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
                   <span>{item}</span>
-                </motion.li>
+                </Reveal>
               ))}
             </ul>
           </div>
@@ -204,20 +197,19 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         {/* Process */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Process</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Så går det till.
               </h2>
-            </motion.div>
+            </Reveal>
             <div className="mt-12 grid gap-8 md:grid-cols-4 md:gap-6">
               {props.process.map((s, i) => (
-                <motion.div
+                <Reveal
                   key={s.title}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  delay={i * 0.08}
+                  y={16}
+                  duration={0.6}
                   className="md:border-l md:border-border md:pl-5"
                 >
                   <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
@@ -225,7 +217,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
                   </p>
                   <h3 className="mt-3 font-serif text-2xl">{s.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -235,20 +227,18 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         {props.tiers && props.tiers.length > 0 && (
           <section className="border-t border-border py-20 md:py-24">
             <div className="container mx-auto px-6">
-              <motion.div {...fadeUp} className="max-w-2xl">
+              <Reveal className="max-w-2xl">
                 <p className="label-caps">Priser</p>
                 <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                   Välj nivå.
                 </h2>
-              </motion.div>
+              </Reveal>
               <div className="mt-12 grid gap-6 md:grid-cols-3">
                 {props.tiers.map((t, i) => (
-                  <motion.div
+                  <Reveal
                     key={t.name}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    delay={i * 0.08}
+                    duration={0.6}
                     className={`relative flex flex-col rounded-xl border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                       t.featured ? "border-primary shadow-md" : "border-border hover:border-primary/50"
                     }`}
@@ -281,7 +271,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
                     >
                       Få offert
                     </Button>
-                  </motion.div>
+                  </Reveal>
                 ))}
               </div>
               {props.pricingNote && (
@@ -297,13 +287,13 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         {/* Why affordable */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-3xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Varför prisvärt</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Därför kan jag hålla priset.
               </h2>
               <p className="mt-7 text-lg leading-relaxed text-foreground/85">{props.whyAffordable}</p>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 
@@ -321,21 +311,15 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         {/* Related */}
         <section className="border-t border-border bg-secondary/30 py-20">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Närliggande tjänster</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Andra tjänster jag levererar.
               </h2>
-            </motion.div>
+            </Reveal>
             <div className="mt-10 grid gap-5 sm:grid-cols-3">
               {props.related.map((r, i) => (
-                <motion.div
-                  key={r.to}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                >
+                <Reveal key={r.to} delay={i * 0.06} y={16} duration={0.5}>
                   <Link
                     to={r.to}
                     className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md"
@@ -347,7 +331,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
                       <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </span>
                   </Link>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -356,26 +340,25 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         {/* Final CTA */}
         <section className="border-t border-border py-28 md:py-36">
           <div className="container mx-auto px-6 max-w-3xl text-center">
-            <motion.h2
-              {...fadeUp}
-              className="font-serif italic text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]"
-            >
-              Klar för {props.title.toLowerCase()}?
-            </motion.h2>
-            <p className="mt-6 text-lg text-muted-foreground">
-              Skriv ett mejl. Jag svarar inom 24 timmar.
-            </p>
-            <div className="mt-10 flex flex-col items-center gap-4">
-              <Button size="lg" onClick={() => open(props.paketName)} className="px-10">
-                Få offert
-              </Button>
-              <a
-                href="mailto:info@auroramedia.se"
-                className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-              >
-                Eller direkt: info@auroramedia.se
-              </a>
-            </div>
+            <Reveal as="div">
+              <h2 className="font-serif italic text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
+                Klar för {props.title.toLowerCase()}?
+              </h2>
+              <p className="mt-6 text-lg text-muted-foreground">
+                Skriv ett mejl. Jag svarar inom 24 timmar.
+              </p>
+              <div className="mt-10 flex flex-col items-center gap-4">
+                <Button size="lg" onClick={() => open(props.paketName)} className="px-10">
+                  Få offert
+                </Button>
+                <a
+                  href="mailto:info@auroramedia.se"
+                  className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                >
+                  Eller direkt: info@auroramedia.se
+                </a>
+              </div>
+            </Reveal>
           </div>
         </section>
       </main>

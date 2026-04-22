@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
 import RelatedLinks from "@/components/RelatedLinks";
+import Reveal from "@/components/Reveal";
 import { setSEOMeta, setJsonLd, setBreadcrumb, SITE_URL } from "@/lib/seoHelpers";
 
 const steps = [
@@ -90,26 +91,30 @@ const Metodik = () => {
       <main>
         <section className="pt-24 pb-12 md:pt-32 md:pb-16">
           <div className="container mx-auto px-6 max-w-3xl">
-            <p className="label-caps">Metodik</p>
-            <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
-              Så bygger jag SaaS med AI på <em className="italic text-primary">veckor</em>
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground">
-              En transparent genomgång av hela processen – från första mejlet till lanserad produkt.
-              Inga svarta lådor. Du ska veta exakt vad du köper.
-            </p>
+            <Reveal>
+              <p className="label-caps">Metodik</p>
+              <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
+                Så bygger jag SaaS med AI på <em className="italic text-primary">veckor</em>
+              </h1>
+              <p className="mt-6 text-lg text-muted-foreground">
+                En transparent genomgång av hela processen – från första mejlet till lanserad produkt.
+                Inga svarta lådor. Du ska veta exakt vad du köper.
+              </p>
+            </Reveal>
           </div>
         </section>
 
         <section className="border-t border-border py-20">
           <div className="container mx-auto px-6 max-w-3xl">
-            <h2 className="font-serif text-3xl md:text-4xl mb-10">Processen, steg för steg</h2>
+            <Reveal>
+              <h2 className="font-serif text-3xl md:text-4xl mb-10">Processen, steg för steg</h2>
+            </Reveal>
             <div className="space-y-10">
-              {steps.map((s) => (
-                <div key={s.title}>
+              {steps.map((s, i) => (
+                <Reveal key={s.title} delay={i * 0.06} y={16} duration={0.6}>
                   <h3 className="font-serif text-2xl mb-3">{s.title}</h3>
                   <p className="text-foreground/85 leading-relaxed">{s.body}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -117,13 +122,17 @@ const Metodik = () => {
 
         <section className="border-t border-border py-20 bg-secondary/30">
           <div className="container mx-auto px-6 max-w-3xl">
-            <h2 className="font-serif text-3xl md:text-4xl mb-10">Mina principer</h2>
+            <Reveal>
+              <h2 className="font-serif text-3xl md:text-4xl mb-10">Mina principer</h2>
+            </Reveal>
             <div className="grid gap-6 md:grid-cols-2">
-              {principles.map((p) => (
-                <div key={p.title} className="rounded-xl border border-border bg-background p-6">
-                  <p className="font-serif text-xl mb-2">{p.title}</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{p.body}</p>
-                </div>
+              {principles.map((p, i) => (
+                <Reveal key={p.title} delay={i * 0.06} y={16} duration={0.6}>
+                  <div className="rounded-xl border border-border bg-background p-6">
+                    <p className="font-serif text-xl mb-2">{p.title}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{p.body}</p>
+                  </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -131,13 +140,15 @@ const Metodik = () => {
 
         <section className="border-t border-border py-20">
           <div className="container mx-auto px-6 max-w-3xl">
-            <h2 className="font-serif text-3xl md:text-4xl mb-10">Verktygen jag använder</h2>
+            <Reveal>
+              <h2 className="font-serif text-3xl md:text-4xl mb-10">Verktygen jag använder</h2>
+            </Reveal>
             <ul className="space-y-4">
-              {tools.map((t) => (
-                <li key={t.name} className="border-b border-border pb-4">
+              {tools.map((t, i) => (
+                <Reveal key={t.name} as="li" delay={i * 0.04} y={12} duration={0.5} className="border-b border-border pb-4">
                   <p className="font-serif text-lg">{t.name}</p>
                   <p className="text-sm text-muted-foreground">{t.use}</p>
-                </li>
+                </Reveal>
               ))}
             </ul>
           </div>
