@@ -96,6 +96,7 @@ const Seo = () => {
         { q: "Kan ni garantera plats 1 på Google?", a: "Nej. Den som lovar det ljuger. Jag lovar mätbara förbättringar i synlighet, klick och konvertering." },
         { q: "Behöver jag löpande SEO?", a: "Inte alltid. Många klarar sig med en grundlig audit + fix, sen content varje månad. Jag säger till om du behöver mer." },
         { q: "Hjälper du med innehåll?", a: "Ja, se Content-tjänsten. SEO-optimerade artiklar från 995 kr/styck." },
+        { q: "Lite dyrt va?", a: "Jag förstår reaktionen, men jämför med vad du faktiskt får. I Audit ingår teknisk crawl, on-page-genomgång, konkurrentanalys och en prioriterad åtgärdslista – arbete som tar mig två fulla dagar. Audit + fix lägger till själva implementationen av tekniska fixar, on-page och schema, vilket annars motsvarar 8–12 timmars utvecklarjobb hos en byrå (15 000–25 000 kr). Jag jobbar med fast pris så att du vet exakt vad du betalar – inga timmar som tickar, inga överraskningar och inga månadsbindningar." },
       ]}
       related={[
         { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
