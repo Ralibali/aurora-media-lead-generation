@@ -50,11 +50,18 @@ const FAQSection = ({
   items = faqs,
   title = "Vanliga frågor",
   searchable = false,
+  ctaPaket,
+  ctaLabel = "Be om offert",
+  ctaText = "Hittade du inte det du letade efter? Skicka några rader så återkommer jag inom 24 timmar.",
 }: {
   items?: typeof faqs;
   title?: string;
   searchable?: boolean;
+  ctaPaket?: string;
+  ctaLabel?: string;
+  ctaText?: string;
 }) => {
+  const { open } = useContactModal();
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
