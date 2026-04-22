@@ -62,6 +62,10 @@ Deno.serve(async (req: Request) => {
       <p style="font-size:14px;padding:8px 12px;background:#f3f6f4;border-left:3px solid #1f7a5e;display:inline-block;border-radius:4px;">
         <strong>${escape(leadLabel || `Intresserad av: ${paket}`)}</strong>
       </p>
+      ${internalNote ? `
+      <p style="font-size:13px;padding:10px 12px;margin-top:8px;background:#fff8e1;border-left:3px solid #d97706;border-radius:4px;">
+        <strong>Intern notering:</strong><br/>${escape(internalNote)}
+      </p>` : ""}
       <p><strong>Namn:</strong> ${escape(name)}</p>
       <p><strong>E-post:</strong> ${escape(email)}</p>
       <p><strong>Företag:</strong> ${escape(company || "—")}</p>
