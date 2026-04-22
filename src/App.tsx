@@ -27,6 +27,7 @@ import CityPage from "./pages/CityPage";
 import Metodik from "./pages/Metodik";
 import RedaktionellPolicy from "./pages/RedaktionellPolicy";
 import TextGenerator from "./pages/admin/TextGenerator";
+import FaqRapport from "./pages/admin/FaqRapport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
