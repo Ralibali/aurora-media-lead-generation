@@ -20,12 +20,20 @@ export const useContactModal = () => {
   return c;
 };
 
+const PLATFORM_OPTIONS = [
+  { value: "iOS", label: "iOS" },
+  { value: "Android", label: "Android" },
+  { value: "Båda", label: "Båda (iOS + Android)" },
+  { value: "Osäker", label: "Osäker / vill ha råd" },
+] as const;
+
 const schema = z.object({
   name: z.string().trim().min(2, "Skriv ditt namn").max(80),
   email: z.string().trim().email("Ogiltig e-post").max(160),
   company: z.string().trim().max(120).optional().or(z.literal("")),
   paket: z.string().min(1, "Välj ett alternativ"),
-  leadLabel: z.string().trim().max(160).optional().or(z.literal("")),
+  platform: z.string().trim().max(40).optional().or(z.literal("")),
+  leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
   message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
 });
@@ -89,6 +97,10 @@ const ContactDialog = ({
   const [submittedLabel, setSubmittedLabel] = useState<string>("");
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
 
+  const [platformValue, setPlatformValue] = useState<string>("");
+
+  const isMobileApp = paketValue.startsWith("Mobilapp") || paketValue === "Kombination – SaaS + app";
+
   const buildPrefill = (paket: string): string => {
     const opt = PAKET_OPTIONS.find((o) => o.value === paket);
     if (!opt) return "";
@@ -97,8 +109,8 @@ const ContactDialog = ({
       const tier = paket.replace("SEO – ", "");
       return `Hej! Jag är intresserad av SEO-paketet "${tier}" (${opt.label}).\n\nKort om sajten:\n• URL: \n• Bransch / vad ni säljer: \n• Viktigaste sökord (om kända): \n\nMål med SEO-arbetet: `;
     }
-    if (paket.startsWith("Mobilapp")) {
-      return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n• Befintlig webb-SaaS (URL eller beskrivning): \n• Plattformar (iOS / Android / båda): \n• Tidsplan: `;
+    if (paket.startsWith("Mobilapp") || paket === "Kombination – SaaS + app") {
+      return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n• Befintlig webb-SaaS (URL eller beskrivning): \n• Tidsplan: `;
     }
     return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n`;
   };
@@ -109,6 +121,7 @@ const ContactDialog = ({
       setPaketValue(paket);
       setMessageValue(buildPrefill(paket));
       setMessageTouched(false);
+      setPlatformValue("");
     }
   }, [isOpen, defaultPaket]);
 
@@ -117,10 +130,17 @@ const ContactDialog = ({
     if (!messageTouched) {
       setMessageValue(buildPrefill(paketValue));
     }
+    // Nollställ plattform när paketet inte längre handlar om app
+    if (!paketValue.startsWith("Mobilapp") && paketValue !== "Kombination – SaaS + app") {
+      setPlatformValue("");
+    }
   }, [paketValue, messageTouched]);
 
   const selectedOption = PAKET_OPTIONS.find((o) => o.value === paketValue);
-  const leadLabel = selectedOption ? `Intresserad av: ${selectedOption.label}` : "";
+  const platformOption = PLATFORM_OPTIONS.find((p) => p.value === platformValue);
+  const leadLabel = selectedOption
+    ? `Intresserad av: ${selectedOption.label}${platformOption ? ` · Plattform: ${platformOption.label}` : ""}`
+    : "";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -131,6 +151,7 @@ const ContactDialog = ({
       email: data.get("email"),
       company: data.get("company") ?? "",
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
+      platform: platformValue,
       leadLabel,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
@@ -155,6 +176,7 @@ const ContactDialog = ({
       form.reset();
       setMessageValue("");
       setMessageTouched(false);
+      setPlatformValue("");
     } catch (err) {
       console.error("[ContactModal] submit error", err);
       toast.error("Något gick fel. Mejla istället info@auroramedia.se");
@@ -282,6 +304,26 @@ const ContactDialog = ({
                 </div>
               )}
             </div>
+            {isMobileApp && (
+              <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                <Label htmlFor="platform">Vilken plattform? *</Label>
+                <p className="text-xs text-muted-foreground">
+                  Hjälper mig att skissa rätt teknikval och tidsplan direkt.
+                </p>
+                <Select value={platformValue} onValueChange={setPlatformValue} name="platform">
+                  <SelectTrigger id="platform">
+                    <SelectValue placeholder="Välj plattform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PLATFORM_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="space-y-1.5">
               <Label htmlFor="message">Beskriv projektet kort *</Label>
               <Textarea
