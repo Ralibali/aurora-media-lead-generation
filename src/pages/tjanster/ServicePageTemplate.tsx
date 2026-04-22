@@ -110,9 +110,12 @@ const ServicePageTemplate = (props: ServicePageProps) => {
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Button size="lg" onClick={() => open(props.paketName)}>
+                  Boka ett samtal
+                </Button>
+                <Button size="lg" variant="outline" onClick={() => open(props.paketName)}>
                   Få offert
                 </Button>
-                <Button size="lg" variant="outline" asChild>
+                <Button size="lg" variant="ghost" asChild>
                   <Link to="/tjanster">Andra tjänster</Link>
                 </Button>
               </div>
