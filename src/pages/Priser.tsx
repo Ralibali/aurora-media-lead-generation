@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Check, ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
+import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { paket } from "@/components/PaketSection";
 import { useContactModal } from "@/components/ContactModal";
@@ -89,13 +89,6 @@ const prisFaqs = [
   { q: "Vad händer om scope ändras under projektet?", a: "Mindre justeringar ingår. Större tillägg offereras separat innan vi börjar bygga – aldrig i efterhand." },
   { q: "Kan jag kombinera paket?", a: "Ja. Många kunder börjar med Prototyp, beslutar sig för MVP eller SaaS, och uppgraderar då till differensen. Du betalar aldrig dubbelt." },
 ];
-
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-};
 
 const Priser = () => {
   const { open } = useContactModal();
