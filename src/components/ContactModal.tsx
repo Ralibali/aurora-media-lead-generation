@@ -141,6 +141,8 @@ const ContactDialog = ({
       setDone(true);
       toast.success("Tack! Jag hör av mig inom 24 timmar.");
       form.reset();
+      setMessageValue("");
+      setMessageTouched(false);
     } catch (err) {
       console.error("[ContactModal] submit error", err);
       toast.error("Något gick fel. Mejla istället info@auroramedia.se");
