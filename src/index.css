@@ -152,30 +152,35 @@
     border-radius: 0.875rem;
   }
 
-  /* Button-in-Button: pill outer + filled icon circle */
+  /* Button-in-Button: pill outer + filled icon circle.
+     Note: add `group` directly on the button element in JSX. */
   .btn-pill {
-    @apply group inline-flex items-center gap-2 pl-6 pr-2 py-2 rounded-full
+    @apply inline-flex items-center gap-2 pl-6 pr-2 py-2 rounded-full
            bg-foreground text-background
-           transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]
+           transition-all duration-700
            hover:scale-[1.02] active:scale-[0.98];
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
   }
   .btn-pill-icon {
     @apply w-10 h-10 rounded-full bg-background text-foreground
            flex items-center justify-center
-           transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]
+           transition-transform duration-500
            group-hover:translate-x-1 group-hover:-translate-y-[1px] group-hover:scale-105;
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
   }
   .btn-pill-ghost {
-    @apply group inline-flex items-center gap-2 pl-6 pr-2 py-2 rounded-full
+    @apply inline-flex items-center gap-2 pl-6 pr-2 py-2 rounded-full
            border border-foreground/15 text-foreground bg-transparent
-           transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]
+           transition-all duration-700
            hover:scale-[1.02] hover:border-foreground/30 active:scale-[0.98];
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
   }
   .btn-pill-ghost-icon {
     @apply w-10 h-10 rounded-full bg-foreground text-background
            flex items-center justify-center
-           transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]
+           transition-transform duration-500
            group-hover:translate-x-1 group-hover:-translate-y-[1px] group-hover:scale-105;
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
   }
 
   /* Subtle paper noise overlay */
