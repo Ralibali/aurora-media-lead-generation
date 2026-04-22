@@ -117,6 +117,9 @@ const ContactDialog = ({
     }
   }, [paketValue, messageTouched]);
 
+  const selectedOption = PAKET_OPTIONS.find((o) => o.value === paketValue);
+  const leadLabel = selectedOption ? `Intresserad av: ${selectedOption.label}` : "";
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -126,6 +129,7 @@ const ContactDialog = ({
       email: data.get("email"),
       company: data.get("company") ?? "",
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
+      leadLabel,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
     });
