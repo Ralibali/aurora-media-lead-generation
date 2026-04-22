@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      text_library: {
+        Row: {
+          blocked_phrases_found: string[]
+          character_count: number | null
+          context: string | null
+          created_at: string
+          generated_content: Json
+          id: string
+          quality_rating: number | null
+          regeneration_count: number
+          status: string
+          target_keyword: string | null
+          text_type: string
+          topic: string
+          updated_at: string
+          used_on_page: string | null
+          word_count: number | null
+        }
+        Insert: {
+          blocked_phrases_found?: string[]
+          character_count?: number | null
+          context?: string | null
+          created_at?: string
+          generated_content: Json
+          id?: string
+          quality_rating?: number | null
+          regeneration_count?: number
+          status?: string
+          target_keyword?: string | null
+          text_type: string
+          topic: string
+          updated_at?: string
+          used_on_page?: string | null
+          word_count?: number | null
+        }
+        Update: {
+          blocked_phrases_found?: string[]
+          character_count?: number | null
+          context?: string | null
+          created_at?: string
+          generated_content?: Json
+          id?: string
+          quality_rating?: number | null
+          regeneration_count?: number
+          status?: string
+          target_keyword?: string | null
+          text_type?: string
+          topic?: string
+          updated_at?: string
+          used_on_page?: string | null
+          word_count?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
