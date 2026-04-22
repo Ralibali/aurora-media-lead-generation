@@ -86,6 +86,8 @@ const ContactDialog = ({
   const [paketValue, setPaketValue] = useState<string>(defaultPaket || "");
   const [messageValue, setMessageValue] = useState<string>("");
   const [messageTouched, setMessageTouched] = useState(false);
+  const [submittedLabel, setSubmittedLabel] = useState<string>("");
+  const [submittedEmail, setSubmittedEmail] = useState<string>("");
 
   const buildPrefill = (paket: string): string => {
     const opt = PAKET_OPTIONS.find((o) => o.value === paket);
