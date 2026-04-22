@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
 import { ArrowUpRight } from "lucide-react";
+import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const products = [
   { name: "Aurora Transport", url: "https://auroratransport.se" },
@@ -14,6 +16,19 @@ const products = [
 ];
 
 const Om = () => {
+  useEffect(() => {
+    setSEOMeta({
+      title: "Om Aurora Media – AI-byrå i Linköping sedan 2020",
+      description:
+        "Aurora Media AB är en AI-byrå i Linköping som bygger SaaS-produkter med Lovable, Bolt och egen erfarenhet. 7 produkter live, 10+ år i säkerhetsbranschen.",
+      canonical: "/om",
+    });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Om Aurora Media", url: "/om" },
+    ]);
+    return () => removeJsonLd("breadcrumb-jsonld");
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { z } from "zod";
 import { Mail, MapPin, Clock } from "lucide-react";
+import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Skriv ditt namn").max(80),
@@ -23,6 +24,20 @@ const schema = z.object({
 const Kontakt = () => {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    setSEOMeta({
+      title: "Kontakt – starta SaaS-projekt med Aurora Media | Linköping",
+      description:
+        "Hör av dig för offert på SaaS, AI-byggd webb eller internt verktyg. Svar inom 24 timmar. Fast pris från 14 900 kr. Bas i Linköping, kunder i hela Sverige.",
+      canonical: "/kontakt",
+    });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Kontakt", url: "/kontakt" },
+    ]);
+    return () => removeJsonLd("breadcrumb-jsonld");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

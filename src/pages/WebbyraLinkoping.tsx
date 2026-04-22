@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
@@ -5,6 +7,7 @@ import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { Check } from "lucide-react";
+import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd } from "@/lib/seoHelpers";
 
 const lokalaFaqs = [
   {
@@ -27,6 +30,31 @@ const lokalaFaqs = [
 
 const WebbyraLinkoping = () => {
   const { open } = useContactModal();
+  useEffect(() => {
+    setSEOMeta({
+      title: "Webbyrå Linköping – AI-byggda hemsidor & SaaS från 14 900 kr",
+      description:
+        "Lokal webbyrå i Linköping som bygger snabba hemsidor och SaaS med AI. Fast pris från 14 900 kr, leverans på 1–2 veckor. Möten i centrala Linköping eller Mjärdevi.",
+      canonical: "/webbbyra-linkoping",
+    });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Webbyrå Linköping", url: "/webbbyra-linkoping" },
+    ]);
+    setJsonLd("webbyra-faq", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: lokalaFaqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+    return () => {
+      removeJsonLd("breadcrumb-jsonld");
+      removeJsonLd("webbyra-faq");
+    };
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
