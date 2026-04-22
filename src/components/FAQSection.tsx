@@ -188,6 +188,44 @@ const FAQSection = ({
           )}
         </motion.div>
 
+        {showChips && (
+          <div className="mt-7 flex max-w-3xl flex-wrap gap-2" role="group" aria-label="Filtrera frågor efter kategori">
+            <button
+              type="button"
+              onClick={() => setActiveCategory(null)}
+              aria-pressed={activeCategory === null}
+              className={`rounded-full border px-4 py-1.5 text-sm transition-[background-color,border-color,color] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                activeCategory === null
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+              }`}
+            >
+              Alla
+              <span className="ml-1.5 text-xs opacity-70">({items.length})</span>
+            </button>
+            {availableCategories.map((cat) => {
+              const count = items.filter((f) => f.category === cat).length;
+              const isActive = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setActiveCategory(isActive ? null : cat)}
+                  aria-pressed={isActive}
+                  className={`rounded-full border px-4 py-1.5 text-sm transition-[background-color,border-color,color] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+                    isActive
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                  }`}
+                >
+                  {cat}
+                  <span className="ml-1.5 text-xs opacity-70">({count})</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {searchable && (
           <div className="mt-8 max-w-3xl">
             <div className="relative">
