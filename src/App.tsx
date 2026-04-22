@@ -9,6 +9,15 @@ import Arbete from "./pages/Arbete";
 import Priser from "./pages/Priser";
 import Om from "./pages/Om";
 import Kontakt from "./pages/Kontakt";
+import Tjanster from "./pages/Tjanster";
+import Hemsidor from "./pages/tjanster/Hemsidor";
+import Ehandel from "./pages/tjanster/Ehandel";
+import Seo from "./pages/tjanster/Seo";
+import GoogleAds from "./pages/tjanster/GoogleAds";
+import MetaAds from "./pages/tjanster/MetaAds";
+import Content from "./pages/tjanster/Content";
+import GrafiskProfil from "./pages/tjanster/GrafiskProfil";
+import Fotografering from "./pages/tjanster/Fotografering";
 import WebbyraLinkoping from "./pages/WebbyraLinkoping";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -32,8 +41,18 @@ const App = () => (
             <Route path="/priser" element={<Priser />} />
             <Route path="/om" element={<Om />} />
             <Route path="/kontakt" element={<Kontakt />} />
+            <Route path="/tjanster" element={<Tjanster />} />
+            <Route path="/tjanster/hemsidor" element={<Hemsidor />} />
+            <Route path="/tjanster/ehandel" element={<Ehandel />} />
+            <Route path="/tjanster/seo" element={<Seo />} />
+            <Route path="/tjanster/google-ads" element={<GoogleAds />} />
+            <Route path="/tjanster/meta-ads" element={<MetaAds />} />
+            <Route path="/tjanster/content" element={<Content />} />
+            <Route path="/tjanster/grafisk-profil" element={<GrafiskProfil />} />
+            <Route path="/tjanster/fotografering" element={<Fotografering />} />
             <Route path="/webbbyra-linkoping" element={<WebbyraLinkoping />} />
             <Route path="/artiklar" element={<Blog />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/artiklar/:slug" element={<BlogPost />} />
             <Route path="/saas-utveckling-:slug" element={<CityPage />} />
             <Route path="/ai-byra-:slug" element={<CityPage />} />
