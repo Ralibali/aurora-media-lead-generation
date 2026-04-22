@@ -86,7 +86,7 @@ const CasePage = () => {
         {/* Hero */}
         <section className="pt-8 pb-12 md:pt-12 md:pb-16">
           <div className="container mx-auto max-w-5xl px-6">
-            <motion.div {...fadeUp}>
+            <motion.div {...fadeIn}>
               <div className="flex flex-wrap items-center gap-3">
                 <span
                   className={cn(
