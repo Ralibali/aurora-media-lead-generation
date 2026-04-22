@@ -20,12 +20,20 @@ export const useContactModal = () => {
   return c;
 };
 
+const PLATFORM_OPTIONS = [
+  { value: "iOS", label: "iOS" },
+  { value: "Android", label: "Android" },
+  { value: "Båda", label: "Båda (iOS + Android)" },
+  { value: "Osäker", label: "Osäker / vill ha råd" },
+] as const;
+
 const schema = z.object({
   name: z.string().trim().min(2, "Skriv ditt namn").max(80),
   email: z.string().trim().email("Ogiltig e-post").max(160),
   company: z.string().trim().max(120).optional().or(z.literal("")),
   paket: z.string().min(1, "Välj ett alternativ"),
-  leadLabel: z.string().trim().max(160).optional().or(z.literal("")),
+  platform: z.string().trim().max(40).optional().or(z.literal("")),
+  leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
   message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
 });
