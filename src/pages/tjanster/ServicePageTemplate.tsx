@@ -53,6 +53,55 @@ const fadeUp = {
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
 };
 
+/**
+ * Per-tjänst CTA-copy under FAQ:n.
+ * "Mix per tjänst": offert-löfte där priset varierar, sparring där scope kräver dialog.
+ */
+const CTA_COPY: Record<string, { label: string; text: string }> = {
+  seo: {
+    label: "Få SEO-offert på 24 h",
+    text: "Vill du veta vad SEO skulle kosta för just din sajt? Skicka URL:en så får du en konkret offert inom 24 timmar – kostnadsfritt och utan förpliktelser.",
+  },
+  ehandel: {
+    label: "Få e-handelsoffert på 24 h",
+    text: "Berätta kort om sortiment och betalflöden – jag återkommer med fast pris och tidsplan inom 24 timmar.",
+  },
+  hemsidor: {
+    label: "Få hemside-offert på 24 h",
+    text: "Skriv några rader om vad sajten ska göra. Du får ett fast pris och konkret leveranstid inom 24 timmar – inga timmar som tickar.",
+  },
+  "google-ads": {
+    label: "Få annonsplan på 24 h",
+    text: "Berätta vilka sökord du tävlar om så skissar jag en kampanjstruktur och budget – svar inom 24 timmar.",
+  },
+  "meta-ads": {
+    label: "Få annonsplan på 24 h",
+    text: "Berätta målgrupp och budget så får du en konkret kampanjplan tillbaka inom 24 timmar.",
+  },
+  content: {
+    label: "Få contentplan på 24 h",
+    text: "Skicka några nyckelord eller ämnen – jag återkommer med ett förslag på artikelkalender och pris inom 24 timmar.",
+  },
+  "grafisk-profil": {
+    label: "Boka 30 min sparring",
+    text: "Vi pratar igenom ditt varumärke i 30 minuter – ej förpliktande. Sen får du en konkret offert inom 24 timmar.",
+  },
+  fotografering: {
+    label: "Boka fototid",
+    text: "Berätta vad som ska fotograferas och var – du får tider och pris inom 24 timmar.",
+  },
+  mobilapp: {
+    label: "Boka 30 min sparring",
+    text: "App-projekt börjar bäst med ett kort samtal. 30 minuter, ej förpliktande – sen får du en konkret offert inom 24 timmar.",
+  },
+};
+
+const getCtaCopy = (slug: string, fallbackTitle: string) =>
+  CTA_COPY[slug] ?? {
+    label: "Få offert på 24 h",
+    text: `Har du fler frågor om ${fallbackTitle.toLowerCase()}? Skicka några rader så återkommer jag med konkret pris och tidsplan inom 24 timmar – kostnadsfritt och utan förpliktelser.`,
+  };
+
 const ServicePageTemplate = (props: ServicePageProps) => {
   const { open } = useContactModal();
 
