@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, ArrowRight, Check } from "@phosphor-icons/react";
+import { ArrowUpRight, ArrowRight, Check, EnvelopeSimple } from "@phosphor-icons/react";
 import { useContactModal } from "@/components/ContactModal";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
@@ -127,29 +127,27 @@ const HeroSection = () => {
                 ref={primaryMagnet.ref as React.RefObject<HTMLButtonElement>}
                 style={{ x: primaryMagnet.x, y: primaryMagnet.y, scale: primaryMagnet.scale }}
                 onClick={() => open()}
+                aria-label="Be om offert – öppna kontaktformulär"
                 className="group btn-pill self-start"
               >
-                <span className="text-sm font-medium">Starta projekt</span>
+                <span className="text-sm font-medium">Be om offert</span>
                 <span className="btn-pill-icon">
                   <ArrowUpRight weight="bold" size={16} />
                 </span>
               </motion.button>
 
-              <motion.button
-                ref={secondaryMagnet.ref as React.RefObject<HTMLButtonElement>}
+              <motion.a
+                ref={secondaryMagnet.ref as React.RefObject<HTMLAnchorElement>}
                 style={{ x: secondaryMagnet.x, y: secondaryMagnet.y, scale: secondaryMagnet.scale }}
-                onClick={() =>
-                  document
-                    .getElementById("portfolj")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
+                href="mailto:info@auroramedia.se?subject=Offertförfrågan%20%E2%80%93%20Aurora%20Media&body=Hej%20Aurora%20Media%2C%0A%0AJag%20vill%20gärna%20be%20om%20en%20offert%20för%3A%0A%0A%E2%80%A2%20Typ%20av%20projekt%3A%20%0A%E2%80%A2%20Tidsplan%3A%20%0A%E2%80%A2%20Budget%20(om%20känd)%3A%20%0A%0AKontaktuppgifter%3A%0ANamn%3A%20%0AFöretag%3A%20%0ATelefon%3A%20%0A%0ATack!"
+                aria-label="Mejla info@auroramedia.se direkt"
                 className="group btn-pill-ghost self-start"
               >
-                <span className="text-sm font-medium">Se mitt arbete</span>
                 <span className="btn-pill-ghost-icon">
-                  <ArrowRight weight="bold" size={16} />
+                  <EnvelopeSimple weight="bold" size={16} />
                 </span>
-              </motion.button>
+                <span className="text-sm font-medium">Mejla info@auroramedia.se</span>
+              </motion.a>
             </div>
 
             <p className="mt-8 font-mono text-xs uppercase tracking-wider text-muted-foreground">
