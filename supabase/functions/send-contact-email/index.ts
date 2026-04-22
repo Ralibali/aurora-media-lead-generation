@@ -13,6 +13,7 @@ interface Body {
   email: string;
   company?: string;
   paket: string;
+  leadLabel?: string;
   message: string;
 }
 
