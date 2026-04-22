@@ -14,6 +14,7 @@ interface Body {
   company?: string;
   paket: string;
   leadLabel?: string;
+  internalNote?: string;
   message: string;
 }
 
