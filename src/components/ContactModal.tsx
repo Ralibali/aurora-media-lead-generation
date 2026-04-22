@@ -11,7 +11,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 
-type ContactModalCtx = { open: (paket?: string) => void };
+type OpenOptions = { paket?: string; internalNote?: string };
+type ContactModalCtx = {
+  open: (paketOrOptions?: string | OpenOptions, options?: OpenOptions) => void;
+};
 const Ctx = createContext<ContactModalCtx | null>(null);
 
 export const useContactModal = () => {
@@ -34,6 +37,7 @@ const schema = z.object({
   paket: z.string().min(1, "Välj ett alternativ"),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
+  internalNote: z.string().trim().max(500).optional().or(z.literal("")),
   message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
 });
@@ -66,16 +70,32 @@ const PAKET_OPTIONS = [
 export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultPaket, setDefaultPaket] = useState<string>("");
+  const [internalNote, setInternalNote] = useState<string>("");
 
-  const open = (paket?: string) => {
-    setDefaultPaket(paket ?? "");
+  const open: ContactModalCtx["open"] = (paketOrOptions, options) => {
+    let paket = "";
+    let note = "";
+    if (typeof paketOrOptions === "string") {
+      paket = paketOrOptions;
+      note = options?.internalNote ?? "";
+    } else if (paketOrOptions) {
+      paket = paketOrOptions.paket ?? "";
+      note = paketOrOptions.internalNote ?? "";
+    }
+    setDefaultPaket(paket);
+    setInternalNote(note);
     setIsOpen(true);
   };
 
   return (
     <Ctx.Provider value={{ open }}>
       {children}
-      <ContactDialog isOpen={isOpen} onOpenChange={setIsOpen} defaultPaket={defaultPaket} />
+      <ContactDialog
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+        defaultPaket={defaultPaket}
+        internalNote={internalNote}
+      />
     </Ctx.Provider>
   );
 };
@@ -84,10 +104,12 @@ const ContactDialog = ({
   isOpen,
   onOpenChange,
   defaultPaket,
+  internalNote,
 }: {
   isOpen: boolean;
   onOpenChange: (v: boolean) => void;
   defaultPaket: string;
+  internalNote: string;
 }) => {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -153,6 +175,7 @@ const ContactDialog = ({
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
       platform: platformValue,
       leadLabel,
+      internalNote,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
     });
@@ -322,6 +345,17 @@ const ContactDialog = ({
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+            )}
+            {internalNote && (
+              <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm">
+                <div className="flex items-start gap-2.5">
+                  <Tag className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                  <div className="space-y-1">
+                    <p className="label-caps text-muted-foreground">Skickas med din förfrågan</p>
+                    <p className="text-foreground/85">{internalNote}</p>
+                  </div>
+                </div>
               </div>
             )}
             <div className="space-y-1.5">

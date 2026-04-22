@@ -268,7 +268,18 @@ const FAQSection = ({
                 {filtered.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => open(`Fråga om FAQ: ${query.trim()}`)}
+                    onClick={() => {
+                      const opened = filtered.find((f) => `item-${f.q}` === openItem) ?? filtered[0];
+                      const noteParts = [
+                        `Sökning: "${query.trim()}"`,
+                        activeCategory ? `Kategori: ${activeCategory}` : null,
+                        opened ? `Visad fråga: "${opened.q}"` : null,
+                      ].filter(Boolean);
+                      open({
+                        paket: ctaPaket,
+                        internalNote: `Lead från FAQ\n${noteParts.join("\n")}`,
+                      });
+                    }}
                     className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary transition-[background-color,border-color] duration-300 hover:border-primary hover:bg-primary/10"
                   >
                     Få personligt svar
@@ -292,9 +303,17 @@ const FAQSection = ({
               </p>
               <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Button
-                  onClick={() =>
-                    open(query.trim() ? `Fråga om FAQ: ${query.trim()}` : undefined)
-                  }
+                  onClick={() => {
+                    const noteParts = [
+                      query.trim() ? `Sökning: "${query.trim()}"` : null,
+                      activeCategory ? `Kategori: ${activeCategory}` : null,
+                      "Resultat: 0 träffar",
+                    ].filter(Boolean);
+                    open({
+                      paket: ctaPaket,
+                      internalNote: `Lead från FAQ (inga träffar)\n${noteParts.join("\n")}`,
+                    });
+                  }}
                   size="lg"
                   className="group"
                 >
@@ -360,7 +379,18 @@ const FAQSection = ({
             >
               <p className="text-base text-foreground/85 sm:max-w-md">{ctaText}</p>
               <Button
-                onClick={() => open(ctaPaket)}
+                onClick={() => {
+                  const opened = filtered.find((f) => `item-${f.q}` === openItem);
+                  const noteParts = [
+                    query.trim() ? `Sökning: "${query.trim()}"` : null,
+                    activeCategory ? `Kategori: ${activeCategory}` : null,
+                    opened ? `Visad fråga: "${opened.q}"` : null,
+                  ].filter(Boolean);
+                  const note = noteParts.length
+                    ? `Lead från FAQ\n${noteParts.join("\n")}`
+                    : "";
+                  open({ paket: ctaPaket, internalNote: note });
+                }}
                 className="group shrink-0"
                 size="lg"
               >
