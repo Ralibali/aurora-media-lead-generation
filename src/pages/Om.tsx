@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import FinalCTASection from "@/components/FinalCTASection";
+import Reveal from "@/components/Reveal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const products = [
@@ -17,13 +17,6 @@ const products = [
   { name: "Viriditas", url: "https://viriditasmassage.se", desc: "Bokningssajt för massagemottagning." },
 ];
 
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-};
-
 const Section = ({
   label,
   title,
@@ -33,13 +26,13 @@ const Section = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <motion.div {...fadeUp} className="border-t border-border pt-12 md:pt-16">
+  <Reveal className="border-t border-border pt-12 md:pt-16">
     <p className="label-caps">{label}</p>
     <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
       {title}
     </h2>
     <div className="mt-7 max-w-2xl text-lg leading-relaxed text-foreground/85">{children}</div>
-  </motion.div>
+  </Reveal>
 );
 
 const Om = () => {
