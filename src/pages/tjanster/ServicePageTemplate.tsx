@@ -17,6 +17,7 @@ export type ServiceTier = {
   desc?: string;
   features?: string[];
   featured?: boolean;
+  paketValue?: string; // override props.paketName for this specific tier
 };
 
 export type RelatedService = {
@@ -224,7 +225,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
                       </ul>
                     )}
                     <Button
-                      onClick={() => open(props.paketName)}
+                      onClick={() => open(t.paketValue ?? props.paketName)}
                       variant={t.featured ? "default" : "outline"}
                       className="mt-6 w-full"
                     >
