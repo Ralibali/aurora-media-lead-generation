@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, ReactNode } from "react";
+import { useState, createContext, useContext, ReactNode, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 type ContactModalCtx = { open: (paket?: string) => void };
 const Ctx = createContext<ContactModalCtx | null>(null);
@@ -24,8 +26,21 @@ const schema = z.object({
   company: z.string().trim().max(120).optional().or(z.literal("")),
   paket: z.string().min(1, "Välj ett alternativ"),
   message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
-  consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna" }) }),
+  consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
 });
+
+const PAKET_OPTIONS = [
+  { value: "Prototyp", label: "Prototyp – 14 900 kr" },
+  { value: "MVP", label: "MVP – 34 900 kr" },
+  { value: "SaaS", label: "Skalbar SaaS – 69 000 kr" },
+  { value: "Skraddarsytt", label: "Skräddarsytt – från 89 000 kr" },
+  { value: "Hemsida", label: "Hemsida – från 4 900 kr" },
+  { value: "SEO", label: "SEO – från 4 900 kr" },
+  { value: "Ads", label: "Google / Meta Ads – från 3 900 kr" },
+  { value: "Content", label: "Content – från 1 490 kr/artikel" },
+  { value: "Annat", label: "Annat" },
+  { value: "Vet inte", label: "Vet inte än" },
+];
 
 export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +70,11 @@ const ContactDialog = ({
 }) => {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [paketValue, setPaketValue] = useState<string>(defaultPaket || "");
+
+  useEffect(() => {
+    if (isOpen) setPaketValue(defaultPaket || "");
+  }, [isOpen, defaultPaket]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,7 +84,7 @@ const ContactDialog = ({
       name: data.get("name"),
       email: data.get("email"),
       company: data.get("company") ?? "",
-      paket: data.get("paket") ?? defaultPaket,
+      paket: paketValue || (data.get("paket") as string) || defaultPaket,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
     });
@@ -74,13 +94,15 @@ const ContactDialog = ({
     }
     setSubmitting(true);
     try {
-      // Future: call edge function send-contact-email
-      // await supabase.functions.invoke('send-contact-email', { body: parsed.data });
-      await new Promise((r) => setTimeout(r, 600));
+      const { error } = await supabase.functions.invoke("send-contact-email", {
+        body: parsed.data,
+      });
+      if (error) throw error;
       setDone(true);
       toast.success("Tack! Jag hör av mig inom 24 timmar.");
       form.reset();
     } catch (err) {
+      console.error("[ContactModal] submit error", err);
       toast.error("Något gick fel. Mejla istället info@auroramedia.se");
     } finally {
       setSubmitting(false);
@@ -95,45 +117,51 @@ const ContactDialog = ({
         if (!v) setTimeout(() => setDone(false), 300);
       }}
     >
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto sm:max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="font-serif text-3xl font-normal">Starta ett projekt</DialogTitle>
           <DialogDescription>Svarar inom 24 timmar vardagar.</DialogDescription>
         </DialogHeader>
 
         {done ? (
-          <div className="py-8 text-center space-y-3">
+          <div className="py-10 text-center space-y-4">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+              <CheckCircle2 className="h-8 w-8 text-primary" strokeWidth={1.5} />
+            </div>
             <p className="font-serif text-2xl">Tack!</p>
             <p className="text-muted-foreground">Jag hör av mig inom 24 timmar.</p>
+            <Button variant="outline" onClick={() => onOpenChange(false)} className="mt-4">
+              Stäng
+            </Button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label htmlFor="name">Namn *</Label>
-                <Input id="name" name="name" required maxLength={80} />
+                <Input id="name" name="name" required maxLength={80} autoComplete="name" />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="email">E-post *</Label>
-                <Input id="email" name="email" type="email" required maxLength={160} />
+                <Input id="email" name="email" type="email" required maxLength={160} autoComplete="email" />
               </div>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="company">Företag</Label>
-              <Input id="company" name="company" maxLength={120} />
+              <Input id="company" name="company" maxLength={120} autoComplete="organization" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="paket">Vilket paket är du intresserad av? *</Label>
-              <Select name="paket" defaultValue={defaultPaket || undefined}>
+              <Select value={paketValue} onValueChange={setPaketValue} name="paket">
                 <SelectTrigger id="paket">
                   <SelectValue placeholder="Välj paket" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Prototyp">Prototyp – 14 900 kr</SelectItem>
-                  <SelectItem value="MVP">MVP – 34 900 kr</SelectItem>
-                  <SelectItem value="SaaS">Skalbar SaaS – 69 000 kr</SelectItem>
-                  <SelectItem value="Skraddarsytt">Skräddarsytt – från 89 000 kr</SelectItem>
-                  <SelectItem value="Vet inte">Vet inte än</SelectItem>
+                  {PAKET_OPTIONS.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -144,7 +172,7 @@ const ContactDialog = ({
             <div className="flex items-start gap-2">
               <Checkbox id="consent" name="consent" required className="mt-1" />
               <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                Jag godkänner att ni hanterar mina uppgifter enligt integritetspolicyn.
+                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.
               </Label>
             </div>
             <Button type="submit" disabled={submitting} className="w-full" size="lg">
