@@ -8,36 +8,36 @@ import {
 
 export const faqs = [
   {
-    q: "Varför så mycket billigare än traditionella dev-byråer?",
-    a: "Eftersom jag använder AI för att skriva större delen av koden. En traditionell utvecklare tar 400–1200 kr/h och bygger 1 feature/dag. Jag bygger 5–10 features/dag till fast pris.",
+    q: "Vem är du?",
+    a: "Jag heter Christoffer och driver Aurora Media själv från Linköping. Jag kommer från säkerhetsbranschen där jag jobbade i 10 år innan jag bytte spår och bygger nu webbappar på heltid.",
   },
   {
-    q: "Vad händer om Lovable eller Bolt stängs ner?",
-    a: "Jag är inte låst till ett verktyg. Jag använder Lovable, Bolt, Emergent, Cursor och Claude efter behov. Koden är standard React + Supabase som fungerar var som helst. Du får alltid källkoden.",
+    q: "Använder du AI för att skriva all kod?",
+    a: "Nej. Jag använder AI-verktyg som Lovable, Bolt och Claude för att snabba på vissa delar, men jag granskar och styr all arkitektur och logik själv. Det är så jag kan leverera på veckor istället för månader utan att tappa kvalitet.",
   },
   {
-    q: "Får jag källkoden?",
-    a: "Ja, alltid. Du äger allt – kod, design, data, domän. Inga låsningar.",
+    q: "Vad betyder det att jag äger källkoden?",
+    a: "Att du får alla filer och rättigheter till koden jag skriver. Du kan anlita vem som helst för att vidareutveckla den i framtiden. Inga låsningar, inga abonnemang du måste behålla.",
   },
   {
-    q: "Hur fungerar supporten efter leverans?",
-    a: "Prototyp: 1 vecka. MVP: 2 veckor. SaaS: 1 månad. Sedan kan du teckna löpande underhåll för 1 990 kr/mån eller stå på egen hand.",
+    q: "Vilken teknik använder du?",
+    a: "Jag bygger med React för frontend och Supabase (PostgreSQL) för backend. Det är en modern och stabil kombination som funkar för allt från enkla appar till skalbar SaaS.",
   },
   {
-    q: "Jobbar du ensam?",
-    a: "Jag driver Aurora Media AB själv. Det är precis därför jag är snabb och prisvärd – inga mellanled, ingen byråkrati, inga projektledare som ska bokas in.",
+    q: "Varför en administrativ avgift på 15%?",
+    a: "Den täcker min tid för projekthantering, möten och avstämningar. Jag väljer att redovisa den separat istället för att gömma den i timpriset. Då vet du exakt vad du betalar för.",
   },
   {
-    q: "Kan du ta över ett befintligt projekt?",
-    a: "Ja, om det är byggt i teknologi jag jobbar i (React, Supabase, Next.js, Vue). Jag gör en snabb audit först och ger fast pris på överlämningen.",
+    q: "Vad händer efter att appen är klar?",
+    a: "Jag överlämnar allt till dig. Om du vill kan jag erbjuda ett supportavtal för 1 990 kr/mån som täcker drift och mindre ändringar. Annars står du på egen hand med full källkod.",
   },
   {
-    q: "Hur fungerar det med GDPR?",
-    a: "All data lagras i EU (Supabase Frankfurt). Jag upprättar personuppgiftsbiträdesavtal vid projektets början och går igenom vilka uppgifter som hanteras var.",
+    q: "Kan du bygga en mobilapp för App Store?",
+    a: "Apparna jag bygger är webbappar som fungerar och ser bra ut på mobilen. De kan installeras på hemskärmen precis som en vanlig app. För renodlade native-appar hänvisar jag vidare.",
   },
   {
-    q: "Vad händer om projektet försenas?",
-    a: "Fast pris gäller. Om jag blir försenad kostar det inte dig något extra. Om du vill lägga till scope är det offert-baserat.",
+    q: "Varför jobbar du ensam?",
+    a: "För att det är enklare. Färre möten, inga missförstånd och en rakare kommunikation. Du pratar direkt med personen som bygger – ingen account manager emellan.",
   },
 ];
 
@@ -58,7 +58,7 @@ const FAQSection = ({
           transition={{ duration: 0.6 }}
           className="max-w-2xl"
         >
-          <p className="label-caps">FAQ</p>
+          <p className="label-caps">Frågor & svar</p>
           <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
             {title}
           </h2>

@@ -54,30 +54,29 @@ const HeroSection = () => {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-7"
           >
-            <p className="label-caps">AI-byggd SaaS · Linköping</p>
+            <p className="label-caps">Aurora Media AB · Linköping</p>
 
             <h1 className="mt-6 font-serif leading-[1.02] tracking-[-0.025em] text-[clamp(3rem,8vw,7rem)]">
-              Jag bygger SaaS
+              Jag bygger din app.
               <br />
-              <em className="italic text-primary">med AI.</em>
+              <em className="italic text-primary">Från idé till lansering på 4 veckor.</em>
             </h1>
 
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Prototyper från 14 900 kr. Fullt betal-SaaS från 69 000 kr.
-              Fast pris. Leverans på 3–28 dagar.
+              Fast pris från 14 900 kr. Du äger alltid källkoden.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Button size="lg" onClick={scrollToPortfolio}>
-                Se vad jag byggt
+                Visa mina paket
               </Button>
               <Button size="lg" variant="outline" onClick={() => open()}>
-                Starta projekt
+                Boka ett möte
               </Button>
             </div>
 
             <p className="mt-6 text-sm text-muted-foreground">
-              7 egna SaaS live · 10+ kundprojekt · Linköping
+              10 år i säkerhetsbranschen, nu med 7 egna SaaS-projekt live.
             </p>
           </motion.div>
 

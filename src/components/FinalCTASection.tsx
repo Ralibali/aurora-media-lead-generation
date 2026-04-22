@@ -16,9 +16,9 @@ const FinalCTASection = () => {
         >
           Har du en idé
           <br />
-          som borde varit en app
+          du vill förverkliga?
           <br />
-          för länge sen?
+          Då pratar vi.
         </motion.h2>
 
         <motion.p
@@ -28,7 +28,7 @@ const FinalCTASection = () => {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mx-auto mt-10 max-w-xl text-lg text-muted-foreground"
         >
-          Skriv ett mejl. Jag hör av mig inom 24 timmar.
+          Boka ett 30-minuters samtal med mig. Inget förpliktande, inget säljsnack.
         </motion.p>
 
         <motion.div
@@ -39,7 +39,7 @@ const FinalCTASection = () => {
           className="mt-10 flex flex-col items-center gap-4"
         >
           <Button size="lg" onClick={() => open()} className="px-10">
-            Skriv till mig
+            Boka samtal
           </Button>
           <a
             href="mailto:info@auroramedia.se"

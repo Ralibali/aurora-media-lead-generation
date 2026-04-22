@@ -1,15 +1,15 @@
 const groups = [
   {
-    name: "Etablerade SMB",
-    body: "Ditt team (20–200 anställda) har ett Excel-ark eller manuell process som skriker efter att bli en app. Jag bygger den på 2–4 veckor. Fast pris.",
+    name: "Etablerade företag (SMB)",
+    body: "Ni har en befintlig verksamhet med 20–200 anställda och behöver en intern app eller en ny digital tjänst. Ni vill ha en snabb process och ett fast pris istället för en byrå-offert i flera steg.",
   },
   {
     name: "Startup-grundare",
-    body: "Du har en idé men ingen utvecklare. Jag bygger MVP:n så du kan validera, pitcha investerare eller ta dina första betalande kunder.",
+    body: "Du har en idé men ingen utvecklare. Du behöver en prototyp eller MVP för att testa mot marknaden, pitcha investerare eller ta dina första betalande kunder. Du vill jobba med någon som själv har byggt och lanserat.",
   },
   {
-    name: "Företag som vill undvika byrå-fällan",
-    body: "Du vet att en traditionell dev-byrå tar 6 månader och 500 000 kr för det du behöver. Det behöver inte vara så. Jag bygger med AI. Snabbare, billigare, samma kvalitet.",
+    name: "Byrå-flyktingar",
+    body: "Du har tröttnat på stora byråer med långa ledtider, höga priser och projektledare i varje led. Du vill ha en direkt relation med personen som faktiskt skriver koden.",
   },
 ];
 
@@ -18,8 +18,8 @@ const TargetAudienceSection = () => {
     <section className="border-t border-border py-24 md:py-32">
       <div className="container mx-auto px-6">
         <div className="max-w-2xl">
-          <p className="label-caps">Målgrupp</p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl">Vem jag jobbar med</h2>
+          <p className="label-caps">För vem?</p>
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl">Jag jobbar helst med tre typer av kunder.</h2>
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">

@@ -3,23 +3,23 @@ import { motion } from "framer-motion";
 const steps = [
   {
     label: "Steg 1 · Dag 1",
-    title: "Första samtalet",
-    body: "20–30 minuter via video. Du beskriver problemet. Jag säger direkt om det är byggbart och exakt vad det kostar.",
+    title: "Samtal",
+    body: "Vi pratar 30 minuter om din idé. Jag ställer frågor. Du får en känsla för om jag är rätt person för jobbet och ett tydligt fast pris.",
   },
   {
-    label: "Steg 2 · Dag 3",
-    title: "Klickbar prototyp",
-    body: "Inte Figma. En verklig app med din data som du kan testa. Din feedback formar resten av bygget.",
+    label: "Steg 2 · Vecka 1",
+    title: "Prototyp",
+    body: "Jag bygger en interaktiv prototyp du kan klicka dig runt i. Inte Figma – en riktig app. Du ger feedback, vi justerar tills den känns rätt.",
   },
   {
-    label: "Steg 3 · Dag 7–14",
+    label: "Steg 3 · Vecka 2–3",
     title: "Produktion",
-    body: "Jag bygger ut funktionalitet, integrationer, betalningar, SEO. Uppdateringar två gånger i veckan.",
+    body: "Jag skriver koden i React och Supabase. Du får uppdateringar två gånger i veckan och kan följa arbetet live på din egen URL.",
   },
   {
-    label: "Steg 4 · Leveransdagen",
-    title: "Du tar över",
-    body: "Källkod, dokumentation, 2–4 veckors support ingår. Sedan är produkten helt din.",
+    label: "Steg 4 · Vecka 4",
+    title: "Överlämning",
+    body: "Jag driftsätter appen och överför all källkod till dig. Visar hur allt fungerar. Du äger 100% av resultatet, inklusive 2–4 veckors support.",
   },
 ];
 
@@ -34,9 +34,9 @@ const ProcessSection = () => {
           transition={{ duration: 0.6 }}
           className="max-w-2xl"
         >
-          <p className="label-caps">Process</p>
+          <p className="label-caps">Min process</p>
           <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-            Fyra steg. Inga överraskningar.
+            Från samtal till färdig app på fyra veckor.
           </h2>
         </motion.div>
 
