@@ -97,6 +97,10 @@ const ContactDialog = ({
   const [submittedLabel, setSubmittedLabel] = useState<string>("");
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
 
+  const [platformValue, setPlatformValue] = useState<string>("");
+
+  const isMobileApp = paketValue.startsWith("Mobilapp") || paketValue === "Kombination – SaaS + app";
+
   const buildPrefill = (paket: string): string => {
     const opt = PAKET_OPTIONS.find((o) => o.value === paket);
     if (!opt) return "";
@@ -105,8 +109,8 @@ const ContactDialog = ({
       const tier = paket.replace("SEO – ", "");
       return `Hej! Jag är intresserad av SEO-paketet "${tier}" (${opt.label}).\n\nKort om sajten:\n• URL: \n• Bransch / vad ni säljer: \n• Viktigaste sökord (om kända): \n\nMål med SEO-arbetet: `;
     }
-    if (paket.startsWith("Mobilapp")) {
-      return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n• Befintlig webb-SaaS (URL eller beskrivning): \n• Plattformar (iOS / Android / båda): \n• Tidsplan: `;
+    if (paket.startsWith("Mobilapp") || paket === "Kombination – SaaS + app") {
+      return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n• Befintlig webb-SaaS (URL eller beskrivning): \n• Tidsplan: `;
     }
     return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n`;
   };
@@ -117,6 +121,7 @@ const ContactDialog = ({
       setPaketValue(paket);
       setMessageValue(buildPrefill(paket));
       setMessageTouched(false);
+      setPlatformValue("");
     }
   }, [isOpen, defaultPaket]);
 
@@ -125,10 +130,17 @@ const ContactDialog = ({
     if (!messageTouched) {
       setMessageValue(buildPrefill(paketValue));
     }
+    // Nollställ plattform när paketet inte längre handlar om app
+    if (!paketValue.startsWith("Mobilapp") && paketValue !== "Kombination – SaaS + app") {
+      setPlatformValue("");
+    }
   }, [paketValue, messageTouched]);
 
   const selectedOption = PAKET_OPTIONS.find((o) => o.value === paketValue);
-  const leadLabel = selectedOption ? `Intresserad av: ${selectedOption.label}` : "";
+  const platformOption = PLATFORM_OPTIONS.find((p) => p.value === platformValue);
+  const leadLabel = selectedOption
+    ? `Intresserad av: ${selectedOption.label}${platformOption ? ` · Plattform: ${platformOption.label}` : ""}`
+    : "";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -139,6 +151,7 @@ const ContactDialog = ({
       email: data.get("email"),
       company: data.get("company") ?? "",
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
+      platform: platformValue,
       leadLabel,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
