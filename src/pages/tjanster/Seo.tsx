@@ -199,6 +199,7 @@ const Seo = () => {
       related={[
         { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
         { name: "Hemsidor", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
+        { name: "Mobilapp", price: "Från 6 900 kr", to: "/tjanster/mobilapp" },
         { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
       ]}
     />
