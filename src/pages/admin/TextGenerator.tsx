@@ -273,6 +273,32 @@ const TextGenerator = () => {
       { textType: "faq-answer", topic: "Kan du ta över ett befintligt projekt?" },
     ]);
 
+  const generateMonthlyArticles = () => {
+    const month = new Date().toLocaleDateString("sv-SE", { month: "long", year: "numeric" });
+    return quickGenerate([
+      {
+        textType: "article",
+        topic: `Så väljer du rätt webbyrå i Linköping 2026`,
+        context: `Lokal SEO-artikel för ${month}. Keyword: webbbyrå linköping. Ska ranka lokalt och driva leads.`,
+      },
+      {
+        textType: "article",
+        topic: `AI-byggda hemsidor vs traditionell webbutveckling`,
+        context: `Jämförande artikel för ${month}. Förklara fördelar/nackdelar utan hype. Keyword: ai hemsida.`,
+      },
+      {
+        textType: "article",
+        topic: `SEO för småföretag: 5 saker som faktiskt funkar 2026`,
+        context: `Praktisk how-to för ${month}. Keyword: seo småföretag. Inga floskler, konkreta steg.`,
+      },
+      {
+        textType: "article",
+        topic: `Vad en hemsida bör kosta – ärlig prisguide`,
+        context: `Transparent prisartikel för ${month}. Visa Aurora Medias 15% admin-avgift och nämn intervall 4 900–50 000 kr.`,
+      },
+    ]);
+  };
+
   if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;
 
   return (
