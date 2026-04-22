@@ -348,6 +348,9 @@ const TextGenerator = () => {
             <Button onClick={generateMonthlyArticles} disabled={loading} variant="outline">
               Månadens 4 artiklar
             </Button>
+            <Button onClick={generateMobileAppArticles} disabled={loading} variant="outline">
+              Mobilapp-artiklar (8 st)
+            </Button>
             <Button onClick={generateFAQs} disabled={loading} variant="outline">
               Generera 5 nya FAQ
             </Button>
