@@ -22,34 +22,42 @@ export const faqs: FaqItem[] = [
   {
     q: "Vem är du?",
     a: "Jag heter Christoffer och driver Aurora Media själv från Linköping. Jag kommer från säkerhetsbranschen där jag jobbade i tio år innan jag bytte spår och bygger nu webbappar på heltid.",
+    category: "Om mig",
   },
   {
     q: "Använder du AI för att skriva all kod?",
     a: "Nej. Jag använder AI-verktyg som Lovable, Bolt och Claude för att snabba på vissa delar, men jag granskar och styr all arkitektur och logik själv. Det är så jag kan leverera på veckor istället för månader utan att tappa kvalitet.",
+    category: "Verktyg",
   },
   {
     q: "Vad betyder det att jag äger källkoden?",
     a: "Att du får alla filer och rättigheter till koden jag skriver. Du kan anlita vem som helst för att vidareutveckla den i framtiden. Inga låsningar, inga abonnemang du måste behålla.",
+    category: "Pris & process",
   },
   {
     q: "Vilken teknik använder du?",
     a: "Jag bygger med React för frontend och Supabase (PostgreSQL) för backend. Det är en modern och stabil kombination som funkar för allt från enkla appar till skalbar SaaS.",
+    category: "Verktyg",
   },
   {
     q: "Varför en administrativ avgift på 15%?",
     a: "Den täcker min tid för projekthantering, möten och avstämningar. Jag väljer att redovisa den separat istället för att gömma den i timpriset. Då vet du exakt vad du betalar för.",
+    category: "Pris & process",
   },
   {
     q: "Vad händer efter att appen är klar?",
     a: "Jag överlämnar allt till dig. Om du vill kan jag erbjuda ett supportavtal för 1 990 kr/mån som täcker drift och mindre ändringar. Annars står du på egen hand med full källkod.",
+    category: "Pris & process",
   },
   {
     q: "Kan du bygga en mobilapp för App Store?",
     a: "Apparna jag bygger är webbappar som fungerar och ser bra ut på mobilen. De kan installeras på hemskärmen precis som en vanlig app. För renodlade native-appar hänvisar jag vidare.",
+    category: "Verktyg",
   },
   {
     q: "Varför jobbar du ensam?",
     a: "För att det är enklare. Färre möten, inga missförstånd och en rakare kommunikation. Du pratar direkt med personen som bygger – ingen account manager emellan.",
+    category: "Om mig",
   },
 ];
 
