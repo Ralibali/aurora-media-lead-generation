@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
   Globe,
   ShoppingBag,
@@ -18,6 +17,7 @@ import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
+import Reveal from "@/components/Reveal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const primary = {
@@ -38,13 +38,6 @@ const services = [
   { icon: Palette, name: "Grafisk profil", price: "Från 5 900 kr", desc: "Logo, färger, typografi, mallar.", to: "/tjanster/grafisk-profil" },
   { icon: Camera, name: "Fotografering", price: "4 900 kr/halvdag", desc: "Produkt-, miljö- och porträttfoto i Linköping.", to: "/tjanster/fotografering" },
 ];
-
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-};
 
 const Tjanster = () => {
   const { open } = useContactModal();
