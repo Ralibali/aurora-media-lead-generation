@@ -303,9 +303,17 @@ const FAQSection = ({
               </p>
               <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Button
-                  onClick={() =>
-                    open(query.trim() ? `Fråga om FAQ: ${query.trim()}` : undefined)
-                  }
+                  onClick={() => {
+                    const noteParts = [
+                      query.trim() ? `Sökning: "${query.trim()}"` : null,
+                      activeCategory ? `Kategori: ${activeCategory}` : null,
+                      "Resultat: 0 träffar",
+                    ].filter(Boolean);
+                    open({
+                      paket: ctaPaket,
+                      internalNote: `Lead från FAQ (inga träffar)\n${noteParts.join("\n")}`,
+                    });
+                  }}
                   size="lg"
                   className="group"
                 >
