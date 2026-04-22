@@ -175,6 +175,7 @@ const ContactDialog = ({
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
       platform: platformValue,
       leadLabel,
+      internalNote,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
     });
