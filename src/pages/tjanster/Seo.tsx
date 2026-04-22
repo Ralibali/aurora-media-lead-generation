@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Clock, Wrench, ClipboardCheck } from "lucide-react";
 import ServicePageTemplate from "./ServicePageTemplate";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
