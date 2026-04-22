@@ -114,7 +114,7 @@ const Priser = () => {
         {/* Hero */}
         <section className="pt-16 pb-12 md:pt-24 md:pb-16">
           <div className="container mx-auto px-6 max-w-4xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Priser</p>
               <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
                 Fast pris. <em className="italic text-primary">Inga timmar.</em>
@@ -123,7 +123,7 @@ const Priser = () => {
                 Du vet exakt vad du betalar innan vi börjar. Ingen löpande räkning, inga
                 "det blev lite mer komplext än vi trodde". Inga sex-månaders bindningar.
               </p>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 
@@ -132,12 +132,10 @@ const Priser = () => {
           <div className="container mx-auto px-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {paket.map((p, i) => (
-                <motion.div
+                <Reveal
                   key={p.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5, delay: i * 0.06 }}
+                  delay={i * 0.06}
+                  duration={0.6}
                   className={`relative flex flex-col rounded-xl border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                     p.featured ? "border-primary shadow-md" : "border-border hover:border-primary/50"
                   }`}
@@ -166,7 +164,7 @@ const Priser = () => {
                   >
                     {p.cta}
                   </Button>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
