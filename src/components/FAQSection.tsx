@@ -71,14 +71,38 @@ const FAQSection = ({
   const { open } = useContactModal();
   const [query, setQuery] = useState("");
   const [openItem, setOpenItem] = useState<string>("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  // Härled tillgängliga kategorier från items (bevarar inmatningsordning)
+  const availableCategories = useMemo(() => {
+    const seen = new Set<string>();
+    const list: string[] = [];
+    for (const f of items) {
+      if (f.category && !seen.has(f.category)) {
+        seen.add(f.category);
+        list.push(f.category);
+      }
+    }
+    return list;
+  }, [items]);
+
+  const showChips = searchable && availableCategories.length >= 2;
+
+  // Filtrera först på kategori, sedan på sökord
   const filtered = useMemo(() => {
-    if (!searchable || !query.trim()) return items;
+    if (!searchable) return items;
+    let list = items;
+    if (showChips && activeCategory) {
+      list = list.filter((f) => f.category === activeCategory);
+    }
     const q = query.trim().toLowerCase();
-    return items.filter(
-      (f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q)
-    );
-  }, [items, query, searchable]);
+    if (q) {
+      list = list.filter(
+        (f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [items, query, searchable, activeCategory, showChips]);
 
   const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
