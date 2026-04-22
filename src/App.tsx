@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ContactModalProvider } from "@/components/ContactModal";
 import Index from "./pages/Index";
 import Arbete from "./pages/Arbete";
+import CasePage from "./pages/CasePage";
 import Priser from "./pages/Priser";
 import Om from "./pages/Om";
 import Kontakt from "./pages/Kontakt";
@@ -40,6 +41,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/arbete" element={<Arbete />} />
+            <Route path="/arbete/:slug" element={<CasePage />} />
             <Route path="/priser" element={<Priser />} />
             <Route path="/om" element={<Om />} />
             <Route path="/kontakt" element={<Kontakt />} />
