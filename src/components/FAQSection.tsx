@@ -12,7 +12,13 @@ import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { trackFaqSearch } from "@/lib/faqTracking";
 
-export const faqs = [
+export type FaqItem = {
+  q: string;
+  a: string;
+  category?: string;
+};
+
+export const faqs: FaqItem[] = [
   {
     q: "Vem är du?",
     a: "Jag heter Christoffer och driver Aurora Media själv från Linköping. Jag kommer från säkerhetsbranschen där jag jobbade i tio år innan jag bytte spår och bygger nu webbappar på heltid.",
@@ -55,7 +61,7 @@ const FAQSection = ({
   ctaLabel = "Be om offert",
   ctaText = "Hittade du inte det du letade efter? Skicka några rader så återkommer jag inom 24 timmar.",
 }: {
-  items?: typeof faqs;
+  items?: FaqItem[];
   title?: string;
   searchable?: boolean;
   ctaPaket?: string;
