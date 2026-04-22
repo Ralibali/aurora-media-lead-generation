@@ -15,7 +15,7 @@ import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 const tillagg = [
   { name: "Hemsida", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
   { name: "E-handel", price: "Från 19 900 kr", to: "/tjanster/ehandel" },
-  { name: "SEO", price: "Från 4 900 kr", to: "/tjanster/seo" },
+  { name: "SEO", price: "Från 2 490 kr", to: "/tjanster/seo" },
   { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
   { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
   { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
