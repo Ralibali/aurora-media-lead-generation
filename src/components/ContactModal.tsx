@@ -25,6 +25,7 @@ const schema = z.object({
   email: z.string().trim().email("Ogiltig e-post").max(160),
   company: z.string().trim().max(120).optional().or(z.literal("")),
   paket: z.string().min(1, "Välj ett alternativ"),
+  leadLabel: z.string().trim().max(160).optional().or(z.literal("")),
   message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
 });
