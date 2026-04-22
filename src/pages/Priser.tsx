@@ -18,7 +18,7 @@ const tillagg = [
   { name: "SEO", price: "Från 4 900 kr", to: "/tjanster/seo" },
   { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
   { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
-  { name: "Content", price: "1 490 kr/artikel", to: "/tjanster/content" },
+  { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
   { name: "Grafisk profil", price: "Från 5 900 kr", to: "/tjanster/grafisk-profil" },
   { name: "Fotografering", price: "4 900 kr/halvdag", to: "/tjanster/fotografering" },
 ];
