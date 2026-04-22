@@ -9,7 +9,7 @@ import {
 export const faqs = [
   {
     q: "Vem är du?",
-    a: "Jag heter Christoffer och driver Aurora Media själv från Linköping. Jag kommer från säkerhetsbranschen där jag jobbade i 10 år innan jag bytte spår och bygger nu webbappar på heltid.",
+    a: "Jag heter Christoffer och driver Aurora Media själv från Linköping. Jag kommer från säkerhetsbranschen där jag jobbade i tio år innan jag bytte spår och bygger nu webbappar på heltid.",
   },
   {
     q: "Använder du AI för att skriva all kod?",

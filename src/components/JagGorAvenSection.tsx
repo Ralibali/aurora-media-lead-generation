@@ -14,7 +14,7 @@ import {
 
 const services = [
   { icon: Globe, name: "Hemsida", price: "Från 4 900 kr", desc: "Enkel, snabb och modern. Allt från en sida till fem.", to: "/tjanster/hemsidor" },
-  { icon: ShoppingBag, name: "E-handel", price: "Från 19 900 kr", desc: "Shopify eller egen lösning. Lansering på 2 veckor.", to: "/tjanster/ehandel" },
+  { icon: ShoppingBag, name: "E-handel", price: "Från 19 900 kr", desc: "Shopify eller egen lösning. Lansering på två veckor.", to: "/tjanster/ehandel" },
   { icon: Search, name: "SEO", price: "Från 4 900 kr", desc: "Teknisk SEO, on-page och lokal SEO för Linköping.", to: "/tjanster/seo" },
   { icon: MousePointerClick, name: "Google Ads", price: "3 900 kr setup", desc: "Sökannonser som faktiskt konverterar.", to: "/tjanster/google-ads" },
   { icon: Megaphone, name: "Meta Ads", price: "3 900 kr setup", desc: "Facebook och Instagram. Pixelinstallation ingår.", to: "/tjanster/meta-ads" },
