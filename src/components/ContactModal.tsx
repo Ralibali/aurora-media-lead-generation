@@ -37,6 +37,7 @@ const schema = z.object({
   paket: z.string().min(1, "Välj ett alternativ"),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
+  internalNote: z.string().trim().max(500).optional().or(z.literal("")),
   message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
 });
