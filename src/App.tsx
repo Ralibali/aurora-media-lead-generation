@@ -24,6 +24,7 @@ import BlogPost from "./pages/BlogPost";
 import CityPage from "./pages/CityPage";
 import Metodik from "./pages/Metodik";
 import RedaktionellPolicy from "./pages/RedaktionellPolicy";
+import TextGenerator from "./pages/admin/TextGenerator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,7 @@ const App = () => (
             <Route path="/ai-byra-:slug" element={<CityPage />} />
             <Route path="/metodik" element={<Metodik />} />
             <Route path="/redaktionell-policy" element={<RedaktionellPolicy />} />
+            <Route path="/admin/texter" element={<TextGenerator />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
