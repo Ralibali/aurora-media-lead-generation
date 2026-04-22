@@ -347,6 +347,17 @@ const ContactDialog = ({
                 </Select>
               </div>
             )}
+            {internalNote && (
+              <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm">
+                <div className="flex items-start gap-2.5">
+                  <Tag className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                  <div className="space-y-1">
+                    <p className="label-caps text-muted-foreground">Skickas med din förfrågan</p>
+                    <p className="text-foreground/85">{internalNote}</p>
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="space-y-1.5">
               <Label htmlFor="message">Beskriv projektet kort *</Label>
               <Textarea
