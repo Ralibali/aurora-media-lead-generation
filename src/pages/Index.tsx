@@ -2,14 +2,16 @@ import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import TrustBarSection from "@/components/TrustBarSection";
-import PaketSection from "@/components/PaketSection";
-import ToolsStackSection from "@/components/ToolsStackSection";
 import PortfolioSection from "@/components/PortfolioSection";
-import ProcessSection from "@/components/ProcessSection";
+import PaketSection from "@/components/PaketSection";
 import VarforSnabbtSection from "@/components/VarforSnabbtSection";
+import ProcessSection from "@/components/ProcessSection";
+import JagGorAvenSection from "@/components/JagGorAvenSection";
 import TargetAudienceSection from "@/components/TargetAudienceSection";
+import SiffrorSection from "@/components/SiffrorSection";
 import FAQSection from "@/components/FAQSection";
-import CTABanner from "@/components/CTABanner";
+import FinalCTASection from "@/components/FinalCTASection";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import Footer from "@/components/Footer";
 import { setSEOMeta, setJsonLd, organizationSchema, websiteSchema, serviceSchema } from "@/lib/seoHelpers";
 
@@ -29,19 +31,21 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main>
+      <main className="pt-16">
         <HeroSection />
         <TrustBarSection />
-        <PaketSection />
-        <ToolsStackSection />
         <PortfolioSection />
-        <ProcessSection />
+        <PaketSection />
         <VarforSnabbtSection />
+        <ProcessSection />
+        <JagGorAvenSection />
         <TargetAudienceSection />
+        <SiffrorSection />
         <FAQSection />
-        <CTABanner />
+        <FinalCTASection />
       </main>
       <Footer />
+      <StickyMobileCTA />
     </div>
   );
 };
