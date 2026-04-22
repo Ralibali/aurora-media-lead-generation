@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      faq_search_events: {
+        Row: {
+          created_at: string
+          id: string
+          opened_question: string | null
+          page_path: string | null
+          query: string
+          result_count: number
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          opened_question?: string | null
+          page_path?: string | null
+          query: string
+          result_count?: number
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          opened_question?: string | null
+          page_path?: string | null
+          query?: string
+          result_count?: number
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       text_library: {
         Row: {
           blocked_phrases_found: string[]
