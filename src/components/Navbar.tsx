@@ -119,6 +119,7 @@ const Navbar = () => {
           </NavLink>
           <NavLink
             to="/blog"
+            end
             className={({ isActive }) =>
               `text-sm transition-colors ${
                 isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"

@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useContactModal } from "@/components/ContactModal";
 
 const portfolio = [
   { name: "Aurora Transport", url: "https://auroratransport.se" },
@@ -23,10 +25,23 @@ const cityLinks = [
 ];
 
 const Footer = () => {
+  const { open } = useContactModal();
   return (
-    <footer className="bg-[#1a3d2e] text-[#ededea]">
-      <div className="container mx-auto px-6 py-16">
-        <div className="grid gap-12 md:grid-cols-4">
+    <footer className="bg-gradient-to-b from-[#1a3d2e] to-[#0a1410] text-[#ededea]">
+      {/* Top CTA band */}
+      <div className="container mx-auto px-6 pt-24 pb-16 md:pt-32 md:pb-20 text-center">
+        <h2 className="mx-auto max-w-3xl font-serif italic text-[clamp(2.25rem,6vw,5rem)] leading-[1.05] tracking-[-0.02em] text-white">
+          Låt mig bygga det du
+          <br />
+          behöver nästa.
+        </h2>
+        <Button onClick={() => open()} size="lg" className="mt-10 bg-white text-primary hover:bg-white/90">
+          Starta ett projekt
+        </Button>
+      </div>
+
+      <div className="container mx-auto px-6 pb-12">
+        <div className="border-t border-white/10 pt-12 grid gap-12 md:grid-cols-4">
           <div>
             <p className="font-serif text-2xl mb-4">Aurora Media AB</p>
             <p className="text-sm text-[#cfcfc8] leading-relaxed">
@@ -59,14 +74,13 @@ const Footer = () => {
           <div>
             <p className="label-caps text-[#cfcfc8] mb-4">Navigera</p>
             <ul className="space-y-2 text-sm">
+              <li><Link to="/tjanster" className="text-[#cfcfc8] hover:text-white">Tjänster</Link></li>
               <li><Link to="/priser" className="text-[#cfcfc8] hover:text-white">Priser</Link></li>
               <li><Link to="/arbete" className="text-[#cfcfc8] hover:text-white">Arbete</Link></li>
-              <li><Link to="/artiklar" className="text-[#cfcfc8] hover:text-white">Artiklar</Link></li>
+              <li><Link to="/blog" className="text-[#cfcfc8] hover:text-white">Artiklar</Link></li>
               <li><Link to="/om" className="text-[#cfcfc8] hover:text-white">Om</Link></li>
               <li><Link to="/kontakt" className="text-[#cfcfc8] hover:text-white">Kontakt</Link></li>
-              <li><Link to="/metodik" className="text-[#cfcfc8] hover:text-white">Metodik</Link></li>
               <li><Link to="/redaktionell-policy" className="text-[#cfcfc8] hover:text-white">Redaktionell policy</Link></li>
-              <li><Link to="/webbbyra-linkoping" className="text-[#cfcfc8] hover:text-white">Webbyrå Linköping</Link></li>
             </ul>
           </div>
 
@@ -87,8 +101,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-white/10 text-sm text-[#9d9d96]">
-          © {new Date().getFullYear()} Aurora Media AB · Byggd med AI, förstås.
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col gap-2 text-sm text-[#9d9d96] sm:flex-row sm:justify-between">
+          <p>© {new Date().getFullYear()} Aurora Media AB</p>
+          <p className="italic">Byggd med AI, förstås.</p>
         </div>
       </div>
     </footer>
