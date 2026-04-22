@@ -176,6 +176,7 @@ const ContactDialog = ({
       form.reset();
       setMessageValue("");
       setMessageTouched(false);
+      setPlatformValue("");
     } catch (err) {
       console.error("[ContactModal] submit error", err);
       toast.error("Något gick fel. Mejla istället info@auroramedia.se");
