@@ -155,7 +155,13 @@ const FAQSection = ({
               </p>
             </div>
           ) : (
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion
+              type="single"
+              collapsible
+              value={openItem}
+              onValueChange={setOpenItem}
+              className="w-full"
+            >
               <AnimatePresence initial={false}>
                 {filtered.map((f, i) => (
                   <motion.div
@@ -167,7 +173,7 @@ const FAQSection = ({
                     transition={{ duration: 0.25, delay: searchable ? 0 : i * 0.03 }}
                   >
                     <AccordionItem
-                      value={`item-${i}`}
+                      value={`item-${f.q}`}
                       className="mb-3 overflow-hidden rounded-xl border border-border bg-card/60 px-5 transition-colors data-[state=open]:border-primary/50 data-[state=open]:bg-card data-[state=open]:shadow-sm sm:px-6"
                     >
                       <AccordionTrigger className="gap-4 py-5 text-left font-serif text-lg leading-snug tracking-[-0.01em] hover:no-underline data-[state=open]:text-primary md:text-xl">
