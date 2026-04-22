@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { useContactModal } from "@/components/ContactModal";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 const portfolio = [
   { name: "Aurora Transport", url: "https://auroratransport.se" },
@@ -32,6 +33,7 @@ const cityLinks = [
 
 const Footer = () => {
   const { open } = useContactModal();
+  const magnet = useMagnetic({ strength: 0.4, radius: 120 });
   return (
     <footer className="relative overflow-hidden bg-gradient-to-b from-[hsl(154_43%_14%)] via-[hsl(154_40%_8%)] to-[hsl(0_0%_4%)] text-white/95">
       {/* Statement */}
@@ -57,16 +59,17 @@ const Footer = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="mt-12"
         >
-          <button onClick={() => open()} className="group inline-flex items-center gap-2 rounded-full bg-white py-2 pl-6 pr-2 text-base text-[hsl(154_43%_14%)] transition-all duration-700 hover:scale-[1.02] active:scale-[0.98]"
-            style={{ transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)" }}
+          <motion.button
+            ref={magnet.ref as React.RefObject<HTMLButtonElement>}
+            style={{ x: magnet.x, y: magnet.y }}
+            onClick={() => open()}
+            className="group inline-flex items-center gap-2 rounded-full bg-white py-2 pl-6 pr-2 text-base text-[hsl(154_43%_14%)] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] hover:shadow-[0_18px_40px_-18px_rgba(255,255,255,0.35)] active:scale-[0.98]"
           >
             <span className="font-medium">Starta ett projekt</span>
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(154_43%_14%)] text-white transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-[1px] group-hover:scale-105"
-              style={{ transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)" }}
-            >
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(154_43%_14%)] text-white transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:-translate-y-[1px] group-hover:scale-105">
               <ArrowUpRight weight="bold" size={16} />
             </span>
-          </button>
+          </motion.button>
         </motion.div>
       </div>
 
