@@ -258,12 +258,24 @@ const FAQSection = ({
               )}
             </div>
             {query && (
-              <p className="mt-3 text-sm text-muted-foreground" aria-live="polite">
-                {filtered.length === 0
-                  ? "Inga träffar."
-                  : `${filtered.length} träff${filtered.length === 1 ? "" : "ar"}`}
-                {" "}för "{query}"
-              </p>
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-muted-foreground" aria-live="polite">
+                  {filtered.length === 0
+                    ? "Inga träffar."
+                    : `${filtered.length} träff${filtered.length === 1 ? "" : "ar"}`}
+                  {" "}för "{query}"
+                </p>
+                {filtered.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => open(`Fråga om FAQ: ${query.trim()}`)}
+                    className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary transition-[background-color,border-color] duration-300 hover:border-primary hover:bg-primary/10"
+                  >
+                    Få personligt svar
+                    <ArrowRight weight="bold" size={12} className="transition-transform group-hover:translate-x-0.5" />
+                  </button>
+                )}
+              </div>
             )}
           </div>
         )}
