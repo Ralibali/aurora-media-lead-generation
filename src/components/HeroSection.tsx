@@ -120,7 +120,7 @@ const HeroSection = () => {
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button onClick={() => open()} className="btn-pill self-start">
+              <button onClick={() => open()} className="group btn-pill self-start">
                 <span className="text-sm font-medium">Starta projekt</span>
                 <span className="btn-pill-icon">
                   <ArrowUpRight weight="bold" size={16} />
@@ -133,7 +133,7 @@ const HeroSection = () => {
                     .getElementById("portfolj")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="btn-pill-ghost self-start"
+                className="group btn-pill-ghost self-start"
               >
                 <span className="text-sm font-medium">Se mitt arbete</span>
                 <span className="btn-pill-ghost-icon">
