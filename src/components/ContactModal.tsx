@@ -207,7 +207,19 @@ const ContactDialog = ({
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="message">Beskriv projektet kort *</Label>
-              <Textarea id="message" name="message" required minLength={20} maxLength={2000} rows={5} />
+              <Textarea
+                id="message"
+                name="message"
+                required
+                minLength={20}
+                maxLength={2000}
+                rows={7}
+                value={messageValue}
+                onChange={(e) => {
+                  setMessageValue(e.target.value);
+                  setMessageTouched(true);
+                }}
+              />
             </div>
             <div className="flex items-start gap-2">
               <Checkbox id="consent" name="consent" required className="mt-1" />
