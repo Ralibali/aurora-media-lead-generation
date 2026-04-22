@@ -10,7 +10,7 @@ export const paket = [
     name: "Prototyp",
     price: "14 900 kr",
     time: "3–5 dagar",
-    desc: "Klickbar MVP. Visa investerare. Testa idé.",
+    desc: "En klickbar prototyp som visar din idé. Perfekt för att söka finansiering eller validera ett koncept innan du bygger på riktigt.",
     features: [
       "Responsiv design",
       "Riktig data (inte mockup)",
@@ -25,7 +25,7 @@ export const paket = [
     name: "MVP",
     price: "34 900 kr",
     time: "2 veckor",
-    desc: "Lanseringsklar. Ta betalt från dag ett.",
+    desc: "En första version av din app med de viktigaste funktionerna. Innehåller databas och inloggning. Lanseringsklar.",
     features: [
       "Allt i Prototyp",
       "Användarlogin",
@@ -41,7 +41,7 @@ export const paket = [
     name: "Skalbar SaaS",
     price: "69 000 kr",
     time: "4 veckor",
-    desc: "Full produkt för skala.",
+    desc: "En komplett app redo för betalande kunder. Inkluderar betalningslösning via Stripe och full SEO.",
     features: [
       "Allt i MVP",
       "Avancerad analys",
@@ -57,7 +57,7 @@ export const paket = [
     name: "Skräddarsytt",
     price: "Från 89 000 kr",
     time: "4–8 veckor",
-    desc: "Komplexa projekt.",
+    desc: "För större projekt med specifika krav. Vi definierar omfattningen tillsammans innan jag sätter pris.",
     features: [
       "Custom integrationer",
       "Multi-tenant",
@@ -82,12 +82,12 @@ const PaketSection = () => {
           transition={{ duration: 0.6 }}
           className="max-w-2xl"
         >
-          <p className="label-caps">Priser</p>
+          <p className="label-caps">Priser & Paket</p>
           <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-            Så här mycket kostar det.
+            Fyra fasta paket för din app.
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
-            Fast pris. Ingen byråkrati. Ingen "kontakta oss för offert".
+            Priserna är exklusive moms. En administrativ avgift på 15% tillkommer på slutfakturan.
           </p>
         </motion.div>
 

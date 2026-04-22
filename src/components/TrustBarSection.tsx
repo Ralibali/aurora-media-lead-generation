@@ -21,7 +21,7 @@ const TrustBarSection = () => {
           transition={{ duration: 0.5 }}
           className="label-caps text-center"
         >
-          Byggt och lanserat av mig
+          Appar jag byggt åt mig själv och andra
         </motion.p>
         <div className="mt-5 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
           {products.map((p, i) => (

@@ -13,13 +13,13 @@ import {
 } from "lucide-react";
 
 const services = [
-  { icon: Globe, name: "Hemsida", price: "Från 4 900 kr", desc: "Enkel, modern, snabb. En sida eller fem.", to: "/tjanster/hemsidor" },
+  { icon: Globe, name: "Hemsida", price: "Från 4 900 kr", desc: "Enkel, snabb och modern. Allt från en sida till fem.", to: "/tjanster/hemsidor" },
   { icon: ShoppingBag, name: "E-handel", price: "Från 19 900 kr", desc: "Shopify eller egen lösning. Lansering på 2 veckor.", to: "/tjanster/ehandel" },
-  { icon: Search, name: "SEO", price: "Från 4 900 kr", desc: "Teknisk SEO, on-page, lokal SEO för Linköping.", to: "/tjanster/seo" },
-  { icon: MousePointerClick, name: "Google Ads", price: "3 900 kr setup", desc: "Sökannonser som konverterar. Inget byråkrati.", to: "/tjanster/google-ads" },
-  { icon: Megaphone, name: "Meta Ads", price: "3 900 kr setup", desc: "Facebook & Instagram. Pixelinstallation ingår.", to: "/tjanster/meta-ads" },
-  { icon: PenTool, name: "Content", price: "1 490 kr/artikel", desc: "SEO-optimerade artiklar skrivna med AI + redigering.", to: "/tjanster/content" },
-  { icon: Palette, name: "Grafisk profil", price: "Från 5 900 kr", desc: "Logo, färger, typografi, mallar.", to: "/tjanster/grafisk-profil" },
+  { icon: Search, name: "SEO", price: "Från 4 900 kr", desc: "Teknisk SEO, on-page och lokal SEO för Linköping.", to: "/tjanster/seo" },
+  { icon: MousePointerClick, name: "Google Ads", price: "3 900 kr setup", desc: "Sökannonser som faktiskt konverterar.", to: "/tjanster/google-ads" },
+  { icon: Megaphone, name: "Meta Ads", price: "3 900 kr setup", desc: "Facebook och Instagram. Pixelinstallation ingår.", to: "/tjanster/meta-ads" },
+  { icon: PenTool, name: "Content", price: "1 490 kr/artikel", desc: "SEO-optimerade artiklar skrivna med AI och redigerade av mig.", to: "/tjanster/content" },
+  { icon: Palette, name: "Grafisk profil", price: "Från 5 900 kr", desc: "Logo, färger, typografi och mallar du faktiskt vågar använda.", to: "/tjanster/grafisk-profil" },
   { icon: Camera, name: "Fotografering", price: "4 900 kr/halvdag", desc: "Produkt-, miljö- och porträttfoto i Linköping.", to: "/tjanster/fotografering" },
 ];
 
@@ -34,12 +34,12 @@ const JagGorAvenSection = () => {
           transition={{ duration: 0.6 }}
           className="max-w-2xl"
         >
-          <p className="label-caps">Tilläggstjänster</p>
+          <p className="label-caps">Mer än bara kod</p>
           <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-            Jag gör även…
+            Jag hjälper även till med detta.
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
-            Samma fast-pris-approach, samma snabbhet, samma transparens.
+            Samma modell med fasta priser gäller här. Fråga mig om en offert.
           </p>
         </motion.div>
 

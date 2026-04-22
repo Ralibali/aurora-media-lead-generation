@@ -47,9 +47,9 @@ const SiffrorSection = () => {
           transition={{ duration: 0.6 }}
           className="max-w-2xl"
         >
-          <p className="label-caps">Resultat</p>
+          <p className="label-caps">Siffrorna bakom</p>
           <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-            I siffror.
+            10 år i säkerhetsbranschen. 7 egna SaaS live.
           </h2>
         </motion.div>
 

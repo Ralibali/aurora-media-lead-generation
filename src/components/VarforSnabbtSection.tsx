@@ -2,16 +2,16 @@ import { motion } from "framer-motion";
 
 const blocks = [
   {
-    h: "AI är hela byggmetodiken.",
-    p: "Jag skriver inte kod rad för rad. Jag orkestrerar Lovable, Bolt, Emergent och Claude som genererar kod, sen finjusterar jag det som behöver mänskligt öga. En traditionell utvecklare bygger en feature per dag. Jag bygger fem till tio.",
+    h: "AI-assisterad kod.",
+    p: "Jag använder AI-verktyg som Lovable, Bolt och Claude för att skriva kod snabbare. Det minskar tiden för repetitiva delar – jag fokuserar på arkitektur, logik och de bitar som kräver mänskligt omdöme.",
   },
   {
-    h: "Jag har redan löst problemet.",
-    p: "Betalningar, användarauthentisering, dashboards, SEO, integrationer med Fortnox och Stripe. Jag har byggt exakt samma saker i mina sju egna produkter. Det som tar en ny byrå 3 veckor att researcha tar mig 3 dagar.",
+    h: "Färdiga komponenter.",
+    p: "Jag har byggt ett eget bibliotek med återanvändbara kodblock från mina 7 egna SaaS-projekt. Betalningar, login, dashboards, SEO. Varför uppfinna hjulet varje gång?",
   },
   {
-    h: "10 år i säkerhetsbranschen.",
-    p: "Innan Aurora Media jobbade jag 10 år i säkerhetsbranschen. Det lärde mig tre saker: rutiner levererar resultat, deadlines är löften, och ingenting får glappa när det gäller data.",
+    h: "En person, en process.",
+    p: "Du pratar direkt med mig, personen som bygger. Inga projektledare, inga mellanhänder, inga möten som slösar tid. 10 år i säkerhetsbranschen lärde mig att rutiner levererar resultat.",
   },
 ];
 
@@ -26,7 +26,7 @@ const VarforSnabbtSection = () => {
           transition={{ duration: 0.6 }}
           className="max-w-3xl font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]"
         >
-          Därför levererar jag på <em className="italic text-primary">veckor</em>.
+          Hur jag kan bygga <em className="italic text-primary">så snabbt</em> utan att fuska.
         </motion.h2>
 
         <div className="mt-16 grid gap-12 md:grid-cols-3 md:gap-10">
