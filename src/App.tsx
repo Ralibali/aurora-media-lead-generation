@@ -12,6 +12,7 @@ import Kontakt from "./pages/Kontakt";
 import Tjanster from "./pages/Tjanster";
 import Hemsidor from "./pages/tjanster/Hemsidor";
 import Ehandel from "./pages/tjanster/Ehandel";
+import Mobilapp from "./pages/tjanster/Mobilapp";
 import Seo from "./pages/tjanster/Seo";
 import GoogleAds from "./pages/tjanster/GoogleAds";
 import MetaAds from "./pages/tjanster/MetaAds";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/tjanster" element={<Tjanster />} />
             <Route path="/tjanster/hemsidor" element={<Hemsidor />} />
             <Route path="/tjanster/ehandel" element={<Ehandel />} />
+            <Route path="/tjanster/mobilapp" element={<Mobilapp />} />
             <Route path="/tjanster/seo" element={<Seo />} />
             <Route path="/tjanster/google-ads" element={<GoogleAds />} />
             <Route path="/tjanster/meta-ads" element={<MetaAds />} />

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import {
   Globe,
   ShoppingBag,
+  Smartphone,
   Search,
   MousePointerClick,
   Megaphone,
@@ -15,6 +16,7 @@ import {
 const services = [
   { icon: Globe, name: "Hemsida", price: "Från 4 900 kr", desc: "Enkel, snabb och modern. Allt från en sida till fem.", to: "/tjanster/hemsidor" },
   { icon: ShoppingBag, name: "E-handel", price: "Från 19 900 kr", desc: "Shopify eller egen lösning. Lansering på två veckor.", to: "/tjanster/ehandel" },
+  { icon: Smartphone, name: "iOS & Android-app", price: "Tillägg från 24 900 kr", desc: "Ta din webb-SaaS till App Store och Google Play. Samma kodbas, paketerad som riktig app.", to: "/tjanster/mobilapp" },
   { icon: Search, name: "SEO", price: "Från 2 490 kr", desc: "Teknisk SEO, on-page och lokal SEO för Linköping.", to: "/tjanster/seo" },
   { icon: MousePointerClick, name: "Google Ads", price: "3 900 kr setup", desc: "Sökannonser som faktiskt konverterar.", to: "/tjanster/google-ads" },
   { icon: Megaphone, name: "Meta Ads", price: "3 900 kr setup", desc: "Facebook och Instagram. Pixelinstallation ingår.", to: "/tjanster/meta-ads" },
@@ -43,7 +45,7 @@ const JagGorAvenSection = () => {
           </p>
         </motion.div>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => {
             const Icon = s.icon;
             return (

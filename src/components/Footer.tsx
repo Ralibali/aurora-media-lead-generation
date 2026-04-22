@@ -72,11 +72,15 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="label-caps text-[#cfcfc8] mb-4">Navigera</p>
+            <p className="label-caps text-[#cfcfc8] mb-4">Tjänster</p>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/tjanster" className="text-[#cfcfc8] hover:text-white">Tjänster</Link></li>
-              <li><Link to="/priser" className="text-[#cfcfc8] hover:text-white">Priser</Link></li>
-              <li><Link to="/arbete" className="text-[#cfcfc8] hover:text-white">Arbete</Link></li>
+              <li><Link to="/priser" className="text-[#cfcfc8] hover:text-white">SaaS & MVP</Link></li>
+              <li><Link to="/tjanster/hemsidor" className="text-[#cfcfc8] hover:text-white">Hemsidor</Link></li>
+              <li><Link to="/tjanster/ehandel" className="text-[#cfcfc8] hover:text-white">E-handel</Link></li>
+              <li><Link to="/tjanster/mobilapp" className="text-[#cfcfc8] hover:text-white">Mobilapp</Link></li>
+              <li><Link to="/tjanster/seo" className="text-[#cfcfc8] hover:text-white">SEO</Link></li>
+              <li><Link to="/tjanster" className="text-[#cfcfc8] hover:text-white">Alla tjänster →</Link></li>
+              <li className="pt-2"><Link to="/arbete" className="text-[#cfcfc8] hover:text-white">Arbete</Link></li>
               <li><Link to="/blog" className="text-[#cfcfc8] hover:text-white">Artiklar</Link></li>
               <li><Link to="/om" className="text-[#cfcfc8] hover:text-white">Om</Link></li>
               <li><Link to="/kontakt" className="text-[#cfcfc8] hover:text-white">Kontakt</Link></li>
