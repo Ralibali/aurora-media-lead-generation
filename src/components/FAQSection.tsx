@@ -379,7 +379,18 @@ const FAQSection = ({
             >
               <p className="text-base text-foreground/85 sm:max-w-md">{ctaText}</p>
               <Button
-                onClick={() => open(ctaPaket)}
+                onClick={() => {
+                  const opened = filtered.find((f) => `item-${f.q}` === openItem);
+                  const noteParts = [
+                    query.trim() ? `Sökning: "${query.trim()}"` : null,
+                    activeCategory ? `Kategori: ${activeCategory}` : null,
+                    opened ? `Visad fråga: "${opened.q}"` : null,
+                  ].filter(Boolean);
+                  const note = noteParts.length
+                    ? `Lead från FAQ\n${noteParts.join("\n")}`
+                    : "";
+                  open({ paket: ctaPaket, internalNote: note });
+                }}
                 className="group shrink-0"
                 size="lg"
               >
