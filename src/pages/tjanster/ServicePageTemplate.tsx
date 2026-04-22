@@ -43,6 +43,7 @@ export type ServicePageProps = {
   faqs: { q: string; a: string }[];
   related: RelatedService[];
   extra?: ReactNode; // e.g. comparison table for Hemsidor
+  postFaq?: ReactNode; // optional block rendered directly after FAQ
 };
 
 const fadeUp = {
@@ -258,6 +259,8 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         </section>
 
         <FAQSection items={props.faqs} title="Vanliga frågor" searchable={props.faqs.length >= 5} />
+
+        {props.postFaq}
 
         {/* Related */}
         <section className="border-t border-border bg-secondary/30 py-20">
