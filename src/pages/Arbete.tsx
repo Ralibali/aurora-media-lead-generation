@@ -87,7 +87,7 @@ const Arbete = () => {
         {/* Hero */}
         <section className="pt-16 pb-10 md:pt-24 md:pb-14">
           <div className="container mx-auto max-w-4xl px-6">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Arbete</p>
               <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
                 {PORTFOLIO.length} projekt.{" "}
@@ -97,12 +97,12 @@ const Arbete = () => {
                 Egna SaaS-produkter, utvecklingsuppdrag och SEO-arbeten. Inga case-studies från en
                 byrå jag jobbade på 2018 – det här är mitt arbete, just nu.
               </p>
-            </motion.div>
+            </Reveal>
 
             {/* Filters + Sort */}
-            <motion.div
-              {...fadeUp}
-              transition={{ duration: 0.5, delay: 0.1 }}
+            <Reveal
+              delay={0.1}
+              duration={0.6}
               className="mt-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
             >
               <div
@@ -148,16 +148,16 @@ const Arbete = () => {
                   ))}
                 </select>
               </div>
-            </motion.div>
+            </Reveal>
 
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.5, delay: 0.15 }}
+            <Reveal
+              delay={0.15}
+              duration={0.6}
               className="mt-6 text-sm text-muted-foreground"
               aria-live="polite"
             >
               Visar {filtered.length} av {PORTFOLIO.length} projekt
-            </motion.p>
+            </Reveal>
           </div>
         </section>
 
