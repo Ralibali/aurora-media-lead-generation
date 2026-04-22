@@ -40,7 +40,7 @@ export type ServicePageProps = {
   tiers?: ServiceTier[];
   pricingNote?: ReactNode;
   whyAffordable: string;
-  faqs: { q: string; a: string }[];
+  faqs: { q: string; a: string; category?: string }[];
   related: RelatedService[];
   extra?: ReactNode; // e.g. comparison table for Hemsidor
   postFaq?: ReactNode; // optional block rendered directly after FAQ
