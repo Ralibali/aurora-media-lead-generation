@@ -43,6 +43,7 @@ export type ServicePageProps = {
   faqs: { q: string; a: string }[];
   related: RelatedService[];
   extra?: ReactNode; // e.g. comparison table for Hemsidor
+  postFaq?: ReactNode; // optional block rendered directly after FAQ
 };
 
 const fadeUp = {
