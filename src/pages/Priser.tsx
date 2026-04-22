@@ -323,7 +323,7 @@ const Priser = () => {
         {/* Betalning + Garanti */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl grid gap-12 md:grid-cols-2 md:gap-16">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Betalningsvillkor</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Hur det funkar.
@@ -346,9 +346,9 @@ const Priser = () => {
                   Alla priser exklusive 25 % moms
                 </li>
               </ul>
-            </motion.div>
+            </Reveal>
 
-            <motion.div {...fadeUp} className="rounded-xl border border-primary/30 bg-primary/5 p-8">
+            <Reveal delay={0.08} className="rounded-xl border border-primary/30 bg-primary/5 p-8">
               <p className="label-caps text-primary">Garanti</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
                 Du tar ingen risk.
@@ -357,7 +357,7 @@ const Priser = () => {
                 Om prototypen dag 3 inte motsvarar förväntningarna, betalar du inget och behåller
                 vi var sin lärdom. Inga 6-månaderskontrakt. Inga uppsägningstider för paket.
               </p>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 
