@@ -211,6 +211,15 @@ const ContactDialog = ({
                   ))}
                 </SelectContent>
               </Select>
+              {leadLabel && (
+                <div
+                  className="mt-2 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary"
+                  aria-live="polite"
+                >
+                  <Tag className="h-3.5 w-3.5" />
+                  <span>{leadLabel}</span>
+                </div>
+              )}
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="message">Beskriv projektet kort *</Label>
