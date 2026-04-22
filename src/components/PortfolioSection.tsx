@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 
 export const cases = [
@@ -62,103 +62,215 @@ export const cases = [
 ];
 
 const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
+  initial: { opacity: 0, y: 32, filter: "blur(8px)" },
+  whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
   viewport: { once: true, margin: "-80px" },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+  transition: { duration: 0.9, ease: [0.32, 0.72, 0, 1] as const },
 };
+
+// Bento spans for the standard grid
+const bentoLayout = [
+  "lg:col-span-2 lg:row-span-1", // Updro – wide
+  "lg:col-span-1 lg:row-span-1", // AgilityManager
+  "lg:col-span-1 lg:row-span-2", // Hönsgården – tall
+  "lg:col-span-1 lg:row-span-1", // Odlingsdagboken
+  "lg:col-span-2 lg:row-span-1", // GoGlamping – wide
+  "lg:col-span-1 lg:row-span-1", // Viriditas
+];
 
 const PortfolioSection = () => {
   const featured = cases[0];
   const rest = cases.slice(1);
 
   return (
-    <section id="portfolj" className="py-24 md:py-32">
+    <section id="portfolj" className="border-t border-border py-24 md:py-36">
       <div className="container mx-auto px-6">
-        <motion.div {...fadeUp} className="max-w-2xl">
-          <p className="label-caps">Portfölj</p>
-          <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-            Sju SaaS, byggda av mig.
-          </h2>
-          <p className="mt-5 text-lg text-muted-foreground">
-            Live. Används. Inga vaporware-mockups.
+        <motion.div {...fadeUp} className="flex items-end justify-between gap-8">
+          <div className="max-w-2xl">
+            <p className="label-caps">Arbete · 2024–2026</p>
+            <h2 className="mt-3 font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[0.98] tracking-[-0.025em]">
+              Sju SaaS,
+              <br />
+              <span className="italic text-primary">live just nu.</span>
+            </h2>
+          </div>
+          <p className="hidden max-w-xs text-base text-muted-foreground md:block">
+            Inga vaporware-mockups. Inga case-studies från praktikperioden 2014. Klicka och se.
           </p>
         </motion.div>
 
-        {/* Featured */}
-        <motion.a
-          {...fadeUp}
-          href={`https://${featured.domain}`}
-          target="_blank"
-          rel="noreferrer"
-          className="group mt-14 grid overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-xl lg:grid-cols-12"
-        >
-          <div className="relative flex aspect-[16/10] items-center justify-center border-b border-border bg-gradient-to-br from-secondary to-accent lg:col-span-7 lg:aspect-auto lg:border-b-0 lg:border-r">
-            <span className="font-serif text-3xl text-foreground/60 md:text-5xl">
-              {featured.domain}
-            </span>
-          </div>
-          <div className="flex flex-col justify-between gap-6 p-8 md:p-10 lg:col-span-5">
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <p className="label-caps !text-[10px]">{featured.label}</p>
-                {featured.platforms && (
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-primary">
-                    {featured.platforms}
-                  </span>
-                )}
-              </div>
-              <h3 className="mt-3 font-serif text-3xl md:text-4xl">{featured.name}</h3>
-              <p className="mt-4 text-base leading-relaxed text-foreground/80">
-                {featured.tagline}
-              </p>
+        {/* LEVEL 1 – FEATURED Z-axis cascade */}
+        <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9, ease: [0.32, 0.72, 0, 1] }}
+            className="relative lg:col-span-7"
+          >
+            {/* Sister card behind */}
+            <div
+              aria-hidden
+              className="bezel-shell pointer-events-none absolute -right-3 -top-4 hidden h-[calc(100%-1rem)] w-[88%] -rotate-[1.5deg] opacity-60 md:block"
+              style={{ transform: "translate(-20px, 0) rotate(-1.5deg)" }}
+            >
+              <div className="bezel-core h-full" />
             </div>
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-                {featured.meta}
-              </p>
-              <div className="mt-5 inline-flex items-center gap-2 font-medium text-primary">
-                Se {featured.domain}
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </div>
-            </div>
-          </div>
-        </motion.a>
 
-        {/* Grid */}
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Main card */}
+            <a
+              href={`https://${featured.domain}`}
+              target="_blank"
+              rel="noreferrer"
+              className="group relative block"
+            >
+              <div className="bezel-shell transition-transform duration-700 group-hover:-translate-y-1" style={{ transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)" }}>
+                <div className="bezel-core overflow-hidden">
+                  {/* Browser chrome */}
+                  <div className="flex items-center gap-1.5 border-b border-border/50 px-4 py-3">
+                    <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
+                    <span className="ml-3 font-mono text-[11px] text-muted-foreground">
+                      {featured.domain}
+                    </span>
+                    <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-[hsl(154_44%_45%)]/10 px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-[hsl(154_44%_35%)]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[hsl(154_44%_45%)]" />
+                      Live
+                    </span>
+                  </div>
+                  {/* Screen */}
+                  <div className="relative flex aspect-[16/10] items-center justify-center bg-gradient-to-br from-secondary via-accent to-secondary">
+                    <div className="text-center">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                        01 — Featured
+                      </p>
+                      <p className="mt-3 font-serif text-3xl text-foreground/70 md:text-5xl">
+                        {featured.domain}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </motion.div>
+
+          {/* Right: longform */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.32, 0.72, 0, 1] }}
+            className="flex flex-col justify-center lg:col-span-5"
+          >
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-primary">
+              {featured.label}
+            </p>
+            <h3 className="mt-4 font-serif text-4xl leading-[1.05] md:text-5xl">
+              {featured.name}
+            </h3>
+            <p className="mt-6 text-lg leading-relaxed text-foreground/80">
+              {featured.tagline}
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-2">
+              {featured.meta.split(" · ").map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-border bg-card px-3 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <a
+              href={`https://${featured.domain}`}
+              target="_blank"
+              rel="noreferrer"
+              className="group btn-pill mt-10 self-start"
+            >
+              <span className="text-sm font-medium">Se {featured.domain}</span>
+              <span className="btn-pill-icon">
+                <ArrowUpRight weight="bold" size={16} />
+              </span>
+            </a>
+          </motion.div>
+        </div>
+
+        {/* LEVEL 2 – Asymmetric bento */}
+        <div className="mt-20 grid auto-rows-[minmax(280px,auto)] gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {rest.map((c, i) => (
             <motion.a
               key={c.domain}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                duration: 0.7,
+                delay: i * 0.07,
+                ease: [0.32, 0.72, 0, 1],
+              }}
               href={`https://${c.domain}`}
               target="_blank"
               rel="noreferrer"
-              className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg"
+              className={`group relative ${bentoLayout[i] ?? ""}`}
             >
-              <div className="flex aspect-[16/10] items-center justify-center border-b border-border bg-secondary/40">
-                <span className="font-serif text-xl text-foreground/60">{c.domain}</span>
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="label-caps !text-[10px]">{c.label}</p>
-                  {c.platforms && (
-                    <span className="rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-primary">
-                      {c.platforms}
+              <div
+                className="bezel-shell h-full transition-transform duration-700 group-hover:-translate-y-1"
+                style={{ transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)" }}
+              >
+                <div className="bezel-core flex h-full flex-col overflow-hidden">
+                  {/* Browser chrome */}
+                  <div className="flex items-center gap-1.5 border-b border-border/40 px-3 py-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-foreground/15" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-foreground/15" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-foreground/15" />
+                    <span className="ml-2 truncate font-mono text-[10px] text-muted-foreground">
+                      {c.domain}
                     </span>
-                  )}
+                    <span className="ml-auto font-mono text-[9px] uppercase tracking-wider text-muted-foreground/80">
+                      0{i + 2}
+                    </span>
+                  </div>
+
+                  {/* Screen */}
+                  <div className="flex flex-1 flex-col justify-between p-5">
+                    <div>
+                      <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
+                        {c.label}
+                      </p>
+                      <h3 className="mt-3 font-serif text-2xl leading-tight md:text-3xl">
+                        {c.name}
+                      </h3>
+                      <p className="mt-3 text-sm leading-relaxed text-foreground/70">
+                        {c.tagline}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 flex items-end justify-between gap-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {c.meta
+                          .split(" · ")
+                          .slice(0, 3)
+                          .map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-full border border-border/70 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-muted-foreground"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                      </div>
+                      <span
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-foreground/60 transition-all duration-500 group-hover:bg-foreground group-hover:text-background"
+                        style={{ transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)" }}
+                      >
+                        <ArrowUpRight weight="bold" size={14} />
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-2 flex items-start justify-between gap-3">
-                  <h3 className="font-serif text-2xl">{c.name}</h3>
-                  <ArrowUpRight className="mt-1 h-5 w-5 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
-                </div>
-                <p className="mt-3 flex-1 text-sm text-foreground/75">{c.tagline}</p>
-                <p className="mt-4 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {c.meta}
-                </p>
               </div>
             </motion.a>
           ))}
