@@ -125,7 +125,7 @@ const HeroSection = () => {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
               <motion.button
                 ref={primaryMagnet.ref as React.RefObject<HTMLButtonElement>}
-                style={{ x: primaryMagnet.x, y: primaryMagnet.y }}
+                style={{ x: primaryMagnet.x, y: primaryMagnet.y, scale: primaryMagnet.scale }}
                 onClick={() => open()}
                 className="group btn-pill self-start"
               >
