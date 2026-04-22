@@ -35,10 +35,12 @@ const Ehandel = () => (
       { q: "Hjälper du med produktbilder?", a: "Ja, jag erbjuder produktfotografering separat – 4 900 kr/halvdag i Linköping." },
       { q: "Klarar lösningen Black Friday?", a: "Shopify ja. Egna lösningar byggs med Vercel/Cloudflare och tål spikar." },
       { q: "Får jag hjälp med ads?", a: "Ja. Google Ads och Meta Ads finns som tilläggstjänster. Vanligast är att vi paketerar setup + 3 månaders optimering." },
+      { q: "Behöver jag en mobilapp till min e-handel?", a: "Sällan från start – en bra mobil webb räcker långt. När du har återkommande kunder och vill ha push-notiser, snabbare checkout eller offline-läge blir en app intressant. Jag bygger PWA från 6 900 kr eller Capacitor-app (iOS + Android från samma kodbas) från 24 900 kr – se /tjanster/mobilapp för upplägg." },
     ]}
     related={[
       { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
       { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
+      { name: "Mobilapp", price: "Från 6 900 kr", to: "/tjanster/mobilapp" },
       { name: "Fotografering", price: "4 900 kr/halvdag", to: "/tjanster/fotografering" },
     ]}
   />

@@ -119,9 +119,11 @@ const Hemsidor = () => (
       { q: "Kan jag uppdatera innehåll själv?", a: "Ja. Mindre sajter får ett enkelt CMS (Sanity eller Decap). Större sajter får en headless lösning som passar ditt team." },
       { q: "Vad händer om jag vill byta byrå senare?", a: "Du äger källkoden. Vilken React-utvecklare som helst kan ta över. Inga proprietära format, inga lock-ins." },
       { q: "Behövs domän?", a: "Nej, men jag rekommenderar det. Jag hjälper till med köp och koppling om du inte redan har en. Cirka 100–200 kr/år för en .se." },
+      { q: "Kan ni göra en mobilapp av sajten också?", a: "Ja. Den enklaste vägen är en PWA (installerbar webbapp) från 6 900 kr – samma kodbas som sajten, ingen App Store-hantering. Vill du ha en riktig butiksapp för iOS och Android bygger jag den med Capacitor från 24 900 kr. Se /tjanster/mobilapp för upplägg och paket." },
     ]}
     related={[
       { name: "SEO", price: "Från 4 900 kr", to: "/tjanster/seo" },
+      { name: "Mobilapp", price: "Från 6 900 kr", to: "/tjanster/mobilapp" },
       { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
       { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
     ]}
