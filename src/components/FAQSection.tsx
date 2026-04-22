@@ -317,6 +317,14 @@ const FAQSection = ({
                       activeCategory ? `Kategori: ${activeCategory}` : null,
                       "Resultat: 0 träffar",
                     ].filter(Boolean);
+                    trackFaqCtaClick({
+                      source: "faq_empty_state",
+                      paket: ctaPaket,
+                      ctaLabel: "Ställ frågan direkt",
+                      query: query.trim() || null,
+                      category: activeCategory,
+                      openedQuestion: null,
+                    });
                     open({
                       paket: ctaPaket,
                       internalNote: `Lead från FAQ (inga träffar)\n${noteParts.join("\n")}`,
