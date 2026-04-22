@@ -83,10 +83,38 @@ const ContactDialog = ({
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [paketValue, setPaketValue] = useState<string>(defaultPaket || "");
+  const [messageValue, setMessageValue] = useState<string>("");
+  const [messageTouched, setMessageTouched] = useState(false);
+
+  const buildPrefill = (paket: string): string => {
+    const opt = PAKET_OPTIONS.find((o) => o.value === paket);
+    if (!opt) return "";
+    // SEO-paketen får en mer specifik förifyllning så leadet är tydligt
+    if (paket.startsWith("SEO – ")) {
+      const tier = paket.replace("SEO – ", "");
+      return `Hej! Jag är intresserad av SEO-paketet "${tier}" (${opt.label}).\n\nKort om sajten:\n• URL: \n• Bransch / vad ni säljer: \n• Viktigaste sökord (om kända): \n\nMål med SEO-arbetet: `;
+    }
+    if (paket.startsWith("Mobilapp")) {
+      return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n• Befintlig webb-SaaS (URL eller beskrivning): \n• Plattformar (iOS / Android / båda): \n• Tidsplan: `;
+    }
+    return `Hej! Jag är intresserad av "${opt.label}".\n\nKort om projektet:\n`;
+  };
 
   useEffect(() => {
-    if (isOpen) setPaketValue(defaultPaket || "");
+    if (isOpen) {
+      const paket = defaultPaket || "";
+      setPaketValue(paket);
+      setMessageValue(buildPrefill(paket));
+      setMessageTouched(false);
+    }
   }, [isOpen, defaultPaket]);
+
+  // Uppdatera meddelandet när paketet ändras – men bara om användaren inte börjat redigera
+  useEffect(() => {
+    if (!messageTouched) {
+      setMessageValue(buildPrefill(paketValue));
+    }
+  }, [paketValue, messageTouched]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
