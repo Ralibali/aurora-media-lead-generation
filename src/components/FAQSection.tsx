@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
-import { trackFaqSearch } from "@/lib/faqTracking";
+import { trackFaqSearch, trackFaqCtaClick } from "@/lib/faqTracking";
 
 export type FaqItem = {
   q: string;
@@ -275,6 +275,14 @@ const FAQSection = ({
                         activeCategory ? `Kategori: ${activeCategory}` : null,
                         opened ? `Visad fråga: "${opened.q}"` : null,
                       ].filter(Boolean);
+                      trackFaqCtaClick({
+                        source: "faq_search_result",
+                        paket: ctaPaket,
+                        ctaLabel: "Få personligt svar",
+                        query: query.trim(),
+                        category: activeCategory,
+                        openedQuestion: opened?.q ?? null,
+                      });
                       open({
                         paket: ctaPaket,
                         internalNote: `Lead från FAQ\n${noteParts.join("\n")}`,
@@ -309,6 +317,14 @@ const FAQSection = ({
                       activeCategory ? `Kategori: ${activeCategory}` : null,
                       "Resultat: 0 träffar",
                     ].filter(Boolean);
+                    trackFaqCtaClick({
+                      source: "faq_empty_state",
+                      paket: ctaPaket,
+                      ctaLabel: "Ställ frågan direkt",
+                      query: query.trim() || null,
+                      category: activeCategory,
+                      openedQuestion: null,
+                    });
                     open({
                       paket: ctaPaket,
                       internalNote: `Lead från FAQ (inga träffar)\n${noteParts.join("\n")}`,
@@ -389,6 +405,14 @@ const FAQSection = ({
                   const note = noteParts.length
                     ? `Lead från FAQ\n${noteParts.join("\n")}`
                     : "";
+                  trackFaqCtaClick({
+                    source: "faq_footer",
+                    paket: ctaPaket,
+                    ctaLabel,
+                    query: query.trim() || null,
+                    category: activeCategory,
+                    openedQuestion: opened?.q ?? null,
+                  });
                   open({ paket: ctaPaket, internalNote: note });
                 }}
                 className="group shrink-0"

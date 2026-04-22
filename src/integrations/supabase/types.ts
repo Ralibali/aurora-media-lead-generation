@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      faq_cta_clicks: {
+        Row: {
+          category: string | null
+          created_at: string
+          cta_label: string | null
+          cta_source: string
+          id: string
+          opened_question: string | null
+          page_path: string | null
+          paket: string | null
+          query: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          cta_label?: string | null
+          cta_source?: string
+          id?: string
+          opened_question?: string | null
+          page_path?: string | null
+          paket?: string | null
+          query?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          cta_label?: string | null
+          cta_source?: string
+          id?: string
+          opened_question?: string | null
+          page_path?: string | null
+          paket?: string | null
+          query?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       faq_search_events: {
         Row: {
           created_at: string
