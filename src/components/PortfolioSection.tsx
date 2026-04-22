@@ -5,7 +5,7 @@ export const cases = [
   {
     name: "Aurora Transport",
     domain: "auroratransport.se",
-    tagline: "Dispatching-SaaS för svenska transportbolag. CJ Bemanning var första kunden.",
+    tagline: "Dispatching-SaaS för svenska transportbolag.",
     label: "FEATURED · TRANSPORT · B2B",
     meta: "3 veckor · Lovable · Supabase · Stripe · Fortnox",
     platforms: "WEB",

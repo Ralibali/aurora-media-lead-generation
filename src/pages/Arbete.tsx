@@ -26,7 +26,7 @@ const cases: Case[] = [
     domain: "auroratransport.se",
     category: "SaaS",
     label: "Featured · Transport · B2B",
-    desc: "Dispatching-SaaS för svenska transportbolag. CJ Bemanning var första kunden.",
+    desc: "Dispatching-SaaS för svenska transportbolag.",
     stack: "3 veckor · Lovable · Supabase · Stripe · Fortnox",
     result: "Lanserad 3 veckor. Betalande kund från dag 1.",
   },
