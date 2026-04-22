@@ -182,30 +182,30 @@ const CasePage = () => {
               {/* Vänster: prosa */}
               <div className="md:col-span-2 space-y-12">
                 {project.problem && (
-                  <div>
+                  <Reveal>
                     <p className="label-caps">Problemet</p>
                     <p className="mt-4 text-lg leading-relaxed text-foreground/85">
                       {project.problem}
                     </p>
-                  </div>
+                  </Reveal>
                 )}
 
                 {project.solution && (
-                  <div>
+                  <Reveal delay={0.05}>
                     <p className="label-caps">Vad jag gjorde</p>
                     <p className="mt-4 text-lg leading-relaxed text-foreground/85">
                       {project.solution}
                     </p>
-                  </div>
+                  </Reveal>
                 )}
 
                 {project.lessons && (
-                  <div>
+                  <Reveal delay={0.1}>
                     <p className="label-caps">Lärdomar</p>
                     <p className="mt-4 text-lg leading-relaxed text-foreground/85">
                       {project.lessons}
                     </p>
-                  </div>
+                  </Reveal>
                 )}
               </div>
 
@@ -269,31 +269,34 @@ const CasePage = () => {
         {related.length > 0 && (
           <section className="border-t border-border py-20 md:py-28">
             <div className="container mx-auto max-w-5xl px-6">
-              <p className="label-caps">Andra projekt</p>
-              <h2 className="mt-3 font-serif text-3xl md:text-4xl">Mer arbete i samma anda</h2>
+              <Reveal>
+                <p className="label-caps">Andra projekt</p>
+                <h2 className="mt-3 font-serif text-3xl md:text-4xl">Mer arbete i samma anda</h2>
+              </Reveal>
 
               <div className="mt-10 grid gap-5 md:grid-cols-3">
-                {related.map((r) => (
-                  <Link
-                    key={r.slug}
-                    to={`/arbete/${r.slug}`}
-                    className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary hover:shadow-lg"
-                  >
-                    <span
-                      className={cn(
-                        "inline-flex w-fit items-center rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider",
-                        CATEGORY_BADGE[r.category],
-                      )}
+                {related.map((r, i) => (
+                  <Reveal key={r.slug} delay={i * 0.06} y={16} duration={0.5}>
+                    <Link
+                      to={`/arbete/${r.slug}`}
+                      className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary hover:shadow-lg"
                     >
-                      {CATEGORY_LABEL[r.category]}
-                    </span>
-                    <h3 className="mt-4 font-serif text-2xl">{r.name}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{r.tagline}</p>
-                    <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                      Läs caset
-                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </span>
-                  </Link>
+                      <span
+                        className={cn(
+                          "inline-flex w-fit items-center rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider",
+                          CATEGORY_BADGE[r.category],
+                        )}
+                      >
+                        {CATEGORY_LABEL[r.category]}
+                      </span>
+                      <h3 className="mt-4 font-serif text-2xl">{r.name}</h3>
+                      <p className="mt-2 text-sm text-muted-foreground">{r.tagline}</p>
+                      <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                        Läs caset
+                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                      </span>
+                    </Link>
+                  </Reveal>
                 ))}
               </div>
             </div>
