@@ -31,7 +31,7 @@ const primary = {
 const services = [
   { icon: Globe, name: "Hemsida", price: "Från 4 900 kr", desc: "Snabb, modern, fullt kodad. Inga mallar.", to: "/tjanster/hemsidor" },
   { icon: ShoppingBag, name: "E-handel", price: "Från 19 900 kr", desc: "Shopify eller egen Stripe-lösning. Lansering på 2 veckor.", to: "/tjanster/ehandel" },
-  { icon: Search, name: "SEO", price: "Från 4 900 kr", desc: "Teknisk SEO, on-page, lokal SEO för Linköping.", to: "/tjanster/seo" },
+  { icon: Search, name: "SEO", price: "Från 2 490 kr", desc: "Teknisk SEO, on-page, lokal SEO för Linköping.", to: "/tjanster/seo" },
   { icon: MousePointerClick, name: "Google Ads", price: "3 900 kr setup", desc: "Sökannonser och Performance Max. Ingen bindning.", to: "/tjanster/google-ads" },
   { icon: Megaphone, name: "Meta Ads", price: "3 900 kr setup", desc: "Facebook + Instagram. Pixel + CAPI ingår.", to: "/tjanster/meta-ads" },
   { icon: PenTool, name: "Content", price: "1 490 kr/artikel", desc: "SEO-optimerade artiklar. AI-skrivet, redigerat manuellt.", to: "/tjanster/content" },
