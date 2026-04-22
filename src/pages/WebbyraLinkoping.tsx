@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
@@ -5,6 +7,7 @@ import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { Check } from "lucide-react";
+import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd } from "@/lib/seoHelpers";
 
 const lokalaFaqs = [
   {
@@ -27,6 +30,31 @@ const lokalaFaqs = [
 
 const WebbyraLinkoping = () => {
   const { open } = useContactModal();
+  useEffect(() => {
+    setSEOMeta({
+      title: "Webbyrå Linköping – AI-byggda hemsidor & SaaS från 14 900 kr",
+      description:
+        "Lokal webbyrå i Linköping som bygger snabba hemsidor och SaaS med AI. Fast pris från 14 900 kr, leverans på 1–2 veckor. Möten i centrala Linköping eller Mjärdevi.",
+      canonical: "/webbbyra-linkoping",
+    });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Webbyrå Linköping", url: "/webbbyra-linkoping" },
+    ]);
+    setJsonLd("webbyra-faq", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: lokalaFaqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+    return () => {
+      removeJsonLd("breadcrumb-jsonld");
+      removeJsonLd("webbyra-faq");
+    };
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -104,6 +132,22 @@ const WebbyraLinkoping = () => {
                 lika nära med en kund i Malmö som med en kund i Mjölby.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className="border-t border-border py-16">
+          <div className="container mx-auto px-6 max-w-3xl">
+            <p className="label-caps mb-4">Relaterade tjänster</p>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              <li><Link to="/saas-utveckling-linkoping" className="text-sm underline hover:text-primary">SaaS-utveckling Linköping →</Link></li>
+              <li><Link to="/ai-byra-linkoping" className="text-sm underline hover:text-primary">AI-byrå Linköping →</Link></li>
+              <li><Link to="/saas-utveckling-norrkoping" className="text-sm underline hover:text-primary">SaaS-utveckling Norrköping →</Link></li>
+              <li><Link to="/saas-utveckling-stockholm" className="text-sm underline hover:text-primary">SaaS-utveckling Stockholm →</Link></li>
+              <li><Link to="/priser" className="text-sm underline hover:text-primary">Priser & paket →</Link></li>
+              <li><Link to="/arbete" className="text-sm underline hover:text-primary">Cases & portfölj →</Link></li>
+              <li><Link to="/metodik" className="text-sm underline hover:text-primary">Vår metodik →</Link></li>
+              <li><Link to="/artiklar" className="text-sm underline hover:text-primary">Artiklar →</Link></li>
+            </ul>
           </div>
         </section>
 

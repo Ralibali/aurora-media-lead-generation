@@ -1,15 +1,26 @@
 // City landing page content – unique copy per city for local SEO.
-// Used by /saas-utveckling-:slug route.
+// Used by /saas-utveckling-:slug and /ai-byra-:slug routes.
 
 export interface CityContent {
   slug: string;
   city: string;
   region: string;
-  intro: string; // Why hire AI agency in this city (300-500 chars)
-  localContext: string; // Näringsliv / branschmix
-  comparison: string; // How we differ from local agencies
-  caseNote?: string; // Optional local case mention
+  intro: string;
+  localContext: string;
+  comparison: string;
+  caseNote?: string;
   faqs: { q: string; a: string }[];
+}
+
+export interface CitySeo {
+  metaTitleSaaS: string;
+  metaDescSaaS: string;
+  metaTitleAI: string;
+  metaDescAI: string;
+  h1Pre: string;
+  h1Em: string;
+  keywords: string[];
+  tjansterIntro: string;
 }
 
 export const cities: CityContent[] = [
@@ -280,3 +291,189 @@ export const cities: CityContent[] = [
 
 export const getCity = (slug: string): CityContent | undefined =>
   cities.find((c) => c.slug === slug);
+
+// Per-city unique SEO fields – generated to avoid duplicate titles/descriptions.
+export const citySeo: Record<string, CitySeo> = {
+  linkoping: {
+    metaTitleSaaS: "SaaS-utveckling i Linköping från 14 900 kr | Aurora Media",
+    metaDescSaaS:
+      "Från idé till SaaS i Linköping. Vi bygger er MVP med koppling till Mjärdevis tech-scen. Få en offert, start från 14 900 kr.",
+    metaTitleAI: "AI-byrå Linköping: AI-lösningar för tech & industri | AM",
+    metaDescAI:
+      "Er AI-byrå i Linköping. Vi hjälper bolag inom tech och industri, inspirerade av Saabs och LiUs innovation, att bygga smarta AI-lösningar.",
+    h1Pre: "AI-byrå i Linköping som bygger",
+    h1Em: "SaaS och AI för teknikbolag",
+    keywords: [
+      "AI-byrå Linköping",
+      "SaaS-utveckling Linköping",
+      "webbyrå Linköping",
+      "systemutveckling Linköping",
+      "Mjärdevi startups",
+      "SaaS-bolag Linköping",
+    ],
+    tjansterIntro:
+      "Vi är en AI-byrå i Linköping som hjälper lokala företag att förverkliga sina digitala ambitioner. Se hur vi kan hjälpa er med SaaS-utveckling och anpassade AI-lösningar.",
+  },
+  norrkoping: {
+    metaTitleSaaS: "Bygga SaaS i Norrköping? Vi startar från 14 900 kr | AM",
+    metaDescSaaS:
+      "Effektiv SaaS-utveckling för logistik och e-handel i Norrköping. Snabb MVP-leverans från 14 900 kr för att testa din affärsidé skarpt.",
+    metaTitleAI: "AI-byrå Norrköping: Automation för logistik & e-handel",
+    metaDescAI:
+      "Aurora Media är er AI-byrå i Norrköping. Vi utvecklar AI-driven automation för att optimera er logistik, drift och e-handel. Förstärk ert datacenter.",
+    h1Pre: "Från Norrköpings logistiknav till",
+    h1Em: "optimerad SaaS & AI-drift",
+    keywords: [
+      "AI-byrå Norrköping",
+      "SaaS Norrköping",
+      "e-handel utveckling Norrköping",
+      "logistik automation",
+      "webbyrå Norrköping pris",
+      "systemutvecklare Norrköping",
+    ],
+    tjansterIntro:
+      "I hjärtat av Östergötlands logistik- och e-handelskluster erbjuder vi SaaS- och AI-utveckling. Utforska våra tjänster för att se hur vi kan effektivisera er verksamhet.",
+  },
+  jonkoping: {
+    metaTitleSaaS: "SaaS för familjeföretag i Jönköping – från 14 900 kr",
+    metaDescSaaS:
+      "Digitalisera ert familjeföretag med en egen SaaS. Vi bygger robusta lösningar för handel och logistik i Jönköping. Pris från 14 900 kr.",
+    metaTitleAI: "AI-byrå Jönköping | AI för handel & logistik | Aurora Media",
+    metaDescAI:
+      "AI för Jönköpings näringsliv. Som er lokala AI-byrå hjälper vi allt från anrika familjeföretag till logistik-giganter att bli effektivare med AI.",
+    h1Pre: "AI och SaaS för Jönköpings",
+    h1Em: "handels- och industriföretag",
+    keywords: [
+      "AI-byrå Jönköping",
+      "SaaS-utveckling Jönköping",
+      "webbyrå Jönköping",
+      "digitalisering familjeföretag",
+      "systemutveckling Småland",
+      "IT-bolag Jönköping",
+    ],
+    tjansterIntro:
+      "För Jönköpings drivna företagskultur erbjuder vi utvecklingstjänster som gör skillnad. Upptäck hur vi kan hjälpa ert familje- eller logistikföretag med SaaS och AI.",
+  },
+  stockholm: {
+    metaTitleSaaS: "Prisvärd SaaS-utveckling i Stockholm – från 14 900 kr",
+    metaDescSaaS:
+      "Slipp dyra byråarvoden. Vi bygger er SaaS-tjänst i Stockholm från 14 900 kr. Perfekt för startups inom fintech och B2B. Snabb, effektiv MVP.",
+    metaTitleAI: "AI-byrå Stockholm: Bättre pris, samma spetskompetens | AM",
+    metaDescAI:
+      "Varför betala överpris? Aurora Media är en AI-byrå för Stockholm som levererar avancerade AI-lösningar för fintech och SaaS utan dyra konsultarvoden.",
+    h1Pre: "SaaS-utveckling i Stockholm utan",
+    h1Em: "stockholmspriser",
+    keywords: [
+      "AI-byrå Stockholm pris",
+      "SaaS-utveckling Stockholm",
+      "webbyrå Stockholm billig",
+      "fintech startup Stockholm",
+      "SaaS-bolag Stockholm",
+      "MVP-utveckling Stockholm",
+    ],
+    tjansterIntro:
+      "I en stad där byråkostnaderna lätt skenar erbjuder vi ett smartare alternativ. Se våra tjänster inom SaaS och AI, anpassade för Stockholms snabbrörliga startups.",
+  },
+  goteborg: {
+    metaTitleSaaS: "SaaS-utveckling Göteborg: MVP för industri & life science",
+    metaDescSaaS:
+      "Vi bygger er nästa SaaS-plattform i Göteborg med fokus på industri, fordon och life science. Få er MVP från 14 900 kr. Testa er idé på marknaden.",
+    metaTitleAI: "AI-byrå Göteborg: AI för fordon, industri & life science",
+    metaDescAI:
+      "Som AI-byrå för Göteborgs näringsliv bygger vi lösningar som stärker er konkurrenskraft inom fordon, industri och life science. Från vision till verklighet.",
+    h1Pre: "Från fordonsindustri till SaaS i Göteborg",
+    h1Em: "vi bygger er nästa innovation",
+    keywords: [
+      "AI-byrå Göteborg",
+      "SaaS Göteborg",
+      "industri 4.0 Göteborg",
+      "Volvo IT",
+      "life science AI",
+      "webbyrå Göteborg",
+    ],
+    tjansterIntro:
+      "Med rötterna i innovationsstaden Göteborg hjälper vi företag inom industri och life science. Ta en titt på våra tjänster för att se hur vi kan realisera er nästa idé.",
+  },
+  malmo: {
+    metaTitleSaaS: "SaaS för startups i Malmö – MVP från 14 900 kr | AM",
+    metaDescSaaS:
+      "För Malmös tech-scen: Vi bygger er MVP! Oavsett om ni är inom gaming, fintech eller greentech, startar vi er SaaS-resa från 14 900 kr.",
+    metaTitleAI: "AI-byrå Malmö: För startups inom gaming, fintech, greentech",
+    metaDescAI:
+      "AI-byrå för Malmös innovativa startup-klimat. Vi hjälper er att integrera AI för att skapa nästa generations produkter inom gaming, fintech och greentech.",
+    h1Pre: "AI-driven utveckling för Malmös",
+    h1Em: "startup-scen",
+    keywords: [
+      "AI-byrå Malmö",
+      "SaaS startup Malmö",
+      "fintech Malmö",
+      "gaming utvecklare Malmö",
+      "greentech bolag",
+      "webbyrå Malmö",
+    ],
+    tjansterIntro:
+      "För den pulserande startup-scenen i Malmö erbjuder vi spetskompetens inom AI och SaaS. Se hur våra tjänster kan ge er den tekniska skjuts ni behöver.",
+  },
+  uppsala: {
+    metaTitleSaaS: "SaaS för biotech & life science i Uppsala | fr. 14 900 kr",
+    metaDescSaaS:
+      "Specialiserad SaaS-utveckling för biotech och life science i Uppsala. Från akademisk forskning till kommersiell produkt. MVP från 14 900 kr.",
+    metaTitleAI: "AI-byrå Uppsala: AI-lösningar för biotech & life science",
+    metaDescAI:
+      "Er AI-byrå i Uppsala med expertis inom life science och biotech. Vi omvandlar forskning och data till intelligenta applikationer och AI-modeller.",
+    h1Pre: "Från akademi till applikation i Uppsala",
+    h1Em: "AI & SaaS för life science",
+    keywords: [
+      "AI-byrå Uppsala",
+      "biotech Uppsala",
+      "life science AI",
+      "SaaS-utveckling Uppsala",
+      "webbyrå Uppsala",
+      "systemutveckling akademi",
+    ],
+    tjansterIntro:
+      "I kunskapsstaden Uppsala bygger vi broar mellan akademi och näringsliv. Upptäck våra AI- och SaaS-tjänster, skräddarsydda för biotech och life science.",
+  },
+  vasteras: {
+    metaTitleSaaS: "SaaS-utveckling Västerås: För industri & automation | AM",
+    metaDescSaaS:
+      "Bygg en SaaS-lösning för industri, energi eller automation i Västerås. Vi levererar en första version (MVP) från 14 900 kr för att validera er idé.",
+    metaTitleAI: "AI-byrå Västerås | AI för industri, energi & automation",
+    metaDescAI:
+      "Som er AI-byrå i Västerås hjälper vi industriföretag som ABB och andra att implementera AI för automation och effektivare energilösningar.",
+    h1Pre: "AI-byrå i Västerås för",
+    h1Em: "industri, energi och automation",
+    keywords: [
+      "AI-byrå Västerås",
+      "industriautomation",
+      "SaaS Västerås",
+      "ABB Västerås",
+      "energi tech",
+      "webbyrå Västerås",
+    ],
+    tjansterIntro:
+      "I industristaden Västerås levererar vi digitala lösningar för framtidens industri. Se hur våra tjänster inom SaaS och AI kan transformera er verksamhet.",
+  },
+  orebro: {
+    metaTitleSaaS: "SaaS-utveckling Örebro: För logistik & mellanstora bolag",
+    metaDescSaaS:
+      "Effektiv SaaS-utveckling för mellanstora bolag i Örebro, med fokus på logistik och livsmedel. Få er skräddarsydda MVP från bara 14 900 kr.",
+    metaTitleAI: "AI-byrå Örebro: Praktiska AI-lösningar för ditt företag",
+    metaDescAI:
+      "Letar du efter en AI-byrå i Örebro? Vi hjälper mellanstora bolag att ta steget med praktiska AI-lösningar för logistik och effektivare drift.",
+    h1Pre: "Smartare SaaS & AI för",
+    h1Em: "mellanstora företag i Örebro",
+    keywords: [
+      "AI-byrå Örebro",
+      "SaaS Örebro",
+      "logistik Örebro",
+      "webbyrå Örebro",
+      "IT-företag Örebro",
+      "systemutveckling Närke",
+    ],
+    tjansterIntro:
+      "För Örebros växande företag erbjuder vi handfasta digitala tjänster som ger resultat. Utforska hur vi kan hjälpa er med SaaS-utveckling och smarta AI-lösningar.",
+  },
+};
+
+export const getCitySeo = (slug: string): CitySeo | undefined => citySeo[slug];

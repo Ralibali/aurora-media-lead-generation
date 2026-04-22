@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
 import { cases } from "@/components/PortfolioSection";
 import { ArrowUpRight } from "lucide-react";
+import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const detailedCases = [
   {
@@ -64,6 +66,19 @@ const detailedCases = [
 ];
 
 const Arbete = () => {
+  useEffect(() => {
+    setSEOMeta({
+      title: "Arbete & cases – 7 SaaS-produkter live | Aurora Media",
+      description:
+        "Sju egna SaaS-produkter i drift: Aurora Transport, Updro, AgilityManager, Hönsgården m.fl. Bevis på att AI-byggd SaaS levererar – inte bara mockups.",
+      canonical: "/arbete",
+    });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Arbete & cases", url: "/arbete" },
+    ]);
+    return () => removeJsonLd("breadcrumb-jsonld");
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

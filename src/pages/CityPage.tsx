@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link, Navigate, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { Check } from "lucide-react";
-import { getCity, cities } from "@/lib/cityContent";
+import { getCity, getCitySeo, cities } from "@/lib/cityContent";
 import { paket } from "@/components/PaketSection";
 import {
   setSEOMeta,
@@ -19,14 +19,22 @@ import {
 
 const CityPage = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { pathname } = useLocation();
   const city = slug ? getCity(slug) : undefined;
+  const seo = slug ? getCitySeo(slug) : undefined;
   const { open } = useContactModal();
 
+  // Two routes share this component – differentiate SEO copy.
+  const isAiVariant = pathname.startsWith("/ai-byra-");
+  const path = isAiVariant ? `/ai-byra-${slug}` : `/saas-utveckling-${slug}`;
+
   useEffect(() => {
-    if (!city) return;
-    const path = `/saas-utveckling-${city.slug}`;
-    const title = `AI-byrå i ${city.city} – bygger SaaS från 14 900 kr | Aurora Media`;
-    const description = `SaaS-utveckling i ${city.city} med AI-kodning. Prototyp på 3–5 dagar, MVP på 2 veckor, full SaaS på 4 veckor. Fast pris från 14 900 kr.`;
+    if (!city || !seo) return;
+    const title = isAiVariant ? seo.metaTitleAI : seo.metaTitleSaaS;
+    const description = isAiVariant ? seo.metaDescAI : seo.metaDescSaaS;
+    const breadcrumbLabel = isAiVariant
+      ? `AI-byrå ${city.city}`
+      : `SaaS-utveckling ${city.city}`;
 
     setSEOMeta({
       title,
@@ -35,16 +43,28 @@ const CityPage = () => {
       ogType: "website",
     });
 
+    // Keyword meta (low SEO weight, but useful for SERP previews/audits).
+    const kwMeta = document.head.querySelector<HTMLMetaElement>(
+      'meta[name="keywords"]',
+    );
+    if (kwMeta) kwMeta.content = seo.keywords.join(", ");
+    else {
+      const m = document.createElement("meta");
+      m.name = "keywords";
+      m.content = seo.keywords.join(", ");
+      document.head.appendChild(m);
+    }
+
     setBreadcrumb([
       { name: "Hem", url: "/" },
-      { name: `AI-byrå ${city.city}`, url: path },
+      { name: breadcrumbLabel, url: path },
     ]);
 
     setJsonLd("city-localbusiness", {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       "@id": `${SITE_URL}${path}#service`,
-      name: `Aurora Media AB – AI-byrå i ${city.city}`,
+      name: `Aurora Media AB – ${breadcrumbLabel}`,
       description,
       url: `${SITE_URL}${path}`,
       provider: { "@id": `${SITE_URL}/#organization` },
@@ -54,6 +74,7 @@ const CityPage = () => {
         containedInPlace: { "@type": "AdministrativeArea", name: city.region },
       },
       priceRange: "14900-89000 SEK",
+      knowsAbout: seo.keywords,
       makesOffer: paket.map((p) => ({
         "@type": "Offer",
         name: p.name,
@@ -80,12 +101,22 @@ const CityPage = () => {
       removeJsonLd("city-organization");
       removeJsonLd("breadcrumb-jsonld");
     };
-  }, [city]);
+  }, [city, seo, isAiVariant, path]);
 
   if (!slug) return <Navigate to="/" replace />;
-  if (!city) return <Navigate to="/404" replace />;
+  if (!city || !seo) return <Navigate to="/404" replace />;
 
   const otherCities = cities.filter((c) => c.slug !== city.slug).slice(0, 5);
+  const breadcrumbLabel = isAiVariant
+    ? `AI-byrå ${city.city}`
+    : `SaaS-utveckling ${city.city}`;
+  // Cross-link to the other variant for the same city.
+  const altPath = isAiVariant
+    ? `/saas-utveckling-${city.slug}`
+    : `/ai-byra-${city.slug}`;
+  const altLabel = isAiVariant
+    ? `Se SaaS-utveckling i ${city.city}`
+    : `Se AI-byrå-tjänster i ${city.city}`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -97,12 +128,12 @@ const CityPage = () => {
             <nav aria-label="Brödsmulor" className="text-sm text-muted-foreground mb-6">
               <Link to="/" className="hover:text-foreground">Hem</Link>
               <span className="mx-2">›</span>
-              <span className="text-foreground">AI-byrå {city.city}</span>
+              <span className="text-foreground">{breadcrumbLabel}</span>
             </nav>
-            <p className="label-caps">AI-byrå · {city.city}</p>
+            <p className="label-caps">{breadcrumbLabel}</p>
             <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
-              AI-byrå i {city.city} –{" "}
-              <em className="italic text-primary">bygger SaaS på veckor från 14 900 kr</em>
+              {seo.h1Pre}{" "}
+              <em className="italic text-primary">{seo.h1Em}</em>
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-2xl">{city.intro}</p>
             <div className="mt-10 flex flex-col sm:flex-row gap-3">
@@ -121,7 +152,9 @@ const CityPage = () => {
         <section className="border-t border-border py-20">
           <div className="container mx-auto px-6 max-w-3xl space-y-6">
             <h2 className="font-serif text-3xl md:text-4xl">
-              Varför anlita en AI-byrå i {city.city}
+              {isAiVariant
+                ? `Varför välja en AI-byrå i ${city.city}`
+                : `Därför funkar SaaS-utveckling i ${city.city}`}
             </h2>
             <p className="text-muted-foreground leading-relaxed text-lg">{city.localContext}</p>
           </div>
@@ -130,10 +163,11 @@ const CityPage = () => {
         {/* Tjänster / paket */}
         <section className="border-t border-border py-20 bg-secondary/30">
           <div className="container mx-auto px-6 max-w-5xl">
-            <h2 className="font-serif text-3xl md:text-4xl mb-10">
-              Mina tjänster i {city.city}
+            <h2 className="font-serif text-3xl md:text-4xl">
+              Tjänster för företag i {city.city}
             </h2>
-            <div className="grid gap-6 md:grid-cols-2">
+            <p className="mt-3 text-muted-foreground max-w-2xl">{seo.tjansterIntro}</p>
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
               {paket.map((p) => (
                 <div key={p.name} className="rounded-xl border border-border bg-background p-6">
                   <p className="label-caps">{p.name}</p>
@@ -183,7 +217,7 @@ const CityPage = () => {
         <section className="border-t border-border py-20 bg-secondary/30">
           <div className="container mx-auto px-6 max-w-3xl">
             <h2 className="font-serif text-3xl md:text-4xl mb-10">
-              FAQ om SaaS-utveckling i {city.city}
+              FAQ – {breadcrumbLabel}
             </h2>
             <div className="space-y-4">
               {city.faqs.map((f) => (
@@ -202,6 +236,47 @@ const CityPage = () => {
           </div>
         </section>
 
+        {/* Internlänkar – tjänster + auktoritetssidor */}
+        <section className="border-t border-border py-16">
+          <div className="container mx-auto px-6 max-w-3xl">
+            <p className="label-caps mb-4">Relaterat för {city.city}</p>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              <li>
+                <Link to={altPath} className="text-sm underline hover:text-primary">
+                  {altLabel} →
+                </Link>
+              </li>
+              <li>
+                <Link to="/priser" className="text-sm underline hover:text-primary">
+                  Priser & paket från 14 900 kr →
+                </Link>
+              </li>
+              <li>
+                <Link to="/arbete" className="text-sm underline hover:text-primary">
+                  Cases & portfölj →
+                </Link>
+              </li>
+              <li>
+                <Link to="/metodik" className="text-sm underline hover:text-primary">
+                  Vår AI-metodik →
+                </Link>
+              </li>
+              {city.slug === "linkoping" && (
+                <li>
+                  <Link to="/webbbyra-linkoping" className="text-sm underline hover:text-primary">
+                    Webbyrå Linköping →
+                  </Link>
+                </li>
+              )}
+              <li>
+                <Link to="/artiklar" className="text-sm underline hover:text-primary">
+                  Artiklar om SaaS & AI →
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </section>
+
         {/* Andra städer */}
         <section className="border-t border-border py-16">
           <div className="container mx-auto px-6 max-w-3xl">
@@ -210,7 +285,7 @@ const CityPage = () => {
               {otherCities.map((c) => (
                 <Link
                   key={c.slug}
-                  to={`/saas-utveckling-${c.slug}`}
+                  to={isAiVariant ? `/ai-byra-${c.slug}` : `/saas-utveckling-${c.slug}`}
                   className="rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary transition-colors"
                 >
                   {c.city}

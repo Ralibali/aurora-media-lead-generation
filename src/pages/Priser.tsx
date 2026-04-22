@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { paket } from "@/components/PaketSection";
 import { Check } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 import FAQSection from "@/components/FAQSection";
+import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const tillagg = [
   { name: "Extra feature", price: "Från 8 000 kr", desc: "En ny funktion utöver det som ingår i paketet." },
@@ -34,6 +36,20 @@ const prisFaqs = [
 
 const Priser = () => {
   const { open } = useContactModal();
+
+  useEffect(() => {
+    setSEOMeta({
+      title: "Priser – fast pris från 14 900 kr | SaaS, MVP & webb",
+      description:
+        "Transparenta paket för AI-byggd SaaS: Prototyp 14 900 kr, MVP 34 900 kr, Skalbar SaaS 69 000 kr. Fast pris, ingen timdebitering, leverans på 1–4 veckor.",
+      canonical: "/priser",
+    });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Priser", url: "/priser" },
+    ]);
+    return () => removeJsonLd("breadcrumb-jsonld");
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
