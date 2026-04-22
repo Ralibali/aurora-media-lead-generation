@@ -70,16 +70,32 @@ const PAKET_OPTIONS = [
 export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultPaket, setDefaultPaket] = useState<string>("");
+  const [internalNote, setInternalNote] = useState<string>("");
 
-  const open = (paket?: string) => {
-    setDefaultPaket(paket ?? "");
+  const open: ContactModalCtx["open"] = (paketOrOptions, options) => {
+    let paket = "";
+    let note = "";
+    if (typeof paketOrOptions === "string") {
+      paket = paketOrOptions;
+      note = options?.internalNote ?? "";
+    } else if (paketOrOptions) {
+      paket = paketOrOptions.paket ?? "";
+      note = paketOrOptions.internalNote ?? "";
+    }
+    setDefaultPaket(paket);
+    setInternalNote(note);
     setIsOpen(true);
   };
 
   return (
     <Ctx.Provider value={{ open }}>
       {children}
-      <ContactDialog isOpen={isOpen} onOpenChange={setIsOpen} defaultPaket={defaultPaket} />
+      <ContactDialog
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
+        defaultPaket={defaultPaket}
+        internalNote={internalNote}
+      />
     </Ctx.Provider>
   );
 };
