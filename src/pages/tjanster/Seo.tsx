@@ -31,9 +31,9 @@ const Seo = () => {
         { label: "Steg 4", title: "Mätning", body: "GSC + GA4-uppsättning så du själv kan följa effekten." },
       ]}
       tiers={[
-        { name: "Audit", price: "2 490 kr", time: "Två dagar", desc: "Teknisk audit + åtgärdslista. Du fixar själv eller betalar för implementation.", features: ["Teknisk crawl", "On-page review", "Konkurrentanalys", "Prioriterad åtgärdslista"] },
-        { name: "Audit + fix", price: "6 900 kr", time: "En vecka", desc: "Allt i Audit – plus jag fixar de tekniska och on-page-bitarna.", features: ["Allt i Audit", "Tekniska fixar", "On-page-implementation", "Schema-markup"], featured: true },
-        { name: "Lokal SEO", price: "Från 4 900 kr", time: "En vecka", desc: "Google Business Profile, citations, lokala sidor.", features: ["GBP-optimering", "Citations & länkar", "Lokala landningssidor", "Recensionsstrategi"] },
+        { name: "Audit", price: "2 490 kr", time: "Två dagar", desc: "Teknisk audit + åtgärdslista. Du fixar själv eller betalar för implementation.", features: ["Teknisk crawl", "On-page review", "Konkurrentanalys", "Prioriterad åtgärdslista"], paketValue: "SEO – Audit" },
+        { name: "Audit + fix", price: "6 900 kr", time: "En vecka", desc: "Allt i Audit – plus jag fixar de tekniska och on-page-bitarna.", features: ["Allt i Audit", "Tekniska fixar", "On-page-implementation", "Schema-markup"], featured: true, paketValue: "SEO – Audit + fix" },
+        { name: "Lokal SEO", price: "Från 4 900 kr", time: "En vecka", desc: "Google Business Profile, citations, lokala sidor.", features: ["GBP-optimering", "Citations & länkar", "Lokala landningssidor", "Recensionsstrategi"], paketValue: "SEO – Lokal" },
       ]}
       pricingNote={
         <>
