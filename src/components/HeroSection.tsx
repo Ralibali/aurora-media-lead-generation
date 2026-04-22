@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 
 const deployments = [
-  { site: "auroratransport.se", days: 14 },
-  { site: "updro.se", days: 21 },
-  { site: "agilitymanager.se", days: 18 },
-  { site: "honsgarden.se", days: 10 },
-  { site: "goglampingsweden.se", days: 9 },
+  { site: "auroratransport.se", days: 38 },
+  { site: "updro.se", days: 42 },
+  { site: "agilitymanager.se", days: 24 },
+  { site: "honsgarden.se", days: 30 },
+  { site: "goglampingsweden.se", days: 33 },
 ];
 
 const HeroSection = () => {
@@ -56,10 +56,10 @@ const HeroSection = () => {
           >
             <p className="label-caps">Aurora Media AB · Linköping</p>
 
-            <h1 className="mt-6 font-serif leading-[1.02] tracking-[-0.025em] text-[clamp(3rem,8vw,7rem)]">
+            <h1 className="mt-6 font-sans font-semibold leading-[1.05] tracking-[-0.035em] text-[clamp(2.75rem,7.5vw,6.25rem)]">
               Jag bygger din app.
               <br />
-              <em className="italic text-primary">Från idé till lansering på 4 veckor.</em>
+              <span className="text-primary">Från idé till lansering på 4 veckor.</span>
             </h1>
 
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
