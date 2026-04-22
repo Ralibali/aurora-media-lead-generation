@@ -197,8 +197,8 @@
 
   /* Skip link – visible on focus only */
   .skip-link {
-    position: absolute;
-    top: -40px;
+    position: fixed;
+    top: 0;
     left: 16px;
     z-index: 100;
     padding: 8px 16px;
@@ -207,10 +207,11 @@
     border-radius: 0 0 6px 6px;
     font-size: 14px;
     font-weight: 500;
-    transition: top 150ms ease-out;
+    transform: translateY(-150%);
+    transition: transform 150ms ease-out;
   }
   .skip-link:focus {
-    top: 0;
+    transform: translateY(0);
     outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
   }
