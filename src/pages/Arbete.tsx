@@ -1,149 +1,211 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import CTABanner from "@/components/CTABanner";
-import { cases } from "@/components/PortfolioSection";
-import { ArrowUpRight } from "lucide-react";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
+import FinalCTASection from "@/components/FinalCTASection";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
+import { cn } from "@/lib/utils";
 
-const detailedCases = [
+type Category = "SaaS" | "Marknadsplats" | "Konsument" | "Bokning";
+
+type Case = {
+  name: string;
+  domain: string;
+  category: Category;
+  label: string;
+  desc: string;
+  stack: string;
+  result: string;
+};
+
+const cases: Case[] = [
   {
     name: "Aurora Transport",
     domain: "auroratransport.se",
-    problem: "Svenska transportbolag jagar fortfarande dispatching i Excel och WhatsApp. Manuell dubbelkoll, missade körningar, ingen koppling till bokföringen.",
-    solution: "Webbaserad dispatching med live-status, Stripe-betalningar mot uppdragsgivare och en direkt Fortnox-koppling som skapar fakturor automatiskt när en körning är klar.",
-    stack: "Lovable + Supabase + Stripe + Fortnox API",
-    result: "Lanserad på 3 veckor. Betalande kund i drift sedan dag 1 efter lansering.",
+    category: "SaaS",
+    label: "Featured · Transport · B2B",
+    desc: "Dispatching-SaaS för svenska transportbolag. CJ Bemanning var första kunden.",
+    stack: "3 veckor · Lovable · Supabase · Stripe · Fortnox",
+    result: "Lanserad 3 veckor. Betalande kund från dag 1.",
   },
   {
     name: "Updro",
     domain: "updro.se",
-    problem: "Företag som ska köpa digitala tjänster vet inte vem de ska prata med. Byrå-marknaden är opaque och offerter går aldrig att jämföra.",
-    solution: "Marknadsplats där företag beskriver sitt behov och får jämförbara offerter från relevanta byråer. Stripe Connect för utbetalningar.",
-    stack: "Lovable + Supabase + Stripe Connect",
-    result: "Lanserad 2026, byråer onboardas löpande.",
+    category: "Marknadsplats",
+    label: "Marknadsplats · B2B",
+    desc: "Marknadsplats för digitala tjänster. Jämförbara offerter från relevanta byråer.",
+    stack: "3 veckor · Lovable · Supabase · Stripe Connect",
+    result: "Live 2026. Byråer onboardas löpande.",
   },
   {
     name: "AgilityManager",
     domain: "agilitymanager.se",
-    problem: "Agility-förare för loggbok i papperskalender. Ingen statistik, ingen progression, ingen koppling till tävlingsresultat.",
-    solution: "Träningsapp med inbyggd kalender, statistik per hund och automatisk hämtning av tävlingsresultat från SBK.",
-    stack: "Lovable + Supabase + Firecrawl",
+    category: "Konsument",
+    label: "Konsument · Sport",
+    desc: "Träningsapp för agility-förare med tävlingsresultat och statistik.",
+    stack: "2,5 veckor · Lovable · Supabase · Firecrawl",
     result: "Live med betalande användare.",
   },
   {
     name: "Hönsgården",
     domain: "honsgarden.se",
-    problem: "Svenska hönsägare har ingen samlad app för värphöns, vaccinations-scheman och flockhantering.",
-    solution: "Freemium-app med basfunktioner gratis och premium för avancerad statistik och AI-guidning.",
-    stack: "Lovable + Supabase + RevenueCat",
-    result: "67 procent premium-konvertering bland aktiva användare.",
+    category: "Konsument",
+    label: "Konsument · Hobby",
+    desc: "Värphönsapp för svenska hönsägare. Vaccinationsschema och flockhantering.",
+    stack: "10 dagar · Lovable · Supabase · RevenueCat",
+    result: "67 % premium-konvertering bland aktiva.",
   },
   {
     name: "Odlingsdagboken",
     domain: "odlingsdagboken.com",
-    problem: "Odlare för dagbok i tre olika appar och en pärm. Ingen samlad bild, ingen påminnelse om vad som ska göras nästa vecka.",
-    solution: "Svensk odlings-SaaS med AI-coach byggd på Claude som ger råd baserat på zon, gröda och tidigare anteckningar.",
-    stack: "Lovable + Supabase + Claude API",
+    category: "Konsument",
+    label: "Konsument · AI-coach",
+    desc: "Svensk odlings-SaaS med AI-coach byggd på Claude. Råd per zon och gröda.",
+    stack: "2 veckor · Lovable · Supabase · Claude API",
     result: "Premium 99 kr/år. Live.",
   },
   {
     name: "GoGlamping Sweden",
     domain: "goglampingsweden.se",
-    problem: "Glamping-anläggning vid Göta kanal hade en bokningsmotor (Sirvoy) men ingen presentationssajt som drev konvertering.",
-    solution: "Bokningssajt med rena landningssidor per stuga, integrerad Sirvoy-widget och SEO-optimering för glamping/Östergötland.",
-    stack: "React + Vite + Sirvoy",
+    category: "Bokning",
+    label: "Bokning · Turism",
+    desc: "Bokningssajt för glamping vid Göta kanal. SEO + Sirvoy-integration.",
+    stack: "9 dagar · React · Vite · Sirvoy",
     result: "Live. Öppnar maj 2026.",
   },
   {
     name: "Viriditas",
     domain: "viriditasmassage.se",
-    problem: "Massagemottagning behövde en seriös sajt med direktbokning som inte såg ut som en gratis Wix-mall.",
-    solution: "Snabb, ren bokningssajt som speglar varumärket, med tidsbokning och presentation av behandlingar.",
-    stack: "React + Vite",
-    result: "1 vecka leverans. Live, betalande kund.",
+    category: "Bokning",
+    label: "Bokning · Hälsa",
+    desc: "Bokningssajt för massagemottagning med direkttidsbokning.",
+    stack: "1 vecka · React · Vite",
+    result: "Live, betalande kund.",
   },
 ];
 
+const filters: ("Alla" | Category)[] = ["Alla", "SaaS", "Marknadsplats", "Konsument", "Bokning"];
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+};
+
 const Arbete = () => {
+  const [active, setActive] = useState<(typeof filters)[number]>("Alla");
+
   useEffect(() => {
     setSEOMeta({
-      title: "Arbete & cases – 7 SaaS-produkter live | Aurora Media",
+      title: "Arbete – 7 SaaS-produkter live | Aurora Media Linköping",
       description:
-        "Sju egna SaaS-produkter i drift: Aurora Transport, Updro, AgilityManager, Hönsgården m.fl. Bevis på att AI-byggd SaaS levererar – inte bara mockups.",
+        "Sju egna SaaS-produkter i drift: Aurora Transport, Updro, AgilityManager, Hönsgården, Odlingsdagboken, GoGlamping, Viriditas. Bevis på AI-byggd SaaS som levererar.",
       canonical: "/arbete",
     });
     setBreadcrumb([
       { name: "Hem", url: "/" },
-      { name: "Arbete & cases", url: "/arbete" },
+      { name: "Arbete", url: "/arbete" },
     ]);
     return () => removeJsonLd("breadcrumb-jsonld");
   }, []);
+
+  const filtered = useMemo(
+    () => (active === "Alla" ? cases : cases.filter((c) => c.category === active)),
+    [active],
+  );
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main>
-        <section className="pt-24 pb-12 md:pt-32 md:pb-16">
+      <main className="pt-16">
+        {/* Hero */}
+        <section className="pt-16 pb-10 md:pt-24 md:pb-14">
           <div className="container mx-auto px-6 max-w-4xl">
-            <p className="label-caps">Arbete</p>
-            <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
-              Sju produkter. <em className="italic text-primary">Alla live.</em>
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
-              Det här är produkter jag har byggt och driver själv. Inga case-studies från en byrå
-              jag jobbade på 2018 – det här är mitt arbete, just nu.
-            </p>
-          </div>
-        </section>
+            <motion.div {...fadeUp}>
+              <p className="label-caps">Arbete</p>
+              <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
+                Sju SaaS. <em className="italic text-primary">Alla live.</em>
+              </h1>
+              <p className="mt-7 max-w-2xl text-lg text-muted-foreground md:text-xl">
+                Det här är produkter jag har byggt och driver själv. Inga case-studies från en byrå
+                jag jobbade på 2018 – det här är mitt arbete, just nu.
+              </p>
+            </motion.div>
 
-        <section className="pb-24">
-          <div className="container mx-auto px-6 max-w-4xl space-y-20">
-            {detailedCases.map((c, i) => (
-              <article
-                key={c.domain}
-                className="grid gap-8 border-t border-border pt-12 md:grid-cols-[1fr_2fr]"
-              >
-                <div>
-                  <p className="label-caps">Case 0{i + 1}</p>
-                  <h2 className="mt-3 font-serif text-3xl md:text-4xl">{c.name}</h2>
-                  <a
-                    href={`https://${c.domain}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-3 inline-flex items-center gap-1 text-sm text-primary hover:underline"
+            {/* Filters */}
+            <motion.div
+              {...fadeUp}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mt-10 flex flex-wrap gap-2"
+              role="tablist"
+              aria-label="Filtrera arbete"
+            >
+              {filters.map((f) => {
+                const isActive = f === active;
+                return (
+                  <button
+                    key={f}
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActive(f)}
+                    className={cn(
+                      "rounded-full border px-4 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                      isActive
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-transparent text-muted-foreground hover:border-primary hover:text-foreground",
+                    )}
                   >
-                    {c.domain}
-                    <ArrowUpRight className="h-4 w-4" />
-                  </a>
-                </div>
-                <div className="space-y-5 text-base text-foreground/85">
-                  <div>
-                    <p className="label-caps mb-1.5">Problem</p>
-                    <p>{c.problem}</p>
-                  </div>
-                  <div>
-                    <p className="label-caps mb-1.5">Lösning</p>
-                    <p>{c.solution}</p>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2 pt-2">
-                    <div>
-                      <p className="label-caps mb-1.5">Stack</p>
-                      <p className="text-sm text-muted-foreground">{c.stack}</p>
-                    </div>
-                    <div>
-                      <p className="label-caps mb-1.5">Resultat</p>
-                      <p className="text-sm text-muted-foreground">{c.result}</p>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
+                    {f}
+                  </button>
+                );
+              })}
+            </motion.div>
           </div>
         </section>
 
-        <CTABanner />
+        {/* Grid */}
+        <section className="pb-24 md:pb-32">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="grid gap-6 md:grid-cols-2">
+              {filtered.map((c, i) => (
+                <motion.a
+                  key={c.domain}
+                  href={`https://${c.domain}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  className="group relative flex h-full flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg md:p-9"
+                >
+                  <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
+                    {c.label}
+                  </p>
+                  <h2 className="mt-4 font-serif text-3xl md:text-4xl">{c.name}</h2>
+                  <p className="mt-3 text-base leading-relaxed text-foreground/80 md:text-lg">
+                    {c.desc}
+                  </p>
+                  <div className="mt-7 space-y-2 border-t border-border pt-5 text-sm">
+                    <p className="font-mono text-xs text-muted-foreground">{c.stack}</p>
+                    <p className="text-foreground/75">{c.result}</p>
+                  </div>
+                  <span className="mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                    Besök {c.domain}
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </span>
+                </motion.a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <FinalCTASection />
       </main>
       <Footer />
+      <StickyMobileCTA />
     </div>
   );
 };

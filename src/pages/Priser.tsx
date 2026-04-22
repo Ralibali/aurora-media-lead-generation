@@ -1,47 +1,72 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Check, ArrowUpRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
+import FAQSection from "@/components/FAQSection";
+import FinalCTASection from "@/components/FinalCTASection";
 import { Button } from "@/components/ui/button";
 import { paket } from "@/components/PaketSection";
-import { Check } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
-import FAQSection from "@/components/FAQSection";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const tillagg = [
-  { name: "Extra feature", price: "Från 8 000 kr", desc: "En ny funktion utöver det som ingår i paketet." },
-  { name: "SEO-paket", price: "Från 12 000 kr", desc: "Teknisk audit, on-page-optimering och innehållsplan." },
+  { name: "Hemsida", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
+  { name: "E-handel", price: "Från 19 900 kr", to: "/tjanster/ehandel" },
+  { name: "SEO", price: "Från 4 900 kr", to: "/tjanster/seo" },
+  { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
+  { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
+  { name: "Content", price: "1 490 kr/artikel", to: "/tjanster/content" },
+  { name: "Grafisk profil", price: "Från 5 900 kr", to: "/tjanster/grafisk-profil" },
+  { name: "Fotografering", price: "4 900 kr/halvdag", to: "/tjanster/fotografering" },
+];
+
+const lopande = [
   { name: "Löpande underhåll", price: "1 990 kr/mån", desc: "Bugfixar, säkerhetsuppdateringar, mindre justeringar (upp till 2 timmar/mån)." },
-  { name: "Retainer", price: "Från 12 000 kr/mån", desc: "Löpande utveckling om du behöver nya features varje månad." },
+  { name: "Retainer", price: "Från 12 000 kr/mån", desc: "Löpande utveckling – nya features varje månad. Säg upp med 30 dagars varsel." },
+  { name: "Timpris", price: "895 kr/h", desc: "Mindre engångsjobb och konsultationer som inte passar paket." },
+];
+
+const comparisonRows: { feature: string; values: [string | boolean, string | boolean, string | boolean, string | boolean] }[] = [
+  { feature: "Responsiv design", values: [true, true, true, true] },
+  { feature: "Riktig data (inte mockup)", values: [true, true, true, true] },
+  { feature: "Deployment på din domän", values: [true, true, true, true] },
+  { feature: "Användarlogin", values: [false, true, true, true] },
+  { feature: "Stripe-betalningar", values: [false, true, true, true] },
+  { feature: "Admin-dashboard", values: [false, true, true, true] },
+  { feature: "Avancerad analys", values: [false, false, true, true] },
+  { feature: "Externa integrationer (Fortnox m.fl.)", values: [false, false, true, true] },
+  { feature: "Full SEO", values: [false, false, true, true] },
+  { feature: "Multi-tenant arkitektur", values: [false, false, false, true] },
+  { feature: "Säkerhetskrav (audit, kryptering)", values: [false, false, false, true] },
+  { feature: "Support efter leverans", values: ["1 vecka", "2 veckor", "1 månad", "Förhandlingsbar"] },
 ];
 
 const prisFaqs = [
-  {
-    q: "Hur betalar jag?",
-    a: "50 procent vid projektstart, 50 procent vid leverans. Faktura med 30 dagars betalningsvillkor. F-skatt via Aurora Media AB.",
-  },
-  {
-    q: "Vad ingår i garantin?",
-    a: "Om prototypen dag 3 inte motsvarar förväntningarna, betalar du inget. Då går vi skilda vägar utan kostnad.",
-  },
-  {
-    q: "Är moms inkluderad?",
-    a: "Alla priser är exklusive moms. 25 procent moms tillkommer för svenska företag.",
-  },
-  {
-    q: "Vad händer om scope ändras under projektet?",
-    a: "Mindre justeringar ingår. Större tillägg offereras separat innan vi börjar bygga – aldrig i efterhand.",
-  },
+  { q: "Hur betalar jag?", a: "50 procent vid projektstart, 50 procent vid leverans. Faktura med 30 dagars betalningsvillkor. F-skatt via Aurora Media AB." },
+  { q: "Vad ingår i garantin?", a: "Om prototypen dag 3 inte motsvarar förväntningarna betalar du inget. Då går vi skilda vägar utan kostnad – och behåller var sin lärdom." },
+  { q: "Är moms inkluderad?", a: "Alla priser är exklusive moms. 25 procent moms tillkommer för svenska företag." },
+  { q: "Vad händer om scope ändras under projektet?", a: "Mindre justeringar ingår. Större tillägg offereras separat innan vi börjar bygga – aldrig i efterhand." },
+  { q: "Kan jag kombinera paket?", a: "Ja. Många kunder börjar med Prototyp, beslutar sig för MVP eller SaaS, och uppgraderar då till differensen. Du betalar aldrig dubbelt." },
 ];
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+};
 
 const Priser = () => {
   const { open } = useContactModal();
 
   useEffect(() => {
     setSEOMeta({
-      title: "Priser – fast pris från 14 900 kr | SaaS, MVP & webb",
+      title: "Priser – fast pris från 14 900 kr | SaaS, MVP & webb | Aurora Media",
       description:
-        "Transparenta paket för AI-byggd SaaS: Prototyp 14 900 kr, MVP 34 900 kr, Skalbar SaaS 69 000 kr. Fast pris, ingen timdebitering, leverans på 1–4 veckor.",
+        "Transparenta paket för AI-byggd SaaS: Prototyp 14 900 kr, MVP 34 900 kr, Skalbar SaaS 69 000 kr, Skräddarsytt från 89 000 kr. Fast pris, ingen timdebitering.",
       canonical: "/priser",
     });
     setBreadcrumb([
@@ -54,40 +79,48 @@ const Priser = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main>
-        <section className="pt-24 pb-16 md:pt-32 md:pb-20">
+      <main className="pt-16">
+        {/* Hero */}
+        <section className="pt-16 pb-12 md:pt-24 md:pb-16">
           <div className="container mx-auto px-6 max-w-4xl">
-            <p className="label-caps">Priser</p>
-            <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
-              Fast pris. <em className="italic text-primary">Inga timmar.</em>
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
-              Du vet exakt vad du betalar innan vi börjar. Ingen löpande räkning, inga "det blev
-              lite mer komplext än vi trodde".
-            </p>
+            <motion.div {...fadeUp}>
+              <p className="label-caps">Priser</p>
+              <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
+                Fast pris. <em className="italic text-primary">Inga timmar.</em>
+              </h1>
+              <p className="mt-7 max-w-2xl text-lg text-muted-foreground md:text-xl">
+                Du vet exakt vad du betalar innan vi börjar. Ingen löpande räkning, inga
+                "det blev lite mer komplext än vi trodde". Inga sex-månaders bindningar.
+              </p>
+            </motion.div>
           </div>
         </section>
 
-        <section className="pb-24">
+        {/* Main packages */}
+        <section className="pb-20 md:pb-24">
           <div className="container mx-auto px-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {paket.map((p) => (
-                <div
+              {paket.map((p, i) => (
+                <motion.div
                   key={p.id}
-                  className={`relative flex flex-col rounded-lg border bg-card p-6 ${
-                    p.featured ? "border-primary shadow-sm" : "border-border"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: i * 0.06 }}
+                  className={`relative flex flex-col rounded-xl border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                    p.featured ? "border-primary shadow-md" : "border-border hover:border-primary/50"
                   }`}
                 >
                   {p.featured && (
-                    <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-primary-foreground">
+                    <span className="absolute -top-3 left-7 rounded-full bg-primary px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-primary-foreground">
                       Populärast
                     </span>
                   )}
                   <p className="label-caps">{p.name}</p>
-                  <p className="mt-3 font-serif text-3xl">{p.price}</p>
+                  <p className="mt-3 font-serif text-3xl md:text-4xl">{p.price}</p>
                   <p className="mt-1 text-sm text-muted-foreground">{p.time}</p>
                   <p className="mt-4 text-sm leading-relaxed text-foreground/80">{p.desc}</p>
-                  <ul className="mt-5 space-y-2.5">
+                  <ul className="mt-5 flex-1 space-y-2.5">
                     {p.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm">
                         <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
@@ -102,64 +135,163 @@ const Priser = () => {
                   >
                     {p.cta}
                   </Button>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-t border-border py-20">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <p className="label-caps">Tillägg</p>
-            <h2 className="mt-3 font-serif text-3xl md:text-4xl">Utöver paketen</h2>
+        {/* Comparison table */}
+        <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
+          <div className="container mx-auto px-6">
+            <motion.div {...fadeUp} className="max-w-2xl">
+              <p className="label-caps">Jämförelse</p>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
+                Vad ingår var?
+              </h2>
+            </motion.div>
+
+            <div className="mt-12 overflow-x-auto rounded-xl border border-border bg-card">
+              <table className="w-full min-w-[720px] text-left text-sm">
+                <thead>
+                  <tr className="border-b border-border bg-secondary/50">
+                    <th className="p-5 font-medium text-muted-foreground"></th>
+                    <th className="p-5 font-serif text-base font-normal">Prototyp</th>
+                    <th className="p-5 font-serif text-base font-normal">MVP</th>
+                    <th className="p-5 font-serif text-base font-normal text-primary">Skalbar SaaS</th>
+                    <th className="p-5 font-serif text-base font-normal">Skräddarsytt</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {comparisonRows.map((row) => (
+                    <tr key={row.feature}>
+                      <td className="p-4 text-foreground/85">{row.feature}</td>
+                      {row.values.map((v, i) => (
+                        <td key={i} className="p-4 text-sm">
+                          {typeof v === "boolean" ? (
+                            v ? (
+                              <Check className="h-4 w-4 text-primary" aria-label="Ingår" />
+                            ) : (
+                              <span className="text-muted-foreground/40" aria-label="Ingår ej">—</span>
+                            )
+                          ) : (
+                            <span className={i === 2 ? "font-medium text-primary" : "text-foreground/75"}>{v}</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* Tilläggstjänster */}
+        <section className="border-t border-border py-20 md:py-24">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <motion.div {...fadeUp}>
+              <p className="label-caps">Tilläggstjänster</p>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
+                Resten av paletten.
+              </h2>
+              <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+                Allt annat jag levererar – samma fast-pris-approach.
+              </p>
+            </motion.div>
+
             <div className="mt-10 divide-y divide-border border-y border-border">
               {tillagg.map((t) => (
-                <div key={t.name} className="grid gap-2 py-5 sm:grid-cols-[1fr_auto] sm:items-center">
-                  <div>
-                    <p className="font-serif text-xl">{t.name}</p>
-                    <p className="mt-1 text-sm text-muted-foreground max-w-2xl">{t.desc}</p>
-                  </div>
-                  <p className="text-primary font-medium sm:text-right">{t.price}</p>
-                </div>
+                <Link
+                  key={t.to}
+                  to={t.to}
+                  className="group grid gap-2 py-5 sm:grid-cols-[1fr_auto_auto] sm:items-center sm:gap-6"
+                >
+                  <p className="font-serif text-xl md:text-2xl">{t.name}</p>
+                  <p className="text-sm font-medium text-primary sm:text-right">{t.price}</p>
+                  <ArrowUpRight className="hidden h-5 w-5 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary sm:block" />
+                </Link>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-t border-border py-20">
-          <div className="container mx-auto px-6 max-w-4xl grid gap-10 md:grid-cols-2">
-            <div>
+        {/* Löpande priser */}
+        <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <motion.div {...fadeUp}>
+              <p className="label-caps">Löpande priser</p>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
+                Efter leverans.
+              </h2>
+            </motion.div>
+
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {lopande.map((l, i) => (
+                <motion.div
+                  key={l.name}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  className="rounded-xl border border-border bg-card p-7"
+                >
+                  <p className="label-caps">{l.name}</p>
+                  <p className="mt-3 font-serif text-2xl md:text-3xl">{l.price}</p>
+                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{l.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Betalning + Garanti */}
+        <section className="border-t border-border py-20 md:py-24">
+          <div className="container mx-auto px-6 max-w-5xl grid gap-12 md:grid-cols-2 md:gap-16">
+            <motion.div {...fadeUp}>
               <p className="label-caps">Betalningsvillkor</p>
-              <h2 className="mt-3 font-serif text-3xl">Hur det funkar</h2>
-              <ul className="mt-6 space-y-3 text-sm text-muted-foreground">
-                <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 text-primary shrink-0" /> 50 procent vid projektstart, 50 procent vid leverans</li>
-                <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 text-primary shrink-0" /> Faktura med 30 dagars betalningsvillkor</li>
-                <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 text-primary shrink-0" /> F-skatt via Aurora Media AB</li>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
+                Hur det funkar.
+              </h2>
+              <ul className="mt-7 space-y-3.5">
+                <li className="flex items-start gap-3 text-base text-foreground/85">
+                  <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
+                  50 procent vid projektstart, 50 procent vid leverans
+                </li>
+                <li className="flex items-start gap-3 text-base text-foreground/85">
+                  <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
+                  Faktura med 30 dagars betalningsvillkor
+                </li>
+                <li className="flex items-start gap-3 text-base text-foreground/85">
+                  <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
+                  F-skatt via Aurora Media AB (org.nr 559272-0220)
+                </li>
+                <li className="flex items-start gap-3 text-base text-foreground/85">
+                  <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
+                  Alla priser exklusive 25 % moms
+                </li>
               </ul>
-            </div>
-            <div>
-              <p className="label-caps">Garanti</p>
-              <h2 className="mt-3 font-serif text-3xl">Du tar ingen risk</h2>
-              <p className="mt-6 text-base text-foreground/85 leading-relaxed">
-                Om prototypen dag 3 inte motsvarar förväntningarna, betalar du inget. Då går vi
-                skilda vägar utan kostnad.
+            </motion.div>
+
+            <motion.div {...fadeUp} className="rounded-xl border border-primary/30 bg-primary/5 p-8">
+              <p className="label-caps text-primary">Garanti</p>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
+                Du tar ingen risk.
+              </h2>
+              <p className="mt-7 text-base leading-relaxed text-foreground/85 md:text-lg">
+                Om prototypen dag 3 inte motsvarar förväntningarna, betalar du inget och behåller
+                vi var sin lärdom. Inga 6-månaderskontrakt. Inga uppsägningstider för paket.
               </p>
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        <FAQSection items={prisFaqs} title="Frågor om priser" />
+        <FAQSection items={prisFaqs} title="Frågor om priser." />
 
-        <section className="border-t border-border py-20">
-          <div className="container mx-auto px-6 max-w-3xl">
-            <h2 className="font-serif text-4xl md:text-5xl">Klar att starta?</h2>
-            <Button className="mt-8" size="lg" onClick={() => open()}>
-              Starta ett projekt
-            </Button>
-          </div>
-        </section>
+        <FinalCTASection />
       </main>
       <Footer />
+      <StickyMobileCTA />
     </div>
   );
 };
