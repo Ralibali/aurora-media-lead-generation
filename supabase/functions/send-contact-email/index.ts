@@ -35,6 +35,7 @@ Deno.serve(async (req: Request) => {
     const email = String(body.email ?? "").trim().slice(0, 160);
     const company = String(body.company ?? "").trim().slice(0, 120);
     const paket = String(body.paket ?? "").trim().slice(0, 60);
+    const leadLabel = String(body.leadLabel ?? "").trim().slice(0, 160);
     const message = String(body.message ?? "").trim().slice(0, 2000);
 
     if (!name || !email || !paket || message.length < 20) {
@@ -50,13 +51,19 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const subject = `Ny förfrågan – ${paket} – ${name}`;
+    // Använd den fullständiga lead-etiketten i ämnesraden om den finns,
+    // annars fall tillbaka på paket-värdet.
+    const subjectLabel = leadLabel || `Intresserad av: ${paket}`;
+    const subject = `Ny förfrågan – ${subjectLabel} – ${name}`;
     const html = `
       <h2>Ny projektförfrågan</h2>
+      <p style="font-size:14px;padding:8px 12px;background:#f3f6f4;border-left:3px solid #1f7a5e;display:inline-block;border-radius:4px;">
+        <strong>${escape(leadLabel || `Intresserad av: ${paket}`)}</strong>
+      </p>
       <p><strong>Namn:</strong> ${escape(name)}</p>
       <p><strong>E-post:</strong> ${escape(email)}</p>
       <p><strong>Företag:</strong> ${escape(company || "—")}</p>
-      <p><strong>Paket:</strong> ${escape(paket)}</p>
+      <p><strong>Paket (värde):</strong> ${escape(paket)}</p>
       <hr />
       <p style="white-space: pre-wrap;">${escape(message)}</p>
     `;
