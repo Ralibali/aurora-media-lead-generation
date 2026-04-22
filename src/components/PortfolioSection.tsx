@@ -100,7 +100,14 @@ const PortfolioSection = () => {
           </div>
           <div className="flex flex-col justify-between gap-6 p-8 md:p-10 lg:col-span-5">
             <div>
-              <p className="label-caps !text-[10px]">{featured.label}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="label-caps !text-[10px]">{featured.label}</p>
+                {featured.platforms && (
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-primary">
+                    {featured.platforms}
+                  </span>
+                )}
+              </div>
               <h3 className="mt-3 font-serif text-3xl md:text-4xl">{featured.name}</h3>
               <p className="mt-4 text-base leading-relaxed text-foreground/80">
                 {featured.tagline}
@@ -136,7 +143,14 @@ const PortfolioSection = () => {
                 <span className="font-serif text-xl text-foreground/60">{c.domain}</span>
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <p className="label-caps !text-[10px]">{c.label}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="label-caps !text-[10px]">{c.label}</p>
+                  {c.platforms && (
+                    <span className="rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-primary">
+                      {c.platforms}
+                    </span>
+                  )}
+                </div>
                 <div className="mt-2 flex items-start justify-between gap-3">
                   <h3 className="font-serif text-2xl">{c.name}</h3>
                   <ArrowUpRight className="mt-1 h-5 w-5 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />

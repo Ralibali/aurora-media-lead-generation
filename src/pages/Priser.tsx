@@ -251,6 +251,54 @@ const Priser = () => {
                 </Link>
               ))}
             </div>
+
+            <p className="mt-6 text-sm text-muted-foreground max-w-3xl">
+              Capacitor är min rekommendation för 90 procent av app-projekt. Vill du paketera
+              webb + app som ett projekt? <Link to="/tjanster/mobilapp" className="text-primary hover:underline">MVP + Capacitor = från 59 800 kr på 3–4 veckor</Link>.
+            </p>
+          </div>
+        </section>
+
+        {/* Vanliga kombinationer */}
+        <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <motion.div {...fadeUp}>
+              <p className="label-caps">Kombo-paket</p>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
+                Vanliga kombinationer.
+              </h2>
+              <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+                Spara tid genom att paketera flera tjänster från start. Samma fasta priser, ett projekt.
+              </p>
+            </motion.div>
+
+            <div className="mt-10 grid gap-5 sm:grid-cols-2">
+              {kombos.map((k, i) => (
+                <motion.div
+                  key={k.name}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  className="flex flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md"
+                >
+                  <p className="label-caps">{k.name}</p>
+                  <p className="mt-3 font-serif text-2xl md:text-3xl">{k.price}</p>
+                  <p className="mt-1 text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                    {k.breakdown}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">{k.time}</p>
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-foreground/80">{k.desc}</p>
+                  <Button
+                    onClick={() => open(k.paket)}
+                    variant="outline"
+                    className="mt-6 w-full"
+                  >
+                    Få offert
+                  </Button>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </section>
 
