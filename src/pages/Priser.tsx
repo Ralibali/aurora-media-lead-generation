@@ -253,7 +253,7 @@ const Priser = () => {
         {/* Vanliga kombinationer */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Kombo-paket</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Vanliga kombinationer.
@@ -261,16 +261,15 @@ const Priser = () => {
               <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
                 Spara tid genom att paketera flera tjänster från start. Samma fasta priser, ett projekt.
               </p>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-10 grid gap-5 sm:grid-cols-2">
               {kombos.map((k, i) => (
-                <motion.div
+                <Reveal
                   key={k.name}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  delay={i * 0.06}
+                  y={16}
+                  duration={0.5}
                   className="flex flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md"
                 >
                   <p className="label-caps">{k.name}</p>
@@ -287,7 +286,7 @@ const Priser = () => {
                   >
                     Få offert
                   </Button>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -296,27 +295,26 @@ const Priser = () => {
         {/* Löpande priser */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Löpande priser</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Efter leverans.
               </h2>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-10 grid gap-5 md:grid-cols-3">
               {lopande.map((l, i) => (
-                <motion.div
+                <Reveal
                   key={l.name}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  delay={i * 0.06}
+                  y={16}
+                  duration={0.5}
                   className="rounded-xl border border-border bg-card p-7"
                 >
                   <p className="label-caps">{l.name}</p>
                   <p className="mt-3 font-serif text-2xl md:text-3xl">{l.price}</p>
                   <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{l.desc}</p>
-                </motion.div>
+                </Reveal>
               ))}
             </div>
           </div>
