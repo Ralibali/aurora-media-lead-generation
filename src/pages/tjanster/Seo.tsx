@@ -98,6 +98,103 @@ const Seo = () => {
         { q: "Hjälper du med innehåll?", a: "Ja, se Content-tjänsten. SEO-optimerade artiklar från 995 kr/styck." },
         { q: "Lite dyrt va?", a: "Jag förstår reaktionen, men jämför med vad du faktiskt får. I Audit ingår teknisk crawl, on-page-genomgång, konkurrentanalys och en prioriterad åtgärdslista – arbete som tar mig två fulla dagar. Audit + fix lägger till själva implementationen av tekniska fixar, on-page och schema, vilket annars motsvarar 8–12 timmars utvecklarjobb hos en byrå (15 000–25 000 kr). Jag jobbar med fast pris så att du vet exakt vad du betalar – inga timmar som tickar, inga överraskningar och inga månadsbindningar." },
       ]}
+      postFaq={
+        <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
+          <div className="container mx-auto max-w-5xl px-6">
+            <div className="max-w-2xl">
+              <p className="label-caps">Så går det till</p>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
+                Två vägar, två tidsplaner.
+              </h2>
+              <p className="mt-4 text-base text-muted-foreground">
+                Välj om du vill ha en åtgärdslista att jobba efter själv – eller om jag kör hela vägen.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {/* Audit */}
+              <div className="flex flex-col rounded-2xl border border-border bg-card p-7">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-lg bg-secondary text-foreground">
+                      <ClipboardCheck className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="label-caps">Audit</p>
+                      <p className="font-serif text-2xl">2 490 kr</p>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-foreground/85">
+                    <Clock className="h-3.5 w-3.5" />
+                    Två dagar
+                  </span>
+                </div>
+
+                <ol className="mt-6 space-y-4 border-l border-border pl-5">
+                  {[
+                    { d: "Dag 1", t: "Crawl & teknisk genomgång", b: "Indexering, Core Web Vitals, schema, intern länkning." },
+                    { d: "Dag 2", t: "Konkurrent- & on-page-analys", b: "Topp 5 konkurrenter på dina nyckelord, sida för sida." },
+                    { d: "Levereras", t: "Prioriterad åtgärdslista", b: "Allt sorterat efter effekt och svårighet. Du tar över därifrån." },
+                  ].map((s) => (
+                    <li key={s.t} className="relative">
+                      <span className="absolute -left-[1.4rem] top-1.5 h-2 w-2 rounded-full bg-foreground/40" />
+                      <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{s.d}</p>
+                      <p className="mt-1 font-serif text-lg leading-snug">{s.t}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.b}</p>
+                    </li>
+                  ))}
+                </ol>
+
+                <p className="mt-6 text-xs text-muted-foreground">
+                  Total leveranstid: ~2 arbetsdagar från start.
+                </p>
+              </div>
+
+              {/* Audit + fix */}
+              <div className="relative flex flex-col rounded-2xl border border-primary/60 bg-card p-7 shadow-sm">
+                <span className="absolute -top-3 left-7 rounded-full bg-primary px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-primary-foreground">
+                  Populärast
+                </span>
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                      <Wrench className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="label-caps text-primary">Audit + fix</p>
+                      <p className="font-serif text-2xl">6 900 kr</p>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
+                    <Clock className="h-3.5 w-3.5" />
+                    En vecka
+                  </span>
+                </div>
+
+                <ol className="mt-6 space-y-4 border-l border-primary/30 pl-5">
+                  {[
+                    { d: "Dag 1–2", t: "Audit", b: "Samma genomgång som Audit-paketet – men jag äger åtgärdslistan." },
+                    { d: "Dag 3–4", t: "Tekniska fixar", b: "Schema, canonicals, indexering, Core Web Vitals-quick wins." },
+                    { d: "Dag 5–6", t: "On-page-implementation", b: "Titlar, meta, intern länkning och struktur körs sida för sida." },
+                    { d: "Dag 7", t: "Mätning & överlämning", b: "GSC + GA4, kort genomgång och 30-dagars uppföljningslista." },
+                  ].map((s) => (
+                    <li key={s.t} className="relative">
+                      <span className="absolute -left-[1.4rem] top-1.5 h-2 w-2 rounded-full bg-primary" />
+                      <p className="font-mono text-[11px] uppercase tracking-wider text-primary">{s.d}</p>
+                      <p className="mt-1 font-serif text-lg leading-snug">{s.t}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.b}</p>
+                    </li>
+                  ))}
+                </ol>
+
+                <p className="mt-6 text-xs text-muted-foreground">
+                  Total leveranstid: ~5–7 arbetsdagar från start.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      }
       related={[
         { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
         { name: "Hemsidor", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
