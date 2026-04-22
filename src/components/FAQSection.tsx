@@ -213,7 +213,7 @@ const FAQSection = ({
               type="single"
               collapsible
               value={openItem}
-              onValueChange={setOpenItem}
+              onValueChange={handleAccordionChange}
               className="w-full"
             >
               <AnimatePresence initial={false}>
