@@ -32,7 +32,7 @@ const Content = () => (
     whyAffordable="AI gör tunga lyftet, jag gör skillnaden. En traditionell copywriter behöver 4–6 timmar per artikel. Jag behöver 60 minuter med rätt verktyg – och kan därför ta 995 kr istället för 4 000–8 000 kr."
     faqs={[
       { q: "Är det inte uppenbart AI-skrivet?", a: "Inte med min process. AI gör utkast, jag skriver om allt som låter generiskt – meningsstruktur, exempel, ton. Lägg gärna en blindtest-artikel mot din befintliga byrås text och jämför." },
-      { q: "Vilka ämnen klarar du?", a: "Tech, B2B SaaS, juridik (lättare områden), bygg, transport, e-handel. Mer nischat (medicin, finans, lag) löser vi med expertintervju." },
+      { q: "Vilka ämnen klarar du?", a: "Jag kan skriva om de flesta ämnen eftersom jag grundar alla texter på vetenskapliga artiklar, branschrapporter och primärkällor. Jag faktagranskar alltid noggrant och anger källor när det behövs. För djupt nischade områden, som avancerad medicin eller juridik på paragrafnivå, erbjuder jag istället en expertintervju eller granskning av en sakkunnig." },
       { q: "Vem äger texten?", a: "Du. Helt och hållet. Jag använder den inte någon annanstans." },
       { q: "Kan jag få bilder också?", a: "Ja, jag kan generera AI-bilder eller koppla in fotograf. Diskuteras per artikel." },
     ]}
