@@ -64,6 +64,8 @@ const Footer = () => {
               <li><Link to="/artiklar" className="text-[#cfcfc8] hover:text-white">Artiklar</Link></li>
               <li><Link to="/om" className="text-[#cfcfc8] hover:text-white">Om</Link></li>
               <li><Link to="/kontakt" className="text-[#cfcfc8] hover:text-white">Kontakt</Link></li>
+              <li><Link to="/metodik" className="text-[#cfcfc8] hover:text-white">Metodik</Link></li>
+              <li><Link to="/redaktionell-policy" className="text-[#cfcfc8] hover:text-white">Redaktionell policy</Link></li>
               <li><Link to="/webbbyra-linkoping" className="text-[#cfcfc8] hover:text-white">Webbyrå Linköping</Link></li>
             </ul>
           </div>

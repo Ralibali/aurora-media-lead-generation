@@ -41,6 +41,11 @@
 - [Fortnox-integration i SaaS](https://auroramedia.se/artiklar/fortnox-integration-saas)
 - [Webbyrå vs AI-byggare](https://auroramedia.se/artiklar/traditionell-webbyra-vs-ai-byggare)
 
+## Transparens
+- [Metodik – så bygger jag SaaS med AI](https://auroramedia.se/metodik)
+- [Redaktionell policy](https://auroramedia.se/redaktionell-policy)
+- [Om Aurora Media](https://auroramedia.se/om)
+
 ## Kontakt
 info@auroramedia.se – svarar inom 24h vardagar
 Aurora Media AB · Org.nr 559272-0220 · Linköping
