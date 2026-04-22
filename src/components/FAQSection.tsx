@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, HelpCircle } from "lucide-react";
+import { Search, X, HelpCircle, ArrowRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -8,6 +8,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useContactModal } from "@/components/ContactModal";
 
 export const faqs = [
   {
@@ -48,11 +50,18 @@ const FAQSection = ({
   items = faqs,
   title = "Vanliga frågor",
   searchable = false,
+  ctaPaket,
+  ctaLabel = "Be om offert",
+  ctaText = "Hittade du inte det du letade efter? Skicka några rader så återkommer jag inom 24 timmar.",
 }: {
   items?: typeof faqs;
   title?: string;
   searchable?: boolean;
+  ctaPaket?: string;
+  ctaLabel?: string;
+  ctaText?: string;
 }) => {
+  const { open } = useContactModal();
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -161,6 +170,26 @@ const FAQSection = ({
                 ))}
               </AnimatePresence>
             </Accordion>
+          )}
+
+          {ctaPaket && filtered.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5 }}
+              className="mt-8 flex flex-col items-start gap-4 rounded-2xl border border-primary/30 bg-primary/5 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8"
+            >
+              <p className="text-base text-foreground/85 sm:max-w-md">{ctaText}</p>
+              <Button
+                onClick={() => open(ctaPaket)}
+                className="group shrink-0"
+                size="lg"
+              >
+                {ctaLabel}
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Button>
+            </motion.div>
           )}
         </div>
       </div>
