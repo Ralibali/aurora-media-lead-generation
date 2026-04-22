@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
-import { trackFaqSearch } from "@/lib/faqTracking";
+import { trackFaqSearch, trackFaqCtaClick } from "@/lib/faqTracking";
 
 export type FaqItem = {
   q: string;
