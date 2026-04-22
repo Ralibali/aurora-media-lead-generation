@@ -37,6 +37,7 @@ Deno.serve(async (req: Request) => {
     const company = String(body.company ?? "").trim().slice(0, 120);
     const paket = String(body.paket ?? "").trim().slice(0, 60);
     const leadLabel = String(body.leadLabel ?? "").trim().slice(0, 160);
+    const internalNote = String(body.internalNote ?? "").trim().slice(0, 500);
     const message = String(body.message ?? "").trim().slice(0, 2000);
 
     if (!name || !email || !paket || message.length < 20) {
