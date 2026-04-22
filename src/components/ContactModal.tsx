@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,6 +25,7 @@ const schema = z.object({
   email: z.string().trim().email("Ogiltig e-post").max(160),
   company: z.string().trim().max(120).optional().or(z.literal("")),
   paket: z.string().min(1, "Välj ett alternativ"),
+  leadLabel: z.string().trim().max(160).optional().or(z.literal("")),
   message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
 });
@@ -116,6 +117,9 @@ const ContactDialog = ({
     }
   }, [paketValue, messageTouched]);
 
+  const selectedOption = PAKET_OPTIONS.find((o) => o.value === paketValue);
+  const leadLabel = selectedOption ? `Intresserad av: ${selectedOption.label}` : "";
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -125,6 +129,7 @@ const ContactDialog = ({
       email: data.get("email"),
       company: data.get("company") ?? "",
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
+      leadLabel,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
     });
@@ -206,6 +211,15 @@ const ContactDialog = ({
                   ))}
                 </SelectContent>
               </Select>
+              {leadLabel && (
+                <div
+                  className="mt-2 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary"
+                  aria-live="polite"
+                >
+                  <Tag className="h-3.5 w-3.5" />
+                  <span>{leadLabel}</span>
+                </div>
+              )}
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="message">Beskriv projektet kort *</Label>
