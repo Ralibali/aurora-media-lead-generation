@@ -299,6 +299,18 @@ const TextGenerator = () => {
     ]);
   };
 
+  const generateMobileAppArticles = () =>
+    quickGenerate([
+      { textType: "article", topic: "Capacitor vs React Native 2026 – vilket ska jag välja?", context: "Jämförelse för utvecklare och produktägare. Keyword: capacitor vs react native." },
+      { textType: "article", topic: "Vad kostar det att göra en app för iOS och Android 2026?", context: "Transparent prisartikel. Aurora Media erbjuder Capacitor från 24 900 kr." },
+      { textType: "article", topic: "Från webb-SaaS till app – steg för steg-guide", context: "Praktisk guide. Hur man paketerar React-app som iOS/Android via Capacitor." },
+      { textType: "article", topic: "Apple Developer Program – så här sätter du upp det", context: "Praktisk how-to för svenska företag. 99 USD/år, betalningsdetaljer, certifikat." },
+      { textType: "article", topic: "Google Play Console vs App Store Connect – skillnader", context: "Jämförelse av butikernas inlämningsprocess." },
+      { textType: "article", topic: "Push-notiser i Capacitor-appar – praktisk guide", context: "OneSignal vs Firebase vs APN. För utvecklare." },
+      { textType: "article", topic: "In-app purchase eller Stripe? Så väljer du rätt betalningsmodell", context: "15-30% Apple/Google fee vs Stripe. När gäller vad?" },
+      { textType: "article", topic: "PWA eller native app – när räcker det med en PWA?", context: "Pragmatisk guide. När duger PWA, när behövs riktig app?" },
+    ]);
+
   if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;
 
   return (
@@ -335,6 +347,9 @@ const TextGenerator = () => {
             </Button>
             <Button onClick={generateMonthlyArticles} disabled={loading} variant="outline">
               Månadens 4 artiklar
+            </Button>
+            <Button onClick={generateMobileAppArticles} disabled={loading} variant="outline">
+              Mobilapp-artiklar (8 st)
             </Button>
             <Button onClick={generateFAQs} disabled={loading} variant="outline">
               Generera 5 nya FAQ

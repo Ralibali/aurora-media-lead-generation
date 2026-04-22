@@ -9,10 +9,12 @@ const services = [
   { label: "SaaS & MVP", to: "/priser", primary: true },
   { label: "Hemsidor", to: "/tjanster/hemsidor" },
   { label: "E-handel", to: "/tjanster/ehandel" },
+  { label: "Mobilapp", to: "/tjanster/mobilapp" },
   { label: "SEO", to: "/tjanster/seo" },
   { label: "Google Ads", to: "/tjanster/google-ads" },
   { label: "Meta Ads", to: "/tjanster/meta-ads" },
-  { label: "Content & grafik", to: "/tjanster/content" },
+  { label: "Content", to: "/tjanster/content" },
+  { label: "Grafisk profil", to: "/tjanster/grafisk-profil" },
   { label: "Fotografering", to: "/tjanster/fotografering" },
 ];
 

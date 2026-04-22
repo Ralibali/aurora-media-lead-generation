@@ -15,12 +15,50 @@ import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 const tillagg = [
   { name: "Hemsida", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
   { name: "E-handel", price: "Från 19 900 kr", to: "/tjanster/ehandel" },
+  { name: "Mobilapp – PWA", price: "6 900 kr (2–3 dagar extra)", to: "/tjanster/mobilapp" },
+  { name: "Mobilapp – Capacitor (iOS + Android)", price: "24 900 kr (1–2 v extra)", to: "/tjanster/mobilapp" },
+  { name: "Mobilapp – Native", price: "Från 89 000 kr (4–8 v)", to: "/tjanster/mobilapp" },
   { name: "SEO", price: "Från 2 490 kr", to: "/tjanster/seo" },
   { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
   { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
   { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
   { name: "Grafisk profil", price: "Från 5 900 kr", to: "/tjanster/grafisk-profil" },
   { name: "Fotografering", price: "4 900 kr/halvdag", to: "/tjanster/fotografering" },
+];
+
+const kombos = [
+  {
+    name: "SaaS + App",
+    paket: "Kombination – SaaS + app",
+    price: "Från 59 800 kr",
+    breakdown: "34 900 MVP + 24 900 Capacitor",
+    time: "3–4 veckor",
+    desc: "Full SaaS på webben plus iOS + Android. Lanserad i båda app-butikerna.",
+  },
+  {
+    name: "Webb + SEO",
+    paket: "Hemsida",
+    price: "Från 9 800 kr",
+    breakdown: "4 900 landningssida + 4 900 SEO",
+    time: "5–7 dagar",
+    desc: "Enkel hemsida som direkt är SEO-optimerad från start.",
+  },
+  {
+    name: "E-handel + Meta Ads",
+    paket: "E-handel",
+    price: "Från 23 800 kr",
+    breakdown: "19 900 butik + 3 900 Ads-setup",
+    time: "2 veckor",
+    desc: "Shopify- eller WooCommerce-butik med första Meta-kampanjen igång.",
+  },
+  {
+    name: "Full launch-paket",
+    paket: "Kombination – SaaS + app",
+    price: "Från 99 600 kr",
+    breakdown: "69 000 SaaS + 24 900 app + 5 700 grund-SEO",
+    time: "5–6 veckor",
+    desc: "Live på webben, i App Store, på Google Play, SEO optimerad. Redo för första kunden dag ett.",
+  },
 ];
 
 const lopande = [
@@ -211,6 +249,54 @@ const Priser = () => {
                   <p className="text-sm font-medium text-primary sm:text-right">{t.price}</p>
                   <ArrowUpRight className="hidden h-5 w-5 text-muted-foreground transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary sm:block" />
                 </Link>
+              ))}
+            </div>
+
+            <p className="mt-6 text-sm text-muted-foreground max-w-3xl">
+              Capacitor är min rekommendation för 90 procent av app-projekt. Vill du paketera
+              webb + app som ett projekt? <Link to="/tjanster/mobilapp" className="text-primary hover:underline">MVP + Capacitor = från 59 800 kr på 3–4 veckor</Link>.
+            </p>
+          </div>
+        </section>
+
+        {/* Vanliga kombinationer */}
+        <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <motion.div {...fadeUp}>
+              <p className="label-caps">Kombo-paket</p>
+              <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
+                Vanliga kombinationer.
+              </h2>
+              <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
+                Spara tid genom att paketera flera tjänster från start. Samma fasta priser, ett projekt.
+              </p>
+            </motion.div>
+
+            <div className="mt-10 grid gap-5 sm:grid-cols-2">
+              {kombos.map((k, i) => (
+                <motion.div
+                  key={k.name}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4, delay: i * 0.06 }}
+                  className="flex flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md"
+                >
+                  <p className="label-caps">{k.name}</p>
+                  <p className="mt-3 font-serif text-2xl md:text-3xl">{k.price}</p>
+                  <p className="mt-1 text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                    {k.breakdown}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">{k.time}</p>
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-foreground/80">{k.desc}</p>
+                  <Button
+                    onClick={() => open(k.paket)}
+                    variant="outline"
+                    className="mt-6 w-full"
+                  >
+                    Få offert
+                  </Button>
+                </motion.div>
               ))}
             </div>
           </div>
