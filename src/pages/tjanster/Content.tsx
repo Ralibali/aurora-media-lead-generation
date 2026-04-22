@@ -27,7 +27,7 @@ const Content = () => (
     tiers={[
       { name: "Enskild artikel", price: "995 kr", time: "En dag", desc: "En artikel. Bra för att testa om vi matchar.", features: ["1 artikel 1 200–1 800 ord", "Sökordsanalys", "Meta-titel + beskrivning", "2 revisionsrundor"] },
       { name: "5-pack", price: "3 990 kr", time: "Tre dagar", desc: "Vanligaste valet. 5 artiklar med tematisk röd tråd.", features: ["5 artiklar", "Innehållsplan", "Internlänkning mellan artiklarna", "Bättre styckpris"], featured: true },
-      { name: "Månadspaket", price: "Från 3 490 kr/mån", time: "Löpande", desc: "4 artiklar/månad. För dig som bygger SEO-trafik systematiskt.", features: ["4 artiklar/mån", "Kvartalsvis innehållsplan", "Performance-rapport", "Säg upp med 30 dagars varsel"] },
+      { name: "Månadspaket", price: "Från 7 980 kr/mån", time: "Löpande", desc: "10 artiklar/månad. För dig som bygger SEO-trafik systematiskt.", features: ["10 artiklar/mån", "Kvartalsvis innehållsplan", "Performance-rapport", "Säg upp med 30 dagars varsel"] },
     ]}
     whyAffordable="AI gör tunga lyftet, jag gör skillnaden. En traditionell copywriter behöver 4–6 timmar per artikel. Jag behöver 60 minuter med rätt verktyg – och kan därför ta 995 kr istället för 4 000–8 000 kr."
     faqs={[
