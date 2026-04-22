@@ -27,7 +27,8 @@ const HeroSection = () => {
     let i = 0;
     const t = setInterval(() => {
       if (i < lines.length) {
-        setShown((p) => [...p, lines[i]]);
+        const line = lines[i];
+        if (line) setShown((p) => [...p, line]);
         i++;
       } else {
         clearInterval(t);
@@ -95,7 +96,7 @@ const HeroSection = () => {
                 <span className="ml-3 font-mono text-[11px] text-white/40">aurora-media — bash</span>
               </div>
               <pre className="px-5 py-5 font-mono text-[13px] leading-7 min-h-[220px]">
-                {shown.map((l, i) => (
+                {shown.filter(Boolean).map((l, i) => (
                   <div
                     key={i}
                     className={l.startsWith(">") ? "text-[#ededea]" : "text-[#7fd3a8]"}
@@ -126,7 +127,7 @@ const HeroSection = () => {
             <span className="ml-3 font-mono text-[10px] text-white/40">aurora-media — bash</span>
           </div>
           <pre className="px-4 py-4 font-mono text-[12px] leading-6 min-h-[140px]">
-            {shown.map((l, i) => (
+            {shown.filter(Boolean).map((l, i) => (
               <div key={i} className={l.startsWith(">") ? "text-[#ededea]" : "text-[#7fd3a8]"}>
                 {l}
                 {i === shown.length - 1 && !ready && <span className="terminal-cursor" />}
