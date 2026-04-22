@@ -257,7 +257,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
           </div>
         </section>
 
-        <FAQSection items={props.faqs} title="Vanliga frågor" />
+        <FAQSection items={props.faqs} title="Vanliga frågor" searchable={props.faqs.length >= 5} />
 
         {/* Related */}
         <section className="border-t border-border bg-secondary/30 py-20">
