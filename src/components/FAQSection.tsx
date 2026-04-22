@@ -268,7 +268,18 @@ const FAQSection = ({
                 {filtered.length > 0 && (
                   <button
                     type="button"
-                    onClick={() => open(`Fråga om FAQ: ${query.trim()}`)}
+                    onClick={() => {
+                      const opened = filtered.find((f) => `item-${f.q}` === openItem) ?? filtered[0];
+                      const noteParts = [
+                        `Sökning: "${query.trim()}"`,
+                        activeCategory ? `Kategori: ${activeCategory}` : null,
+                        opened ? `Visad fråga: "${opened.q}"` : null,
+                      ].filter(Boolean);
+                      open({
+                        paket: ctaPaket,
+                        internalNote: `Lead från FAQ\n${noteParts.join("\n")}`,
+                      });
+                    }}
                     className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary transition-[background-color,border-color] duration-300 hover:border-primary hover:bg-primary/10"
                   >
                     Få personligt svar
