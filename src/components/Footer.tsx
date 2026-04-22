@@ -61,7 +61,7 @@ const Footer = () => {
         >
           <motion.button
             ref={magnet.ref as React.RefObject<HTMLButtonElement>}
-            style={{ x: magnet.x, y: magnet.y }}
+            style={{ x: magnet.x, y: magnet.y, scale: magnet.scale }}
             onClick={() => open()}
             className="group inline-flex items-center gap-2 rounded-full bg-white py-2 pl-6 pr-2 text-base text-[hsl(154_43%_14%)] transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] hover:shadow-[0_18px_40px_-18px_rgba(255,255,255,0.35)] active:scale-[0.98]"
           >
