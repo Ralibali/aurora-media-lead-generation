@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, HelpCircle } from "lucide-react";
+import { Search, X, HelpCircle, ArrowRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -8,6 +8,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useContactModal } from "@/components/ContactModal";
 
 export const faqs = [
   {
