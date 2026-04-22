@@ -173,12 +173,12 @@ const Priser = () => {
         {/* Comparison table */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6">
-            <motion.div {...fadeUp} className="max-w-2xl">
+            <Reveal className="max-w-2xl">
               <p className="label-caps">Jämförelse</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Vad ingår var?
               </h2>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-12 overflow-x-auto rounded-xl border border-border bg-card">
               <table className="w-full min-w-[720px] text-left text-sm">
@@ -219,7 +219,7 @@ const Priser = () => {
         {/* Tilläggstjänster */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Tilläggstjänster</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Resten av paletten.
@@ -227,7 +227,7 @@ const Priser = () => {
               <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
                 Allt annat jag levererar – samma fast-pris-approach.
               </p>
-            </motion.div>
+            </Reveal>
 
             <div className="mt-10 divide-y divide-border border-y border-border">
               {tillagg.map((t) => (
