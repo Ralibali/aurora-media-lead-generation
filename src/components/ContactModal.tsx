@@ -304,6 +304,26 @@ const ContactDialog = ({
                 </div>
               )}
             </div>
+            {isMobileApp && (
+              <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                <Label htmlFor="platform">Vilken plattform? *</Label>
+                <p className="text-xs text-muted-foreground">
+                  Hjälper mig att skissa rätt teknikval och tidsplan direkt.
+                </p>
+                <Select value={platformValue} onValueChange={setPlatformValue} name="platform">
+                  <SelectTrigger id="platform">
+                    <SelectValue placeholder="Välj plattform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PLATFORM_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             <div className="space-y-1.5">
               <Label htmlFor="message">Beskriv projektet kort *</Label>
               <Textarea
