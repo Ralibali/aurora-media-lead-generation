@@ -184,11 +184,17 @@ const FAQSection = ({
                 {filtered.map((f, i) => (
                   <motion.div
                     key={f.q}
+                    ref={(el) => {
+                      const key = `item-${f.q}`;
+                      if (el) itemRefs.current.set(key, el);
+                      else itemRefs.current.delete(key);
+                    }}
                     layout
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.25, delay: searchable ? 0 : i * 0.03 }}
+                    style={{ scrollMarginTop: "6rem" }}
                   >
                     <AccordionItem
                       value={`item-${f.q}`}
