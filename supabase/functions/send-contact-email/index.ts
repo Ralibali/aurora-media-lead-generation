@@ -2,7 +2,11 @@
 // Receives contact form submissions and emails info@auroramedia.se via Resend.
 // Uses RESEND_API_KEY secret if available; otherwise logs and returns ok so the UI flow works.
 
-import { corsHeaders } from "https://esm.sh/@supabase/supabase-js@2.45.0/cors";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
 
 interface Body {
   name: string;
