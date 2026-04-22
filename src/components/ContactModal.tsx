@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2, Tag } from "lucide-react";
+import { CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,6 +86,8 @@ const ContactDialog = ({
   const [paketValue, setPaketValue] = useState<string>(defaultPaket || "");
   const [messageValue, setMessageValue] = useState<string>("");
   const [messageTouched, setMessageTouched] = useState(false);
+  const [submittedLabel, setSubmittedLabel] = useState<string>("");
+  const [submittedEmail, setSubmittedEmail] = useState<string>("");
 
   const buildPrefill = (paket: string): string => {
     const opt = PAKET_OPTIONS.find((o) => o.value === paket);
@@ -143,8 +145,13 @@ const ContactDialog = ({
         body: parsed.data,
       });
       if (error) throw error;
+      setSubmittedLabel(leadLabel || (selectedOption ? selectedOption.label : paketValue));
+      setSubmittedEmail(parsed.data.email);
       setDone(true);
-      toast.success("Tack! Jag hör av mig inom 24 timmar.");
+      toast.success(
+        `Tack! Din förfrågan om "${selectedOption?.label ?? paketValue}" är mottagen. Jag svarar inom 24 timmar.`,
+        { duration: 6000 }
+      );
       form.reset();
       setMessageValue("");
       setMessageTouched(false);
@@ -171,13 +178,67 @@ const ContactDialog = ({
         </DialogHeader>
 
         {done ? (
-          <div className="py-10 text-center space-y-4">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-              <CheckCircle2 className="h-8 w-8 text-primary" strokeWidth={1.5} />
+          <div className="py-6 space-y-6">
+            <div className="text-center space-y-3">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                <CheckCircle2 className="h-8 w-8 text-primary" strokeWidth={1.5} />
+              </div>
+              <p className="font-serif text-3xl">Tack!</p>
+              <p className="text-muted-foreground">
+                Din förfrågan är mottagen. Jag återkommer inom 24 timmar vardagar.
+              </p>
             </div>
-            <p className="font-serif text-2xl">Tack!</p>
-            <p className="text-muted-foreground">Jag hör av mig inom 24 timmar.</p>
-            <Button variant="outline" onClick={() => onOpenChange(false)} className="mt-4">
+
+            {submittedLabel && (
+              <div className="rounded-xl border border-primary/30 bg-primary/5 px-5 py-4">
+                <p className="label-caps text-primary">Din förfrågan</p>
+                <div className="mt-2 flex items-start gap-2.5">
+                  <Tag className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <p className="font-serif text-lg leading-snug">{submittedLabel}</p>
+                </div>
+                {submittedEmail && (
+                  <div className="mt-3 flex items-center gap-2.5 text-sm text-muted-foreground">
+                    <Mail className="h-4 w-4 shrink-0" />
+                    <span>
+                      Bekräftelse skickad till <span className="text-foreground">{submittedEmail}</span>
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="rounded-xl border border-border bg-card/60 px-5 py-4">
+              <p className="label-caps">Vad händer nu?</p>
+              <ul className="mt-3 space-y-3 text-sm">
+                <li className="flex items-start gap-3">
+                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-foreground/85">
+                    Inom <strong>24 timmar</strong> får du ett personligt svar från mig (Christoffer) på{" "}
+                    <span className="text-foreground">{submittedEmail || "din mejl"}</span>.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-foreground/85">
+                    Vi bokar ett kort 20-min samtal för att stämma av scope och tidsplan.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                  <span className="text-foreground/85">
+                    Brådskande?{" "}
+                    <a
+                      href="mailto:info@auroramedia.se"
+                      className="text-primary underline-offset-4 hover:underline"
+                    >
+                      info@auroramedia.se
+                    </a>
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <Button onClick={() => onOpenChange(false)} className="w-full" size="lg">
               Stäng
             </Button>
           </div>
