@@ -102,6 +102,41 @@ const FAQSection = ({
     }
   }, [query, filtered, searchable]);
 
+  // Debouncad tracking — loggar 800ms efter att användaren slutat skriva
+  useEffect(() => {
+    if (!searchable) return;
+    const trimmed = query.trim();
+    if (!trimmed) return;
+
+    const timer = window.setTimeout(() => {
+      trackFaqSearch({
+        query: trimmed,
+        resultCount: filtered.length,
+        openedQuestion: filtered[0]?.q ?? null,
+      });
+    }, 800);
+
+    return () => window.clearTimeout(timer);
+  }, [query, filtered, searchable]);
+
+  // Logga när användaren manuellt öppnar en ANNAN fråga under aktiv sökning
+  const handleAccordionChange = (value: string) => {
+    setOpenItem(value);
+    if (!searchable) return;
+    const trimmed = query.trim();
+    if (!value || !trimmed) return;
+
+    const expectedAuto = filtered[0] ? `item-${filtered[0].q}` : "";
+    if (value !== expectedAuto) {
+      const opened = value.replace(/^item-/, "");
+      trackFaqSearch({
+        query: trimmed,
+        resultCount: filtered.length,
+        openedQuestion: opened,
+      });
+    }
+  };
+
   return (
     <section className="border-t border-border py-20 md:py-32">
       <div className="container mx-auto px-6">
