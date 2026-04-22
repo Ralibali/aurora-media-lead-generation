@@ -24,7 +24,7 @@ const Hemsidor = () => (
     process={[
       { label: "Steg 1 · Dag 1", title: "Korta brief", body: "Mejl eller 20 min video. Du beskriver vad du vill ha. Jag säger pris och leveransdag." },
       { label: "Steg 2 · Dag 2–3", title: "Designutkast", body: "Du får en första version live på en URL. Inte Figma – riktig sajt." },
-      { label: "Steg 3 · Dag 4–8", title: "Justeringar", body: "Två feedback-rundor ingår. Jag bygger om det som behöver byggas om." },
+      { label: "Steg 3 · Dag 4–8", title: "Justeringar", body: "Fem feedbackrundor ingår. Jag bygger om det som behöver byggas om." },
       { label: "Steg 4", title: "Leverans", body: "Domänkoppling, SSL, Analytics. Källkod till dig. Klart." },
     ]}
     tiers={[
