@@ -260,6 +260,8 @@ const ServicePageTemplate = (props: ServicePageProps) => {
 
         <FAQSection items={props.faqs} title="Vanliga frågor" searchable={props.faqs.length >= 5} />
 
+        {props.postFaq}
+
         {/* Related */}
         <section className="border-t border-border bg-secondary/30 py-20">
           <div className="container mx-auto px-6 max-w-5xl">
