@@ -312,8 +312,8 @@ const ServicePageTemplate = (props: ServicePageProps) => {
           title="Vanliga frågor"
           searchable={props.faqs.length >= 5}
           ctaPaket={props.paketName}
-          ctaLabel="Be om offert"
-          ctaText={`Har du fler frågor om ${props.title.toLowerCase()}? Skicka några rader så återkommer jag inom 24 timmar – kostnadsfritt och utan förpliktelser.`}
+          ctaLabel={getCtaCopy(props.slug, props.title).label}
+          ctaText={getCtaCopy(props.slug, props.title).text}
         />
 
         {props.postFaq}
