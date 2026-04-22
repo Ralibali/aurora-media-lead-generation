@@ -63,6 +63,7 @@ const FAQSection = ({
 }) => {
   const { open } = useContactModal();
   const [query, setQuery] = useState("");
+  const [openItem, setOpenItem] = useState<string>("");
 
   const filtered = useMemo(() => {
     if (!searchable || !query.trim()) return items;
@@ -71,6 +72,16 @@ const FAQSection = ({
       (f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q)
     );
   }, [items, query, searchable]);
+
+  // Auto-öppna första träffen när användaren söker
+  useEffect(() => {
+    if (!searchable) return;
+    if (query.trim() && filtered.length > 0) {
+      setOpenItem(`item-${filtered[0].q}`);
+    } else if (!query.trim()) {
+      setOpenItem("");
+    }
+  }, [query, filtered, searchable]);
 
   return (
     <section className="border-t border-border py-20 md:py-32">
