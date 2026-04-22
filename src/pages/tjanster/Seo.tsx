@@ -1,0 +1,47 @@
+import ServicePageTemplate from "./ServicePageTemplate";
+
+const Seo = () => (
+  <ServicePageTemplate
+    slug="seo"
+    title="SEO från 4 900 kr."
+    intro="Teknisk SEO, on-page och lokal SEO för Linköping. Inga 12-månaderskontrakt. Bara mätbara förbättringar."
+    paketName="SEO"
+    seoTitle="SEO Linköping från 4 900 kr – teknisk + lokal SEO | Aurora Media"
+    seoDescription="Tekniskt SEO-paket för svenska sajter. Audit, on-page, lokal SEO för Linköping och Östergötland. Fast pris från 4 900 kr. Inga månadsbindningar."
+    includes={[
+      "Teknisk audit (Core Web Vitals, indexering, schema)",
+      "Sitemap, robots.txt och canonical-strategi",
+      "On-page-optimering av nyckelsidor",
+      "Schema.org-markup (Organization, FAQ, Article)",
+      "Lokal SEO (Google Business Profile, citations)",
+      "Search Console- och GA4-uppsättning",
+      "Konkurrentanalys på dina viktigaste sökord",
+      "Rapport med 30-dagars åtgärdslista",
+    ]}
+    process={[
+      { label: "Steg 1", title: "Audit", body: "Crawl + manuell genomgång. Du får en prioriterad lista." },
+      { label: "Steg 2", title: "Quick wins", body: "Allt som kan fixas på en vecka körs först. Tekniska fel, schema, indexering." },
+      { label: "Steg 3", title: "On-page", body: "Titlar, meta, intern länkning, innehåll. Sida för sida." },
+      { label: "Steg 4", title: "Mätning", body: "GSC + GA4-uppsättning så du själv kan följa effekten." },
+    ]}
+    tiers={[
+      { name: "Audit", price: "4 900 kr", time: "3 dagar", desc: "Teknisk audit + åtgärdslista. Du fixar själv eller betalar för implementation.", features: ["Teknisk crawl", "On-page review", "Konkurrentanalys", "Prioriterad åtgärdslista"] },
+      { name: "Audit + fix", price: "12 900 kr", time: "1 vecka", desc: "Allt i Audit – plus jag fixar de tekniska och on-page-bitarna.", features: ["Allt i Audit", "Tekniska fixar", "On-page-implementation", "Schema-markup"], featured: true },
+      { name: "Lokal SEO", price: "Från 9 900 kr", time: "1 vecka", desc: "Google Business Profile, citations, lokala sidor.", features: ["GBP-optimering", "Citations & länkar", "Lokala landningssidor", "Recensionsstrategi"] },
+    ]}
+    whyAffordable="SEO är hantverk, men 80% är samma checklista varje gång. Jag använder mina egna verktyg och AI för att speed-runa audit och on-page – utan att kompromissa på kvalitet."
+    faqs={[
+      { q: "Hur lång tid tar det att se resultat?", a: "Tekniska fixar syns ofta inom 2–4 veckor. On-page tar 1–3 månader. Innehållsbaserad ranking 3–6 månader. Inga garantier på exakta positioner – det vore fusk." },
+      { q: "Kan ni garantera plats 1 på Google?", a: "Nej. Den som lovar det ljuger. Jag lovar mätbara förbättringar i synlighet, klick och konvertering." },
+      { q: "Behöver jag löpande SEO?", a: "Inte alltid. Många klarar sig med en grundlig audit + fix, sen content varje månad. Jag säger till om du behöver mer." },
+      { q: "Hjälper du med innehåll?", a: "Ja, se Content-tjänsten. SEO-optimerade artiklar från 1 490 kr/styck." },
+    ]}
+    related={[
+      { name: "Content", price: "1 490 kr/artikel", to: "/tjanster/content" },
+      { name: "Hemsidor", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
+      { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
+    ]}
+  />
+);
+
+export default Seo;
