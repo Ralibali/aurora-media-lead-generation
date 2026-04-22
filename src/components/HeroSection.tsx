@@ -59,7 +59,7 @@ const HeroSection = () => {
             <h1 className="mt-6 font-sans font-semibold leading-[1.05] tracking-[-0.035em] text-[clamp(2.75rem,7.5vw,6.25rem)]">
               Jag bygger din app.
               <br />
-              <span className="text-primary">Från idé till lansering på 4 veckor.</span>
+              <span className="text-primary">Från idé till lansering på fyra veckor.</span>
             </h1>
 
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
@@ -76,7 +76,7 @@ const HeroSection = () => {
             </div>
 
             <p className="mt-6 text-sm text-muted-foreground">
-              10 år i säkerhetsbranschen, nu med 7 egna SaaS-projekt live.
+              Tio år i säkerhetsbranschen, nu med sju egna SaaS-projekt live.
             </p>
           </motion.div>
 

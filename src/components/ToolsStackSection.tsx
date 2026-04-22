@@ -21,7 +21,7 @@ const tools = [
   },
   {
     name: "Supabase + Stripe",
-    desc: "Databas, auth, betalningar. Produktionsklar infrastruktur från dag 1.",
+    desc: "Databas, auth, betalningar. Produktionsklar infrastruktur från dag ett.",
     tag: "Backend · Betalningar",
   },
 ];

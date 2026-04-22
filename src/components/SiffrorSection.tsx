@@ -49,7 +49,7 @@ const SiffrorSection = () => {
         >
           <p className="label-caps">Siffrorna bakom</p>
           <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-            10 år i säkerhetsbranschen. 7 egna SaaS live.
+            Tio år i säkerhetsbranschen. Sju egna SaaS live.
           </h2>
         </motion.div>
 

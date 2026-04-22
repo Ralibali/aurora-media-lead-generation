@@ -2,24 +2,24 @@ import { motion } from "framer-motion";
 
 const steps = [
   {
-    label: "Steg 1 · Dag 1",
+    label: "Steg ett · Dag ett",
     title: "Samtal",
-    body: "Vi pratar 30 minuter om din idé. Jag ställer frågor. Du får en känsla för om jag är rätt person för jobbet och ett tydligt fast pris.",
+    body: "Vi pratar trettio minuter om din idé. Jag ställer frågor. Du får en känsla för om jag är rätt person för jobbet och ett tydligt fast pris.",
   },
   {
-    label: "Steg 2 · Vecka 1",
+    label: "Steg två · Vecka ett",
     title: "Prototyp",
     body: "Jag bygger en interaktiv prototyp du kan klicka dig runt i. Inte Figma – en riktig app. Du ger feedback, vi justerar tills den känns rätt.",
   },
   {
-    label: "Steg 3 · Vecka 2–3",
+    label: "Steg tre · Vecka två till tre",
     title: "Produktion",
     body: "Jag skriver koden i React och Supabase. Du får uppdateringar två gånger i veckan och kan följa arbetet live på din egen URL.",
   },
   {
-    label: "Steg 4 · Vecka 4",
+    label: "Steg fyra · Vecka fyra",
     title: "Överlämning",
-    body: "Jag driftsätter appen och överför all källkod till dig. Visar hur allt fungerar. Du äger 100% av resultatet, inklusive 2–4 veckors support.",
+    body: "Jag driftsätter appen och överför all källkod till dig. Visar hur allt fungerar. Du äger hela resultatet, inklusive två till fyra veckors support.",
   },
 ];
 
