@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagnifyingGlass, X, Question, ArrowRight } from "@phosphor-icons/react";
 import {
@@ -63,6 +63,7 @@ const FAQSection = ({
 }) => {
   const { open } = useContactModal();
   const [query, setQuery] = useState("");
+  const [openItem, setOpenItem] = useState<string>("");
 
   const filtered = useMemo(() => {
     if (!searchable || !query.trim()) return items;
@@ -71,6 +72,16 @@ const FAQSection = ({
       (f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q)
     );
   }, [items, query, searchable]);
+
+  // Auto-öppna första träffen när användaren söker
+  useEffect(() => {
+    if (!searchable) return;
+    if (query.trim() && filtered.length > 0) {
+      setOpenItem(`item-${filtered[0].q}`);
+    } else if (!query.trim()) {
+      setOpenItem("");
+    }
+  }, [query, filtered, searchable]);
 
   return (
     <section className="border-t border-border py-20 md:py-32">
@@ -144,7 +155,13 @@ const FAQSection = ({
               </p>
             </div>
           ) : (
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion
+              type="single"
+              collapsible
+              value={openItem}
+              onValueChange={setOpenItem}
+              className="w-full"
+            >
               <AnimatePresence initial={false}>
                 {filtered.map((f, i) => (
                   <motion.div
@@ -156,7 +173,7 @@ const FAQSection = ({
                     transition={{ duration: 0.25, delay: searchable ? 0 : i * 0.03 }}
                   >
                     <AccordionItem
-                      value={`item-${i}`}
+                      value={`item-${f.q}`}
                       className="mb-3 overflow-hidden rounded-xl border border-border bg-card/60 px-5 transition-colors data-[state=open]:border-primary/50 data-[state=open]:bg-card data-[state=open]:shadow-sm sm:px-6"
                     >
                       <AccordionTrigger className="gap-4 py-5 text-left font-serif text-lg leading-snug tracking-[-0.01em] hover:no-underline data-[state=open]:text-primary md:text-xl">
