@@ -258,12 +258,24 @@ const FAQSection = ({
               )}
             </div>
             {query && (
-              <p className="mt-3 text-sm text-muted-foreground" aria-live="polite">
-                {filtered.length === 0
-                  ? "Inga träffar."
-                  : `${filtered.length} träff${filtered.length === 1 ? "" : "ar"}`}
-                {" "}för "{query}"
-              </p>
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-muted-foreground" aria-live="polite">
+                  {filtered.length === 0
+                    ? "Inga träffar."
+                    : `${filtered.length} träff${filtered.length === 1 ? "" : "ar"}`}
+                  {" "}för "{query}"
+                </p>
+                {filtered.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => open(`Fråga om FAQ: ${query.trim()}`)}
+                    className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary transition-[background-color,border-color] duration-300 hover:border-primary hover:bg-primary/10"
+                  >
+                    Få personligt svar
+                    <ArrowRight weight="bold" size={12} className="transition-transform group-hover:translate-x-0.5" />
+                  </button>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -273,16 +285,29 @@ const FAQSection = ({
             <div className="rounded-2xl border border-dashed border-border bg-card/50 px-6 py-12 text-center">
               <Question weight="duotone" size={28} className="mx-auto text-muted-foreground/60" />
               <p className="mt-4 font-serif text-xl">Hittar du inte svaret?</p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Mejla{" "}
+              <p className="mt-2 max-w-md mx-auto text-sm text-muted-foreground">
+                {query.trim()
+                  ? `Inga frågor matchade "${query.trim()}". Skicka frågan direkt till mig så svarar jag inom 24 timmar.`
+                  : "Skicka frågan direkt till mig så svarar jag inom 24 timmar."}
+              </p>
+              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Button
+                  onClick={() =>
+                    open(query.trim() ? `Fråga om FAQ: ${query.trim()}` : undefined)
+                  }
+                  size="lg"
+                  className="group"
+                >
+                  Ställ frågan direkt
+                  <ArrowRight weight="bold" size={16} className="ml-2 transition-transform group-hover:translate-x-0.5" />
+                </Button>
                 <a
                   href="mailto:info@auroramedia.se"
-                  className="text-primary underline-offset-4 hover:underline"
+                  className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
                 >
-                  info@auroramedia.se
-                </a>{" "}
-                – jag svarar inom 24 timmar.
-              </p>
+                  Eller mejla info@auroramedia.se
+                </a>
+              </div>
             </div>
           ) : (
             <Accordion
