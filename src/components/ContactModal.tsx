@@ -104,10 +104,12 @@ const ContactDialog = ({
   isOpen,
   onOpenChange,
   defaultPaket,
+  internalNote,
 }: {
   isOpen: boolean;
   onOpenChange: (v: boolean) => void;
   defaultPaket: string;
+  internalNote: string;
 }) => {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
