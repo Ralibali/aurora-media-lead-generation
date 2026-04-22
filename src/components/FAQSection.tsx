@@ -405,6 +405,14 @@ const FAQSection = ({
                   const note = noteParts.length
                     ? `Lead från FAQ\n${noteParts.join("\n")}`
                     : "";
+                  trackFaqCtaClick({
+                    source: "faq_footer",
+                    paket: ctaPaket,
+                    ctaLabel,
+                    query: query.trim() || null,
+                    category: activeCategory,
+                    openedQuestion: opened?.q ?? null,
+                  });
                   open({ paket: ctaPaket, internalNote: note });
                 }}
                 className="group shrink-0"
