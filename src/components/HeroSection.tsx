@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, ArrowRight, Check, EnvelopeSimple } from "@phosphor-icons/react";
+import { ArrowUpRight, Check, EnvelopeSimple } from "@phosphor-icons/react";
 import { useContactModal } from "@/components/ContactModal";
 import { useMagnetic } from "@/hooks/useMagnetic";
 
