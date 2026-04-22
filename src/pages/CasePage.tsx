@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import FinalCTASection from "@/components/FinalCTASection";
+import Reveal from "@/components/Reveal";
 import {
   setSEOMeta,
   setBreadcrumb,
@@ -23,7 +24,7 @@ import {
   STATUS_DOT,
 } from "@/data/portfolio";
 
-const fadeUp = {
+const fadeIn = {
   initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
