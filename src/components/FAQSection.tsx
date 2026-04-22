@@ -275,6 +275,14 @@ const FAQSection = ({
                         activeCategory ? `Kategori: ${activeCategory}` : null,
                         opened ? `Visad fråga: "${opened.q}"` : null,
                       ].filter(Boolean);
+                      trackFaqCtaClick({
+                        source: "faq_search_result",
+                        paket: ctaPaket,
+                        ctaLabel: "Få personligt svar",
+                        query: query.trim(),
+                        category: activeCategory,
+                        openedQuestion: opened?.q ?? null,
+                      });
                       open({
                         paket: ctaPaket,
                         internalNote: `Lead från FAQ\n${noteParts.join("\n")}`,
