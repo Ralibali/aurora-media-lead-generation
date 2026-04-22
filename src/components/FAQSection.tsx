@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagnifyingGlass, X, Question, ArrowRight } from "@phosphor-icons/react";
 import {
@@ -73,11 +73,29 @@ const FAQSection = ({
     );
   }, [items, query, searchable]);
 
-  // Auto-öppna första träffen när användaren söker
+  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+
+  // Auto-öppna första träffen när användaren söker + scrolla in den mjukt
   useEffect(() => {
     if (!searchable) return;
     if (query.trim() && filtered.length > 0) {
-      setOpenItem(`item-${filtered[0].q}`);
+      const nextValue = `item-${filtered[0].q}`;
+      setOpenItem(nextValue);
+
+      // Vänta på att accordion expanderar innan vi scrollar (två frames för layout)
+      const raf1 = requestAnimationFrame(() => {
+        const raf2 = requestAnimationFrame(() => {
+          const el = itemRefs.current.get(nextValue);
+          if (!el) return;
+          const isMobile = window.matchMedia("(max-width: 768px)").matches;
+          // Offset för sticky navbar (~96px på mobil)
+          const offset = isMobile ? 96 : 120;
+          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        });
+        return () => cancelAnimationFrame(raf2);
+      });
+      return () => cancelAnimationFrame(raf1);
     } else if (!query.trim()) {
       setOpenItem("");
     }
@@ -166,11 +184,17 @@ const FAQSection = ({
                 {filtered.map((f, i) => (
                   <motion.div
                     key={f.q}
+                    ref={(el) => {
+                      const key = `item-${f.q}`;
+                      if (el) itemRefs.current.set(key, el);
+                      else itemRefs.current.delete(key);
+                    }}
                     layout
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.25, delay: searchable ? 0 : i * 0.03 }}
+                    style={{ scrollMarginTop: "6rem" }}
                   >
                     <AccordionItem
                       value={`item-${f.q}`}
