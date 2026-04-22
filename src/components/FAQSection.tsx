@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, HelpCircle, ArrowRight } from "lucide-react";
+import { MagnifyingGlass, X, Question, ArrowRight } from "@phosphor-icons/react";
 import {
   Accordion,
   AccordionContent,
@@ -96,7 +96,7 @@ const FAQSection = ({
         {searchable && (
           <div className="mt-8 max-w-3xl">
             <div className="relative">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <MagnifyingGlass weight="bold" size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
                 value={query}
@@ -112,7 +112,7 @@ const FAQSection = ({
                   aria-label="Rensa sökning"
                   className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                 >
-                  <X className="h-4 w-4" />
+                  <X weight="bold" size={14} />
                 </button>
               )}
             </div>
@@ -130,7 +130,7 @@ const FAQSection = ({
         <div className="mt-10 max-w-3xl">
           {filtered.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border bg-card/50 px-6 py-12 text-center">
-              <HelpCircle className="mx-auto h-6 w-6 text-muted-foreground/60" />
+              <Question weight="duotone" size={28} className="mx-auto text-muted-foreground/60" />
               <p className="mt-4 font-serif text-xl">Hittar du inte svaret?</p>
               <p className="mt-2 text-sm text-muted-foreground">
                 Mejla{" "}
@@ -187,7 +187,7 @@ const FAQSection = ({
                 size="lg"
               >
                 {ctaLabel}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight weight="bold" size={16} className="ml-2 transition-transform group-hover:translate-x-0.5" />
               </Button>
             </motion.div>
           )}

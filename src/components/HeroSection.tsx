@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, ArrowRight, Check } from "@phosphor-icons/react";
 import { useContactModal } from "@/components/ContactModal";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 type Mode = "terminal" | "code" | "browser";
 
@@ -31,6 +32,8 @@ const HeroSection = () => {
   const [terminalIdx, setTerminalIdx] = useState(0);
   const [typedCode, setTypedCode] = useState("");
   const [browserIdx, setBrowserIdx] = useState(0);
+  const primaryMagnet = useMagnetic({ strength: 0.35, radius: 100 });
+  const secondaryMagnet = useMagnetic({ strength: 0.25, radius: 80 });
 
   // Cycle modes
   useEffect(() => {
@@ -120,14 +123,21 @@ const HeroSection = () => {
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <button onClick={() => open()} className="group btn-pill self-start">
+              <motion.button
+                ref={primaryMagnet.ref as React.RefObject<HTMLButtonElement>}
+                style={{ x: primaryMagnet.x, y: primaryMagnet.y }}
+                onClick={() => open()}
+                className="group btn-pill self-start"
+              >
                 <span className="text-sm font-medium">Starta projekt</span>
                 <span className="btn-pill-icon">
                   <ArrowUpRight weight="bold" size={16} />
                 </span>
-              </button>
+              </motion.button>
 
-              <button
+              <motion.button
+                ref={secondaryMagnet.ref as React.RefObject<HTMLButtonElement>}
+                style={{ x: secondaryMagnet.x, y: secondaryMagnet.y }}
                 onClick={() =>
                   document
                     .getElementById("portfolj")
@@ -139,7 +149,7 @@ const HeroSection = () => {
                 <span className="btn-pill-ghost-icon">
                   <ArrowRight weight="bold" size={16} />
                 </span>
-              </button>
+              </motion.button>
             </div>
 
             <p className="mt-8 font-mono text-xs uppercase tracking-wider text-muted-foreground">
