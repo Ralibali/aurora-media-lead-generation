@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://auroramedia.se/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://auroramedia.se/arbete</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://auroramedia.se/arbete/aurora-transport</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/arbete/updro</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/agilitymanager</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/honsgarden</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/odlingsdagboken</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/goglamping-sweden</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/viriditas</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/yachting-sweden</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/solcellsofferter</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/minandel</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://auroramedia.se/priser</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://auroramedia.se/om</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://auroramedia.se/kontakt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
