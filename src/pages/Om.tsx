@@ -57,7 +57,7 @@ const Om = () => {
         {/* Hero */}
         <section className="pt-16 pb-16 md:pt-24 md:pb-20">
           <div className="container mx-auto px-6 max-w-4xl">
-            <motion.div {...fadeUp}>
+            <Reveal>
               <p className="label-caps">Om</p>
               <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
                 Om Aurora Media.
@@ -66,7 +66,7 @@ const Om = () => {
                 Ett enmans-konsultbolag i Linköping som bygger SaaS med AI-kodning. Här är hela
                 historien.
               </p>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 
@@ -100,7 +100,7 @@ const Om = () => {
             </Section>
 
             {/* Products */}
-            <motion.div {...fadeUp} className="border-t border-border pt-12 md:pt-16">
+            <Reveal className="border-t border-border pt-12 md:pt-16">
               <p className="label-caps">Sektion 4 · Produkter</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Mina egna produkter.
@@ -123,10 +123,10 @@ const Om = () => {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </Reveal>
 
             {/* Company info */}
-            <motion.div {...fadeUp} className="border-t border-border pt-12 md:pt-16">
+            <Reveal className="border-t border-border pt-12 md:pt-16">
               <p className="label-caps">Sektion 5 · Företagsinfo</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
                 Företagsinfo.
@@ -164,7 +164,7 @@ const Om = () => {
                   </dd>
                 </div>
               </dl>
-            </motion.div>
+            </Reveal>
           </div>
         </section>
 
