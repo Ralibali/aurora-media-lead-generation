@@ -143,10 +143,13 @@ const PaketSection = () => {
               <div className="bezel-shell h-full">
                 <div
                   className={`bezel-core flex h-full flex-col p-7 ${
-                    p.featured
-                      ? "bg-[hsl(154_43%_14%)] text-white"
-                      : "bg-card"
+                    p.featured ? "text-white" : "bg-card"
                   }`}
+                  style={
+                    p.featured
+                      ? { backgroundColor: "hsl(154 43% 14%)" }
+                      : undefined
+                  }
                 >
                   <div className="flex items-baseline justify-between">
                     <p
