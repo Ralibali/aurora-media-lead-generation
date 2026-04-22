@@ -11,7 +11,10 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 
-type ContactModalCtx = { open: (paket?: string) => void };
+type OpenOptions = { paket?: string; internalNote?: string };
+type ContactModalCtx = {
+  open: (paketOrOptions?: string | OpenOptions, options?: OpenOptions) => void;
+};
 const Ctx = createContext<ContactModalCtx | null>(null);
 
 export const useContactModal = () => {
