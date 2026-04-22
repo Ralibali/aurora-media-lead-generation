@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { List, X, CaretDown, ArrowUpRight } from "@phosphor-icons/react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+  AnimatePresence,
+} from "framer-motion";
 import { useContactModal } from "@/components/ContactModal";
 
 const services = [
@@ -18,18 +23,26 @@ const services = [
   { label: "Fotografering", to: "/tjanster/fotografering" },
 ];
 
+const navItems = [
+  { label: "Arbete", to: "/arbete" },
+  { label: "Priser", to: "/priser" },
+  { label: "Artiklar", to: "/blog" },
+];
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { open: openModal } = useContactModal();
   const { scrollY } = useScroll();
   const navigate = useNavigate();
 
+  // Smooth shrink: from 1.5 padding to 1 padding when scrolled
+  const padding = useTransform(scrollY, [0, 120], [6, 4]);
+  const top = useTransform(scrollY, [0, 120], [16, 12]);
+
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const prev = scrollY.getPrevious() ?? 0;
-    if (latest > 100 && latest > prev) setHidden(true);
-    else setHidden(false);
+    setScrolled(latest > 40);
   });
 
   useEffect(() => {
@@ -41,160 +54,219 @@ const Navbar = () => {
   }, [open]);
 
   return (
-    <motion.header
-      initial={{ y: 0 }}
-      animate={{ y: hidden ? -80 : 0 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md"
-    >
-      <nav className="container mx-auto flex h-16 items-center justify-between px-6">
-        <Link to="/" className="font-serif text-xl font-medium tracking-tight">
-          AURORA MEDIA
-        </Link>
-
-        {/* Desktop center */}
-        <div className="hidden items-center gap-8 md:flex">
-          <NavLink
-            to="/arbete"
-            className={({ isActive }) =>
-              `text-sm transition-colors ${
-                isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              }`
-            }
+    <>
+      {/* Fluid Island — desktop */}
+      <motion.header
+        style={{ top, padding }}
+        className="fixed left-1/2 z-50 hidden -translate-x-1/2 md:block"
+      >
+        <motion.nav
+          animate={{
+            backgroundColor: scrolled
+              ? "hsla(0, 0%, 6%, 0.85)"
+              : "hsla(0, 0%, 6%, 0.65)",
+            backdropFilter: scrolled ? "blur(24px)" : "blur(16px)",
+          }}
+          transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+          className="flex items-center gap-1 rounded-full border border-white/10 px-2 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.4)]"
+        >
+          {/* Logo */}
+          <Link
+            to="/"
+            className="ml-3 mr-2 font-serif text-base tracking-tight text-white/95 transition-opacity hover:opacity-80"
           >
-            Arbete
-          </NavLink>
+            Aurora
+          </Link>
 
-          {/* Services dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
-          >
-            <button
-              className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
-              aria-expanded={servicesOpen}
+          <span className="h-5 w-px bg-white/10" aria-hidden />
+
+          {/* Center links */}
+          <div className="flex items-center gap-1 px-2">
+            {/* Tjänster dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setServicesOpen(true)}
+              onMouseLeave={() => setServicesOpen(false)}
             >
-              Tjänster
-              <ChevronDown className="h-3.5 w-3.5" />
-            </button>
-            <AnimatePresence>
-              {servicesOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute left-1/2 top-full -translate-x-1/2 pt-3"
-                >
-                  <div className="w-64 rounded-lg border border-border bg-popover p-2 shadow-lg">
-                    {services.map((s) => (
-                      <button
-                        key={s.to}
-                        onClick={() => {
-                          setServicesOpen(false);
-                          navigate(s.to);
-                        }}
-                        className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition-colors hover:bg-accent ${
-                          s.primary ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        {s.label}
-                        {s.primary && <span className="text-[10px] uppercase tracking-wider text-primary">Primär</span>}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+              <button
+                className="flex items-center gap-1 rounded-full px-3 py-1.5 text-sm text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                aria-expanded={servicesOpen}
+              >
+                Tjänster
+                <CaretDown weight="bold" size={11} />
+              </button>
+              <AnimatePresence>
+                {servicesOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 4, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
+                    className="absolute left-1/2 top-full -translate-x-1/2 pt-3"
+                  >
+                    <div className="w-64 overflow-hidden rounded-2xl border border-white/10 bg-[hsl(0_0%_8%)]/95 p-2 shadow-2xl backdrop-blur-xl">
+                      {services.map((s) => (
+                        <button
+                          key={s.to}
+                          onClick={() => {
+                            setServicesOpen(false);
+                            navigate(s.to);
+                          }}
+                          className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
+                            s.primary ? "text-white" : "text-white/65 hover:text-white"
+                          }`}
+                        >
+                          <span>{s.label}</span>
+                          {s.primary && (
+                            <span className="font-mono text-[9px] uppercase tracking-wider text-[hsl(154_44%_55%)]">
+                              Primär
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/blog"}
+                className={({ isActive }) =>
+                  `rounded-full px-3 py-1.5 text-sm transition-colors hover:bg-white/10 ${
+                    isActive ? "text-white" : "text-white/70 hover:text-white"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
           </div>
 
-          <NavLink
-            to="/priser"
-            className={({ isActive }) =>
-              `text-sm transition-colors ${
-                isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              }`
-            }
-          >
-            Priser
-          </NavLink>
-          <NavLink
-            to="/blog"
-            end
-            className={({ isActive }) =>
-              `text-sm transition-colors ${
-                isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              }`
-            }
-          >
-            Artiklar
-          </NavLink>
+          {/* CTA pill — button-in-button */}
+          <button onClick={() => openModal()} className="ml-1 group">
+            <span className="flex items-center gap-2 rounded-full bg-white py-1 pl-4 pr-1 text-sm text-[hsl(0_0%_8%)] transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-[1.02] active:scale-[0.98]">
+              Starta projekt
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(0_0%_8%)] text-white transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-[1px]">
+                <ArrowUpRight weight="bold" size={13} />
+              </span>
+            </span>
+          </button>
+        </motion.nav>
+      </motion.header>
 
-          <Button onClick={() => openModal()} size="sm">
-            Starta projekt
-          </Button>
+      {/* Mobile bar */}
+      <div className="fixed left-3 right-3 top-3 z-50 md:hidden">
+        <div className="flex items-center justify-between rounded-full border border-white/10 bg-[hsl(0_0%_6%)]/85 px-4 py-2 shadow-lg backdrop-blur-xl">
+          <Link
+            to="/"
+            className="font-serif text-base tracking-tight text-white/95"
+          >
+            Aurora
+          </Link>
+          <button
+            onClick={() => setOpen(!open)}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/15"
+            aria-label={open ? "Stäng meny" : "Öppna meny"}
+            aria-expanded={open}
+          >
+            <motion.span
+              animate={{ rotate: open ? 90 : 0 }}
+              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+              className="flex"
+            >
+              {open ? (
+                <X weight="bold" size={18} />
+              ) : (
+                <List weight="bold" size={18} />
+              )}
+            </motion.span>
+          </button>
         </div>
+      </div>
 
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-foreground"
-          aria-label="Meny"
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-      </nav>
-
-      {/* Mobile fullscreen */}
+      {/* Mobile fullscreen overlay */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto bg-background px-6 py-8 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 overflow-y-auto bg-[hsl(0_0%_6%)]/95 px-6 pb-12 pt-24 backdrop-blur-3xl md:hidden"
           >
-            <div className="flex flex-col gap-1">
-              <NavLink to="/arbete" onClick={() => setOpen(false)} className="border-b border-border py-4 font-serif text-2xl">
-                Arbete
-              </NavLink>
-              <div className="border-b border-border py-4">
-                <p className="font-serif text-2xl mb-3">Tjänster</p>
-                <div className="flex flex-col gap-2 pl-1">
+            <div className="flex flex-col gap-1 text-white">
+              {[
+                { label: "Arbete", to: "/arbete" },
+                { label: "Priser", to: "/priser" },
+                { label: "Artiklar", to: "/blog" },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.to}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.1 + i * 0.05,
+                    duration: 0.4,
+                    ease: [0.32, 0.72, 0, 1],
+                  }}
+                >
+                  <NavLink
+                    to={item.to}
+                    onClick={() => setOpen(false)}
+                    className="block border-b border-white/10 py-5 font-serif text-3xl tracking-tight"
+                  >
+                    {item.label}
+                  </NavLink>
+                </motion.div>
+              ))}
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.4 }}
+                className="border-b border-white/10 py-5"
+              >
+                <p className="font-serif text-3xl tracking-tight">Tjänster</p>
+                <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2">
                   {services.map((s) => (
                     <NavLink
                       key={s.to}
                       to={s.to}
                       onClick={() => setOpen(false)}
-                      className="text-base text-muted-foreground"
+                      className="text-sm text-white/65 transition-colors hover:text-white"
                     >
                       {s.label}
                     </NavLink>
                   ))}
                 </div>
-              </div>
-              <NavLink to="/priser" onClick={() => setOpen(false)} className="border-b border-border py-4 font-serif text-2xl">
-                Priser
-              </NavLink>
-              <NavLink to="/blog" onClick={() => setOpen(false)} className="border-b border-border py-4 font-serif text-2xl">
-                Artiklar
-              </NavLink>
-              <Button
+              </motion.div>
+
+              <motion.button
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35, duration: 0.4 }}
                 onClick={() => {
                   setOpen(false);
                   openModal();
                 }}
-                size="lg"
-                className="mt-6"
+                className="mt-8 group"
               >
-                Starta projekt
-              </Button>
+                <span className="flex w-full items-center justify-between rounded-full bg-white py-2 pl-6 pr-2 text-base text-[hsl(0_0%_8%)] transition-transform active:scale-[0.98]">
+                  Starta projekt
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(0_0%_8%)] text-white">
+                    <ArrowUpRight weight="bold" size={16} />
+                  </span>
+                </span>
+              </motion.button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   );
 };
 
