@@ -22,8 +22,11 @@ const Index = () => {
       description:
         "AI-driven SaaS-utveckling i Linköping. Prototyp från 14 900 kr, MVP från 34 900 kr. Fast pris, leverans på 2–4 veckor. 7 produkter levererade. Boka kostnadsfri rådgivning.",
       canonical: "/",
-      ogImage: "https://auroramedia.se/og-image-sv.jpg",
+      ogImage: "/og-image-sv.jpg",
       ogType: "website",
+      ogLocale: "sv_SE",
+      keywords:
+        "SaaS-utveckling, AI-kodning, MVP-utveckling, webbyrå Linköping, Lovable, Bolt, Claude, Cursor, fast pris SaaS, intern verktygsutveckling",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);

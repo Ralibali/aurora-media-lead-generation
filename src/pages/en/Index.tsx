@@ -127,8 +127,11 @@ const EnIndex = () => {
       description:
         "Sweden-based AI-augmented builder shipping production SaaS in 2–4 weeks. Lovable, Bolt, Claude, Cursor. 7 products live. Fixed price from $1,400. Book a free intro call.",
       canonical: "/en",
-      ogImage: "https://auroramedia.se/og-image-en.jpg",
+      ogImage: "/og-image-en.jpg",
       ogType: "website",
+      ogLocale: "en_US",
+      keywords:
+        "SaaS development, AI coding, MVP development, Lovable expert, Bolt.new, Claude, Cursor, fixed price SaaS, fractional CTO, Sweden developer",
     });
     setHreflang("/", "/en");
     setBreadcrumb([
