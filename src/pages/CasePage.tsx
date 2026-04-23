@@ -156,12 +156,12 @@ const CasePage = () => {
                     loading="lazy"
                   />
                 ) : (
-                  <div className="relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-secondary via-accent/40 to-secondary md:aspect-[16/10]">
+                  <div className="relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-[hsl(154_43%_21%)]/10 via-[hsl(137_30%_50%)]/10 to-[hsl(60_20%_97%)] md:aspect-[16/10]">
                     <div className="text-center">
                       <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                         Preview
                       </p>
-                      <p className="mt-3 font-serif text-3xl text-foreground/70 md:text-6xl">
+                      <p className="mt-3 font-serif text-3xl text-foreground/75 md:text-6xl">
                         {project.domain}
                       </p>
                     </div>
@@ -235,16 +235,21 @@ const CasePage = () => {
                 {project.results && project.results.length > 0 && (
                   <div>
                     <p className="label-caps">Resultat</p>
-                    <ul className="mt-4 space-y-3">
+                    <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
                       {project.results.map((r) => (
-                        <li key={r.label} className="border-t border-border pt-3">
-                          <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                        <div
+                          key={r.label}
+                          className="rounded-2xl border border-border bg-card p-5"
+                        >
+                          <p className="font-serif text-4xl leading-none text-primary md:text-5xl">
+                            {r.value}
+                          </p>
+                          <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
                             {r.label}
                           </p>
-                          <p className="mt-1 font-serif text-xl">{r.value}</p>
-                        </li>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
 
