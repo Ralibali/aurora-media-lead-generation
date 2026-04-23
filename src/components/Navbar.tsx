@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { List, X, CaretDown, ArrowUpRight } from "@phosphor-icons/react";
 import {
   motion,
@@ -36,6 +36,10 @@ const Navbar = () => {
   const { open: openModal } = useContactModal();
   const { scrollY } = useScroll();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isEnglish = location.pathname.startsWith("/en");
+  const langSwitchTo = isEnglish ? "/" : "/en";
+  const langSwitchLabel = isEnglish ? "SV" : "EN";
 
   // Smooth shrink: from 1.5 padding to 1 padding when scrolled
   const padding = useTransform(scrollY, [0, 120], [6, 4]);
@@ -145,6 +149,15 @@ const Navbar = () => {
               </NavLink>
             ))}
           </div>
+
+          {/* Language switch */}
+          <Link
+            to={langSwitchTo}
+            aria-label={isEnglish ? "Byt till svenska" : "Switch to English"}
+            className="ml-1 mr-1 rounded-full px-2 py-1 text-xs font-medium text-white/55 transition-colors hover:bg-white/10 hover:text-white"
+          >
+            {langSwitchLabel}
+          </Link>
 
           {/* CTA pill — button-in-button */}
           <button onClick={() => openModal()} className="ml-1 group">
