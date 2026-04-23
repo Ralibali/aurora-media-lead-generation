@@ -68,7 +68,10 @@ if (!portfolio?.length) {
 
 if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({
+  executablePath: process.env.CHROMIUM_PATH || undefined,
+  args: ["--no-sandbox", "--disable-setuid-sandbox"],
+});
 const ctx = await browser.newContext({
   viewport: { width: 1280, height: 800 },
   deviceScaleFactor: 1,
