@@ -323,6 +323,12 @@ export const STATUS_DOT: Record<PortfolioStatus, string> = {
 export const getPortfolioBySlug = (slug: string) =>
   PORTFOLIO.find((p) => p.slug === slug);
 
+export const getLocalizedTagline = (item: PortfolioItem, lang: "sv" | "en") =>
+  lang === "en" ? item.taglineEn : item.tagline;
+
+export const getLocalizedDescription = (item: PortfolioItem, lang: "sv" | "en") =>
+  lang === "en" ? item.descriptionEn : item.description;
+
 export const getRelatedPortfolio = (slug: string, count = 3) => {
   const current = getPortfolioBySlug(slug);
   if (!current) return [];

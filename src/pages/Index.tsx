@@ -13,7 +13,7 @@ import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import Footer from "@/components/Footer";
-import { setSEOMeta, setJsonLd, organizationSchema, websiteSchema, serviceSchema } from "@/lib/seoHelpers";
+import { setSEOMeta, setJsonLd, setHreflang, organizationSchema, websiteSchema, serviceSchema } from "@/lib/seoHelpers";
 
 const Index = () => {
   useEffect(() => {
@@ -23,6 +23,7 @@ const Index = () => {
         "Bygger SaaS-produkter och interna verktyg med AI-kodning. Prototyp från 14 900 kr. MVP från 34 900 kr. Fast pris, veckor istället för månader. Linköping, Sverige.",
       canonical: "/",
     });
+    setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
     setJsonLd("website-jsonld", websiteSchema);
     setJsonLd("service-jsonld", serviceSchema);

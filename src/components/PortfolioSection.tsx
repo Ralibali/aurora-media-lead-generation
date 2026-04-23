@@ -1,6 +1,7 @@
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import PortfolioPlaceholder from "@/components/PortfolioPlaceholder";
 import {
   PORTFOLIO,
   CATEGORY_LABEL,
@@ -97,21 +98,26 @@ const PortfolioSection = () => {
                     </span>
                   </div>
                   {/* Screen */}
-                  <div className="relative flex aspect-[16/10] items-center justify-center bg-gradient-to-br from-secondary via-accent to-secondary">
-                    <span
-                      className={`absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider ${CATEGORY_BADGE[featured.category]}`}
-                    >
-                      {CATEGORY_LABEL[featured.category]}
-                    </span>
-                    <div className="text-center">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        01 — Featured
-                      </p>
-                      <p className="mt-3 font-serif text-3xl text-foreground/70 md:text-5xl">
-                        {featured.domain}
-                      </p>
+                  {featured.screenshot ? (
+                    <img
+                      src={featured.screenshot}
+                      alt={`Skärmavbild av ${featured.name}`}
+                      className="aspect-[16/10] w-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="relative">
+                      <PortfolioPlaceholder
+                        domain={featured.domain}
+                        label="01 — Featured"
+                      />
+                      <span
+                        className={`absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[9px] uppercase tracking-wider ${CATEGORY_BADGE[featured.category]}`}
+                      >
+                        {CATEGORY_LABEL[featured.category]}
+                      </span>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </Link>

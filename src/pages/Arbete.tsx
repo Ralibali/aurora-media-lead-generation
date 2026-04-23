@@ -177,42 +177,82 @@ const Arbete = () => {
                   >
                     <Link
                       to={`/arbete/${c.slug}`}
-                      className="group relative flex h-full flex-col rounded-xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-lg md:p-9"
+                      className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:border-primary hover:shadow-lg"
                     >
-                      <div className="flex items-center justify-between gap-3">
-                        <span
-                          className={cn(
-                            "inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider",
-                            CATEGORY_BADGE[c.category],
-                          )}
-                        >
-                          {CATEGORY_LABEL[c.category]}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                          <span className={cn("h-1.5 w-1.5 rounded-full", STATUS_DOT[c.status])} />
-                          {STATUS_LABEL[c.status]}
+                      <div className="relative overflow-hidden">
+                        {c.screenshot ? (
+                          <img
+                            src={c.screenshot}
+                            alt={`Skärmavbild av ${c.name}`}
+                            className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="transition-transform duration-700 group-hover:scale-[1.04]">
+                            <div className="relative flex aspect-[16/10] items-center justify-center bg-gradient-to-br from-[hsl(154_43%_21%)]/10 via-[hsl(137_30%_50%)]/10 to-[hsl(60_20%_97%)]">
+                              <div className="text-center px-4">
+                                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                                  Preview
+                                </p>
+                                <p className="mt-2 font-serif text-3xl text-foreground/75 md:text-4xl">
+                                  {c.domain}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* Hover overlay (desktop only) */}
+                        <div className="pointer-events-none absolute inset-0 hidden items-end bg-gradient-to-t from-foreground/85 via-foreground/40 to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100 md:flex">
+                          <div className="text-background">
+                            <p className="font-serif text-lg leading-tight">{c.tagline}</p>
+                            <a
+                              href={c.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="pointer-events-auto mt-2 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider underline-offset-4 hover:underline"
+                            >
+                              Visit live <ArrowUpRight className="h-3 w-3" />
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-1 flex-col p-7 md:p-8">
+                        <div className="flex items-center justify-between gap-3">
+                          <span
+                            className={cn(
+                              "inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider",
+                              CATEGORY_BADGE[c.category],
+                            )}
+                          >
+                            {CATEGORY_LABEL[c.category]}
+                          </span>
+                          <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                            <span className={cn("h-1.5 w-1.5 rounded-full", STATUS_DOT[c.status])} />
+                            {STATUS_LABEL[c.status]}
+                          </span>
+                        </div>
+
+                        <h2 className="mt-4 font-serif text-3xl md:text-4xl">{c.name}</h2>
+                        <p className="mt-3 text-base leading-relaxed text-foreground/80 md:text-lg">
+                          {c.tagline}
+                        </p>
+
+                        <div className="mt-6 space-y-2 border-t border-border pt-5 text-sm">
+                          <p className="font-mono text-xs text-muted-foreground">
+                            {c.stack.slice(0, 4).join(" · ")}
+                          </p>
+                          <p className="text-foreground/75">
+                            {c.type}
+                            {c.buildTime ? ` · ${c.buildTime}` : ""}
+                          </p>
+                        </div>
+
+                        <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                          Läs caset
+                          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                         </span>
                       </div>
-
-                      <h2 className="mt-4 font-serif text-3xl md:text-4xl">{c.name}</h2>
-                      <p className="mt-3 text-base leading-relaxed text-foreground/80 md:text-lg">
-                        {c.tagline}
-                      </p>
-
-                      <div className="mt-7 space-y-2 border-t border-border pt-5 text-sm">
-                        <p className="font-mono text-xs text-muted-foreground">
-                          {c.stack.slice(0, 4).join(" · ")}
-                        </p>
-                        <p className="text-foreground/75">
-                          {c.type}
-                          {c.buildTime ? ` · ${c.buildTime}` : ""}
-                        </p>
-                      </div>
-
-                      <span className="mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                        Läs caset
-                        <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                      </span>
                     </Link>
                   </motion.div>
                 ))}

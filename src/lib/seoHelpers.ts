@@ -160,4 +160,68 @@ export const serviceSchema = {
   areaServed: "SE",
 };
 
+/** English variant of the Organization schema for /en. */
+export const organizationSchemaEn = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE_URL}/en#organization`,
+  name: "Aurora Media AB",
+  alternateName: "Aurora Media",
+  url: `${SITE_URL}/en`,
+  logo: `${SITE_URL}/logo.png`,
+  description:
+    "Sweden-based AI-augmented developer building SaaS products in 2-4 weeks with Lovable, Bolt and Claude. 7 products shipped. Fixed price from $1,400.",
+  email: "info@auroramedia.se",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Linköping",
+    addressRegion: "Östergötland County",
+    addressCountry: "SE",
+  },
+  areaServed: { "@type": "Place", name: "Worldwide" },
+  priceRange: "$1,400 - $8,500",
+  foundingDate: "2020",
+  slogan: "I ship SaaS in weeks. Not months.",
+  serviceType: [
+    "SaaS development",
+    "MVP development",
+    "AI-augmented coding",
+    "Fractional CTO",
+    "Web development",
+  ],
+  makesOffer: [
+    { "@type": "Offer", name: "Prototype", price: "1400", priceCurrency: "USD" },
+    { "@type": "Offer", name: "MVP", price: "3300", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Production SaaS", price: "6500", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Custom", price: "8500", priceCurrency: "USD" },
+  ],
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "orgNr",
+    value: "559272-0220",
+  },
+};
+
+/** Set hreflang alternate links for sv/en pairs. */
+export const setHreflang = (svPath: string, enPath: string) => {
+  // Clean previous
+  document.head
+    .querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]')
+    .forEach((el) => el.remove());
+
+  const add = (lang: string, path: string) => {
+    const link = document.createElement("link");
+    link.setAttribute("rel", "alternate");
+    link.setAttribute("hreflang", lang);
+    link.setAttribute(
+      "href",
+      path.startsWith("http") ? path : `${SITE_URL}${path}`,
+    );
+    document.head.appendChild(link);
+  };
+  add("sv", svPath);
+  add("en", enPath);
+  add("x-default", svPath);
+};
+
 export { SITE_URL };
