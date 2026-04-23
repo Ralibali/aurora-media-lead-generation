@@ -68,13 +68,27 @@ if (!portfolio?.length) {
 
 if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({
+  executablePath: process.env.CHROMIUM_PATH || undefined,
+  args: ["--no-sandbox", "--disable-setuid-sandbox"],
+});
 const ctx = await browser.newContext({
   viewport: { width: 1280, height: 800 },
   deviceScaleFactor: 1,
   userAgent:
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 AuroraMedia-PortfolioBot",
 });
+
+import { spawn } from "node:child_process";
+import { unlink } from "node:fs/promises";
+
+function run(cmd, args) {
+  return new Promise((resolvePromise, reject) => {
+    const p = spawn(cmd, args, { stdio: "inherit" });
+    p.on("exit", (code) => (code === 0 ? resolvePromise() : reject(new Error(`${cmd} exited ${code}`))));
+    p.on("error", reject);
+  });
+}
 
 const results = [];
 
@@ -91,18 +105,17 @@ for (const item of portfolio) {
     continue;
   }
   const page = await ctx.newPage();
+  const tmpPng = resolve(outDir, `${item.slug}.tmp.png`);
   try {
     await page.goto(item.url, { waitUntil: "networkidle", timeout: 30_000 });
-    await page.waitForTimeout(1500); // let webfonts/animations settle
-    await page.screenshot({
-      path: outFile,
-      type: "webp",
-      quality: 85,
-      fullPage: false,
-    });
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: tmpPng, type: "png", fullPage: false });
+    await run("nix", ["run", "nixpkgs#imagemagick", "--", tmpPng, "-quality", "85", outFile]);
+    await unlink(tmpPng).catch(() => {});
     results.push({ slug: item.slug, status: "ok" });
     console.log(`[ok]    ${item.slug} → public/portfolio/${item.slug}.webp`);
   } catch (err) {
+    await unlink(tmpPng).catch(() => {});
     results.push({ slug: item.slug, status: "error", error: String(err) });
     console.log(`[error] ${item.slug}: ${err?.message ?? err}`);
   } finally {
