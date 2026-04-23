@@ -7,9 +7,11 @@ interface SEOMeta {
   canonical?: string;
   ogImage?: string;
   ogType?: string;
+  ogLocale?: string;
   noindex?: boolean;
   publishedTime?: string;
   modifiedTime?: string;
+  keywords?: string;
 }
 
 const SITE_URL = "https://auroramedia.se";
@@ -41,29 +43,41 @@ export const setSEOMeta = ({
   canonical,
   ogImage,
   ogType = "website",
+  ogLocale = "sv_SE",
   noindex = false,
   publishedTime,
   modifiedTime,
+  keywords,
 }: SEOMeta) => {
   document.title = title;
   setMeta("description", description);
   setMeta("robots", noindex ? "noindex, nofollow" : "index, follow");
+  if (keywords) setMeta("keywords", keywords);
 
   const fullCanonical = canonical?.startsWith("http") ? canonical : `${SITE_URL}${canonical ?? ""}`;
   setLink("canonical", fullCanonical);
+
+  const fullOgImage = ogImage
+    ? ogImage.startsWith("http")
+      ? ogImage
+      : `${SITE_URL}${ogImage}`
+    : `${SITE_URL}/og-image-sv.jpg`;
 
   setMeta("og:title", title, "property");
   setMeta("og:description", description, "property");
   setMeta("og:url", fullCanonical, "property");
   setMeta("og:type", ogType, "property");
-  setMeta("og:locale", "sv_SE", "property");
+  setMeta("og:locale", ogLocale, "property");
   setMeta("og:site_name", "Aurora Media AB", "property");
-  if (ogImage) setMeta("og:image", ogImage, "property");
+  setMeta("og:image", fullOgImage, "property");
+  setMeta("og:image:width", "1200", "property");
+  setMeta("og:image:height", "630", "property");
+  setMeta("og:image:alt", title, "property");
 
   setMeta("twitter:card", "summary_large_image");
   setMeta("twitter:title", title);
   setMeta("twitter:description", description);
-  if (ogImage) setMeta("twitter:image", ogImage);
+  setMeta("twitter:image", fullOgImage);
 
   if (publishedTime) setMeta("article:published_time", publishedTime, "property");
   if (modifiedTime) setMeta("article:modified_time", modifiedTime, "property");

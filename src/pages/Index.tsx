@@ -18,10 +18,15 @@ import { setSEOMeta, setJsonLd, setHreflang, organizationSchema, websiteSchema, 
 const Index = () => {
   useEffect(() => {
     setSEOMeta({
-      title: "Aurora Media AB – Bygger SaaS med AI i Linköping | Från 14 900 kr",
+      title: "Bygger SaaS med AI – Veckor, inte månader | Aurora Media Linköping",
       description:
-        "Bygger SaaS-produkter och interna verktyg med AI-kodning. Prototyp från 14 900 kr. MVP från 34 900 kr. Fast pris, veckor istället för månader. Linköping, Sverige.",
+        "AI-driven SaaS-utveckling i Linköping. Prototyp från 14 900 kr, MVP från 34 900 kr. Fast pris, leverans på 2–4 veckor. 7 produkter levererade. Boka kostnadsfri rådgivning.",
       canonical: "/",
+      ogImage: "/og-image-sv.jpg",
+      ogType: "website",
+      ogLocale: "sv_SE",
+      keywords:
+        "SaaS-utveckling, AI-kodning, MVP-utveckling, webbyrå Linköping, Lovable, Bolt, Claude, Cursor, fast pris SaaS, intern verktygsutveckling",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
