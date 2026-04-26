@@ -48,9 +48,9 @@ const AuroraFooter = () => (
             </span>
           </div>
           <p className="mt-5 max-w-md text-sm leading-relaxed text-[hsl(var(--au-cream)/0.62)]">
-            AI-driven mjukvarubyrå från Linköping. Vi bygger SaaS, appar och
-            skräddarsydda system för svenska bolag — med fast pris, snabb
-            leverans och kod du äger från dag ett.
+            AI-driven mjukvarubyrå för svenska bolag. Vi bygger SaaS, appar
+            och skräddarsydda system — med fast pris, snabb leverans och kod
+            du äger från dag ett.
           </p>
         </div>
 

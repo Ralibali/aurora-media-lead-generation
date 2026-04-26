@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import {
   Layers, Plug, Smartphone, Brush, Globe, LayoutTemplate,
   Megaphone, Search, Sparkles, Compass, BarChart3, LifeBuoy,
-  ArrowRight,
 } from "lucide-react";
 
 type Service = {
@@ -50,9 +49,8 @@ const AuroraServices = () => (
 
       <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {SERVICES.map(({ icon: Icon, title, desc, descShort }, i) => (
-          <motion.a
+          <motion.div
             key={title}
-            href="#kontakt"
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
@@ -72,15 +70,7 @@ const AuroraServices = () => (
             <p className="mt-2 hidden text-sm leading-relaxed text-[hsl(var(--au-cream)/0.65)] sm:block">
               {desc}
             </p>
-
-            <span
-              className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] transition-transform duration-300 group-hover:translate-x-0.5"
-              style={{ color: "hsl(152 80% 65%)" }}
-            >
-              Diskutera projekt
-              <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-            </span>
-          </motion.a>
+          </motion.div>
         ))}
       </div>
     </div>

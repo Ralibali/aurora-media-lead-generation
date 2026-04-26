@@ -74,21 +74,16 @@ const PhoneMockup = () => (
             border: "1px solid hsl(var(--au-cream) / 0.06)",
           }}
         >
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="font-mono-au text-[9px] uppercase tracking-[0.18em] text-[hsl(var(--au-muted))]">
-                MVP-status
-              </p>
-              <p
-                className="mt-1 font-display text-[34px] leading-none"
-                style={{ color: "hsl(152 80% 60%)" }}
-              >
-                72%
-              </p>
-            </div>
-            <span className="font-mono-au text-[10px] text-[hsl(var(--au-muted))]">
-              v1.0
-            </span>
+          <div>
+            <p className="font-mono-au text-[9px] uppercase tracking-[0.18em] text-[hsl(var(--au-muted))]">
+              MVP-status
+            </p>
+            <p
+              className="mt-1 font-display text-[34px] leading-none"
+              style={{ color: "hsl(152 80% 60%)" }}
+            >
+              72%
+            </p>
           </div>
           <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[hsl(var(--au-cream)/0.06)]">
             <div
