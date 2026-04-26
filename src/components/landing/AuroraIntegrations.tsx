@@ -1,56 +1,59 @@
 import { Plus, ArrowRight } from "lucide-react";
 
-type Logo =
-  | { name: string; kind: "simple"; slug: string; hex: string; darkText?: boolean; darkBg?: boolean }
-  | { name: string; kind: "custom"; bg: string; label: string; fg?: string; smallText?: boolean };
+type Integration = {
+  name: string;
+  initial: string;
+  color: string;
+  textDark?: boolean;
+};
 
-const ROW_1: Logo[] = [
-  { name: "Stripe",         kind: "simple", slug: "stripe",        hex: "635BFF" },
-  { name: "Klarna",         kind: "simple", slug: "klarna",        hex: "FFA8CD", darkText: true },
-  { name: "Swish",          kind: "custom", bg: "#EE2A7B",         label: "S" },
-  { name: "PayPal",         kind: "simple", slug: "paypal",        hex: "003087" },
-  { name: "Adyen",          kind: "simple", slug: "adyen",         hex: "0ABF53" },
-  { name: "BankID",         kind: "custom", bg: "#193E8F",         label: "BID", smallText: true },
-  { name: "Fortnox",        kind: "custom", bg: "#005A45",         label: "F" },
-  { name: "Visma",          kind: "custom", bg: "#E1251B",         label: "V" },
-  { name: "Bokio",          kind: "custom", bg: "#00C896",         label: "B" },
-  { name: "Stripe Connect", kind: "simple", slug: "stripe",        hex: "635BFF" },
-  { name: "Auth0",          kind: "simple", slug: "auth0",         hex: "EB5424" },
-  { name: "Clerk",          kind: "simple", slug: "clerk",         hex: "6C47FF" },
+const ROW_1: Integration[] = [
+  { name: "Stripe",         initial: "St",  color: "#635BFF" },
+  { name: "Klarna",         initial: "K",   color: "#FFA8CD", textDark: true },
+  { name: "Swish",          initial: "S",   color: "#EE2A7B" },
+  { name: "PayPal",         initial: "PP",  color: "#003087" },
+  { name: "Adyen",          initial: "A",   color: "#0ABF53" },
+  { name: "BankID",         initial: "BID", color: "#193E8F" },
+  { name: "Fortnox",        initial: "F",   color: "#005A45" },
+  { name: "Visma",          initial: "V",   color: "#E1251B" },
+  { name: "Bokio",          initial: "B",   color: "#00C896" },
+  { name: "Stripe Connect", initial: "SC",  color: "#635BFF" },
+  { name: "Auth0",          initial: "A0",  color: "#EB5424" },
+  { name: "Clerk",          initial: "Cl",  color: "#6C47FF" },
 ];
 
-const ROW_2: Logo[] = [
-  { name: "Slack",            kind: "simple", slug: "slack",            hex: "4A154B" },
-  { name: "Microsoft 365",    kind: "simple", slug: "microsoft",        hex: "5E5E5E" },
-  { name: "Google Workspace", kind: "simple", slug: "google",           hex: "4285F4" },
-  { name: "Microsoft Teams",  kind: "simple", slug: "microsoftteams",   hex: "6264A7" },
-  { name: "Mailchimp",        kind: "simple", slug: "mailchimp",        hex: "FFE01B", darkText: true },
-  { name: "Klaviyo",          kind: "simple", slug: "klaviyo",          hex: "232627" },
-  { name: "HubSpot",          kind: "simple", slug: "hubspot",          hex: "FF7A59" },
-  { name: "ActiveCampaign",   kind: "simple", slug: "activecampaign",   hex: "356AE6" },
-  { name: "Meta Ads",         kind: "simple", slug: "meta",             hex: "0467DF" },
-  { name: "Google Ads",       kind: "custom", bg: "#4285F4",            label: "G" },
-  { name: "Shopify",          kind: "simple", slug: "shopify",          hex: "7AB55C" },
-  { name: "WooCommerce",      kind: "simple", slug: "woocommerce",      hex: "96588A" },
-  { name: "WordPress",        kind: "simple", slug: "wordpress",        hex: "21759B" },
-  { name: "Webflow",          kind: "simple", slug: "webflow",          hex: "146EF5" },
+const ROW_2: Integration[] = [
+  { name: "Slack",            initial: "Sl", color: "#4A154B" },
+  { name: "Microsoft 365",    initial: "M",  color: "#0078D4" },
+  { name: "Google Workspace", initial: "G",  color: "#4285F4" },
+  { name: "Microsoft Teams",  initial: "T",  color: "#6264A7" },
+  { name: "Mailchimp",        initial: "MC", color: "#FFE01B", textDark: true },
+  { name: "Klaviyo",          initial: "Kl", color: "#232627" },
+  { name: "HubSpot",          initial: "HS", color: "#FF7A59" },
+  { name: "ActiveCampaign",   initial: "AC", color: "#356AE6" },
+  { name: "Meta Ads",         initial: "M",  color: "#0467DF" },
+  { name: "Google Ads",       initial: "G",  color: "#4285F4" },
+  { name: "Shopify",          initial: "Sh", color: "#7AB55C" },
+  { name: "WooCommerce",      initial: "Wo", color: "#96588A" },
+  { name: "WordPress",        initial: "WP", color: "#21759B" },
+  { name: "Webflow",          initial: "Wf", color: "#146EF5" },
 ];
 
-const ROW_3: Logo[] = [
-  { name: "OpenAI",        kind: "simple", slug: "openai",      hex: "412991" },
-  { name: "Anthropic",     kind: "simple", slug: "anthropic",   hex: "D97757" },
-  { name: "Google Gemini", kind: "custom", bg: "#1B72E8",       label: "G" },
-  { name: "Mistral AI",    kind: "custom", bg: "#FF7000",       label: "M" },
-  { name: "ElevenLabs",    kind: "custom", bg: "#000000",       label: "11" },
-  { name: "Supabase",      kind: "simple", slug: "supabase",    hex: "3FCF8E" },
-  { name: "Vercel",        kind: "simple", slug: "vercel",      hex: "FFFFFF", darkBg: true },
-  { name: "Cloudflare",    kind: "simple", slug: "cloudflare",  hex: "F38020" },
-  { name: "AWS",           kind: "simple", slug: "amazonaws",   hex: "232F3E" },
-  { name: "Firebase",      kind: "simple", slug: "firebase",    hex: "FFCA28" },
-  { name: "Twilio",        kind: "simple", slug: "twilio",      hex: "F22F46" },
-  { name: "46elks",        kind: "custom", bg: "#0066FF",       label: "46" },
-  { name: "Zapier",        kind: "simple", slug: "zapier",      hex: "FF4A00" },
-  { name: "Make",          kind: "simple", slug: "make",        hex: "6D00CC" },
+const ROW_3: Integration[] = [
+  { name: "OpenAI",        initial: "AI", color: "#10A37F" },
+  { name: "Anthropic",     initial: "An", color: "#D97757" },
+  { name: "Google Gemini", initial: "G",  color: "#1B72E8" },
+  { name: "Mistral AI",    initial: "Mi", color: "#FF7000" },
+  { name: "ElevenLabs",    initial: "11", color: "#000000" },
+  { name: "Supabase",      initial: "Sb", color: "#3FCF8E" },
+  { name: "Vercel",        initial: "V",  color: "#000000" },
+  { name: "Cloudflare",    initial: "Cf", color: "#F38020" },
+  { name: "AWS",           initial: "AW", color: "#FF9900" },
+  { name: "Firebase",      initial: "Fb", color: "#FFCA28", textDark: true },
+  { name: "Twilio",        initial: "Tw", color: "#F22F46" },
+  { name: "46elks",        initial: "46", color: "#0066FF" },
+  { name: "Zapier",        initial: "Z",  color: "#FF4A00" },
+  { name: "Make",          initial: "Mk", color: "#6D00CC" },
 ];
 
 const CATEGORIES: { name: string; tools: string }[] = [
@@ -68,49 +71,35 @@ const CATEGORIES: { name: string; tools: string }[] = [
   { name: "Övrigt",           tools: "Google Maps, Calendly, Notion, Airtable, Linear, Sentry" },
 ];
 
-const LogoMark = ({ logo }: { logo: Logo }) => {
-  if (logo.kind === "simple") {
-    const wrapBg = logo.darkBg ? "#0a0a0a" : "transparent";
-    return (
-      <span
-        className="grid h-7 w-7 shrink-0 place-items-center rounded-md"
-        style={{ background: wrapBg }}
-      >
-        <img
-          src={`https://cdn.simpleicons.org/${logo.slug}/${logo.hex}`}
-          alt=""
-          width={22}
-          height={22}
-          loading="lazy"
-          className="h-[22px] w-[22px] object-contain"
-        />
-      </span>
-    );
-  }
-  return (
-    <span
-      className="grid h-7 w-7 shrink-0 place-items-center rounded-md font-display font-bold"
-      style={{
-        background: logo.bg,
-        color: logo.fg ?? "#fff",
-        fontSize: logo.smallText ? "9px" : "12px",
-        letterSpacing: "-0.02em",
-      }}
-    >
-      {logo.label}
-    </span>
-  );
-};
+const IntegrationLogo = ({ logo }: { logo: Integration }) => (
+  <span
+    aria-hidden
+    className="grid h-7 w-7 shrink-0 place-items-center rounded-lg font-display font-bold"
+    style={{
+      background: logo.color,
+      color: logo.textDark ? "#0a0f0d" : "#ffffff",
+      fontSize: logo.initial.length >= 3 ? "9px" : logo.initial.length === 2 ? "11px" : "13px",
+      letterSpacing: "-0.02em",
+      lineHeight: 1,
+    }}
+  >
+    {logo.initial}
+  </span>
+);
 
-const Row = ({ logos, animClass }: { logos: Logo[]; animClass: string }) => {
-  // Duplicate the list for seamless loop
+const Row = ({ logos, animClass }: { logos: Integration[]; animClass: string }) => {
+  // Duplicate the list for a seamless infinite loop
   const items = [...logos, ...logos];
   return (
     <div className="au-marquee-wrap au-marquee-mask group relative overflow-hidden">
       <div className={`au-marquee-track ${animClass} gap-3`}>
         {items.map((logo, i) => (
-          <div key={`${logo.name}-${i}`} className="au-logo-pill">
-            <LogoMark logo={logo} />
+          <div
+            key={`${logo.name}-${i}`}
+            className="au-logo-pill"
+            aria-hidden={i >= logos.length}
+          >
+            <IntegrationLogo logo={logo} />
             <span className="text-sm font-medium text-[hsl(var(--au-cream)/0.9)]">
               {logo.name}
             </span>

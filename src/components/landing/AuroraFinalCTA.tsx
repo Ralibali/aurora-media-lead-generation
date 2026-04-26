@@ -65,11 +65,10 @@ const AuroraFinalCTA = () => {
             </div>
 
             <div
-              className="mt-12 grid gap-6 border-t pt-8 sm:grid-cols-3"
+              className="mt-12 grid gap-5 border-t pt-8 sm:grid-cols-2"
               style={{ borderColor: "hsl(var(--au-cream) / 0.1)" }}
             >
               {[
-                { label: "MEJL",     value: "info@auroramedia.se" },
                 { label: "ORG.NR",   value: "559272-0220" },
                 { label: "SVARSTID", value: "Inom 24 timmar" },
               ].map((c) => (
