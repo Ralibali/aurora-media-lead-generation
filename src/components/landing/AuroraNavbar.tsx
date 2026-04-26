@@ -87,9 +87,19 @@ const AuroraNavbar = () => {
           </nav>
 
           <div className="hidden md:block">
-            <button onClick={() => open()} className="au-btn-coral">
-              Boka rådgivning
-              <ArrowRight size={16} strokeWidth={2.5} />
+            <button
+              onClick={() => open()}
+              className="au-btn-coral"
+              style={{
+                padding: scrolled ? "0.6rem 1.05rem" : "0.95rem 1.5rem",
+                fontSize: scrolled ? "0.85rem" : "0.95rem",
+                transition:
+                  "padding 0.35s cubic-bezier(0.32,0.72,0,1), font-size 0.35s cubic-bezier(0.32,0.72,0,1), transform 0.35s cubic-bezier(0.32,0.72,0,1), box-shadow 0.35s cubic-bezier(0.32,0.72,0,1)",
+              }}
+              aria-label="Boka kostnadsfri rådgivning"
+            >
+              {scrolled ? "Boka" : "Boka rådgivning"}
+              <ArrowRight size={scrolled ? 14 : 16} strokeWidth={2.5} />
             </button>
           </div>
 
