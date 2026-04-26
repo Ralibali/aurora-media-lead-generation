@@ -1,32 +1,36 @@
 import { useEffect } from "react";
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import TrustBarSection from "@/components/TrustBarSection";
-import PortfolioSection from "@/components/PortfolioSection";
-import PaketSection from "@/components/PaketSection";
-import VarforSnabbtSection from "@/components/VarforSnabbtSection";
-import ProcessSection from "@/components/ProcessSection";
-import JagGorAvenSection from "@/components/JagGorAvenSection";
-import TargetAudienceSection from "@/components/TargetAudienceSection";
-import SiffrorSection from "@/components/SiffrorSection";
-import FAQSection from "@/components/FAQSection";
-import FinalCTASection from "@/components/FinalCTASection";
-import StickyMobileCTA from "@/components/StickyMobileCTA";
-import Footer from "@/components/Footer";
-import { setSEOMeta, setJsonLd, setHreflang, organizationSchema, websiteSchema, serviceSchema } from "@/lib/seoHelpers";
+import AuroraNavbar from "@/components/landing/AuroraNavbar";
+import AuroraHero from "@/components/landing/AuroraHero";
+import AuroraServices from "@/components/landing/AuroraServices";
+import AuroraProducts from "@/components/landing/AuroraProducts";
+import AuroraIndustries from "@/components/landing/AuroraIndustries";
+import AuroraIntegrations from "@/components/landing/AuroraIntegrations";
+import AuroraProcess from "@/components/landing/AuroraProcess";
+import AuroraPricing from "@/components/landing/AuroraPricing";
+import AuroraFinalCTA from "@/components/landing/AuroraFinalCTA";
+import AuroraFooter from "@/components/landing/AuroraFooter";
+import AuroraStickyMobileCTA from "@/components/landing/AuroraStickyMobileCTA";
+import {
+  setSEOMeta,
+  setJsonLd,
+  setHreflang,
+  organizationSchema,
+  websiteSchema,
+  serviceSchema,
+} from "@/lib/seoHelpers";
 
 const Index = () => {
   useEffect(() => {
     setSEOMeta({
-      title: "Bygger SaaS med AI – Veckor, inte månader | Aurora Media Linköping",
+      title: "Idén finns. Produkten saknas. | Aurora Media – AI-driven mjukvara",
       description:
-        "AI-driven SaaS-utveckling i Linköping. Prototyp från 14 900 kr, MVP från 34 900 kr. Fast pris, leverans på 2–4 veckor. 7 produkter levererade. Boka kostnadsfri rådgivning.",
+        "Vi bygger SaaS, appar och skräddarsydda system med fast pris från 14 900 kr. Leverans på 2–4 veckor. Du äger alltid koden. Boka kostnadsfri rådgivning.",
       canonical: "/",
       ogImage: "/og-image-sv.jpg",
       ogType: "website",
       ogLocale: "sv_SE",
       keywords:
-        "SaaS-utveckling, AI-kodning, MVP-utveckling, webbyrå Linköping, Lovable, Bolt, Claude, Cursor, fast pris SaaS, intern verktygsutveckling",
+        "SaaS-utveckling, AI-driven mjukvara, MVP-utveckling, integrationer, webbyrå Linköping, Aurora Media",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
@@ -35,23 +39,20 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main id="main" className="pt-16">
-        <HeroSection />
-        <TrustBarSection />
-        <PortfolioSection />
-        <PaketSection />
-        <VarforSnabbtSection />
-        <ProcessSection />
-        <JagGorAvenSection />
-        <TargetAudienceSection />
-        <SiffrorSection />
-        <FAQSection />
-        <FinalCTASection />
+    <div className="aurora-theme min-h-screen">
+      <AuroraNavbar />
+      <main id="main">
+        <AuroraHero />
+        <AuroraServices />
+        <AuroraProducts />
+        <AuroraIndustries />
+        <AuroraIntegrations />
+        <AuroraProcess />
+        <AuroraPricing />
+        <AuroraFinalCTA />
       </main>
-      <Footer />
-      <StickyMobileCTA />
+      <AuroraFooter />
+      <AuroraStickyMobileCTA />
     </div>
   );
 };
