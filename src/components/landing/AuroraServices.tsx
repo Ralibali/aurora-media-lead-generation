@@ -2,21 +2,29 @@ import { motion } from "framer-motion";
 import {
   Layers, Plug, Smartphone, Brush, Globe, LayoutTemplate,
   Megaphone, Search, Sparkles, Compass, BarChart3, LifeBuoy,
+  ArrowRight,
 } from "lucide-react";
 
-const SERVICES = [
-  { icon: Layers,         title: "System",                 desc: "Robusta affärssystem som växer med er — byggda i modern stack." },
-  { icon: Plug,           title: "Integrationer",          desc: "Sömlösa kopplingar mellan Fortnox, Visma, Stripe och era befintliga verktyg." },
-  { icon: Smartphone,     title: "Appar",                  desc: "iOS, Android och progressiva webbappar som folk faktiskt vill använda." },
-  { icon: Brush,          title: "Redesign",               desc: "Modern UI/UX som lyfter varumärket och ökar konvertering." },
-  { icon: Globe,          title: "Webb & plattformar",     desc: "Snabba, säkra och skalbara lösningar — från landningssida till SaaS." },
-  { icon: LayoutTemplate, title: "Landningssidor",         desc: "Konverterande sidor som driver leads och säljer hela dygnet." },
-  { icon: Megaphone,      title: "Digital marknadsföring", desc: "Meta Ads och Google Ads — datadriven annonsering med tydlig ROAS." },
-  { icon: Search,         title: "SEO & innehåll",         desc: "Programmatic SEO och innehåll som rankar — och konverterar." },
-  { icon: Sparkles,       title: "AI-integration",         desc: "GPT-driven automation, chatbottar och AI-coacher inbyggda i din produkt." },
-  { icon: Compass,        title: "Strategi & rådgivning",  desc: "Tekniska audits, MVP-validering och digital strategi för bolag som vill växa rätt." },
-  { icon: BarChart3,      title: "CRO & analys",           desc: "Datadriven optimering med GA4, Hotjar och A/B-testning som höjer konvertering." },
-  { icon: LifeBuoy,       title: "Underhåll & support",    desc: "Löpande utveckling, säkerhetsuppdateringar och hosting — vi sover så du slipper." },
+type Service = {
+  icon: typeof Layers;
+  title: string;
+  desc: string;       // desktop / full copy
+  descShort: string;  // mobile copy
+};
+
+const SERVICES: Service[] = [
+  { icon: Layers,         title: "System",                 desc: "Robusta affärssystem som växer med er — byggda i modern stack.",                              descShort: "Affärssystem som växer med er." },
+  { icon: Plug,           title: "Integrationer",          desc: "Sömlösa kopplingar mellan Fortnox, Visma, Stripe och era befintliga verktyg.",                descShort: "Fortnox, Visma, Stripe & mer." },
+  { icon: Smartphone,     title: "Appar",                  desc: "iOS, Android och progressiva webbappar som folk faktiskt vill använda.",                     descShort: "iOS, Android & PWA." },
+  { icon: Brush,          title: "Redesign",               desc: "Modern UI/UX som lyfter varumärket och ökar konvertering.",                                  descShort: "UI/UX som konverterar." },
+  { icon: Globe,          title: "Webb & plattformar",     desc: "Snabba, säkra och skalbara lösningar — från landningssida till SaaS.",                       descShort: "Från landningssida till SaaS." },
+  { icon: LayoutTemplate, title: "Landningssidor",         desc: "Konverterande sidor som driver leads och säljer hela dygnet.",                               descShort: "Sidor som säljer dygnet runt." },
+  { icon: Megaphone,      title: "Digital marknadsföring", desc: "Meta Ads och Google Ads — datadriven annonsering med tydlig ROAS.",                          descShort: "Meta & Google Ads med ROAS." },
+  { icon: Search,         title: "SEO & innehåll",         desc: "Programmatic SEO och innehåll som rankar — och konverterar.",                                descShort: "SEO som rankar & konverterar." },
+  { icon: Sparkles,       title: "AI-integration",         desc: "GPT-driven automation, chatbottar och AI-coacher inbyggda i din produkt.",                   descShort: "GPT, chatbottar & automation." },
+  { icon: Compass,        title: "Strategi & rådgivning",  desc: "Tekniska audits, MVP-validering och digital strategi för bolag som vill växa rätt.",         descShort: "Audits, MVP & strategi." },
+  { icon: BarChart3,      title: "CRO & analys",           desc: "Datadriven optimering med GA4, Hotjar och A/B-testning som höjer konvertering.",             descShort: "GA4, Hotjar & A/B-tester." },
+  { icon: LifeBuoy,       title: "Underhåll & support",    desc: "Löpande utveckling, säkerhetsuppdateringar och hosting — vi sover så du slipper.",           descShort: "Drift, support & hosting." },
 ];
 
 const AuroraServices = () => (
@@ -41,23 +49,38 @@ const AuroraServices = () => (
       </div>
 
       <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {SERVICES.map(({ icon: Icon, title, desc }, i) => (
-          <motion.div
+        {SERVICES.map(({ icon: Icon, title, desc, descShort }, i) => (
+          <motion.a
             key={title}
+            href="#kontakt"
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: (i % 3) * 0.05, ease: [0.32, 0.72, 0, 1] }}
-            className="au-card p-6"
+            className="au-card au-service-card group flex flex-col p-6"
           >
             <span className="au-icon">
               <Icon size={20} strokeWidth={2} />
             </span>
             <h3 className="mt-5 font-display text-xl tracking-[-0.02em]">{title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--au-cream)/0.65)]">
+
+            {/* Mobile copy */}
+            <p className="mt-2 text-sm leading-relaxed text-[hsl(var(--au-cream)/0.65)] sm:hidden">
+              {descShort}
+            </p>
+            {/* Desktop / tablet copy */}
+            <p className="mt-2 hidden text-sm leading-relaxed text-[hsl(var(--au-cream)/0.65)] sm:block">
               {desc}
             </p>
-          </motion.div>
+
+            <span
+              className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] transition-transform duration-300 group-hover:translate-x-0.5"
+              style={{ color: "hsl(152 80% 65%)" }}
+            >
+              Diskutera projekt
+              <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+            </span>
+          </motion.a>
         ))}
       </div>
     </div>
