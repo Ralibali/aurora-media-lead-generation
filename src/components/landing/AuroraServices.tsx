@@ -1,19 +1,22 @@
 import { motion } from "framer-motion";
 import {
   Layers, Plug, Smartphone, Brush, Globe, LayoutTemplate,
-  Megaphone, Search, Sparkles,
+  Megaphone, Search, Sparkles, Compass, BarChart3, LifeBuoy,
 } from "lucide-react";
 
 const SERVICES = [
-  { icon: Layers,         title: "System",                desc: "Robusta affärssystem som växer med er — byggda i modern stack." },
-  { icon: Plug,           title: "Integrationer",         desc: "Sömlösa kopplingar mellan Fortnox, Visma, Stripe och era befintliga verktyg." },
-  { icon: Smartphone,     title: "Appar",                 desc: "iOS, Android och progressiva webbappar som folk faktiskt vill använda." },
-  { icon: Brush,          title: "Redesign",              desc: "Modern UI/UX som lyfter varumärket och ökar konvertering." },
-  { icon: Globe,          title: "Webb & plattformar",    desc: "Snabba, säkra och skalbara lösningar — från landningssida till SaaS." },
-  { icon: LayoutTemplate, title: "Landningssidor",        desc: "Konverterande sidor som driver leads och säljer hela dygnet." },
-  { icon: Megaphone,      title: "Digital marknadsföring",desc: "Meta Ads och Google Ads — datadriven annonsering med tydlig ROAS." },
-  { icon: Search,         title: "SEO & innehåll",        desc: "Programmatic SEO och innehåll som rankar — och konverterar." },
-  { icon: Sparkles,       title: "AI-integration",        desc: "GPT-driven automation, chatbottar och AI-coacher inbyggda i din produkt." },
+  { icon: Layers,         title: "System",                 desc: "Robusta affärssystem som växer med er — byggda i modern stack." },
+  { icon: Plug,           title: "Integrationer",          desc: "Sömlösa kopplingar mellan Fortnox, Visma, Stripe och era befintliga verktyg." },
+  { icon: Smartphone,     title: "Appar",                  desc: "iOS, Android och progressiva webbappar som folk faktiskt vill använda." },
+  { icon: Brush,          title: "Redesign",               desc: "Modern UI/UX som lyfter varumärket och ökar konvertering." },
+  { icon: Globe,          title: "Webb & plattformar",     desc: "Snabba, säkra och skalbara lösningar — från landningssida till SaaS." },
+  { icon: LayoutTemplate, title: "Landningssidor",         desc: "Konverterande sidor som driver leads och säljer hela dygnet." },
+  { icon: Megaphone,      title: "Digital marknadsföring", desc: "Meta Ads och Google Ads — datadriven annonsering med tydlig ROAS." },
+  { icon: Search,         title: "SEO & innehåll",         desc: "Programmatic SEO och innehåll som rankar — och konverterar." },
+  { icon: Sparkles,       title: "AI-integration",         desc: "GPT-driven automation, chatbottar och AI-coacher inbyggda i din produkt." },
+  { icon: Compass,        title: "Strategi & rådgivning",  desc: "Tekniska audits, MVP-validering och digital strategi för bolag som vill växa rätt." },
+  { icon: BarChart3,      title: "CRO & analys",           desc: "Datadriven optimering med GA4, Hotjar och A/B-testning som höjer konvertering." },
+  { icon: LifeBuoy,       title: "Underhåll & support",    desc: "Löpande utveckling, säkerhetsuppdateringar och hosting — vi sover så du slipper." },
 ];
 
 const AuroraServices = () => (
