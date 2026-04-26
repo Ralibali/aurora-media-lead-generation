@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -227,4 +227,198 @@
     animation: blink 1s step-end infinite;
     color: hsl(var(--primary));
   }
+}
+
+/* ============================================================
+   AURORA LANDING THEME — opt-in via .aurora-theme on root <div>
+   Brutal, premium, dark forest with neon-emerald aurora.
+   ============================================================ */
+.aurora-theme {
+  --au-bg: 160 24% 4%;
+  --au-bg-2: 158 22% 6%;
+  --au-surface: 158 18% 8%;
+  --au-surface-2: 156 14% 11%;
+  --au-cream: 42 38% 92%;
+  --au-cream-dim: 42 24% 78%;
+  --au-muted: 150 8% 58%;
+  --au-emerald: 152 76% 48%;
+  --au-emerald-soft: 152 60% 38%;
+  --au-coral: 6 100% 68%;
+  --au-coral-deep: 6 88% 60%;
+  --au-amber: 38 95% 60%;
+  --au-border: 150 16% 18%;
+
+  background: hsl(var(--au-bg));
+  color: hsl(var(--au-cream));
+  font-family: 'Manrope', 'Geist', system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+.aurora-theme h1,
+.aurora-theme h2,
+.aurora-theme h3,
+.aurora-theme h4,
+.aurora-theme h5,
+.aurora-theme h6 {
+  font-family: 'Bricolage Grotesque', 'Manrope', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  color: hsl(var(--au-cream));
+}
+
+.aurora-theme .font-display {
+  font-family: 'Bricolage Grotesque', 'Manrope', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+.aurora-theme .font-body { font-family: 'Manrope', system-ui, sans-serif; }
+.aurora-theme .font-mono-au { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+.aurora-theme .font-hand { font-family: 'Caveat', cursive; font-weight: 600; }
+
+.aurora-theme .au-eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: hsl(var(--au-emerald));
+}
+
+/* Aurora background — radial emerald glows */
+.aurora-bg { position: relative; isolation: isolate; }
+.aurora-bg::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 45% at 80% 0%,   hsl(152 80% 38% / 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 10% 25%,  hsl(160 70% 32% / 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 80% 60% at 50% 110%, hsl(152 70% 28% / 0.20) 0%, transparent 70%);
+  filter: blur(20px);
+}
+.aurora-bg::after {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 1px 1px, hsl(var(--au-cream) / 0.025) 1px, transparent 0);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 70% 50% at 50% 30%, black 0%, transparent 80%);
+}
+
+.aurora-section-bg {
+  background: linear-gradient(180deg, hsl(var(--au-bg)) 0%, hsl(var(--au-bg-2)) 100%);
+}
+
+.au-card {
+  background: linear-gradient(180deg, hsl(var(--au-surface)) 0%, hsl(var(--au-surface-2)) 100%);
+  border: 1px solid hsl(var(--au-cream) / 0.08);
+  border-radius: 1rem;
+  transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+}
+.au-card:hover {
+  border-color: hsl(var(--au-emerald) / 0.35);
+  box-shadow: 0 0 0 1px hsl(var(--au-emerald) / 0.15),
+              0 24px 60px -28px hsl(var(--au-emerald) / 0.45);
+}
+.au-card-static {
+  background: linear-gradient(180deg, hsl(var(--au-surface)) 0%, hsl(var(--au-surface-2)) 100%);
+  border: 1px solid hsl(var(--au-cream) / 0.08);
+  border-radius: 1rem;
+}
+
+.au-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.75rem; height: 2.75rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(180deg, hsl(152 80% 18% / 0.55), hsl(152 80% 12% / 0.4));
+  border: 1px solid hsl(var(--au-emerald) / 0.35);
+  color: hsl(152 80% 65%);
+  box-shadow: inset 0 1px 0 hsl(var(--au-emerald) / 0.18),
+              0 8px 24px -16px hsl(var(--au-emerald) / 0.5);
+}
+
+.au-highlight { position: relative; display: inline-block; z-index: 0; }
+.au-highlight::before {
+  content: "";
+  position: absolute; left: -0.05em; right: -0.05em; bottom: 0.06em; height: 0.42em;
+  background: linear-gradient(90deg,
+    hsl(152 80% 38% / 0.0) 0%,
+    hsl(152 80% 38% / 0.65) 12%,
+    hsl(152 80% 38% / 0.65) 88%,
+    hsl(152 80% 38% / 0.0) 100%);
+  border-radius: 0.25em;
+  z-index: -1;
+  filter: blur(0.5px);
+}
+
+.au-handline { position: relative; display: inline-block; }
+.au-handline::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -0.18em; height: 0.18em;
+  background: linear-gradient(90deg, transparent, hsl(var(--au-emerald)), transparent);
+  border-radius: 999px;
+  transform: rotate(-1.5deg);
+}
+
+.au-btn-coral {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.95rem 1.5rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, hsl(var(--au-coral)), hsl(var(--au-coral-deep)));
+  color: hsl(160 24% 6%);
+  font-weight: 700;
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  border: 1px solid hsl(var(--au-coral) / 0.6);
+  box-shadow: 0 14px 40px -18px hsl(var(--au-coral) / 0.85),
+              inset 0 1px 0 hsl(0 0% 100% / 0.35);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1),
+              box-shadow 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  cursor: pointer;
+}
+.au-btn-coral:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 22px 60px -20px hsl(var(--au-coral) / 0.95),
+              inset 0 1px 0 hsl(0 0% 100% / 0.45);
+}
+.au-btn-coral:active { transform: scale(0.98); }
+
+.au-btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.9rem 1.45rem;
+  border-radius: 999px;
+  background: transparent;
+  color: hsl(var(--au-cream));
+  border: 1px solid hsl(var(--au-cream) / 0.18);
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  cursor: pointer;
+}
+.au-btn-ghost:hover {
+  border-color: hsl(var(--au-emerald) / 0.6);
+  color: hsl(152 80% 70%);
+  background: hsl(var(--au-emerald) / 0.06);
+  transform: translateY(-1px);
+}
+
+.au-glow-ring { position: relative; }
+.au-glow-ring::before {
+  content: "";
+  position: absolute; inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, hsl(var(--au-emerald) / 0.7), hsl(var(--au-emerald) / 0.15));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+}
+
+.au-divider-x {
+  background: linear-gradient(90deg, transparent, hsl(var(--au-emerald) / 0.4), transparent);
+}
+.au-divider-y {
+  background: linear-gradient(180deg, transparent, hsl(var(--au-emerald) / 0.4), transparent);
 }
