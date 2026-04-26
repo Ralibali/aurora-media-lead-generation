@@ -16,44 +16,70 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://auroramedia.se/en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://auroramedia.se/" />
   </url>
-  <url><loc>https://auroramedia.se/arbete</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://auroramedia.se/arbete/aurora-transport</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/arbete/updro</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/agilitymanager</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/honsgarden</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/odlingsdagboken</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/goglamping-sweden</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/viriditas</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/yachting-sweden</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/solcellsofferter</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/arbete/minandel</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/priser</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://auroramedia.se/om</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://auroramedia.se/kontakt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://auroramedia.se/webbbyra-linkoping</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/metodik</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/redaktionell-policy</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://auroramedia.se/tjanster/mobilapp</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/bygga-saas-med-ai-2026</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/lovable-eller-bolt-eller-emergent</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/vad-kostar-saas-utveckling-2026</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/bygga-saas-pa-2-veckor</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/ai-kodning-sverige-2026</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/saas-utvecklare-linkoping</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/mvp-utveckling-for-startup</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/intern-app-istallet-for-excel</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/saas-for-startup-utan-utvecklare</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/supabase-eller-firebase-2026</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/fortnox-integration-saas</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/traditionell-webbyra-vs-ai-byggare</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-linkoping</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-norrkoping</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-jonkoping</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-stockholm</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-goteborg</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-malmo</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-uppsala</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-vasteras</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://auroramedia.se/saas-utveckling-orebro</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/arbete</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://auroramedia.se/arbete/aurora-transport</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/arbete/updro</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/agilitymanager</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/honsgarden</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/odlingsdagboken</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/goglamping-sweden</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/viriditas</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/yachting-sweden</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/solcellsofferter</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/arbete/minandel</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/priser</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://auroramedia.se/om</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://auroramedia.se/kontakt</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://auroramedia.se/webbbyra-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/metodik</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/redaktionell-policy</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Tjänstesidor -->
+  <url><loc>https://auroramedia.se/tjanster</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/hemsidor</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/ehandel</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/mobilapp</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/seo</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/google-ads</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/meta-ads</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/content</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/grafisk-profil</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://auroramedia.se/tjanster/fotografering</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
+
+  <!-- Artiklar -->
+  <url><loc>https://auroramedia.se/artiklar</loc><lastmod>2026-04-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/bygga-saas-med-ai-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/lovable-eller-bolt-eller-emergent</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/vad-kostar-saas-utveckling-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/bygga-saas-pa-2-veckor</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/ai-kodning-sverige-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/saas-utvecklare-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/mvp-utveckling-for-startup</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/intern-app-istallet-for-excel</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/saas-for-startup-utan-utvecklare</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/supabase-eller-firebase-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/fortnox-integration-saas</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/artiklar/traditionell-webbyra-vs-ai-byggare</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Lokala SaaS-landningssidor -->
+  <url><loc>https://auroramedia.se/saas-utveckling-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-norrkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-jonkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-stockholm</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-goteborg</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-malmo</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-uppsala</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-vasteras</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/saas-utveckling-orebro</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+
+  <!-- Lokala AI-byrå-landningssidor -->
+  <url><loc>https://auroramedia.se/ai-byra-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-norrkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-jonkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-stockholm</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-goteborg</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-malmo</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-uppsala</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-vasteras</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://auroramedia.se/ai-byra-orebro</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
 </urlset>
