@@ -1,0 +1,3 @@
+# Netlify / static hosting fallback for the React single-page app.
+# Keeps direct visits to client-side routes such as /tjanster/seo and /artiklar/... from returning 404.
+/*    /index.html   200
