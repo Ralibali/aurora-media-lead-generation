@@ -89,7 +89,7 @@ const AuroraNavbar = () => {
           <div className="hidden md:block">
             <button
               onClick={() => open()}
-              className="au-btn-coral group/cta"
+              className="au-btn-coral"
               style={{
                 padding: scrolled ? "0.6rem 1.05rem" : "0.95rem 1.5rem",
                 fontSize: scrolled ? "0.85rem" : "0.95rem",
@@ -98,11 +98,7 @@ const AuroraNavbar = () => {
               }}
               aria-label="Boka kostnadsfri rådgivning"
             >
-              <span className={scrolled ? "lg:inline hidden" : "inline"}>
-                {scrolled ? "Boka" : "Boka rådgivning"}
-              </span>
-              {/* Always-visible label for sm/md when collapsed */}
-              {scrolled && <span className="lg:hidden">Boka</span>}
+              {scrolled ? "Boka" : "Boka rådgivning"}
               <ArrowRight size={scrolled ? 14 : 16} strokeWidth={2.5} />
             </button>
           </div>
