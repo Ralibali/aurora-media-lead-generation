@@ -149,6 +149,16 @@ const Footer = () => {
                   </Link>
                 </li>
               ))}
+              <li className="pt-3">
+                <Link to="/integritetspolicy" className="text-white/70 hover:text-white">
+                  Integritetspolicy
+                </Link>
+              </li>
+              <li>
+                <Link to="/redaktionell-policy" className="text-white/70 hover:text-white">
+                  Redaktionell policy
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
