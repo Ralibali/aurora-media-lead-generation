@@ -233,6 +233,14 @@
    AURORA LANDING THEME — opt-in via .aurora-theme on root <div>
    Brutal, premium, dark forest with neon-emerald aurora.
    ============================================================ */
+/* When Aurora landing is active, paint html/body dark too so iOS Safari
+   overscroll/rubber-band and the gap above the fixed header don't reveal
+   the global cream background. */
+html:has(.aurora-theme),
+body:has(.aurora-theme) {
+  background: hsl(160 24% 4%);
+}
+
 .aurora-theme {
   --au-bg: 160 24% 4%;
   --au-bg-2: 158 22% 6%;
