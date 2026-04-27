@@ -8,31 +8,31 @@ export const paket = [
     id: "Prototyp",
     number: "01",
     name: "Prototyp",
-    price: "14 900 kr",
-    priceFrom: "Från",
-    priceAmount: "14 900",
-    priceCurrency: "kr",
-    time: "3–5 arbetsdagar · Fast pris",
-    desc: "Klickbar prototyp. Visa investerare. Testa idé innan du bygger på riktigt.",
+    price: "Offert efter behov",
+    priceFrom: "Pris",
+    priceAmount: "Rimlig offert",
+    priceCurrency: "",
+    time: "2–3 arbetsdagar · Snabb start",
+    desc: "Klickbar prototyp. Perfekt när du vill se idén på riktigt innan du investerar stort.",
     features: [
       "Responsiv design, mobil + desktop",
-      "Riktig data — inte mockup",
+      "Riktig data — inte bara mockup",
       "Deployment på din domän",
       "En veckas support",
     ],
-    cta: "Starta prototyp",
+    cta: "Be om offert",
     featured: false,
   },
   {
     id: "MVP",
     number: "02",
     name: "MVP",
-    price: "34 900 kr",
-    priceFrom: "Från",
-    priceAmount: "34 900",
-    priceCurrency: "kr",
-    time: "2 veckor · Fast pris",
-    desc: "Första riktiga versionen. Login, betalningar, databas. Lanseringsklar.",
+    price: "Offert efter behov",
+    priceFrom: "Pris",
+    priceAmount: "Du blir inte besviken",
+    priceCurrency: "",
+    time: "5–10 arbetsdagar · Lanseringsfokus",
+    desc: "Första riktiga versionen. Login, betalningar, databas och det viktigaste som krävs för lansering.",
     features: [
       "Allt i Prototyp",
       "Användarlogin & roller",
@@ -40,44 +40,44 @@ export const paket = [
       "Admin-dashboard",
       "Två veckors support",
     ],
-    cta: "Starta MVP",
+    cta: "Få ett förslag",
     featured: true,
   },
   {
     id: "SaaS",
     number: "03",
     name: "Skalbar SaaS",
-    price: "69 000 kr",
-    priceFrom: "Från",
-    priceAmount: "69 000",
-    priceCurrency: "kr",
-    time: "4 veckor · Fast pris",
-    desc: "Komplett app redo för betalande kunder. Stripe + full SEO + integrationer.",
+    price: "Offert efter behov",
+    priceFrom: "Pris",
+    priceAmount: "Anpassas efter scope",
+    priceCurrency: "",
+    time: "2–3 veckor · Tydlig plan",
+    desc: "Komplett app redo för betalande kunder. Vi bygger det som skapar värde först och skalar därifrån.",
     features: [
       "Allt i MVP",
       "Avancerad analys",
-      "Integrationer (Fortnox, HubSpot)",
-      "Full SEO",
+      "Integrationer vid behov",
+      "SEO-grund från start",
       "En månads support",
     ],
-    cta: "Starta SaaS",
+    cta: "Boka genomgång",
     featured: false,
   },
   {
     id: "Skraddarsytt",
     number: "04",
     name: "Skräddarsytt",
-    price: "Från 89 000 kr",
-    priceFrom: "Från",
-    priceAmount: "89 000",
-    priceCurrency: "kr",
-    time: "4–8 veckor · Offert",
-    desc: "Större projekt med specifika krav. Vi definierar omfattningen tillsammans.",
+    price: "Offert efter behov",
+    priceFrom: "Pris",
+    priceAmount: "Efter genomgång",
+    priceCurrency: "",
+    time: "3–6 veckor · Offert",
+    desc: "Större projekt med specifika krav. Vi definierar omfattningen tillsammans innan du bestämmer dig.",
     features: [
       "Custom integrationer",
       "Multi-tenant arkitektur",
-      "Säkerhetskrav (GDPR, SOC2)",
-      "Stora datamängder",
+      "Säkerhetskrav och GDPR",
+      "Större datamängder",
     ],
     cta: "Boka samtal",
     featured: false,
@@ -97,14 +97,14 @@ const PaketSection = () => {
           transition={{ duration: 0.9, ease: [0.32, 0.72, 0, 1] }}
           className="max-w-2xl"
         >
-          <p className="label-caps">Priser & Paket</p>
+          <p className="label-caps">Paket & upplägg</p>
           <h2 className="mt-3 font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[0.98] tracking-[-0.025em]">
-            Fyra fasta paket.
+            Snabb leverans.
             <br />
-            <span className="italic text-primary">Inga timmar.</span>
+            <span className="italic text-primary">Rimlig offert.</span>
           </h2>
           <p className="mt-6 text-lg text-muted-foreground">
-            Priserna är exklusive moms. En administrativ avgift på 15 % tillkommer på slutfakturan — alltid synlig i offerten.
+            Jag visar inte fasta prislappar här eftersom varje projekt ser olika ut. Men målet är enkelt: du ska få en tydlig offert, en snabb väg framåt och känna att värdet är större än kostnaden.
           </p>
         </motion.div>
 
@@ -118,7 +118,6 @@ const PaketSection = () => {
               transition={{ duration: 0.7, delay: i * 0.08, ease: [0.32, 0.72, 0, 1] }}
               className="relative"
             >
-              {/* Spotlight glow behind featured */}
               {p.featured && (
                 <div
                   aria-hidden
@@ -130,7 +129,6 @@ const PaketSection = () => {
                 />
               )}
 
-              {/* Ribbon badge */}
               {p.featured && (
                 <div
                   className="absolute -right-2 top-4 z-10 rotate-[3deg] rounded-sm bg-primary px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-primary-foreground shadow-lg"
@@ -169,32 +167,25 @@ const PaketSection = () => {
                     {p.name}
                   </h3>
 
-                  <div className="mt-5 flex items-baseline gap-1.5">
+                  <div className="mt-5">
                     <span
-                      className={`text-xs uppercase tracking-wider ${
+                      className={`block text-xs uppercase tracking-wider ${
                         p.featured ? "text-white/55" : "text-muted-foreground"
                       }`}
                     >
                       {p.priceFrom}
                     </span>
                     <span
-                      className={`font-serif text-4xl leading-none ${
+                      className={`mt-1 block font-serif text-3xl leading-tight ${
                         p.featured ? "text-white" : "text-foreground"
                       }`}
                     >
                       {p.priceAmount}
                     </span>
-                    <span
-                      className={`text-sm ${
-                        p.featured ? "text-white/65" : "text-muted-foreground"
-                      }`}
-                    >
-                      {p.priceCurrency}
-                    </span>
                   </div>
 
                   <p
-                    className={`mt-2 font-mono text-[10px] uppercase tracking-wider ${
+                    className={`mt-3 font-mono text-[10px] uppercase tracking-wider ${
                       p.featured ? "text-white/45" : "text-muted-foreground"
                     }`}
                   >
@@ -271,14 +262,13 @@ const PaketSection = () => {
 
         <div className="mt-12 flex flex-col items-start gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>
-            Löpande underhåll efter leverans:{" "}
-            <span className="text-foreground">1 990 kr/mån</span>
+            Inga överraskningar: du får alltid omfattning, leverans och pris bekräftat innan start.
           </p>
           <Link
             to="/priser"
             className="font-medium text-primary underline-offset-4 hover:underline"
           >
-            Se fullständiga priser →
+            Se hur upplägget fungerar →
           </Link>
         </div>
       </div>
