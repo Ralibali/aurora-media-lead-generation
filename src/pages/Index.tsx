@@ -36,6 +36,20 @@ const Index = () => {
     setJsonLd("organization-jsonld", organizationSchema);
     setJsonLd("website-jsonld", websiteSchema);
     setJsonLd("service-jsonld", serviceSchema);
+
+    // iOS Safari: paint status bar + overscroll dark to match Aurora theme.
+    let themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    const previous = themeMeta?.getAttribute("content") ?? null;
+    if (!themeMeta) {
+      themeMeta = document.createElement("meta");
+      themeMeta.name = "theme-color";
+      document.head.appendChild(themeMeta);
+    }
+    themeMeta.setAttribute("content", "#06120e");
+    return () => {
+      if (previous !== null) themeMeta!.setAttribute("content", previous);
+      else themeMeta?.remove();
+    };
   }, []);
 
   return (
