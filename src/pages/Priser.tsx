@@ -13,81 +13,81 @@ import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const tillagg = [
-  { name: "Hemsida", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
-  { name: "E-handel", price: "Från 19 900 kr", to: "/tjanster/ehandel" },
-  { name: "Mobilapp – PWA", price: "6 900 kr (2–3 dagar extra)", to: "/tjanster/mobilapp" },
-  { name: "Mobilapp – Capacitor (iOS + Android)", price: "24 900 kr (1–2 v extra)", to: "/tjanster/mobilapp" },
-  { name: "Mobilapp – Native", price: "Från 89 000 kr (4–8 v)", to: "/tjanster/mobilapp" },
-  { name: "SEO", price: "Från 2 490 kr", to: "/tjanster/seo" },
-  { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
-  { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
-  { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
-  { name: "Grafisk profil", price: "Från 5 900 kr", to: "/tjanster/grafisk-profil" },
-  { name: "Fotografering", price: "4 900 kr/halvdag", to: "/tjanster/fotografering" },
+  { name: "Hemsida", price: "Offert efter omfattning", to: "/tjanster/hemsidor" },
+  { name: "E-handel", price: "Offert efter behov", to: "/tjanster/ehandel" },
+  { name: "Mobilapp – PWA", price: "Snabbt tillägg", to: "/tjanster/mobilapp" },
+  { name: "Mobilapp – iOS + Android", price: "Offert efter plattform", to: "/tjanster/mobilapp" },
+  { name: "Mobilapp – Native", price: "Skräddarsydd offert", to: "/tjanster/mobilapp" },
+  { name: "SEO", price: "Månad eller engångsinsats", to: "/tjanster/seo" },
+  { name: "Google Ads", price: "Setup efter konto", to: "/tjanster/google-ads" },
+  { name: "Meta Ads", price: "Setup efter mål", to: "/tjanster/meta-ads" },
+  { name: "Content", price: "Pris efter volym", to: "/tjanster/content" },
+  { name: "Grafisk profil", price: "Offert efter nivå", to: "/tjanster/grafisk-profil" },
+  { name: "Fotografering", price: "Offert efter upplägg", to: "/tjanster/fotografering" },
 ];
 
 const kombos = [
   {
     name: "SaaS + App",
     paket: "Kombination – SaaS + app",
-    price: "Från 59 800 kr",
-    breakdown: "34 900 MVP + 24 900 Capacitor",
-    time: "3–4 veckor",
-    desc: "Full SaaS på webben plus iOS + Android. Lanserad i båda app-butikerna.",
+    price: "Offert efter scope",
+    breakdown: "Webbapp + mobilapp i samma plan",
+    time: "2–4 veckor",
+    desc: "För dig som vill komma ut på webben och i mobilen utan att bygga två separata projekt.",
   },
   {
     name: "Webb + SEO",
     paket: "Hemsida",
-    price: "Från 9 800 kr",
-    breakdown: "4 900 landningssida + 4 900 SEO",
-    time: "5–7 dagar",
-    desc: "Enkel hemsida som direkt är SEO-optimerad från start.",
+    price: "Rimlig paketoffert",
+    breakdown: "Hemsida + SEO-grund från start",
+    time: "3–7 arbetsdagar",
+    desc: "En snabb, snygg och sökbar hemsida där grunden är rätt redan från början.",
   },
   {
     name: "E-handel + Meta Ads",
     paket: "E-handel",
-    price: "Från 23 800 kr",
-    breakdown: "19 900 butik + 3 900 Ads-setup",
-    time: "2 veckor",
-    desc: "Shopify- eller WooCommerce-butik med första Meta-kampanjen igång.",
+    price: "Offert efter butikens omfattning",
+    breakdown: "Butik + första kampanjstrukturen",
+    time: "1–2 veckor",
+    desc: "För dig som vill kunna sälja och samtidigt få igång relevant trafik direkt efter lansering.",
   },
   {
     name: "Full launch-paket",
     paket: "Kombination – SaaS + app",
-    price: "Från 99 600 kr",
-    breakdown: "69 000 SaaS + 24 900 app + 5 700 grund-SEO",
-    time: "5–6 veckor",
-    desc: "Live på webben, i App Store, på Google Play, SEO optimerad. Redo för första kunden dag ett.",
+    price: "Skräddarsydd offert",
+    breakdown: "Webb, app, SEO och annonsering",
+    time: "3–6 veckor",
+    desc: "När du vill ha en samlad lansering där teknik, synlighet och konvertering hänger ihop.",
   },
 ];
 
 const lopande = [
-  { name: "Löpande underhåll", price: "1 990 kr/mån", desc: "Bugfixar, säkerhetsuppdateringar, mindre justeringar (upp till 2 timmar/mån)." },
-  { name: "Retainer", price: "Från 12 000 kr/mån", desc: "Löpande utveckling – nya features varje månad. Säg upp med 30 dagars varsel." },
-  { name: "Timpris", price: "895 kr/h", desc: "Mindre engångsjobb och konsultationer som inte passar paket." },
+  { name: "Löpande underhåll", price: "Fast månadsoffert", desc: "Bugfixar, säkerhetsuppdateringar och mindre justeringar när du vill slippa tänka på tekniken." },
+  { name: "Retainer", price: "Offert efter tempo", desc: "För dig som vill utveckla vidare varje månad med tydlig prioritering och snabb leverans." },
+  { name: "Konsultation", price: "Bokas efter behov", desc: "Passar mindre engångsjobb, rådgivning eller felsökning där du vill komma vidare snabbt." },
 ];
 
 const comparisonRows: { feature: string; values: [string | boolean, string | boolean, string | boolean, string | boolean] }[] = [
   { feature: "Responsiv design", values: [true, true, true, true] },
-  { feature: "Riktig data (inte mockup)", values: [true, true, true, true] },
+  { feature: "Riktig data (inte bara mockup)", values: [true, true, true, true] },
   { feature: "Deployment på din domän", values: [true, true, true, true] },
   { feature: "Användarlogin", values: [false, true, true, true] },
-  { feature: "Stripe-betalningar", values: [false, true, true, true] },
+  { feature: "Betalningar", values: [false, true, true, true] },
   { feature: "Admin-dashboard", values: [false, true, true, true] },
-  { feature: "Avancerad analys", values: [false, false, true, true] },
-  { feature: "Externa integrationer (Fortnox m.fl.)", values: [false, false, true, true] },
-  { feature: "Full SEO", values: [false, false, true, true] },
+  { feature: "Analys och spårning", values: [false, false, true, true] },
+  { feature: "Externa integrationer", values: [false, false, true, true] },
+  { feature: "SEO-grund", values: [false, true, true, true] },
   { feature: "Multi-tenant arkitektur", values: [false, false, false, true] },
-  { feature: "Säkerhetskrav (audit, kryptering)", values: [false, false, false, true] },
-  { feature: "Support efter leverans", values: ["1 vecka", "2 veckor", "1 månad", "Förhandlingsbar"] },
+  { feature: "Säkerhets- och GDPR-tänk", values: [true, true, true, true] },
+  { feature: "Support efter leverans", values: ["Ingår", "Ingår", "Ingår", "Enligt offert"] },
 ];
 
 const prisFaqs = [
-  { q: "Hur betalar jag?", a: "50 procent vid projektstart, 50 procent vid leverans. Faktura med 30 dagars betalningsvillkor. F-skatt via Aurora Media AB." },
-  { q: "Vad ingår i garantin?", a: "Om prototypen dag 3 inte motsvarar förväntningarna betalar du inget. Då går vi skilda vägar utan kostnad – och behåller var sin lärdom." },
-  { q: "Är moms inkluderad?", a: "Alla priser är exklusive moms. 25 procent moms tillkommer för svenska företag." },
-  { q: "Vad händer om scope ändras under projektet?", a: "Mindre justeringar ingår. Större tillägg offereras separat innan vi börjar bygga – aldrig i efterhand." },
-  { q: "Kan jag kombinera paket?", a: "Ja. Många kunder börjar med Prototyp, beslutar sig för MVP eller SaaS, och uppgraderar då till differensen. Du betalar aldrig dubbelt." },
+  { q: "Varför visar ni inte fasta priser längre?", a: "För att två projekt sällan är lika. Ett fast lågt pris kan låta tryggt, men blir ofta missvisande. Jag vill hellre ge dig en ärlig offert efter vad du faktiskt behöver — så att du inte betalar för fel saker." },
+  { q: "Kommer offerten kännas dyr?", a: "Målet är tvärtom att du ska känna: det här är rimligt. Jag bygger hellre smart och fokuserat än stort och onödigt. Du får alltid veta omfattning, leverans och pris innan vi startar." },
+  { q: "Hur snabbt kan ni leverera?", a: "Mindre projekt kan ofta komma igång och levereras på några arbetsdagar. Större MVP-, SaaS- och e-handelsprojekt får en tydlig tidsplan, men fokus är alltid att få ut första värdeskapande versionen snabbt." },
+  { q: "Vad händer om scope ändras under projektet?", a: "Då tar vi det innan något byggs vidare. Mindre justeringar är normalt, men större tillägg ska aldrig komma som en överraskning i efterhand." },
+  { q: "Kan jag börja litet och bygga vidare?", a: "Ja, och det är ofta det smartaste. Börja med det som skapar mest värde först, lansera snabbare och bygg vidare när du vet vad kunderna faktiskt behöver." },
 ];
 
 const Priser = () => {
@@ -95,9 +95,9 @@ const Priser = () => {
 
   useEffect(() => {
     setSEOMeta({
-      title: "Priser – fast pris från 14 900 kr | SaaS, MVP & webb | Aurora Media",
+      title: "Priser & offert – snabb leverans utan överraskningar | Aurora Media",
       description:
-        "Transparenta paket för AI-byggd SaaS: Prototyp 14 900 kr, MVP 34 900 kr, Skalbar SaaS 69 000 kr, Skräddarsytt från 89 000 kr. Fast pris, ingen timdebitering.",
+        "Få en tydlig och rimlig offert för hemsida, SaaS, MVP, e-handel, SEO, Google Ads och Meta Ads. Snabb leverans, tydlig omfattning och inga överraskningar.",
       canonical: "/priser",
     });
     setBreadcrumb([
@@ -111,23 +111,20 @@ const Priser = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-16">
-        {/* Hero */}
         <section className="pt-16 pb-12 md:pt-24 md:pb-16">
           <div className="container mx-auto px-6 max-w-4xl">
             <Reveal>
-              <p className="label-caps">Priser</p>
+              <p className="label-caps">Priser & offert</p>
               <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
-                Fast pris. <em className="italic text-primary">Inga timmar.</em>
+                Du får ett tydligt pris. <em className="italic text-primary">Inte en överraskning.</em>
               </h1>
               <p className="mt-7 max-w-2xl text-lg text-muted-foreground md:text-xl">
-                Du vet exakt vad du betalar innan vi börjar. Ingen löpande räkning, inga
-                "det blev lite mer komplext än vi trodde". Inga sex-månaders bindningar.
+                Jag visar inte generella prislappar eftersom de sällan säger sanningen. Istället får du en snabb genomgång, en konkret rekommendation och en offert som är anpassad efter det som faktiskt behöver byggas.
               </p>
             </Reveal>
           </div>
         </section>
 
-        {/* Main packages */}
         <section className="pb-20 md:pb-24">
           <div className="container mx-auto px-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -170,14 +167,16 @@ const Priser = () => {
           </div>
         </section>
 
-        {/* Comparison table */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6">
             <Reveal className="max-w-2xl">
               <p className="label-caps">Jämförelse</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
-                Vad ingår var?
+                Välj nivå — inte prislapp.
               </h2>
+              <p className="mt-5 text-lg text-muted-foreground">
+                Det viktiga är inte att köpa störst paket. Det viktiga är att börja på rätt nivå och få ut något som faktiskt kan användas.
+              </p>
             </Reveal>
 
             <div className="mt-12 overflow-x-auto rounded-xl border border-border bg-card">
@@ -216,7 +215,6 @@ const Priser = () => {
           </div>
         </section>
 
-        {/* Tilläggstjänster */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
@@ -225,7 +223,7 @@ const Priser = () => {
                 Resten av paletten.
               </h2>
               <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-                Allt annat jag levererar – samma fast-pris-approach.
+                Du får pris efter behov, inte efter en mall. Det gör offerten mer rättvis och oftast mer träffsäker.
               </p>
             </Reveal>
 
@@ -244,13 +242,11 @@ const Priser = () => {
             </div>
 
             <p className="mt-6 text-sm text-muted-foreground max-w-3xl">
-              Capacitor är min rekommendation för 90 procent av app-projekt. Vill du paketera
-              webb + app som ett projekt? <Link to="/tjanster/mobilapp" className="text-primary hover:underline">MVP + Capacitor = från 59 800 kr på 3–4 veckor</Link>.
+              Vill du kombinera flera delar? Då paketerar vi dem i ett upplägg så att du får en tydlig leverans, en tydlig prioritering och ett pris du kan ta ställning till innan start.
             </p>
           </div>
         </section>
 
-        {/* Vanliga kombinationer */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
@@ -259,7 +255,7 @@ const Priser = () => {
                 Vanliga kombinationer.
               </h2>
               <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-                Spara tid genom att paketera flera tjänster från start. Samma fasta priser, ett projekt.
+                Här finns inga låsta paketpriser. Det finns bättre: en kombination som passar målet, budgeten och tempot.
               </p>
             </Reveal>
 
@@ -292,13 +288,12 @@ const Priser = () => {
           </div>
         </section>
 
-        {/* Löpande priser */}
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
-              <p className="label-caps">Löpande priser</p>
+              <p className="label-caps">Efter leverans</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.1] tracking-[-0.02em]">
-                Efter leverans.
+                Trygghet även efter lansering.
               </h2>
             </Reveal>
 
@@ -320,48 +315,46 @@ const Priser = () => {
           </div>
         </section>
 
-        {/* Betalning + Garanti */}
         <section className="border-t border-border py-20 md:py-24">
           <div className="container mx-auto px-6 max-w-5xl grid gap-12 md:grid-cols-2 md:gap-16">
             <Reveal>
-              <p className="label-caps">Betalningsvillkor</p>
+              <p className="label-caps">Så fungerar det</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                Hur det funkar.
+                Inga dolda överraskningar.
               </h2>
               <ul className="mt-7 space-y-3.5">
                 <li className="flex items-start gap-3 text-base text-foreground/85">
                   <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
-                  50 procent vid projektstart, 50 procent vid leverans
+                  Vi börjar med en snabb genomgång av mål, behov och viktigaste funktioner
                 </li>
                 <li className="flex items-start gap-3 text-base text-foreground/85">
                   <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
-                  Faktura med 30 dagars betalningsvillkor
+                  Du får en tydlig offert innan projektstart
                 </li>
                 <li className="flex items-start gap-3 text-base text-foreground/85">
                   <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
-                  F-skatt via Aurora Media AB (org.nr 559272-0220)
+                  Leveransen delas upp så att det viktigaste kommer ut först
                 </li>
                 <li className="flex items-start gap-3 text-base text-foreground/85">
                   <Check className="mt-1 h-4 w-4 text-primary shrink-0" />
-                  Alla priser exklusive 25 % moms
+                  Större tillägg godkänns alltid innan de byggs
                 </li>
               </ul>
             </Reveal>
 
             <Reveal delay={0.08} className="rounded-xl border border-primary/30 bg-primary/5 p-8">
-              <p className="label-caps text-primary">Garanti</p>
+              <p className="label-caps text-primary">Trygghet</p>
               <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                Du tar ingen risk.
+                Du ska känna att det var värt det.
               </h2>
               <p className="mt-7 text-base leading-relaxed text-foreground/85 md:text-lg">
-                Om prototypen dag 3 inte motsvarar förväntningarna, betalar du inget och behåller
-                vi var sin lärdom. Inga 6-månaderskontrakt. Inga uppsägningstider för paket.
+                Ett bra projekt handlar inte om att pressa fram flest funktioner. Det handlar om att bygga rätt saker, i rätt ordning, till ett pris som känns rimligt när du ser vad du får tillbaka.
               </p>
             </Reveal>
           </div>
         </section>
 
-        <FAQSection items={prisFaqs} title="Frågor om priser." />
+        <FAQSection items={prisFaqs} title="Frågor om offert och pris." />
 
         <FinalCTASection />
       </main>
