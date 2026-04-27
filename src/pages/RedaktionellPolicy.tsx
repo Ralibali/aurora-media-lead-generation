@@ -12,23 +12,23 @@ const sections = [
   },
   {
     h: "Hur använder jag AI i texterna?",
-    p: "Jag använder Claude och GPT-5 för att utkast-skriva, redigera och faktagranska. Varje publicerad artikel går igenom minst två manuella revisioner där jag stryker AI-fluff, lägger till konkreta exempel från egna projekt och verifierar varje siffra. Ingen artikel publiceras helt AI-genererad.",
+    p: "Jag använder AI-verktyg för att utkast-skriva, strukturera, redigera och faktagranska. Varje publicerad artikel går igenom manuell revision där jag stryker AI-fluff, lägger till konkreta exempel från egna projekt och verifierar viktiga siffror. Ingen artikel publiceras helt AI-genererad utan mänsklig granskning.",
   },
   {
     h: "Faktakontroll",
-    p: "Priser, leveranstider och statistik kommer från egna projekt eller publika källor (SCB, Tillväxtverket, leverantörers prislistor). När jag refererar verktyg som Lovable, Bolt eller Supabase är priserna kontrollerade mot leverantörens egen sida samma månad som artikeln publiceras.",
+    p: "Priser, leveranstider och statistik kommer från egna projekt eller publika källor som myndigheter, branschdata och leverantörers prislistor. När jag refererar verktyg och leverantörer kontrolleras informationen mot aktuella källor i samband med publicering eller uppdatering.",
   },
   {
     h: "Uppdateringar",
-    p: "Tekniklandskapet rör sig snabbt. Varje artikel har ett ”uppdaterad”-datum som speglar senaste verkliga genomgång. Artiklar äldre än 6 månader granskas på nytt eller markeras som arkiverade.",
+    p: "Tekniklandskapet rör sig snabbt. Varje artikel har ett uppdaterad-datum som speglar senaste verkliga genomgång. Artiklar äldre än 6 månader granskas på nytt eller markeras som arkiverade.",
   },
   {
     h: "Sponsring och affiliate",
-    p: "Aurora Media tar inte emot betalning för att skriva positivt om verktyg eller leverantörer. Inga affiliate-länkar. Om jag rekommenderar Lovable är det för att jag använder det dagligen och det levererar – inte för att jag får provision.",
+    p: "Aurora Media tar inte emot betalning för att skriva positivt om verktyg eller leverantörer. Inga affiliate-länkar. Om jag rekommenderar ett verktyg är det för att jag använder det själv eller bedömer att det har ett verkligt värde för målgruppen.",
   },
   {
     h: "Rättelser",
-    p: "Hittar du ett fel? Mejla info@auroramedia.se. Jag rättar inom 48 timmar och noterar ändringen tydligt i artikeln med datum.",
+    p: "Hittar du ett fel? Mejla info@auroramedia.se. Jag rättar inom 48 timmar när felet är bekräftat och uppdaterar artikeln vid behov.",
   },
   {
     h: "Källor och referenser",
@@ -36,7 +36,7 @@ const sections = [
   },
   {
     h: "Integritet och persondata",
-    p: "Inga cookies utöver tekniskt nödvändiga. Ingen tracking-pixel från tredjepart. Kontaktformulär lagrar bara det du själv skickar in och raderas efter avslutat ärende. Personuppgiftsansvarig: Aurora Media AB, org.nr 559272-0220.",
+    p: "Kontaktformulär lagrar bara det du själv skickar in. Webbplatsen kan använda tekniskt nödvändiga cookies och, efter samtycke där det krävs, analys- och annonsteknik som hjälper oss att mäta trafik och marknadsföring. Läs mer i vår integritetspolicy. Personuppgiftsansvarig: Aurora Media AB, org.nr 559272-0220.",
   },
 ];
 
@@ -94,6 +94,7 @@ const RedaktionellPolicy = () => {
               links={[
                 { to: "/metodik", title: "Min metodik – från idé till SaaS", caption: "Process" },
                 { to: "/om", title: "Om Aurora Media", caption: "Bakgrund" },
+                { to: "/integritetspolicy", title: "Integritetspolicy", caption: "Personuppgifter" },
                 { to: "/artiklar", title: "Alla artiklar", caption: "Innehåll" },
               ]}
             />
