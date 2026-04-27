@@ -27,6 +27,7 @@ import BlogPost from "./pages/BlogPost";
 import CityPage from "./pages/CityPage";
 import Metodik from "./pages/Metodik";
 import RedaktionellPolicy from "./pages/RedaktionellPolicy";
+import Integritetspolicy from "./pages/Integritetspolicy";
 import TextGenerator from "./pages/admin/TextGenerator";
 import FaqRapport from "./pages/admin/FaqRapport";
 import NotFound from "./pages/NotFound";
@@ -66,6 +67,7 @@ const App = () => (
             <Route path="/ai-byra-:slug" element={<CityPage />} />
             <Route path="/metodik" element={<Metodik />} />
             <Route path="/redaktionell-policy" element={<RedaktionellPolicy />} />
+            <Route path="/integritetspolicy" element={<Integritetspolicy />} />
             <Route path="/admin/texter" element={<TextGenerator />} />
             <Route path="/admin/faq-rapport" element={<FaqRapport />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
