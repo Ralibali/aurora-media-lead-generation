@@ -49,12 +49,12 @@ export const PORTFOLIO: PortfolioItem[] = [
     tagline: "Dispatching-SaaS för svenska transportbolag.",
     taglineEn: "Dispatching SaaS for Swedish transport companies.",
     description:
-      "Komplett dispatch- och fakturasystem för åkerier. Bygger schemaläggning, körorder, Fortnox-export och Stripe-fakturering på 3 veckor.",
+      "Komplett dispatch- och fakturasystem för åkerier. Bygger schemaläggning, körorder, Fortnox-export och Stripe-fakturering på under 2 veckor.",
     descriptionEn:
-      "Full dispatch and invoicing platform for trucking firms. Built scheduling, work orders, Fortnox export and Stripe invoicing in 3 weeks.",
+      "Full dispatch and invoicing platform for trucking firms. Built scheduling, work orders, Fortnox export and Stripe invoicing in under 2 weeks.",
     stack: ["Lovable", "Supabase", "Stripe", "Fortnox API", "React", "Tailwind"],
     url: "https://auroratransport.se",
-    buildTime: "3 veckor",
+    buildTime: "Under 2 veckor",
     featured: true,
     order: 1,
     shortLabel: "FEATURED · TRANSPORT · B2B",
@@ -63,7 +63,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     solution:
       "Byggde en SaaS som hanterar hela kedjan: order in → schemaläggning → körorder till chaufför → automatisk Fortnox-export → Stripe-faktura. Allt i ett gränssnitt, optimerat för mobil ute på vägen.",
     results: [
-      { label: "Lansering", labelEn: "Launched", value: "3 veckor" },
+      { label: "Lansering", labelEn: "Launched", value: "Under 2 veckor" },
       { label: "Betalande kund", labelEn: "Paying customer", value: "Dag 1" },
     ],
   },
