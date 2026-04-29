@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
+  ArrowRight,
+  ArrowUpRight,
   Globe,
   ShoppingBag,
   Search,
@@ -9,32 +12,43 @@ import {
   PenTool,
   Palette,
   Camera,
-  ArrowUpRight,
   Code2,
+  Smartphone,
+  type LucideIcon,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import StickyMobileCTA from "@/components/StickyMobileCTA";
-import { Button } from "@/components/ui/button";
+import AuroraNavbar from "@/components/landing/AuroraNavbar";
+import AuroraFooter from "@/components/landing/AuroraFooter";
+import AuroraFinalCTA from "@/components/landing/AuroraFinalCTA";
+import AuroraStickyMobileCTA from "@/components/landing/AuroraStickyMobileCTA";
 import { useContactModal } from "@/components/ContactModal";
-import Reveal from "@/components/Reveal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
-const primary = {
+type Service = {
+  icon: LucideIcon;
+  name: string;
+  price: string;
+  desc: string;
+  to: string;
+  featured?: boolean;
+};
+
+const primary: Service = {
   icon: Code2,
   name: "SaaS & MVP",
   price: "Från 14 900 kr",
-  desc: "Min huvudtjänst: bygger SaaS-produkter och MVP:er med AI-kodning. Fast pris, leverans 1–4 veckor.",
+  desc: "Min huvudtjänst: SaaS-produkter och MVP:er byggda med AI-driven utveckling. Fast pris, leverans 1–4 veckor, kod du äger från dag ett.",
   to: "/priser",
+  featured: true,
 };
 
-const services = [
+const services: Service[] = [
   { icon: Globe, name: "Hemsida", price: "Från 4 900 kr", desc: "Snabb, modern, fullt kodad. Inga mallar.", to: "/tjanster/hemsidor" },
   { icon: ShoppingBag, name: "E-handel", price: "Från 19 900 kr", desc: "Shopify eller egen Stripe-lösning. Lansering på 2 veckor.", to: "/tjanster/ehandel" },
+  { icon: Smartphone, name: "Mobilapp", price: "Från 6 900 kr", desc: "PWA eller Capacitor – iOS + Android från samma kodbas.", to: "/tjanster/mobilapp" },
   { icon: Search, name: "SEO", price: "Från 2 490 kr", desc: "Teknisk SEO, on-page, lokal SEO för Linköping.", to: "/tjanster/seo" },
   { icon: MousePointerClick, name: "Google Ads", price: "3 900 kr setup", desc: "Sökannonser och Performance Max. Ingen bindning.", to: "/tjanster/google-ads" },
   { icon: Megaphone, name: "Meta Ads", price: "3 900 kr setup", desc: "Facebook + Instagram. Pixel + CAPI ingår.", to: "/tjanster/meta-ads" },
-  { icon: PenTool, name: "Content", price: "1 490 kr/artikel", desc: "SEO-optimerade artiklar. AI-skrivet, redigerat manuellt.", to: "/tjanster/content" },
+  { icon: PenTool, name: "Content", price: "Från 995 kr/artikel", desc: "SEO-optimerade artiklar. AI-skrivet, mänskligt redigerat.", to: "/tjanster/content" },
   { icon: Palette, name: "Grafisk profil", price: "Från 5 900 kr", desc: "Logo, färger, typografi, mallar.", to: "/tjanster/grafisk-profil" },
   { icon: Camera, name: "Fotografering", price: "4 900 kr/halvdag", desc: "Produkt-, miljö- och porträttfoto i Linköping.", to: "/tjanster/fotografering" },
 ];
@@ -56,118 +70,192 @@ const Tjanster = () => {
     return () => removeJsonLd("breadcrumb-jsonld");
   }, []);
 
+  const totalCount = useMemo(() => services.length + 1, []);
+
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="pt-16">
-        <section className="pt-16 pb-12 md:pt-24 md:pb-16">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <Reveal>
-              <p className="label-caps">Tjänster</p>
-              <h1 className="mt-4 font-serif text-[clamp(2.75rem,7vw,6rem)] leading-[1.05] tracking-[-0.02em]">
+    <div className="aurora-theme min-h-screen">
+      <AuroraNavbar />
+      <main id="main" className="overflow-hidden">
+        {/* Hero */}
+        <section className="aurora-bg relative min-h-[70vh] pt-28 md:pt-36">
+          <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 pb-16 md:px-8 lg:grid-cols-12 lg:items-end lg:pb-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+              className="lg:col-span-7"
+            >
+              <p className="au-eyebrow">TJÄNSTER · {totalCount} OMRÅDEN</p>
+              <h1 className="mt-5 font-display text-[clamp(3rem,8vw,6.5rem)] leading-[0.92] tracking-[-0.045em]">
                 Allt jag levererar.
               </h1>
-              <p className="mt-7 max-w-2xl text-lg text-muted-foreground md:text-xl">
-                Min huvudtjänst är att bygga SaaS med AI. Allt annat är tilläggstjänster jag tar
-                med samma fast-pris-approach.
+              <p className="mt-6 max-w-2xl text-base leading-relaxed md:text-lg" style={{ color: "hsl(var(--au-cream) / 0.72)" }}>
+                Min huvudtjänst är att bygga SaaS med AI. Allt annat är tilläggstjänster jag tar med samma fast-pris-approach – samma snabbhet, samma transparens.
               </p>
-            </Reveal>
-          </div>
-        </section>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <button onClick={() => open()} className="au-btn-coral">
+                  Starta ett projekt
+                  <ArrowRight size={16} strokeWidth={2.5} />
+                </button>
+                <a href="#tjanster-grid" className="au-btn-ghost">
+                  Se alla tjänster
+                  <ArrowUpRight size={16} strokeWidth={2.2} />
+                </a>
+              </div>
+            </motion.div>
 
-        {/* Primary */}
-        <section className="pb-16 md:pb-24">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <Reveal>
-              <p className="label-caps">Primär tjänst</p>
-            </Reveal>
-            <Reveal duration={0.7} className="mt-5">
-              <Link
-                to={primary.to}
-                className="group flex flex-col gap-6 rounded-xl border-2 border-primary bg-card p-8 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-xl md:flex-row md:items-center md:gap-10 md:p-10"
-              >
-                <primary.icon className="h-12 w-12 text-primary" strokeWidth={1.25} />
-                <div className="flex-1">
-                  <h2 className="font-serif text-3xl md:text-4xl">{primary.name}</h2>
-                  <p className="mt-2 font-mono text-sm text-primary">{primary.price}</p>
-                  <p className="mt-4 text-base leading-relaxed text-foreground/80 md:text-lg">{primary.desc}</p>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.32, 0.72, 0, 1] }}
+              className="grid gap-4 sm:grid-cols-3 lg:col-span-5"
+            >
+              {[
+                { value: totalCount, label: "tjänster" },
+                { value: "1–4v", label: "leverans" },
+                { value: "0%", label: "bindning" },
+              ].map((stat) => (
+                <div key={stat.label} className="au-card-static p-5">
+                  <p className="font-display text-4xl leading-none" style={{ color: "hsl(152 80% 60%)" }}>
+                    {stat.value}
+                  </p>
+                  <p className="mt-2 font-mono-au text-[10px] uppercase tracking-[0.18em]" style={{ color: "hsl(var(--au-cream) / 0.55)" }}>
+                    {stat.label}
+                  </p>
                 </div>
-                <span className="inline-flex items-center gap-1 self-start font-medium text-primary md:self-center">
-                  Se priser
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </Reveal>
+              ))}
+            </motion.div>
           </div>
         </section>
 
-        {/* Secondary services */}
-        <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <Reveal>
-              <p className="label-caps">Tilläggstjänster</p>
-              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                Resten av paletten.
-              </h2>
-              <p className="mt-5 max-w-2xl text-lg text-muted-foreground">
-                Samma fast-pris-approach, samma snabbhet, samma transparens.
-              </p>
-            </Reveal>
+        {/* Services grid */}
+        <section
+          id="tjanster-grid"
+          className="aurora-section-bg relative border-t py-20 md:py-28"
+          style={{ borderColor: "hsl(var(--au-cream) / 0.08)" }}
+        >
+          <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
+            <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-5">
+                <p className="au-eyebrow">UTBUD</p>
+                <h2 className="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1] tracking-[-0.035em]">
+                  Primär tjänst — och hela paletten.
+                </h2>
+              </div>
+              <div className="lg:col-span-7 lg:pt-2">
+                <p className="text-base leading-relaxed md:text-lg" style={{ color: "hsl(var(--au-cream) / 0.7)" }}>
+                  SaaS-utveckling är kärnan. Resten finns för att du ska kunna lansera, marknadsföra och växa utan att behöva fem leverantörer.
+                </p>
+              </div>
+            </div>
 
-            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {services.map((s, i) => {
-                const Icon = s.icon;
-                return (
-                  <Reveal key={s.name} delay={i * 0.05} y={16} duration={0.5}>
-                    <Link
-                      to={s.to}
-                      className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md"
-                    >
-                      <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
-                      <h3 className="mt-5 font-serif text-2xl">{s.name}</h3>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">{s.price}</p>
-                      <p className="mt-4 flex-1 text-sm leading-relaxed text-foreground/75">{s.desc}</p>
-                      <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                        Läs mer
-                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                      </span>
-                    </Link>
-                  </Reveal>
-                );
-              })}
+            {/* Flagship + grid */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
+              className="mt-12 grid gap-4 lg:grid-cols-2"
+            >
+              <ServiceCard service={primary} large />
+              <div className="grid gap-4 sm:grid-cols-2">
+                {services.slice(0, 4).map((s) => (
+                  <ServiceCard key={s.name} service={s} />
+                ))}
+              </div>
+            </motion.div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {services.slice(4).map((s, i) => (
+                <ServiceCard key={s.name} service={s} index={i} />
+              ))}
             </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="border-t border-border py-28 md:py-36">
-          <div className="container mx-auto px-6 max-w-3xl text-center">
-            <Reveal as="div">
-              <h2 className="font-serif italic text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-                Vet du inte var du ska börja?
-              </h2>
-            </Reveal>
-            <p className="mt-6 text-lg text-muted-foreground">
-              Berätta vad du vill uppnå. Jag säger vilken tjänst som passar – eller om jag inte
-              är rätt person.
-            </p>
-            <div className="mt-10 flex flex-col items-center gap-4">
-              <Button size="lg" onClick={() => open()} className="px-10">
-                Starta projekt
-              </Button>
-              <a
-                href="mailto:info@auroramedia.se"
-                className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-              >
-                Eller direkt: info@auroramedia.se
-              </a>
-            </div>
-          </div>
-        </section>
+        <AuroraFinalCTA />
       </main>
-      <Footer />
-      <StickyMobileCTA />
+      <AuroraFooter />
+      <AuroraStickyMobileCTA />
     </div>
+  );
+};
+
+const ServiceCard = ({
+  service,
+  large = false,
+  index = 0,
+}: {
+  service: Service;
+  large?: boolean;
+  index?: number;
+}) => {
+  const Icon = service.icon;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.45, delay: Math.min(index * 0.04, 0.18), ease: [0.32, 0.72, 0, 1] }}
+    >
+      <Link
+        to={service.to}
+        aria-label={`Läs mer om ${service.name}`}
+        className={`group au-card relative flex h-full flex-col overflow-hidden ${large ? "min-h-[430px] p-8 md:p-10" : "min-h-[260px] p-6"}`}
+        style={
+          service.featured
+            ? {
+                background: "linear-gradient(180deg, hsl(152 50% 10% / 0.55), hsl(156 14% 11%))",
+                boxShadow: "0 0 0 1px hsl(152 80% 38% / 0.25), 0 30px 80px -30px hsl(152 80% 30% / 0.55)",
+                borderColor: "hsl(152 80% 38% / 0.35)",
+              }
+            : undefined
+        }
+      >
+        {service.featured && <span className="au-eyebrow mb-4 inline-block">PRIMÄR TJÄNST</span>}
+
+        <div className="flex items-start justify-between gap-4">
+          <span className="au-icon">
+            <Icon size={20} strokeWidth={2} />
+          </span>
+          <span
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all duration-300 group-hover:rotate-[20deg]"
+            style={{
+              background: "hsl(var(--au-cream) / 0.06)",
+              border: "1px solid hsl(var(--au-cream) / 0.1)",
+              color: "hsl(var(--au-cream) / 0.85)",
+            }}
+          >
+            <ArrowUpRight size={15} strokeWidth={2.2} />
+          </span>
+        </div>
+
+        <h3 className={`mt-5 font-display tracking-[-0.025em] ${large ? "text-3xl md:text-5xl" : "text-2xl"}`}>
+          {service.name}
+        </h3>
+        <p
+          className={`${large ? "mt-3 text-base md:text-lg" : "mt-2 text-sm"} font-mono-au`}
+          style={{ color: "hsl(152 80% 65%)" }}
+        >
+          {service.price}
+        </p>
+
+        <p
+          className={`${large ? "mt-4 text-base md:text-lg" : "mt-3 text-sm"} leading-relaxed`}
+          style={{ color: "hsl(var(--au-cream) / 0.65)" }}
+        >
+          {service.desc}
+        </p>
+
+        <div
+          className="mt-auto flex items-center gap-2 pt-6 font-mono-au text-[11px] uppercase tracking-[0.16em]"
+          style={{ color: "hsl(var(--au-cream) / 0.55)" }}
+        >
+          Läs mer
+          <ArrowUpRight size={12} strokeWidth={2.2} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </div>
+      </Link>
+    </motion.div>
   );
 };
 
