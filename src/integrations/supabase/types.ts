@@ -89,6 +89,57 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          internal_note: string | null
+          ip: string | null
+          lead_label: string | null
+          message: string
+          name: string
+          paket: string
+          platform: string | null
+          status: string
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          internal_note?: string | null
+          ip?: string | null
+          lead_label?: string | null
+          message: string
+          name: string
+          paket: string
+          platform?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          internal_note?: string | null
+          ip?: string | null
+          lead_label?: string | null
+          message?: string
+          name?: string
+          paket?: string
+          platform?: string | null
+          status?: string
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       text_library: {
         Row: {
           blocked_phrases_found: string[]
