@@ -207,6 +207,7 @@ const ContactDialog = ({
       setMessageValue(buildPrefill(paket));
       setMessageTouched(false);
       setPlatformValue("");
+      setFieldErrors({});
     }
   }, [isOpen, defaultPaket]);
 
