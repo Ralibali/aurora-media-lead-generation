@@ -205,20 +205,20 @@ export const PORTFOLIO: PortfolioItem[] = [
     tagline: "Bokningssajt för massagemottagning.",
     taglineEn: "Booking site for massage clinic.",
     description:
-      "Snabbsajt med direkttidsbokning. Levererad på en vecka.",
+      "Snabbsajt med direkttidsbokning. Levererad på några dagar.",
     descriptionEn:
-      "Fast site with direct booking. Delivered in one week.",
+      "Fast site with direct booking. Delivered in a few days.",
     stack: ["React", "Vite", "Tailwind"],
     url: "https://viriditasmassage.se",
-    buildTime: "1 vecka",
+    buildTime: "Några dagar",
     featured: false,
     order: 7,
     shortLabel: "BOKNING",
     problem:
       "Massör behövde snabbt en professionell sajt med direkttidsbokning – inget krångel, ingen WordPress-administration.",
     solution:
-      "Byggde lättviktssajt på React + Vite med direktintegration mot bokningssystem. Live på en vecka, betalande kund.",
-    results: [{ label: "Leveranstid", labelEn: "Delivery", value: "1 vecka" }],
+      "Byggde lättviktssajt på React + Vite med direktintegration mot bokningssystem. Live på några dagar, betalande kund.",
+    results: [{ label: "Leveranstid", labelEn: "Delivery", value: "Några dagar" }],
   },
   {
     slug: "yachting-sweden",
