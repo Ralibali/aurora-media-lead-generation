@@ -30,16 +30,63 @@ const PLATFORM_OPTIONS = [
   { value: "Osäker", label: "Osäker / vill ha råd" },
 ] as const;
 
+// Blockerade engångs-/skräpdomäner (vanliga "wegwerf"-tjänster)
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  "mailinator.com", "guerrillamail.com", "guerrillamail.info", "10minutemail.com",
+  "tempmail.com", "temp-mail.org", "throwawaymail.com", "trashmail.com",
+  "yopmail.com", "getnada.com", "fakeinbox.com", "sharklasers.com",
+  "maildrop.cc", "dispostable.com", "mintemail.com", "spam4.me",
+  "tempr.email", "mailnesia.com", "emailondeck.com", "moakt.com",
+]);
+
+// Tillåt bokstäver (inkl. åäö och internationella), mellanslag, bindestreck och apostrof
+const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
+
 const schema = z.object({
-  name: z.string().trim().min(2, "Skriv ditt namn").max(80),
-  email: z.string().trim().email("Ogiltig e-post").max(160),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Skriv ditt fullständiga namn (minst 2 tecken)")
+    .max(80, "Namnet är för långt")
+    .regex(NAME_REGEX, "Namnet får bara innehålla bokstäver, mellanslag och bindestreck")
+    .refine((v) => v.includes(" "), "Ange både för- och efternamn"),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(5, "Ogiltig e-post")
+    .max(160, "E-posten är för lång")
+    .email("Ogiltig e-postadress")
+    .refine((v) => {
+      const domain = v.split("@")[1];
+      return domain && !DISPOSABLE_EMAIL_DOMAINS.has(domain);
+    }, "Använd en riktig e-postadress, inte en engångsadress")
+    .refine((v) => !/\+.*\+/.test(v), "Ogiltig e-postadress"),
   company: z.string().trim().max(120).optional().or(z.literal("")),
-  paket: z.string().min(1, "Välj ett alternativ"),
+  paket: z.string().min(1, "Välj vilket paket du är intresserad av"),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
   internalNote: z.string().trim().max(500).optional().or(z.literal("")),
-  message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
+  message: z
+    .string()
+    .trim()
+    .min(20, "Beskriv projektet med minst 20 tecken")
+    .max(2000, "Meddelandet är för långt")
+    .refine((v) => v.split(/\s+/).filter(Boolean).length >= 5, "Skriv minst några meningar om projektet")
+    .refine((v) => /\s/.test(v), "Meddelandet ser inte ut som riktig text")
+    .refine((v) => {
+      // Räkna URL:er — fler än 2 = troligen spam
+      const urls = v.match(/https?:\/\/|www\./gi) ?? [];
+      return urls.length <= 2;
+    }, "Meddelandet innehåller för många länkar")
+    .refine((v) => {
+      // Blockera meddelanden som mest består av samma tecken upprepat
+      const longestRepeat = v.match(/(.)\1{9,}/);
+      return !longestRepeat;
+    }, "Meddelandet ser inte ut att vara riktigt skrivet"),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
+  // Honeypot — ska alltid vara tomt; bots fyller i det
+  website: z.string().max(0, "").optional().or(z.literal("")),
 });
 
 const PAKET_OPTIONS = [
