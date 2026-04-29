@@ -135,7 +135,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Vaccination schedule, flock management, egg production. Capacitor wrap for Play Store, RevenueCat for subscriptions.",
     stack: ["Lovable", "Supabase", "Capacitor", "RevenueCat", "Google Play"],
     url: "https://honsgarden.se",
-    buildTime: "2 veckor",
+    buildTime: "1 vecka",
     featured: false,
     order: 4,
     shortLabel: "KONSUMENT · MOBIL",
