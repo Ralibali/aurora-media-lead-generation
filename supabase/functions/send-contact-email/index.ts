@@ -126,13 +126,41 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const admin = SUPABASE_URL && SERVICE_KEY ? createClient(SUPABASE_URL, SERVICE_KEY) : null;
+
+    // Deduplicering — samma namn+email+meddelande inom 10 min = duplikat
+    if (admin) {
+      try {
+        const tenMinAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
+        const { data: dupes, error: dupErr } = await admin
+          .from("leads")
+          .select("id")
+          .eq("email", email)
+          .eq("name", name)
+          .eq("message", message)
+          .gte("created_at", tenMinAgo)
+          .limit(1);
+        if (dupErr) {
+          console.error("[send-contact-email] dedupe check failed", dupErr);
+        } else if (dupes && dupes.length > 0) {
+          console.log("[send-contact-email] duplicate suppressed", { email, leadId: dupes[0].id });
+          // Svara 200 så användaren inte tror att något gick fel
+          return new Response(JSON.stringify({ ok: true, leadId: dupes[0].id, deduplicated: true }), {
+            status: 200,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+      } catch (e) {
+        console.error("[send-contact-email] dedupe threw", e);
+      }
+    }
+
     // Spara leadet i databasen (best effort — bryt inte mailet om det failar)
     let leadId: string | null = null;
-    try {
-      const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-      const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-      if (SUPABASE_URL && SERVICE_KEY) {
-        const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+    if (admin) {
+      try {
         const { data, error } = await admin
           .from("leads")
           .insert({
@@ -154,9 +182,9 @@ Deno.serve(async (req: Request) => {
         } else {
           leadId = data.id;
         }
+      } catch (e) {
+        console.error("[send-contact-email] lead save threw", e);
       }
-    } catch (e) {
-      console.error("[send-contact-email] lead save threw", e);
     }
 
     // Använd den fullständiga lead-etiketten i ämnesraden om den finns,
