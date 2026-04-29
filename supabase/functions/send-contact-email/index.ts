@@ -1,6 +1,8 @@
 // Edge Function: send-contact-email
-// Receives contact form submissions and emails info@auroramedia.se via Resend.
-// Uses RESEND_API_KEY secret if available; otherwise logs and returns ok so the UI flow works.
+// Receives contact form submissions, saves them to the `leads` table,
+// and emails info@auroramedia.se (+ optional internal BCC) via Resend.
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
