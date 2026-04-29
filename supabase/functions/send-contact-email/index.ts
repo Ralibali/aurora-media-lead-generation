@@ -126,6 +126,39 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    // Spara leadet i databasen (best effort — bryt inte mailet om det failar)
+    let leadId: string | null = null;
+    try {
+      const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+      const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (SUPABASE_URL && SERVICE_KEY) {
+        const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+        const { data, error } = await admin
+          .from("leads")
+          .insert({
+            name,
+            email,
+            company: company || null,
+            paket,
+            platform: platform || null,
+            lead_label: leadLabel || null,
+            internal_note: internalNote || null,
+            message,
+            ip,
+            user_agent: userAgent || null,
+          })
+          .select("id")
+          .single();
+        if (error) {
+          console.error("[send-contact-email] failed to save lead", error);
+        } else {
+          leadId = data.id;
+        }
+      }
+    } catch (e) {
+      console.error("[send-contact-email] lead save threw", e);
+    }
+
     // Använd den fullständiga lead-etiketten i ämnesraden om den finns,
     // annars fall tillbaka på paket-värdet.
     const subjectLabel = leadLabel || `Intresserad av: ${paket}`;
@@ -143,21 +176,29 @@ Deno.serve(async (req: Request) => {
       <p><strong>E-post:</strong> ${escape(email)}</p>
       <p><strong>Företag:</strong> ${escape(company || "—")}</p>
       <p><strong>Paket (värde):</strong> ${escape(paket)}</p>
+      ${platform ? `<p><strong>Plattform:</strong> ${escape(platform)}</p>` : ""}
       <hr />
       <p style="white-space: pre-wrap;">${escape(message)}</p>
+      ${leadId ? `<p style="margin-top:16px;font-size:12px;color:#666;">Lead-ID: ${escape(leadId)} · sparad i adminpanelen (/admin/leads)</p>` : ""}
     `;
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
     if (!RESEND_API_KEY) {
       console.log("[send-contact-email] RESEND_API_KEY not set – logging only", {
-        name, email, company, paket, messageLength: message.length,
+        name, email, company, paket, messageLength: message.length, leadId,
       });
-      return new Response(JSON.stringify({ ok: true, queued: false }), {
+      return new Response(JSON.stringify({ ok: true, queued: false, leadId }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    // Intern BCC-mottagare (kopia av varje lead). Faller tillbaka till info@.
+    const INTERNAL_LEADS_EMAIL = Deno.env.get("INTERNAL_LEADS_EMAIL")?.trim();
+    const bcc = INTERNAL_LEADS_EMAIL && INTERNAL_LEADS_EMAIL !== "info@auroramedia.se"
+      ? [INTERNAL_LEADS_EMAIL]
+      : undefined;
 
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -168,6 +209,7 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         from: "Aurora Media <noreply@auroramedia.se>",
         to: ["info@auroramedia.se"],
+        ...(bcc ? { bcc } : {}),
         reply_to: email,
         subject,
         html,
@@ -177,13 +219,13 @@ Deno.serve(async (req: Request) => {
     if (!res.ok) {
       const text = await res.text();
       console.error("[send-contact-email] Resend error", res.status, text);
-      return new Response(JSON.stringify({ error: "Email provider failed" }), {
+      return new Response(JSON.stringify({ error: "Email provider failed", leadId }), {
         status: 502,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
+    return new Response(JSON.stringify({ ok: true, leadId }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -193,5 +235,7 @@ Deno.serve(async (req: Request) => {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+  }
+});
   }
 });
