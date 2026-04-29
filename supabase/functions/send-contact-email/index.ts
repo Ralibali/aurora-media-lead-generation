@@ -107,9 +107,11 @@ Deno.serve(async (req: Request) => {
     const email = String(body.email ?? "").trim().slice(0, 160);
     const company = String(body.company ?? "").trim().slice(0, 120);
     const paket = String(body.paket ?? "").trim().slice(0, 60);
+    const platform = String(body.platform ?? "").trim().slice(0, 40);
     const leadLabel = String(body.leadLabel ?? "").trim().slice(0, 160);
     const internalNote = String(body.internalNote ?? "").trim().slice(0, 500);
     const message = String(body.message ?? "").trim().slice(0, 2000);
+    const userAgent = req.headers.get("user-agent")?.slice(0, 300) ?? "";
 
     if (!name || !email || !paket || message.length < 20) {
       return new Response(JSON.stringify({ error: "Invalid input" }), {
