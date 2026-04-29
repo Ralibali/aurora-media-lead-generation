@@ -110,7 +110,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Training journal, competition results and statistics for dog agility. Scrapes results from SBK with Firecrawl and auto-builds handler profiles.",
     stack: ["Lovable", "Supabase", "Firecrawl", "React"],
     url: "https://agilitymanager.se",
-    buildTime: "3 veckor",
+    buildTime: "Under 2 veckor",
     featured: false,
     order: 3,
     shortLabel: "KONSUMENT · SAAS",
