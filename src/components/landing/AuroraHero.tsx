@@ -3,8 +3,7 @@ import { ArrowRight, Tag, Rocket, Code2, Target, Check } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 
 const TRUST = [
-  { icon: Tag, text: "Fast pris från 14 900 kr" },
-  { icon: Rocket, text: "Leverans på 2–4 veckor" },
+  { icon: Rocket, text: "Snabb leverans — ofta 1–2 veckor" },
   { icon: Code2, text: "Du äger alltid koden" },
   { icon: Target, text: "Byggt för din verksamhet, inte tvärtom" },
 ];
