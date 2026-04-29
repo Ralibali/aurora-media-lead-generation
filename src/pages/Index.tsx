@@ -24,7 +24,7 @@ const Index = () => {
     setSEOMeta({
       title: "Idén finns. Produkten saknas. | Aurora Media – AI-driven mjukvara",
       description:
-        "Vi bygger SaaS, appar och skräddarsydda system med fast pris från 14 900 kr. Leverans på 2–4 veckor. Du äger alltid koden. Boka kostnadsfri rådgivning.",
+        "Vi bygger SaaS, appar och skräddarsydda system. Snabb leverans — ofta 1–2 veckor. Du äger alltid koden. Boka kostnadsfri rådgivning.",
       canonical: "/",
       ogImage: "/og-image-sv.jpg",
       ogType: "website",

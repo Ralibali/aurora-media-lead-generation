@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Tag, Rocket, Code2, Target, Check } from "lucide-react";
+import { ArrowRight, Rocket, Code2, Target, Check } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 
 const TRUST = [
-  { icon: Tag, text: "Fast pris från 14 900 kr" },
-  { icon: Rocket, text: "Leverans på 2–4 veckor" },
+  { icon: Rocket, text: "Snabb leverans — ofta 1–2 veckor" },
   { icon: Code2, text: "Du äger alltid koden" },
   { icon: Target, text: "Byggt för din verksamhet, inte tvärtom" },
 ];
@@ -145,11 +144,11 @@ const PhoneMockup = () => (
             }}
           >
             <p className="font-mono-au text-[9px] uppercase tracking-[0.16em] text-[hsl(var(--au-muted))]">
-              Budget
+              Sprint
             </p>
-            <p className="mt-1 text-[10px] text-[hsl(var(--au-cream)/0.6)]">från</p>
+            <p className="mt-1 text-[10px] text-[hsl(var(--au-cream)/0.6)]">vecka</p>
             <p className="font-display text-[15px]" style={{ color: "hsl(152 80% 60%)" }}>
-              14 900 kr
+              2 av 2
             </p>
           </div>
           <div
@@ -166,7 +165,7 @@ const PhoneMockup = () => (
               Pågår
             </p>
             <p className="text-[10px] text-[hsl(var(--au-cream)/0.55)]">
-              Leverans om 12 dagar
+              Leverans om 5 dagar
             </p>
           </div>
         </div>
@@ -267,8 +266,8 @@ const AuroraHero = () => {
 
           <p className="mt-7 max-w-xl text-base leading-relaxed text-[hsl(var(--au-cream)/0.7)] md:text-lg">
             Vi bygger skräddarsydda system, appar och plattformar som gör din
-            verksamhet snabbare, smartare och mer lönsam — med fast pris, snabb
-            leverans och kod du äger från dag ett.
+            verksamhet snabbare, smartare och mer lönsam — med snabb leverans
+            och kod du äger från dag ett.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">

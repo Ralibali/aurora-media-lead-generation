@@ -49,12 +49,12 @@ export const PORTFOLIO: PortfolioItem[] = [
     tagline: "Dispatching-SaaS för svenska transportbolag.",
     taglineEn: "Dispatching SaaS for Swedish transport companies.",
     description:
-      "Komplett dispatch- och fakturasystem för åkerier. Bygger schemaläggning, körorder, Fortnox-export och Stripe-fakturering på 3 veckor.",
+      "Komplett dispatch- och fakturasystem för åkerier. Bygger schemaläggning, körorder, Fortnox-export och Stripe-fakturering på under 2 veckor.",
     descriptionEn:
-      "Full dispatch and invoicing platform for trucking firms. Built scheduling, work orders, Fortnox export and Stripe invoicing in 3 weeks.",
+      "Full dispatch and invoicing platform for trucking firms. Built scheduling, work orders, Fortnox export and Stripe invoicing in under 2 weeks.",
     stack: ["Lovable", "Supabase", "Stripe", "Fortnox API", "React", "Tailwind"],
     url: "https://auroratransport.se",
-    buildTime: "3 veckor",
+    buildTime: "Under 2 veckor",
     featured: true,
     order: 1,
     shortLabel: "FEATURED · TRANSPORT · B2B",
@@ -63,7 +63,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     solution:
       "Byggde en SaaS som hanterar hela kedjan: order in → schemaläggning → körorder till chaufför → automatisk Fortnox-export → Stripe-faktura. Allt i ett gränssnitt, optimerat för mobil ute på vägen.",
     results: [
-      { label: "Lansering", labelEn: "Launched", value: "3 veckor" },
+      { label: "Lansering", labelEn: "Launched", value: "Under 2 veckor" },
       { label: "Betalande kund", labelEn: "Paying customer", value: "Dag 1" },
     ],
   },
@@ -82,7 +82,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Two-sided marketplace. Companies post projects, agencies submit comparable quotes, Stripe Connect handles payouts.",
     stack: ["Lovable", "Supabase", "Stripe Connect", "React"],
     url: "https://updro.se",
-    buildTime: "4 veckor",
+    buildTime: "2 veckor",
     featured: false,
     order: 2,
     shortLabel: "MARKNADSPLATS",
@@ -110,7 +110,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Training journal, competition results and statistics for dog agility. Scrapes results from SBK with Firecrawl and auto-builds handler profiles.",
     stack: ["Lovable", "Supabase", "Firecrawl", "React"],
     url: "https://agilitymanager.se",
-    buildTime: "3 veckor",
+    buildTime: "Under 2 veckor",
     featured: false,
     order: 3,
     shortLabel: "KONSUMENT · SAAS",
@@ -135,7 +135,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Vaccination schedule, flock management, egg production. Capacitor wrap for Play Store, RevenueCat for subscriptions.",
     stack: ["Lovable", "Supabase", "Capacitor", "RevenueCat", "Google Play"],
     url: "https://honsgarden.se",
-    buildTime: "2 veckor",
+    buildTime: "1 vecka",
     featured: false,
     order: 4,
     shortLabel: "KONSUMENT · MOBIL",
@@ -155,20 +155,20 @@ export const PORTFOLIO: PortfolioItem[] = [
     tagline: "Svensk odlings-SaaS med AI-coach.",
     taglineEn: "Swedish gardening SaaS with AI coach.",
     description:
-      "Odlingsdagbok med AI-coach byggd på Claude. Råd anpassade per zon, gröda och årstid. 99 kr/år.",
+      "Odlingsdagbok med AI-coach byggd på Claude. Råd anpassade per zon, gröda och årstid.",
     descriptionEn:
-      "Gardening journal with Claude-powered AI coach. Advice tailored per zone, crop and season. 99 SEK/year.",
+      "Gardening journal with Claude-powered AI coach. Advice tailored per zone, crop and season.",
     stack: ["Lovable", "Supabase", "Claude API", "Stripe"],
     url: "https://odlingsdagboken.com",
-    buildTime: "3 veckor",
+    buildTime: "Under 2 veckor",
     featured: false,
     order: 5,
     shortLabel: "KONSUMENT · AI",
     problem:
       "Svenska hobbyodlare har inget verktyg som kombinerar dagbok med personlig rådgivning baserad på just deras zon och grödor.",
     solution:
-      "Kombinerade odlingsdagbok med Claude-baserad AI-coach. Användaren matar in zon + gröda, får specifika råd. Premium 99 kr/år.",
-    results: [{ label: "Pris", labelEn: "Price", value: "99 kr/år" }],
+      "Kombinerade odlingsdagbok med Claude-baserad AI-coach. Användaren matar in zon + gröda, får specifika råd som anpassas över säsongen.",
+    results: [{ label: "Status", labelEn: "Status", value: "Live, betalande" }],
   },
   {
     slug: "goglamping-sweden",
@@ -185,7 +185,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Booking site with SEO focus and Sirvoy integration. Opens May 2026.",
     stack: ["React", "Vite", "Sirvoy API", "Tailwind"],
     url: "https://goglampingsweden.se",
-    buildTime: "2 veckor",
+    buildTime: "1 vecka",
     featured: false,
     order: 6,
     shortLabel: "BOKNING",
@@ -205,20 +205,20 @@ export const PORTFOLIO: PortfolioItem[] = [
     tagline: "Bokningssajt för massagemottagning.",
     taglineEn: "Booking site for massage clinic.",
     description:
-      "Snabbsajt med direkttidsbokning. Levererad på en vecka.",
+      "Snabbsajt med direkttidsbokning. Levererad på några dagar.",
     descriptionEn:
-      "Fast site with direct booking. Delivered in one week.",
+      "Fast site with direct booking. Delivered in a few days.",
     stack: ["React", "Vite", "Tailwind"],
     url: "https://viriditasmassage.se",
-    buildTime: "1 vecka",
+    buildTime: "Några dagar",
     featured: false,
     order: 7,
     shortLabel: "BOKNING",
     problem:
       "Massör behövde snabbt en professionell sajt med direkttidsbokning – inget krångel, ingen WordPress-administration.",
     solution:
-      "Byggde lättviktssajt på React + Vite med direktintegration mot bokningssystem. Live på en vecka, betalande kund.",
-    results: [{ label: "Leveranstid", labelEn: "Delivery", value: "1 vecka" }],
+      "Byggde lättviktssajt på React + Vite med direktintegration mot bokningssystem. Live på några dagar, betalande kund.",
+    results: [{ label: "Leveranstid", labelEn: "Delivery", value: "Några dagar" }],
   },
   {
     slug: "yachting-sweden",
