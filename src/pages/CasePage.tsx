@@ -235,20 +235,35 @@ const CasePage = () => {
                 {project.results && project.results.length > 0 && (
                   <div>
                     <p className="label-caps">Resultat</p>
-                    <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-1 lg:grid-cols-3">
-                      {project.results.map((r) => (
-                        <div
-                          key={r.label}
-                          className="rounded-2xl border border-border bg-card p-5"
-                        >
-                          <p className="font-serif text-4xl leading-none text-primary md:text-5xl">
-                            {r.value}
-                          </p>
-                          <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                            {r.label}
-                          </p>
-                        </div>
-                      ))}
+                    <div className="mt-4 space-y-3">
+                      {project.results.map((r) => {
+                        // Skala typografi efter textlängd så långa strängar inte spränger boxen.
+                        const len = r.value.length;
+                        const valueClass =
+                          len <= 4
+                            ? "text-4xl md:text-5xl"
+                            : len <= 10
+                              ? "text-2xl md:text-3xl"
+                              : "text-xl md:text-2xl";
+                        return (
+                          <div
+                            key={r.label}
+                            className="rounded-2xl border border-border bg-card p-5"
+                          >
+                            <p
+                              className={cn(
+                                "font-serif leading-tight text-primary",
+                                valueClass,
+                              )}
+                            >
+                              {r.value}
+                            </p>
+                            <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                              {r.label}
+                            </p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
