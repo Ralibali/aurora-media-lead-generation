@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Tag, Rocket, Code2, Target, Check } from "lucide-react";
+import { ArrowRight, Rocket, Code2, Target, Check } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 
 const TRUST = [
