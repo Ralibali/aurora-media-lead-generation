@@ -225,12 +225,22 @@ const CasePage = () => {
                   </ul>
                 </div>
 
-                {project.buildTime && (
-                  <div>
-                    <p className="label-caps">Leveranstid</p>
-                    <p className="mt-3 font-serif text-2xl">{project.buildTime}</p>
-                  </div>
-                )}
+                {project.buildTime &&
+                  !project.results?.some(
+                    (r) => r.value.toLowerCase() === project.buildTime!.toLowerCase(),
+                  ) && (
+                    <div>
+                      <p className="label-caps">Leveranstid</p>
+                      <p
+                        className={cn(
+                          "mt-3 font-serif leading-tight",
+                          project.buildTime.length <= 6 ? "text-3xl" : "text-xl md:text-2xl",
+                        )}
+                      >
+                        {project.buildTime}
+                      </p>
+                    </div>
+                  )}
 
                 {project.results && project.results.length > 0 && (
                   <div>
