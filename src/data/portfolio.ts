@@ -82,7 +82,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Two-sided marketplace. Companies post projects, agencies submit comparable quotes, Stripe Connect handles payouts.",
     stack: ["Lovable", "Supabase", "Stripe Connect", "React"],
     url: "https://updro.se",
-    buildTime: "4 veckor",
+    buildTime: "2 veckor",
     featured: false,
     order: 2,
     shortLabel: "MARKNADSPLATS",
