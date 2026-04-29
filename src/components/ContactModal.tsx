@@ -242,11 +242,27 @@ const ContactDialog = ({
       internalNote,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
+      website: data.get("website") ?? "",
     });
     if (!parsed.success) {
+      // Sätt alla fältfel + visa första som toast
+      const newErrors: Record<string, string> = {};
+      parsed.error.issues.forEach((issue) => {
+        const path = issue.path[0];
+        if (typeof path === "string" && !newErrors[path]) {
+          newErrors[path] = issue.message;
+        }
+      });
+      setFieldErrors(newErrors);
       toast.error(parsed.error.issues[0].message);
       return;
     }
+    // Honeypot — om dolt fält är ifyllt: tysta avvisning
+    if (parsed.data.website) {
+      console.warn("[ContactModal] honeypot triggered");
+      return;
+    }
+    setFieldErrors({});
     setSubmitting(true);
     try {
       const { error } = await supabase.functions.invoke("send-contact-email", {
