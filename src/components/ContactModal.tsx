@@ -168,6 +168,7 @@ const ContactDialog = ({
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [platformValue, setPlatformValue] = useState<string>("");
+  const [renderedAt, setRenderedAt] = useState<number>(() => Date.now());
 
   const setFieldError = (field: string, error: string | null) => {
     setFieldErrors((prev) => {
@@ -208,6 +209,7 @@ const ContactDialog = ({
       setMessageTouched(false);
       setPlatformValue("");
       setFieldErrors({});
+      setRenderedAt(Date.now());
     }
   }, [isOpen, defaultPaket]);
 
@@ -266,7 +268,7 @@ const ContactDialog = ({
     setSubmitting(true);
     try {
       const { error } = await supabase.functions.invoke("send-contact-email", {
-        body: parsed.data,
+        body: { ...parsed.data, _renderedAt: renderedAt },
       });
       if (error) throw error;
       setSubmittedLabel(leadLabel || (selectedOption ? selectedOption.label : paketValue));
