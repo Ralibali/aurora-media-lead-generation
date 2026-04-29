@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 
 const NAV = [
@@ -12,7 +13,7 @@ const NAV = [
 ];
 
 const AuroraLogo = () => (
-  <a href="#top" className="flex items-center gap-2.5 group">
+  <Link to="/" className="flex items-center gap-2.5 group">
     <span
       className="grid h-8 w-8 place-items-center rounded-lg font-display text-base"
       style={{
@@ -28,7 +29,7 @@ const AuroraLogo = () => (
     <span className="font-display text-[15px] tracking-[-0.01em] text-[hsl(var(--au-cream))]">
       AURORA MEDIA
     </span>
-  </a>
+  </Link>
 );
 
 const smoothTo = (href: string) => {
@@ -39,8 +40,18 @@ const smoothTo = (href: string) => {
 
 const AuroraNavbar = () => {
   const { open } = useContactModal();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const goToSection = (href: string) => {
+    if (location.pathname === "/") {
+      smoothTo(href);
+      return;
+    }
+    navigate(`/${href}`);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -77,7 +88,7 @@ const AuroraNavbar = () => {
                 href={n.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  smoothTo(n.href);
+                  goToSection(n.href);
                 }}
                 className="rounded-full px-3.5 py-2 text-sm font-medium text-[hsl(var(--au-cream)/0.72)] transition-colors hover:bg-[hsl(var(--au-cream)/0.05)] hover:text-[hsl(var(--au-cream))]"
               >
@@ -131,7 +142,7 @@ const AuroraNavbar = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     setMobileOpen(false);
-                    setTimeout(() => smoothTo(n.href), 120);
+                    setTimeout(() => goToSection(n.href), 120);
                   }}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
