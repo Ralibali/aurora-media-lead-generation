@@ -5,7 +5,6 @@ import { useContactModal } from "@/components/ContactModal";
 type Pkg = {
   num: string;
   name: string;
-  price: string;
   intro: string;
   features: string[];
   cta: string;
@@ -18,22 +17,20 @@ const PACKAGES: Pkg[] = [
   {
     num: "01",
     name: "Prototyp",
-    price: "Från 14 900 kr",
     intro: "För dig som vill testa en idé snabbt innan större investering.",
-    features: ["Klickbar prototyp", "1–2 användarflöden", "UX-genomgång", "Leverans 1–2 veckor"],
+    features: ["Klickbar prototyp", "1–2 användarflöden", "UX-genomgång", "Leverans på några dagar"],
     cta: "Starta med prototyp",
     paket: "Prototyp",
   },
   {
     num: "02",
     name: "MVP",
-    price: "Från 34 900 kr",
     intro: "För dig som vill lansera en första fungerande produkt med riktiga kunder.",
     features: [
       "Fungerande webb-/mobilapp",
       "Auth, betalningar, databas",
       "Stripe + valfri integration",
-      "Leverans 3–4 veckor",
+      "Leverans 1–2 veckor",
       "Du äger koden",
     ],
     cta: "Bygg min MVP",
@@ -44,7 +41,6 @@ const PACKAGES: Pkg[] = [
   {
     num: "03",
     name: "Skräddarsytt system",
-    price: "Offert",
     intro: "För bolag som behöver affärssystem, integrationer eller intern plattform.",
     features: [
       "Anpassad arkitektur",
