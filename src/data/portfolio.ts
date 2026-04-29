@@ -185,7 +185,7 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Booking site with SEO focus and Sirvoy integration. Opens May 2026.",
     stack: ["React", "Vite", "Sirvoy API", "Tailwind"],
     url: "https://goglampingsweden.se",
-    buildTime: "2 veckor",
+    buildTime: "1 vecka",
     featured: false,
     order: 6,
     shortLabel: "BOKNING",
