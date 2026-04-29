@@ -266,8 +266,8 @@ const AuroraHero = () => {
 
           <p className="mt-7 max-w-xl text-base leading-relaxed text-[hsl(var(--au-cream)/0.7)] md:text-lg">
             Vi bygger skräddarsydda system, appar och plattformar som gör din
-            verksamhet snabbare, smartare och mer lönsam — med fast pris, snabb
-            leverans och kod du äger från dag ett.
+            verksamhet snabbare, smartare och mer lönsam — med snabb leverans
+            och kod du äger från dag ett.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
