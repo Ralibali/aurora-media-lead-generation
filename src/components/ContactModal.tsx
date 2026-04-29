@@ -483,11 +483,23 @@ const ContactDialog = ({
                 maxLength={2000}
                 rows={7}
                 value={messageValue}
+                aria-invalid={!!fieldErrors.message}
+                className={fieldErrors.message ? "border-destructive focus-visible:ring-destructive" : undefined}
                 onChange={(e) => {
                   setMessageValue(e.target.value);
                   setMessageTouched(true);
+                  if (fieldErrors.message) setFieldError("message", null);
                 }}
+                onBlur={(e) => validateField("message", e.target.value)}
               />
+              <div className="flex items-center justify-between gap-3">
+                <p className={`text-xs ${fieldErrors.message ? "text-destructive" : "text-muted-foreground"}`} role={fieldErrors.message ? "alert" : undefined}>
+                  {fieldErrors.message ?? "Berätta vad du vill bygga, tidsplan och eventuell budget."}
+                </p>
+                <p className={`text-xs tabular-nums ${messageValue.trim().length < 20 ? "text-muted-foreground" : "text-primary"}`}>
+                  {messageValue.trim().length}/2000
+                </p>
+              </div>
             </div>
             <div className="flex items-start gap-2">
               <Checkbox id="consent" name="consent" required className="mt-1" />
