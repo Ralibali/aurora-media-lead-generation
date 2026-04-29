@@ -368,15 +368,50 @@ const ContactDialog = ({
             </Button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {/* Honeypot — dolt fält. Riktiga användare ser inte detta. */}
+            <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "-9999px", height: 0, overflow: "hidden" }}>
+              <Label htmlFor="website">Webbplats (lämna tom)</Label>
+              <Input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label htmlFor="name">Namn *</Label>
-                <Input id="name" name="name" required maxLength={80} autoComplete="name" />
+                <Input
+                  id="name"
+                  name="name"
+                  required
+                  maxLength={80}
+                  autoComplete="name"
+                  placeholder="Förnamn Efternamn"
+                  aria-invalid={!!fieldErrors.name}
+                  className={fieldErrors.name ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onBlur={(e) => validateField("name", e.target.value)}
+                  onChange={() => fieldErrors.name && setFieldError("name", null)}
+                />
+                {fieldErrors.name && (
+                  <p className="text-xs text-destructive" role="alert">{fieldErrors.name}</p>
+                )}
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="email">E-post *</Label>
-                <Input id="email" name="email" type="email" required maxLength={160} autoComplete="email" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  maxLength={160}
+                  autoComplete="email"
+                  inputMode="email"
+                  placeholder="namn@foretag.se"
+                  aria-invalid={!!fieldErrors.email}
+                  className={fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onBlur={(e) => validateField("email", e.target.value)}
+                  onChange={() => fieldErrors.email && setFieldError("email", null)}
+                />
+                {fieldErrors.email && (
+                  <p className="text-xs text-destructive" role="alert">{fieldErrors.email}</p>
+                )}
               </div>
             </div>
             <div className="space-y-1.5">
