@@ -165,8 +165,24 @@ const ContactDialog = ({
   const [messageTouched, setMessageTouched] = useState(false);
   const [submittedLabel, setSubmittedLabel] = useState<string>("");
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [platformValue, setPlatformValue] = useState<string>("");
+
+  const setFieldError = (field: string, error: string | null) => {
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      if (error) next[field] = error;
+      else delete next[field];
+      return next;
+    });
+  };
+
+  const validateField = (field: "name" | "email" | "message", value: string) => {
+    const fieldSchema = schema.shape[field];
+    const result = fieldSchema.safeParse(value);
+    setFieldError(field, result.success ? null : result.error.issues[0].message);
+  };
 
   const isMobileApp = paketValue.startsWith("Mobilapp") || paketValue === "Kombination – SaaS + app";
 
