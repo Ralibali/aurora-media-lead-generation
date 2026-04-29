@@ -71,7 +71,7 @@ const AuroraPricing = () => {
             <p className="text-base leading-relaxed text-[hsl(var(--au-cream)/0.7)] md:text-lg">
               Tre tydliga paketnivåer — från snabb prototyp till skräddarsytt
               affärssystem. Inga konstiga tilläggsfakturor, ingen
-              abonnemangsfälla. Fast pris, fast leveranstid.
+              abonnemangsfälla. Tydlig leveranstid, helt utan överraskningar.
             </p>
           </div>
         </div>
