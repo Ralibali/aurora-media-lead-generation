@@ -30,6 +30,7 @@ import RedaktionellPolicy from "./pages/RedaktionellPolicy";
 import Integritetspolicy from "./pages/Integritetspolicy";
 import TextGenerator from "./pages/admin/TextGenerator";
 import FaqRapport from "./pages/admin/FaqRapport";
+import Leads from "./pages/admin/Leads";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -70,6 +71,7 @@ const App = () => (
             <Route path="/integritetspolicy" element={<Integritetspolicy />} />
             <Route path="/admin/texter" element={<TextGenerator />} />
             <Route path="/admin/faq-rapport" element={<FaqRapport />} />
+            <Route path="/admin/leads" element={<Leads />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
