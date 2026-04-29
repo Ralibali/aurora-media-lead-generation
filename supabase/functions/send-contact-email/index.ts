@@ -16,6 +16,40 @@ interface Body {
   leadLabel?: string;
   internalNote?: string;
   message: string;
+  website?: string; // honeypot — ska vara tomt
+  _renderedAt?: number; // klienttid när formuläret renderades (ms)
+}
+
+// Enkel in-memory rate limiter per IP. Återställs när funktionen kallstartar,
+// vilket räcker för att stoppa enkel skräp-trafik.
+type RateEntry = { count: number; windowStart: number; lastAt: number };
+const RATE_BUCKET = new Map<string, RateEntry>();
+const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 timme
+const RATE_MAX_PER_WINDOW = 3;
+const RATE_MIN_GAP_MS = 30 * 1000; // 30s mellan submits
+
+function checkRateLimit(ip: string): { ok: boolean; reason?: string } {
+  const now = Date.now();
+  const entry = RATE_BUCKET.get(ip);
+  if (!entry || now - entry.windowStart > RATE_WINDOW_MS) {
+    RATE_BUCKET.set(ip, { count: 1, windowStart: now, lastAt: now });
+    return { ok: true };
+  }
+  if (now - entry.lastAt < RATE_MIN_GAP_MS) {
+    return { ok: false, reason: "Vänta en stund innan du skickar igen." };
+  }
+  if (entry.count >= RATE_MAX_PER_WINDOW) {
+    return { ok: false, reason: "För många förfrågningar. Försök igen om en stund." };
+  }
+  entry.count += 1;
+  entry.lastAt = now;
+  return { ok: true };
+}
+
+function getClientIp(req: Request): string {
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  return req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip") || "unknown";
 }
 
 const escape = (s: string) =>
@@ -32,6 +66,40 @@ Deno.serve(async (req: Request) => {
 
   try {
     const body = (await req.json()) as Body;
+
+    // 1) Honeypot — bots fyller i dolda fält
+    if (typeof body.website === "string" && body.website.trim() !== "") {
+      console.warn("[send-contact-email] honeypot triggered", { ip: getClientIp(req) });
+      // Svara 200 så bot inte vet att den blev avvisad
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // 2) Min-fill-time — formulär submittade < 3s efter render = troligen bot
+    if (typeof body._renderedAt === "number" && body._renderedAt > 0) {
+      const elapsed = Date.now() - body._renderedAt;
+      if (elapsed < 3000) {
+        console.warn("[send-contact-email] submitted too fast", { elapsed, ip: getClientIp(req) });
+        return new Response(JSON.stringify({ ok: true }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    // 3) Rate limit per IP
+    const ip = getClientIp(req);
+    const rate = checkRateLimit(ip);
+    if (!rate.ok) {
+      console.warn("[send-contact-email] rate limited", { ip, reason: rate.reason });
+      return new Response(JSON.stringify({ error: rate.reason ?? "Rate limited" }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const name = String(body.name ?? "").trim().slice(0, 80);
     const email = String(body.email ?? "").trim().slice(0, 160);
     const company = String(body.company ?? "").trim().slice(0, 120);
