@@ -144,11 +144,11 @@ const PhoneMockup = () => (
             }}
           >
             <p className="font-mono-au text-[9px] uppercase tracking-[0.16em] text-[hsl(var(--au-muted))]">
-              Budget
+              Sprint
             </p>
-            <p className="mt-1 text-[10px] text-[hsl(var(--au-cream)/0.6)]">från</p>
+            <p className="mt-1 text-[10px] text-[hsl(var(--au-cream)/0.6)]">vecka</p>
             <p className="font-display text-[15px]" style={{ color: "hsl(152 80% 60%)" }}>
-              14 900 kr
+              2 av 2
             </p>
           </div>
           <div
@@ -165,7 +165,7 @@ const PhoneMockup = () => (
               Pågår
             </p>
             <p className="text-[10px] text-[hsl(var(--au-cream)/0.55)]">
-              Leverans om 12 dagar
+              Leverans om 5 dagar
             </p>
           </div>
         </div>
