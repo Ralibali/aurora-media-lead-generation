@@ -119,13 +119,6 @@ const AuroraPricing = () => {
                 {p.name}
               </h3>
 
-              <p
-                className="mt-2 font-display text-[26px] leading-none"
-                style={{ color: "hsl(152 80% 60%)" }}
-              >
-                {p.price}
-              </p>
-
               <p className="mt-3 text-[14.5px] leading-relaxed text-[hsl(var(--au-cream)/0.65)]">
                 {p.intro}
               </p>
