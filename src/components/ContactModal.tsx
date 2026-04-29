@@ -30,16 +30,63 @@ const PLATFORM_OPTIONS = [
   { value: "Osäker", label: "Osäker / vill ha råd" },
 ] as const;
 
+// Blockerade engångs-/skräpdomäner (vanliga "wegwerf"-tjänster)
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  "mailinator.com", "guerrillamail.com", "guerrillamail.info", "10minutemail.com",
+  "tempmail.com", "temp-mail.org", "throwawaymail.com", "trashmail.com",
+  "yopmail.com", "getnada.com", "fakeinbox.com", "sharklasers.com",
+  "maildrop.cc", "dispostable.com", "mintemail.com", "spam4.me",
+  "tempr.email", "mailnesia.com", "emailondeck.com", "moakt.com",
+]);
+
+// Tillåt bokstäver (inkl. åäö och internationella), mellanslag, bindestreck och apostrof
+const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
+
 const schema = z.object({
-  name: z.string().trim().min(2, "Skriv ditt namn").max(80),
-  email: z.string().trim().email("Ogiltig e-post").max(160),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Skriv ditt fullständiga namn (minst 2 tecken)")
+    .max(80, "Namnet är för långt")
+    .regex(NAME_REGEX, "Namnet får bara innehålla bokstäver, mellanslag och bindestreck")
+    .refine((v) => v.includes(" "), "Ange både för- och efternamn"),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(5, "Ogiltig e-post")
+    .max(160, "E-posten är för lång")
+    .email("Ogiltig e-postadress")
+    .refine((v) => {
+      const domain = v.split("@")[1];
+      return domain && !DISPOSABLE_EMAIL_DOMAINS.has(domain);
+    }, "Använd en riktig e-postadress, inte en engångsadress")
+    .refine((v) => !/\+.*\+/.test(v), "Ogiltig e-postadress"),
   company: z.string().trim().max(120).optional().or(z.literal("")),
-  paket: z.string().min(1, "Välj ett alternativ"),
+  paket: z.string().min(1, "Välj vilket paket du är intresserad av"),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
   internalNote: z.string().trim().max(500).optional().or(z.literal("")),
-  message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
+  message: z
+    .string()
+    .trim()
+    .min(20, "Beskriv projektet med minst 20 tecken")
+    .max(2000, "Meddelandet är för långt")
+    .refine((v) => v.split(/\s+/).filter(Boolean).length >= 5, "Skriv minst några meningar om projektet")
+    .refine((v) => /\s/.test(v), "Meddelandet ser inte ut som riktig text")
+    .refine((v) => {
+      // Räkna URL:er — fler än 2 = troligen spam
+      const urls = v.match(/https?:\/\/|www\./gi) ?? [];
+      return urls.length <= 2;
+    }, "Meddelandet innehåller för många länkar")
+    .refine((v) => {
+      // Blockera meddelanden som mest består av samma tecken upprepat
+      const longestRepeat = v.match(/(.)\1{9,}/);
+      return !longestRepeat;
+    }, "Meddelandet ser inte ut att vara riktigt skrivet"),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
+  // Honeypot — ska alltid vara tomt; bots fyller i det
+  website: z.string().max(0, "").optional().or(z.literal("")),
 });
 
 const PAKET_OPTIONS = [
@@ -118,8 +165,24 @@ const ContactDialog = ({
   const [messageTouched, setMessageTouched] = useState(false);
   const [submittedLabel, setSubmittedLabel] = useState<string>("");
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [platformValue, setPlatformValue] = useState<string>("");
+
+  const setFieldError = (field: string, error: string | null) => {
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      if (error) next[field] = error;
+      else delete next[field];
+      return next;
+    });
+  };
+
+  const validateField = (field: "name" | "email" | "message", value: string) => {
+    const fieldSchema = schema.shape[field];
+    const result = fieldSchema.safeParse(value);
+    setFieldError(field, result.success ? null : result.error.issues[0].message);
+  };
 
   const isMobileApp = paketValue.startsWith("Mobilapp") || paketValue === "Kombination – SaaS + app";
 
@@ -144,6 +207,7 @@ const ContactDialog = ({
       setMessageValue(buildPrefill(paket));
       setMessageTouched(false);
       setPlatformValue("");
+      setFieldErrors({});
     }
   }, [isOpen, defaultPaket]);
 
@@ -178,11 +242,27 @@ const ContactDialog = ({
       internalNote,
       message: data.get("message"),
       consent: data.get("consent") === "on" ? true : false,
+      website: data.get("website") ?? "",
     });
     if (!parsed.success) {
+      // Sätt alla fältfel + visa första som toast
+      const newErrors: Record<string, string> = {};
+      parsed.error.issues.forEach((issue) => {
+        const path = issue.path[0];
+        if (typeof path === "string" && !newErrors[path]) {
+          newErrors[path] = issue.message;
+        }
+      });
+      setFieldErrors(newErrors);
       toast.error(parsed.error.issues[0].message);
       return;
     }
+    // Honeypot — om dolt fält är ifyllt: tysta avvisning
+    if (parsed.data.website) {
+      console.warn("[ContactModal] honeypot triggered");
+      return;
+    }
+    setFieldErrors({});
     setSubmitting(true);
     try {
       const { error } = await supabase.functions.invoke("send-contact-email", {
@@ -288,15 +368,50 @@ const ContactDialog = ({
             </Button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {/* Honeypot — dolt fält. Riktiga användare ser inte detta. */}
+            <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "-9999px", height: 0, overflow: "hidden" }}>
+              <Label htmlFor="website">Webbplats (lämna tom)</Label>
+              <Input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <Label htmlFor="name">Namn *</Label>
-                <Input id="name" name="name" required maxLength={80} autoComplete="name" />
+                <Input
+                  id="name"
+                  name="name"
+                  required
+                  maxLength={80}
+                  autoComplete="name"
+                  placeholder="Förnamn Efternamn"
+                  aria-invalid={!!fieldErrors.name}
+                  className={fieldErrors.name ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onBlur={(e) => validateField("name", e.target.value)}
+                  onChange={() => fieldErrors.name && setFieldError("name", null)}
+                />
+                {fieldErrors.name && (
+                  <p className="text-xs text-destructive" role="alert">{fieldErrors.name}</p>
+                )}
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="email">E-post *</Label>
-                <Input id="email" name="email" type="email" required maxLength={160} autoComplete="email" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  maxLength={160}
+                  autoComplete="email"
+                  inputMode="email"
+                  placeholder="namn@foretag.se"
+                  aria-invalid={!!fieldErrors.email}
+                  className={fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onBlur={(e) => validateField("email", e.target.value)}
+                  onChange={() => fieldErrors.email && setFieldError("email", null)}
+                />
+                {fieldErrors.email && (
+                  <p className="text-xs text-destructive" role="alert">{fieldErrors.email}</p>
+                )}
               </div>
             </div>
             <div className="space-y-1.5">
@@ -368,11 +483,23 @@ const ContactDialog = ({
                 maxLength={2000}
                 rows={7}
                 value={messageValue}
+                aria-invalid={!!fieldErrors.message}
+                className={fieldErrors.message ? "border-destructive focus-visible:ring-destructive" : undefined}
                 onChange={(e) => {
                   setMessageValue(e.target.value);
                   setMessageTouched(true);
+                  if (fieldErrors.message) setFieldError("message", null);
                 }}
+                onBlur={(e) => validateField("message", e.target.value)}
               />
+              <div className="flex items-center justify-between gap-3">
+                <p className={`text-xs ${fieldErrors.message ? "text-destructive" : "text-muted-foreground"}`} role={fieldErrors.message ? "alert" : undefined}>
+                  {fieldErrors.message ?? "Berätta vad du vill bygga, tidsplan och eventuell budget."}
+                </p>
+                <p className={`text-xs tabular-nums ${messageValue.trim().length < 20 ? "text-muted-foreground" : "text-primary"}`}>
+                  {messageValue.trim().length}/2000
+                </p>
+              </div>
             </div>
             <div className="flex items-start gap-2">
               <Checkbox id="consent" name="consent" required className="mt-1" />
