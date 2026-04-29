@@ -155,20 +155,20 @@ export const PORTFOLIO: PortfolioItem[] = [
     tagline: "Svensk odlings-SaaS med AI-coach.",
     taglineEn: "Swedish gardening SaaS with AI coach.",
     description:
-      "Odlingsdagbok med AI-coach byggd på Claude. Råd anpassade per zon, gröda och årstid. 99 kr/år.",
+      "Odlingsdagbok med AI-coach byggd på Claude. Råd anpassade per zon, gröda och årstid.",
     descriptionEn:
-      "Gardening journal with Claude-powered AI coach. Advice tailored per zone, crop and season. 99 SEK/year.",
+      "Gardening journal with Claude-powered AI coach. Advice tailored per zone, crop and season.",
     stack: ["Lovable", "Supabase", "Claude API", "Stripe"],
     url: "https://odlingsdagboken.com",
-    buildTime: "3 veckor",
+    buildTime: "Under 2 veckor",
     featured: false,
     order: 5,
     shortLabel: "KONSUMENT · AI",
     problem:
       "Svenska hobbyodlare har inget verktyg som kombinerar dagbok med personlig rådgivning baserad på just deras zon och grödor.",
     solution:
-      "Kombinerade odlingsdagbok med Claude-baserad AI-coach. Användaren matar in zon + gröda, får specifika råd. Premium 99 kr/år.",
-    results: [{ label: "Pris", labelEn: "Price", value: "99 kr/år" }],
+      "Kombinerade odlingsdagbok med Claude-baserad AI-coach. Användaren matar in zon + gröda, får specifika råd som anpassas över säsongen.",
+    results: [{ label: "Status", labelEn: "Status", value: "Live, betalande" }],
   },
   {
     slug: "goglamping-sweden",
