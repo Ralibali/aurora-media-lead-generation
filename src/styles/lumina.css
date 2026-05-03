@@ -64,8 +64,9 @@
   will-change: transform;
 }
 
-/* Lumina cinematic skin for the rest of Aurora landing */
-.aurora-theme {
+/* Global Lumina cinematic system */
+.aurora-theme,
+.lumina-site {
   --au-bg: 0 0% 0%;
   --au-bg-2: 225 44% 5%;
   --au-surface: 224 32% 8%;
@@ -79,10 +80,45 @@
   --au-coral-deep: 28 89% 71%;
   --au-amber: 45 93% 58%;
   --au-border: 224 20% 22%;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
   background:
-    radial-gradient(circle at 85% 10%, rgba(59, 130, 246, 0.15), transparent 32rem),
-    radial-gradient(circle at 10% 28%, rgba(168, 85, 247, 0.12), transparent 30rem),
-    linear-gradient(180deg, #000000 0%, #050816 46%, #000000 100%);
+    radial-gradient(circle at 86% 8%, rgba(59, 130, 246, 0.2), transparent 32rem),
+    radial-gradient(circle at 8% 30%, rgba(168, 85, 247, 0.16), transparent 30rem),
+    radial-gradient(circle at 75% 68%, rgba(236, 72, 153, 0.1), transparent 34rem),
+    linear-gradient(180deg, #000000 0%, #050816 42%, #000000 100%);
+  color: #ffffff;
+}
+
+.lumina-site::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at 50% 18%, black, transparent 72%);
+  opacity: 0.34;
+}
+
+.lumina-site::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.09) 1px, transparent 0);
+  background-size: 28px 28px;
+  opacity: 0.08;
+}
+
+.lumina-site > * {
+  position: relative;
+  z-index: 1;
 }
 
 html:has(.aurora-theme),
@@ -90,17 +126,25 @@ body:has(.aurora-theme) {
   background: #000000;
 }
 
-.aurora-theme main {
-  background:
-    linear-gradient(180deg, #000000 0%, #050816 36%, #000000 100%);
+.aurora-theme main,
+.lumina-site main,
+.lumina-site section,
+.lumina-site article {
+  background-color: transparent !important;
 }
 
 .aurora-section-bg,
-.aurora-bg {
+.aurora-bg,
+.lumina-site [class*="bg-background"],
+.lumina-site [class*="bg-card"],
+.lumina-site [class*="bg-white"],
+.lumina-site [class*="bg-stone"],
+.lumina-site [class*="bg-slate"],
+.lumina-site [class*="bg-neutral"] {
   background:
     radial-gradient(circle at 90% 15%, rgba(59, 130, 246, 0.16), transparent 34rem),
     radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.1), transparent 32rem),
-    linear-gradient(180deg, rgba(3, 7, 18, 0.98), rgba(0, 0, 0, 0.98));
+    linear-gradient(180deg, rgba(3, 7, 18, 0.98), rgba(0, 0, 0, 0.98)) !important;
 }
 
 .aurora-bg::before,
@@ -108,93 +152,201 @@ body:has(.aurora-theme) {
   opacity: 0.55;
 }
 
-.aurora-theme .au-eyebrow {
-  color: rgba(255, 255, 255, 0.64);
+.aurora-theme .au-eyebrow,
+.lumina-site .au-eyebrow,
+.lumina-site [class*="uppercase"][class*="tracking"] {
+  color: rgba(255, 255, 255, 0.64) !important;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.32em;
 }
 
+.lumina-site h1,
+.lumina-site h2,
+.lumina-site h3,
+.lumina-site h4,
+.lumina-site h5,
+.lumina-site h6,
+.aurora-theme h1,
 .aurora-theme h2,
 .aurora-theme h3 {
-  color: #ffffff;
+  color: #ffffff !important;
+  text-shadow: 0 0 42px rgba(59, 130, 246, 0.14);
 }
 
+.lumina-site p,
+.lumina-site li,
+.lumina-site span,
+.lumina-site label,
 .aurora-theme p,
 .aurora-theme li {
-  color: rgba(255, 255, 255, 0.66);
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.lumina-site a {
+  color: rgba(255,255,255,0.86);
+}
+
+.lumina-site a:hover {
+  color: #ffffff;
 }
 
 .aurora-theme .au-card,
 .aurora-theme .au-card-static,
 .aurora-theme .au-service-card,
-.aurora-theme .au-logo-pill {
-  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
-  border: 1px solid rgba(255, 255, 255, 0.13);
+.aurora-theme .au-logo-pill,
+.lumina-site .au-card,
+.lumina-site .au-card-static,
+.lumina-site .au-service-card,
+.lumina-site .au-logo-pill,
+.lumina-site article,
+.lumina-site aside,
+.lumina-site form,
+.lumina-site [class*="rounded-xl"],
+.lumina-site [class*="rounded-2xl"],
+.lumina-site [class*="rounded-3xl"],
+.lumina-site [class*="border"]:not(header):not(nav):not(button):not(input):not(textarea) {
+  border-color: rgba(255, 255, 255, 0.13) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 28px 80px -42px rgba(59, 130, 246, 0.55);
+}
+
+.aurora-theme .au-card,
+.aurora-theme .au-card-static,
+.aurora-theme .au-service-card,
+.aurora-theme .au-logo-pill,
+.lumina-site .au-card,
+.lumina-site .au-card-static,
+.lumina-site .au-service-card,
+.lumina-site .au-logo-pill,
+.lumina-site article,
+.lumina-site aside,
+.lumina-site form,
+.lumina-site [class*="rounded-xl"],
+.lumina-site [class*="rounded-2xl"],
+.lumina-site [class*="rounded-3xl"] {
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035)) !important;
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
 }
 
 .aurora-theme .au-card:hover,
 .aurora-theme .au-service-card:hover,
-.aurora-theme .au-logo-pill:hover {
-  border-color: rgba(96, 165, 250, 0.48);
+.aurora-theme .au-logo-pill:hover,
+.lumina-site article:hover,
+.lumina-site [class*="rounded-xl"]:hover,
+.lumina-site [class*="rounded-2xl"]:hover,
+.lumina-site [class*="rounded-3xl"]:hover {
+  border-color: rgba(96, 165, 250, 0.48) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 32px 88px -36px rgba(168, 85, 247, 0.75);
 }
 
-.aurora-theme .au-icon {
+.aurora-theme .au-icon,
+.lumina-site .au-icon,
+.lumina-site svg:not(header svg) {
+  color: #bfdbfe;
+}
+
+.aurora-theme .au-icon,
+.lumina-site .au-icon {
   background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(168,85,247,0.18));
   border-color: rgba(147,197,253,0.42);
-  color: #bfdbfe;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 0 26px rgba(59,130,246,0.24);
 }
 
 .aurora-theme .au-highlight::before,
 .aurora-theme .au-handline::after,
 .aurora-theme .au-divider-x,
-.aurora-theme .au-divider-y {
+.aurora-theme .au-divider-y,
+.lumina-site .au-highlight::before,
+.lumina-site .au-handline::after,
+.lumina-site .au-divider-x,
+.lumina-site .au-divider-y {
   background: linear-gradient(90deg, transparent, rgba(59,130,246,0.72), rgba(236,72,153,0.58), transparent);
 }
 
-.aurora-theme .au-btn-coral {
+.aurora-theme .au-btn-coral,
+.lumina-site .au-btn-coral,
+.lumina-site button:not([aria-label*="Stäng"]):not([aria-label*="Öppna"]),
+.lumina-site [role="button"] {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.18);
-  color: #ffffff;
-  text-shadow: none;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  background: rgba(255,255,255,0.18) !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   box-shadow: inset 0 0 24px rgba(255,255,255,0.16), 0 20px 52px -24px rgba(236,72,153,0.82);
 }
 
-.aurora-theme .au-btn-coral:hover {
+.aurora-theme .au-btn-coral:hover,
+.lumina-site .au-btn-coral:hover,
+.lumina-site button:hover,
+.lumina-site [role="button"]:hover {
   box-shadow: inset 0 0 28px rgba(255,255,255,0.2), 0 28px 64px -24px rgba(59,130,246,0.9);
 }
 
-.aurora-theme .au-btn-ghost {
-  border-color: rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.045);
-  color: rgba(255,255,255,0.82);
+.aurora-theme .au-btn-ghost,
+.lumina-site .au-btn-ghost {
+  border-color: rgba(255,255,255,0.18) !important;
+  background: rgba(255,255,255,0.045) !important;
+  color: rgba(255,255,255,0.82) !important;
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 }
 
-.aurora-theme .au-btn-ghost:hover {
-  border-color: rgba(96,165,250,0.55);
-  background: rgba(59,130,246,0.12);
-  color: #ffffff;
+.aurora-theme .au-btn-ghost:hover,
+.lumina-site .au-btn-ghost:hover {
+  border-color: rgba(96,165,250,0.55) !important;
+  background: rgba(59,130,246,0.12) !important;
+  color: #ffffff !important;
 }
 
-.aurora-theme .au-marquee-mask {
+.lumina-site input,
+.lumina-site textarea,
+.lumina-site select {
+  background: rgba(255,255,255,0.07) !important;
+  border: 1px solid rgba(255,255,255,0.16) !important;
+  color: #ffffff !important;
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.lumina-site input::placeholder,
+.lumina-site textarea::placeholder {
+  color: rgba(255,255,255,0.42) !important;
+}
+
+.lumina-site table {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.lumina-site th,
+.lumina-site td {
+  border-color: rgba(255,255,255,0.1) !important;
+  color: rgba(255,255,255,0.72);
+}
+
+.lumina-site img,
+.lumina-site video:not(.lumina-hero-video) {
+  border-color: rgba(255,255,255,0.14);
+}
+
+.aurora-theme .au-marquee-mask,
+.lumina-site .au-marquee-mask {
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .aurora-theme footer,
-.aurora-theme #footer {
-  background: #000000;
+.aurora-theme #footer,
+.lumina-site footer,
+.lumina-site #footer {
+  background: #000000 !important;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 @keyframes lumina-orbit {
@@ -221,7 +373,8 @@ body:has(.aurora-theme) {
     transform: scale(1.15);
   }
 
-  .aurora-theme .au-eyebrow {
+  .aurora-theme .au-eyebrow,
+  .lumina-site .au-eyebrow {
     letter-spacing: 0.26em;
   }
 }
