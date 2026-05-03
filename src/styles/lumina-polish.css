@@ -74,12 +74,32 @@
     radial-gradient(circle at 16% 42%, rgba(168,85,247,0.16), transparent 30rem) !important;
 }
 
+.lumina-site main.blog-page > section.blog-hero {
+  padding-top: 6rem !important;
+}
+
+@media (min-width: 640px) {
+  .lumina-site main.blog-page > section.blog-hero {
+    padding-top: 7rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lumina-site main.blog-page > section.blog-hero {
+    padding-top: 8rem !important;
+  }
+}
+
 .lumina-site main > section:first-child:not(.lumina-hero)::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: linear-gradient(to right, rgba(0,0,0,0.92), rgba(0,0,0,0.55), rgba(0,0,0,0.18));
+}
+
+.lumina-site main.blog-page > section.blog-hero::before {
+  background: linear-gradient(to right, rgba(0,0,0,0.86), rgba(0,0,0,0.42), rgba(0,0,0,0.12));
 }
 
 .lumina-site main > section:first-child:not(.lumina-hero) > * {
@@ -89,6 +109,10 @@
 
 .lumina-site main > section:not(:first-child) {
   border-top: 1px solid rgba(255,255,255,0.09) !important;
+}
+
+.lumina-site main.blog-page > section:not(:first-child) {
+  border-top: 0 !important;
 }
 
 .lumina-site .prose,
