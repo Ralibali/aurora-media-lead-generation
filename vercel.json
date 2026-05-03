@@ -1,0 +1,19 @@
+{
+  "redirects": [
+    { "source": "/om-oss-2", "destination": "/om", "permanent": true },
+    { "source": "/om-oss-2/", "destination": "/om", "permanent": true },
+    { "source": "/post-3", "destination": "/blogg", "permanent": true },
+    { "source": "/post-3/", "destination": "/blogg", "permanent": true },
+    { "source": "/post-5", "destination": "/blogg", "permanent": true },
+    { "source": "/post-5/", "destination": "/blogg", "permanent": true },
+    { "source": "/blog", "destination": "/blogg", "permanent": true },
+    { "source": "/blog/", "destination": "/blogg", "permanent": true },
+    { "source": "/artiklar", "destination": "/blogg", "permanent": true },
+    { "source": "/artiklar/", "destination": "/blogg", "permanent": true },
+    { "source": "/webbbyra-linkoping", "destination": "/webbyra-linkoping", "permanent": true },
+    { "source": "/webbbyra-linkoping/", "destination": "/webbyra-linkoping", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
