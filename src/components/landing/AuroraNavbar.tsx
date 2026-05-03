@@ -5,10 +5,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 
 const NAV = [
+  { label: "AI-kartan", href: "/ai-karta", type: "route" },
   { label: "AI & automation", href: "/ai-automation-foretag", type: "route" },
   { label: "Tjänster", href: "#tjanster", type: "section" },
   { label: "Process", href: "#process", type: "section" },
-  { label: "Projekt", href: "#projekt", type: "section" },
   { label: "Paket", href: "#paket", type: "section" },
 ];
 
