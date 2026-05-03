@@ -6,25 +6,25 @@ import CTABanner from "@/components/CTABanner";
 import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd } from "@/lib/seoHelpers";
 
 const lokalaFaqs = [
   {
-    q: "Vad kostar en hemsida i Linköping?",
-    a: "Min prototyp är 14 900 kr (3–5 dagar). En komplett företagshemsida hamnar oftast i MVP-paketet på 34 900 kr eller SaaS-paketet på 69 000 kr om det ska finnas inloggning, betalningar eller dashboards. Fast pris alltid.",
+    q: "Är Aurora Media en webbyrå i Linköping?",
+    a: "Ja, Aurora Media AB är baserat i Linköping men jobbar med kunder i hela Sverige. Fokus är inte bara hemsidor, utan SaaS, AI-automationer, interna appar och moderna webbplattformar.",
   },
   {
-    q: "Behöver jag verkligen en lokal byrå i Linköping?",
-    a: "Inte tekniskt. Men jag är baserad i Linköping och tar gärna fysiska möten i regionen om det underlättar. För 90 procent av kunderna räcker video-möten – jag jobbar med kunder i hela Sverige.",
+    q: "Vad kostar en hemsida eller webbplattform?",
+    a: "Det beror på scope. En enkel landningssida är billigare än en plattform med databas, login och integrationer. För SaaS och MVP börjar paketen från 14 900 kr för prototyp och 34 900 kr för MVP.",
   },
   {
-    q: "Hur skiljer du dig från en traditionell webbyrå i Linköping?",
-    a: "Tre saker: jag bygger med AI så det går 3–5 gånger snabbare, jag jobbar fast pris så du vet vad du betalar, och jag är ensam vilket betyder ingen byråkrati och inga mellanled.",
+    q: "Hur skiljer ni er från en traditionell webbyrå?",
+    a: "Aurora jobbar som AI-builder snarare än klassisk byrå. Det betyder mindre workshop, snabbare prototyp, fast pris, modern kodbas och direktkontakt med personen som bygger.",
   },
   {
-    q: "Bygger du WordPress-sajter?",
-    a: "Nej, jag bygger React-sajter med Supabase som backend. Det är snabbare, säkrare och enklare att driftsätta än WordPress för moderna behov. Om du redan har WordPress kan jag bygga om eller komplettera.",
+    q: "Bygger ni WordPress?",
+    a: "Huvudspåret är inte WordPress. Aurora bygger främst med React, TypeScript, Supabase, Stripe och modern hosting. Det ger bättre kontroll, prestanda och ägande för många moderna projekt.",
   },
 ];
 
@@ -32,14 +32,14 @@ const WebbyraLinkoping = () => {
   const { open } = useContactModal();
   useEffect(() => {
     setSEOMeta({
-      title: "Webbyrå Linköping – AI-byggda hemsidor & SaaS från 14 900 kr",
+      title: "Webbyrå Linköping – AI-builder för SaaS, webb och automation | Aurora Media",
       description:
-        "Lokal webbyrå i Linköping som bygger snabba hemsidor och SaaS med AI. Fast pris från 14 900 kr, leverans på 1–2 veckor. Möten i centrala Linköping eller Mjärdevi.",
-      canonical: "/webbbyra-linkoping",
+        "Aurora Media är en AI-driven webbyrå i Linköping som bygger SaaS, MVP, hemsidor, interna appar och AI-automationer med fast pris och kod kunden äger.",
+      canonical: "/webbyra-linkoping",
     });
     setBreadcrumb([
       { name: "Hem", url: "/" },
-      { name: "Webbyrå Linköping", url: "/webbbyra-linkoping" },
+      { name: "Webbyrå Linköping", url: "/webbyra-linkoping" },
     ]);
     setJsonLd("webbyra-faq", {
       "@context": "https://schema.org",
@@ -59,94 +59,68 @@ const WebbyraLinkoping = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <section className="pt-24 pb-12 md:pt-32 md:pb-16">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <p className="label-caps">Webbyrå Linköping</p>
-            <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
-              Webbyrå Linköping –{" "}
-              <em className="italic text-primary">AI-byggda hemsidor och SaaS</em>
+        <section className="pt-28 pb-16 md:pt-36 md:pb-20">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <p className="label-caps">Webbyrå Linköping · AI-builder</p>
+            <h1 className="mt-4 font-display text-[clamp(3rem,7vw,6.5rem)] leading-[0.92] tracking-tight">
+              Webbyrå i Linköping för dig som vill bygga mer än en broschyr.
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
-              En traditionell webbyrå i Linköping bygger din hemsida på 2 månader för 80 000 kr.
-              Jag bygger den på 1 vecka med AI för en tredjedel av priset. Samma kvalitet,
-              snabbare leverans, fast pris.
+            <p className="mt-7 text-lg text-muted-foreground max-w-2xl md:text-xl">
+              Aurora Media bygger hemsidor, SaaS, MVP:er, interna appar och AI-automationer åt företag i Linköping och resten av Sverige. Mindre byråprocess. Mer färdig produkt.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
-              <Button size="lg" onClick={() => open()}>Starta ett projekt</Button>
-              <a
-                href="mailto:info@auroramedia.se"
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-border px-6 text-sm hover:bg-secondary transition-colors"
-              >
-                info@auroramedia.se
-              </a>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <Button size="lg" onClick={() => open()} className="rounded-full">Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" /></Button>
+              <Button size="lg" variant="outline" asChild className="rounded-full"><Link to="/ai-konsult-sverige">AI-konsult vs AI-builder</Link></Button>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-border py-20">
-          <div className="container mx-auto px-6 max-w-3xl space-y-10">
+        <section className="border-t border-white/10 py-20">
+          <div className="container mx-auto px-6 max-w-5xl grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <h2 className="font-serif text-3xl">Varför Aurora Media som webbyrå i Linköping?</h2>
-              <p className="mt-5 text-base leading-relaxed text-foreground/85">
-                Jag är Christoffer och driver Aurora Media AB från Linköping. Det här är inte
-                en byrå med 15 anställda och projektledare. Det är jag, AI-verktyg som Lovable
-                och Bolt, och 7 egna SaaS-produkter live som bevis på att metoden fungerar.
-              </p>
-              <p className="mt-4 text-base leading-relaxed text-foreground/85">
-                För dig som företagare i Linköping eller Östergötland betyder det: snabbare
-                leverans, lägre pris och en enda kontaktperson som faktiskt bygger sajten själv.
-              </p>
+              <p className="label-caps">Varför Aurora</p>
+              <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Lokal partner. Modern leverans.</h2>
             </div>
-
-            <div>
-              <h2 className="font-serif text-3xl">Vad jag bygger åt företag i Linköping</h2>
-              <ul className="mt-5 space-y-3 text-base text-foreground/85">
-                <li className="flex gap-2"><Check className="mt-1 h-4 w-4 text-primary shrink-0" /> Företagshemsidor med modern design och stark SEO</li>
-                <li className="flex gap-2"><Check className="mt-1 h-4 w-4 text-primary shrink-0" /> Bokningssajter (frisör, massör, restaurang, glamping)</li>
-                <li className="flex gap-2"><Check className="mt-1 h-4 w-4 text-primary shrink-0" /> Interna verktyg som ersätter Excel-ark och manuella processer</li>
-                <li className="flex gap-2"><Check className="mt-1 h-4 w-4 text-primary shrink-0" /> Betal-SaaS med Stripe och användarkonton</li>
-                <li className="flex gap-2"><Check className="mt-1 h-4 w-4 text-primary shrink-0" /> Marknadsplatser och tvåsidiga plattformar</li>
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="font-serif text-3xl">Snabbare än traditionell webbyrå</h2>
-              <p className="mt-5 text-base leading-relaxed text-foreground/85">
-                En traditionell webbyrå i Linköping skissar i Figma i 2 veckor, kodar i 6 veckor
-                och driftsätter i vecka 9. Jag hoppar över hela mockup-fasen. Du loggar in i en
-                klickbar prototyp dag 3 och har en färdig produkt på 1–4 veckor beroende på
-                omfattning.
-              </p>
-              <p className="mt-4 text-base leading-relaxed text-foreground/85">
-                Det går snabbare för att AI skriver större delen av koden. Jag styr arkitekturen,
-                designen och kvalitetskontrollen. Slutprodukten är standard React + Supabase –
-                samma teknologi de stora byråerna använder, bara producerad effektivare.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="font-serif text-3xl">Lokalt baserad, jobbar i hela Sverige</h2>
-              <p className="mt-5 text-base leading-relaxed text-foreground/85">
-                Jag är baserad i Linköping och tar fysiska möten i Östergötland när det
-                underlättar. Större delen av jobbet sker dock digitalt – det är så jag kan jobba
-                lika nära med en kund i Malmö som med en kund i Mjölby.
-              </p>
+            <div className="space-y-5 text-base leading-relaxed text-foreground/85">
+              <p>Jag är Christoffer och driver Aurora Media AB från Linköping. Jag bygger inte bara snygga ytor — jag bygger digitala produkter som kan ha login, databas, betalning, admin, automationer och integrationer.</p>
+              <p>För dig som företagare i Linköping betyder det en partner som kan ta dig från idé till fungerande system utan att du behöver koordinera designer, utvecklare, SEO-person och projektledare separat.</p>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-border py-16">
-          <div className="container mx-auto px-6 max-w-3xl">
-            <p className="label-caps mb-4">Relaterade tjänster</p>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              <li><Link to="/saas-utveckling-linkoping" className="text-sm underline hover:text-primary">SaaS-utveckling Linköping →</Link></li>
-              <li><Link to="/ai-byra-linkoping" className="text-sm underline hover:text-primary">AI-byrå Linköping →</Link></li>
-              <li><Link to="/saas-utveckling-norrkoping" className="text-sm underline hover:text-primary">SaaS-utveckling Norrköping →</Link></li>
-              <li><Link to="/saas-utveckling-stockholm" className="text-sm underline hover:text-primary">SaaS-utveckling Stockholm →</Link></li>
+        <section className="border-t border-white/10 py-20 bg-secondary/20">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <p className="label-caps">Vad vi bygger</p>
+            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Från hemsida till SaaS.</h2>
+            <ul className="mt-10 grid gap-4 md:grid-cols-2">
+              {[
+                "Företagshemsidor med stark SEO och modern design",
+                "SaaS och MVP med login, databas och betalning",
+                "Interna verktyg som ersätter Excel, mejl och manuella flöden",
+                "AI-automationer kopplade till riktiga arbetsprocesser",
+                "E-handel och betalflöden med Stripe eller Shopify",
+                "SEO-hubbar, artiklar och AI-vänlig informationsstruktur",
+              ].map((item) => (
+                <li key={item} className="flex gap-3 rounded-2xl border border-white/12 bg-white/[0.045] p-5 text-foreground/85">
+                  <Check className="mt-1 h-4 w-4 text-blue-200 shrink-0" /> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="border-t border-white/10 py-16">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <p className="label-caps mb-4">Relaterade sidor</p>
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <li><Link to="/ai-konsult-sverige" className="text-sm underline hover:text-primary">AI-konsult Sverige →</Link></li>
               <li><Link to="/priser" className="text-sm underline hover:text-primary">Priser & paket →</Link></li>
-              <li><Link to="/arbete" className="text-sm underline hover:text-primary">Cases & portfölj →</Link></li>
-              <li><Link to="/metodik" className="text-sm underline hover:text-primary">Vår metodik →</Link></li>
-              <li><Link to="/artiklar" className="text-sm underline hover:text-primary">Artiklar →</Link></li>
+              <li><Link to="/arbete" className="text-sm underline hover:text-primary">Case & projekt →</Link></li>
+              <li><Link to="/metodik" className="text-sm underline hover:text-primary">Metodik →</Link></li>
+              <li><Link to="/tjanster/hemsidor" className="text-sm underline hover:text-primary">Hemsidor →</Link></li>
+              <li><Link to="/tjanster/seo" className="text-sm underline hover:text-primary">SEO →</Link></li>
+              <li><Link to="/blogg" className="text-sm underline hover:text-primary">Blogg →</Link></li>
+              <li><Link to="/kontakt" className="text-sm underline hover:text-primary">Kontakt →</Link></li>
             </ul>
           </div>
         </section>
