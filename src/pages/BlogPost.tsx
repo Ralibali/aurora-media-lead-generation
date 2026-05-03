@@ -17,16 +17,18 @@ const BlogPost = () => {
     setSEOMeta({
       title: article.metaTitle,
       description: article.metaDesc,
-      canonical: `/artiklar/${article.slug}`,
+      canonical: `/blogg/${article.slug}`,
       ogType: "article",
       publishedTime: article.publishedDate,
       modifiedTime: article.updatedDate,
     });
+
     setBreadcrumb([
       { name: "Hem", url: "/" },
-      { name: "Artiklar", url: "/artiklar" },
-      { name: article.title, url: `/artiklar/${article.slug}` },
+      { name: "Blogg", url: "/blogg" },
+      { name: article.title, url: `/blogg/${article.slug}` },
     ]);
+
     setJsonLd("blogpost-jsonld", {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -34,9 +36,15 @@ const BlogPost = () => {
       description: article.metaDesc,
       datePublished: article.publishedDate,
       dateModified: article.updatedDate,
-      author: { "@type": "Organization", name: "Aurora Media AB", url: SITE_URL },
-      publisher: { "@id": `${SITE_URL}/#organization` },
-      mainEntityOfPage: `${SITE_URL}/artiklar/${article.slug}`,
+      author: {
+        "@type": "Organization",
+        name: "Aurora Media AB",
+        url: SITE_URL,
+      },
+      publisher: {
+        "@id": `${SITE_URL}/#organization`,
+      },
+      mainEntityOfPage: `${SITE_URL}/blogg/${article.slug}`,
       keywords: article.keyword,
       articleSection: article.category,
     });
@@ -51,7 +59,7 @@ const BlogPost = () => {
     });
   }, [article]);
 
-  if (!article) return <Navigate to="/artiklar" replace />;
+  if (!article) return <Navigate to="/blogg" replace />;
 
   const related = getRelatedArticles(article.relatedSlugs);
 
@@ -63,7 +71,7 @@ const BlogPost = () => {
           <nav className="text-sm text-muted-foreground mb-8" aria-label="Brödsmulor">
             <Link to="/" className="hover:text-foreground">Hem</Link>
             <span className="mx-2">›</span>
-            <Link to="/artiklar" className="hover:text-foreground">Artiklar</Link>
+            <Link to="/blogg" className="hover:text-foreground">Blogg</Link>
             <span className="mx-2">›</span>
             <span className="text-foreground">{article.category}</span>
           </nav>
@@ -128,7 +136,7 @@ const BlogPost = () => {
                 {related.map((r) => (
                   <Link
                     key={r.slug}
-                    to={`/artiklar/${r.slug}`}
+                    to={`/blogg/${r.slug}`}
                     className="rounded-lg border border-border bg-card p-5 hover:-translate-y-0.5 hover:shadow-md transition-all"
                   >
                     <p className="label-caps !text-[10px] mb-2">{r.category}</p>

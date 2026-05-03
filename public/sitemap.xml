@@ -30,7 +30,7 @@
   <url><loc>https://auroramedia.se/priser</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://auroramedia.se/om</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://auroramedia.se/kontakt</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://auroramedia.se/webbbyra-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/webbyra-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://auroramedia.se/metodik</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://auroramedia.se/redaktionell-policy</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
@@ -46,20 +46,20 @@
   <url><loc>https://auroramedia.se/tjanster/grafisk-profil</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
   <url><loc>https://auroramedia.se/tjanster/fotografering</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.75</priority></url>
 
-  <!-- Artiklar -->
-  <url><loc>https://auroramedia.se/artiklar</loc><lastmod>2026-04-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/bygga-saas-med-ai-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/lovable-eller-bolt-eller-emergent</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/vad-kostar-saas-utveckling-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/bygga-saas-pa-2-veckor</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/ai-kodning-sverige-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/saas-utvecklare-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/mvp-utveckling-for-startup</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/intern-app-istallet-for-excel</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/saas-for-startup-utan-utvecklare</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/supabase-eller-firebase-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/fortnox-integration-saas</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://auroramedia.se/artiklar/traditionell-webbyra-vs-ai-byggare</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <!-- Blogg -->
+  <url><loc>https://auroramedia.se/blogg</loc><lastmod>2026-04-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://auroramedia.se/blogg/bygga-saas-med-ai-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/lovable-eller-bolt-eller-emergent</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/vad-kostar-saas-utveckling-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/bygga-saas-pa-2-veckor</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/ai-kodning-sverige-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/saas-utvecklare-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/mvp-utveckling-for-startup</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/intern-app-istallet-for-excel</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/saas-for-startup-utan-utvecklare</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/supabase-eller-firebase-2026</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/fortnox-integration-saas</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://auroramedia.se/blogg/traditionell-webbyra-vs-ai-byggare</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Lokala SaaS-landningssidor -->
   <url><loc>https://auroramedia.se/saas-utveckling-linkoping</loc><lastmod>2026-04-26</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
