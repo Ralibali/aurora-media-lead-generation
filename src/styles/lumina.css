@@ -64,6 +64,139 @@
   will-change: transform;
 }
 
+/* Lumina cinematic skin for the rest of Aurora landing */
+.aurora-theme {
+  --au-bg: 0 0% 0%;
+  --au-bg-2: 225 44% 5%;
+  --au-surface: 224 32% 8%;
+  --au-surface-2: 230 28% 11%;
+  --au-cream: 0 0% 100%;
+  --au-cream-dim: 220 20% 78%;
+  --au-muted: 220 14% 64%;
+  --au-emerald: 217 91% 60%;
+  --au-emerald-soft: 262 83% 68%;
+  --au-coral: 330 81% 60%;
+  --au-coral-deep: 28 89% 71%;
+  --au-amber: 45 93% 58%;
+  --au-border: 224 20% 22%;
+  background:
+    radial-gradient(circle at 85% 10%, rgba(59, 130, 246, 0.15), transparent 32rem),
+    radial-gradient(circle at 10% 28%, rgba(168, 85, 247, 0.12), transparent 30rem),
+    linear-gradient(180deg, #000000 0%, #050816 46%, #000000 100%);
+}
+
+html:has(.aurora-theme),
+body:has(.aurora-theme) {
+  background: #000000;
+}
+
+.aurora-theme main {
+  background:
+    linear-gradient(180deg, #000000 0%, #050816 36%, #000000 100%);
+}
+
+.aurora-section-bg,
+.aurora-bg {
+  background:
+    radial-gradient(circle at 90% 15%, rgba(59, 130, 246, 0.16), transparent 34rem),
+    radial-gradient(circle at 10% 80%, rgba(236, 72, 153, 0.1), transparent 32rem),
+    linear-gradient(180deg, rgba(3, 7, 18, 0.98), rgba(0, 0, 0, 0.98));
+}
+
+.aurora-bg::before,
+.aurora-bg::after {
+  opacity: 0.55;
+}
+
+.aurora-theme .au-eyebrow {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+}
+
+.aurora-theme h2,
+.aurora-theme h3 {
+  color: #ffffff;
+}
+
+.aurora-theme p,
+.aurora-theme li {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.aurora-theme .au-card,
+.aurora-theme .au-card-static,
+.aurora-theme .au-service-card,
+.aurora-theme .au-logo-pill {
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 28px 80px -42px rgba(59, 130, 246, 0.55);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.aurora-theme .au-card:hover,
+.aurora-theme .au-service-card:hover,
+.aurora-theme .au-logo-pill:hover {
+  border-color: rgba(96, 165, 250, 0.48);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 32px 88px -36px rgba(168, 85, 247, 0.75);
+}
+
+.aurora-theme .au-icon {
+  background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(168,85,247,0.18));
+  border-color: rgba(147,197,253,0.42);
+  color: #bfdbfe;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 0 26px rgba(59,130,246,0.24);
+}
+
+.aurora-theme .au-highlight::before,
+.aurora-theme .au-handline::after,
+.aurora-theme .au-divider-x,
+.aurora-theme .au-divider-y {
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.72), rgba(236,72,153,0.58), transparent);
+}
+
+.aurora-theme .au-btn-coral {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.18);
+  color: #ffffff;
+  text-shadow: none;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  box-shadow: inset 0 0 24px rgba(255,255,255,0.16), 0 20px 52px -24px rgba(236,72,153,0.82);
+}
+
+.aurora-theme .au-btn-coral:hover {
+  box-shadow: inset 0 0 28px rgba(255,255,255,0.2), 0 28px 64px -24px rgba(59,130,246,0.9);
+}
+
+.aurora-theme .au-btn-ghost {
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.045);
+  color: rgba(255,255,255,0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.aurora-theme .au-btn-ghost:hover {
+  border-color: rgba(96,165,250,0.55);
+  background: rgba(59,130,246,0.12);
+  color: #ffffff;
+}
+
+.aurora-theme .au-marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.aurora-theme footer,
+.aurora-theme #footer {
+  background: #000000;
+}
+
 @keyframes lumina-orbit {
   from {
     transform: rotate(0deg);
@@ -86,5 +219,9 @@
   .lumina-hero-video {
     opacity: 0.52;
     transform: scale(1.15);
+  }
+
+  .aurora-theme .au-eyebrow {
+    letter-spacing: 0.26em;
   }
 }
