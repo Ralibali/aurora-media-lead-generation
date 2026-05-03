@@ -1,0 +1,90 @@
+.lumina-hero-video {
+  transform-origin: right center;
+  transform: scale(1.3);
+  object-position: right center;
+  filter: brightness(1.1) contrast(1.1);
+}
+
+.lumina-primary-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 999px;
+  padding: 14px 26.5px;
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-family: 'Manrope', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 0;
+  box-shadow: inset 0 0 28px rgba(255, 255, 255, 0.22), 0 18px 48px -22px rgba(59, 130, 246, 0.75);
+  cursor: pointer;
+  isolation: isolate;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.35s ease;
+}
+
+.lumina-primary-cta::before {
+  content: "";
+  position: absolute;
+  inset: -500%;
+  z-index: -2;
+  background: conic-gradient(#3b82f6, #a855f7, #ec4899, #f8a170, #eab308, #3b82f6);
+  animation: lumina-orbit 6s linear infinite;
+}
+
+.lumina-primary-cta::after {
+  content: "";
+  position: absolute;
+  inset: 2.5px;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.lumina-primary-cta:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: inset 0 0 32px rgba(255, 255, 255, 0.26), 0 24px 58px -24px rgba(168, 85, 247, 0.9);
+}
+
+.lumina-primary-cta:active {
+  transform: scale(0.98);
+}
+
+.lumina-ticker {
+  animation: lumina-ticker 26s linear infinite;
+  will-change: transform;
+}
+
+@keyframes lumina-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes lumina-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .lumina-hero-video {
+    opacity: 0.52;
+    transform: scale(1.15);
+  }
+}
