@@ -7,6 +7,7 @@ import "@/styles/lumina.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
+import AiAutomationForetag from "./pages/AiAutomationForetag";
 import AiKonsultSverige from "./pages/AiKonsultSverige";
 import Arbete from "./pages/Arbete";
 import Blog from "./pages/Blog";
@@ -49,10 +50,16 @@ type SEOConfig = {
 
 const seoMap: Record<string, SEOConfig> = {
   "/": {
-    title: "Aurora Media AB – Bygger SaaS med AI",
+    title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
     description:
-      "Aurora Media bygger SaaS, AI-lösningar och skräddarsydd mjukvara för företag som vill växa snabbare.",
+      "Aurora Media hjälper företag att ersätta Excel, manuella rutiner och omoderna system med AI-lösningar, automationer, SaaS och smarta digitala arbetsflöden.",
     canonical: "https://auroramedia.se/",
+  },
+  "/ai-automation-foretag": {
+    title: "AI automation för företag | Automatisera Excel, leads och administration",
+    description:
+      "Aurora Media hjälper företag att ersätta Excel, manuella rutiner och omoderna system med AI-lösningar, automationer, interna system och smarta digitala arbetsflöden.",
+    canonical: "https://auroramedia.se/ai-automation-foretag",
   },
   "/ai-konsult-sverige": {
     title: "AI-konsult Sverige – från strategi till färdig produkt | Aurora Media AB",
@@ -271,6 +278,7 @@ const App = () => (
           <div className="aurora-theme lumina-site min-h-screen">
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/ai-automation-foretag" element={<AiAutomationForetag />} />
               <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />
               <Route path="/arbete" element={<Arbete />} />
@@ -295,15 +303,14 @@ const App = () => (
               <Route path="/artiklar" element={<Navigate to="/blogg" replace />} />
               <Route path="/blogg/:slug" element={<BlogPost />} />
               <Route path="/artiklar/:slug" element={<BlogPost />} />
-              <Route path="/saas-utveckling-:slug" element={<CityPage />} />
-              <Route path="/ai-byra-:slug" element={<CityPage />} />
               <Route path="/metodik" element={<Metodik />} />
               <Route path="/redaktionell-policy" element={<RedaktionellPolicy />} />
               <Route path="/integritetspolicy" element={<Integritetspolicy />} />
-              <Route path="/admin/text-generator" element={<TextGenerator />} />
-              <Route path="/admin/texter" element={<TextGenerator />} />
-              <Route path="/admin/faq-rapport" element={<FaqRapport />} />
               <Route path="/admin/leads" element={<Leads />} />
+              <Route path="/admin/text-generator" element={<TextGenerator />} />
+              <Route path="/admin/faq-rapport" element={<FaqRapport />} />
+              <Route path="/saas-utveckling-:city" element={<CityPage />} />
+              <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
