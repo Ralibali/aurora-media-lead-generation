@@ -11,23 +11,25 @@ const Blog = () => {
       title: "Artiklar om AI-kodning och SaaS-utveckling | Aurora Media",
       description:
         "Artiklar om att bygga SaaS med AI-verktyg som Lovable, Bolt och Emergent. Konkreta erfarenheter, jämförelser och prisguider från Aurora Media.",
-      canonical: "/artiklar",
+      canonical: "/blogg",
     });
+
     setBreadcrumb([
       { name: "Hem", url: "/" },
-      { name: "Artiklar", url: "/artiklar" },
+      { name: "Blogg", url: "/blogg" },
     ]);
+
     setJsonLd("blog-collection-jsonld", {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: "Artiklar – Aurora Media",
-      url: `${SITE_URL}/artiklar`,
+      name: "Blogg – Aurora Media",
+      url: `${SITE_URL}/blogg`,
       mainEntity: {
         "@type": "ItemList",
         itemListElement: articles.map((a, i) => ({
           "@type": "ListItem",
           position: i + 1,
-          url: `${SITE_URL}/artiklar/${a.slug}`,
+          url: `${SITE_URL}/blogg/${a.slug}`,
           name: a.title,
         })),
       },
@@ -53,7 +55,7 @@ const Blog = () => {
           {articles.map((a) => (
             <Link
               key={a.slug}
-              to={`/artiklar/${a.slug}`}
+              to={`/blogg/${a.slug}`}
               className="group rounded-lg border border-border bg-card p-6 transition-all hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
