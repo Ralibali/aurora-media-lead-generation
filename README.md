@@ -1,73 +1,165 @@
-# Welcome to your Lovable project
+# Aurora Media Lead Generation
 
-## Project info
+Aurora Media bygger inte bara SaaS. Vi hjälper företag att gå från Excel, anteckningar, manuella rutiner och omoderna system till smarta AI-lösningar, automationer och digitala arbetsflöden som sparar tid, minskar administration och skapar fler affärer.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Det här projektet är grunden för Aurora Medias leadgenerering, positionering och säljande webbplats. Sajten ska tydligt kommunicera att Aurora Media erbjuder SaaS-utveckling, AI-konsulting, automation, interna system, leadgenerering, SEO, webb och digital effektivisering för företag.
 
-## How can I edit this code?
+## Kärnpositionering
 
-There are several ways of editing your application.
+**AI, automation och skräddarsydda system som gör företag effektivare.**
 
-**Use Lovable**
+Vi hjälper företag att ersätta manuellt arbete, Excel-kaos, lösa anteckningar, gamla system och ineffektiva arbetsflöden med moderna digitala lösningar. Det kan vara en AI-assistent, ett internt system, en automatiserad säljprocess, en dashboard, en kundportal eller en helt ny SaaS-produkt.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Målet är enkelt: mindre manuellt arbete, bättre överblick, snabbare uppföljning och fler affärer.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Vad Aurora Media erbjuder
 
-**Use your preferred IDE**
+### AI-genomlysning
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Vi analyserar hur företaget jobbar idag och identifierar vilka moment som kan effektiviseras, automatiseras eller byggas om till smarta digitala system.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Exempel på saker vi kartlägger:
 
-Follow these steps:
+- Excel-filer som egentligen borde vara system
+- manuella rutiner som upprepas varje vecka
+- kunddata som ligger utspridd i mejl, dokument och anteckningar
+- leads som inte följs upp tillräckligt snabbt
+- rapporter som tar onödig tid att sammanställa
+- system som inte pratar med varandra
+- intern kunskap som är svår att hitta
+- administration som bromsar försäljning och leverans
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### AI-automationer
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Vi bygger automationer som tar hand om repetitiva uppgifter och kopplar ihop företagets befintliga verktyg.
 
-# Step 3: Install the necessary dependencies.
-npm i
+Exempel:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- inkommande leads skickas automatiskt till CRM
+- AI sammanfattar kundförfrågningar
+- offerter skapas snabbare
+- uppföljningsmejl skickas automatiskt
+- dokument analyseras och sorteras
+- rapporter genereras automatiskt
+- interna uppgifter skapas i rätt system
+- mejl, formulär, CRM och affärssystem kopplas ihop
 
-**Edit a file directly in GitHub**
+### Interna system
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+När Excel, whiteboards och gamla verktyg inte längre räcker bygger vi riktiga system som är anpassade efter hur företaget faktiskt jobbar.
 
-**Use GitHub Codespaces**
+Exempel:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- kundregister
+- projektportal
+- offertsystem
+- bokningssystem
+- intern dashboard
+- ärendehantering
+- orderflöde
+- personalplanering
+- rapportverktyg
+- dokumentportal
 
-## What technologies are used for this project?
+### AI-assistenter
 
-This project is built with:
+Vi bygger AI-assistenter som hjälper personal, sälj, support och ledning att hitta rätt information snabbare.
+
+Exempel:
+
+- intern AI-assistent för rutiner och processer
+- säljassistent för argument, pris och kundcase
+- supportassistent som föreslår svar på kundfrågor
+- dokumentassistent för avtal, PDF:er och manualer
+- onboarding-assistent för ny personal
+
+### Leadgenerering och säljautomation
+
+Vi bygger leadflöden som inte bara skapar kontaktförfrågningar, utan hjälper företag att följa upp snabbare, prioritera rätt kunder och stänga fler affärer.
+
+Exempel:
+
+- konverterande landningssidor
+- formulär som kvalificerar kunder
+- CRM-koppling
+- lead scoring med AI
+- automatiska mejlsekvenser
+- dashboards för säljstatus
+- automatisk uppföljning
+- påminnelser till säljare
+
+### SaaS och digitala produkter
+
+Vi bygger även SaaS, MVP:er, kundportaler, marknadsplatser och digitala produkter från idé till lansering.
+
+## Huvudbudskap till sajten
+
+Aurora Media är inte bara ett bolag som bygger SaaS. Aurora Media är en digital effektiviseringspartner för företag som vill använda AI, automation och modern teknik för att spara tid, sälja mer och jobba smartare.
+
+## Konverterande hero-copy
+
+**H1:** AI, automation och skräddarsydda system som gör företag effektivare
+
+**Underrubrik:** Vi hjälper företag att gå från Excel, manuella rutiner, anteckningar och gamla system till smarta AI-lösningar, automationer och digitala arbetsflöden som sparar tid, minskar administration och skapar fler affärer.
+
+**Primär CTA:** Boka en AI-genomlysning
+
+**Sekundär CTA:** Se hur vi kan effektivisera ert företag
+
+## SEO-fokus
+
+Prioriterade sökord och landningssidor:
+
+- AI automation företag
+- AI konsult Sverige
+- AI konsult Linköping
+- AI byrå Linköping
+- automatisera Excel
+- digitalisering företag
+- skräddarsydda system
+- CRM automation
+- leadgenerering automation
+- AI-assistent företag
+- effektivisera administration
+- SaaS utveckling Sverige
+
+## Rekommenderade URL:er
+
+- `/ai-automation-foretag`
+- `/automatisera-excel`
+- `/ai-konsult-linkoping`
+- `/ai-byra-linkoping`
+- `/digitalisering-foretag`
+- `/skraddarsydda-system`
+- `/crm-automation`
+- `/leadgenerering-automation`
+- `/ai-assistent-foretag`
+- `/effektivisera-administration`
+
+## Teknik
+
+Projektet är byggt med:
 
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase
+- React Router
+- React Helmet Async
 
-## How can I deploy this project?
+## Lokalt utvecklingsflöde
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```sh
+npm i
+npm run dev
+```
 
-## Can I connect a custom domain to my Lovable project?
+## Build
 
-Yes, you can!
+```sh
+npm run build
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Build-scriptet genererar även statiska sidor och sitemap enligt projektets befintliga scripts.
