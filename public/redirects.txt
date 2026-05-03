@@ -1,0 +1,12 @@
+/om-oss-2/ /om 301
+/om-oss-2 /om 301
+/post-3/ /blogg 301
+/post-3 /blogg 301
+/post-5/ /blogg 301
+/post-5 /blogg 301
+/blog/ /blogg 301
+/blog /blogg 301
+/artiklar/ /blogg 301
+/artiklar /blogg 301
+/webbbyra-linkoping/ /webbyra-linkoping 301
+/webbbyra-linkoping /webbyra-linkoping 301
