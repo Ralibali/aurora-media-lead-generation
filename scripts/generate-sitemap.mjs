@@ -11,6 +11,7 @@ const BUILD_DATE = new Date().toISOString().slice(0, 10);
 
 const STATIC_ROUTES = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
+  { path: '/ai-konsult-sverige', changefreq: 'weekly', priority: '0.95' },
   { path: '/tjanster', changefreq: 'weekly', priority: '0.9' },
   { path: '/tjanster/hemsidor', changefreq: 'monthly', priority: '0.85' },
   { path: '/tjanster/ehandel', changefreq: 'monthly', priority: '0.85' },
