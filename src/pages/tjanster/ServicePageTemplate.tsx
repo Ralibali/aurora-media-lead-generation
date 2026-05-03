@@ -1,11 +1,10 @@
-import { useEffect, ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Check, ChevronRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, Check, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import FAQSection from "@/components/FAQSection";
-import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
@@ -17,7 +16,7 @@ export type ServiceTier = {
   desc?: string;
   features?: string[];
   featured?: boolean;
-  paketValue?: string; // override props.paketName for this specific tier
+  paketValue?: string;
 };
 
 export type RelatedService = {
@@ -32,7 +31,7 @@ export type ServicePageProps = {
   title: string;
   titleEm?: string;
   intro: string;
-  paketName: string; // value passed to ContactModal select
+  paketName: string;
   seoTitle: string;
   seoDescription: string;
   includes: string[];
@@ -42,61 +41,58 @@ export type ServicePageProps = {
   whyAffordable: string;
   faqs: { q: string; a: string; category?: string }[];
   related: RelatedService[];
-  extra?: ReactNode; // e.g. comparison table for Hemsidor
-  postFaq?: ReactNode; // optional block rendered directly after FAQ
+  extra?: ReactNode;
+  postFaq?: ReactNode;
 };
 
-/**
- * Per-tjänst CTA-copy under FAQ:n.
- * "Mix per tjänst": offert-löfte där priset varierar, sparring där scope kräver dialog.
- */
 const CTA_COPY: Record<string, { label: string; text: string }> = {
   seo: {
-    label: "Få SEO-offert på 24 h",
-    text: "Vill du veta vad SEO skulle kosta för just din sajt? Skicka URL:en så får du en konkret offert inom 24 timmar – kostnadsfritt och utan förpliktelser.",
+    label: "Få SEO-genomgång",
+    text: "Skicka URL:en så tittar jag på struktur, indexering och vad som mest sannolikt bromsar synligheten.",
   },
   ehandel: {
-    label: "Få e-handelsoffert på 24 h",
-    text: "Berätta kort om sortiment och betalflöden – jag återkommer med fast pris och tidsplan inom 24 timmar.",
+    label: "Få e-handelsplan",
+    text: "Berätta kort om sortiment, betalflöde och nuläge så tar vi fram rätt nivå: Shopify, Stripe eller skräddarsytt.",
   },
   hemsidor: {
-    label: "Få hemside-offert på 24 h",
-    text: "Skriv några rader om vad sajten ska göra. Du får ett fast pris och konkret leveranstid inom 24 timmar – inga timmar som tickar.",
+    label: "Få webbplan",
+    text: "Skriv vad sajten ska göra: sälja, ranka, förklara eller bli en plattform. Jag svarar med konkret nästa steg.",
   },
   "google-ads": {
-    label: "Få annonsplan på 24 h",
-    text: "Berätta vilka sökord du tävlar om så skissar jag en kampanjstruktur och budget – svar inom 24 timmar.",
+    label: "Få annonsplan",
+    text: "Skicka mål, budget och nuvarande konto så får du en konkret struktur istället för gissningar.",
   },
   "meta-ads": {
-    label: "Få annonsplan på 24 h",
-    text: "Berätta målgrupp och budget så får du en konkret kampanjplan tillbaka inom 24 timmar.",
+    label: "Få annonsplan",
+    text: "Berätta målgrupp och erbjudande så skissar jag kampanjvinkel och funnel.",
   },
   content: {
-    label: "Få contentplan på 24 h",
-    text: "Skicka några nyckelord eller ämnen – jag återkommer med ett förslag på artikelkalender och pris inom 24 timmar.",
+    label: "Få contentplan",
+    text: "Skicka ämne eller nyckelord så föreslår jag artikelstruktur och SEO-vinkel.",
   },
   "grafisk-profil": {
-    label: "Boka 30 min sparring",
-    text: "Vi pratar igenom ditt varumärke i 30 minuter – ej förpliktande. Sen får du en konkret offert inom 24 timmar.",
+    label: "Boka varumärkessparring",
+    text: "Vi går igenom hur uttrycket ska kännas och vad som behövs för att hålla ihop helheten.",
   },
   fotografering: {
-    label: "Boka fototid",
-    text: "Berätta vad som ska fotograferas och var – du får tider och pris inom 24 timmar.",
+    label: "Planera foto",
+    text: "Berätta vad som ska fotograferas, var och varför så får du ett rimligt upplägg.",
   },
   mobilapp: {
-    label: "Boka 30 min sparring",
-    text: "App-projekt börjar bäst med ett kort samtal. 30 minuter, ej förpliktande – sen får du en konkret offert inom 24 timmar.",
+    label: "Boka appsparring",
+    text: "Vi tar reda på om du faktiskt behöver app, PWA eller bara bättre mobil webb.",
   },
 };
 
 const getCtaCopy = (slug: string, fallbackTitle: string) =>
   CTA_COPY[slug] ?? {
-    label: "Få offert på 24 h",
-    text: `Har du fler frågor om ${fallbackTitle.toLowerCase()}? Skicka några rader så återkommer jag med konkret pris och tidsplan inom 24 timmar – kostnadsfritt och utan förpliktelser.`,
+    label: "Boka genomgång",
+    text: `Har du frågor om ${fallbackTitle.toLowerCase()}? Skicka några rader så får du ett konkret svar.`,
   };
 
 const ServicePageTemplate = (props: ServicePageProps) => {
   const { open } = useContactModal();
+  const cta = getCtaCopy(props.slug, props.title);
 
   useEffect(() => {
     setSEOMeta({
@@ -115,252 +111,158 @@ const ServicePageTemplate = (props: ServicePageProps) => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-16">
-        {/* Breadcrumb */}
-        <nav aria-label="Brödsmulor" className="container mx-auto px-6 pt-8">
-          <ol className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
-            <li>
-              <Link to="/" className="hover:text-foreground">
-                Hem
-              </Link>
-            </li>
-            <ChevronRight className="h-3 w-3" />
-            <li>
-              <Link to="/tjanster" className="hover:text-foreground">
-                Tjänster
-              </Link>
-            </li>
-            <ChevronRight className="h-3 w-3" />
-            <li className="text-foreground">{props.title}</li>
-          </ol>
-        </nav>
+      <main className="overflow-hidden">
+        <section className="relative px-6 pb-16 pt-28 sm:px-10 md:pt-36 lg:px-[70px]">
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_16%,rgba(59,130,246,0.22),transparent_34rem),radial-gradient(circle_at_12%_50%,rgba(168,85,247,0.14),transparent_30rem)]" />
+          <div className="mx-auto max-w-7xl">
+            <nav aria-label="Brödsmulor" className="mb-10">
+              <ol className="flex flex-wrap items-center gap-1.5 text-xs text-white/45">
+                <li><Link to="/" className="hover:text-white">Hem</Link></li>
+                <ChevronRight className="h-3 w-3" />
+                <li><Link to="/tjanster" className="hover:text-white">Tjänster</Link></li>
+                <ChevronRight className="h-3 w-3" />
+                <li className="text-white/70">{props.label ?? props.title}</li>
+              </ol>
+            </nav>
 
-        {/* Hero */}
-        <section className="pt-10 pb-16 md:pt-16 md:pb-20">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <Reveal>
-              <p className="label-caps">{props.label ?? "Tilläggstjänst"}</p>
-              <h1 className="mt-5 font-serif text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.05] tracking-[-0.02em]">
-                {props.title}
-                {props.titleEm && (
-                  <>
-                    {" "}
-                    <em className="italic text-primary">{props.titleEm}</em>
-                  </>
-                )}
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg text-muted-foreground leading-relaxed md:text-xl">
-                {props.intro}
-              </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" onClick={() => open(props.paketName)}>
-                  Boka ett samtal
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => open(props.paketName)}>
-                  Få offert
-                </Button>
-                <Button size="lg" variant="ghost" asChild>
-                  <Link to="/tjanster">Andra tjänster</Link>
-                </Button>
+            <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+              <div>
+                <p className="label-caps mb-5">{props.label ?? "Tjänst"}</p>
+                <h1 className="font-display text-[clamp(3rem,7vw,6.5rem)] font-bold leading-[0.92] tracking-tight text-white">
+                  {props.title}
+                  {props.titleEm && <span className="block text-blue-100/92">{props.titleEm}</span>}
+                </h1>
+                <p className="mt-7 max-w-2xl text-lg leading-relaxed text-white/66 md:text-xl">
+                  {props.intro}
+                </p>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Button size="lg" onClick={() => open(props.paketName)} className="rounded-full">
+                    Boka genomgång <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button size="lg" variant="outline" asChild className="rounded-full">
+                    <Link to="/priser">Se priser</Link>
+                  </Button>
+                </div>
               </div>
-            </Reveal>
+
+              <div className="rounded-[2rem] border border-white/12 bg-white/[0.055] p-6 backdrop-blur-2xl">
+                <p className="label-caps mb-5">Snabb överblick</p>
+                <div className="grid gap-3">
+                  {props.includes.slice(0, 5).map((item) => (
+                    <div key={item} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-black/20 p-4">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-200" />
+                      <span className="text-sm leading-relaxed text-white/70">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* What's included */}
-        <section className="border-t border-border py-20 md:py-24">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <Reveal>
-              <p className="label-caps">Vad som ingår</p>
-              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                Det här får du.
-              </h2>
-            </Reveal>
-            <ul className="mt-10 grid gap-3 sm:grid-cols-2">
-              {props.includes.map((item, i) => (
-                <Reveal
-                  key={item}
-                  as="li"
-                  delay={i * 0.04}
-                  y={12}
-                  duration={0.5}
-                  className="flex items-start gap-3 text-base text-foreground/85"
-                >
-                  <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+        <section className="border-t border-white/10 px-6 py-16 sm:px-10 md:py-24 lg:px-[70px]">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-10 max-w-3xl">
+              <p className="label-caps mb-3">Vad som ingår</p>
+              <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">Det här får du.</h2>
+            </div>
+            <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {props.includes.map((item) => (
+                <li key={item} className="flex items-start gap-3 rounded-[1.35rem] border border-white/12 bg-white/[0.045] p-5 text-sm leading-relaxed text-white/68 backdrop-blur-xl">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-200" />
                   <span>{item}</span>
-                </Reveal>
+                </li>
               ))}
             </ul>
           </div>
         </section>
 
-        {/* Process */}
-        <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <Reveal>
-              <p className="label-caps">Process</p>
-              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                Så går det till.
-              </h2>
-            </Reveal>
-            <div className="mt-12 grid gap-8 md:grid-cols-4 md:gap-6">
-              {props.process.map((s, i) => (
-                <Reveal
-                  key={s.title}
-                  delay={i * 0.08}
-                  y={16}
-                  duration={0.6}
-                  className="md:border-l md:border-border md:pl-5"
-                >
-                  <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
-                    {s.label}
-                  </p>
-                  <h3 className="mt-3 font-serif text-2xl">{s.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
-                </Reveal>
+        <section className="border-t border-white/10 bg-white/[0.018] px-6 py-16 sm:px-10 md:py-24 lg:px-[70px]">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-10 max-w-3xl">
+              <p className="label-caps mb-3">Process</p>
+              <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">Så går det till.</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {props.process.map((step, index) => (
+                <div key={step.title} className="rounded-[1.5rem] border border-white/12 bg-white/[0.045] p-6 backdrop-blur-xl">
+                  <p className="text-sm font-bold text-blue-200">0{index + 1}</p>
+                  <h3 className="mt-4 font-display text-2xl font-bold text-white">{step.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/60">{step.body}</p>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Pricing tiers (optional) */}
         {props.tiers && props.tiers.length > 0 && (
-          <section className="border-t border-border py-20 md:py-24">
-            <div className="container mx-auto px-6">
-              <Reveal className="max-w-2xl">
-                <p className="label-caps">Priser</p>
-                <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                  Välj nivå.
-                </h2>
-              </Reveal>
-              <div className="mt-12 grid gap-6 md:grid-cols-3">
-                {props.tiers.map((t, i) => (
-                  <Reveal
-                    key={t.name}
-                    delay={i * 0.08}
-                    duration={0.6}
-                    className={`relative flex flex-col rounded-xl border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
-                      t.featured ? "border-primary shadow-md" : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    {t.featured && (
-                      <span className="absolute -top-3 left-7 rounded-full bg-primary px-3 py-1 text-[10px] font-medium uppercase tracking-wider text-primary-foreground">
-                        Populärast
-                      </span>
-                    )}
-                    <p className="label-caps">{t.name}</p>
-                    <p className="mt-3 font-serif text-3xl md:text-4xl">{t.price}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">{t.time}</p>
-                    {t.desc && (
-                      <p className="mt-4 text-sm leading-relaxed text-foreground/80">{t.desc}</p>
-                    )}
-                    {t.features && (
-                      <ul className="mt-5 flex-1 space-y-2.5">
-                        {t.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2 text-sm">
-                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                            <span className="text-muted-foreground">{f}</span>
+          <section className="border-t border-white/10 px-6 py-16 sm:px-10 md:py-24 lg:px-[70px]">
+            <div className="mx-auto max-w-7xl">
+              <div className="mb-10 max-w-3xl">
+                <p className="label-caps mb-3">Nivåer</p>
+                <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">Välj rätt nivå.</h2>
+              </div>
+              <div className="grid gap-5 md:grid-cols-3">
+                {props.tiers.map((tier) => (
+                  <div key={tier.name} className={`relative flex flex-col rounded-[1.7rem] border p-7 backdrop-blur-2xl ${tier.featured ? "border-blue-300/40 bg-blue-400/10 shadow-[0_34px_100px_-52px_rgba(59,130,246,0.9)]" : "border-white/12 bg-white/[0.055]"}`}>
+                    {tier.featured && <span className="absolute -top-3 left-6 rounded-full border border-blue-300/30 bg-blue-500/30 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-50">Rekommenderad</span>}
+                    <p className="label-caps">{tier.name}</p>
+                    <p className="mt-4 text-3xl font-bold text-white">{tier.price}</p>
+                    <p className="mt-1 text-sm text-white/45">{tier.time}</p>
+                    {tier.desc && <p className="mt-4 text-sm leading-relaxed text-white/66">{tier.desc}</p>}
+                    {tier.features && (
+                      <ul className="mt-6 flex-1 space-y-2.5">
+                        {tier.features.map((feature) => (
+                          <li key={feature} className="flex items-start gap-2 text-sm text-white/64">
+                            <Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-200" />
+                            <span>{feature}</span>
                           </li>
                         ))}
                       </ul>
                     )}
-                    <Button
-                      onClick={() => open(t.paketValue ?? props.paketName)}
-                      variant={t.featured ? "default" : "outline"}
-                      className="mt-6 w-full"
-                    >
+                    <Button onClick={() => open(tier.paketValue ?? props.paketName)} variant={tier.featured ? "default" : "outline"} className="mt-7 w-full rounded-full">
                       Få offert
                     </Button>
-                  </Reveal>
+                  </div>
                 ))}
               </div>
-              {props.pricingNote && (
-                <div className="mt-8 max-w-3xl text-sm text-muted-foreground">{props.pricingNote}</div>
-              )}
+              {props.pricingNote && <div className="mt-8 max-w-3xl text-sm leading-relaxed text-white/52">{props.pricingNote}</div>}
             </div>
           </section>
         )}
 
-        {/* Custom extra (e.g. comparison table) */}
         {props.extra}
 
-        {/* Why affordable */}
-        <section className="border-t border-border py-20 md:py-24">
-          <div className="container mx-auto px-6 max-w-3xl">
-            <Reveal>
-              <p className="label-caps">Varför prisvärt</p>
-              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                Därför kan jag hålla priset.
-              </h2>
-              <p className="mt-7 text-lg leading-relaxed text-foreground/85">{props.whyAffordable}</p>
-            </Reveal>
+        <section className="border-t border-white/10 px-6 py-16 sm:px-10 md:py-24 lg:px-[70px]">
+          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+            <div>
+              <p className="label-caps mb-3">Varför Aurora</p>
+              <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">Snabbare utan att bli slarvigt.</h2>
+            </div>
+            <p className="text-lg leading-relaxed text-white/68">{props.whyAffordable}</p>
           </div>
         </section>
 
-        <FAQSection
-          items={props.faqs}
-          title="Vanliga frågor"
-          searchable={props.faqs.length >= 5}
-          ctaPaket={props.paketName}
-          ctaLabel={getCtaCopy(props.slug, props.title).label}
-          ctaText={getCtaCopy(props.slug, props.title).text}
-        />
-
+        <FAQSection items={props.faqs} title={`Vanliga frågor om ${props.title.toLowerCase()}`} searchable ctaPaket={props.paketName} ctaLabel={cta.label} ctaText={cta.text} />
         {props.postFaq}
 
-        {/* Related */}
-        <section className="border-t border-border bg-secondary/30 py-20">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <Reveal>
-              <p className="label-caps">Närliggande tjänster</p>
-              <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-                Andra tjänster jag levererar.
-              </h2>
-            </Reveal>
-            <div className="mt-10 grid gap-5 sm:grid-cols-3">
-              {props.related.map((r, i) => (
-                <Reveal key={r.to} delay={i * 0.06} y={16} duration={0.5}>
-                  <Link
-                    to={r.to}
-                    className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:shadow-md"
-                  >
-                    <p className="font-serif text-2xl">{r.name}</p>
-                    <p className="mt-1 font-mono text-xs text-muted-foreground">{r.price}</p>
-                    <span className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                      Läs mer
-                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </span>
+        {props.related.length > 0 && (
+          <section className="border-t border-white/10 px-6 py-16 sm:px-10 md:py-24 lg:px-[70px]">
+            <div className="mx-auto max-w-7xl">
+              <p className="label-caps mb-3">Relaterat</p>
+              <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">Bygg vidare.</h2>
+              <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {props.related.map((service) => (
+                  <Link key={service.to} to={service.to} className="group rounded-[1.4rem] border border-white/12 bg-white/[0.045] p-5 transition hover:-translate-y-1 hover:border-blue-300/35 hover:bg-white/[0.07]">
+                    <p className="font-display text-xl font-bold text-white">{service.name}</p>
+                    <p className="mt-2 text-sm text-white/52">{service.price}</p>
+                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-blue-100/80">Läs mer <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span>
                   </Link>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Final CTA */}
-        <section className="border-t border-border py-28 md:py-36">
-          <div className="container mx-auto px-6 max-w-3xl text-center">
-            <Reveal as="div">
-              <h2 className="font-serif italic text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
-                Klar för {props.title.toLowerCase()}?
-              </h2>
-              <p className="mt-6 text-lg text-muted-foreground">
-                Skriv ett mejl. Jag svarar inom 24 timmar.
-              </p>
-              <div className="mt-10 flex flex-col items-center gap-4">
-                <Button size="lg" onClick={() => open(props.paketName)} className="px-10">
-                  Få offert
-                </Button>
-                <a
-                  href="mailto:info@auroramedia.se"
-                  className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                >
-                  Eller direkt: info@auroramedia.se
-                </a>
+                ))}
               </div>
-            </Reveal>
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
       <StickyMobileCTA />
