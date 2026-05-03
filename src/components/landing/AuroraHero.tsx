@@ -1,28 +1,29 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Code2, Rocket, Target } from "lucide-react";
+import { ArrowRight, Bot, FileSpreadsheet, Rocket, Target } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import "@/styles/lumina.css";
 
 const TRUST = [
-  { icon: Rocket, text: "Snabb leverans — ofta 1–2 veckor" },
-  { icon: Code2, text: "Du äger alltid koden" },
-  { icon: Target, text: "Byggt för din verksamhet, inte tvärtom" },
+  { icon: FileSpreadsheet, text: "Från Excel och manuellt kaos till smarta flöden" },
+  { icon: Bot, text: "AI, automation och system byggt för er vardag" },
+  { icon: Target, text: "Fokus på sparad tid, fler leads och bättre överblick" },
 ];
 
 const OFFERINGS = [
-  "AI-system",
+  "AI-automation",
+  "AI-genomlysning",
+  "Interna system",
+  "Säljautomation",
+  "AI-assistenter",
+  "CRM-flöden",
+  "Dashboards",
   "SaaS & MVP",
-  "Automatisering",
   "Webbappar",
-  "Hemsidor",
-  "E-handel",
-  "Mobilappar",
   "SEO",
   "Google Ads",
-  "Meta Ads",
   "Content",
-  "Grafisk profil",
 ];
 
 const BrandMark = ({ name }: { name: string }) => (
@@ -89,53 +90,47 @@ const AuroraHero = () => {
         />
       </video>
 
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.85)_30%,rgba(0,0,0,0)_85%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_24%,rgba(59,130,246,0.18),transparent_32%),radial-gradient(circle_at_82%_42%,rgba(168,85,247,0.14),transparent_36%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0)_86%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_24%,rgba(59,130,246,0.2),transparent_32%),radial-gradient(circle_at_82%_42%,rgba(168,85,247,0.14),transparent_36%)]" />
 
       <div className="relative z-10 flex min-h-[calc(100vh-92px)] items-center px-6 pb-44 pt-10 sm:px-10 lg:px-[70px]">
         <motion.div
           initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.9, ease: [0.32, 0.72, 0, 1] }}
-          className="w-full -translate-y-[12%]"
+          className="w-full -translate-y-[10%]"
         >
           <p className="mb-3 font-mono-au text-[9px] font-bold uppercase tracking-[0.4em] text-white/70">
-            AURORA MEDIA · AI-DRIVEN MJUKVARA
+            AURORA MEDIA · AI · AUTOMATION · SYSTEM
           </p>
 
-          <h1 className="font-display text-[clamp(3.6rem,8vw,5rem)] font-bold leading-[1] tracking-tight text-white md:max-w-[820px]">
-            <span className="block">IDÉN FINNS.</span>
+          <h1 className="font-display text-[clamp(3.3rem,8vw,6.4rem)] font-bold leading-[0.92] tracking-tight text-white md:max-w-[980px]">
+            <span className="block">FRÅN EXCEL-KAOS.</span>
             <span className="block">
-              PRODUKTEN <span className="text-white">SAKNAS.</span>
+              TILL SMARTA <span className="text-white">AI-FLÖDEN.</span>
             </span>
           </h1>
 
-          <p className="mt-4 max-w-[430px] text-base font-normal leading-relaxed text-white/60">
-            Vi bygger skräddarsydda system, appar och plattformar som gör din
-            verksamhet snabbare, smartare och mer lönsam — med snabb leverans
-            och kod du äger från dag ett.
+          <p className="mt-5 max-w-[620px] text-base font-normal leading-relaxed text-white/64 md:text-lg">
+            Vi hjälper företag att ersätta manuella rutiner, anteckningar, gamla system och tidskrävande administration med AI-lösningar, automationer och skräddarsydda system som sparar tid och skapar fler affärer.
           </p>
 
           <div className="mt-[30px] flex flex-col gap-3 sm:flex-row sm:items-center">
             <button onClick={() => open()} className="lumina-primary-cta group">
               <span className="relative z-10 flex items-center gap-3">
-                Boka kostnadsfri rådgivning
+                Boka AI-genomlysning
                 <ArrowRight size={16} strokeWidth={2.5} className="transition-transform group-hover:translate-x-[5px]" />
               </span>
             </button>
-            <a
-              href="#projekt"
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector("#projekt")?.scrollIntoView({ behavior: "smooth" });
-              }}
+            <Link
+              to="/ai-automation-foretag"
               className="inline-flex items-center justify-center rounded-full border border-white/20 px-[26.5px] py-[14px] text-[12px] font-bold uppercase tracking-[0.08em] text-white/75 backdrop-blur-xl transition hover:border-white/35 hover:text-white"
             >
-              Se tidigare projekt
-            </a>
+              Läs om AI & automation
+            </Link>
           </div>
 
-          <ul className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+          <ul className="mt-10 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
             {TRUST.map(({ icon: Icon, text }) => (
               <li key={text} className="flex items-center gap-2.5 text-sm text-white/70">
                 <span className="grid h-7 w-7 place-items-center rounded-md border border-blue-400/30 bg-blue-500/10 text-blue-200 shadow-[0_0_18px_rgba(59,130,246,0.22)]">
