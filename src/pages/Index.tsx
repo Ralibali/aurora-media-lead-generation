@@ -22,15 +22,15 @@ import {
 const Index = () => {
   useEffect(() => {
     setSEOMeta({
-      title: "Idén finns. Produkten saknas. | Aurora Media – AI-driven mjukvara",
+      title: "AI, automation och skräddarsydda system för företag | Aurora Media",
       description:
-        "Vi bygger SaaS, appar och skräddarsydda system. Snabb leverans — ofta 1–2 veckor. Du äger alltid koden. Boka kostnadsfri rådgivning.",
+        "Aurora Media hjälper företag att ersätta Excel, manuella rutiner och omoderna system med AI-lösningar, automationer, SaaS, interna system och smarta digitala arbetsflöden.",
       canonical: "/",
       ogImage: "/og-image-sv.jpg",
       ogType: "website",
       ogLocale: "sv_SE",
       keywords:
-        "SaaS-utveckling, AI-driven mjukvara, MVP-utveckling, integrationer, webbyrå Linköping, Aurora Media",
+        "AI automation företag, automatisera Excel, AI konsult Sverige, skräddarsydda system, SaaS-utveckling, CRM automation, digitalisering företag, Aurora Media",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
