@@ -1,39 +1,59 @@
+import { Link } from "react-router-dom";
+
 const COLS = [
   {
     title: "Tjänster",
     items: [
-      { label: "System & SaaS", href: "#tjanster" },
-      { label: "Integrationer", href: "#integrationer" },
-      { label: "Appar", href: "#tjanster" },
-      { label: "Webb & plattformar", href: "#tjanster" },
-      { label: "AI-integration", href: "#tjanster" },
+      { label: "System & SaaS", href: "/tjanster" },
+      { label: "Integrationer", href: "/tjanster" },
+      { label: "Appar", href: "/tjanster/mobilapp" },
+      { label: "Webb & plattformar", href: "/tjanster/hemsidor" },
+      { label: "AI-integration", href: "/tjanster" },
     ],
   },
   {
     title: "Företaget",
     items: [
-      { label: "Process", href: "#process" },
-      { label: "Projekt", href: "#projekt" },
-      { label: "Branscher", href: "#branscher" },
-      { label: "Paket", href: "#paket" },
+      { label: "Process", href: "/metodik" },
+      { label: "Projekt", href: "/arbete" },
+      { label: "Branscher", href: "/#branscher" },
+      { label: "Paket", href: "/priser" },
     ],
   },
   {
     title: "Kontakt",
     items: [
-      { label: "info@auroramedia.se", href: "mailto:info@auroramedia.se" },
-      { label: "Org.nr 559272-0220", href: "#" },
-      { label: "Linköping, Sverige", href: "#" },
+      { label: "info@auroramedia.se", href: "mailto:info@auroramedia.se", external: true },
+      { label: "Org.nr 559272-0220", href: "/om" },
+      { label: "Linköping, Sverige", href: "/webbyra-linkoping" },
     ],
   },
 ];
+
+const FooterLink = ({ href, children, external = false }: { href: string; children: React.ReactNode; external?: boolean }) => {
+  const className = "text-sm text-[hsl(var(--au-cream)/0.75)] transition-colors hover:text-[hsl(152_80%_65%)]";
+
+  if (external || href.startsWith("mailto:") || href.startsWith("tel:")) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link to={href} className={className}>
+      {children}
+    </Link>
+  );
+};
 
 const AuroraFooter = () => (
   <footer className="aurora-section-bg relative overflow-hidden border-t border-[hsl(var(--au-cream)/0.08)] pt-16 pb-10">
     <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
       <div className="grid gap-12 md:grid-cols-12">
         <div className="md:col-span-5">
-          <div className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5">
             <span
               className="grid h-9 w-9 place-items-center rounded-lg font-display text-base"
               style={{
@@ -46,7 +66,7 @@ const AuroraFooter = () => (
             <span className="font-display text-base text-[hsl(var(--au-cream))]">
               AURORA MEDIA
             </span>
-          </div>
+          </Link>
           <p className="mt-5 max-w-md text-sm leading-relaxed text-[hsl(var(--au-cream)/0.62)]">
             AI-driven mjukvarubyrå för svenska bolag. Vi bygger SaaS, appar
             och skräddarsydda system — med fast pris, snabb leverans och kod
@@ -62,12 +82,9 @@ const AuroraFooter = () => (
             <ul className="mt-4 space-y-2.5">
               {col.items.map((it) => (
                 <li key={it.label}>
-                  <a
-                    href={it.href}
-                    className="text-sm text-[hsl(var(--au-cream)/0.75)] transition-colors hover:text-[hsl(152 80% 65%)]"
-                  >
+                  <FooterLink href={it.href} external={it.external}>
                     {it.label}
-                  </a>
+                  </FooterLink>
                 </li>
               ))}
             </ul>
@@ -81,8 +98,12 @@ const AuroraFooter = () => (
       >
         <p>© {new Date().getFullYear()} Aurora Media AB · Org.nr 559272-0220</p>
         <div className="flex items-center gap-5">
-          <a href="#" className="hover:text-[hsl(var(--au-cream)/0.85)]">Integritetspolicy</a>
-          <a href="#" className="hover:text-[hsl(var(--au-cream)/0.85)]">Villkor</a>
+          <Link to="/integritetspolicy" className="hover:text-[hsl(var(--au-cream)/0.85)]">
+            Integritetspolicy
+          </Link>
+          <Link to="/redaktionell-policy" className="hover:text-[hsl(var(--au-cream)/0.85)]">
+            Villkor
+          </Link>
         </div>
       </div>
     </div>
