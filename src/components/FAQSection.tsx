@@ -1,12 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { MagnifyingGlass, X, Question, ArrowRight } from "@phosphor-icons/react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { MagnifyingGlass, X, ArrowRight } from "@phosphor-icons/react";
+import { ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
@@ -20,44 +15,34 @@ export type FaqItem = {
 
 export const faqs: FaqItem[] = [
   {
-    q: "Vem är du?",
-    a: "Jag heter Christoffer och driver Aurora Media själv från Linköping. Jag kommer från säkerhetsbranschen där jag jobbade i tio år innan jag bytte spår och bygger nu webbappar på heltid.",
-    category: "Om mig",
+    q: "Vad gör Aurora Media?",
+    a: "Aurora Media bygger SaaS, MVP:er, interna appar, AI-automationer och moderna webbplattformar åt svenska företag. Fokus är fast pris, snabb leverans och kod kunden äger.",
+    category: "Om Aurora",
   },
   {
-    q: "Använder du AI för att skriva all kod?",
-    a: "Nej. Jag använder AI-verktyg som Lovable, Bolt och Claude för att snabba på vissa delar, men jag granskar och styr all arkitektur och logik själv. Det är så jag kan leverera på veckor istället för månader utan att tappa kvalitet.",
-    category: "Verktyg",
+    q: "Använder du AI för att bygga?",
+    a: "Ja. Jag använder AI-verktyg som Lovable, Bolt, Cursor och Claude för att bygga snabbare. Men arkitektur, scope, säkerhet, QA och slutansvar ligger hos mig.",
+    category: "Process",
   },
   {
-    q: "Vad betyder det att jag äger källkoden?",
-    a: "Att du får alla filer och rättigheter till koden jag skriver. Du kan anlita vem som helst för att vidareutveckla den i framtiden. Inga låsningar, inga abonnemang du måste behålla.",
-    category: "Pris & process",
+    q: "Vad betyder kod du äger?",
+    a: "Du får tillgång till GitHub-repo, teknisk grund och dokumentation. Du ska kunna fortsätta med Aurora Media, ta in en annan utvecklare eller bygga vidare internt.",
+    category: "Ägande",
+  },
+  {
+    q: "Vad kostar det?",
+    a: "En prototyp börjar från 14 900 kr, en MVP från 34 900 kr och en mer skalbar SaaS från 89 000 kr. Exakt pris beror på scope, integrationer och komplexitet.",
+    category: "Pris",
   },
   {
     q: "Vilken teknik använder du?",
-    a: "Jag bygger med React för frontend och Supabase (PostgreSQL) för backend. Det är en modern och stabil kombination som funkar för allt från enkla appar till skalbar SaaS.",
-    category: "Verktyg",
+    a: "Vanligtvis React, TypeScript, Supabase, PostgreSQL, Stripe, Brevo och modern hosting. Stacken väljs efter vad projektet faktiskt behöver.",
+    category: "Teknik",
   },
   {
-    q: "Varför en administrativ avgift på 15%?",
-    a: "Den täcker min tid för projekthantering, möten och avstämningar. Jag väljer att redovisa den separat istället för att gömma den i timpriset. Då vet du exakt vad du betalar för.",
-    category: "Pris & process",
-  },
-  {
-    q: "Vad händer efter att appen är klar?",
-    a: "Jag överlämnar allt till dig. Om du vill kan jag erbjuda ett supportavtal för 1 990 kr/mån som täcker drift och mindre ändringar. Annars står du på egen hand med full källkod.",
-    category: "Pris & process",
-  },
-  {
-    q: "Kan du bygga en mobilapp för App Store?",
-    a: "Apparna jag bygger är webbappar som fungerar och ser bra ut på mobilen. De kan installeras på hemskärmen precis som en vanlig app. För renodlade native-appar hänvisar jag vidare.",
-    category: "Verktyg",
-  },
-  {
-    q: "Varför jobbar du ensam?",
-    a: "För att det är enklare. Färre möten, inga missförstånd och en rakare kommunikation. Du pratar direkt med personen som bygger – ingen account manager emellan.",
-    category: "Om mig",
+    q: "Vad händer efter leverans?",
+    a: "Du får överlämning, dokumentation och möjlighet till fortsatt utveckling eller support. Målet är inte att låsa in dig, utan att ge dig en stabil grund att äga själv.",
+    category: "Leverans",
   },
 ];
 
@@ -66,8 +51,8 @@ const FAQSection = ({
   title = "Vanliga frågor",
   searchable = false,
   ctaPaket,
-  ctaLabel = "Be om offert",
-  ctaText = "Hittade du inte det du letade efter? Skicka några rader så återkommer jag inom 24 timmar.",
+  ctaLabel = "Få personligt svar",
+  ctaText = "Hittade du inte det du letade efter? Skicka några rader så återkommer jag med ett konkret svar.",
 }: {
   items?: FaqItem[];
   title?: string;
@@ -78,351 +63,188 @@ const FAQSection = ({
 }) => {
   const { open } = useContactModal();
   const [query, setQuery] = useState("");
-  const [openItem, setOpenItem] = useState<string>("");
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  // Härled tillgängliga kategorier från items (bevarar inmatningsordning)
-  const availableCategories = useMemo(() => {
+  const categories = useMemo(() => {
     const seen = new Set<string>();
-    const list: string[] = [];
-    for (const f of items) {
-      if (f.category && !seen.has(f.category)) {
-        seen.add(f.category);
-        list.push(f.category);
+    return items.reduce<string[]>((acc, item) => {
+      if (item.category && !seen.has(item.category)) {
+        seen.add(item.category);
+        acc.push(item.category);
       }
-    }
-    return list;
+      return acc;
+    }, []);
   }, [items]);
 
-  const showChips = searchable && availableCategories.length >= 2;
-
-  // Filtrera först på kategori, sedan på sökord
   const filtered = useMemo(() => {
-    if (!searchable) return items;
     let list = items;
-    if (showChips && activeCategory) {
-      list = list.filter((f) => f.category === activeCategory);
+    if (searchable && activeCategory) {
+      list = list.filter((item) => item.category === activeCategory);
     }
     const q = query.trim().toLowerCase();
-    if (q) {
-      list = list.filter(
-        (f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q)
-      );
+    if (searchable && q) {
+      list = list.filter((item) => item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q));
     }
     return list;
-  }, [items, query, searchable, activeCategory, showChips]);
+  }, [items, searchable, activeCategory, query]);
 
-  const itemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-
-  // Auto-öppna första träffen när användaren söker + scrolla in den mjukt
-  useEffect(() => {
-    if (!searchable) return;
-    if (query.trim() && filtered.length > 0) {
-      const nextValue = `item-${filtered[0].q}`;
-      setOpenItem(nextValue);
-
-      // Vänta på att accordion expanderar innan vi scrollar (två frames för layout)
-      const raf1 = requestAnimationFrame(() => {
-        const raf2 = requestAnimationFrame(() => {
-          const el = itemRefs.current.get(nextValue);
-          if (!el) return;
-          const isMobile = window.matchMedia("(max-width: 768px)").matches;
-          // Offset för sticky navbar (~96px på mobil)
-          const offset = isMobile ? 96 : 120;
-          const top = el.getBoundingClientRect().top + window.scrollY - offset;
-          window.scrollTo({ top, behavior: "smooth" });
+  const handleSearch = (value: string) => {
+    setQuery(value);
+    setOpenIndex(0);
+    if (value.trim()) {
+      window.setTimeout(() => {
+        trackFaqSearch({
+          query: value.trim(),
+          resultCount: filtered.length,
+          openedQuestion: filtered[0]?.q ?? null,
         });
-        return () => cancelAnimationFrame(raf2);
-      });
-      return () => cancelAnimationFrame(raf1);
-    } else if (!query.trim()) {
-      setOpenItem("");
-    }
-  }, [query, filtered, searchable]);
-
-  // Debouncad tracking — loggar 800ms efter att användaren slutat skriva
-  useEffect(() => {
-    if (!searchable) return;
-    const trimmed = query.trim();
-    if (!trimmed) return;
-
-    const timer = window.setTimeout(() => {
-      trackFaqSearch({
-        query: trimmed,
-        resultCount: filtered.length,
-        openedQuestion: filtered[0]?.q ?? null,
-      });
-    }, 800);
-
-    return () => window.clearTimeout(timer);
-  }, [query, filtered, searchable]);
-
-  // Logga när användaren manuellt öppnar en ANNAN fråga under aktiv sökning
-  const handleAccordionChange = (value: string) => {
-    setOpenItem(value);
-    if (!searchable) return;
-    const trimmed = query.trim();
-    if (!value || !trimmed) return;
-
-    const expectedAuto = filtered[0] ? `item-${filtered[0].q}` : "";
-    if (value !== expectedAuto) {
-      const opened = value.replace(/^item-/, "");
-      trackFaqSearch({
-        query: trimmed,
-        resultCount: filtered.length,
-        openedQuestion: opened,
-      });
+      }, 0);
     }
   };
 
+  const handleCta = () => {
+    const opened = openIndex !== null ? filtered[openIndex] : null;
+    trackFaqCtaClick({
+      source: "faq_section",
+      paket: ctaPaket,
+      ctaLabel,
+      query: query.trim() || null,
+      category: activeCategory,
+      openedQuestion: opened?.q ?? null,
+    });
+    open({
+      paket: ctaPaket,
+      internalNote: `Lead från FAQ${query.trim() ? `\nSökning: ${query.trim()}` : ""}${opened ? `\nFråga: ${opened.q}` : ""}`,
+    });
+  };
+
   return (
-    <section className="border-t border-border py-20 md:py-32">
-      <div className="container mx-auto px-6">
+    <section className="relative border-t border-white/10 py-16 md:py-24">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_20%,rgba(59,130,246,0.12),transparent_30rem)]" />
+      <div className="container relative mx-auto px-6">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="max-w-2xl"
+          transition={{ duration: 0.55 }}
+          className="max-w-3xl"
         >
           <p className="label-caps">Frågor & svar</p>
-          <h2 className="mt-3 font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.02em]">
+          <h2 className="mt-3 font-display text-[clamp(2.5rem,5vw,4.6rem)] font-bold leading-[0.98] tracking-tight text-white">
             {title}
           </h2>
-          {searchable && (
-            <p className="mt-4 text-base text-muted-foreground">
-              {items.length} frågor. Sök eller bläddra.
-            </p>
-          )}
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/58">
+            {searchable ? `${items.length} frågor. Sök, filtrera eller öppna det som är relevant.` : "Svar på de vanligaste frågorna innan du bokar ett samtal."}
+          </p>
         </motion.div>
 
-        {showChips && (
-          <div className="mt-7 flex max-w-3xl flex-wrap gap-2" role="group" aria-label="Filtrera frågor efter kategori">
-            <button
-              type="button"
-              onClick={() => setActiveCategory(null)}
-              aria-pressed={activeCategory === null}
-              className={`rounded-full border px-4 py-1.5 text-sm transition-[background-color,border-color,color] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                activeCategory === null
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground"
-              }`}
-            >
-              Alla
-              <span className="ml-1.5 text-xs opacity-70">({items.length})</span>
-            </button>
-            {availableCategories.map((cat) => {
-              const count = items.filter((f) => f.category === cat).length;
-              const isActive = activeCategory === cat;
-              return (
+        {searchable && (
+          <div className="mt-8 max-w-3xl space-y-4">
+            {categories.length > 1 && (
+              <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrera frågor efter kategori">
                 <button
-                  key={cat}
                   type="button"
-                  onClick={() => setActiveCategory(isActive ? null : cat)}
-                  aria-pressed={isActive}
-                  className={`rounded-full border px-4 py-1.5 text-sm transition-[background-color,border-color,color] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${
-                    isActive
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                  onClick={() => setActiveCategory(null)}
+                  className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition ${
+                    activeCategory === null
+                      ? "border-blue-300/45 bg-blue-400/14 text-blue-50"
+                      : "border-white/12 bg-white/[0.045] text-white/52 hover:border-white/25 hover:text-white"
                   }`}
                 >
-                  {cat}
-                  <span className="ml-1.5 text-xs opacity-70">({count})</span>
+                  Alla
                 </button>
-              );
-            })}
-          </div>
-        )}
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
+                    className={`rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] transition ${
+                      activeCategory === cat
+                        ? "border-blue-300/45 bg-blue-400/14 text-blue-50"
+                        : "border-white/12 bg-white/[0.045] text-white/52 hover:border-white/25 hover:text-white"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
 
-        {searchable && (
-          <div className="mt-8 max-w-3xl">
             <div className="relative">
-              <MagnifyingGlass weight="bold" size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <MagnifyingGlass weight="bold" size={17} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/42" />
               <Input
                 type="search"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 placeholder="Sök bland frågorna…"
-                className="h-12 rounded-full border-border bg-card pl-11 pr-11 text-base shadow-sm focus-visible:ring-primary/40"
+                className="h-12 rounded-full border-white/14 bg-white/[0.055] pl-11 pr-11 text-base text-white placeholder:text-white/34 shadow-none backdrop-blur-xl focus-visible:ring-blue-300/35"
                 aria-label="Sök i frågor och svar"
               />
               {query && (
                 <button
                   type="button"
-                  onClick={() => setQuery("")}
+                  onClick={() => handleSearch("")}
                   aria-label="Rensa sökning"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-white/42 transition hover:bg-white/10 hover:text-white"
                 >
                   <X weight="bold" size={14} />
                 </button>
               )}
             </div>
-            {query && (
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                <p className="text-sm text-muted-foreground" aria-live="polite">
-                  {filtered.length === 0
-                    ? "Inga träffar."
-                    : `${filtered.length} träff${filtered.length === 1 ? "" : "ar"}`}
-                  {" "}för "{query}"
-                </p>
-                {filtered.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const opened = filtered.find((f) => `item-${f.q}` === openItem) ?? filtered[0];
-                      const noteParts = [
-                        `Sökning: "${query.trim()}"`,
-                        activeCategory ? `Kategori: ${activeCategory}` : null,
-                        opened ? `Visad fråga: "${opened.q}"` : null,
-                      ].filter(Boolean);
-                      trackFaqCtaClick({
-                        source: "faq_search_result",
-                        paket: ctaPaket,
-                        ctaLabel: "Få personligt svar",
-                        query: query.trim(),
-                        category: activeCategory,
-                        openedQuestion: opened?.q ?? null,
-                      });
-                      open({
-                        paket: ctaPaket,
-                        internalNote: `Lead från FAQ\n${noteParts.join("\n")}`,
-                      });
-                    }}
-                    className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary transition-[background-color,border-color] duration-300 hover:border-primary hover:bg-primary/10"
-                  >
-                    Få personligt svar
-                    <ArrowRight weight="bold" size={12} className="transition-transform group-hover:translate-x-0.5" />
-                  </button>
-                )}
-              </div>
-            )}
           </div>
         )}
 
-        <div className="mt-10 max-w-3xl">
+        <div className="mt-9 grid max-w-4xl gap-3">
           {filtered.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-border bg-card/50 px-6 py-12 text-center">
-              <Question weight="duotone" size={28} className="mx-auto text-muted-foreground/60" />
-              <p className="mt-4 font-serif text-xl">Hittar du inte svaret?</p>
-              <p className="mt-2 max-w-md mx-auto text-sm text-muted-foreground">
-                {query.trim()
-                  ? `Inga frågor matchade "${query.trim()}". Skicka frågan direkt till mig så svarar jag inom 24 timmar.`
-                  : "Skicka frågan direkt till mig så svarar jag inom 24 timmar."}
-              </p>
-              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Button
-                  onClick={() => {
-                    const noteParts = [
-                      query.trim() ? `Sökning: "${query.trim()}"` : null,
-                      activeCategory ? `Kategori: ${activeCategory}` : null,
-                      "Resultat: 0 träffar",
-                    ].filter(Boolean);
-                    trackFaqCtaClick({
-                      source: "faq_empty_state",
-                      paket: ctaPaket,
-                      ctaLabel: "Ställ frågan direkt",
-                      query: query.trim() || null,
-                      category: activeCategory,
-                      openedQuestion: null,
-                    });
-                    open({
-                      paket: ctaPaket,
-                      internalNote: `Lead från FAQ (inga träffar)\n${noteParts.join("\n")}`,
-                    });
-                  }}
-                  size="lg"
-                  className="group"
-                >
-                  Ställ frågan direkt
-                  <ArrowRight weight="bold" size={16} className="ml-2 transition-transform group-hover:translate-x-0.5" />
-                </Button>
-                <a
-                  href="mailto:info@auroramedia.se"
-                  className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                >
-                  Eller mejla info@auroramedia.se
-                </a>
-              </div>
+            <div className="rounded-2xl border border-white/12 bg-white/[0.045] p-6 text-sm text-white/60">
+              Inga träffar. Testa ett annat sökord eller skicka frågan direkt.
             </div>
           ) : (
-            <Accordion
-              type="single"
-              collapsible
-              value={openItem}
-              onValueChange={handleAccordionChange}
-              className="w-full"
-            >
-              <AnimatePresence initial={false}>
-                {filtered.map((f, i) => (
-                  <motion.div
-                    key={f.q}
-                    ref={(el) => {
-                      const key = `item-${f.q}`;
-                      if (el) itemRefs.current.set(key, el);
-                      else itemRefs.current.delete(key);
-                    }}
-                    layout
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.25, delay: searchable ? 0 : i * 0.03 }}
-                    style={{ scrollMarginTop: "6rem" }}
+            filtered.map((item, index) => {
+              const isOpen = openIndex === index;
+              return (
+                <motion.div
+                  key={`${item.q}-${index}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: Math.min(index * 0.025, 0.12) }}
+                  className={`overflow-hidden rounded-2xl border transition ${
+                    isOpen
+                      ? "border-blue-300/35 bg-blue-400/[0.075] shadow-[0_20px_70px_-42px_rgba(59,130,246,0.85)]"
+                      : "border-white/12 bg-white/[0.04] hover:border-white/22 hover:bg-white/[0.06]"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left sm:px-6"
+                    aria-expanded={isOpen}
                   >
-                    <AccordionItem
-                      value={`item-${f.q}`}
-                      className="mb-3 overflow-hidden rounded-xl border border-border bg-card/60 px-5 transition-colors data-[state=open]:border-primary/50 data-[state=open]:bg-card data-[state=open]:shadow-sm sm:px-6"
-                    >
-                      <AccordionTrigger className="gap-4 py-5 text-left font-serif text-lg leading-snug tracking-[-0.01em] hover:no-underline data-[state=open]:text-primary md:text-xl">
-                        <span className="flex-1">{f.q}</span>
-                      </AccordionTrigger>
-                      <AccordionContent className="pb-5 text-base leading-relaxed text-muted-foreground sm:text-[1.0625rem]">
-                        {f.a}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </Accordion>
+                    <span className="font-display text-lg font-bold leading-snug text-white sm:text-xl">{item.q}</span>
+                    <ChevronDown className={`h-5 w-5 shrink-0 text-white/58 transition-transform ${isOpen ? "rotate-180 text-blue-100" : ""}`} />
+                  </button>
+                  {isOpen && (
+                    <div className="border-t border-white/10 px-5 pb-5 pt-4 sm:px-6">
+                      <p className="max-w-3xl text-sm leading-relaxed text-white/68 sm:text-base">{item.a}</p>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })
           )}
+        </div>
 
-          {ctaPaket && filtered.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5 }}
-              className="mt-8 flex flex-col items-start gap-4 rounded-2xl border border-primary/30 bg-primary/5 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:px-8"
-            >
-              <p className="text-base text-foreground/85 sm:max-w-md">{ctaText}</p>
-              <Button
-                onClick={() => {
-                  const opened = filtered.find((f) => `item-${f.q}` === openItem);
-                  const noteParts = [
-                    query.trim() ? `Sökning: "${query.trim()}"` : null,
-                    activeCategory ? `Kategori: ${activeCategory}` : null,
-                    opened ? `Visad fråga: "${opened.q}"` : null,
-                  ].filter(Boolean);
-                  const note = noteParts.length
-                    ? `Lead från FAQ\n${noteParts.join("\n")}`
-                    : "";
-                  trackFaqCtaClick({
-                    source: "faq_footer",
-                    paket: ctaPaket,
-                    ctaLabel,
-                    query: query.trim() || null,
-                    category: activeCategory,
-                    openedQuestion: opened?.q ?? null,
-                  });
-                  open({ paket: ctaPaket, internalNote: note });
-                }}
-                className="group shrink-0"
-                size="lg"
-              >
-                {ctaLabel}
-                <ArrowRight weight="bold" size={16} className="ml-2 transition-transform group-hover:translate-x-0.5" />
-              </Button>
-            </motion.div>
-          )}
+        <div className="mt-8 max-w-4xl rounded-[1.5rem] border border-white/12 bg-[linear-gradient(135deg,rgba(59,130,246,0.16),rgba(168,85,247,0.12),rgba(236,72,153,0.08))] p-6 backdrop-blur-2xl sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <div>
+            <p className="font-display text-xl font-bold text-white">Saknar du ett svar?</p>
+            <p className="mt-2 text-sm leading-relaxed text-white/62">{ctaText}</p>
+          </div>
+          <Button onClick={handleCta} className="mt-5 shrink-0 rounded-full sm:mt-0">
+            {ctaLabel}
+            <ArrowRight weight="bold" size={15} className="ml-2" />
+          </Button>
         </div>
       </div>
     </section>
