@@ -3,32 +3,37 @@ import type { Article } from "./articleTypes";
 export const articles19to24: Article[] = [
   {
     slug: "lovable-vs-bolt-vs-cursor-2026",
-    keyword: "Lovable vs Bolt vs Cursor 2026",
+    keyword: "Lovable vs Bolt vs Cursor 2026, AI-kodare, Lovable, Bolt, Cursor, SaaS med AI, AI-kodning",
     category: "AI-kodning",
     title: "Lovable vs Bolt vs Cursor 2026: vilken AI-kodare ska du faktiskt välja?",
     metaTitle: "Lovable vs Bolt vs Cursor 2026 – jämförelse & prompts | Aurora Media",
     metaDesc:
-      "Lovable, Bolt eller Cursor 2026? En praktisk jämförelse av AI-kodare med exakta prompts, workflows, priser, styrkor och svagheter.",
+      "Lovable, Bolt eller Cursor 2026? En praktisk jämförelse med exakta prompts, workflows, priser, styrkor och svagheter från verkliga SaaS-projekt.",
     publishedDate: "2026-05-03",
     updatedDate: "2026-05-03",
-    readMinutes: 13,
+    readMinutes: 16,
     intro:
-      "Lovable bygger din SaaS från noll till lansering. Bolt är bäst för snabba prototyper där du vill kunna gå djupt i koden. Cursor är inte ett alternativ till de andra två — det är vad du flyttar till när din SaaS växer förbi vad en webbläsare orkar. Här är exakt när, hur och med vilka prompts jag använder dem.",
+      "Lovable bygger din SaaS från noll till lansering. Bolt är bäst för snabba prototyper där du vill kunna gå djupt i koden. Cursor är inte ett alternativ till de andra två — det är vad du flyttar till när din SaaS växer förbi vad en webbläsare orkar. De flesta builders som faktiskt levererar produkter kombinerar minst två av dem. Den här guiden visar exakt när, hur och med vilka prompts.",
     sections: [
       {
         heading: "Det första alla missförstår: de konkurrerar inte",
         content:
-          "Om du läser tio jämförelser online kommer nio av dem ranka verktygen mot varandra som om de gjorde samma sak. Det gör de inte. Lovable är en produktbyggare: du beskriver vad du vill ha och får en fullstack-app med Supabase, autentisering, betalning och hosting. Bolt är en AI-IDE i webbläsaren: du får filträd, terminal och möjlighet att installera npm-paket. Cursor är en kodredigerare för utvecklare: den lever på din dator, öppnar dina existerande repon och accelererar arbetet med AI-agenter. Att fråga vilken som är bäst är som att fråga om hammaren eller skruvmejseln är bäst. Frågan är vad du försöker bygga och i vilket skede.",
+          "Om du läser tio jämförelser online kommer nio av dem ranka verktygen mot varandra som om de gjorde samma sak. Det gör de inte. Lovable är en produktbyggare. Du beskriver vad du vill ha och får en fullstack-app med Supabase, autentisering, betalning och hosting. Du behöver inte öppna en terminal. Bolt är en AI-IDE i webbläsaren. Du får hela filträdet, en terminal och kan installera npm-paket. Det är som att ha Cursor lite — men i webbläsaren och med mer fokus på att generera nytt än att redigera befintligt. Cursor är en kodredigerare för utvecklare. Den lever på din dator, öppnar dina existerande repon och accelererar arbetet med AI-agenter. Den bygger inget åt dig från noll — den hjälper dig att gå snabbare med kod du redan har. Att jämföra dem som 'vilken är bäst' är som att fråga om hammaren eller skruvmejseln är bäst. Frågan är vad du försöker bygga och i vilket skede.",
       },
       {
         heading: "Lovable: när du har en idé och inget mer",
         content:
-          "Lovables sweet spot är att gå från 'jag har en idé i huvudet' till 'jag har en fungerande SaaS som tar emot betalningar' på 2–4 veckor. Deras Supabase-integration är inte bara att skicka SQL. Den skapar tabeller, sätter upp Row Level Security, kopplar autentisering och skriver klientkoden som binder ihop allt. Det som går fel är framför allt komplexa refactors, edge cases och ostrukturerade prompts som bränner credits utan att ge stabil output.",
+          "Prisbilden i maj 2026 är ungefär Free med dagliga credits, Pro runt 25 dollar per månad och Business runt 50 dollar per månad beroende på plan och villkor. Lovables sweet spot är att gå från 'jag har en idé i huvudet' till 'jag har en fungerande SaaS som tar emot betalningar' på 2–4 veckor. Lovable är dramatiskt bättre på detta än de flesta andra AI-kodare, framför allt eftersom Supabase-integrationen inte bara handlar om att skicka SQL. Den skapar tabeller, sätter upp Row Level Security-policys, kopplar autentisering och skriver klientkoden som binder ihop allt. Det är inte trivialt om du försöker göra det själv.",
       },
       {
-        heading: "Bootstrap-prompten jag använder i Lovable",
+        heading: "Lovables vanligaste failure modes",
         content:
-          "Den här prompten är medvetet torr och specifik. Det är poängen. Lovable bygger exakt det du beskriver. Vag input ger vag output. Specifik input ger något du kan ta betalt för.",
+          "Det första som brukar gå fel är komplexa refactors. När kodbasen växer förbi ungefär 30 filer börjar Lovable lätt tappa kontext mellan komponenter. Den ändrar något i en fil och bryter något i en annan utan att märka det. Det andra är branchad logik och edge cases. Lovable är fenomenal på att bygga happy path, men medioker på att tänka igenom alla felfall. Du kommer behöva påpeka saker som: vad händer om användaren saknar prenumeration? Det tredje är credit-bränning på ostrukturerade prompts. En vag prompt kostar lika många credits som en specifik, men ger ofta resultat du måste bygga om. Det är den största kostnadsfällan.",
+      },
+      {
+        heading: "Bootstrap-prompten jag faktiskt använder i Lovable",
+        content:
+          "Den här prompten är tråkig att läsa — och det är poängen. Lovable bygger exakt vad du beskriver. Vag input ger vag output. Specifik input ger något du kan ta betalt för.",
         code: `Bygg en SaaS för [tydlig användarpersona] som behöver [primär jobb-att-utföra].
 
 TEKNISK STACK (icke förhandlingsbart):
@@ -43,7 +48,8 @@ DATAMODELL (skapa Supabase-tabeller med RLS från dag 1):
 - organizations (id uuid pk, name, stripe_customer_id, subscription_status, plan)
 - [din domänentitet] (id, organization_id fk, ...)
 
-RLS-POLICY: alla queries filtreras på organization_id via en SECURITY DEFINER-funktion get_current_org_id() som läser från JWT.
+RLS-POLICY: alla queries filtreras på organization_id via en SECURITY DEFINER-funktion 
+get_current_org_id() som läser från JWT.
 
 KÄRNFUNKTIONER I MVP (bygg INTE mer än detta i första iterationen):
 1. [konkret feature med användarvärde]
@@ -51,25 +57,31 @@ KÄRNFUNKTIONER I MVP (bygg INTE mer än detta i första iterationen):
 3. [konkret feature med användarvärde]
 
 SIDOR: /, /login, /signup, /dashboard, /settings, /pricing, /thanks
-INGEN admin-panel, ingen onboarding-wizard, inga notifikationer i denna iteration.
+INGEN admin-panel, ingen onboarding-wizard, inga notifikationer i denna iteration. 
 Vi lägger till det när basen är stabil.
 
-VISUELL STIL: Modern, lugn, mycket whitespace, neutral färgpalett (referens: Linear, Notion, Vercel). Ingen gradient-spam, inga emojis i UI.`,
+VISUELL STIL: Modern, lugn, mycket whitespace, neutral färgpalett 
+(referens: Linear, Notion, Vercel). Ingen gradient-spam, inga emojis i UI.`,
       },
       {
-        heading: "Två Lovable-trick som sparar credits",
+        heading: "Två mindre kända Lovable-trick",
         content:
-          "Använd Plan Mode först, alltid. Innan du klickar Build, be Lovable skriva en plan över vad den tänker bygga: arkitektur, datamodell och komponenter. Det kostar lite, men sparar många felbyggen. Koppla också GitHub direkt i Pro-planen. När Lovable börjar tappa sammanhanget kan du checka ut till Cursor på fem minuter.",
+          "Använd Plan Mode först, alltid. Innan du klickar Build — be Lovable skriva en plan över vad den tänker bygga. Be den beskriva arkitekturen, datamodellen och vilka komponenter den tänker skapa, och säg uttryckligen att den ska vänta på ditt godkännande. Det kostar lite, men sparar mycket när planen är fel. Knyt också GitHub direkt. I Pro-planen kan du synka till ett GitHub-repo. Gör det första dagen. När Lovable börjar tappa fattningen kan du checka ut till Cursor på fem minuter.",
       },
       {
         heading: "Cursor: när din SaaS växt förbi Lovable",
         content:
-          "Cursor är rätt när kodbasen är 50+ filer, när du har krav på kodkvalitet och när du behöver göra refactors som spänner över flera filer. I Agent mode kan Cursor göra arbete som annars hade tagit dagar. Det som går fel är långa agent-sessioner, monorepon utan .cursorignore och att du använder för dyr modell för enkla uppgifter. Mönstret som fungerar bäst är Ask → Plan → Agent → Manual edit.",
+          "Prisbilden i maj 2026 är ungefär Hobby gratis, Pro runt 20 dollar per månad, Pro+ runt 60 dollar per månad, Ultra runt 200 dollar per månad och Teams runt 40 dollar per seat och månad. Cursors sweet spot är när du har en kodbas på 50+ filer, specifika krav på kodkvalitet och refactors som spänner över flera filer. Det är här Cursor i Agent mode med en stark modell kan göra arbete som hade tagit tre dagar manuellt på 30 minuter.",
       },
       {
-        heading: ".cursorrules jag använder i Aurora-projekt",
+        heading: "Cursors vanligaste failure modes",
         content:
-          "Den här filen är skillnaden mellan en agent som bygger som en junior-utvecklare och en som bygger med tydliga guardrails. Varje gång Cursor gör något dumt lägger jag till en regel som hade förhindrat det.",
+          "Långa Agent-sessioner degraderar. Efter runt 20 turer i samma chat börjar agenten ofta glömma tidigare beslut och göra dubbelarbete. Lösningen är att starta en ny chat för varje uppgift och lägga långsiktig kontext i .cursorrules. Monorepo utan .cursorignore är också dödligt. Cursor indexerar varje fil. Om du har node_modules, .next eller stora loggfiler i repot tar indexeringen tid och kontextfönstret fylls med skräp. Det tredje problemet är credit-bränning på fel modell. Den dyraste modellen är inte alltid bäst för rutinjobb. Auto mode eller billigare modeller räcker ofta långt.",
+      },
+      {
+        heading: ".cursorrules jag använder för Aurora-projekten",
+        content:
+          "Lägg filen i repo-rooten. Den här filen är skillnaden mellan en agent som bygger som en junior-utvecklare och en som bygger med tydliga guardrails. Iterera den över tid. Varje gång Cursor gör något korkat, lägg till en regel som hade förhindrat det.",
         code: `Du arbetar på en svensk SaaS-produkt byggd med:
 - React 18 + TypeScript + Vite + Tailwind + shadcn/ui
 - Supabase (Postgres + Auth + RLS + Edge Functions)
@@ -100,24 +112,30 @@ NÄR DU FELSÖKER:
       {
         heading: "Cursors tre modes och när du använder vilket",
         content:
-          "Ask använder jag innan jag gör något: för att förstå hur autentisering, databasen eller en integration fungerar. Agent använder jag när uppgiften är konkret: bygg en endpoint, refactora ett flöde, skapa en Edge Function. Manual edit använder jag när jag vet exakt vad som ska ändras och bara vill få hjälp med koden. Att hoppa direkt till Agent är den vanligaste anledningen till att folk tycker Cursor skriver skräp.",
+          "Ask använder du innan du gör någonting. Exempel: förklara hur autentiseringen flödar mellan Supabase Auth, Edge Functions och frontend i den här kodbasen. Du bygger inget — du förstår. Agent använder du när du har en konkret uppgift, till exempel att lägga till en endpoint i Supabase Edge Functions för att skicka välkomstmejl via Brevo när en ny user signar upp. Manual edit, ofta Cmd+K, använder du när du vet exakt vad du vill ändra och bara behöver hjälp att skriva det. Mönstret som ger bäst output är Ask → Plan → Agent → Manual för polering. Att hoppa direkt till Agent är en vanlig anledning till att Cursor skriver skräp.",
       },
       {
         heading: "Bolt: den underskattade mellanvägen",
         content:
-          "Bolt är bäst för snabba prototyper där du vill se och redigera koden direkt, men inte är redo att flytta projektet till lokal IDE. Bolt slår Lovable när du vill se hela filträdet, använda terminal i webbläsaren och iterera snabbt. Bolt förlorar mot Lovable när backend, databas och autentisering är avgörande. Om din SaaS lever och dör på databasen väljer jag Lovable.",
+          "Prisbilden i maj 2026 är ungefär Free med tokenbegränsning, Pro runt 25 dollar per månad och Teams runt 30 dollar per användare och månad. Bolts sweet spot är snabba prototyper där du vill kunna se och redigera koden direkt, men där du inte är redo att flytta projektet till en lokal IDE än. Bolt är fantastisk när du behöver bygga ett verktyg som ska fungera imorgon och du inte har tid att sätta upp lokal miljö.",
       },
       {
-        heading: "Bolt-prompten jag använder för snabb prototyp",
+        heading: "Var Bolt slår Lovable — och var Bolt förlorar",
+        content:
+          "Bolt slår Lovable när du vill se hela filträdet, använda terminal i webbläsaren via WebContainers, köra npm install, npm run test och installera valfria paket. Det känns magiskt första gången. Bolt uppdaterar också ofta bara ändrade filer mellan iterationer, vilket gör att det känns snabbare på iterativa uppgifter. Bolt förlorar mot Lovable när backend är viktig. Bolt Cloud har blivit bättre, men Lovables Supabase-integration är fortfarande mer mogen. Om din SaaS lever och dör på databasen väljer jag Lovable. Bolts tokenmodell kan dessutom bli opredikterbar när projekt växer eftersom mer kod skickas in i kontexten.",
+      },
+      {
+        heading: "Bolt-prompten jag använder för en snabb prototyp",
         content:
           "Skillnaden mellan Bolt-prompten och Lovable-prompten är medveten. Lovable bygger din produkt. Bolt bygger din prototyp. Att blanda ihop dem är att betala för fel jobb.",
-        code: `Skapa en enkel app för [användare] som löser [konkret problem].
-Inga inloggningar, inga betalningar, ingen databas — bara en fungerande UI med state hanterad i React (useState/useReducer).
+        code: `Skapa en enkel app för [användare] som löser [konkret problem]. 
+Inga inloggningar, inga betalningar, ingen databas — bara en fungerande UI 
+med state hanterad i React (useState/useReducer). 
 
-Stack: Vite + React + TypeScript + Tailwind.
+Stack: Vite + React + TypeScript + Tailwind. 
 Inga andra dependencies om jag inte uttryckligen säger till.
 
-Mål: en klickbar prototyp jag kan visa en kund för feedback inom 30 minuter.
+Mål: en klickbar prototyp jag kan visa en kund för feedback inom 30 minuter. 
 Skitsnyggt är inte målet. Att förstå om idén är värd att bygga är målet.
 
 Specifika skärmar:
@@ -128,14 +146,19 @@ Specifika skärmar:
 Mock-data: använd hårdkodade arrayer i src/data/. Inga API-anrop.`,
       },
       {
-        heading: "Det verkliga arbetsflödet: kombinationen som fungerar",
+        heading: "Det verkliga arbetsflödet: kombinationen som faktiskt fungerar",
         content:
-          "Fas 1 är validering med Bolt eller Lovable Free: en klickbar prototyp med mock-data som kan visas för fem potentiella kunder. Fas 2 är MVP med Lovable Pro och GitHub-sync: fungerande SaaS med inloggning, betalning och kärnfunktion. Fas 3 är skalning och polering i Cursor Pro: lokal miljö, .cursorrules, tester, komplexa Edge Functions, Stripe webhooks och refactors. I praktiken bygger jag ofta 80 procent av en MVP i Lovable och flyttar till Cursor när komplexiteten kräver det.",
+          "Fas 1 är validering på timmar med Bolt eller Lovable Free. Målet är en klickbar prototyp du kan visa fem potentiella kunder. Inga riktiga konton, ingen betalning, ingen databas. Bara mock-data. Fas 2 är MVP på 1–3 veckor med Lovable Pro och GitHub-sync. Målet är en fungerande SaaS med inloggning, betalning och kärnfunktioner som kan ta emot riktiga kunder. Fas 3 är skala och polering i Cursor Pro med lokal miljö. När du har aktiva användare och Lovable börjar tappa kontext klonar du GitHub-repot, lägger till .cursorrules och fortsätter i Cursor.",
+      },
+      {
+        heading: "Bootstrap-flödet jag faktiskt använder",
+        content:
+          "Först bygger jag basen i Lovable med prompten ovan, ofta 5–10 credits. Sedan synkar jag till GitHub direkt. Därefter bygger jag ut kärnfunktionerna i Lovable, en feature i taget. Innan varje större feature använder jag Plan Mode: skriv en plan, vänta på godkännande. När jag har användare som kraschar saker går jag över till Cursor. I praktiken bygger jag ofta 80 procent av en MVP i Lovable och flyttar till Cursor när jag behöver skriva komplexa Edge Functions, Stripe webhook-hantering med signaturverifiering, refactora flera filer samtidigt, skriva tester, felsöka över frontend/backend/databas eller bygga något performance-kritiskt. Lovable och Cursor är inte konkurrenter. De är två steg i samma arbetsflöde.",
       },
       {
         heading: "Kostnaden för en riktig SaaS, jämförd",
         content:
-          "Säg att du bygger en MVP med multi-tenant SaaS, inloggning, prenumeration, dashboard och två kärnfunktioner. Verktygskostnaden är inte det som gör traditionell SaaS-utveckling dyr. Det dyra är teamtid, byråstruktur och långsam process. Därför kan AI-assisterad utveckling bli dramatiskt billigare.",
+          "Säg att du bygger en MVP: multi-tenant SaaS med inloggning, prenumeration, dashboard och två kärnfunktioner. Här är ungefär vad verktygsavgifterna kan kosta över tre månader. Poängen är inte att varje dollar är exakt för alltid, utan att verktygskostnaden är dramatiskt lägre än lönen för ett team på sex personer.",
         table: {
           headers: ["Workflow", "Lovable", "Bolt", "Cursor", "Totalt"],
           rows: [
@@ -148,24 +171,29 @@ Mock-data: använd hårdkodade arrayer i src/data/. Inga API-anrop.`,
         },
       },
       {
+        heading: "Vad totalkostnaden betyder i praktiken",
+        content:
+          "För ungefär 90 dollar — cirka 950 kronor — har du allt du behöver i verktyg för att bygga en fungerande, säljbar SaaS. Lägg till Supabase, Stripe-fees och domän så landar du fortfarande mycket lågt jämfört med traditionell utveckling. Det är därför AI-assisterad SaaS-utveckling kan ha helt annan prisbild än en klassisk byrå. Inte för att kompetens är oviktig, utan för att verktygskostnaden och ledtiden är mycket lägre än i ett traditionellt teamupplägg.",
+      },
+      {
         heading: "Vilket ska du välja idag?",
         content:
-          "Är du non-technical founder med en idé: välj Lovable Pro. Är du utvecklare som bygger kommersiell SaaS: Lovable Pro för bootstrap och Cursor Pro för skalning. Är du utvecklare som vill prototypa snabbt och se koden: Bolt Pro. Har du en existerande kodbas och vill accelerera: Cursor Pro. De flesta som faktiskt levererar produkter kombinerar minst två verktyg.",
+          "Om du är non-technical founder med en idé: välj Lovable Pro. Det är det enda av de tre du sannolikt kan använda meningsfullt utan kodkunskap. Om du är utvecklare som bygger kommersiell SaaS: använd Lovable Pro för bootstrap och Cursor Pro för skalning. Skippa ofta Bolt i det flödet. Om du är utvecklare som vill prototypa snabbt och vill se koden: välj Bolt Pro. Om du har en existerande kodbas och vill accelerera: välj Cursor Pro. De andra är då knappt ens i diskussionen.",
       },
       {
         heading: "Vad jag bygger med dem just nu",
         content:
-          "Hönsgården byggdes initialt i Lovable och underhålls mestadels i Cursor. Aurora Transport bootstrappades i Lovable medan komplex logik som multi-tenant RLS, Stripe-integration och Brevo-automation byggdes i Cursor. Updro byggs i Lovable och kommer flyttas till Cursor när trafiken motiverar det. Jag använder Lovable Pro, Cursor Pro+ och Bolt Pro kortvarigt när jag prototypar åt klienter.",
+          "För transparens: Hönsgården, en produkt för chicken flock management med betalande Premium-användare, byggdes initialt i Lovable och underhålls mestadels i Cursor. Aurora Transport, en B2B dispatch-SaaS, bootstrappades i Lovable medan komplex logik som multi-tenant RLS, Stripe-integration och Brevo-automation byggdes i Cursor. Updro, en svensk byråmarknadsplats, byggs i Lovable och kommer att flyttas till Cursor när trafiken motiverar det. Jag använder Lovable Pro, Cursor Pro+ och kortvarig Bolt Pro när jag prototypar snabbt åt klienter. För det kan jag driva flera SaaS-produkter parallellt med klientarbete vid sidan av.",
       },
       {
         heading: "Vad du gör nu",
         content:
-          "Om du har en idé du suttit på länge: sätt upp ett Lovable-konto, skriv prompten ovan med din egen användarpersona och datamodell, bygg så långt daily credits räcker och visa prototypen för riktiga människor. Om du fastnar — eller vill ha det rätt från dag ett — boka 30 minuter med Aurora Media. Jag tar fast pris från 14 900 kr för en prototyp som faktiskt fungerar.",
+          "Om du har en idé du suttit på länge: sätt upp ett Lovable-konto, använd Free-planen för att utvärdera, skriv prompten ovan med din egen användarpersona och datamodell och bygg så långt dina daily credits räcker. Det är ofta minst en klickbar prototyp. Om du fastnar — eller om du vill ha det rätt från dag ett — boka 30 minuter med mig. Jag tar fast pris från 14 900 kr för en prototyp som faktiskt fungerar. Skillnaden är att jag har gjort många produkter med de här verktygen och därför undviker fällorna du hittar första gången.",
       },
       {
         heading: "Källor och uppdateringar",
         content:
-          "Priser och credit-strukturer förändras ofta hos Lovable, Bolt och Cursor. Verifiera alltid mot respektive officiella prissida innan du beställer. Den här artikeln är skriven utifrån praktisk användning och ska uppdateras löpande när verktygen förändras.",
+          "Priser och credit-strukturer förändras ofta hos alla tre verktygen. Verifiera alltid mot officiella prissidor innan du beställer. Källor: Lovable pricing och docs, Cursor pricing och Models & Pricing, Bolt pricing breakdown 2026, Cursor IDE Complete Guide 2026 samt NoCode MBA:s jämförelser av Bolt och Lovable. Den här artikeln ska uppdateras kvartalsvis eftersom funktioner och priser ändras snabbt.",
       },
     ],
     faq: [
