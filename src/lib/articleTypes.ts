@@ -1,6 +1,13 @@
+export interface ArticleTable {
+  headers: string[];
+  rows: string[][];
+}
+
 export interface ArticleSection {
   heading: string;
   content: string;
+  code?: string;
+  table?: ArticleTable;
 }
 
 export interface ArticleFAQ {
