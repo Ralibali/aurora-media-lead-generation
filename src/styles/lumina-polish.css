@@ -1,0 +1,178 @@
+/* Final global polish so legacy page templates look intentional in the Lumina system. */
+.lumina-site {
+  --background: 224 60% 3%;
+  --foreground: 0 0% 100%;
+  --card: 224 34% 8%;
+  --card-foreground: 0 0% 100%;
+  --popover: 224 34% 8%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 230 28% 11%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 226 18% 14%;
+  --muted-foreground: 220 14% 70%;
+  --accent: 262 83% 58%;
+  --accent-foreground: 0 0% 100%;
+  --border: 224 20% 22%;
+  --input: 224 20% 22%;
+  --ring: 217 91% 60%;
+}
+
+.lumina-site .container,
+.lumina-site .container-narrow,
+.lumina-site [class*="max-w-"] {
+  position: relative;
+}
+
+.lumina-site .label-caps {
+  color: rgba(255,255,255,0.52) !important;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 9px !important;
+  font-weight: 800;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase;
+}
+
+.lumina-site .text-muted-foreground,
+.lumina-site [class*="text-muted-foreground"],
+.lumina-site [class*="text-foreground/"],
+.lumina-site [class*="text-white/"] {
+  color: rgba(255,255,255,0.68) !important;
+}
+
+.lumina-site .text-primary,
+.lumina-site [class*="text-primary"] {
+  color: #93c5fd !important;
+}
+
+.lumina-site .bg-primary,
+.lumina-site [class*="bg-primary"] {
+  background: linear-gradient(135deg, rgba(59,130,246,0.92), rgba(168,85,247,0.82)) !important;
+  color: #ffffff !important;
+}
+
+.lumina-site .bg-secondary,
+.lumina-site [class*="bg-secondary"],
+.lumina-site .bg-muted,
+.lumina-site [class*="bg-muted"] {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025)) !important;
+}
+
+.lumina-site .border-border,
+.lumina-site [class*="border-border"],
+.lumina-site [class*="divide-border"] > * {
+  border-color: rgba(255,255,255,0.12) !important;
+}
+
+.lumina-site main > section:first-child:not(.lumina-hero) {
+  position: relative;
+  overflow: hidden;
+  padding-top: clamp(8rem, 14vw, 11rem) !important;
+  background:
+    radial-gradient(circle at 82% 16%, rgba(59,130,246,0.22), transparent 30rem),
+    radial-gradient(circle at 16% 42%, rgba(168,85,247,0.16), transparent 30rem) !important;
+}
+
+.lumina-site main > section:first-child:not(.lumina-hero)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to right, rgba(0,0,0,0.92), rgba(0,0,0,0.55), rgba(0,0,0,0.18));
+}
+
+.lumina-site main > section:first-child:not(.lumina-hero) > * {
+  position: relative;
+  z-index: 1;
+}
+
+.lumina-site main > section:not(:first-child) {
+  border-top: 1px solid rgba(255,255,255,0.09) !important;
+}
+
+.lumina-site .prose,
+.lumina-site article,
+.lumina-site [class*="prose"] {
+  color: rgba(255,255,255,0.72) !important;
+}
+
+.lumina-site .prose strong,
+.lumina-site article strong,
+.lumina-site [class*="prose"] strong {
+  color: #ffffff !important;
+}
+
+.lumina-site .prose a,
+.lumina-site article a,
+.lumina-site [class*="prose"] a {
+  color: #93c5fd !important;
+  text-decoration-color: rgba(147,197,253,0.45);
+}
+
+.lumina-site .prose blockquote,
+.lumina-site article blockquote,
+.lumina-site blockquote {
+  border-left-color: rgba(147,197,253,0.55) !important;
+  background: rgba(255,255,255,0.045);
+  border-radius: 0 18px 18px 0;
+  padding: 1rem 1.25rem;
+}
+
+.lumina-site [data-radix-popper-content-wrapper] * {
+  color: rgba(255,255,255,0.88);
+}
+
+.lumina-site [role="dialog"],
+.lumina-site [data-radix-dialog-content],
+.lumina-site [data-radix-popper-content-wrapper] > div {
+  background: linear-gradient(180deg, rgba(15,23,42,0.96), rgba(2,6,23,0.98)) !important;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,0.14) !important;
+  box-shadow: 0 40px 120px -40px rgba(59,130,246,0.7), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+}
+
+.lumina-site [cmdk-root],
+.lumina-site [cmdk-input],
+.lumina-site [cmdk-list],
+.lumina-site [cmdk-item] {
+  background: rgba(2,6,23,0.96) !important;
+  color: #ffffff !important;
+}
+
+.lumina-site button,
+.lumina-site a,
+.lumina-site input,
+.lumina-site textarea,
+.lumina-site select {
+  transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, color 0.25s ease;
+}
+
+.lumina-site input:focus,
+.lumina-site textarea:focus,
+.lumina-site button:focus-visible,
+.lumina-site a:focus-visible {
+  outline: 2px solid rgba(96,165,250,0.8) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(59,130,246,0.18) !important;
+}
+
+.lumina-site .shadow,
+.lumina-site .shadow-sm,
+.lumina-site .shadow-md,
+.lumina-site .shadow-lg,
+.lumina-site .shadow-xl,
+.lumina-site .shadow-2xl {
+  box-shadow: 0 32px 100px -46px rgba(59,130,246,0.6), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+.lumina-site hr {
+  border-color: rgba(255,255,255,0.1) !important;
+}
+
+.lumina-site ::selection {
+  background: rgba(59,130,246,0.45);
+  color: #ffffff;
+}
