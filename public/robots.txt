@@ -1,8 +1,23 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /admin
 
+# Skyddade och interna rutter
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /auth
+Disallow: /login
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /preview
+
+# Gamla/redirectade rutter ska inte crawlas som egna mål
+Disallow: /om-oss-2
+Disallow: /post-3
+Disallow: /post-5
+Disallow: /webbbyra-linkoping
+
+# AI-crawlers tillåts läsa publikt innehåll
 User-agent: GPTBot
 Allow: /
 
