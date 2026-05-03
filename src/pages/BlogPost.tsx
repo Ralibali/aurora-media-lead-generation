@@ -78,7 +78,7 @@ const BlogPost = () => {
 
           <header className="mb-10">
             <p className="label-caps mb-4">{article.category}</p>
-            <h1 className="font-serif text-4xl md:text-5xl leading-[1.1]">{article.title}</h1>
+            <h1 className="font-display text-4xl md:text-6xl leading-[1.02] tracking-tight">{article.title}</h1>
             <p className="mt-6 text-sm text-muted-foreground">
               Publicerad {new Date(article.publishedDate).toLocaleDateString("sv-SE")} ·
               Uppdaterad {new Date(article.updatedDate).toLocaleDateString("sv-SE")} ·
@@ -86,16 +86,50 @@ const BlogPost = () => {
             </p>
           </header>
 
-          <p className="text-lg leading-relaxed font-medium mb-12">{article.intro}</p>
+          <p className="text-lg leading-relaxed font-medium mb-12 text-white/80">{article.intro}</p>
 
-          <div className="space-y-10">
+          <div className="space-y-11">
             {article.sections.map((s, i) => (
               <section key={i}>
-                <h2 className="font-serif text-3xl mb-4">{s.heading}</h2>
-                <p className="text-base leading-relaxed text-foreground/90">{s.content}</p>
+                <h2 className="font-display text-3xl mb-4 leading-tight">{s.heading}</h2>
+                <p className="text-base leading-relaxed text-foreground/90 whitespace-pre-line">{s.content}</p>
+
+                {s.code && (
+                  <pre className="mt-6 overflow-x-auto rounded-2xl border border-white/12 bg-black/55 p-5 text-sm leading-relaxed text-blue-50 shadow-[inset_0_0_40px_rgba(59,130,246,0.08)]">
+                    <code>{s.code}</code>
+                  </pre>
+                )}
+
+                {s.table && (
+                  <div className="mt-6 overflow-x-auto rounded-2xl border border-white/12 bg-white/[0.04]">
+                    <table className="w-full min-w-[640px] text-left text-sm">
+                      <thead>
+                        <tr className="border-b border-white/10 bg-white/[0.06]">
+                          {s.table.headers.map((header) => (
+                            <th key={header} className="px-4 py-3 font-bold text-white">
+                              {header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {s.table.rows.map((row, rowIndex) => (
+                          <tr key={rowIndex} className="border-b border-white/10 last:border-0">
+                            {row.map((cell, cellIndex) => (
+                              <td key={`${rowIndex}-${cellIndex}`} className="px-4 py-3 text-white/72">
+                                {cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
                 {i === Math.floor(article.sections.length / 2) && (
-                  <div className="mt-8 rounded-lg border border-border bg-accent/30 p-6">
-                    <p className="font-serif text-xl mb-2">Behöver du det här byggt?</p>
+                  <div className="mt-8 rounded-2xl border border-white/12 bg-[linear-gradient(135deg,rgba(59,130,246,0.16),rgba(168,85,247,0.12))] p-6 backdrop-blur-2xl">
+                    <p className="font-display text-xl mb-2">Behöver du det här byggt?</p>
                     <p className="text-sm text-muted-foreground mb-4">
                       Prototyp från 14 900 kr. Fast pris. Skriv till mig.
                     </p>
@@ -107,10 +141,10 @@ const BlogPost = () => {
           </div>
 
           <section className="mt-16">
-            <h2 className="font-serif text-3xl mb-6">Vanliga frågor</h2>
+            <h2 className="font-display text-3xl mb-6">Vanliga frågor</h2>
             <div className="space-y-3">
               {article.faq.map((f, i) => (
-                <details key={i} className="rounded-lg border border-border bg-card p-5 group">
+                <details key={i} className="rounded-2xl border border-border bg-card p-5 group">
                   <summary className="cursor-pointer font-medium list-none flex justify-between items-center gap-4">
                     <span>{f.q}</span>
                     <span className="text-muted-foreground group-open:rotate-180 transition-transform">⌄</span>
@@ -121,8 +155,8 @@ const BlogPost = () => {
             </div>
           </section>
 
-          <section className="mt-16 rounded-lg border border-border bg-card p-8 text-center">
-            <h2 className="font-serif text-3xl mb-3">Har du en idé värd att bygga?</h2>
+          <section className="mt-16 rounded-2xl border border-border bg-card p-8 text-center">
+            <h2 className="font-display text-3xl mb-3">Har du en idé värd att bygga?</h2>
             <p className="text-muted-foreground mb-6">
               Skicka ett mejl så svarar jag inom 24 timmar. Fast pris från 14 900 kr.
             </p>
@@ -131,16 +165,16 @@ const BlogPost = () => {
 
           {related.length > 0 && (
             <section className="mt-16">
-              <h2 className="font-serif text-3xl mb-6">Relaterade artiklar</h2>
+              <h2 className="font-display text-3xl mb-6">Relaterade artiklar</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {related.map((r) => (
                   <Link
                     key={r.slug}
                     to={`/blogg/${r.slug}`}
-                    className="rounded-lg border border-border bg-card p-5 hover:-translate-y-0.5 hover:shadow-md transition-all"
+                    className="rounded-2xl border border-border bg-card p-5 hover:-translate-y-0.5 hover:shadow-md transition-all"
                   >
                     <p className="label-caps !text-[10px] mb-2">{r.category}</p>
-                    <p className="font-serif text-lg leading-snug">{r.title}</p>
+                    <p className="font-display text-lg leading-snug font-bold">{r.title}</p>
                   </Link>
                 ))}
               </div>
