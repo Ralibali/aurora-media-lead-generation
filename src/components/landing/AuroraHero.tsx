@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Code2, Rocket, Target } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
+import "@/styles/lumina.css";
 
 const TRUST = [
   { icon: Rocket, text: "Snabb leverans — ofta 1–2 veckor" },
