@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { Menu, X, Play } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 
@@ -13,21 +13,18 @@ const NAV = [
 ];
 
 const AuroraLogo = () => (
-  <Link to="/" className="flex items-center gap-2.5 group">
+  <Link to="/" className="group flex items-center gap-3">
     <span
-      className="grid h-8 w-8 place-items-center rounded-lg font-display text-base"
-      style={{
-        background:
-          "linear-gradient(135deg, hsl(152 80% 50%), hsl(160 70% 28%))",
-        color: "hsl(160 24% 6%)",
-        boxShadow: "0 8px 24px -12px hsl(152 80% 50% / 0.7)",
-      }}
+      className="grid h-9 w-9 place-items-center border border-blue-300/35 bg-blue-500/10 shadow-[0_0_28px_rgba(59,130,246,0.55)]"
       aria-hidden
     >
-      A
+      <span className="relative h-3 w-3 rounded-full bg-blue-300 shadow-[0_0_18px_rgba(147,197,253,0.95)]">
+        <span className="absolute left-1/2 top-1/2 h-px w-5 -translate-x-1/2 -translate-y-1/2 bg-blue-200/70" />
+        <span className="absolute left-1/2 top-1/2 h-5 w-px -translate-x-1/2 -translate-y-1/2 bg-blue-200/70" />
+      </span>
     </span>
-    <span className="font-display text-[15px] tracking-[-0.01em] text-[hsl(var(--au-cream))]">
-      AURORA MEDIA
+    <span className="text-[11px] font-bold uppercase tracking-[0.5em] text-white">
+      Aurora Media
     </span>
   </Link>
 );
@@ -62,26 +59,26 @@ const AuroraNavbar = () => {
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   return (
     <>
       <motion.header
         animate={{
-          backgroundColor: scrolled ? "hsl(160 24% 4% / 0.78)" : "hsl(160 24% 4% / 0)",
+          backgroundColor: scrolled ? "rgba(0,0,0,0.42)" : "rgba(0,0,0,0)",
           backdropFilter: scrolled ? "blur(18px)" : "blur(0px)",
-          borderBottomColor: scrolled
-            ? "hsl(42 38% 92% / 0.06)"
-            : "hsl(42 38% 92% / 0)",
+          borderBottomColor: scrolled ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0)",
         }}
         transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
         className="fixed inset-x-0 top-0 z-50 border-b"
       >
-        <div className="mx-auto flex h-[68px] w-full max-w-7xl items-center justify-between px-5 md:px-8">
+        <div className="flex h-[70px] w-full items-center px-6 sm:px-10 lg:px-[70px]">
           <AuroraLogo />
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="ml-auto mr-12 hidden items-center gap-8 md:flex">
             {NAV.map((n) => (
               <a
                 key={n.href}
@@ -90,33 +87,23 @@ const AuroraNavbar = () => {
                   e.preventDefault();
                   goToSection(n.href);
                 }}
-                className="rounded-full px-3.5 py-2 text-sm font-medium text-[hsl(var(--au-cream)/0.72)] transition-colors hover:bg-[hsl(var(--au-cream)/0.05)] hover:text-[hsl(var(--au-cream))]"
+                className="text-[0.85rem] font-normal text-white/60 transition-colors hover:text-white"
               >
                 {n.label}
               </a>
             ))}
           </nav>
 
-          <div className="hidden md:block">
-            <button
-              onClick={() => open()}
-              className="au-btn-coral"
-              style={{
-                padding: scrolled ? "0.6rem 1.05rem" : "0.95rem 1.5rem",
-                fontSize: scrolled ? "0.85rem" : "0.95rem",
-                transition:
-                  "padding 0.35s cubic-bezier(0.32,0.72,0,1), font-size 0.35s cubic-bezier(0.32,0.72,0,1), transform 0.35s cubic-bezier(0.32,0.72,0,1), box-shadow 0.35s cubic-bezier(0.32,0.72,0,1)",
-              }}
-              aria-label="Boka kostnadsfri rådgivning"
-            >
-              {scrolled ? "Boka" : "Boka rådgivning"}
-              <ArrowRight size={scrolled ? 14 : 16} strokeWidth={2.5} />
-            </button>
-          </div>
-
-          {/* Mobile toggle */}
           <button
-            className="grid h-10 w-10 place-items-center rounded-full border border-[hsl(var(--au-cream)/0.12)] bg-[hsl(var(--au-cream)/0.04)] text-[hsl(var(--au-cream))] md:hidden"
+            onClick={() => open()}
+            className="hidden h-[52px] w-[52px] place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-xl transition hover:bg-white/15 md:grid"
+            aria-label="Boka kostnadsfri rådgivning"
+          >
+            <Play size={17} fill="currentColor" className="ml-0.5" />
+          </button>
+
+          <button
+            className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-xl md:hidden"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Stäng meny" : "Öppna meny"}
           >
@@ -132,7 +119,7 @@ const AuroraNavbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-40 overflow-y-auto px-6 pb-12 pt-24 md:hidden"
-            style={{ background: "hsl(160 24% 4% / 0.97)", backdropFilter: "blur(24px)" }}
+            style={{ background: "rgba(0,0,0,0.96)", backdropFilter: "blur(24px)" }}
           >
             <div className="flex flex-col gap-1">
               {NAV.map((n, i) => (
@@ -147,7 +134,7 @@ const AuroraNavbar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 + i * 0.04, duration: 0.35 }}
-                  className="block border-b border-[hsl(var(--au-cream)/0.08)] py-5 font-display text-3xl text-[hsl(var(--au-cream))]"
+                  className="block border-b border-white/10 py-5 font-display text-3xl text-white"
                 >
                   {n.label}
                 </motion.a>
@@ -160,11 +147,10 @@ const AuroraNavbar = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.35 }}
-                className="au-btn-coral mt-8 justify-center text-base"
+                className="lumina-primary-cta group mt-8 justify-center"
                 style={{ width: "100%" }}
               >
-                Boka rådgivning
-                <ArrowRight size={18} strokeWidth={2.5} />
+                <span className="relative z-10">Boka rådgivning</span>
               </motion.button>
             </div>
           </motion.div>
