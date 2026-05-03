@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Mail, MapPin, Clock } from "lucide-react";
+import { Mail, MapPin, Clock, Sparkles } from "lucide-react";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const schema = z.object({
@@ -27,9 +27,9 @@ const Kontakt = () => {
 
   useEffect(() => {
     setSEOMeta({
-      title: "Kontakt – starta SaaS-projekt med Aurora Media | Linköping",
+      title: "Kontakt – boka AI-genomgång | Aurora Media",
       description:
-        "Hör av dig för offert på SaaS, AI-byggd webb eller internt verktyg. Svar inom 24 timmar. Fast pris från 14 900 kr. Bas i Linköping, kunder i hela Sverige.",
+        "Boka 30 minuter med Aurora Media för SaaS, MVP, AI-automation, intern app eller webbprojekt. Fast pris från 14 900 kr och svar inom 24 timmar.",
       canonical: "/kontakt",
     });
     setBreadcrumb([
@@ -74,22 +74,25 @@ const Kontakt = () => {
       <main>
         <section className="pt-24 pb-16 md:pt-32 md:pb-20">
           <div className="container mx-auto px-6 max-w-4xl">
-            <p className="label-caps">Kontakt</p>
-            <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
-              Hör av dig
+            <p className="label-caps">Kontakt · AI-genomgång</p>
+            <h1 className="mt-4 font-display text-5xl md:text-6xl leading-[1.02] tracking-tight">
+              Berätta vad du vill bygga.
             </h1>
+            <p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
+              SaaS, MVP, intern app, AI-automation eller webb. Du får ett ärligt svar: bygga, skrota eller tänka om — och ett tydligt nästa steg.
+            </p>
           </div>
         </section>
 
         <section className="pb-24">
           <div className="container mx-auto px-6 max-w-5xl grid gap-12 md:grid-cols-2">
             <div>
-              <h2 className="font-serif text-3xl">Starta ett projekt</h2>
-              <p className="mt-3 text-muted-foreground">Svarar inom 24 timmar vardagar.</p>
+              <h2 className="font-display text-3xl">Starta ett projekt</h2>
+              <p className="mt-3 text-muted-foreground">Svar inom 24 timmar vardagar. Ingen säljpitch.</p>
 
               {done ? (
-                <div className="mt-8 rounded-lg border border-border bg-card p-8 text-center">
-                  <p className="font-serif text-2xl">Tack!</p>
+                <div className="mt-8 rounded-2xl border border-border bg-card p-8 text-center">
+                  <p className="font-display text-2xl">Tack!</p>
                   <p className="mt-2 text-muted-foreground">Jag hör av mig inom 24 timmar.</p>
                 </div>
               ) : (
@@ -109,39 +112,40 @@ const Kontakt = () => {
                     <Input id="company" name="company" maxLength={120} />
                   </div>
                   <div className="space-y-1.5">
-                    <Label htmlFor="paket">Vilket paket är du intresserad av? *</Label>
+                    <Label htmlFor="paket">Vad vill du bygga? *</Label>
                     <Select name="paket">
-                      <SelectTrigger id="paket"><SelectValue placeholder="Välj paket" /></SelectTrigger>
+                      <SelectTrigger id="paket"><SelectValue placeholder="Välj spår" /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Prototyp">Prototyp – 14 900 kr</SelectItem>
-                        <SelectItem value="MVP">MVP – 34 900 kr</SelectItem>
-                        <SelectItem value="SaaS">Skalbar SaaS – 69 000 kr</SelectItem>
-                        <SelectItem value="Skraddarsytt">Skräddarsytt – från 89 000 kr</SelectItem>
-                        <SelectItem value="Vet inte">Vet inte än</SelectItem>
+                        <SelectItem value="AI-genomgang">AI-genomgång / osäker än</SelectItem>
+                        <SelectItem value="Prototyp">Prototyp – från 14 900 kr</SelectItem>
+                        <SelectItem value="MVP">MVP – från 34 900 kr</SelectItem>
+                        <SelectItem value="Skalbar SaaS">Skalbar SaaS – från 89 000 kr</SelectItem>
+                        <SelectItem value="AI Ops">AI-automation / AI Ops</SelectItem>
+                        <SelectItem value="Webb">Hemsida, SEO eller webbplattform</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-1.5">
                     <Label htmlFor="message">Beskriv projektet kort *</Label>
-                    <Textarea id="message" name="message" required minLength={20} maxLength={2000} rows={6} />
+                    <Textarea id="message" name="message" required minLength={20} maxLength={2000} rows={6} placeholder="Vad ska systemet göra, vem ska använda det och vad vill du uppnå?" />
                   </div>
                   <div className="flex items-start gap-2">
                     <Checkbox id="consent" name="consent" required className="mt-1" />
                     <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                      Jag godkänner att ni hanterar mina uppgifter enligt integritetspolicyn.
+                      Jag godkänner att Aurora Media hanterar mina uppgifter enligt integritetspolicyn.
                     </Label>
                   </div>
-                  <Button type="submit" disabled={submitting} size="lg" className="w-full">
-                    {submitting ? "Skickar…" : "Skicka"}
+                  <Button type="submit" disabled={submitting} size="lg" className="w-full rounded-full">
+                    {submitting ? "Skickar…" : "Skicka projektidé"}
                   </Button>
                 </form>
               )}
             </div>
 
             <div>
-              <h2 className="font-serif text-3xl">Andra frågor?</h2>
+              <h2 className="font-display text-3xl">Direktkontakt</h2>
               <p className="mt-3 text-muted-foreground">
-                Mejla mig direkt så svarar jag inom ett dygn.
+                Vill du hellre mejla direkt? Gör det. Skriv kort vad du vill bygga så tar vi det därifrån.
               </p>
 
               <div className="mt-8 space-y-5 text-sm">
@@ -158,23 +162,24 @@ const Kontakt = () => {
                   <MapPin className="mt-0.5 h-4 w-4 text-primary" />
                   <div>
                     <p className="label-caps">Plats</p>
-                    <p className="text-foreground">Linköping, Sverige</p>
+                    <p className="text-foreground">Linköping, Sverige · kunder i hela landet</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Clock className="mt-0.5 h-4 w-4 text-primary" />
                   <div>
                     <p className="label-caps">Svarstid</p>
-                    <p className="text-foreground">24 timmar vardagar</p>
+                    <p className="text-foreground">Vanligtvis inom 24 timmar vardagar</p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-10 rounded-lg border border-border bg-secondary/40 p-6 text-sm text-muted-foreground space-y-1.5">
-                <p className="font-serif text-xl text-foreground">Aurora Media AB</p>
+              <div className="mt-10 rounded-2xl border border-border bg-secondary/40 p-6 text-sm text-muted-foreground space-y-1.5">
+                <p className="font-display text-xl text-foreground">Aurora Media AB</p>
+                <p>AI-builder för SaaS, MVP och automationer</p>
                 <p>Org.nr 559272-0220</p>
                 <p>VAT: SE559272022001</p>
-                <p>F-skatt: Ja</p>
+                <p className="flex items-center gap-2 pt-2"><Sparkles size={15} /> Fast pris. Kod du äger. Snabb leverans.</p>
               </div>
             </div>
           </div>
