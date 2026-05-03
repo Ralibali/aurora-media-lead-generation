@@ -1,25 +1,25 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Bot, FileSpreadsheet, Rocket, Target } from "lucide-react";
+import { ArrowRight, Bot, Code2, Rocket, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import "@/styles/lumina.css";
 
 const TRUST = [
-  { icon: FileSpreadsheet, text: "Från Excel och manuellt kaos till smarta flöden" },
-  { icon: Bot, text: "AI, automation och system byggt för er vardag" },
-  { icon: Target, text: "Fokus på sparad tid, fler leads och bättre överblick" },
+  { icon: Rocket, text: "SaaS, appar och digitala produkter från idé till lansering" },
+  { icon: Bot, text: "AI, automation och effektivisering för företag" },
+  { icon: Target, text: "Byggt för affärsnytta, tillväxt och smartare arbetsflöden" },
 ];
 
 const OFFERINGS = [
+  "SaaS & MVP",
   "AI-automation",
-  "AI-genomlysning",
+  "React Native-appar",
   "Interna system",
+  "AI-genomlysning",
   "Säljautomation",
-  "AI-assistenter",
   "CRM-flöden",
   "Dashboards",
-  "SaaS & MVP",
   "Webbappar",
   "SEO",
   "Google Ads",
@@ -90,8 +90,8 @@ const AuroraHero = () => {
         />
       </video>
 
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0)_86%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_24%,rgba(59,130,246,0.2),transparent_32%),radial-gradient(circle_at_82%_42%,rgba(168,85,247,0.14),transparent_36%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,1)_0%,rgba(0,0,0,0.86)_32%,rgba(0,0,0,0)_86%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_24%,rgba(59,130,246,0.18),transparent_32%),radial-gradient(circle_at_82%_42%,rgba(168,85,247,0.14),transparent_36%)]" />
 
       <div className="relative z-10 flex min-h-[calc(100vh-92px)] items-center px-6 pb-44 pt-10 sm:px-10 lg:px-[70px]">
         <motion.div
@@ -101,24 +101,22 @@ const AuroraHero = () => {
           className="w-full -translate-y-[10%]"
         >
           <p className="mb-3 font-mono-au text-[9px] font-bold uppercase tracking-[0.4em] text-white/70">
-            AURORA MEDIA · AI · AUTOMATION · SYSTEM
+            AURORA MEDIA · SAAS · AI · AUTOMATION · APPAR
           </p>
 
-          <h1 className="font-display text-[clamp(3.3rem,8vw,6.4rem)] font-bold leading-[0.92] tracking-tight text-white md:max-w-[980px]">
-            <span className="block">FRÅN EXCEL-KAOS.</span>
-            <span className="block">
-              TILL SMARTA <span className="text-white">AI-FLÖDEN.</span>
-            </span>
+          <h1 className="font-display text-[clamp(3.4rem,8vw,6.2rem)] font-bold leading-[0.94] tracking-tight text-white md:max-w-[980px]">
+            <span className="block">IDÉN FINNS.</span>
+            <span className="block">VI BYGGER SYSTEMET.</span>
           </h1>
 
-          <p className="mt-5 max-w-[620px] text-base font-normal leading-relaxed text-white/64 md:text-lg">
-            Vi hjälper företag att ersätta manuella rutiner, anteckningar, gamla system och tidskrävande administration med AI-lösningar, automationer och skräddarsydda system som sparar tid och skapar fler affärer.
+          <p className="mt-5 max-w-[650px] text-base font-normal leading-relaxed text-white/64 md:text-lg">
+            Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare, effektivisera arbetet och ersätta manuella rutiner med smarta digitala flöden.
           </p>
 
           <div className="mt-[30px] flex flex-col gap-3 sm:flex-row sm:items-center">
             <button onClick={() => open()} className="lumina-primary-cta group">
               <span className="relative z-10 flex items-center gap-3">
-                Boka AI-genomlysning
+                Boka kostnadsfri rådgivning
                 <ArrowRight size={16} strokeWidth={2.5} className="transition-transform group-hover:translate-x-[5px]" />
               </span>
             </button>
@@ -126,7 +124,7 @@ const AuroraHero = () => {
               to="/ai-automation-foretag"
               className="inline-flex items-center justify-center rounded-full border border-white/20 px-[26.5px] py-[14px] text-[12px] font-bold uppercase tracking-[0.08em] text-white/75 backdrop-blur-xl transition hover:border-white/35 hover:text-white"
             >
-              Läs om AI & automation
+              AI & effektivisering
             </Link>
           </div>
 
