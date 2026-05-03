@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Code2, Rocket, Target } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
@@ -9,15 +10,19 @@ const TRUST = [
   { icon: Target, text: "Byggt för din verksamhet, inte tvärtom" },
 ];
 
-const ECOSYSTEM = [
-  "Google",
-  "Stripe",
-  "Supabase",
-  "Vercel",
-  "OpenAI",
+const OFFERINGS = [
+  "AI-system",
+  "SaaS & MVP",
+  "Automatisering",
+  "Webbappar",
+  "Hemsidor",
+  "E-handel",
+  "Mobilappar",
+  "SEO",
+  "Google Ads",
   "Meta Ads",
-  "Klarna",
-  "Fortnox",
+  "Content",
+  "Grafisk profil",
 ];
 
 const BrandMark = ({ name }: { name: string }) => (
@@ -31,16 +36,52 @@ const BrandMark = ({ name }: { name: string }) => (
 
 const AuroraHero = () => {
   const { open } = useContactModal();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const isRestartingRef = useRef(false);
+  const [videoVisible, setVideoVisible] = useState(true);
+
+  const restartVideoSoftly = () => {
+    const video = videoRef.current;
+    if (!video || isRestartingRef.current) return;
+
+    isRestartingRef.current = true;
+    setVideoVisible(false);
+
+    window.setTimeout(() => {
+      if (!videoRef.current) return;
+      videoRef.current.currentTime = 0.15;
+      void videoRef.current.play();
+
+      window.setTimeout(() => {
+        setVideoVisible(true);
+        isRestartingRef.current = false;
+      }, 90);
+    }, 420);
+  };
+
+  const handleVideoTimeUpdate = () => {
+    const video = videoRef.current;
+    if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return;
+
+    if (video.duration - video.currentTime <= 0.65) {
+      restartVideoSoftly();
+    }
+  };
 
   return (
     <section id="top" className="lumina-hero relative min-h-screen overflow-hidden bg-black pt-[92px] text-white">
       <video
-        className="lumina-hero-video absolute inset-y-0 right-0 h-full w-full object-cover opacity-100"
+        ref={videoRef}
+        className={`lumina-hero-video absolute inset-y-0 right-0 h-full w-full object-cover transition-opacity duration-500 ${
+          videoVisible ? "opacity-100" : "opacity-0"
+        }`}
         autoPlay
         muted
-        loop
         playsInline
+        preload="auto"
         aria-hidden="true"
+        onTimeUpdate={handleVideoTimeUpdate}
+        onEnded={restartVideoSoftly}
       >
         <source
           src="https://cdn.sceneai.art/Hero%20Section%20Video/9ad5cc99-2fa4-4154-bcc2-5c9ec152778e.mp4"
@@ -113,7 +154,7 @@ const AuroraHero = () => {
         </p>
         <div className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
           <div className="lumina-ticker flex w-max gap-12 opacity-55 grayscale">
-            {[...ECOSYSTEM, ...ECOSYSTEM, ...ECOSYSTEM].map((name, index) => (
+            {[...OFFERINGS, ...OFFERINGS].map((name, index) => (
               <BrandMark key={`${name}-${index}`} name={name} />
             ))}
           </div>
