@@ -4,57 +4,56 @@ import { motion } from "framer-motion";
 const Hemsidor = () => (
   <ServicePageTemplate
     slug="hemsidor"
-    label="Tilläggstjänst"
-    title="Hemsida från 4 900 kr"
-    titleEm="Sveriges billigaste riktiga webbpartner."
-    intro="Snabb, modern, fullt kodad. Inga Wix-mallar. Inga 80 000 kr-byråoffert. Leverans på 3–10 dagar."
-    paketName="Hemsida"
-    seoTitle="Hemsida från 4 900 kr – snabb leverans | Aurora Media Linköping"
-    seoDescription="Riktig kodad hemsida från 4 900 kr. Landningssida, företagshemsida eller större sajt. Leverans 3–10 dagar. Linköping, hela Sverige."
+    label="Webb & plattformar"
+    title="Hemsidor som känns som en produkt"
+    titleEm="inte en mall."
+    intro="Modern React-sajt, landningssida eller webbplattform byggd med samma tänk som en SaaS: snabb, sökbar, konverterande och med kod du äger. För företag som vill mer än att bara ha en digital broschyr."
+    paketName="Hemsida / webbplattform"
+    seoTitle="Hemsidor & webbplattformar – modern React-sajt | Aurora Media"
+    seoDescription="Aurora Media bygger moderna hemsidor, landningssidor och webbplattformar med React, SEO, snabb laddning och kod kunden äger. För svenska företag som vill växa digitalt."
     includes={[
-      "Helt kodad i React – inga mallar, inga lock-ins",
-      "Responsiv för mobil, läsplatta och desktop",
-      "On-page SEO och tekniskt grundpaket",
-      "Snabb hosting (Vercel/Netlify) ingår första året",
-      "Domänkoppling och SSL",
-      "Kontaktformulär och Google Maps-integration",
-      "Google Analytics eller Plausible",
-      "Källkoden lämnas över – du äger allt",
+      "Modern React/TypeScript-sajt utan mall-låsning",
+      "Responsiv design för mobil, surfplatta och desktop",
+      "SEO-grund med metadata, sitemap, struktur och prestanda",
+      "Snabb hosting och SSL via modern plattform",
+      "Kontaktflöde, CTA-struktur och mätning",
+      "Möjlighet till blogg/content-hub för organisk trafik",
+      "Kan byggas vidare till app, SaaS eller kundportal",
+      "Källkod och dokumentation lämnas över",
     ]}
     process={[
-      { label: "Steg 1 · Dag 1", title: "Korta brief", body: "Mejl eller 20 min video. Du beskriver vad du vill ha. Jag säger pris och leveransdag." },
-      { label: "Steg 2 · Dag 2–3", title: "Designutkast", body: "Du får en första version live på en URL. Inte Figma – riktig sajt." },
-      { label: "Steg 3 · Dag 4–8", title: "Justeringar", body: "Fem feedbackrundor ingår. Jag bygger om det som behöver byggas om." },
-      { label: "Steg 4", title: "Leverans", body: "Domänkoppling, SSL, Analytics. Källkod till dig. Klart." },
+      { label: "Steg 1", title: "Scope", body: "Vi bestämmer vad sajten ska göra: sälja, förklara, generera leads, ranka på Google eller fungera som bas för en produkt." },
+      { label: "Steg 2", title: "Struktur", body: "Jag sätter sidstruktur, budskap, SEO-grund och CTA-flöden så sajten inte bara blir snygg utan också användbar." },
+      { label: "Steg 3", title: "Bygg", body: "Sajten byggs i riktig kod med snabb preview-länk. Du kan se och testa löpande istället för att vänta på statiska skisser." },
+      { label: "Steg 4", title: "Lansering", body: "Domän, SSL, metadata, mätning, sitemap och överlämning fixas innan sidan går live." },
     ]}
     tiers={[
       {
         name: "Landningssida",
-        price: "4 900 kr",
-        time: "3 dagar",
-        desc: "En sida. För kampanjer, lansering, eller en enkel företagssajt.",
-        features: ["1 sida", "Kontaktformulär", "Mobiloptimerad", "Hosting + SSL"],
+        price: "Offert efter scope",
+        time: "Ofta 1–2 veckor",
+        desc: "För kampanj, ny tjänst eller tydlig leadgenerering.",
+        features: ["1 fokuserad sida", "CTA och kontaktflöde", "SEO-grund", "Responsiv design"],
       },
       {
-        name: "Företagshemsida",
-        price: "9 900 kr",
-        time: "5 dagar",
-        desc: "Klassisk uppsättning: hem, om, tjänster, blogg, kontakt.",
-        features: ["5 sidor", "Bloggsystem", "On-page SEO", "Hosting + SSL", "Analytics"],
+        name: "Företagssajt",
+        price: "Fast offert",
+        time: "Ofta 2–4 veckor",
+        desc: "För bolag som behöver en riktig webbplats med flera sidor och tydlig positionering.",
+        features: ["Startsida + undersidor", "Tjänstesidor", "Kontaktflöde", "SEO och mätning", "Kod du äger"],
         featured: true,
       },
       {
-        name: "Större sajt",
-        price: "Från 14 900 kr",
-        time: "7–10 dagar",
-        desc: "10+ sidor, kategoristruktur, mer komplex layout.",
-        features: ["10+ sidor", "CMS för innehåll", "Avancerad SEO", "Integrationer"],
+        name: "Webbplattform",
+        price: "Från 34 900 kr",
+        time: "Efter scope",
+        desc: "När sajten behöver login, databas, kundportal, betalning eller integrationer.",
+        features: ["Databas", "Auth/login", "Admin eller dashboard", "Integrationer", "Skalbar grund"],
       },
     ]}
     pricingNote={
       <>
-        Alla priser exkl. moms. Hosting ingår år 1, sedan från 290 kr/år. Löpande underhåll
-        finns för 1 990 kr/mån.
+        Priset sätts efter faktisk omfattning. Vill du bara ha en enkel landningssida håller vi det litet. Behöver du en plattform med login, databas eller betalning går projektet in i MVP-upplägget.
       </>
     }
     extra={
@@ -67,65 +66,45 @@ const Hemsidor = () => (
             transition={{ duration: 0.6 }}
           >
             <p className="label-caps">Jämförelse</p>
-            <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
-              Hur jag står mig.
+            <h2 className="mt-3 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.1] tracking-[-0.02em]">
+              Webb som kan växa vidare.
             </h2>
           </motion.div>
 
-          <div className="mt-10 overflow-x-auto rounded-xl border border-border bg-card">
+          <div className="mt-10 overflow-x-auto rounded-2xl border border-border bg-card">
             <table className="w-full min-w-[640px] text-left text-sm">
               <thead>
                 <tr className="border-b border-border bg-secondary/50">
                   <th className="p-5 font-medium text-muted-foreground"></th>
-                  <th className="p-5 font-serif text-base font-normal">Traditionell byrå</th>
-                  <th className="p-5 font-serif text-base font-normal">Wix / Squarespace</th>
-                  <th className="p-5 font-serif text-base font-normal text-primary">Aurora Media</th>
+                  <th className="p-5 font-display text-base font-normal">Mallbyggare</th>
+                  <th className="p-5 font-display text-base font-normal">Traditionell byrå</th>
+                  <th className="p-5 font-display text-base font-normal text-primary">Aurora Media</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                <tr>
-                  <td className="p-5 label-caps">Pris</td>
-                  <td className="p-5 text-foreground/75">25 000 – 80 000 kr</td>
-                  <td className="p-5 text-foreground/75">0 kr + din tid</td>
-                  <td className="p-5 font-medium text-primary">4 900 – 14 900 kr</td>
-                </tr>
-                <tr>
-                  <td className="p-5 label-caps">Tid</td>
-                  <td className="p-5 text-foreground/75">4–8 veckor</td>
-                  <td className="p-5 text-foreground/75">20+ timmar av dig</td>
-                  <td className="p-5 font-medium text-primary">3–10 dagar</td>
-                </tr>
-                <tr>
-                  <td className="p-5 label-caps">Kontroll</td>
-                  <td className="p-5 text-foreground/75">Begränsad</td>
-                  <td className="p-5 text-foreground/75">Begränsad</td>
-                  <td className="p-5 font-medium text-primary">Full kontroll över koden</td>
-                </tr>
-                <tr>
-                  <td className="p-5 label-caps">SEO</td>
-                  <td className="p-5 text-foreground/75">Extra kostnad</td>
-                  <td className="p-5 text-foreground/75">Begränsad</td>
-                  <td className="p-5 font-medium text-primary">Ingår</td>
-                </tr>
+                <tr><td className="p-5 label-caps">Ägande</td><td className="p-5 text-foreground/75">Plattformslåst</td><td className="p-5 text-foreground/75">Varierar</td><td className="p-5 font-medium text-primary">Kod och struktur du äger</td></tr>
+                <tr><td className="p-5 label-caps">Skalning</td><td className="p-5 text-foreground/75">Begränsad</td><td className="p-5 text-foreground/75">Möjlig men ofta dyr</td><td className="p-5 font-medium text-primary">Kan växa till app/SaaS</td></tr>
+                <tr><td className="p-5 label-caps">SEO</td><td className="p-5 text-foreground/75">Grundläggande</td><td className="p-5 text-foreground/75">Ofta tillägg</td><td className="p-5 font-medium text-primary">Teknisk grund från start</td></tr>
+                <tr><td className="p-5 label-caps">Process</td><td className="p-5 text-foreground/75">Gör själv</td><td className="p-5 text-foreground/75">Byråprocess</td><td className="p-5 font-medium text-primary">Direkt med den som bygger</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </section>
     }
-    whyAffordable="Jag använder samma AI-kodningsmetodik som för mina SaaS-projekt. En traditionell byrå har designer, projektledare, utvecklare och korrekturläsare i varje led – jag är alla i en, med AI som förstärkning. Resultatet är riktig kod, inte mallar – men till en bråkdel av kostnaden."
+    whyAffordable="Jag bygger med AI-assisterad utveckling och en modern React-stack. Det gör processen snabbare, men värdet ligger fortfarande i scope, struktur, SEO, designbeslut och att sajten byggs på en grund som kan växa vidare."
     faqs={[
-      { q: "Är det WordPress?", a: "Nej. Det är React med Vite, byggt från grunden. Snabbare, säkrare, lättare att underhålla – och utan plugin-roulette." },
-      { q: "Kan jag uppdatera innehåll själv?", a: "Ja. Mindre sajter får ett enkelt CMS (Sanity eller Decap). Större sajter får en headless lösning som passar ditt team." },
-      { q: "Vad händer om jag vill byta byrå senare?", a: "Du äger källkoden. Vilken React-utvecklare som helst kan ta över. Inga proprietära format, inga lock-ins." },
-      { q: "Behövs domän?", a: "Nej, men jag rekommenderar det. Jag hjälper till med köp och koppling om du inte redan har en. Cirka 100–200 kr/år för en .se." },
-      { q: "Kan ni göra en mobilapp av sajten också?", a: "Ja. Den enklaste vägen är en PWA (installerbar webbapp) från 6 900 kr – samma kodbas som sajten, ingen App Store-hantering. Vill du ha en riktig butiksapp för iOS och Android bygger jag den med Capacitor från 24 900 kr. Se /tjanster/mobilapp för upplägg och paket." },
+      { q: "Är det WordPress?", a: "Nej, huvudspåret är React/TypeScript med modern hosting. Det passar bäst när du vill ha prestanda, kontroll och möjlighet att bygga vidare till app eller plattform." },
+      { q: "Kan jag uppdatera innehåll själv?", a: "Ja. Beroende på behov kan vi lägga till CMS, enkel datakälla eller ett adminflöde." },
+      { q: "Äger jag sajten?", a: "Ja. Du får kod, repo och dokumentation. Du ska inte bli låst till Aurora Media." },
+      { q: "Kan hemsidan bli en app eller SaaS senare?", a: "Ja. Det är en av poängerna med att bygga i riktig kod istället för mallverktyg." },
+      { q: "Vad kostar det?", a: "Det beror på scope. En enkel landningssida är mindre. En webbplattform med login, databas eller betalning hamnar närmare MVP-upplägget." },
     ]}
     related={[
-      { name: "SEO", price: "Från 4 900 kr", to: "/tjanster/seo" },
-      { name: "Mobilapp", price: "Från 6 900 kr", to: "/tjanster/mobilapp" },
-      { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
-      { name: "Content", price: "995 kr/artikel", to: "/tjanster/content" },
+      { name: "AI-konsult Sverige", price: "Från strategi till produkt", to: "/ai-konsult-sverige" },
+      { name: "SEO", price: "Teknisk SEO och content", to: "/tjanster/seo" },
+      { name: "Priser", price: "Se aktuella paket", to: "/priser" },
+      { name: "Kontakt", price: "Boka AI-genomgång", to: "/kontakt" },
     ]}
   />
 );
