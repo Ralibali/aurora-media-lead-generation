@@ -16,6 +16,12 @@ const STATIC_PAGES = [
     body: 'Aurora Media AB är en AI-driven mjukvarubyrå i Linköping. Vi bygger SaaS, MVP:er, interna system, webbappar, mobilappar, e-handel, integrationer och automatiseringar för svenska företag.',
   },
   {
+    route: '/ai-konsult-sverige',
+    title: 'AI-konsult Sverige – från strategi till färdig produkt',
+    description: 'Aurora Media är AI-konsulten som bygger produkten: SaaS, interna appar och AI-automationer med fast pris, snabb leverans och kod du äger.',
+    body: 'Aurora Media är en AI-konsult och AI-builder i Sverige som bygger SaaS, interna appar och AI-automationer. Vi hjälper företag gå från AI-strategi till fungerande produkt med fast pris, snabb leverans, modern stack och kod kunden äger. Mindre workshop. Mer fungerande produkt.',
+  },
+  {
     route: '/tjanster',
     title: 'Tjänster – SaaS, AI, appar och webb',
     description: 'Utforska Aurora Medias tjänster inom SaaS-utveckling, AI-integration, webbappar, mobilappar, SEO, Google Ads, Meta Ads och content.',
