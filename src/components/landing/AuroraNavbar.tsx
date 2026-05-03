@@ -5,11 +5,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 
 const NAV = [
-  { label: "Tjänster", href: "#tjanster" },
-  { label: "Branscher", href: "#branscher" },
-  { label: "Process", href: "#process" },
-  { label: "Projekt", href: "#projekt" },
-  { label: "Paket", href: "#paket" },
+  { label: "AI & automation", href: "/ai-automation-foretag", type: "route" },
+  { label: "Tjänster", href: "#tjanster", type: "section" },
+  { label: "Process", href: "#process", type: "section" },
+  { label: "Projekt", href: "#projekt", type: "section" },
+  { label: "Paket", href: "#paket", type: "section" },
 ];
 
 const AuroraLogo = () => (
@@ -42,11 +42,17 @@ const AuroraNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const goToSection = (href: string) => {
+  const goToNav = (href: string, type: string) => {
+    if (type === "route") {
+      navigate(href);
+      return;
+    }
+
     if (location.pathname === "/") {
       smoothTo(href);
       return;
     }
+
     navigate(`/${href}`);
   };
 
@@ -85,7 +91,7 @@ const AuroraNavbar = () => {
                 href={n.href}
                 onClick={(e) => {
                   e.preventDefault();
-                  goToSection(n.href);
+                  goToNav(n.href, n.type);
                 }}
                 className="text-[0.85rem] font-normal text-white/60 transition-colors hover:text-white"
               >
@@ -129,7 +135,7 @@ const AuroraNavbar = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     setMobileOpen(false);
-                    setTimeout(() => goToSection(n.href), 120);
+                    setTimeout(() => goToNav(n.href, n.type), 120);
                   }}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -150,7 +156,7 @@ const AuroraNavbar = () => {
                 className="lumina-primary-cta group mt-8 justify-center"
                 style={{ width: "100%" }}
               >
-                <span className="relative z-10">Boka rådgivning</span>
+                <span className="relative z-10">Boka AI-genomlysning</span>
               </motion.button>
             </div>
           </motion.div>
