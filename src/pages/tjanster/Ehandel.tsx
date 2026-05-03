@@ -3,45 +3,65 @@ import ServicePageTemplate from "./ServicePageTemplate";
 const Ehandel = () => (
   <ServicePageTemplate
     slug="ehandel"
-    title="E-handel från 19 900 kr."
-    intro="Shopify eller egen lösning. Lansering på 2 veckor. Du börjar sälja från dag ett."
-    paketName="Ads"
-    seoTitle="E-handel från 19 900 kr – Shopify eller eget | Aurora Media"
-    seoDescription="Bygg din e-handel på 2 veckor. Shopify-setup eller egen Stripe-lösning. Fast pris från 19 900 kr. Linköping."
+    label="E-handel & betalflöden"
+    title="E-handel som kan sälja, mäta och växa"
+    intro="Shopify, Stripe eller skräddarsydd checkout beroende på vad du faktiskt behöver. Fokus är inte bara en snygg butik — utan produktstruktur, betalflöde, mätning och en grund som går att skala."
+    paketName="E-handel"
+    seoTitle="E-handel, Shopify och Stripe-lösningar | Aurora Media"
+    seoDescription="Aurora Media bygger e-handel, Shopify-flöden och skräddarsydda Stripe-lösningar med SEO, mätning, betalning och integrationer för svenska företag."
     includes={[
-      "Shopify, BigCommerce eller egen Stripe-baserad lösning",
-      "Produktimport och kategoristruktur",
-      "Betalning med Klarna, Swish, kort",
-      "Frakt- och leveransflöde (PostNord, Budbee m.fl.)",
-      "Mobiloptimerad design",
-      "On-page SEO för produkter och kategorier",
-      "Mailchimp/Klaviyo-integration",
-      "Google Analytics + Meta Pixel",
+      "Plattformsval: Shopify, Stripe eller skräddarsydd lösning",
+      "Produkt- och kategoristruktur",
+      "Betalflöde med kort, Klarna, Swish eller Stripe där det passar",
+      "Frakt-, order- och kundflöden",
+      "Mobiloptimerad köpupplevelse",
+      "SEO-grund för produkter och kategorier",
+      "Mätning: Google Analytics, Meta Pixel och konverteringar",
+      "Möjlighet till Fortnox, Brevo, Klaviyo eller andra integrationer",
     ]}
     process={[
-      { label: "Steg 1", title: "Plattformsval", body: "Vi avgör om Shopify räcker eller om du behöver något egenkokat." },
-      { label: "Steg 2", title: "Setup", body: "Tema, betalningar, frakt, produkter. En vecka." },
-      { label: "Steg 3", title: "Integrationer", body: "Bokföring, e-post, ads. Allt kopplas innan lansering." },
-      { label: "Steg 4", title: "Lansering", body: "Soft launch, justeringar, full launch. Du börjar sälja." },
+      { label: "Steg 1", title: "Affärsflöde", body: "Vi går igenom vad du säljer, hur betalning/frakt ska fungera och vilka system e-handeln måste prata med." },
+      { label: "Steg 2", title: "Tekniskt val", body: "Shopify om det är smartast. Egen lösning om regler, checkout eller data kräver mer kontroll." },
+      { label: "Steg 3", title: "Bygg & kopplingar", body: "Butik, produktstruktur, betalning, mätning, e-postflöden och integrationer byggs ihop." },
+      { label: "Steg 4", title: "Lansering", body: "Soft launch, testköp, tracking, justeringar och överlämning så du kan börja sälja tryggt." },
     ]}
     tiers={[
-      { name: "Shopify start", price: "19 900 kr", time: "2 veckor", desc: "Shopify-tema, upp till 50 produkter, betalningar och frakt.", features: ["Shopify Basic-setup", "Tema och anpassning", "Produktimport", "Klarna + kort"] },
-      { name: "Shopify pro", price: "34 900 kr", time: "3 veckor", desc: "Shopify med klistret: e-post, ads, Fortnox.", features: ["Allt i Start", "Klaviyo eller Mailchimp", "Meta Pixel + Google Ads", "Fortnox-koppling"], featured: true },
-      { name: "Egen e-handel", price: "Från 49 900 kr", time: "4–6 veckor", desc: "Stripe-baserad, full kontroll, inga månadsavgifter.", features: ["Custom React + Stripe", "Egen admin", "Multi-region", "Full kodbas"] },
+      {
+        name: "Shopify Launch",
+        price: "Fast offert",
+        time: "Ofta 2–4 veckor",
+        desc: "För företag som vill sälja snabbt med en stabil, beprövad plattform.",
+        features: ["Shopify-setup", "Tema och anpassning", "Produktstruktur", "Betalning och frakt", "Tracking"],
+      },
+      {
+        name: "Growth Commerce",
+        price: "Fast offert",
+        time: "Efter scope",
+        desc: "För butiker som behöver e-postflöden, annonsering, SEO och integrationer från start.",
+        features: ["Allt i Launch", "SEO-grund", "Meta/Google tracking", "E-postflöden", "Integrationer"],
+        featured: true,
+      },
+      {
+        name: "Custom Commerce",
+        price: "Från 89 000 kr",
+        time: "Efter scope",
+        desc: "När du behöver egen checkout, databas, kundportal eller mer avancerad logik.",
+        features: ["React + Stripe", "Egen admin", "Kundkonton", "API-integrationer", "Kod du äger"],
+      },
     ]}
-    whyAffordable="Shopify-temat anpassas snabbt om man kan koden. Den egna lösningen byggs på samma byggblock jag använder för mina SaaS-produkter. Jag har redan löst betalningar, frakt och Fortnox-koppling i mina egna projekt."
+    whyAffordable="Jag väljer inte teknik för att det låter dyrt. Shopify när det är rätt, egen lösning när affären kräver det. AI-assisterad utveckling gör byggdelen snabbare, men värdet ligger i att betalning, struktur, mätning och integrationer sitter rätt från början."
     faqs={[
-      { q: "Shopify eller eget?", a: "Säljer du under 1 000 ordrar/månad: Shopify. Mer än så, eller komplexa produkter/regler: egen lösning lönar sig snabbt." },
-      { q: "Hjälper du med produktbilder?", a: "Ja, jag erbjuder produktfotografering separat – 4 900 kr/halvdag i Linköping." },
-      { q: "Klarar lösningen Black Friday?", a: "Shopify ja. Egna lösningar byggs med Vercel/Cloudflare och tål spikar." },
-      { q: "Får jag hjälp med ads?", a: "Ja. Google Ads och Meta Ads finns som tilläggstjänster. Vanligast är att vi paketerar setup + 3 månaders optimering." },
-      { q: "Behöver jag en mobilapp till min e-handel?", a: "Sällan från start – en bra mobil webb räcker långt. När du har återkommande kunder och vill ha push-notiser, snabbare checkout eller offline-läge blir en app intressant. Jag bygger PWA från 6 900 kr eller Capacitor-app (iOS + Android från samma kodbas) från 24 900 kr – se /tjanster/mobilapp för upplägg." },
+      { q: "Shopify eller egen lösning?", a: "Shopify är ofta bäst när du vill sälja standardprodukter snabbt. Egen lösning passar när du har specialregler, kundportal, avancerad checkout eller vill äga hela flödet." },
+      { q: "Kan ni koppla Klarna, Swish eller Stripe?", a: "Ja. Exakt betalflöde beror på plattform och affärsmodell. Stripe är ofta bäst för SaaS och skräddarsydda flöden, medan Shopify har färdiga alternativ." },
+      { q: "Hjälper ni med annonsering?", a: "Ja. Google Ads och Meta Ads kan kopplas på tillsammans med rätt tracking och landningssidor." },
+      { q: "Kan e-handeln bli en app senare?", a: "Ja. Om produkten behöver återkommande användning, pushnotiser eller appkänsla kan vi bygga PWA eller app-liknande lösning senare." },
+      { q: "Äger jag koden?", a: "Om vi bygger skräddarsytt får du repo och kod. Om vi bygger på Shopify äger du butiken och kontot, men själva Shopify-plattformen är förstås extern." },
     ]}
     related={[
-      { name: "Google Ads", price: "3 900 kr setup", to: "/tjanster/google-ads" },
-      { name: "Meta Ads", price: "3 900 kr setup", to: "/tjanster/meta-ads" },
-      { name: "Mobilapp", price: "Från 6 900 kr", to: "/tjanster/mobilapp" },
-      { name: "Fotografering", price: "4 900 kr/halvdag", to: "/tjanster/fotografering" },
+      { name: "Google Ads", price: "Kampanj och tracking", to: "/tjanster/google-ads" },
+      { name: "Meta Ads", price: "Facebook och Instagram", to: "/tjanster/meta-ads" },
+      { name: "SEO", price: "Produkt- och kategorisynlighet", to: "/tjanster/seo" },
+      { name: "Kontakt", price: "Boka AI-genomgång", to: "/kontakt" },
     ]}
   />
 );
