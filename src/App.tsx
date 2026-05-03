@@ -7,6 +7,7 @@ import "@/styles/lumina.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
+import AiKonsultSverige from "./pages/AiKonsultSverige";
 import Arbete from "./pages/Arbete";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -52,6 +53,12 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Aurora Media bygger SaaS, AI-lösningar och skräddarsydd mjukvara för företag som vill växa snabbare.",
     canonical: "https://auroramedia.se/",
+  },
+  "/ai-konsult-sverige": {
+    title: "AI-konsult Sverige – från strategi till färdig produkt | Aurora Media AB",
+    description:
+      "Aurora Media är AI-konsulten som bygger produkten: SaaS, interna appar och AI-automationer med fast pris, snabb leverans och kod du äger.",
+    canonical: "https://auroramedia.se/ai-konsult-sverige",
   },
   "/en": {
     title: "Aurora Media AB – We build AI-powered SaaS",
@@ -264,6 +271,7 @@ const App = () => (
           <div className="aurora-theme lumina-site min-h-screen">
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />
               <Route path="/arbete" element={<Arbete />} />
               <Route path="/arbete/:slug" element={<CasePage />} />
