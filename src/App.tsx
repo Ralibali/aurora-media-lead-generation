@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import AiAutomationForetag from "./pages/AiAutomationForetag";
+import AiKarta from "./pages/AiKarta";
 import AiKonsultSverige from "./pages/AiKonsultSverige";
 import Arbete from "./pages/Arbete";
 import Blog from "./pages/Blog";
@@ -52,8 +53,14 @@ const seoMap: Record<string, SEOConfig> = {
   "/": {
     title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
     description:
-      "Aurora Media hjälper företag att ersätta Excel, manuella rutiner och omoderna system med AI-lösningar, automationer, SaaS och smarta digitala arbetsflöden.",
+      "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
     canonical: "https://auroramedia.se/",
+  },
+  "/ai-karta": {
+    title: "AI-kartan | Hitta företagets bästa AI-case | Aurora Media",
+    description:
+      "Ladda ner Aurora AI-karta och identifiera vilka arbetsuppgifter, system och processer i företaget som kan automatiseras, effektiviseras eller byggas om med AI.",
+    canonical: "https://auroramedia.se/ai-karta",
   },
   "/ai-automation-foretag": {
     title: "AI automation för företag | Automatisera Excel, leads och administration",
@@ -116,9 +123,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/tjanster/ehandel",
   },
   "/tjanster/mobilapp": {
-    title: "Mobilappar | Aurora Media AB",
+    title: "React Native apputveckling | Appar för iOS och Android | Aurora Media",
     description:
-      "Vi utvecklar mobilappar med tydlig affärsnytta, snabb prestanda och modern användarupplevelse.",
+      "Aurora Media är experter på React Native och bygger moderna appar för iOS och Android: kundappar, interna appar, MVP:er, SaaS-appar och AI-drivna mobila lösningar.",
     canonical: "https://auroramedia.se/tjanster/mobilapp",
   },
   "/tjanster/seo": {
@@ -278,6 +285,7 @@ const App = () => (
           <div className="aurora-theme lumina-site min-h-screen">
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/ai-karta" element={<AiKarta />} />
               <Route path="/ai-automation-foretag" element={<AiAutomationForetag />} />
               <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />
