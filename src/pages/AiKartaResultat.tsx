@@ -48,6 +48,7 @@ function buildHeadline(potential: string): { lead: string; tail: string } {
 const AiKartaResultat = () => {
   const navigate = useNavigate();
   const [result, setResult] = useState<AiMapResult | null>(null);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     setSEOMeta({
