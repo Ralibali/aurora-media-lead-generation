@@ -85,6 +85,12 @@ const AiKartaForm = () => {
           email: parsed.data.email,
           company: parsed.data.company,
           _renderedAt: renderedAtRef.current,
+          source: (() => {
+            try { return sessionStorage.getItem("aikarta_source") || "form_direct"; }
+            catch { return "form_direct"; }
+          })(),
+          page_path: typeof window !== "undefined" ? window.location.pathname : null,
+          referrer: typeof document !== "undefined" ? document.referrer || null : null,
         },
       });
 

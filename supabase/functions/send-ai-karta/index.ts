@@ -17,6 +17,9 @@ interface Body {
   company?: string;
   website?: string; // honeypot
   _renderedAt?: number;
+  source?: string;
+  page_path?: string | null;
+  referrer?: string | null;
 }
 
 type RateEntry = { count: number; windowStart: number; lastAt: number };
@@ -99,6 +102,9 @@ Deno.serve(async (req: Request) => {
     const name = String(body.name ?? "").trim().slice(0, 80);
     const email = String(body.email ?? "").trim().slice(0, 160);
     const company = String(body.company ?? "").trim().slice(0, 120);
+    const source = String(body.source ?? "form_direct").trim().slice(0, 60) || "form_direct";
+    const pagePath = body.page_path ? String(body.page_path).slice(0, 200) : null;
+    const referrer = body.referrer ? String(body.referrer).slice(0, 300) : null;
     const userAgent = req.headers.get("user-agent")?.slice(0, 300) ?? "";
 
     if (!name || !email) {
@@ -161,6 +167,18 @@ Deno.serve(async (req: Request) => {
 
     let leadId: string | null = null;
     try {
+      const sourceLabel =
+        source === "hero_cta"
+          ? "Hero-knapp ”Hämta AI-kartan”"
+          : source === "form_direct"
+          ? "Formulär (direkt)"
+          : source;
+      const messageParts = [
+        company ? `Hämtade AI-kartan från ${company}.` : "Hämtade AI-kartan.",
+        `Källa: ${sourceLabel}`,
+        pagePath ? `Sida: ${pagePath}` : null,
+        referrer ? `Referrer: ${referrer}` : null,
+      ].filter(Boolean);
       const { data, error } = await admin
         .from("leads")
         .insert({
@@ -168,8 +186,9 @@ Deno.serve(async (req: Request) => {
           email,
           company: company || null,
           paket: "ai-karta",
-          lead_label: "AI-kartan – nedladdning",
-          message: company ? `Hämtade AI-kartan från ${company}.` : "Hämtade AI-kartan.",
+          platform: source,
+          lead_label: `AI-kartan – ${sourceLabel}`,
+          message: messageParts.join("\n"),
           ip,
           user_agent: userAgent || null,
         })
