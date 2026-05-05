@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  ArrowRight, CheckCircle2, Clock, Database, Download,
+  ArrowRight, CheckCircle2, Clock, Database, Download, Mail,
   Sparkles, Target, TrendingUp, Workflow, Zap,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
+import { supabase } from "@/integrations/supabase/client";
 
 const RESULT_KEY = "ai_map_result";
 
