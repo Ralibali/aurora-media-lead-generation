@@ -172,21 +172,21 @@ const AiKartaResultat = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main className="overflow-hidden">
-        <section className="relative pt-28 pb-16 md:pt-36 md:pb-24">
+        <section className="relative pt-24 pb-14 md:pt-36 md:pb-24">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.18),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_30%)]" />
-          <div className="container mx-auto max-w-4xl px-6">
+          <div className="container mx-auto max-w-4xl px-5 sm:px-6">
             <Reveal>
               <p className="label-caps">Mini-analys för {meta.company_name}</p>
-              <h1 className="mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] font-bold leading-[0.95] tracking-tight">
+              <h1 className="mt-4 font-display text-[clamp(2rem,8vw,5rem)] font-bold leading-[1.02] tracking-tight break-words">
                 Ni har <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">{lead}</span> {tail}
               </h1>
-              <p className="mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
                 Baserat på era svar har vi identifierat {top3.length} processer där AI och automation
                 kan göra störst skillnad. Här är en första uppskattning – inte en exakt lösningsdesign.
               </p>
 
               {/* Konkreta värdesiffror, inte abstrakta poäng */}
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <div className="mt-7 grid gap-3 grid-cols-1 sm:grid-cols-3">
                 <StatCard
                   icon={Clock}
                   label="Uppskattad tidsbesparing"
@@ -227,12 +227,12 @@ const AiKartaResultat = () => {
 
             {ai_analysis && (
               <Reveal y={18}>
-                <div className="mt-10 rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-6 sm:p-8">
+                <div className="mt-10 rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-5 sm:p-8">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-primary" />
                     <p className="label-caps text-primary">Aurora-analys</p>
                   </div>
-                  <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
+                  <h2 className="mt-3 font-display text-xl font-bold sm:text-3xl">
                     Vad vi ser i era svar
                   </h2>
                   <p className="mt-4 text-sm leading-relaxed text-foreground/90 sm:text-base">
@@ -260,7 +260,7 @@ const AiKartaResultat = () => {
                 const saved = p.saved_hours_per_week ?? 0;
                 return (
                   <Reveal key={`${p.position}-${i}`} y={18}>
-                    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 sm:p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]">
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 sm:p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
@@ -268,7 +268,7 @@ const AiKartaResultat = () => {
                             <span className="text-xs text-muted-foreground">·</span>
                             <span className="text-xs font-medium text-muted-foreground">{p.potential}</span>
                           </div>
-                          <h2 className="mt-2 font-display text-2xl font-bold leading-tight break-words sm:text-3xl">
+                          <h2 className="mt-2 font-display text-xl font-bold leading-tight break-words sm:text-3xl">
                             {p.process_name}
                           </h2>
                         </div>
@@ -328,7 +328,7 @@ const AiKartaResultat = () => {
                         const ai = aiCaseFor(p.process_name);
                         if (!ai) return null;
                         return (
-                          <div className="mt-6 space-y-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-5">
+                          <div className="mt-6 space-y-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-4 sm:p-5">
                             <div className="flex items-center gap-2">
                               <Sparkles className="h-4 w-4 text-primary" />
                               <p className="text-[11px] uppercase tracking-wider text-primary">
@@ -396,24 +396,24 @@ const AiKartaResultat = () => {
 
             {/* CTA – conversion-optimized */}
             <Reveal y={18}>
-              <div className="relative mt-14 overflow-hidden rounded-[2rem] border border-primary/30 bg-gradient-to-br from-primary/[0.16] via-primary/[0.06] to-transparent p-8 sm:p-12 shadow-[0_40px_100px_-50px_hsl(var(--primary)/0.6)]">
+              <div className="relative mt-12 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-primary/30 bg-gradient-to-br from-primary/[0.16] via-primary/[0.06] to-transparent p-5 sm:p-12 shadow-[0_40px_100px_-50px_hsl(var(--primary)/0.6)]">
                 <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
                 <div className="absolute -left-16 -bottom-16 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl" />
-                <div className="relative grid gap-8 sm:grid-cols-[1.3fr_1fr] sm:items-center">
+                <div className="relative grid gap-7 sm:grid-cols-[1.3fr_1fr] sm:items-center">
                   <div>
                     <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.10] px-3 py-1.5 text-xs font-semibold text-primary">
                       <Sparkles className="h-3.5 w-3.5" /> Era nästa 30 dagar
                     </div>
-                    <h2 className="mt-4 font-display text-3xl font-bold leading-tight sm:text-4xl">
+                    <h2 className="mt-4 font-display text-2xl font-bold leading-tight sm:text-4xl break-words">
                       Vill ni att vi bygger <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">första piloten</span> åt er?
                     </h2>
                     <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
                       Boka en kostnadsfri AI-genomlysning (45 min). Vi går igenom era svar live, pekar ut bästa första pilot och ger en uppskattning av <strong className="text-foreground">lösning, tid och kostnad</strong>. Inga köpkrav.
                     </p>
                     {totalSavedPerYear > 0 && (
-                      <div className="mt-5 inline-flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/[0.08] px-4 py-3">
+                      <div className="mt-5 flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/[0.08] px-4 py-3">
                         <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                        <p className="text-sm text-foreground/90">
+                        <p className="text-sm leading-relaxed text-foreground/90">
                           Med era topp-3 case kan ni spara cirka{" "}
                           <strong className="text-foreground">{totalSavedPerYear} timmar/år</strong>.
                           Det motsvarar ungefär{" "}
@@ -422,7 +422,7 @@ const AiKartaResultat = () => {
                         </p>
                       </div>
                     )}
-                    <ul className="mt-6 grid gap-2 text-sm text-foreground/85 sm:grid-cols-2">
+                    <ul className="mt-6 grid gap-2 text-sm text-foreground/85 grid-cols-1 sm:grid-cols-2">
                       {[
                         "Helt kostnadsfritt",
                         "Inget köpkrav",
@@ -436,7 +436,7 @@ const AiKartaResultat = () => {
                     </ul>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <Button asChild size="lg" className="rounded-full shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]">
+                    <Button asChild size="lg" className="h-14 w-full rounded-full text-base shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]">
                       <Link to="/kontakt">
                         Boka kostnadsfri genomlysning <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
@@ -444,7 +444,7 @@ const AiKartaResultat = () => {
                     <Button
                       size="lg"
                       variant="outline"
-                      className="rounded-full"
+                      className="h-12 w-full rounded-full text-base"
                       onClick={handlePrint}
                     >
                       Ladda ner PDF-analys <Download className="ml-2 h-4 w-4" />
@@ -452,7 +452,7 @@ const AiKartaResultat = () => {
                     <Button
                       size="lg"
                       variant="ghost"
-                      className="rounded-full"
+                      className="h-12 w-full rounded-full text-base"
                       onClick={handleResend}
                       disabled={sending}
                       aria-label={`Skicka analysen till ${meta.email}`}
@@ -460,8 +460,10 @@ const AiKartaResultat = () => {
                       <Mail className="mr-2 h-4 w-4" />
                       {sending ? "Skickar…" : "Mejla mig analysen"}
                     </Button>
-                    <p className="text-center text-[11px] text-muted-foreground">
-                      En kopia skickades redan till <strong className="text-foreground">{meta.email}</strong> direkt efter formuläret.
+                    <p className="text-center text-[11px] leading-relaxed text-muted-foreground break-words">
+                      En kopia skickades redan till{" "}
+                      <strong className="text-foreground break-all">{meta.email}</strong>{" "}
+                      direkt efter formuläret.
                     </p>
                   </div>
                 </div>
