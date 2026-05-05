@@ -328,7 +328,13 @@ const AiKartaStart = () => {
                 )}
 
                 {step === 2 && (
-                  <div>
+                  <div
+                    className={
+                      errors.pain_areas
+                        ? "rounded-2xl border border-destructive/60 bg-destructive/[0.06] p-4"
+                        : ""
+                    }
+                  >
                     <div className="flex flex-wrap gap-2">
                       {PAIN_AREAS.map((label) => (
                         <ChoicePill
@@ -341,7 +347,7 @@ const AiKartaStart = () => {
                       ))}
                     </div>
                     {errors.pain_areas && (
-                      <p className="mt-3 text-xs text-destructive">{errors.pain_areas}</p>
+                      <p className="mt-3 text-xs font-medium text-destructive">{errors.pain_areas}</p>
                     )}
                   </div>
                 )}
@@ -457,20 +463,26 @@ const AiKartaStart = () => {
                       </ul>
                     </div>
 
-                    <div className="rounded-2xl border border-white/10 bg-background/40 p-4">
+                    <div
+                      className={`rounded-2xl border p-4 ${
+                        errors.consent
+                          ? "border-destructive/60 bg-destructive/[0.06]"
+                          : "border-white/10 bg-background/40"
+                      }`}
+                    >
                       <div className="flex items-start gap-3">
                         <Checkbox
                           id="aimap-consent"
                           checked={form.consent}
                           onCheckedChange={(v) => update("consent", v === true)}
-                          className="mt-0.5"
+                          className={`mt-0.5 ${errors.consent ? "border-destructive" : ""}`}
                         />
                         <Label htmlFor="aimap-consent" className="text-xs leading-relaxed text-foreground/80">
                           Jag godkänner att Aurora Media AB sparar mina svar och kontaktar mig med anledning av min AI-karta.
                         </Label>
                       </div>
                       {errors.consent && (
-                        <p className="mt-2 text-xs text-destructive">{errors.consent}</p>
+                        <p className="mt-2 text-xs font-medium text-destructive">{errors.consent}</p>
                       )}
                     </div>
 
@@ -531,11 +543,19 @@ function Field({
 }) {
   return (
     <div className={full ? "sm:col-span-2" : ""}>
-      <Label className="text-xs uppercase tracking-wider text-muted-foreground">
-        {label} {required && <span className="text-primary">*</span>}
+      <Label className={`text-xs uppercase tracking-wider ${error ? "text-destructive" : "text-muted-foreground"}`}>
+        {label} {required && <span className={error ? "text-destructive" : "text-primary"}>*</span>}
       </Label>
-      <div className="mt-1.5">{children}</div>
-      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
+      <div
+        className={`mt-1.5 ${
+          error
+            ? "rounded-full ring-2 ring-destructive/70 ring-offset-2 ring-offset-background [&_input]:border-destructive"
+            : ""
+        }`}
+      >
+        {children}
+      </div>
+      {error && <p className="mt-1 text-xs font-medium text-destructive">{error}</p>}
     </div>
   );
 }
@@ -554,8 +574,16 @@ function PillRow({
   onChange: (v: string) => void;
 }) {
   return (
-    <div>
-      <Label className="text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+    <div
+      className={
+        error
+          ? "rounded-2xl border border-destructive/60 bg-destructive/[0.06] p-3 -m-3"
+          : ""
+      }
+    >
+      <Label className={`text-xs uppercase tracking-wider ${error ? "text-destructive" : "text-muted-foreground"}`}>
+        {label}
+      </Label>
       <div className="mt-1.5 flex flex-wrap gap-2">
         {options.map(([key, lbl]) => (
           <ChoicePill key={key} active={value === key} onClick={() => onChange(key)}>
@@ -563,7 +591,7 @@ function PillRow({
           </ChoicePill>
         ))}
       </div>
-      {error && <p className="mt-1 text-xs text-destructive">{error}</p>}
+      {error && <p className="mt-2 text-xs font-medium text-destructive">{error}</p>}
     </div>
   );
 }
