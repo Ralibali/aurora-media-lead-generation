@@ -362,9 +362,9 @@ const AiKartaStart = () => {
                             <button
                               type="button"
                               onClick={() => removeProcess(idx)}
-                              className="text-xs text-muted-foreground hover:text-destructive"
+                              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-destructive active:scale-95"
                             >
-                              <Trash2 className="inline h-3.5 w-3.5" /> Ta bort
+                              <Trash2 className="h-4 w-4" /> Ta bort
                             </button>
                           )}
                         </div>
