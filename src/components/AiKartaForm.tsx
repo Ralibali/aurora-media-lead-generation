@@ -31,9 +31,22 @@ const AiKartaForm = () => {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const renderedAtRef = useRef<number>(0);
+  const [prefilled, setPrefilled] = useState(false);
 
   useEffect(() => {
     renderedAtRef.current = Date.now();
+    try {
+      const raw = localStorage.getItem("aurora_lead");
+      if (raw) {
+        const saved = JSON.parse(raw) as { name?: string; email?: string; company?: string };
+        if (saved.name) setName(saved.name);
+        if (saved.email) setEmail(saved.email);
+        if (saved.company) setCompany(saved.company);
+        if (saved.name || saved.email) setPrefilled(true);
+      }
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -79,6 +92,14 @@ const AiKartaForm = () => {
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
 
       if (data.downloadUrl) setDownloadUrl(data.downloadUrl);
+      try {
+        localStorage.setItem(
+          "aurora_lead",
+          JSON.stringify({ name: parsed.data.name, email: parsed.data.email, company: parsed.data.company ?? "" })
+        );
+      } catch {
+        /* ignore */
+      }
       setStatus("success");
       toast.success("Tack! AI-kartan är på väg till din mejl.", { duration: 5000 });
     } catch (err) {
@@ -134,6 +155,25 @@ const AiKartaForm = () => {
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
         Vill ni ha hjälp att gå igenom svaren efteråt? Boka en AI-genomlysning så prioriterar vi era case efter effekt, komplexitet och affärsnytta.
       </p>
+
+      {prefilled && (
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-primary/25 bg-primary/[0.06] px-4 py-3 text-xs text-foreground/80">
+          <span>Välkommen tillbaka! Vi har fyllt i dina uppgifter från förra gången.</span>
+          <button
+            type="button"
+            onClick={() => {
+              setName("");
+              setEmail("");
+              setCompany("");
+              setPrefilled(false);
+              try { localStorage.removeItem("aurora_lead"); } catch { /* ignore */ }
+            }}
+            className="shrink-0 text-primary underline underline-offset-2"
+          >
+            Rensa
+          </button>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div>
