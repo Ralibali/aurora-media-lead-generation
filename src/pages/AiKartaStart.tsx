@@ -34,7 +34,6 @@ const Step1Schema = z.object({
   employee_count: z.string().min(1, "Välj antal anställda"),
   contact_name: z.string().trim().min(1, "Ange ditt namn").max(80),
   email: z.string().trim().email("Ogiltig e-postadress").max(160),
-  phone: z.string().max(40).optional().or(z.literal("")),
 });
 
 const STEPS = ["Kontakt", "Tidstjuvar", "Processer", "Sammanfattning"];
@@ -317,13 +316,6 @@ const AiKartaStart = () => {
                         className="rounded-full"
                       />
                     </Field>
-                    <Field label="Telefon (valfritt)">
-                      <Input
-                        value={form.phone}
-                        onChange={(e) => update("phone", e.target.value)}
-                        className="rounded-full"
-                      />
-                    </Field>
                   </div>
                 )}
 
@@ -445,7 +437,7 @@ const AiKartaStart = () => {
                 {step === 4 && (
                   <div className="space-y-5">
                     <SummaryRow label="Företag" value={`${form.company_name} · ${form.industry} · ${form.employee_count} anställda`} />
-                    <SummaryRow label="Kontakt" value={`${form.contact_name} · ${form.email}${form.phone ? " · " + form.phone : ""}`} />
+                    <SummaryRow label="Kontakt" value={`${form.contact_name} · ${form.email}`} />
                     <SummaryRow label="Tidstjuvar" value={form.pain_areas.join(", ") || "—"} />
                     <div>
                       <p className="label-caps">Processer</p>

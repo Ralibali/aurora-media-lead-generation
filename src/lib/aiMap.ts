@@ -21,7 +21,6 @@ export interface AiMapFormState {
   employee_count: string;
   contact_name: string;
   email: string;
-  phone: string;
   pain_areas: string[];
   processes: ProcessInput[];
   consent: boolean;
@@ -85,7 +84,6 @@ export function emptyForm(): AiMapFormState {
     employee_count: "",
     contact_name: "",
     email: "",
-    phone: "",
     pain_areas: [],
     processes: [emptyProcess(), emptyProcess(), emptyProcess()],
     consent: false,

@@ -137,7 +137,7 @@ Deno.serve(async (req: Request) => {
     const employee_count = String(body.employee_count ?? "").trim().slice(0, 20);
     const contact_name = String(body.contact_name ?? "").trim().slice(0, 80);
     const email = String(body.email ?? "").trim().slice(0, 160);
-    const phone = body.phone ? String(body.phone).trim().slice(0, 40) : null;
+    const phone: string | null = null;
     const pain_areas = Array.isArray(body.pain_areas) ? body.pain_areas.slice(0, 12).map((s) => String(s).slice(0, 60)) : [];
     const consent = body.consent === true;
     const processes = Array.isArray(body.processes) ? body.processes.slice(0, 5) : [];
@@ -413,7 +413,7 @@ Skriv också:
         <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:600px;color:#0f172a;">
           <h2 style="margin:0 0 12px;">Ny AI-karta inskickad</h2>
           <p><strong>Företag:</strong> ${escape(company_name)} (${escape(industry)}, ${escape(employee_count)} anst.)</p>
-          <p><strong>Kontakt:</strong> ${escape(contact_name)} · ${escape(email)}${phone ? " · " + escape(phone) : ""}</p>
+          <p><strong>Kontakt:</strong> ${escape(contact_name)} · ${escape(email)}</p>
           <p><strong>Total potential:</strong> ${escape(total_potential)} (snitt ${avg.toFixed(1)}, totalt ${totalScore})</p>
           <h3 style="margin-top:18px;">Topp 3 case</h3>
           <ol>${top3.map((t) => `<li><strong>${escape(t.process_name)}</strong> – ${escape(t.potential)} (${t.score} p)<br/>→ ${escape(t.recommended_solution)}</li>`).join("")}</ol>
