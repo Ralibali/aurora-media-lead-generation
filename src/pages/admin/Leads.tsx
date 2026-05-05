@@ -160,6 +160,28 @@ const Leads = () => {
         </Button>
       </div>
 
+      {stats && (
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="rounded-xl border border-border bg-card/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Hero-klick (30d)</p>
+            <p className="mt-1 font-serif text-2xl">{stats.hero_clicks}</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">PDF-klick (30d)</p>
+            <p className="mt-1 font-serif text-2xl">{stats.pdf_clicks}</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">AI-karta-leads</p>
+            <p className="mt-1 font-serif text-2xl">{stats.ai_karta_leads}</p>
+          </div>
+          <div className="rounded-xl border border-primary/30 bg-primary/[0.06] p-4">
+            <p className="text-xs uppercase tracking-wider text-primary">Konvertering</p>
+            <p className="mt-1 font-serif text-2xl">{stats.conversion_rate}%</p>
+            <p className="mt-1 text-[10px] text-muted-foreground">leads / hero-klick</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-wrap gap-2 mb-6">
         {(["all", "new", "read", "archived"] as const).map((f) => (
           <Button
