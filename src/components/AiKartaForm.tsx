@@ -115,35 +115,47 @@ const AiKartaForm = () => {
   };
 
   if (status === "success") {
+    const pdfUrl =
+      downloadUrl ||
+      "https://cyymcdqkpvcvwjoqxbco.supabase.co/storage/v1/object/public/lead-magnets/aurora-ai-karta.pdf";
+    const firstName = name ? name.split(" ")[0] : "";
     return (
-      <div className="rounded-[1.7rem] border border-primary/30 bg-primary/[0.06] p-6">
+      <div className="rounded-[1.7rem] border border-primary/30 bg-gradient-to-br from-primary/[0.10] via-primary/[0.05] to-transparent p-6 shadow-[0_20px_60px_-30px_hsl(var(--primary)/0.5)]">
         <div className="flex items-start gap-4">
-          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
-            <CheckCircle2 className="h-6 w-6" />
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary/20 text-primary ring-4 ring-primary/10">
+            <CheckCircle2 className="h-7 w-7" />
           </div>
           <div>
-            <h3 className="font-display text-2xl font-bold text-foreground">AI-kartan är på väg!</h3>
+            <p className="label-caps text-primary">Tack{firstName ? ` ${firstName}` : ""}!</p>
+            <h3 className="mt-2 font-display text-2xl font-bold text-foreground">
+              AI-kartan är på väg till {email || "din mejl"}
+            </h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              Den dyker upp i din inkorg om någon minut (kolla skräpposten om den dröjer). Du kan också ladda ner direkt här:
+              Den dyker upp i inkorgen om någon minut (kolla skräpposten om den dröjer). Du kan också ladda ner PDF:en direkt här:
             </p>
           </div>
         </div>
 
-        {downloadUrl && (
-          <a href={downloadUrl} target="_blank" rel="noopener noreferrer" className="mt-6 block">
-            <Button size="lg" className="w-full rounded-full">
-              Ladda ner PDF nu <Download className="ml-2 h-4 w-4" />
-            </Button>
-          </a>
-        )}
+        <a href={pdfUrl} download="aurora-ai-karta.pdf" target="_blank" rel="noopener noreferrer" className="mt-6 block">
+          <Button size="lg" className="w-full rounded-full">
+            Ladda ner PDF nu <Download className="ml-2 h-4 w-4" />
+          </Button>
+        </a>
 
-        <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
-          Nästa steg: vill ni att vi går igenom era svar och visar exakt vad som bör byggas först?{" "}
-          <a href="/kontakt" className="text-primary underline underline-offset-2">
-            Boka en kostnadsfri AI-genomlysning
-          </a>
-          .
+        <p className="mt-3 text-center text-[11px] text-muted-foreground">
+          Funkar inte länken? Kopiera:{" "}
+          <a href={pdfUrl} className="underline underline-offset-2">aurora-ai-karta.pdf</a>
         </p>
+
+        <div className="mt-5 rounded-2xl border border-white/10 bg-background/40 p-4">
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">Nästa steg:</span> vill ni att vi går igenom era svar och visar exakt vad som bör byggas först?{" "}
+            <a href="/kontakt" className="text-primary underline underline-offset-2">
+              Boka en kostnadsfri AI-genomlysning
+            </a>
+            .
+          </p>
+        </div>
       </div>
     );
   }
