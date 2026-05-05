@@ -65,8 +65,8 @@ const AiKartaPdfUpload = () => {
           let serverMsg: string | null = null;
           let serverMissing: string[] | null = null;
           try {
-            // @ts-expect-error supabase-js exposes context.response in newer versions
-            const resp: Response | undefined = invokeErr.context?.response;
+            const ctx = (invokeErr as { context?: { response?: Response } }).context;
+            const resp = ctx?.response;
             if (resp) {
               const json = await resp.clone().json().catch(() => null);
               serverMsg = json?.error ?? null;
