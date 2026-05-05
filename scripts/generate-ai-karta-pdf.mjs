@@ -43,10 +43,10 @@ const FREQUENCIES = [
   ["rare", "Sällan"],
 ];
 const TIMES = [
-  ["0-1", "0–1 h/v"],
-  ["1-3", "1–3 h/v"],
-  ["3-5", "3–5 h/v"],
-  ["5-10", "5–10 h/v"],
+  ["0-1", "0-1 h/v"],
+  ["1-3", "1-3 h/v"],
+  ["3-5", "3-5 h/v"],
+  ["5-10", "5-10 h/v"],
   ["10+", "10+ h/v"],
 ];
 const YPN = [
@@ -247,7 +247,7 @@ async function build() {
   placeField("industry", "Bransch *", M + colW + 16, y - fieldH, colW);
   y -= fieldH + 32;
 
-  placeField("employee_count", "Antal anställda * (1–5 / 6–20 / 21–50 / 51–200 / 200+)", M, y - fieldH, colW);
+  placeField("employee_count", "Antal anställda * (1-5 / 6-20 / 21-50 / 51-200 / 200+)", M, y - fieldH, colW);
   placeField("contact_name", "Kontaktperson *", M + colW + 16, y - fieldH, colW);
   y -= fieldH + 32;
 
@@ -346,7 +346,7 @@ async function build() {
   p4.drawText("Spara PDF:en och ladda upp den här:", {
     x: M + 18, y: y - 12, size: 11, font: fontBold, color: COLORS.text,
   });
-  p4.drawText("auroramedia.se/ai-karta  →  knappen \"Ladda upp ifylld PDF\"", {
+  p4.drawText("auroramedia.se/ai-karta  ->  knappen \"Ladda upp ifylld PDF\"", {
     x: M + 18, y: y - 30, size: 11, font: fontReg, color: COLORS.text,
   });
   p4.drawText("Vi räknar fram er topp-3, total tidsbesparing och nästa steg.", {
