@@ -167,6 +167,18 @@ Deno.serve(async (req: Request) => {
 
     let leadId: string | null = null;
     try {
+      const sourceLabel =
+        source === "hero_cta"
+          ? "Hero-knapp ”Hämta AI-kartan”"
+          : source === "form_direct"
+          ? "Formulär (direkt)"
+          : source;
+      const messageParts = [
+        company ? `Hämtade AI-kartan från ${company}.` : "Hämtade AI-kartan.",
+        `Källa: ${sourceLabel}`,
+        pagePath ? `Sida: ${pagePath}` : null,
+        referrer ? `Referrer: ${referrer}` : null,
+      ].filter(Boolean);
       const { data, error } = await admin
         .from("leads")
         .insert({
@@ -174,8 +186,9 @@ Deno.serve(async (req: Request) => {
           email,
           company: company || null,
           paket: "ai-karta",
-          lead_label: "AI-kartan – nedladdning",
-          message: company ? `Hämtade AI-kartan från ${company}.` : "Hämtade AI-kartan.",
+          platform: source,
+          lead_label: `AI-kartan – ${sourceLabel}`,
+          message: messageParts.join("\n"),
           ip,
           user_agent: userAgent || null,
         })
