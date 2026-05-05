@@ -172,21 +172,21 @@ const AiKartaResultat = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main className="overflow-hidden">
-        <section className="relative pt-28 pb-16 md:pt-36 md:pb-24">
+        <section className="relative pt-24 pb-14 md:pt-36 md:pb-24">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.18),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_30%)]" />
-          <div className="container mx-auto max-w-4xl px-6">
+          <div className="container mx-auto max-w-4xl px-5 sm:px-6">
             <Reveal>
               <p className="label-caps">Mini-analys för {meta.company_name}</p>
-              <h1 className="mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] font-bold leading-[0.95] tracking-tight">
+              <h1 className="mt-4 font-display text-[clamp(2rem,8vw,5rem)] font-bold leading-[1.02] tracking-tight break-words">
                 Ni har <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">{lead}</span> {tail}
               </h1>
-              <p className="mt-5 max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
+              <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
                 Baserat på era svar har vi identifierat {top3.length} processer där AI och automation
                 kan göra störst skillnad. Här är en första uppskattning – inte en exakt lösningsdesign.
               </p>
 
               {/* Konkreta värdesiffror, inte abstrakta poäng */}
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <div className="mt-7 grid gap-3 grid-cols-1 sm:grid-cols-3">
                 <StatCard
                   icon={Clock}
                   label="Uppskattad tidsbesparing"
