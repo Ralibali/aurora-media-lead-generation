@@ -8,7 +8,6 @@ import {
   ClipboardList,
   Clock3,
   Database,
-  Download,
   FileSpreadsheet,
   Gauge,
   Sparkles,
@@ -19,10 +18,8 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import AiKartaForm from "@/components/AiKartaForm";
-import AiKartaPdfUpload from "@/components/AiKartaPdfUpload";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
-import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 
 const signals = [
   "uppgiften återkommer ofta",
