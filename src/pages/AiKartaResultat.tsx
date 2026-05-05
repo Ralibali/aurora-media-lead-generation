@@ -45,9 +45,13 @@ function buildHeadline(potential: string): { lead: string; tail: string } {
   return map[potential] ?? { lead: potential.toLowerCase(), tail: "AI-potential" };
 }
 
+type LoadStatus = "loading" | "ready" | "missing" | "error";
+
 const AiKartaResultat = () => {
   const navigate = useNavigate();
   const [result, setResult] = useState<AiMapResult | null>(null);
+  const [status, setStatus] = useState<LoadStatus>("loading");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
@@ -57,16 +61,53 @@ const AiKartaResultat = () => {
       canonical: "https://auroramedia.se/ai-karta/resultat",
       noindex: true,
     });
-    try {
-      const raw = sessionStorage.getItem(RESULT_KEY);
-      if (raw) setResult(JSON.parse(raw) as AiMapResult);
-      else navigate("/ai-karta/start", { replace: true });
-    } catch {
-      navigate("/ai-karta/start", { replace: true });
-    }
-  }, [navigate]);
+    // Liten konstgjord delay så loading-state hinner kännas medvetet, inte glitch
+    const t = setTimeout(() => {
+      try {
+        const raw = sessionStorage.getItem(RESULT_KEY);
+        if (!raw) {
+          setStatus("missing");
+          return;
+        }
+        const parsed = JSON.parse(raw) as AiMapResult;
+        if (!parsed || !parsed.top3 || !Array.isArray(parsed.top3) || parsed.top3.length === 0) {
+          setErrorMsg("Resultatet verkar vara tomt eller skadat.");
+          setStatus("error");
+          return;
+        }
+        setResult(parsed);
+        setStatus("ready");
+      } catch (err) {
+        console.error("[AiKartaResultat] kunde inte läsa resultatet", err);
+        setErrorMsg(err instanceof Error ? err.message : "Okänt fel vid inläsning.");
+        setStatus("error");
+      }
+    }, 250);
+    return () => clearTimeout(t);
+  }, []);
 
-  if (!result) return null;
+  if (status === "loading") {
+    return <ResultStateScreen kind="loading" />;
+  }
+  if (status === "missing") {
+    return (
+      <ResultStateScreen
+        kind="missing"
+        onPrimary={() => navigate("/ai-karta/start")}
+      />
+    );
+  }
+  if (status === "error" || !result) {
+    return (
+      <ResultStateScreen
+        kind="error"
+        message={errorMsg ?? undefined}
+        onPrimary={() => navigate("/ai-karta/start")}
+        onSecondary={() => window.location.reload()}
+      />
+    );
+  }
+
 
   const {
     total_potential, top3, totalScore, meta,
