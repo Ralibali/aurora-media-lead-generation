@@ -102,6 +102,9 @@ Deno.serve(async (req: Request) => {
     const name = String(body.name ?? "").trim().slice(0, 80);
     const email = String(body.email ?? "").trim().slice(0, 160);
     const company = String(body.company ?? "").trim().slice(0, 120);
+    const source = String(body.source ?? "form_direct").trim().slice(0, 60) || "form_direct";
+    const pagePath = body.page_path ? String(body.page_path).slice(0, 200) : null;
+    const referrer = body.referrer ? String(body.referrer).slice(0, 300) : null;
     const userAgent = req.headers.get("user-agent")?.slice(0, 300) ?? "";
 
     if (!name || !email) {
