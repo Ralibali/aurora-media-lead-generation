@@ -175,20 +175,20 @@ const AiKartaResultat = () => {
                 const saved = p.saved_hours_per_week ?? 0;
                 return (
                   <Reveal key={`${p.position}-${i}`} y={18}>
-                    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]">
-                      <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 sm:p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="label-caps text-primary">Topp {i + 1}</span>
                             <span className="text-xs text-muted-foreground">·</span>
                             <span className="text-xs font-medium text-muted-foreground">{p.potential}</span>
                           </div>
-                          <h2 className="mt-2 font-display text-3xl font-bold break-words">
+                          <h2 className="mt-2 font-display text-2xl font-bold leading-tight break-words sm:text-3xl">
                             {p.process_name}
                           </h2>
                         </div>
                         <span
-                          className={`inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r ${
+                          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r ${
                             potentialColor[
                               p.potential.includes("Hög") || p.potential.includes("Direkt")
                                 ? "Hög"
@@ -196,17 +196,17 @@ const AiKartaResultat = () => {
                                 ? "Medel"
                                 : "Låg"
                             ] ?? "from-primary to-primary/60"
-                          } px-4 py-1.5 text-sm font-semibold text-primary-foreground`}
+                          } px-3 py-1 text-xs font-semibold text-primary-foreground sm:px-4 sm:py-1.5 sm:text-sm`}
                         >
-                          <TrendingUp className="h-3.5 w-3.5" /> {p.score} p
+                          <TrendingUp className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {p.score} p
                         </span>
                       </div>
 
                       {/* Konkret tidsvärde per case */}
                       {saved > 0 && (
-                        <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.08] px-3 py-1.5">
-                          <Clock className="h-3.5 w-3.5 text-primary" />
-                          <span className="text-sm">
+                        <div className="mt-4 flex w-full items-start gap-2 rounded-2xl border border-primary/30 bg-primary/[0.08] px-3 py-2 sm:inline-flex sm:w-auto sm:items-center sm:rounded-full sm:py-1.5">
+                          <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary sm:mt-0" />
+                          <span className="text-xs leading-relaxed sm:text-sm">
                             <strong className="text-foreground">~{saved} h/vecka</strong>
                             <span className="text-muted-foreground"> kan automatiseras (≈ {Math.round(saved * 46)} h/år)</span>
                           </span>
@@ -366,17 +366,29 @@ function StatCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border p-5 ${
+      className={`flex h-full flex-col rounded-2xl border p-4 sm:p-5 ${
         highlight
           ? "border-primary/30 bg-primary/[0.08]"
           : "border-white/10 bg-white/[0.03]"
       }`}
     >
-      <div className="flex items-center gap-2">
-        {Icon && <Icon className={`h-4 w-4 ${highlight ? "text-primary" : "text-muted-foreground"}`} />}
-        <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <div className="flex items-start gap-2">
+        {Icon && (
+          <Icon
+            className={`mt-0.5 h-4 w-4 shrink-0 ${
+              highlight ? "text-primary" : "text-muted-foreground"
+            }`}
+          />
+        )}
+        <p className="text-[11px] uppercase leading-tight tracking-wider text-muted-foreground">
+          {label}
+        </p>
       </div>
-      <p className={`mt-2 font-display text-3xl font-bold ${highlight ? "text-primary" : ""}`}>
+      <p
+        className={`mt-2 font-display text-2xl font-bold leading-tight break-words sm:text-3xl ${
+          highlight ? "text-primary" : ""
+        }`}
+      >
         {value}
       </p>
       {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
