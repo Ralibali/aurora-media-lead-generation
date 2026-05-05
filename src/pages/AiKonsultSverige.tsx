@@ -70,7 +70,7 @@ const AiKonsultSverige = () => {
                 bygger det på veckor — med fast pris, modern stack och kod du äger.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" onClick={open} className="rounded-full">
+                <Button size="lg" onClick={() => open()} className="rounded-full">
                   Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Link to="/priser" className="inline-flex items-center justify-center rounded-full border border-white/18 bg-white/8 px-6 py-3 text-sm font-bold text-white/82 backdrop-blur-xl transition hover:border-blue-300/45 hover:bg-blue-400/12">
@@ -194,7 +194,7 @@ const AiKonsultSverige = () => {
               Ingen säljpitch. Bara konkret nästa steg.
             </p>
             <div className="mt-8 flex justify-center">
-              <Button size="lg" onClick={open} className="rounded-full">
+              <Button size="lg" onClick={() => open()} className="rounded-full">
                 Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>

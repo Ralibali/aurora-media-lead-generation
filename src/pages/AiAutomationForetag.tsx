@@ -138,7 +138,7 @@ const AiAutomationForetag = () => {
                 Aurora Media hjälper företag att ersätta manuella rutiner, anteckningar, gamla system och tidskrävande administration med AI-lösningar, automationer och skräddarsydda system som sparar tid och skapar fler affärer.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" onClick={open} className="rounded-full">
+                <Button size="lg" onClick={() => open()} className="rounded-full">
                   Boka AI-genomlysning <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline" asChild className="rounded-full">
@@ -277,7 +277,7 @@ const AiAutomationForetag = () => {
                       Vi börjar med hur ni jobbar idag. Sedan visar vi exakt vilka processer som kan effektiviseras, automatiseras eller byggas om till smarta digitala system.
                     </p>
                   </div>
-                  <Button size="lg" onClick={open} className="rounded-full md:shrink-0">
+                  <Button size="lg" onClick={() => open()} className="rounded-full md:shrink-0">
                     Boka första genomgången <Sparkles className="ml-2 h-4 w-4" />
                   </Button>
                 </div>

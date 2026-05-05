@@ -77,7 +77,7 @@ const Mobilapp = () => {
                 Aurora Media bygger moderna mobilappar för företag som vill lansera snabbt, skala smart och äga sin kod. Vi använder React Native för att skapa appar för både iOS och Android med en stark, effektiv och framtidssäker kodbas.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" onClick={open} className="rounded-full">
+                <Button size="lg" onClick={() => open()} className="rounded-full">
                   Diskutera appidé <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button size="lg" variant="outline" asChild className="rounded-full">
@@ -183,7 +183,7 @@ const Mobilapp = () => {
                   Vi hjälper er att välja rätt scope, bygga rätt första version och lansera en React Native-app som är redo att växa.
                 </p>
                 <div className="mt-8">
-                  <Button size="lg" onClick={open} className="rounded-full">
+                  <Button size="lg" onClick={() => open()} className="rounded-full">
                     Boka appgenomgång <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>

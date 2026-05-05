@@ -49,7 +49,7 @@ export async function trackFaqSearch({ query, resultCount, openedQuestion }: Sea
   }
 }
 
-export type FaqCtaSource = "faq_footer" | "faq_search_result" | "faq_empty_state";
+export type FaqCtaSource = "faq_footer" | "faq_search_result" | "faq_empty_state" | "faq_section";
 
 type CtaClickEvent = {
   source: FaqCtaSource;
