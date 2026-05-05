@@ -167,43 +167,42 @@ async function build() {
   fillBg(p1);
   drawHeader(p1, null, null);
 
-  // Big brand block centered
-  const cy = PAGE_H / 2 + 60;
-  p1.drawText("AURORA MEDIA", {
-    x: M, y: cy + 60, size: 11, font: fontBold, color: COLORS.primary,
+  // Big brand block
+  const brandTop = PAGE_H - M - 90;
+  p1.drawText("AURORA MEDIA AB", {
+    x: M, y: brandTop, size: 11, font: fontBold, color: COLORS.primary,
   });
   p1.drawText("Aurora", {
-    x: M, y: cy - 10, size: 56, font: fontBold, color: COLORS.text,
+    x: M, y: brandTop - 78, size: 56, font: fontBold, color: COLORS.text,
   });
   p1.drawText("AI-karta", {
-    x: M, y: cy - 70, size: 56, font: fontBold, color: COLORS.primary,
+    x: M, y: brandTop - 138, size: 56, font: fontBold, color: COLORS.primary,
   });
-  // Subtitle
   p1.drawText("Arbetsblad för småföretag som vill", {
-    x: M, y: cy - 110, size: 13, font: fontReg, color: COLORS.muted,
+    x: M, y: brandTop - 178, size: 13, font: fontReg, color: COLORS.muted,
   });
   p1.drawText("kartlägga sin AI-potential på 10 minuter.", {
-    x: M, y: cy - 128, size: 13, font: fontReg, color: COLORS.muted,
+    x: M, y: brandTop - 196, size: 13, font: fontReg, color: COLORS.muted,
   });
 
   // How-it-works box
-  const hbY = 250;
+  const hbY = 180;
   p1.drawRectangle({
-    x: M, y: hbY, width: PAGE_W - M * 2, height: 130,
+    x: M, y: hbY, width: PAGE_W - M * 2, height: 140,
     color: COLORS.panel, borderColor: COLORS.primary, borderWidth: 0.6, opacity: 0.9, borderOpacity: 0.5,
   });
   p1.drawText("Så funkar det", {
-    x: M + 18, y: hbY + 102, size: 13, font: fontBold, color: COLORS.primary,
+    x: M + 18, y: hbY + 110, size: 13, font: fontBold, color: COLORS.primary,
   });
   const steps = [
     "1.  Fyll i fälten i PDF:en (eller skriv ut och fyll i för hand).",
     "2.  Spara PDF:en på din dator.",
-    "3.  Ladda upp den på auroramedia.se/ai-karta — vi räknar fram er topp-3.",
+    "3.  Ladda upp den på auroramedia.se/ai-karta - vi räknar fram er topp-3.",
     "4.  Du får en mini-analys direkt + ett mejl med detaljerna.",
   ];
   steps.forEach((s, i) => {
     p1.drawText(s, {
-      x: M + 18, y: hbY + 80 - i * 16, size: 10, font: fontReg, color: COLORS.text,
+      x: M + 18, y: hbY + 86 - i * 18, size: 10.5, font: fontReg, color: COLORS.text,
     });
   });
 
