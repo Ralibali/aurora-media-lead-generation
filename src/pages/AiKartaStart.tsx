@@ -282,14 +282,14 @@ const AiKartaStart = () => {
                       <Input
                         value={form.company_name}
                         onChange={(e) => update("company_name", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                       />
                     </Field>
                     <Field label="Bransch" error={errors.industry} required>
                       <Input
                         value={form.industry}
                         onChange={(e) => update("industry", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                         placeholder="t.ex. e-handel, bygg, konsult"
                       />
                     </Field>
@@ -310,7 +310,7 @@ const AiKartaStart = () => {
                       <Input
                         value={form.contact_name}
                         onChange={(e) => update("contact_name", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                       />
                     </Field>
                     <Field label="E-post" error={errors.email} required>
@@ -318,7 +318,7 @@ const AiKartaStart = () => {
                         type="email"
                         value={form.email}
                         onChange={(e) => update("email", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                       />
                     </Field>
                   </div>
@@ -373,7 +373,7 @@ const AiKartaStart = () => {
                             <Input
                               value={p.process_name}
                               onChange={(e) => updateProcess(idx, { process_name: e.target.value })}
-                              className="rounded-full"
+                              className="rounded-full h-12 text-base"
                               placeholder="t.ex. Skapa offerter manuellt i Word"
                             />
                           </Field>
@@ -397,7 +397,7 @@ const AiKartaStart = () => {
                             <Input
                               value={p.systems}
                               onChange={(e) => updateProcess(idx, { systems: e.target.value })}
-                              className="rounded-full"
+                              className="rounded-full h-12 text-base"
                               placeholder="t.ex. Fortnox, Excel, HubSpot"
                             />
                           </Field>
