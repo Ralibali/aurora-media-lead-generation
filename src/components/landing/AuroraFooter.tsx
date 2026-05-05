@@ -80,7 +80,7 @@ const AuroraFooter = () => {
 
             <button
               type="button"
-              onClick={open}
+              onClick={() => open()}
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_12px_30px_-12px_hsl(var(--primary)/0.6)] transition hover:brightness-110"
             >
               Boka rådgivning <ArrowRight size={16} />
