@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_karta_clicks: {
+        Row: {
+          button: string
+          created_at: string
+          id: string
+          page_path: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          button: string
+          created_at?: string
+          id?: string
+          page_path?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          button?: string
+          created_at?: string
+          id?: string
+          page_path?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       faq_cta_clicks: {
         Row: {
           category: string | null

@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import AiKartaForm from "@/components/AiKartaForm";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
+import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 
 const signals = [
   "uppgiften återkommer ofta",
@@ -123,6 +124,7 @@ const AiKarta = () => {
                     size="lg"
                     onClick={() => {
                       try { sessionStorage.setItem("aikarta_source", "hero_cta"); } catch { /* ignore */ }
+                      void trackAiKartaClick("hero_cta");
                       const el = document.getElementById("ai-karta-form");
                       if (el) {
                         el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -140,6 +142,7 @@ const AiKarta = () => {
                       download="aurora-ai-karta.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => void trackAiKartaClick("pdf_direct")}
                     >
                       Ladda ner direkt (PDF) <Download className="ml-2 h-4 w-4" />
                     </a>

@@ -38,10 +38,20 @@ const statusLabel: Record<Lead["status"], string> = {
   archived: "Arkiverad",
 };
 
+type Stats = {
+  hero_clicks: number;
+  pdf_clicks: number;
+  total_clicks: number;
+  ai_karta_leads: number;
+  conversion_rate: number;
+  window_days: number;
+};
+
 const Leads = () => {
   const [password, setPassword] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? "");
   const [authed, setAuthed] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | Lead["status"]>("all");
@@ -70,6 +80,7 @@ const Leads = () => {
       if (!res.ok) throw new Error(await res.text());
       const json = await res.json();
       setLeads(json.leads ?? []);
+      setStats(json.stats ?? null);
       setAuthed(true);
       sessionStorage.setItem(STORAGE_KEY, pwd);
     } catch (e) {
@@ -148,6 +159,28 @@ const Leads = () => {
           Uppdatera
         </Button>
       </div>
+
+      {stats && (
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="rounded-xl border border-border bg-card/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Hero-klick (30d)</p>
+            <p className="mt-1 font-serif text-2xl">{stats.hero_clicks}</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">PDF-klick (30d)</p>
+            <p className="mt-1 font-serif text-2xl">{stats.pdf_clicks}</p>
+          </div>
+          <div className="rounded-xl border border-border bg-card/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">AI-karta-leads</p>
+            <p className="mt-1 font-serif text-2xl">{stats.ai_karta_leads}</p>
+          </div>
+          <div className="rounded-xl border border-primary/30 bg-primary/[0.06] p-4">
+            <p className="text-xs uppercase tracking-wider text-primary">Konvertering</p>
+            <p className="mt-1 font-serif text-2xl">{stats.conversion_rate}%</p>
+            <p className="mt-1 text-[10px] text-muted-foreground">leads / hero-klick</p>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-2 mb-6">
         {(["all", "new", "read", "archived"] as const).map((f) => (
