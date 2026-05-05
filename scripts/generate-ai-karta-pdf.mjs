@@ -398,9 +398,9 @@ function drawProcessBlock(page, form, fontReg, fontBold, idx, yTop) {
   });
 
   // Process name field (full width)
-  let cy = yTop - 52;
+  let cy = yTop - 70;
   page.drawText("PROCESSNAMN", {
-    x: M + 14, y: cy + 22, size: 7.5, font: fontBold, color: COLORS.muted,
+    x: M + 14, y: cy + 28, size: 7.5, font: fontBold, color: COLORS.muted,
   });
   page.drawRectangle({
     x: M + 14, y: cy, width: w - 28, height: 22,
