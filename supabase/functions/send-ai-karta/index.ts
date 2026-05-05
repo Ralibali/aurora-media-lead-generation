@@ -17,6 +17,9 @@ interface Body {
   company?: string;
   website?: string; // honeypot
   _renderedAt?: number;
+  source?: string;
+  page_path?: string | null;
+  referrer?: string | null;
 }
 
 type RateEntry = { count: number; windowStart: number; lastAt: number };
