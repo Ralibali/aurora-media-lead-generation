@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Play } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 
@@ -13,18 +13,20 @@ const NAV = [
 ];
 
 const AuroraLogo = () => (
-  <Link to="/" className="group flex items-center gap-3">
+  <Link to="/" className="group flex items-center gap-3" aria-label="Aurora Media – startsida">
     <span
-      className="grid h-9 w-9 place-items-center border border-blue-300/35 bg-blue-500/10 shadow-[0_0_28px_rgba(59,130,246,0.55)]"
+      className="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[0_8px_24px_-12px_hsl(var(--primary)/0.6)] ring-1 ring-primary/30"
       aria-hidden
     >
-      <span className="relative h-3 w-3 rounded-full bg-blue-300 shadow-[0_0_18px_rgba(147,197,253,0.95)]">
-        <span className="absolute left-1/2 top-1/2 h-px w-5 -translate-x-1/2 -translate-y-1/2 bg-blue-200/70" />
-        <span className="absolute left-1/2 top-1/2 h-5 w-px -translate-x-1/2 -translate-y-1/2 bg-blue-200/70" />
-      </span>
+      <span className="font-display text-xl font-bold leading-none">A</span>
     </span>
-    <span className="text-[11px] font-bold uppercase tracking-[0.5em] text-white">
-      Aurora Media
+    <span className="flex flex-col leading-tight">
+      <span className="font-display text-[15px] font-bold uppercase tracking-[0.32em] text-foreground">
+        Aurora
+      </span>
+      <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+        Media
+      </span>
     </span>
   </Link>
 );
@@ -43,16 +45,8 @@ const AuroraNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const goToNav = (href: string, type: string) => {
-    if (type === "route") {
-      navigate(href);
-      return;
-    }
-
-    if (location.pathname === "/") {
-      smoothTo(href);
-      return;
-    }
-
+    if (type === "route") return navigate(href);
+    if (location.pathname === "/") return smoothTo(href);
     navigate(`/${href}`);
   };
 
@@ -65,35 +59,30 @@ const AuroraNavbar = () => {
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
   return (
     <>
       <motion.header
         animate={{
-          backgroundColor: scrolled ? "rgba(0,0,0,0.42)" : "rgba(0,0,0,0)",
+          backgroundColor: scrolled ? "hsl(var(--background) / 0.85)" : "hsl(var(--background) / 0)",
           backdropFilter: scrolled ? "blur(18px)" : "blur(0px)",
-          borderBottomColor: scrolled ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0)",
+          borderBottomColor: scrolled ? "hsl(var(--border) / 0.6)" : "hsl(var(--border) / 0)",
         }}
         transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
         className="fixed inset-x-0 top-0 z-50 border-b"
       >
-        <div className="flex h-[70px] w-full items-center px-6 sm:px-10 lg:px-[70px]">
+        <div className="mx-auto flex h-[72px] w-full max-w-7xl items-center px-6 sm:px-10 lg:px-12">
           <AuroraLogo />
 
-          <nav className="ml-auto mr-12 hidden items-center gap-8 md:flex">
+          <nav className="ml-auto mr-8 hidden items-center gap-7 md:flex">
             {NAV.map((n) => (
               <a
                 key={n.href}
                 href={n.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goToNav(n.href, n.type);
-                }}
-                className="text-[0.85rem] font-normal text-white/60 transition-colors hover:text-white"
+                onClick={(e) => { e.preventDefault(); goToNav(n.href, n.type); }}
+                className="text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
               >
                 {n.label}
               </a>
@@ -102,14 +91,13 @@ const AuroraNavbar = () => {
 
           <button
             onClick={() => open()}
-            className="hidden h-[52px] w-[52px] place-items-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-xl transition hover:bg-white/15 md:grid"
-            aria-label="Boka kostnadsfri rådgivning"
+            className="hidden items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_hsl(var(--primary)/0.55)] transition hover:brightness-110 md:inline-flex"
           >
-            <Play size={17} fill="currentColor" className="ml-0.5" />
+            Boka rådgivning
           </button>
 
           <button
-            className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-xl md:hidden"
+            className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-border bg-card/80 text-foreground backdrop-blur-xl md:hidden"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Stäng meny" : "Öppna meny"}
           >
@@ -121,42 +109,31 @@ const AuroraNavbar = () => {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 overflow-y-auto px-6 pb-12 pt-24 md:hidden"
-            style={{ background: "rgba(0,0,0,0.96)", backdropFilter: "blur(24px)" }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 overflow-y-auto bg-background/97 px-6 pb-12 pt-24 backdrop-blur-2xl md:hidden"
           >
             <div className="flex flex-col gap-1">
               {NAV.map((n, i) => (
                 <motion.a
-                  key={n.href}
-                  href={n.href}
+                  key={n.href} href={n.href}
                   onClick={(e) => {
-                    e.preventDefault();
-                    setMobileOpen(false);
+                    e.preventDefault(); setMobileOpen(false);
                     setTimeout(() => goToNav(n.href, n.type), 120);
                   }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 + i * 0.04, duration: 0.35 }}
-                  className="block border-b border-white/10 py-5 font-display text-3xl text-white"
+                  className="block border-b border-border py-5 font-display text-3xl text-foreground"
                 >
                   {n.label}
                 </motion.a>
               ))}
               <motion.button
-                onClick={() => {
-                  setMobileOpen(false);
-                  setTimeout(() => open(), 200);
-                }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                onClick={() => { setMobileOpen(false); setTimeout(() => open(), 200); }}
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.35 }}
-                className="lumina-primary-cta group mt-8 justify-center"
-                style={{ width: "100%" }}
+                className="mt-8 w-full rounded-full bg-primary px-6 py-4 text-base font-semibold text-primary-foreground"
               >
-                <span className="relative z-10">Boka AI-genomlysning</span>
+                Boka rådgivning
               </motion.button>
             </div>
           </motion.div>
