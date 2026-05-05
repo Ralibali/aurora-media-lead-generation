@@ -251,8 +251,33 @@ const AiKarta = () => {
                 </div>
               </Reveal>
               <Reveal y={18}>
-                <div id="ai-karta-form" className="scroll-mt-28">
-                  <AiKartaForm />
+                <div id="ai-karta-form" className="scroll-mt-28 rounded-[1.7rem] border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-8 shadow-[0_20px_60px_-30px_hsl(var(--primary)/0.5)]">
+                  <p className="label-caps text-primary">Starta nu</p>
+                  <h3 className="mt-3 font-display text-3xl font-bold">Fyll i AI-kartan online</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Tar 5–10 minuter. Direkt efter får ni en mini-analys på skärmen och kan ladda ner en innehållsrik PDF med era svar, AI-rekommendationer och konkreta automatiseringsförslag.
+                  </p>
+                  <ul className="mt-5 space-y-2 text-sm text-foreground/85">
+                    {[
+                      "Personlig analys av era topp-3 AI-case",
+                      "Uppskattad tidsbesparing per vecka och år",
+                      "Konkret playbook för hur ni automatiserar",
+                      "PDF att dela internt med ledning och team",
+                    ].map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button asChild size="lg" className="mt-7 w-full rounded-full">
+                    <Link to="/ai-karta/start">
+                      Starta AI-kartan <Sparkles className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <p className="mt-3 text-center text-[11px] text-muted-foreground">
+                    100 % kostnadsfritt · Inga kreditkortsuppgifter · Inget spam
+                  </p>
                 </div>
               </Reveal>
             </div>
