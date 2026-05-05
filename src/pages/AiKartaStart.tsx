@@ -117,7 +117,7 @@ const AiKartaStart = () => {
     setForm((f) => (f.processes.length >= 5 ? f : { ...f, processes: [...f.processes, emptyProcess()] }));
 
   const removeProcess = (idx: number) =>
-    setForm((f) => (f.processes.length <= 3 ? f : { ...f, processes: f.processes.filter((_, i) => i !== idx) }));
+    setForm((f) => (f.processes.length <= 1 ? f : { ...f, processes: f.processes.filter((_, i) => i !== idx) }));
 
   const togglePain = (label: string) =>
     setForm((f) => ({
@@ -226,13 +226,13 @@ const AiKartaStart = () => {
               <h1 className="mt-4 font-display text-[clamp(2.4rem,5.2vw,4rem)] font-bold leading-[0.95] tracking-tight">
                 {step === 1 && "Berätta lite om er"}
                 {step === 2 && "Var sitter era största tidstjuvar?"}
-                {step === 3 && "Lägg till 3–5 processer"}
+                {step === 3 && "Lägg till 1–5 processer"}
                 {step === 4 && "Kontrollera och skicka in"}
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
                 {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
-                {step === 3 && "Beskriv 3–5 konkreta arbetsuppgifter så räknar vi ut AI-potentialen för varje."}
+                {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till 5) – vi räknar ut AI-potentialen för varje."}
                 {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
               </p>
             </Reveal>
@@ -353,7 +353,7 @@ const AiKartaStart = () => {
                       >
                         <div className="flex items-center justify-between gap-3">
                           <p className="label-caps text-primary">Process {idx + 1}</p>
-                          {form.processes.length > 3 && (
+                          {form.processes.length > 1 && (
                             <button
                               type="button"
                               onClick={() => removeProcess(idx)}
