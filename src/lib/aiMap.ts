@@ -105,6 +105,7 @@ export interface ScoredProcess {
   potential: string;
   recommended_solution: string;
   next_step: string;
+  saved_hours_per_week?: number;
 }
 
 export interface AiMapResult {
@@ -114,6 +115,9 @@ export interface AiMapResult {
   total_potential: string;
   processes: ScoredProcess[];
   top3: ScoredProcess[];
+  totalSavedPerWeek?: number;
+  totalSavedPerYear?: number;
+  pain_areas?: string[];
   meta: {
     company_name: string;
     contact_name: string;
