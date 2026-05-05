@@ -43,7 +43,7 @@ const stepCardClass =
   "rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]";
 
 const choicePillBase =
-  "rounded-full border px-4 py-2 text-sm transition-colors cursor-pointer select-none";
+  "rounded-full border px-4 py-2 text-sm font-medium transition-all cursor-pointer select-none";
 
 function ChoicePill({
   active,
@@ -58,12 +58,14 @@ function ChoicePill({
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={`${choicePillBase} ${
         active
-          ? "border-primary bg-primary text-primary-foreground"
-          : "border-white/15 bg-white/[0.03] text-foreground/80 hover:border-primary/50"
+          ? "border-primary bg-primary text-primary-foreground shadow-[0_0_0_3px_hsl(var(--primary)/0.25)] ring-1 ring-primary/60"
+          : "border-white/15 bg-white/[0.04] text-foreground/80 hover:border-primary/60 hover:bg-white/[0.08]"
       }`}
     >
+      {active && <CheckCircle2 className="mr-1.5 inline h-3.5 w-3.5 -mt-0.5" />}
       {children}
     </button>
   );
