@@ -288,6 +288,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/ai-karta" element={<AiKarta />} />
+              <Route path="/ai-karta/start" element={<AiKartaStart />} />
+              <Route path="/ai-karta/resultat" element={<AiKartaResultat />} />
               <Route path="/ai-automation-foretag" element={<AiAutomationForetag />} />
               <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />
