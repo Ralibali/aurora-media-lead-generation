@@ -156,6 +156,25 @@ const AiKartaForm = () => {
         Vill ni ha hjälp att gå igenom svaren efteråt? Boka en AI-genomlysning så prioriterar vi era case efter effekt, komplexitet och affärsnytta.
       </p>
 
+      {prefilled && (
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-primary/25 bg-primary/[0.06] px-4 py-3 text-xs text-foreground/80">
+          <span>Välkommen tillbaka! Vi har fyllt i dina uppgifter från förra gången.</span>
+          <button
+            type="button"
+            onClick={() => {
+              setName("");
+              setEmail("");
+              setCompany("");
+              setPrefilled(false);
+              try { localStorage.removeItem("aurora_lead"); } catch { /* ignore */ }
+            }}
+            className="shrink-0 text-primary underline underline-offset-2"
+          >
+            Rensa
+          </button>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div>
           <Label htmlFor="aikarta-name" className="text-xs uppercase tracking-wider text-muted-foreground">
