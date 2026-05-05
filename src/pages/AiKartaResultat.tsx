@@ -328,7 +328,7 @@ const AiKartaResultat = () => {
                         const ai = aiCaseFor(p.process_name);
                         if (!ai) return null;
                         return (
-                          <div className="mt-6 space-y-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-5">
+                          <div className="mt-6 space-y-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-4 sm:p-5">
                             <div className="flex items-center gap-2">
                               <Sparkles className="h-4 w-4 text-primary" />
                               <p className="text-[11px] uppercase tracking-wider text-primary">
