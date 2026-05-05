@@ -126,47 +126,13 @@ const AiKarta = () => {
                       Starta AI-kartan <Sparkles className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => {
-                      try { sessionStorage.setItem("aikarta_source", "hero_cta"); } catch { /* ignore */ }
-                      void trackAiKartaClick("hero_cta");
-                      const el = document.getElementById("ai-karta-form");
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth", block: "center" });
-                        const input = el.querySelector<HTMLInputElement>("#aikarta-name");
-                        setTimeout(() => input?.focus({ preventScroll: true }), 600);
-                      }
-                    }}
-                    className="rounded-full"
-                  >
-                    Hämta AI-kartan (PDF-mall) <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => {
-                      try { sessionStorage.setItem("aikarta_source", "pdf_direct"); } catch { /* ignore */ }
-                      void trackAiKartaClick("pdf_direct");
-                      const el = document.getElementById("ai-karta-form");
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth", block: "center" });
-                        const input = el.querySelector<HTMLInputElement>("#aikarta-name");
-                        setTimeout(() => input?.focus({ preventScroll: true }), 600);
-                      }
-                    }}
-                    className="rounded-full"
-                  >
-                    Ladda ner direkt (PDF) <Download className="ml-2 h-4 w-4" />
-                  </Button>
                   <Button size="lg" variant="ghost" asChild className="rounded-full">
                     <Link to="/ai-automation-foretag">Se hur vi bygger lösningen</Link>
                   </Button>
                 </div>
-                <div className="mt-8">
-                  <AiKartaPdfUpload />
-                </div>
+                <p className="mt-5 text-sm text-muted-foreground">
+                  Fyll i formuläret online – ni får direkt en mini-analys och en innehållsrik PDF med era svar, AI-rekommendationer och konkreta automatiseringsförslag.
+                </p>
               </Reveal>
 
               <Reveal y={18}>
