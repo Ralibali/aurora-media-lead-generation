@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Clock3,
   Database,
+  Download,
   FileSpreadsheet,
   Gauge,
   Sparkles,
