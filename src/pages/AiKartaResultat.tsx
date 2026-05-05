@@ -491,4 +491,105 @@ function StatCard({
   );
 }
 
+function ResultStateScreen({
+  kind,
+  message,
+  onPrimary,
+  onSecondary,
+}: {
+  kind: "loading" | "missing" | "error";
+  message?: string;
+  onPrimary?: () => void;
+  onSecondary?: () => void;
+}) {
+  const config = {
+    loading: {
+      Icon: Loader2,
+      iconClass: "text-primary animate-spin",
+      ring: "border-primary/30 bg-primary/[0.08]",
+      label: "Bearbetar er AI-karta",
+      title: "Vi sätter ihop er mini-analys…",
+      body:
+        "Vi kör era svar genom Aurora-modellen, räknar fram tidsbesparing och identifierar topp-3 case. Det tar oftast bara några sekunder.",
+    },
+    missing: {
+      Icon: Sparkles,
+      iconClass: "text-primary",
+      ring: "border-primary/30 bg-primary/[0.08]",
+      label: "Inget resultat hittades",
+      title: "Vi hittar ingen ifylld AI-karta",
+      body:
+        "Det verkar som att du landade här utan att ha fyllt i formuläret – eller så har sessionen gått ut. Starta om analysen så bygger vi ett nytt resultat på under 2 minuter.",
+    },
+    error: {
+      Icon: AlertTriangle,
+      iconClass: "text-amber-400",
+      ring: "border-amber-400/30 bg-amber-400/[0.08]",
+      label: "Något gick fel",
+      title: "Vi kunde inte ladda ert resultat",
+      body:
+        message ||
+        "Något gick fel när vi försökte hämta er analys. Det kan vara ett tillfälligt problem – försök igen, eller starta om formuläret.",
+    },
+  }[kind];
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main className="overflow-hidden">
+        <section className="relative pt-28 pb-24 md:pt-36 md:pb-32">
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.18),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_30%)]" />
+          <div className="container mx-auto max-w-2xl px-6">
+            <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)] sm:p-12">
+              <div className={`mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border ${config.ring}`}>
+                <config.Icon className={`h-7 w-7 ${config.iconClass}`} />
+              </div>
+              <p className="label-caps mt-6 text-primary">{config.label}</p>
+              <h1 className="mt-3 font-display text-3xl font-bold leading-tight sm:text-4xl">
+                {config.title}
+              </h1>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {config.body}
+              </p>
+
+              {kind === "loading" && (
+                <div className="mt-8 space-y-3">
+                  <div className="mx-auto h-3 w-3/4 animate-pulse rounded-full bg-white/10" />
+                  <div className="mx-auto h-3 w-full animate-pulse rounded-full bg-white/10" />
+                  <div className="mx-auto h-3 w-2/3 animate-pulse rounded-full bg-white/10" />
+                </div>
+              )}
+
+              {kind !== "loading" && (
+                <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <Button onClick={onPrimary} size="lg" className="w-full sm:w-auto">
+                    {kind === "missing" ? "Starta AI-kartan" : "Tillbaka till start"}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  {kind === "error" && onSecondary && (
+                    <Button onClick={onSecondary} size="lg" variant="outline" className="w-full sm:w-auto">
+                      <RefreshCw className="mr-2 h-4 w-4" /> Försök igen
+                    </Button>
+                  )}
+                </div>
+              )}
+
+              {kind === "error" && (
+                <p className="mt-6 text-xs text-muted-foreground">
+                  Problemet kvarstår? Mejla{" "}
+                  <a href="mailto:info@auroramedia.se" className="text-primary underline-offset-4 hover:underline">
+                    info@auroramedia.se
+                  </a>{" "}
+                  så hjälper vi er direkt.
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
 export default AiKartaResultat;
