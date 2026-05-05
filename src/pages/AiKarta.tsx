@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import AiKartaForm from "@/components/AiKartaForm";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
+import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 
 const signals = [
   "uppgiften återkommer ofta",
