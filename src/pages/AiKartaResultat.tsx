@@ -260,7 +260,7 @@ const AiKartaResultat = () => {
                 const saved = p.saved_hours_per_week ?? 0;
                 return (
                   <Reveal key={`${p.position}-${i}`} y={18}>
-                    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 sm:p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]">
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 sm:p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]">
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
