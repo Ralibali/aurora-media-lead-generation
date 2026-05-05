@@ -363,7 +363,8 @@ const AiKartaResultat = () => {
                     <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
                       Boka en kostnadsfri AI-genomlysning (45 min). Vi går igenom era svar,
                       pekar ut bästa första pilot och ger en uppskattning av lösning, tid och kostnad.
-                      En kopia av analysen är skickad till <strong className="text-foreground">{meta.email}</strong>.
+                      En kopia av analysen skickades till <strong className="text-foreground">{meta.email}</strong> direkt
+                      efter att ni fyllde i formuläret – behöver ni en till kopia kan ni begära den nedan.
                     </p>
                   </div>
                   <div className="flex flex-col gap-3">
@@ -371,6 +372,17 @@ const AiKartaResultat = () => {
                       <Link to="/kontakt">
                         Boka kostnadsfri AI-genomlysning <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="secondary"
+                      className="rounded-full"
+                      onClick={handleResend}
+                      disabled={sending}
+                      aria-label={`Skicka analysen till ${meta.email}`}
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      {sending ? "Skickar…" : `Skicka analysen till ${meta.email}`}
                     </Button>
                     <Button
                       size="lg"
