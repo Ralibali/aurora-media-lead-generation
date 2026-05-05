@@ -294,7 +294,7 @@ const AiKartaStart = () => {
                       />
                     </Field>
                     <Field label="Antal anställda" error={errors.employee_count} required full>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2.5">
                         {EMPLOYEE_OPTIONS.map((opt) => (
                           <ChoicePill
                             key={opt}
@@ -332,7 +332,7 @@ const AiKartaStart = () => {
                         : ""
                     }
                   >
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2.5">
                       {PAIN_AREAS.map((label) => (
                         <ChoicePill
                           key={label}
