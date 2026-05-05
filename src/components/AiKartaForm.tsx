@@ -1,0 +1,233 @@
+import { useEffect, useRef, useState } from "react";
+import { CheckCircle2, Download, Loader2, MailCheck, AlertCircle } from "lucide-react";
+import { z } from "zod";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+
+const Schema = z.object({
+  name: z.string().min(2, "Ange ditt namn").max(80),
+  email: z.string().email("Ogiltig e-postadress").max(160),
+  company: z.string().max(120).optional().or(z.literal("")),
+  website: z.string().max(0).optional().or(z.literal("")),
+});
+
+type Status = "idle" | "submitting" | "success" | "error";
+
+const AiKartaForm = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [website, setWebsite] = useState("");
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const renderedAtRef = useRef<number>(0);
+
+  useEffect(() => {
+    renderedAtRef.current = Date.now();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    setFieldErrors({});
+
+    const parsed = Schema.safeParse({ name, email, company, website });
+    if (!parsed.success) {
+      const fe: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = issue.path[0]?.toString() ?? "form";
+        if (!fe[key]) fe[key] = issue.message;
+      }
+      setFieldErrors(fe);
+      return;
+    }
+
+    if (parsed.data.website) {
+      console.warn("[AiKartaForm] honeypot triggered");
+      setStatus("success");
+      return;
+    }
+
+    setStatus("submitting");
+
+    try {
+      const { data, error } = await supabase.functions.invoke<{
+        ok: boolean;
+        downloadUrl?: string;
+        leadId?: string;
+        error?: string;
+      }>("send-ai-karta", {
+        body: {
+          name: parsed.data.name,
+          email: parsed.data.email,
+          company: parsed.data.company,
+          _renderedAt: renderedAtRef.current,
+        },
+      });
+
+      if (error) throw error;
+      if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
+
+      if (data.downloadUrl) setDownloadUrl(data.downloadUrl);
+      setStatus("success");
+      toast.success("Tack! AI-kartan är på väg till din mejl.", { duration: 5000 });
+    } catch (err) {
+      console.error("[AiKartaForm] submit failed", err);
+      setStatus("error");
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Något gick fel. Mejla info@auroramedia.se så skickar jag PDF:en manuellt.";
+      setErrorMsg(msg);
+      toast.error("Något gick fel. Försök igen om en stund.");
+    }
+  };
+
+  if (status === "success") {
+    return (
+      <div className="rounded-[1.7rem] border border-primary/30 bg-primary/[0.06] p-6">
+        <div className="flex items-start gap-4">
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
+            <CheckCircle2 className="h-6 w-6" />
+          </div>
+          <div>
+            <h3 className="font-display text-2xl font-bold text-foreground">AI-kartan är på väg!</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              Den dyker upp i din inkorg om någon minut (kolla skräpposten om den dröjer). Du kan också ladda ner direkt här:
+            </p>
+          </div>
+        </div>
+
+        {downloadUrl && (
+          <a href={downloadUrl} target="_blank" rel="noopener noreferrer" className="mt-6 block">
+            <Button size="lg" className="w-full rounded-full">
+              Ladda ner PDF nu <Download className="ml-2 h-4 w-4" />
+            </Button>
+          </a>
+        )}
+
+        <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
+          Nästa steg: vill ni att vi går igenom era svar och visar exakt vad som bör byggas först?{" "}
+          <a href="/kontakt" className="text-primary underline underline-offset-2">
+            Boka en kostnadsfri AI-genomlysning
+          </a>
+          .
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-[1.7rem] border border-white/10 bg-white/[0.055] p-6">
+      <p className="label-caps">Hämta mallen</p>
+      <h3 className="mt-3 font-display text-3xl font-bold">Skicka AI-kartan till min mejl</h3>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+        Vill ni ha hjälp att gå igenom svaren efteråt? Boka en AI-genomlysning så prioriterar vi era case efter effekt, komplexitet och affärsnytta.
+      </p>
+
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
+        <div>
+          <Label htmlFor="aikarta-name" className="text-xs uppercase tracking-wider text-muted-foreground">
+            Namn
+          </Label>
+          <Input
+            id="aikarta-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={status === "submitting"}
+            className="mt-1 rounded-full"
+            aria-invalid={!!fieldErrors.name}
+            aria-describedby={fieldErrors.name ? "aikarta-name-error" : undefined}
+            required
+          />
+          {fieldErrors.name && (
+            <p id="aikarta-name-error" className="mt-1 text-xs text-destructive">
+              {fieldErrors.name}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <Label htmlFor="aikarta-email" className="text-xs uppercase tracking-wider text-muted-foreground">
+            E-post
+          </Label>
+          <Input
+            id="aikarta-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={status === "submitting"}
+            className="mt-1 rounded-full"
+            aria-invalid={!!fieldErrors.email}
+            aria-describedby={fieldErrors.email ? "aikarta-email-error" : undefined}
+            required
+          />
+          {fieldErrors.email && (
+            <p id="aikarta-email-error" className="mt-1 text-xs text-destructive">
+              {fieldErrors.email}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <Label htmlFor="aikarta-company" className="text-xs uppercase tracking-wider text-muted-foreground">
+            Företag (valfritt)
+          </Label>
+          <Input
+            id="aikarta-company"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            disabled={status === "submitting"}
+            className="mt-1 rounded-full"
+          />
+        </div>
+
+        {/* Honeypot — dolt från riktiga användare */}
+        <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+          <Label htmlFor="aikarta-website">Webbplats</Label>
+          <Input
+            id="aikarta-website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
+        </div>
+
+        <Button type="submit" size="lg" disabled={status === "submitting"} className="w-full rounded-full">
+          {status === "submitting" ? (
+            <>
+              Skickar... <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            </>
+          ) : (
+            <>
+              Hämta AI-kartan <MailCheck className="ml-2 h-4 w-4" />
+            </>
+          )}
+        </Button>
+      </form>
+
+      {status === "error" && errorMsg && (
+        <div className="mt-4 flex items-start gap-2 rounded-2xl border border-destructive/30 bg-destructive/[0.08] p-3 text-sm text-destructive">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <p>{errorMsg}</p>
+        </div>
+      )}
+
+      <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
+        Vi behandlar dina uppgifter enligt vår{" "}
+        <a href="/integritetspolicy" className="underline underline-offset-2">
+          integritetspolicy
+        </a>
+        . Inga utskick utan att du själv ber om det.
+      </p>
+    </div>
+  );
+};
+
+export default AiKartaForm;
