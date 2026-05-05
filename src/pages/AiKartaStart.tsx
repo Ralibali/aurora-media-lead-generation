@@ -354,7 +354,7 @@ const AiKartaStart = () => {
                     {form.processes.map((p, idx) => (
                       <div
                         key={idx}
-                        className="rounded-2xl border border-white/10 bg-background/40 p-5"
+                        className="rounded-2xl border border-white/10 bg-background/40 p-4 sm:p-5"
                       >
                         <div className="flex items-center justify-between gap-3">
                           <p className="label-caps text-primary">Process {idx + 1}</p>
