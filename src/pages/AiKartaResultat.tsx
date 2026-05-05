@@ -11,6 +11,7 @@ import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
+import { downloadAiMapPdf } from "@/lib/aiMapPdf";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 import { supabase } from "@/integrations/supabase/client";
 
