@@ -46,7 +46,7 @@ const AuroraFooter = () => {
   const { open } = useContactModal();
 
   return (
-    <footer className="relative overflow-hidden border-t border-border bg-secondary/40 px-6 pb-10 pt-20 sm:px-10 lg:px-12">
+    <footer className="relative overflow-hidden border-t border-border bg-secondary/40 px-6 pb-28 pt-20 sm:px-10 md:pb-10 lg:px-12">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-60"

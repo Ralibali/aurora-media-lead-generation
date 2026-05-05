@@ -98,7 +98,7 @@ const AuroraHero = () => {
           <h1 className="mt-6 font-display text-[clamp(2.6rem,6vw,4.6rem)] font-bold leading-[1.02] tracking-tight text-foreground">
             Idén finns.
             <br />
-            <span className="italic text-primary" style={{ fontFamily: "'Instrument Serif', serif" }}>
+            <span className="italic font-medium text-primary" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 600 }}>
               Vi bygger
             </span>{" "}
             systemet.
@@ -119,7 +119,7 @@ const AuroraHero = () => {
             </button>
             <Link
               to="/ai-automation-foretag"
-              className="inline-flex items-center justify-center rounded-full border border-border bg-card px-7 py-4 text-base font-semibold text-foreground transition hover:border-primary/40 hover:bg-primary/5"
+              className="inline-flex items-center justify-center rounded-full border border-foreground/25 bg-transparent px-7 py-4 text-base font-semibold text-foreground/90 transition hover:border-primary/60 hover:text-foreground"
             >
               AI & effektivisering
             </Link>

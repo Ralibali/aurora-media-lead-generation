@@ -28,9 +28,9 @@
 .lumina-site .label-caps {
   color: rgba(255,255,255,0.52) !important;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 9px !important;
-  font-weight: 800;
-  letter-spacing: 0.32em !important;
+  font-size: 12px !important;
+  font-weight: 700;
+  letter-spacing: 0.26em !important;
   text-transform: uppercase;
 }
 

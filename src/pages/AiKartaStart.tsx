@@ -593,7 +593,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
     <div className="flex items-start gap-3">
       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
       <div>
-        <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+        <p className="text-[12px] uppercase tracking-wider text-muted-foreground">{label}</p>
         <p className="text-sm text-foreground">{value}</p>
       </div>
     </div>
