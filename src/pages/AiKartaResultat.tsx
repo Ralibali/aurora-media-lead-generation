@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  ArrowRight, CheckCircle2, Clock, Database, Download, Mail,
-  Sparkles, Target, TrendingUp, Workflow, Zap,
+  AlertTriangle, ArrowRight, CheckCircle2, Clock, Database, Download, Loader2, Mail,
+  RefreshCw, Sparkles, Target, TrendingUp, Workflow, Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
