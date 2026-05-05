@@ -68,8 +68,13 @@ const AiKartaResultat = () => {
   const {
     total_potential, top3, totalScore, meta,
     totalSavedPerWeek = 0, totalSavedPerYear = 0, pain_areas = [],
+    ai_analysis = null,
   } = result;
   const { lead, tail } = buildHeadline(total_potential);
+  const aiCaseFor = (name: string) =>
+    ai_analysis?.cases?.find(
+      (c) => c.process_name.trim().toLowerCase() === name.trim().toLowerCase()
+    ) ?? null;
 
   const handlePrint = () => {
     toast.message("PDF-version öppnas", {
@@ -134,6 +139,35 @@ const AiKartaResultat = () => {
                 </div>
               )}
             </Reveal>
+
+            {ai_analysis && (
+              <Reveal y={18}>
+                <div className="mt-10 rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-6 sm:p-8">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <p className="label-caps text-primary">Aurora-analys</p>
+                  </div>
+                  <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
+                    Vad vi ser i era svar
+                  </h2>
+                  <p className="mt-4 text-sm leading-relaxed text-foreground/90 sm:text-base">
+                    {ai_analysis.executive_summary}
+                  </p>
+                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                    <strong className="text-foreground">Mognadsläge: </strong>
+                    {ai_analysis.maturity_note}
+                  </p>
+                  <div className="mt-5 rounded-2xl border border-primary/30 bg-primary/[0.08] p-4">
+                    <p className="text-[11px] uppercase tracking-wider text-primary">
+                      Vår rekommendation
+                    </p>
+                    <p className="mt-2 text-sm text-foreground sm:text-base">
+                      {ai_analysis.overall_recommendation}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            )}
 
             <div className="mt-12 space-y-5">
               {top3.map((p, i) => {
@@ -204,6 +238,71 @@ const AiKartaResultat = () => {
                           <p className="mt-2 text-sm text-foreground">{p.next_step}</p>
                         </div>
                       </div>
+
+                      {(() => {
+                        const ai = aiCaseFor(p.process_name);
+                        if (!ai) return null;
+                        return (
+                          <div className="mt-6 space-y-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-5">
+                            <div className="flex items-center gap-2">
+                              <Sparkles className="h-4 w-4 text-primary" />
+                              <p className="text-[11px] uppercase tracking-wider text-primary">
+                                Djupare analys
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                Varför just detta?
+                              </p>
+                              <p className="mt-1 text-sm leading-relaxed text-foreground/90">
+                                {ai.why_it_matters}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                Vad AI realistiskt kan ta över
+                              </p>
+                              <p className="mt-1 text-sm leading-relaxed text-foreground/90">
+                                {ai.deep_analysis}
+                              </p>
+                            </div>
+                            <div className="rounded-xl border border-white/10 bg-background/40 p-3">
+                              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                Så skulle det kännas i vardagen
+                              </p>
+                              <p className="mt-1 text-sm italic leading-relaxed text-foreground/80">
+                                {ai.concrete_example}
+                              </p>
+                            </div>
+                            {ai.quick_wins?.length > 0 && (
+                              <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                                  Quick wins ni kan testa själva
+                                </p>
+                                <ul className="mt-2 space-y-1.5">
+                                  {ai.quick_wins.map((qw, idx) => (
+                                    <li
+                                      key={idx}
+                                      className="flex items-start gap-2 text-sm leading-relaxed text-foreground/90"
+                                    >
+                                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                                      <span>{qw}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            <div>
+                              <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-400/80">
+                                Att vara uppmärksam på
+                              </p>
+                              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                                {ai.risks}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </Reveal>
                 );

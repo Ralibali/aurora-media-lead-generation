@@ -108,6 +108,22 @@ export interface ScoredProcess {
   saved_hours_per_week?: number;
 }
 
+export interface AiAnalysisCase {
+  process_name: string;
+  why_it_matters: string;
+  deep_analysis: string;
+  concrete_example: string;
+  quick_wins: string[];
+  risks: string;
+}
+
+export interface AiAnalysis {
+  executive_summary: string;
+  maturity_note: string;
+  overall_recommendation: string;
+  cases: AiAnalysisCase[];
+}
+
 export interface AiMapResult {
   leadId: string;
   totalScore: number;
@@ -118,6 +134,7 @@ export interface AiMapResult {
   totalSavedPerWeek?: number;
   totalSavedPerYear?: number;
   pain_areas?: string[];
+  ai_analysis?: AiAnalysis | null;
   meta: {
     company_name: string;
     contact_name: string;
