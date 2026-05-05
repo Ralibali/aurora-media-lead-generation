@@ -90,6 +90,41 @@ const AiKartaResultat = () => {
     }, 250);
   };
 
+  const handleResend = async () => {
+    if (!result || sending) return;
+    setSending(true);
+    void trackAiKartaClick("result_resend_email");
+    const t = toast.loading(`Skickar analysen till ${result.meta.email}…`);
+    try {
+      const { data, error } = await supabase.functions.invoke("resend-ai-map-email", {
+        body: {
+          email: result.meta.email,
+          contact_name: result.meta.contact_name,
+          company_name: result.meta.company_name,
+          total_potential: result.total_potential,
+          top3: result.top3,
+          totalSavedPerWeek: result.totalSavedPerWeek,
+          totalSavedPerYear: result.totalSavedPerYear,
+        },
+      });
+      if (error || (data && (data as { error?: string }).error)) {
+        throw new Error((data as { error?: string })?.error || error?.message || "Okänt fel");
+      }
+      toast.success(`Mail skickat till ${result.meta.email}`, {
+        id: t,
+        description: "Kolla inkorgen (och eventuellt skräpposten).",
+      });
+    } catch (err) {
+      console.error("[resend-ai-map-email]", err);
+      toast.error("Kunde inte skicka mailet", {
+        id: t,
+        description: "Försök igen om en stund eller kontakta info@auroramedia.se.",
+      });
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
