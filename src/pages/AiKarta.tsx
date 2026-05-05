@@ -19,6 +19,7 @@ import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import AiKartaForm from "@/components/AiKartaForm";
+import AiKartaPdfUpload from "@/components/AiKartaPdfUpload";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
@@ -162,6 +163,9 @@ const AiKarta = () => {
                   <Button size="lg" variant="ghost" asChild className="rounded-full">
                     <Link to="/ai-automation-foretag">Se hur vi bygger lösningen</Link>
                   </Button>
+                </div>
+                <div className="mt-8">
+                  <AiKartaPdfUpload />
                 </div>
               </Reveal>
 
