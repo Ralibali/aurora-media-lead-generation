@@ -236,7 +236,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         <section className="border-t border-white/10 px-6 py-16 sm:px-10 md:py-24 lg:px-[70px]">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
             <div>
-              <p className="label-caps mb-3">Varför Aurora</p>
+              <p className="label-caps mb-3">Varför Aurora Media</p>
               <h2 className="font-display text-4xl font-bold tracking-tight text-white md:text-5xl">Snabbare utan att bli slarvigt.</h2>
             </div>
             <p className="text-lg leading-relaxed text-white/68">{props.whyAffordable}</p>

@@ -37,7 +37,7 @@ const primary: Service = {
   icon: Sparkles,
   name: "AI-builder & SaaS/MVP",
   price: "Prototyp från 14 900 kr · MVP från 34 900 kr",
-  desc: "Auroras kärna: SaaS, interna appar och AI-automationer byggda snabbt, med fast pris och kod du äger. Mindre workshop. Mer fungerande produkt.",
+  desc: "Aurora Medias kärna: SaaS, interna appar och AI-automationer byggda snabbt, med fast pris och kod du äger. Mindre workshop. Mer fungerande produkt.",
   to: "/ai-konsult-sverige",
   featured: true,
 };
