@@ -172,6 +172,8 @@ Deno.serve(async (req: Request) => {
       const score = f + t + r + d + v;
       const potential = potentialFromScore(score);
       const recommended_solution = recommendSolution(p, pain_areas, score);
+      const weeklyHours = HOURS_PER_WEEK[p.weekly_time] ?? 0;
+      const savedHoursPerWeek = Math.round(weeklyHours * automationFactor(p) * 10) / 10;
       return {
         position: idx,
         process_name: String(p.process_name ?? "").trim().slice(0, 160),
@@ -184,13 +186,16 @@ Deno.serve(async (req: Request) => {
         score,
         potential,
         recommended_solution,
-        next_step: recommendNextStep(score),
+        next_step: recommendNextStep(p, score),
+        saved_hours_per_week: savedHoursPerWeek,
       };
     });
 
     const totalScore = scored.reduce((sum, s) => sum + s.score, 0);
     const avg = scored.length ? totalScore / scored.length : 0;
     const total_potential = totalPotentialLabel(avg);
+    const totalSavedPerWeek = scored.reduce((s, p) => s + (p.saved_hours_per_week || 0), 0);
+    const totalSavedPerYear = Math.round(totalSavedPerWeek * 46); // 46 arbetsveckor
 
     const top3 = [...scored].sort((a, b) => b.score - a.score).slice(0, 3);
 
