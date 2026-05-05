@@ -119,9 +119,15 @@ const AiKarta = () => {
                 <p className="mt-7 max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-2xl">
                   Aurora AI-karta hjälper er att identifiera vilka arbetsuppgifter, system och processer som kan automatiseras, effektiviseras eller byggas om med AI, automation och skräddarsydda digitala lösningar.
                 </p>
-                <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Button asChild size="lg" className="rounded-full">
+                    <Link to="/ai-karta/start">
+                      Starta AI-kartan <Sparkles className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
                   <Button
                     size="lg"
+                    variant="outline"
                     onClick={() => {
                       try { sessionStorage.setItem("aikarta_source", "hero_cta"); } catch { /* ignore */ }
                       void trackAiKartaClick("hero_cta");
@@ -134,7 +140,7 @@ const AiKarta = () => {
                     }}
                     className="rounded-full"
                   >
-                    Hämta AI-kartan <ArrowRight className="ml-2 h-4 w-4" />
+                    Hämta AI-kartan (PDF-mall) <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="outline" asChild className="rounded-full">
                     <a
