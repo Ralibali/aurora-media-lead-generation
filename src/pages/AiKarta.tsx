@@ -17,7 +17,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
-import AiKartaForm from "@/components/AiKartaForm";
+
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
