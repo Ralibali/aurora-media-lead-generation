@@ -1,15 +1,9 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight,
-  BarChart3,
-  Bot,
   CheckCircle2,
   ClipboardList,
   Clock3,
-  Database,
-  Download,
-  FileSpreadsheet,
   Gauge,
   Sparkles,
   Workflow,
@@ -18,11 +12,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
-import AiKartaForm from "@/components/AiKartaForm";
-import AiKartaPdfUpload from "@/components/AiKartaPdfUpload";
+
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
-import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 
 const signals = [
   "uppgiften återkommer ofta",
@@ -94,7 +86,7 @@ const AiKarta = () => {
     setSEOMeta({
       title: "AI-kartan | Hitta företagets bästa AI-case | Aurora Media",
       description:
-        "Ladda ner Aurora AI-karta och identifiera vilka arbetsuppgifter, system och processer i företaget som kan automatiseras, effektiviseras eller byggas om med AI.",
+        "Fyll i Aurora AI-kartan online och få en innehållsrik PDF med era svar, AI-rekommendationer och konkreta automatiseringsförslag för ert företag.",
       canonical: "/ai-karta",
     });
     setBreadcrumb([
@@ -126,47 +118,13 @@ const AiKarta = () => {
                       Starta AI-kartan <Sparkles className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => {
-                      try { sessionStorage.setItem("aikarta_source", "hero_cta"); } catch { /* ignore */ }
-                      void trackAiKartaClick("hero_cta");
-                      const el = document.getElementById("ai-karta-form");
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth", block: "center" });
-                        const input = el.querySelector<HTMLInputElement>("#aikarta-name");
-                        setTimeout(() => input?.focus({ preventScroll: true }), 600);
-                      }
-                    }}
-                    className="rounded-full"
-                  >
-                    Hämta AI-kartan (PDF-mall) <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => {
-                      try { sessionStorage.setItem("aikarta_source", "pdf_direct"); } catch { /* ignore */ }
-                      void trackAiKartaClick("pdf_direct");
-                      const el = document.getElementById("ai-karta-form");
-                      if (el) {
-                        el.scrollIntoView({ behavior: "smooth", block: "center" });
-                        const input = el.querySelector<HTMLInputElement>("#aikarta-name");
-                        setTimeout(() => input?.focus({ preventScroll: true }), 600);
-                      }
-                    }}
-                    className="rounded-full"
-                  >
-                    Ladda ner direkt (PDF) <Download className="ml-2 h-4 w-4" />
-                  </Button>
                   <Button size="lg" variant="ghost" asChild className="rounded-full">
                     <Link to="/ai-automation-foretag">Se hur vi bygger lösningen</Link>
                   </Button>
                 </div>
-                <div className="mt-8">
-                  <AiKartaPdfUpload />
-                </div>
+                <p className="mt-5 text-sm text-muted-foreground">
+                  Fyll i formuläret online – ni får direkt en mini-analys och en innehållsrik PDF med era svar, AI-rekommendationer och konkreta automatiseringsförslag.
+                </p>
               </Reveal>
 
               <Reveal y={18}>
@@ -288,8 +246,33 @@ const AiKarta = () => {
                 </div>
               </Reveal>
               <Reveal y={18}>
-                <div id="ai-karta-form" className="scroll-mt-28">
-                  <AiKartaForm />
+                <div id="ai-karta-form" className="scroll-mt-28 rounded-[1.7rem] border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-8 shadow-[0_20px_60px_-30px_hsl(var(--primary)/0.5)]">
+                  <p className="label-caps text-primary">Starta nu</p>
+                  <h3 className="mt-3 font-display text-3xl font-bold">Fyll i AI-kartan online</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Tar 5–10 minuter. Direkt efter får ni en mini-analys på skärmen och kan ladda ner en innehållsrik PDF med era svar, AI-rekommendationer och konkreta automatiseringsförslag.
+                  </p>
+                  <ul className="mt-5 space-y-2 text-sm text-foreground/85">
+                    {[
+                      "Personlig analys av era topp-3 AI-case",
+                      "Uppskattad tidsbesparing per vecka och år",
+                      "Konkret playbook för hur ni automatiserar",
+                      "PDF att dela internt med ledning och team",
+                    ].map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button asChild size="lg" className="mt-7 w-full rounded-full">
+                    <Link to="/ai-karta/start">
+                      Starta AI-kartan <Sparkles className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <p className="mt-3 text-center text-[11px] text-muted-foreground">
+                    100 % kostnadsfritt · Inga kreditkortsuppgifter · Inget spam
+                  </p>
                 </div>
               </Reveal>
             </div>

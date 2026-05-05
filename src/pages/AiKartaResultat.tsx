@@ -11,6 +11,7 @@ import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
+import { downloadAiMapPdf } from "@/lib/aiMapPdf";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -121,14 +122,15 @@ const AiKartaResultat = () => {
     ) ?? null;
 
   const handlePrint = () => {
+    if (!result) return;
     void trackAiKartaClick("result_pdf_download");
-    toast.message("PDF-version öppnas", {
-      description: "Välj 'Spara som PDF' i utskriftsdialogen.",
-    });
-    setTimeout(() => {
-      void trackAiKartaClick("result_print_dialog_opened");
-      window.print();
-    }, 250);
+    try {
+      downloadAiMapPdf(result);
+      toast.success("PDF skapad", { description: "Filen laddas ner till din enhet." });
+    } catch (err) {
+      console.error("[AiKartaResultat] PDF-export misslyckades", err);
+      toast.error("Kunde inte skapa PDF", { description: "Försök igen eller kontakta info@auroramedia.se." });
+    }
   };
 
   const handleResend = async () => {
