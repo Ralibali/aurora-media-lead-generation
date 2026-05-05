@@ -148,14 +148,17 @@ const AuroraHero = () => {
 
           {/* Handwritten note */}
           <div
-            className="absolute -left-2 top-2 hidden rotate-[-6deg] rounded-2xl border border-primary/20 bg-card px-4 py-3 shadow-lg sm:block"
+            className="absolute -left-6 -top-4 hidden rotate-[-4deg] sm:block"
             style={{ fontFamily: "'Caveat', cursive" }}
+            aria-hidden
           >
-            <p className="text-2xl leading-tight text-primary">"Från idé till lansering</p>
-            <p className="text-2xl leading-tight text-primary">på under fyra veckor."</p>
-            <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
-              — Aurora-metoden
-            </p>
+            <div className="relative rounded-2xl border border-primary/30 bg-card/95 px-5 py-3 shadow-[0_18px_40px_-18px_hsl(var(--primary)/0.55)] backdrop-blur">
+              <p className="text-2xl leading-tight text-foreground">"Från idé till lansering</p>
+              <p className="text-2xl leading-tight text-foreground">på under fyra veckor."</p>
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-primary/80" style={{ fontFamily: "ui-monospace, monospace" }}>
+                — Aurora-metoden
+              </p>
+            </div>
           </div>
 
           {/* Timeline */}
