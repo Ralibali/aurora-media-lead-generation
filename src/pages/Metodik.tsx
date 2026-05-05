@@ -96,7 +96,7 @@ const Metodik = () => {
                 En rak process för att bygga SaaS, MVP:er, interna appar och AI-automationer utan att fastna i månader av möten.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" onClick={open} className="rounded-full">Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                <Button size="lg" onClick={() => open()} className="rounded-full">Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" /></Button>
                 <Button size="lg" variant="outline" asChild className="rounded-full"><Link to="/priser">Se priser</Link></Button>
               </div>
             </Reveal>
