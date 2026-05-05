@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
+import auroraMonogram from "@/assets/aurora-monogram.png";
 
 const NAV = [
   { label: "AI-kartan", href: "/ai-karta", type: "route" },
@@ -13,12 +14,17 @@ const NAV = [
 ];
 
 const AuroraLogo = () => (
-  <Link to="/" className="group flex items-center gap-3" aria-label="Aurora Media – startsida">
+  <Link to="/" className="group flex items-center gap-3" aria-label="Aurora Media AB – startsida">
     <span
-      className="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[0_8px_24px_-12px_hsl(var(--primary)/0.6)] ring-1 ring-primary/30"
+      className="grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-black ring-1 ring-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)]"
       aria-hidden
     >
-      <span className="font-display text-xl font-bold leading-none">A</span>
+      <img
+        src={auroraMonogram}
+        alt=""
+        className="h-full w-full object-cover scale-[1.18]"
+        draggable={false}
+      />
     </span>
     <span className="flex flex-col leading-tight">
       <span className="font-display text-[15px] font-bold uppercase tracking-[0.32em] text-foreground">
