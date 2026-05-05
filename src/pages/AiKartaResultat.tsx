@@ -68,8 +68,13 @@ const AiKartaResultat = () => {
   const {
     total_potential, top3, totalScore, meta,
     totalSavedPerWeek = 0, totalSavedPerYear = 0, pain_areas = [],
+    ai_analysis = null,
   } = result;
   const { lead, tail } = buildHeadline(total_potential);
+  const aiCaseFor = (name: string) =>
+    ai_analysis?.cases?.find(
+      (c) => c.process_name.trim().toLowerCase() === name.trim().toLowerCase()
+    ) ?? null;
 
   const handlePrint = () => {
     toast.message("PDF-version öppnas", {
