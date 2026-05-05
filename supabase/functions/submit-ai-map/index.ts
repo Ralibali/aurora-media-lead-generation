@@ -62,11 +62,46 @@ function recommendSolution(p: ProcessIn, painAreas: string[], score: number): st
   return "Skräddarsydd AI-automation eller internt system";
 }
 
-function recommendNextStep(score: number): string {
-  if (score >= 13) return "Boka AI-genomlysning – detta case är moget för pilot inom 2–4 veckor.";
-  if (score >= 9) return "Workshop 60 min för att avgränsa scope och välja teknisk lösning.";
-  if (score >= 5) return "Kort förstudie för att kvalitetssäkra data och systemintegrationer.";
+function recommendNextStep(p: ProcessIn, score: number): string {
+  // Mer specifika rekommendationer baserat på data + regelstyrning, inte bara score
+  if (score >= 13) {
+    if (p.data_available === "yes" && p.rule_based === "yes")
+      return "Pilot inom 2–4 veckor – datan finns och processen är regelstyrd. Vi kan börja bygga direkt.";
+    return "Boka AI-genomlysning – detta case är moget för pilot inom 2–4 veckor.";
+  }
+  if (score >= 9) {
+    if (p.rule_based === "no")
+      return "Workshop 90 min för att kartlägga beslutslogik – AI-assistent är troligt rätt väg.";
+    if (p.data_available === "partial")
+      return "Workshop 60 min + dataförberedelse i parallell innan pilot kan starta.";
+    return "Workshop 60 min för att avgränsa scope och välja teknisk lösning.";
+  }
+  if (score >= 5) {
+    if (p.data_available === "no")
+      return "Börja med datainsamling – strukturera underlaget innan AI introduceras.";
+    if (p.rule_based === "no")
+      return "Kort förstudie för att förstå undantag och variationer i processen.";
+    return "Kort förstudie för att kvalitetssäkra data och systemintegrationer.";
+  }
+  if (p.data_available === "no" && p.rule_based === "no")
+    return "Inte AI-moget ännu – fokusera först på att digitalisera och strukturera processen.";
+  if (p.data_available === "no")
+    return "Bygg upp datagrund först – utan data ingen AI. Vi hjälper er strukturera.";
   return "Samla mer underlag innan AI-pilot – börja med dataförberedelse.";
+}
+
+// Uppskattad veckotid (h) per process baserat på weekly_time
+const HOURS_PER_WEEK: Record<string, number> = {
+  "0-1": 0.5, "1-3": 2, "3-5": 4, "5-10": 7.5, "10+": 12,
+};
+// Uppskattad automationsgrad (andel som kan automatiseras)
+function automationFactor(p: ProcessIn): number {
+  let f = 0.3;
+  if (p.rule_based === "yes") f += 0.3;
+  else if (p.rule_based === "partial") f += 0.15;
+  if (p.data_available === "yes") f += 0.25;
+  else if (p.data_available === "partial") f += 0.1;
+  return Math.min(f, 0.85);
 }
 
 const escape = (s: string) =>
