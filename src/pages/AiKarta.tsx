@@ -142,16 +142,22 @@ const AiKarta = () => {
                   >
                     Hämta AI-kartan (PDF-mall) <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
-                  <Button size="lg" variant="outline" asChild className="rounded-full">
-                    <a
-                      href="https://cyymcdqkpvcvwjoqxbco.supabase.co/storage/v1/object/public/lead-magnets/aurora-ai-karta.pdf"
-                      download="aurora-ai-karta.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => void trackAiKartaClick("pdf_direct")}
-                    >
-                      Ladda ner direkt (PDF) <Download className="ml-2 h-4 w-4" />
-                    </a>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={() => {
+                      try { sessionStorage.setItem("aikarta_source", "pdf_direct"); } catch { /* ignore */ }
+                      void trackAiKartaClick("pdf_direct");
+                      const el = document.getElementById("ai-karta-form");
+                      if (el) {
+                        el.scrollIntoView({ behavior: "smooth", block: "center" });
+                        const input = el.querySelector<HTMLInputElement>("#aikarta-name");
+                        setTimeout(() => input?.focus({ preventScroll: true }), 600);
+                      }
+                    }}
+                    className="rounded-full"
+                  >
+                    Ladda ner direkt (PDF) <Download className="ml-2 h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="ghost" asChild className="rounded-full">
                     <Link to="/ai-automation-foretag">Se hur vi bygger lösningen</Link>
