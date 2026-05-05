@@ -467,6 +467,7 @@ Skriv också:
         totalSavedPerWeek: Math.round(totalSavedPerWeek * 10) / 10,
         totalSavedPerYear,
         pain_areas,
+        ai_analysis: aiAnalysis,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
