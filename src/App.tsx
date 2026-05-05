@@ -9,6 +9,8 @@ import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-route
 
 import AiAutomationForetag from "./pages/AiAutomationForetag";
 import AiKarta from "./pages/AiKarta";
+import AiKartaStart from "./pages/AiKartaStart";
+import AiKartaResultat from "./pages/AiKartaResultat";
 import AiKonsultSverige from "./pages/AiKonsultSverige";
 import Arbete from "./pages/Arbete";
 import Blog from "./pages/Blog";
