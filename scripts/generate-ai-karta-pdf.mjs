@@ -155,11 +155,10 @@ async function build() {
     });
   };
 
-  const addTextField = (name, x, y, w, h, opts = {}) => {
+  const addTextField = (name, opts = {}) => {
     const f = form.createTextField(name);
     if (opts.multiline) f.enableMultiline();
     if (opts.maxLength) f.setMaxLength(opts.maxLength);
-    f.setFontSize(opts.fontSize ?? 10);
     return f;
   };
 
@@ -240,9 +239,9 @@ async function build() {
     f.addToPage(p2, {
       x: x + 1, y: y + 1, width: w - 2, height: fieldH - 2,
       borderWidth: 0,
-      backgroundColor: undefined,
       textColor: rgb(1, 1, 1),
     });
+    f.setFontSize(10);
   };
 
   placeField("company_name", "Företagsnamn *", M, y - fieldH, colW);
