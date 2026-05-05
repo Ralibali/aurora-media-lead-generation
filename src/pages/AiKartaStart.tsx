@@ -581,7 +581,7 @@ function PillRow({
       <Label className={`text-xs uppercase tracking-wider ${error ? "text-destructive" : "text-muted-foreground"}`}>
         {label}
       </Label>
-      <div className="mt-1.5 flex flex-wrap gap-2">
+      <div className="mt-2 flex flex-wrap gap-2.5 sm:gap-2">
         {options.map(([key, lbl]) => (
           <ChoicePill key={key} active={value === key} onClick={() => onChange(key)}>
             {lbl}
