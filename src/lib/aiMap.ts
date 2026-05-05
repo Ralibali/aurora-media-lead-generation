@@ -21,7 +21,6 @@ export interface AiMapFormState {
   employee_count: string;
   contact_name: string;
   email: string;
-  phone: string;
   pain_areas: string[];
   processes: ProcessInput[];
   consent: boolean;
