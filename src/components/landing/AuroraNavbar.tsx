@@ -54,6 +54,8 @@ const AuroraNavbar = () => {
     if (type === "route") return navigate(href);
     if (location.pathname === "/") return smoothTo(href);
     navigate(`/${href}`);
+    // Scroll after route renders
+    setTimeout(() => smoothTo(href), 350);
   };
 
   useEffect(() => {

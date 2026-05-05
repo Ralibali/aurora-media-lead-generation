@@ -52,6 +52,16 @@ const Index = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!window.location.hash) return;
+    const id = window.location.hash;
+    const t = setTimeout(() => {
+      const el = document.querySelector(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 250);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="aurora-theme min-h-screen">
       <AuroraNavbar />
