@@ -215,7 +215,7 @@ const AiKarta = () => {
             <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
               <Reveal>
                 <p className="label-caps">Problemet</p>
-                <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
+                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                   Ni vet att AI borde fixa det här. Men <em className="font-display italic text-primary">vad</em> ska ni börja med?
                 </h2>
                 <p className="mt-5 text-muted-foreground md:text-lg">
@@ -247,7 +247,7 @@ const AiKarta = () => {
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps text-primary">Vad ni får – allt kostnadsfritt</p>
-              <h2 className="mt-3 max-w-4xl font-display text-4xl font-bold tracking-tight md:text-5xl">
+              <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                 Inte ännu en AI-rapport. <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">Ett färdigt beslutsunderlag.</span>
               </h2>
               <p className="mt-4 max-w-3xl text-muted-foreground md:text-lg">
@@ -290,7 +290,7 @@ const AiKarta = () => {
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps">Så fungerar det</p>
-              <h2 className="mt-3 max-w-4xl font-display text-4xl font-bold tracking-tight md:text-5xl">
+              <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                 Från första klick till färdig AI-roadmap.
               </h2>
             </Reveal>
@@ -318,7 +318,7 @@ const AiKarta = () => {
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
               <p className="label-caps">Vanliga invändningar</p>
-              <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
+              <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                 Innan ni klickar – det här undrar de flesta.
               </h2>
             </Reveal>
@@ -346,7 +346,7 @@ const AiKarta = () => {
                   <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.10] px-3 py-1.5 text-xs font-semibold text-primary">
                     <Star className="h-3.5 w-3.5" /> Begränsat antal pilotplatser kvartalsvis
                   </div>
-                  <h2 className="mt-5 max-w-3xl font-display text-4xl font-bold tracking-tight md:text-6xl">
+                  <h2 className="mt-5 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                     10 minuter nu kan spara teamet hundratals timmar nästa år.
                   </h2>
                   <p className="mt-5 max-w-2xl text-muted-foreground md:text-lg">
