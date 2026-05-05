@@ -11,6 +11,7 @@ import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
+import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 
 const RESULT_KEY = "ai_map_result";
 
@@ -77,10 +78,14 @@ const AiKartaResultat = () => {
     ) ?? null;
 
   const handlePrint = () => {
+    void trackAiKartaClick("result_pdf_download");
     toast.message("PDF-version öppnas", {
       description: "Välj 'Spara som PDF' i utskriftsdialogen.",
     });
-    setTimeout(() => window.print(), 250);
+    setTimeout(() => {
+      void trackAiKartaClick("result_print_dialog_opened");
+      window.print();
+    }, 250);
   };
 
   return (
