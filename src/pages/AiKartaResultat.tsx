@@ -366,17 +366,29 @@ function StatCard({
 }) {
   return (
     <div
-      className={`rounded-2xl border p-5 ${
+      className={`flex h-full flex-col rounded-2xl border p-4 sm:p-5 ${
         highlight
           ? "border-primary/30 bg-primary/[0.08]"
           : "border-white/10 bg-white/[0.03]"
       }`}
     >
-      <div className="flex items-center gap-2">
-        {Icon && <Icon className={`h-4 w-4 ${highlight ? "text-primary" : "text-muted-foreground"}`} />}
-        <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <div className="flex items-start gap-2">
+        {Icon && (
+          <Icon
+            className={`mt-0.5 h-4 w-4 shrink-0 ${
+              highlight ? "text-primary" : "text-muted-foreground"
+            }`}
+          />
+        )}
+        <p className="text-[11px] uppercase leading-tight tracking-wider text-muted-foreground">
+          {label}
+        </p>
       </div>
-      <p className={`mt-2 font-display text-3xl font-bold ${highlight ? "text-primary" : ""}`}>
+      <p
+        className={`mt-2 font-display text-2xl font-bold leading-tight break-words sm:text-3xl ${
+          highlight ? "text-primary" : ""
+        }`}
+      >
         {value}
       </p>
       {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
