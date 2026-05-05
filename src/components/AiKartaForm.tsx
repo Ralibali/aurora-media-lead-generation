@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 
 const Schema = z.object({
@@ -12,6 +13,9 @@ const Schema = z.object({
   email: z.string().email("Ogiltig e-postadress").max(160),
   company: z.string().max(120).optional().or(z.literal("")),
   website: z.string().max(0).optional().or(z.literal("")),
+  consent: z.literal(true, {
+    errorMap: () => ({ message: "Du måste godkänna behandlingen av dina uppgifter." }),
+  }),
 });
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -21,6 +25,7 @@ const AiKartaForm = () => {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [website, setWebsite] = useState("");
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
@@ -36,7 +41,7 @@ const AiKartaForm = () => {
     setErrorMsg(null);
     setFieldErrors({});
 
-    const parsed = Schema.safeParse({ name, email, company, website });
+    const parsed = Schema.safeParse({ name, email, company, website, consent });
     if (!parsed.success) {
       const fe: Record<string, string> = {};
       for (const issue of parsed.error.issues) {
@@ -199,6 +204,31 @@ const AiKartaForm = () => {
           />
         </div>
 
+        <div className="rounded-2xl border border-white/10 bg-background/40 p-4">
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="aikarta-consent"
+              checked={consent}
+              onCheckedChange={(v) => setConsent(v === true)}
+              aria-invalid={!!fieldErrors.consent}
+              aria-describedby={fieldErrors.consent ? "aikarta-consent-error" : "aikarta-consent-help"}
+              className="mt-0.5"
+            />
+            <Label htmlFor="aikarta-consent" className="text-xs leading-relaxed text-foreground/80">
+              Jag godkänner att Aurora Media AB lagrar mitt namn och min e-postadress för att skicka AI-kartan och eventuell uppföljning. Jag kan när som helst avregistrera mig genom att mejla{" "}
+              <a href="mailto:info@auroramedia.se" className="text-primary underline underline-offset-2">
+                info@auroramedia.se
+              </a>
+              .
+            </Label>
+          </div>
+          {fieldErrors.consent && (
+            <p id="aikarta-consent-error" className="mt-2 text-xs text-destructive">
+              {fieldErrors.consent}
+            </p>
+          )}
+        </div>
+
         <Button type="submit" size="lg" disabled={status === "submitting"} className="w-full rounded-full">
           {status === "submitting" ? (
             <>
@@ -219,12 +249,12 @@ const AiKartaForm = () => {
         </div>
       )}
 
-      <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-        Vi behandlar dina uppgifter enligt vår{" "}
+      <p id="aikarta-consent-help" className="mt-4 text-xs leading-relaxed text-muted-foreground">
+        Personuppgiftsansvarig är Aurora Media AB (org.nr 559272-0220). Vi delar aldrig dina uppgifter med tredje part. Läs mer i vår{" "}
         <a href="/integritetspolicy" className="underline underline-offset-2">
           integritetspolicy
         </a>
-        . Inga utskick utan att du själv ber om det.
+        .
       </p>
     </div>
   );
