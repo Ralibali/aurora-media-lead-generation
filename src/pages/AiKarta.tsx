@@ -91,7 +91,7 @@ const AiKarta = () => {
     setSEOMeta({
       title: "AI-kartan | Hitta företagets bästa AI-case | Aurora Media",
       description:
-        "Ladda ner Aurora AI-karta och identifiera vilka arbetsuppgifter, system och processer i företaget som kan automatiseras, effektiviseras eller byggas om med AI.",
+        "Fyll i Aurora AI-kartan online och få en innehållsrik PDF med era svar, AI-rekommendationer och konkreta automatiseringsförslag för ert företag.",
       canonical: "/ai-karta",
     });
     setBreadcrumb([
