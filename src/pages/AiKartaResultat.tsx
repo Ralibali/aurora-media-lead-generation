@@ -268,7 +268,7 @@ const AiKartaResultat = () => {
                             <span className="text-xs text-muted-foreground">·</span>
                             <span className="text-xs font-medium text-muted-foreground">{p.potential}</span>
                           </div>
-                          <h2 className="mt-2 font-display text-2xl font-bold leading-tight break-words sm:text-3xl">
+                          <h2 className="mt-2 font-display text-xl font-bold leading-tight break-words sm:text-3xl">
                             {p.process_name}
                           </h2>
                         </div>
