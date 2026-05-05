@@ -42,7 +42,7 @@ const stepCardClass =
   "rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]";
 
 const choicePillBase =
-  "rounded-full border px-4 py-2 text-sm font-medium transition-all cursor-pointer select-none";
+  "inline-flex min-h-[44px] items-center rounded-full border px-4 py-2.5 text-sm font-medium leading-none transition-all cursor-pointer select-none active:scale-[0.97] touch-manipulation";
 
 function ChoicePill({
   active,
