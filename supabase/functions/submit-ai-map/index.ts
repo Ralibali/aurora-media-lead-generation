@@ -305,6 +305,9 @@ Deno.serve(async (req: Request) => {
         total_potential,
         processes: scored,
         top3,
+        totalSavedPerWeek: Math.round(totalSavedPerWeek * 10) / 10,
+        totalSavedPerYear,
+        pain_areas,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
