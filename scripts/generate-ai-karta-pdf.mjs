@@ -410,11 +410,11 @@ function drawProcessBlock(page, form, fontReg, fontBold, idx, yTop) {
     borderWidth: 0.5, borderOpacity: 0.6,
   });
   const tf = form.createTextField(`p${idx}_process_name`);
-  tf.setFontSize(10);
   tf.addToPage(page, {
     x: M + 15, y: cy + 1, width: w - 30, height: 20,
     borderWidth: 0, textColor: rgb(1, 1, 1),
   });
+  tf.setFontSize(10);
 
   cy -= 16;
   // Systems field
@@ -428,11 +428,11 @@ function drawProcessBlock(page, form, fontReg, fontBold, idx, yTop) {
     borderWidth: 0.5, borderOpacity: 0.6,
   });
   const sysF = form.createTextField(`p${idx}_systems`);
-  sysF.setFontSize(10);
   sysF.addToPage(page, {
     x: M + 15, y: cy + 1, width: w - 30, height: 18,
     borderWidth: 0, textColor: rgb(1, 1, 1),
   });
+  sysF.setFontSize(10);
 
   // Radio rows: frequency, time, rule_based, data_available, business_value
   cy -= 22;
