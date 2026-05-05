@@ -10,7 +10,6 @@ import {
   Database,
   FileSpreadsheet,
   Gauge,
-  MailCheck,
   Sparkles,
   Workflow,
 } from "lucide-react";
@@ -18,7 +17,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import AiKartaForm from "@/components/AiKartaForm";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
@@ -247,24 +246,7 @@ const AiKarta = () => {
                 </div>
               </Reveal>
               <Reveal y={18}>
-                <div className="rounded-[1.7rem] border border-white/10 bg-white/[0.055] p-6">
-                  <p className="label-caps">Hämta mallen</p>
-                  <h3 className="mt-3 font-display text-3xl font-bold">Skicka AI-kartan till min mejl</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Vill ni ha hjälp att gå igenom svaren efteråt? Boka en AI-genomlysning så prioriterar vi era case efter effekt, komplexitet och affärsnytta.
-                  </p>
-                  <div className="mt-6 space-y-3">
-                    <Input placeholder="Namn" className="rounded-full" />
-                    <Input placeholder="E-post" type="email" className="rounded-full" />
-                    <Input placeholder="Företag" className="rounded-full" />
-                    <Button onClick={() => open()} size="lg" className="w-full rounded-full">
-                      Hämta AI-kartan <MailCheck className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                  <p className="mt-4 text-xs text-muted-foreground">
-                    Formuläret är redo för koppling till ert CRM eller e-postverktyg. Knappen öppnar kontaktflödet tills integrationen är på plats.
-                  </p>
-                </div>
+                <AiKartaForm />
               </Reveal>
             </div>
           </div>
