@@ -319,7 +319,7 @@ async function build() {
   y -= 14;
 
   drawProcessBlock(p3, form, fontReg, fontBold, 1, y - 8);
-  y -= 230;
+  y -= 260;
   drawProcessBlock(p3, form, fontReg, fontBold, 2, y - 8);
 
   drawFooter(p3, 3, 4);
@@ -333,7 +333,7 @@ async function build() {
   drawProcessBlock(p4, form, fontReg, fontBold, 3, y);
 
   // Skicka in / CTA
-  y -= 250;
+  y -= 270;
   p4.drawRectangle({
     x: M, y: y - 110, width: PAGE_W - M * 2, height: 130,
     color: COLORS.panel, borderColor: COLORS.primary, borderWidth: 0.6,
@@ -378,7 +378,7 @@ function slug(s) {
 
 function drawProcessBlock(page, form, fontReg, fontBold, idx, yTop) {
   const w = PAGE_W - M * 2;
-  const h = 220;
+  const h = 240;
   // Card
   page.drawRectangle({
     x: M, y: yTop - h, width: w, height: h,
