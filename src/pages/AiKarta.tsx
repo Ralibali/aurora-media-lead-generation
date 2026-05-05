@@ -134,6 +134,16 @@ const AiKarta = () => {
                     Hämta AI-kartan <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="outline" asChild className="rounded-full">
+                    <a
+                      href="https://cyymcdqkpvcvwjoqxbco.supabase.co/storage/v1/object/public/lead-magnets/aurora-ai-karta.pdf"
+                      download="aurora-ai-karta.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Ladda ner direkt (PDF) <Download className="ml-2 h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button size="lg" variant="ghost" asChild className="rounded-full">
                     <Link to="/ai-automation-foretag">Se hur vi bygger lösningen</Link>
                   </Button>
                 </div>
