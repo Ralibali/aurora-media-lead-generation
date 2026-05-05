@@ -122,6 +122,7 @@ const AiKarta = () => {
                   <Button
                     size="lg"
                     onClick={() => {
+                      try { sessionStorage.setItem("aikarta_source", "hero_cta"); } catch { /* ignore */ }
                       const el = document.getElementById("ai-karta-form");
                       if (el) {
                         el.scrollIntoView({ behavior: "smooth", block: "center" });
