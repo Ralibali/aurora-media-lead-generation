@@ -44,6 +44,116 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_map_leads: {
+        Row: {
+          company_name: string
+          consent: boolean
+          contact_name: string
+          created_at: string
+          email: string
+          employee_count: string
+          id: string
+          industry: string
+          ip: string | null
+          pain_areas: string[]
+          phone: string | null
+          total_potential: string
+          total_score: number
+          user_agent: string | null
+        }
+        Insert: {
+          company_name: string
+          consent?: boolean
+          contact_name: string
+          created_at?: string
+          email: string
+          employee_count: string
+          id?: string
+          industry: string
+          ip?: string | null
+          pain_areas?: string[]
+          phone?: string | null
+          total_potential?: string
+          total_score?: number
+          user_agent?: string | null
+        }
+        Update: {
+          company_name?: string
+          consent?: boolean
+          contact_name?: string
+          created_at?: string
+          email?: string
+          employee_count?: string
+          id?: string
+          industry?: string
+          ip?: string | null
+          pain_areas?: string[]
+          phone?: string | null
+          total_potential?: string
+          total_score?: number
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      ai_map_processes: {
+        Row: {
+          business_value: string
+          created_at: string
+          data_available: string
+          frequency: string
+          id: string
+          lead_id: string
+          position: number
+          potential: string
+          process_name: string
+          recommended_solution: string
+          rule_based: string
+          score: number
+          systems: string | null
+          weekly_time: string
+        }
+        Insert: {
+          business_value: string
+          created_at?: string
+          data_available: string
+          frequency: string
+          id?: string
+          lead_id: string
+          position?: number
+          potential: string
+          process_name: string
+          recommended_solution: string
+          rule_based: string
+          score?: number
+          systems?: string | null
+          weekly_time: string
+        }
+        Update: {
+          business_value?: string
+          created_at?: string
+          data_available?: string
+          frequency?: string
+          id?: string
+          lead_id?: string
+          position?: number
+          potential?: string
+          process_name?: string
+          recommended_solution?: string
+          rule_based?: string
+          score?: number
+          systems?: string | null
+          weekly_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_map_processes_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ai_map_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       faq_cta_clicks: {
         Row: {
           category: string | null
