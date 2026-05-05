@@ -15,7 +15,11 @@ function getSessionId(): string {
   }
 }
 
-export type AiKartaButton = "hero_cta" | "pdf_direct";
+export type AiKartaButton =
+  | "hero_cta"
+  | "pdf_direct"
+  | "result_pdf_download"
+  | "result_print_dialog_opened";
 
 export async function trackAiKartaClick(button: AiKartaButton): Promise<void> {
   try {
