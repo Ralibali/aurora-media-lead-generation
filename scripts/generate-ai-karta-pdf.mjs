@@ -241,7 +241,6 @@ async function build() {
       borderWidth: 0,
       textColor: rgb(1, 1, 1),
     });
-    f.setFontSize(10);
   };
 
   placeField("company_name", "Företagsnamn *", M, y - fieldH, colW);
@@ -414,7 +413,6 @@ function drawProcessBlock(page, form, fontReg, fontBold, idx, yTop) {
     x: M + 15, y: cy + 1, width: w - 30, height: 20,
     borderWidth: 0, textColor: rgb(1, 1, 1),
   });
-  tf.setFontSize(10);
 
   cy -= 16;
   // Systems field
@@ -432,7 +430,6 @@ function drawProcessBlock(page, form, fontReg, fontBold, idx, yTop) {
     x: M + 15, y: cy + 1, width: w - 30, height: 18,
     borderWidth: 0, textColor: rgb(1, 1, 1),
   });
-  sysF.setFontSize(10);
 
   // Radio rows: frequency, time, rule_based, data_available, business_value
   cy -= 22;
