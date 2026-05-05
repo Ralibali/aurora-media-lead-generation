@@ -157,8 +157,8 @@ Deno.serve(async (req: Request) => {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    if (processes.length < 3) {
-      return new Response(JSON.stringify({ error: "Minst 3 processer krävs." }), {
+    if (processes.length < 1) {
+      return new Response(JSON.stringify({ error: "Minst 1 process krävs." }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

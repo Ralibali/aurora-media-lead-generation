@@ -133,7 +133,7 @@ Deno.serve(async (req: Request) => {
     if (!contact_name) missing.push("Kontaktperson");
     if (!email) missing.push("E-post");
     if (!consent) missing.push("Samtycke (kryssrutan på sista sidan)");
-    if (processes.length < 3) missing.push(`Minst 3 processer (du har fyllt i ${processes.length})`);
+    if (processes.length < 1) missing.push(`Minst 1 process (du har fyllt i ${processes.length})`);
 
     for (let i = 0; i < processes.length; i++) {
       const p = processes[i];

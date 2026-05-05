@@ -117,7 +117,7 @@ const AiKartaStart = () => {
     setForm((f) => (f.processes.length >= 5 ? f : { ...f, processes: [...f.processes, emptyProcess()] }));
 
   const removeProcess = (idx: number) =>
-    setForm((f) => (f.processes.length <= 3 ? f : { ...f, processes: f.processes.filter((_, i) => i !== idx) }));
+    setForm((f) => (f.processes.length <= 1 ? f : { ...f, processes: f.processes.filter((_, i) => i !== idx) }));
 
   const togglePain = (label: string) =>
     setForm((f) => ({
@@ -226,28 +226,33 @@ const AiKartaStart = () => {
               <h1 className="mt-4 font-display text-[clamp(2.4rem,5.2vw,4rem)] font-bold leading-[0.95] tracking-tight">
                 {step === 1 && "Berätta lite om er"}
                 {step === 2 && "Var sitter era största tidstjuvar?"}
-                {step === 3 && "Lägg till 3–5 processer"}
+                {step === 3 && "Lägg till 1–5 processer"}
                 {step === 4 && "Kontrollera och skicka in"}
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
                 {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
-                {step === 3 && "Beskriv 3–5 konkreta arbetsuppgifter så räknar vi ut AI-potentialen för varje."}
+                {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till 5) – vi räknar ut AI-potentialen för varje."}
                 {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
               </p>
             </Reveal>
 
             {/* Progress */}
             <div className="mt-8">
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                {STEPS.map((label, i) => (
-                  <span
-                    key={label}
-                    className={`${i + 1 <= step ? "text-primary" : ""} hidden sm:inline`}
-                  >
-                    {i + 1}. {label}
-                  </span>
-                ))}
+              <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                {STEPS.map((label, i) => {
+                  const reached = i + 1 <= step;
+                  const isCurrent = i + 1 === step;
+                  return (
+                    <span
+                      key={label}
+                      className={`flex-1 truncate text-center ${reached ? "text-primary" : ""} ${isCurrent ? "font-semibold" : ""}`}
+                    >
+                      <span className="hidden sm:inline">{i + 1}. {label}</span>
+                      <span className="sm:hidden">{isCurrent ? label : i + 1}</span>
+                    </span>
+                  );
+                })}
               </div>
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                 <div
@@ -349,11 +354,11 @@ const AiKartaStart = () => {
                     {form.processes.map((p, idx) => (
                       <div
                         key={idx}
-                        className="rounded-2xl border border-white/10 bg-background/40 p-5"
+                        className="rounded-2xl border border-white/10 bg-background/40 p-4 sm:p-5"
                       >
                         <div className="flex items-center justify-between gap-3">
                           <p className="label-caps text-primary">Process {idx + 1}</p>
-                          {form.processes.length > 3 && (
+                          {form.processes.length > 1 && (
                             <button
                               type="button"
                               onClick={() => removeProcess(idx)}
@@ -486,20 +491,20 @@ const AiKartaStart = () => {
               </div>
             </Reveal>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
+            <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
               {step > 1 ? (
-                <Button variant="outline" onClick={prev} className="rounded-full" disabled={submitting}>
+                <Button variant="outline" onClick={prev} className="w-full rounded-full sm:w-auto" disabled={submitting}>
                   <ArrowLeft className="mr-2 h-4 w-4" /> Tillbaka
                 </Button>
               ) : (
-                <span />
+                <span className="hidden sm:block" />
               )}
               {step < STEPS.length ? (
-                <Button onClick={next} size="lg" className="rounded-full">
+                <Button onClick={next} size="lg" className="w-full rounded-full sm:w-auto">
                   Fortsätt <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} size="lg" className="rounded-full" disabled={submitting}>
+                <Button onClick={handleSubmit} size="lg" className="w-full rounded-full sm:w-auto" disabled={submitting}>
                   {submitting ? (
                     <>Beräknar... <Loader2 className="ml-2 h-4 w-4 animate-spin" /></>
                   ) : (
