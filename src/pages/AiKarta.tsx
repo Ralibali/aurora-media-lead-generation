@@ -122,7 +122,7 @@ const AiKarta = () => {
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
               <Reveal>
-                <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.08] px-3 py-1.5 text-xs font-semibold text-primary">
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.08] px-3 py-1.5 text-[11px] font-semibold text-primary sm:text-xs">
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
@@ -130,7 +130,7 @@ const AiKarta = () => {
                   Helt kostnadsfri · Inget säljmöte krävs
                 </div>
 
-                <h1 className="mt-5 max-w-5xl font-display text-[clamp(2.6rem,7vw,6.2rem)] font-bold leading-[0.92] tracking-tight">
+                <h1 className="mt-5 max-w-full font-display text-[clamp(2rem,8vw,6.2rem)] font-bold leading-[0.95] tracking-tight break-words sm:max-w-5xl sm:leading-[0.92]">
                   Vad i ert företag kan{" "}
                   <span className="bg-gradient-to-r from-primary via-primary to-purple-400 bg-clip-text text-transparent">
                     AI sköta åt er
@@ -138,25 +138,25 @@ const AiKarta = () => {
                   ?
                 </h1>
 
-                <p className="mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-2xl">
+                <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:mt-7 sm:text-lg md:text-2xl">
                   Få en personlig AI-analys av era processer på <strong className="text-foreground">10 minuter</strong>.
                   Vi pekar ut exakt vilka uppgifter som kan automatiseras – och hur mycket tid det sparar.
                 </p>
 
-                <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
-                  <Button asChild size="lg" className="rounded-full shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]">
+                <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center sm:flex-wrap">
+                  <Button asChild size="lg" className="w-full rounded-full shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)] sm:w-auto">
                     <Link to="/ai-karta/start">
                       Starta min AI-analys – gratis <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="h-4 w-4 text-primary" />
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
                     <span>Inget kreditkort · Inget spam · 10 min</span>
                   </div>
                 </div>
 
                 {/* Proof stats row */}
-                <div className="mt-10 grid gap-4 sm:grid-cols-3">
+                <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
                   {proofStats.map((s) => (
                     <div key={s.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                       <p className="font-display text-2xl font-bold text-primary">{s.value}</p>
@@ -215,7 +215,7 @@ const AiKarta = () => {
             <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
               <Reveal>
                 <p className="label-caps">Problemet</p>
-                <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
+                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                   Ni vet att AI borde fixa det här. Men <em className="font-display italic text-primary">vad</em> ska ni börja med?
                 </h2>
                 <p className="mt-5 text-muted-foreground md:text-lg">
@@ -247,7 +247,7 @@ const AiKarta = () => {
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps text-primary">Vad ni får – allt kostnadsfritt</p>
-              <h2 className="mt-3 max-w-4xl font-display text-4xl font-bold tracking-tight md:text-5xl">
+              <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                 Inte ännu en AI-rapport. <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">Ett färdigt beslutsunderlag.</span>
               </h2>
               <p className="mt-4 max-w-3xl text-muted-foreground md:text-lg">
@@ -290,7 +290,7 @@ const AiKarta = () => {
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps">Så fungerar det</p>
-              <h2 className="mt-3 max-w-4xl font-display text-4xl font-bold tracking-tight md:text-5xl">
+              <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                 Från första klick till färdig AI-roadmap.
               </h2>
             </Reveal>
@@ -318,7 +318,7 @@ const AiKarta = () => {
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
               <p className="label-caps">Vanliga invändningar</p>
-              <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
+              <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
                 Innan ni klickar – det här undrar de flesta.
               </h2>
             </Reveal>
@@ -346,7 +346,7 @@ const AiKarta = () => {
                   <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.10] px-3 py-1.5 text-xs font-semibold text-primary">
                     <Star className="h-3.5 w-3.5" /> Begränsat antal pilotplatser kvartalsvis
                   </div>
-                  <h2 className="mt-5 max-w-3xl font-display text-4xl font-bold tracking-tight md:text-6xl">
+                  <h2 className="mt-5 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">
                     10 minuter nu kan spara teamet hundratals timmar nästa år.
                   </h2>
                   <p className="mt-5 max-w-2xl text-muted-foreground md:text-lg">
