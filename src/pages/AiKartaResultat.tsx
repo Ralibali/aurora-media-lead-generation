@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  ArrowRight, CheckCircle2, Clock, Database, Download,
+  ArrowRight, CheckCircle2, Clock, Database, Download, Mail,
   Sparkles, Target, TrendingUp, Workflow, Zap,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
+import { supabase } from "@/integrations/supabase/client";
 
 const RESULT_KEY = "ai_map_result";
 
@@ -47,6 +48,7 @@ function buildHeadline(potential: string): { lead: string; tail: string } {
 const AiKartaResultat = () => {
   const navigate = useNavigate();
   const [result, setResult] = useState<AiMapResult | null>(null);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     setSEOMeta({
@@ -86,6 +88,41 @@ const AiKartaResultat = () => {
       void trackAiKartaClick("result_print_dialog_opened");
       window.print();
     }, 250);
+  };
+
+  const handleResend = async () => {
+    if (!result || sending) return;
+    setSending(true);
+    void trackAiKartaClick("result_resend_email");
+    const t = toast.loading(`Skickar analysen till ${result.meta.email}…`);
+    try {
+      const { data, error } = await supabase.functions.invoke("resend-ai-map-email", {
+        body: {
+          email: result.meta.email,
+          contact_name: result.meta.contact_name,
+          company_name: result.meta.company_name,
+          total_potential: result.total_potential,
+          top3: result.top3,
+          totalSavedPerWeek: result.totalSavedPerWeek,
+          totalSavedPerYear: result.totalSavedPerYear,
+        },
+      });
+      if (error || (data && (data as { error?: string }).error)) {
+        throw new Error((data as { error?: string })?.error || error?.message || "Okänt fel");
+      }
+      toast.success(`Mail skickat till ${result.meta.email}`, {
+        id: t,
+        description: "Kolla inkorgen (och eventuellt skräpposten).",
+      });
+    } catch (err) {
+      console.error("[resend-ai-map-email]", err);
+      toast.error("Kunde inte skicka mailet", {
+        id: t,
+        description: "Försök igen om en stund eller kontakta info@auroramedia.se.",
+      });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -326,7 +363,8 @@ const AiKartaResultat = () => {
                     <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
                       Boka en kostnadsfri AI-genomlysning (45 min). Vi går igenom era svar,
                       pekar ut bästa första pilot och ger en uppskattning av lösning, tid och kostnad.
-                      En kopia av analysen är skickad till <strong className="text-foreground">{meta.email}</strong>.
+                      En kopia av analysen skickades till <strong className="text-foreground">{meta.email}</strong> direkt
+                      efter att ni fyllde i formuläret – behöver ni en till kopia kan ni begära den nedan.
                     </p>
                   </div>
                   <div className="flex flex-col gap-3">
@@ -334,6 +372,17 @@ const AiKartaResultat = () => {
                       <Link to="/kontakt">
                         Boka kostnadsfri AI-genomlysning <ArrowRight className="ml-2 h-4 w-4" />
                       </Link>
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="secondary"
+                      className="rounded-full"
+                      onClick={handleResend}
+                      disabled={sending}
+                      aria-label={`Skicka analysen till ${meta.email}`}
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      {sending ? "Skickar…" : `Skicka analysen till ${meta.email}`}
                     </Button>
                     <Button
                       size="lg"
