@@ -134,7 +134,7 @@
   }
 
   .label-caps {
-    @apply font-sans uppercase tracking-[0.18em] text-xs text-muted-foreground;
+    @apply font-sans uppercase tracking-[0.18em] text-[12px] text-muted-foreground;
   }
 
   .container-narrow {
