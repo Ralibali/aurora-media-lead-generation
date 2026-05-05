@@ -31,9 +31,22 @@ const AiKartaForm = () => {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const renderedAtRef = useRef<number>(0);
+  const [prefilled, setPrefilled] = useState(false);
 
   useEffect(() => {
     renderedAtRef.current = Date.now();
+    try {
+      const raw = localStorage.getItem("aurora_lead");
+      if (raw) {
+        const saved = JSON.parse(raw) as { name?: string; email?: string; company?: string };
+        if (saved.name) setName(saved.name);
+        if (saved.email) setEmail(saved.email);
+        if (saved.company) setCompany(saved.company);
+        if (saved.name || saved.email) setPrefilled(true);
+      }
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
