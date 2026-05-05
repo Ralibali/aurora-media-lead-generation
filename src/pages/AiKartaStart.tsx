@@ -467,17 +467,17 @@ const AiKartaStart = () => {
                           : "border-white/10 bg-background/40"
                       }`}
                     >
-                      <div className="flex items-start gap-3">
+                      <label htmlFor="aimap-consent" className="flex cursor-pointer items-start gap-3 -m-1 p-1 rounded-xl">
                         <Checkbox
                           id="aimap-consent"
                           checked={form.consent}
                           onCheckedChange={(v) => update("consent", v === true)}
-                          className={`mt-0.5 ${errors.consent ? "border-destructive" : ""}`}
+                          className={`mt-0.5 h-5 w-5 ${errors.consent ? "border-destructive" : ""}`}
                         />
-                        <Label htmlFor="aimap-consent" className="text-xs leading-relaxed text-foreground/80">
+                        <span className="text-sm leading-relaxed text-foreground/80">
                           Jag godkänner att Aurora Media AB sparar mina svar och kontaktar mig med anledning av min AI-karta.
-                        </Label>
-                      </div>
+                        </span>
+                      </label>
                       {errors.consent && (
                         <p className="mt-2 text-xs font-medium text-destructive">{errors.consent}</p>
                       )}
