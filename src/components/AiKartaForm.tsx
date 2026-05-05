@@ -92,6 +92,14 @@ const AiKartaForm = () => {
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
 
       if (data.downloadUrl) setDownloadUrl(data.downloadUrl);
+      try {
+        localStorage.setItem(
+          "aurora_lead",
+          JSON.stringify({ name: parsed.data.name, email: parsed.data.email, company: parsed.data.company ?? "" })
+        );
+      } catch {
+        /* ignore */
+      }
       setStatus("success");
       toast.success("Tack! AI-kartan är på väg till din mejl.", { duration: 5000 });
     } catch (err) {
