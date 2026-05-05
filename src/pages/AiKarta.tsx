@@ -1,14 +1,9 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight,
-  BarChart3,
-  Bot,
   CheckCircle2,
   ClipboardList,
   Clock3,
-  Database,
-  FileSpreadsheet,
   Gauge,
   Sparkles,
   Workflow,
