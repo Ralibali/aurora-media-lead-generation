@@ -431,7 +431,7 @@ const AiKartaStart = () => {
                       <button
                         type="button"
                         onClick={addProcess}
-                        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-4 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                        className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground active:scale-[0.99]"
                       >
                         <Plus className="h-4 w-4" /> Lägg till en process till
                       </button>
