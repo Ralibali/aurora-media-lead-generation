@@ -54,14 +54,32 @@ Deno.serve(async (req: Request) => {
 
     const url = new URL(req.url);
     const limit = Math.min(parseInt(url.searchParams.get("limit") ?? "100"), 500);
-    const { data, error } = await admin
-      .from("leads")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(limit);
-    if (error) throw error;
 
-    return new Response(JSON.stringify({ leads: data ?? [] }), {
+    const [{ data: leads, error: leadsErr }, { data: clicks, error: clicksErr }] = await Promise.all([
+      admin.from("leads").select("*").order("created_at", { ascending: false }).limit(limit),
+      admin
+        .from("ai_karta_clicks")
+        .select("button, created_at")
+        .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString()),
+    ]);
+    if (leadsErr) throw leadsErr;
+    if (clicksErr) console.warn("[list-leads] clicks fetch failed", clicksErr);
+
+    const aiKartaLeads = (leads ?? []).filter((l: { paket?: string }) => l.paket === "ai-karta").length;
+    const heroClicks = (clicks ?? []).filter((c: { button: string }) => c.button === "hero_cta").length;
+    const pdfClicks = (clicks ?? []).filter((c: { button: string }) => c.button === "pdf_direct").length;
+    const totalClicks = heroClicks + pdfClicks;
+
+    const stats = {
+      hero_clicks: heroClicks,
+      pdf_clicks: pdfClicks,
+      total_clicks: totalClicks,
+      ai_karta_leads: aiKartaLeads,
+      conversion_rate: heroClicks > 0 ? Math.round((aiKartaLeads / heroClicks) * 1000) / 10 : 0,
+      window_days: 30,
+    };
+
+    return new Response(JSON.stringify({ leads: leads ?? [], stats }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
