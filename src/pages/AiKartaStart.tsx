@@ -328,7 +328,13 @@ const AiKartaStart = () => {
                 )}
 
                 {step === 2 && (
-                  <div>
+                  <div
+                    className={
+                      errors.pain_areas
+                        ? "rounded-2xl border border-destructive/60 bg-destructive/[0.06] p-4"
+                        : ""
+                    }
+                  >
                     <div className="flex flex-wrap gap-2">
                       {PAIN_AREAS.map((label) => (
                         <ChoicePill
@@ -341,7 +347,7 @@ const AiKartaStart = () => {
                       ))}
                     </div>
                     {errors.pain_areas && (
-                      <p className="mt-3 text-xs text-destructive">{errors.pain_areas}</p>
+                      <p className="mt-3 text-xs font-medium text-destructive">{errors.pain_areas}</p>
                     )}
                   </div>
                 )}
