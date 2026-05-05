@@ -199,6 +199,165 @@ Deno.serve(async (req: Request) => {
 
     const top3 = [...scored].sort((a, b) => b.score - a.score).slice(0, 3);
 
+    // ===== Lovable AI: djupare, personlig analys på enkel svenska =====
+    let aiAnalysis: {
+      executive_summary: string;
+      maturity_note: string;
+      cases: Array<{
+        process_name: string;
+        why_it_matters: string;
+        deep_analysis: string;
+        concrete_example: string;
+        quick_wins: string[];
+        risks: string;
+      }>;
+      overall_recommendation: string;
+    } | null = null;
+
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    if (LOVABLE_API_KEY) {
+      try {
+        const aiPayload = {
+          company: { name: company_name, industry, employee_count },
+          pain_areas,
+          total_potential,
+          total_saved_per_week: Math.round(totalSavedPerWeek * 10) / 10,
+          total_saved_per_year: totalSavedPerYear,
+          top3: top3.map((p) => ({
+            process_name: p.process_name,
+            frequency: p.frequency,
+            weekly_time: p.weekly_time,
+            systems: p.systems,
+            rule_based: p.rule_based,
+            data_available: p.data_available,
+            business_value: p.business_value,
+            score: p.score,
+            potential: p.potential,
+            recommended_solution: p.recommended_solution,
+            saved_hours_per_week: p.saved_hours_per_week,
+          })),
+        };
+
+        const systemPrompt = `Du är en senior AI- och automationsrådgivare på Aurora Media (Linköping).
+Du skriver på enkel, tydlig svenska för en VD eller verksamhetsansvarig som INTE är tekniker.
+Undvik buzzwords ("synergier", "leverage", "AI-driven transformation"). Skriv konkret, mänskligt och rådgivande – aldrig säljigt.
+Använd "ni" och "ert" när du tilltalar företaget. Var specifik utifrån branschen och de processer kunden faktiskt beskrivit.
+Inga emojis. Inga rubriker i texten. Använd korta stycken. Aldrig "som AI-modell..." eller liknande meta-prat.`;
+
+        const userPrompt = `Företag: ${company_name} (${industry}, ${employee_count} anställda)
+Utmaningsområden de pekat ut: ${pain_areas.join(", ") || "—"}
+Total AI-potential enligt scoring: ${total_potential}
+Uppskattad tidsbesparing totalt: ~${Math.round(totalSavedPerWeek * 10) / 10} h/vecka (~${totalSavedPerYear} h/år)
+
+Här är de tre processer som scorade högst (med kundens egna svar):
+${top3
+  .map(
+    (p, i) => `
+${i + 1}. "${p.process_name}"
+   - Frekvens: ${p.frequency}, Tid: ${p.weekly_time} h/v, System: ${p.systems || "ej angivet"}
+   - Regelstyrd: ${p.rule_based}, Data tillgänglig: ${p.data_available}, Affärsvärde: ${p.business_value}
+   - Vår tekniska rekommendation: ${p.recommended_solution}
+   - Uppskattad besparing: ~${p.saved_hours_per_week} h/vecka`,
+  )
+  .join("\n")}
+
+Skriv en djupare mini-analys där du för varje case förklarar:
+- why_it_matters: VARFÖR just denna process är värd att titta på (1–2 meningar, koppla till deras bransch och utmaning)
+- deep_analysis: vad som händer idag och vad AI/automation realistiskt kan ta över (3–5 meningar, konkret)
+- concrete_example: ett konkret, hands-on exempel på hur lösningen skulle kännas i deras vardag (2–3 meningar, "Tänk er att...")
+- quick_wins: 2–3 korta punkter på vad de kan göra de första 2 veckorna (även utan oss)
+- risks: en mening om vad de bör vara uppmärksamma på (data, juridik, förändringsledning)
+
+Skriv också:
+- executive_summary: 3–4 meningar för VD:n, ärlig och konkret om var den största hävstången finns
+- maturity_note: 1–2 meningar om var ${company_name} står mognadsmässigt jämfört med liknande bolag
+- overall_recommendation: en tydlig rekommendation om vilket case som bör prioriteras först och varför`;
+
+        const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "google/gemini-3-flash-preview",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt },
+            ],
+            tools: [
+              {
+                type: "function",
+                function: {
+                  name: "deliver_analysis",
+                  description: "Strukturerad mini-analys på svenska",
+                  parameters: {
+                    type: "object",
+                    properties: {
+                      executive_summary: { type: "string" },
+                      maturity_note: { type: "string" },
+                      overall_recommendation: { type: "string" },
+                      cases: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            process_name: { type: "string" },
+                            why_it_matters: { type: "string" },
+                            deep_analysis: { type: "string" },
+                            concrete_example: { type: "string" },
+                            quick_wins: {
+                              type: "array",
+                              items: { type: "string" },
+                            },
+                            risks: { type: "string" },
+                          },
+                          required: [
+                            "process_name",
+                            "why_it_matters",
+                            "deep_analysis",
+                            "concrete_example",
+                            "quick_wins",
+                            "risks",
+                          ],
+                          additionalProperties: false,
+                        },
+                      },
+                    },
+                    required: [
+                      "executive_summary",
+                      "maturity_note",
+                      "overall_recommendation",
+                      "cases",
+                    ],
+                    additionalProperties: false,
+                  },
+                },
+              },
+            ],
+            tool_choice: { type: "function", function: { name: "deliver_analysis" } },
+          }),
+        });
+
+        if (aiResp.ok) {
+          const aiJson = await aiResp.json();
+          const argsStr =
+            aiJson?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
+          if (argsStr) {
+            try {
+              aiAnalysis = JSON.parse(argsStr);
+            } catch (e) {
+              console.error("[submit-ai-map] failed to parse AI args", e);
+            }
+          }
+        } else {
+          console.error("[submit-ai-map] AI gateway error", aiResp.status, await aiResp.text());
+        }
+      } catch (e) {
+        console.error("[submit-ai-map] AI analysis threw", e);
+      }
+    }
+
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!SUPABASE_URL || !SERVICE_KEY) {
