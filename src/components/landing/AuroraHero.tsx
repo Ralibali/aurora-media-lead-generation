@@ -152,7 +152,7 @@ const AuroraHero = () => {
             style={{ fontFamily: "'Caveat', cursive" }}
           >
             <p className="text-2xl leading-tight text-primary">"Från idé till lansering</p>
-            <p className="text-2xl leading-tight text-primary">på under 4 veckor."</p>
+            <p className="text-2xl leading-tight text-primary">på under fyra veckor."</p>
             <p className="mt-1 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
               — Aurora-metoden
             </p>
