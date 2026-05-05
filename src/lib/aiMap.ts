@@ -84,7 +84,6 @@ export function emptyForm(): AiMapFormState {
     employee_count: "",
     contact_name: "",
     email: "",
-    phone: "",
     pain_areas: [],
     processes: [emptyProcess(), emptyProcess(), emptyProcess()],
     consent: false,
