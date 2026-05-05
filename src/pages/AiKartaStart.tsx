@@ -491,20 +491,20 @@ const AiKartaStart = () => {
               </div>
             </Reveal>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
+            <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
               {step > 1 ? (
-                <Button variant="outline" onClick={prev} className="rounded-full" disabled={submitting}>
+                <Button variant="outline" onClick={prev} className="w-full rounded-full sm:w-auto" disabled={submitting}>
                   <ArrowLeft className="mr-2 h-4 w-4" /> Tillbaka
                 </Button>
               ) : (
-                <span />
+                <span className="hidden sm:block" />
               )}
               {step < STEPS.length ? (
-                <Button onClick={next} size="lg" className="rounded-full">
+                <Button onClick={next} size="lg" className="w-full rounded-full sm:w-auto">
                   Fortsätt <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} size="lg" className="rounded-full" disabled={submitting}>
+                <Button onClick={handleSubmit} size="lg" className="w-full rounded-full sm:w-auto" disabled={submitting}>
                   {submitting ? (
                     <>Beräknar... <Loader2 className="ml-2 h-4 w-4 animate-spin" /></>
                   ) : (
