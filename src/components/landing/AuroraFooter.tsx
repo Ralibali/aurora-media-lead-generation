@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Mail, MapPin, Sparkles } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
+import auroraMonogram from "@/assets/aurora-monogram.png";
 
 const FOOTER_COLUMNS = [
   {
@@ -59,9 +60,9 @@ const AuroraFooter = () => {
         <div className="grid gap-12 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link to="/" className="inline-flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[0_10px_30px_-10px_hsl(var(--primary)/0.55)]">
-                <span className="font-display text-xl font-bold">A</span>
+            <Link to="/" className="inline-flex items-center gap-3" aria-label="Aurora Media AB – startsida">
+              <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl bg-black ring-1 ring-white/10 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)]">
+                <img src={auroraMonogram} alt="" className="h-full w-full object-cover scale-[1.18]" draggable={false} />
               </span>
               <span className="flex flex-col leading-tight">
                 <span className="font-display text-base font-bold uppercase tracking-[0.3em] text-foreground">
