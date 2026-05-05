@@ -42,7 +42,7 @@ const stepCardClass =
   "rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]";
 
 const choicePillBase =
-  "rounded-full border px-4 py-2 text-sm font-medium transition-all cursor-pointer select-none";
+  "inline-flex min-h-[44px] items-center rounded-full border px-4 py-2.5 text-sm font-medium leading-none transition-all cursor-pointer select-none active:scale-[0.97] touch-manipulation";
 
 function ChoicePill({
   active,
@@ -282,19 +282,19 @@ const AiKartaStart = () => {
                       <Input
                         value={form.company_name}
                         onChange={(e) => update("company_name", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                       />
                     </Field>
                     <Field label="Bransch" error={errors.industry} required>
                       <Input
                         value={form.industry}
                         onChange={(e) => update("industry", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                         placeholder="t.ex. e-handel, bygg, konsult"
                       />
                     </Field>
                     <Field label="Antal anställda" error={errors.employee_count} required full>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2.5">
                         {EMPLOYEE_OPTIONS.map((opt) => (
                           <ChoicePill
                             key={opt}
@@ -310,7 +310,7 @@ const AiKartaStart = () => {
                       <Input
                         value={form.contact_name}
                         onChange={(e) => update("contact_name", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                       />
                     </Field>
                     <Field label="E-post" error={errors.email} required>
@@ -318,7 +318,7 @@ const AiKartaStart = () => {
                         type="email"
                         value={form.email}
                         onChange={(e) => update("email", e.target.value)}
-                        className="rounded-full"
+                        className="rounded-full h-12 text-base"
                       />
                     </Field>
                   </div>
@@ -332,7 +332,7 @@ const AiKartaStart = () => {
                         : ""
                     }
                   >
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2.5">
                       {PAIN_AREAS.map((label) => (
                         <ChoicePill
                           key={label}
@@ -362,9 +362,9 @@ const AiKartaStart = () => {
                             <button
                               type="button"
                               onClick={() => removeProcess(idx)}
-                              className="text-xs text-muted-foreground hover:text-destructive"
+                              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-destructive active:scale-95"
                             >
-                              <Trash2 className="inline h-3.5 w-3.5" /> Ta bort
+                              <Trash2 className="h-4 w-4" /> Ta bort
                             </button>
                           )}
                         </div>
@@ -373,7 +373,7 @@ const AiKartaStart = () => {
                             <Input
                               value={p.process_name}
                               onChange={(e) => updateProcess(idx, { process_name: e.target.value })}
-                              className="rounded-full"
+                              className="rounded-full h-12 text-base"
                               placeholder="t.ex. Skapa offerter manuellt i Word"
                             />
                           </Field>
@@ -397,7 +397,7 @@ const AiKartaStart = () => {
                             <Input
                               value={p.systems}
                               onChange={(e) => updateProcess(idx, { systems: e.target.value })}
-                              className="rounded-full"
+                              className="rounded-full h-12 text-base"
                               placeholder="t.ex. Fortnox, Excel, HubSpot"
                             />
                           </Field>
@@ -431,7 +431,7 @@ const AiKartaStart = () => {
                       <button
                         type="button"
                         onClick={addProcess}
-                        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-4 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                        className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground active:scale-[0.99]"
                       >
                         <Plus className="h-4 w-4" /> Lägg till en process till
                       </button>
@@ -467,17 +467,17 @@ const AiKartaStart = () => {
                           : "border-white/10 bg-background/40"
                       }`}
                     >
-                      <div className="flex items-start gap-3">
+                      <label htmlFor="aimap-consent" className="flex cursor-pointer items-start gap-3 -m-1 p-1 rounded-xl">
                         <Checkbox
                           id="aimap-consent"
                           checked={form.consent}
                           onCheckedChange={(v) => update("consent", v === true)}
-                          className={`mt-0.5 ${errors.consent ? "border-destructive" : ""}`}
+                          className={`mt-0.5 h-5 w-5 ${errors.consent ? "border-destructive" : ""}`}
                         />
-                        <Label htmlFor="aimap-consent" className="text-xs leading-relaxed text-foreground/80">
+                        <span className="text-sm leading-relaxed text-foreground/80">
                           Jag godkänner att Aurora Media AB sparar mina svar och kontaktar mig med anledning av min AI-karta.
-                        </Label>
-                      </div>
+                        </span>
+                      </label>
                       {errors.consent && (
                         <p className="mt-2 text-xs font-medium text-destructive">{errors.consent}</p>
                       )}
@@ -493,18 +493,18 @@ const AiKartaStart = () => {
 
             <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
               {step > 1 ? (
-                <Button variant="outline" onClick={prev} className="w-full rounded-full sm:w-auto" disabled={submitting}>
+                <Button variant="outline" onClick={prev} className="h-12 w-full rounded-full text-base sm:w-auto" disabled={submitting}>
                   <ArrowLeft className="mr-2 h-4 w-4" /> Tillbaka
                 </Button>
               ) : (
                 <span className="hidden sm:block" />
               )}
               {step < STEPS.length ? (
-                <Button onClick={next} size="lg" className="w-full rounded-full sm:w-auto">
+                <Button onClick={next} size="lg" className="h-14 w-full rounded-full text-base sm:w-auto">
                   Fortsätt <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} size="lg" className="w-full rounded-full sm:w-auto" disabled={submitting}>
+                <Button onClick={handleSubmit} size="lg" className="h-14 w-full rounded-full text-base sm:w-auto" disabled={submitting}>
                   {submitting ? (
                     <>Beräknar... <Loader2 className="ml-2 h-4 w-4 animate-spin" /></>
                   ) : (
@@ -581,7 +581,7 @@ function PillRow({
       <Label className={`text-xs uppercase tracking-wider ${error ? "text-destructive" : "text-muted-foreground"}`}>
         {label}
       </Label>
-      <div className="mt-1.5 flex flex-wrap gap-2">
+      <div className="mt-2 flex flex-wrap gap-2.5 sm:gap-2">
         {options.map(([key, lbl]) => (
           <ChoicePill key={key} active={value === key} onClick={() => onChange(key)}>
             {lbl}
