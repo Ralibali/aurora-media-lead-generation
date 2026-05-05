@@ -227,12 +227,12 @@ const AiKartaResultat = () => {
 
             {ai_analysis && (
               <Reveal y={18}>
-                <div className="mt-10 rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-6 sm:p-8">
+                <div className="mt-10 rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-5 sm:p-8">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-primary" />
                     <p className="label-caps text-primary">Aurora-analys</p>
                   </div>
-                  <h2 className="mt-3 font-display text-2xl font-bold sm:text-3xl">
+                  <h2 className="mt-3 font-display text-xl font-bold sm:text-3xl">
                     Vad vi ser i era svar
                   </h2>
                   <p className="mt-4 text-sm leading-relaxed text-foreground/90 sm:text-base">
