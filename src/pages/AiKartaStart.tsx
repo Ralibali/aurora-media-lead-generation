@@ -239,15 +239,20 @@ const AiKartaStart = () => {
 
             {/* Progress */}
             <div className="mt-8">
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                {STEPS.map((label, i) => (
-                  <span
-                    key={label}
-                    className={`${i + 1 <= step ? "text-primary" : ""} hidden sm:inline`}
-                  >
-                    {i + 1}. {label}
-                  </span>
-                ))}
+              <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                {STEPS.map((label, i) => {
+                  const reached = i + 1 <= step;
+                  const isCurrent = i + 1 === step;
+                  return (
+                    <span
+                      key={label}
+                      className={`flex-1 truncate text-center ${reached ? "text-primary" : ""} ${isCurrent ? "font-semibold" : ""}`}
+                    >
+                      <span className="hidden sm:inline">{i + 1}. {label}</span>
+                      <span className="sm:hidden">{isCurrent ? label : i + 1}</span>
+                    </span>
+                  );
+                })}
               </div>
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                 <div
