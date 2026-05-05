@@ -78,7 +78,7 @@ const WebbyraLinkoping = () => {
         <section className="border-t border-white/10 py-20">
           <div className="container mx-auto px-6 max-w-5xl grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
-              <p className="label-caps">Varför Aurora</p>
+              <p className="label-caps">Varför Aurora Media</p>
               <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Lokal partner. Modern leverans.</h2>
             </div>
             <div className="space-y-5 text-base leading-relaxed text-foreground/85">

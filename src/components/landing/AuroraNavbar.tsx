@@ -22,10 +22,10 @@ const AuroraLogo = () => (
     </span>
     <span className="flex flex-col leading-tight">
       <span className="font-display text-[15px] font-bold uppercase tracking-[0.32em] text-foreground">
-        Aurora
+        Aurora Media
       </span>
       <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-        Media
+        AB
       </span>
     </span>
   </Link>

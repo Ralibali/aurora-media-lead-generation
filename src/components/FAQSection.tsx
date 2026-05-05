@@ -17,7 +17,7 @@ export const faqs: FaqItem[] = [
   {
     q: "Vad gör Aurora Media?",
     a: "Aurora Media bygger SaaS, MVP:er, interna appar, AI-automationer och moderna webbplattformar åt svenska företag. Fokus är fast pris, snabb leverans och kod kunden äger.",
-    category: "Om Aurora",
+    category: "Om Aurora Media",
   },
   {
     q: "Använder du AI för att bygga?",

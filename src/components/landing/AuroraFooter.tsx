@@ -23,11 +23,11 @@ const FOOTER_COLUMNS = [
     ],
   },
   {
-    title: "Aurora",
+    title: "Aurora Media",
     items: [
       { label: "Case & projekt", href: "/arbete" },
       { label: "Blogg", href: "/blogg" },
-      { label: "Om Aurora", href: "/om" },
+      { label: "Om Aurora Media", href: "/om" },
       { label: "Webbyrå Linköping", href: "/webbyra-linkoping" },
     ],
   },
