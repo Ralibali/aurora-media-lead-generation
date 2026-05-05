@@ -118,7 +118,18 @@ const AiKarta = () => {
                   Aurora AI-karta hjälper er att identifiera vilka arbetsuppgifter, system och processer som kan automatiseras, effektiviseras eller byggas om med AI, automation och skräddarsydda digitala lösningar.
                 </p>
                 <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                  <Button size="lg" onClick={() => open()} className="rounded-full">
+                  <Button
+                    size="lg"
+                    onClick={() => {
+                      const el = document.getElementById("ai-karta-form");
+                      if (el) {
+                        el.scrollIntoView({ behavior: "smooth", block: "center" });
+                        const input = el.querySelector<HTMLInputElement>("#aikarta-name");
+                        setTimeout(() => input?.focus({ preventScroll: true }), 600);
+                      }
+                    }}
+                    className="rounded-full"
+                  >
                     Hämta AI-kartan <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                   <Button size="lg" variant="outline" asChild className="rounded-full">
@@ -246,7 +257,9 @@ const AiKarta = () => {
                 </div>
               </Reveal>
               <Reveal y={18}>
-                <AiKartaForm />
+                <div id="ai-karta-form" className="scroll-mt-28">
+                  <AiKartaForm />
+                </div>
               </Reveal>
             </div>
           </div>
