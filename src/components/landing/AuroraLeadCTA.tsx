@@ -60,7 +60,7 @@ const AuroraLeadCTA = ({
                 </p>
               </div>
               <button
-                onClick={() => open({ leadLabel })}
+                onClick={() => open()}
                 className="au-btn-coral whitespace-nowrap self-start md:self-auto"
               >
                 {ctaLabel}
@@ -123,7 +123,7 @@ const AuroraLeadCTA = ({
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button
-                  onClick={() => open({ leadLabel })}
+                  onClick={() => open()}
                   className="au-btn-coral"
                 >
                   {ctaLabel}
