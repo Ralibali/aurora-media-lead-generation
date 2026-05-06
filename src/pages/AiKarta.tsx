@@ -33,7 +33,7 @@ const valueStack = [
   { icon: Target, title: "Personlig topp-3-analys", body: "Vilka av era processer som ger störst effekt först – inte en generisk lista." },
   { icon: Clock, title: "Konkret tidsbesparing i timmar", body: "Beräknat per process, per vecka och per år. Lätt att räkna ROI på." },
   { icon: Workflow, title: "Förslag på lösning per område", body: "AI-assistent, automation, dashboard, internt system eller integration – med motivering." },
-  { icon: Sparkles, title: "Djupanalys av Aurora-analysen", body: "Snabb vinsts, risker att hantera och en rekommenderad ordning på pilotprojekten." },
+  { icon: Sparkles, title: "Djupanalys av Aurora-analysen", body: "Snabba vinster, risker att hantera och en rekommenderad ordning på pilotprojekten." },
   { icon: ShieldCheck, title: "Innehållsrik PDF att dela internt", body: "Snyggt formaterad, byggd för att ta med till ledningsmöte eller workshop med personalen." },
   { icon: Zap, title: "Metodguide: Så automatiserar ni", body: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt AI-lösning på 2–4 veckor." },
 ];
@@ -222,7 +222,7 @@ const AiKarta = () => {
                   De flesta företag experimenterar med ChatGPT lite då och då – men har ingen aning om vilka processer som faktiskt skulle ge mätbar effekt om de automatiserades. Resultatet: tiden går, konkurrenterna drar ifrån, och AI förblir ett experiment istället för en konkurrensfördel.
                 </p>
                 <p className="mt-4 text-muted-foreground md:text-lg">
-                  AI-kartan ger er svaret – baserat på <strong className="text-foreground">era egna processer</strong>, inte ett generiskt råd.
+                  AI-kartan ger er svaret – baserat på <strong className="text-foreground">era egna processer</strong>, inte generiska råd.
                 </p>
               </Reveal>
               <Reveal y={18}>
