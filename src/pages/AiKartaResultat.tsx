@@ -61,6 +61,11 @@ const AiKartaResultat = () => {
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingStatus, setBookingStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [bookingErr, setBookingErr] = useState<string | null>(null);
+  const [bookForm, setBookForm] = useState({ name: "", email: "", phone: "", preferred_time: "", message: "", website: "" });
+  const [bookFieldErrors, setBookFieldErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setSEOMeta({
