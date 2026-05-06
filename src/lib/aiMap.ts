@@ -1,9 +1,9 @@
 // Delade typer + scoringkonstanter för AI-kartan-formuläret.
 // Scoring körs både klient- och serverside; servern är auktoritativ.
-export type Frequency = "daily" | "weekly" | "monthly" | "rare";
-export type WeeklyTime = "0-1" | "1-3" | "3-5" | "5-10" | "10+";
-export type YesPartialNo = "yes" | "partial" | "no";
-export type BusinessValue = "high" | "medium" | "low";
+export type Frequency = "daily" | "weekly" | "monthly" | "rare" | "unknown";
+export type WeeklyTime = "0-1" | "1-3" | "3-5" | "5-10" | "10+" | "unknown";
+export type YesPartialNo = "yes" | "partial" | "no" | "unknown";
+export type BusinessValue = "high" | "medium" | "low" | "unknown";
 
 export interface ProcessInput {
   process_name: string;
