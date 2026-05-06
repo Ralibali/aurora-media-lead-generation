@@ -604,6 +604,8 @@ Skriv också:
         : ""
     }
 
+    ${aiSummaryHtml}
+
     <div style="padding:24px 28px 8px;">
       <h2 style="font-size:14px;color:#0f172a;margin:0 0 14px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">${escape(topAreasTitle(top3.length))}</h2>
       ${topCasesHtml}
