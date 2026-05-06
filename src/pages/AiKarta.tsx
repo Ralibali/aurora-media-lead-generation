@@ -24,7 +24,7 @@ import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 // — Conversion-driven copy. Specifika siffror > vaga löften. —
 
 const proofStats = [
-  { value: "5–15 h", label: "sparat per anställd och vecka", sub: "i typiska AI-piloter vi byggt" },
+  { value: "5–15 h", label: "sparat per anställd och vecka", sub: "i typiska AI-piloter som vi byggt" },
   { value: "10 min", label: "att fylla i online", sub: "klart innan ditt nästa möte" },
   { value: "0 kr", label: "för analysen", sub: "och inget säljmöte krävs" },
 ];
@@ -32,19 +32,19 @@ const proofStats = [
 const valueStack = [
   { icon: Target, title: "Personlig topp-3-analys", body: "Vilka av era processer som ger störst effekt först – inte en generisk lista." },
   { icon: Clock, title: "Konkret tidsbesparing i timmar", body: "Beräknat per process, per vecka och per år. Lätt att räkna ROI på." },
-  { icon: Workflow, title: "Förslag på lösning per case", body: "AI-assistent, automation, dashboard, internt system eller integration – med motivering." },
-  { icon: Sparkles, title: "Djupanalys av Aurora-AI:n", body: "Quick wins, risker att hantera och en rekommenderad ordning på pilotprojekten." },
-  { icon: ShieldCheck, title: "Innehållsrik PDF att dela internt", body: "Snyggt formaterad, byggd för att ta med till ledningsmöte eller team-workshop." },
-  { icon: Zap, title: "Playbook: Så automatiserar ni", body: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt AI-lösning på 2–4 veckor." },
+  { icon: Workflow, title: "Förslag på lösning per område", body: "AI-assistent, automation, dashboard, internt system eller integration – med motivering." },
+  { icon: Sparkles, title: "Djupanalys av Aurora-analysen", body: "Snabb vinsts, risker att hantera och en rekommenderad ordning på pilotprojekten." },
+  { icon: ShieldCheck, title: "Innehållsrik PDF att dela internt", body: "Snyggt formaterad, byggd för att ta med till ledningsmöte eller workshop med personalen." },
+  { icon: Zap, title: "Metodguide: Så automatiserar ni", body: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt AI-lösning på 2–4 veckor." },
 ];
 
 const objections = [
   {
-    q: "Vi är inte tekniska – fattar vi ens svaren?",
+    q: "Vi är inte tekniska – förstår vi ens svaren?",
     a: "Ja. Allt är på vanlig svenska, utan AI-jargong. Du svarar på frågor om hur ni jobbar idag – vi översätter till lösningar.",
   },
   {
-    q: "Är det här bara en lead-magnet för att ringa oss sen?",
+    q: "Är det här bara ett sätt att fånga in leads för att ringa oss sen?",
     a: "Nej. Ni får hela analysen och PDF:en direkt på skärmen, utan säljmöte. Vill ni boka en genomlysning är det helt frivilligt – och alltid kostnadsfritt.",
   },
   {
@@ -53,14 +53,14 @@ const objections = [
   },
   {
     q: "Hur vet ni vad som passar just oss?",
-    a: "Analysen är byggd på era egna svar om frekvens, tidsåtgång, regelstyrning, datatillgång och affärsvärde – samma kriterier vi använder med betalande kunder.",
+    a: "Analysen är byggd på era egna svar om frekvens, tidsåtgång, regelstyrning, datatillgång och affärsvärde – samma kriterier som vi använder med betalande kunder.",
   },
 ];
 
 const steps = [
   { icon: Sparkles, title: "1. Fyll i AI-kartan online", body: "5–10 minuter. Lista era vanligaste tidskrävande processer.", time: "5–10 min" },
-  { icon: Gauge, title: "2. Få mini-analys direkt", body: "Topp-3 case, tidsbesparing, lösningsförslag och AI-djupanalys – på skärmen, direkt.", time: "Direkt" },
-  { icon: Workflow, title: "3. Ladda ner PDF:en", body: "Innehållsrikt underlag att dela med ledning, team eller styrelse.", time: "1 klick" },
+  { icon: Gauge, title: "2. Få mini-analys direkt", body: "Topp-3 områden, tidsbesparing, lösningsförslag och AI-djupanalys – på skärmen, direkt.", time: "Direkt" },
+  { icon: Workflow, title: "3. Ladda ner PDF:en", body: "Innehållsrikt underlag att dela med ledning, personal eller styrelse.", time: "1 klick" },
   { icon: Clock3, title: "4. (Valfritt) Boka genomlysning", body: "Vi går igenom era svar och pekar ut bästa första pilot. Helt kostnadsfritt.", time: "45 min" },
 ];
 
@@ -151,7 +151,7 @@ const AiKarta = () => {
                   </Button>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    <span>Inget kreditkort · Inget spam · 10 min</span>
+                    <span>Inget säljmöte · Inget spam · 10 min</span>
                   </div>
                 </div>
 
@@ -189,7 +189,7 @@ const AiKarta = () => {
                     <div className="mt-5 grid gap-2.5">
                       {[
                         { k: "Lösning", v: "AI-assistent + dokumentmall" },
-                        { k: "Quick win", v: "Auto-genererat utkast på 30 sek" },
+                        { k: "Snabb vinst", v: "Auto-genererat utkast på 30 sek" },
                         { k: "Risk", v: "Kvalitetskontroll av priser" },
                       ].map((row) => (
                         <div key={row.k} className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm">
@@ -200,7 +200,7 @@ const AiKarta = () => {
                     </div>
                     <div className="mt-5 rounded-2xl border border-primary/25 bg-primary/[0.08] p-3 text-xs leading-relaxed text-foreground/85">
                       <Sparkles className="mr-1 inline h-3 w-3 text-primary" />
-                      Du får djupanalys, konkret exempel och Aurora Medias rekommendation för varje case.
+                      Du får djupanalys, konkret exempel och Aurora Medias rekommendation för varje område.
                     </div>
                   </div>
                 </div>
@@ -219,7 +219,7 @@ const AiKarta = () => {
                   Ni vet att AI borde fixa det här. Men <em className="font-display italic text-primary">vad</em> ska ni börja med?
                 </h2>
                 <p className="mt-5 text-muted-foreground md:text-lg">
-                  De flesta företag spelar runt med ChatGPT lite då och då – men har ingen aning om vilka processer som faktiskt skulle ge mätbar effekt om de automatiserades. Resultat: tiden går, konkurrenterna drar ifrån, och AI förblir ett experiment istället för en konkurrensfördel.
+                  De flesta företag experimenterar med ChatGPT lite då och då – men har ingen aning om vilka processer som faktiskt skulle ge mätbar effekt om de automatiserades. Resultatet: tiden går, konkurrenterna drar ifrån, och AI förblir ett experiment istället för en konkurrensfördel.
                 </p>
                 <p className="mt-4 text-muted-foreground md:text-lg">
                   AI-kartan ger er svaret – baserat på <strong className="text-foreground">era egna processer</strong>, inte ett generiskt råd.
@@ -235,7 +235,7 @@ const AiKarta = () => {
                   ))}
                 </div>
                 <p className="mt-4 text-xs italic text-muted-foreground">
-                  Känner ni igen er? Allt detta är typiska AI-case vi automatiserar.
+                  Känner ni igen er? Allt detta är typiska områden vi automatiserar.
                 </p>
               </Reveal>
             </div>
@@ -272,7 +272,7 @@ const AiKarta = () => {
             <Reveal y={16}>
               <div className="mt-12 flex flex-col items-center gap-4 rounded-[1.7rem] border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-8 text-center sm:flex-row sm:justify-between sm:text-left">
                 <div>
-                  <p className="font-display text-xl font-bold sm:text-2xl">Klar att se vad AI kan göra för er?</p>
+                  <p className="font-display text-xl font-bold sm:text-2xl">Redo att se vad AI kan göra för er?</p>
                   <p className="mt-1 text-sm text-muted-foreground">10 minuter. Direktanalys. Ingen kontaktinfo krävs förrän ni vill ha PDF:en.</p>
                 </div>
                 <Button asChild size="lg" className="rounded-full shrink-0">
@@ -291,7 +291,7 @@ const AiKarta = () => {
             <Reveal>
               <p className="label-caps">Så fungerar det</p>
               <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Från första klick till färdig AI-roadmap.
+                Från första klick till färdig AI-plan.
               </h2>
             </Reveal>
             <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -347,10 +347,10 @@ const AiKarta = () => {
                     <Star className="h-3.5 w-3.5" /> Begränsat antal pilotplatser kvartalsvis
                   </div>
                   <h2 className="mt-5 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                    10 minuter nu kan spara teamet hundratals timmar nästa år.
+                    10 minuter nu kan spara er verksamhet hundratals timmar nästa år.
                   </h2>
                   <p className="mt-5 max-w-2xl text-muted-foreground md:text-lg">
-                    Starta AI-kartan och se exakt vad som bör automatiseras först. Hittar vi inte minst 3 konkreta AI-case ni kan jobba vidare med – då har ni ändå fått en gratis nulägesanalys.
+                    Starta AI-kartan och se exakt vad som bör automatiseras först. Hittar vi inte minst 3 konkreta områden ni kan jobba vidare med – då har ni ändå fått en gratis nulägesanalys.
                   </p>
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                     <Button asChild size="lg" className="rounded-full shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]">
