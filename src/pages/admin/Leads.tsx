@@ -106,6 +106,7 @@ const Leads = () => {
       if (!res.ok) throw new Error(await res.text());
       const json = await res.json();
       setLeads(json.leads ?? []);
+      setDrip(json.drip ?? []);
       setStats(json.stats ?? null);
       setAuthed(true);
       sessionStorage.setItem(STORAGE_KEY, pwd);
