@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  AlertTriangle, ArrowRight, CheckCircle2, Clock, Database, Download, Loader2, Mail,
+  AlertTriangle, ArrowRight, CalendarCheck, CheckCircle2, Clock, Database, Download, Loader2, Mail,
   RefreshCw, Sparkles, Target, TrendingUp, Workflow, Zap,
 } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
 import { downloadAiMapPdf } from "@/lib/aiMapPdf";
