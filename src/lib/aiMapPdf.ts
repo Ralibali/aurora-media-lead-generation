@@ -173,7 +173,7 @@ function processBlock(doc: jsPDF, cur: Cursor, p: ScoredProcess, idx: number, de
     subheading(doc, cur, "Konkret exempel");
     paragraph(doc, cur, deep.concrete_example);
     if (deep.quick_wins?.length) {
-      subheading(doc, cur, "Quick wins");
+      subheading(doc, cur, "Snabba vinster");
       for (const qw of deep.quick_wins) bullet(doc, cur, qw);
     }
     subheading(doc, cur, "Risker att hantera");
@@ -292,7 +292,7 @@ export function downloadAiMapPdf(result: AiMapResult) {
   cur.y = MARGIN + 4;
   addPageHeader(doc, cur);
   heading(doc, cur, "Så automatiserar ni ert företag", 18);
-  paragraph(doc, cur, "Aurora Medias playbook för att gå från idé till driftsatt AI-lösning – samma metod vi använder med våra kunder.", { color: COLOR_MUTED });
+  paragraph(doc, cur, "Aurora Medias metodguide för att gå från idé till driftsatt AI-lösning – samma metod som vi använder med våra kunder.", { color: COLOR_MUTED });
 
   const playbook: { title: string; body: string }[] = [
     { title: "1. Välj första piloten med disciplin", body: "Börja med ETT case med tydlig ägare, mätbar tidsbesparing och låg integrationskostnad. Det skapar momentum och en intern referenscase." },
