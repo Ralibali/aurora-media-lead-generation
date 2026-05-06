@@ -20,7 +20,7 @@ const sections = [
   },
   {
     h: "Uppdateringar",
-    p: "Tekniklandskapet rör sig snabbt. Varje artikel har ett uppdaterad-datum som speglar senaste verkliga genomgång. Artiklar äldre än 6 månader granskas på nytt eller markeras som arkiverade.",
+    p: "Tekniklandskapet rör sig snabbt. Varje artikel har ett uppdaterad-datum som speglar senaste verkliga genomgång. Artiklar äldre än sex månader granskas på nytt eller markeras som arkiverade.",
   },
   {
     h: "Sponsring och affiliate",

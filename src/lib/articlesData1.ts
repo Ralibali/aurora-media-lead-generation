@@ -107,7 +107,7 @@ export const articles1to6: Article[] = [
       {
         heading: "När ska du välja vilket?",
         content:
-          "Vill du sälja en SaaS till svenska kunder med svensk faktura, Fortnox och Stripe? Lovable. Vill du visa en grov demo på 4 timmar inför ett pitchmöte? Bolt.new. Bygger du ett internt verktyg med komplex affärslogik och egna säkerhetskrav? Emergent. Vet du inte? Lovable är default-svaret för 80 procent av projekten 2026.",
+          "Vill du sälja en SaaS till svenska kunder med svensk faktura, Fortnox och Stripe? Lovable. Vill du visa en grov demo på fyra timmar inför ett pitchmöte? Bolt.new. Bygger du ett internt verktyg med komplex affärslogik och egna säkerhetskrav? Emergent. Vet du inte? Lovable är default-svaret för 80 procent av projekten 2026.",
       },
       {
         heading: "Priser jämförda",
@@ -115,7 +115,7 @@ export const articles1to6: Article[] = [
           "Alla tre kör på prenumerationsmodell med olika tier. Lovable och Bolt har generösa free-tiers för start, sedan paid plans från cirka 20 USD/mån för individer och 50-200 USD/mån för team. Emergent ligger högre, mer enterprise-prissatt. Räkna med 200-500 USD per kundprojekt i verktygskostnader om du jobbar professionellt – vilket är försumbart jämfört med vad utvecklingen sparar.",
       },
       {
-        heading: "Vår erfarenhet efter 7+ produkter",
+        heading: "Vår erfarenhet efter sju+ produkter",
         content:
           "Lovable är default. Bolt är prototyp-verktyget. Emergent är enterprise-verktyget. Cursor + Claude är det jag faller tillbaka på när AI-plattformarna inte räcker. Slutsatsen: verktyget är inte poängen. Erfarenheten av att veta när varje verktyg passar och var de brister – det är det som sparar dig 100 000 kr på ett projekt.",
       },
@@ -250,7 +250,7 @@ export const articles1to6: Article[] = [
       {
         heading: "Vecka 1: prototyp och validering",
         content:
-          "Dag 1: kravsamling i 30 minuter. Vi går igenom problemet, användaren och de 3-5 viktigaste flödena. Dag 2: jag bygger prototypen med riktig data, deployar på subdomän. Dag 3: du testar, ger feedback, vi prioriterar om. Dag 4-5: vi formar slutgiltig scope och börjar bygga produktionsversionen. I slutet av vecka 1 finns en klickbar produkt – inte en mockup, en riktig app.",
+          "Dag 1: kravsamling i 30 minuter. Vi går igenom problemet, användaren och de tre till fem viktigaste flödena. Dag 2: jag bygger prototypen med riktig data, deployar på subdomän. Dag 3: du testar, ger feedback, vi prioriterar om. Dag 4-5: vi formar slutgiltig scope och börjar bygga produktionsversionen. I slutet av vecka 1 finns en klickbar produkt – inte en mockup, en riktig app.",
       },
       {
         heading: "Vecka 2: produktion och lansering",
@@ -279,7 +279,7 @@ export const articles1to6: Article[] = [
       },
       {
         q: "Hinner jag testa produkten innan lansering?",
-        a: "Du testar dag 3 (prototyp) och dag 12-13 (produktion). Om du upptäcker större problem efter lansering ingår support 2-4 veckor.",
+        a: "Du testar dag 3 (prototyp) och dag 12-13 (produktion). Om du upptäcker större problem efter lansering ingår support två till fyra veckor.",
       },
       {
         q: "Kan ni hålla 2-veckorslöftet om jag är sen med feedback?",
@@ -403,7 +403,7 @@ export const articles1to6: Article[] = [
       {
         heading: "Prisintervall i Linköping 2026",
         content:
-          "Etablerade byråer i Linköping (Knightec, Cygni, Sigma): 1000-1500 kr/h. Frilanskonsulter: 600-1000 kr/h. Boutique-byråer (1-3 personer) som specialiserat sig: fast pris från 50 000 kr per projekt och uppåt. AI-byggare (som Aurora Media): fast pris från 14 900 kr för prototyp, 34 900 kr för MVP. Skillnaden är inte primärt geografisk – den ligger i affärsmodell och verktygsval.",
+          "Etablerade byråer i Linköping (Knightec, Cygni, Sigma): 1000-1500 kr/h. Frilanskonsulter: 600-1000 kr/h. Boutique-byråer (en till tre personer) som specialiserat sig: fast pris från 50 000 kr per projekt och uppåt. AI-byggare (som Aurora Media): fast pris från 14 900 kr för prototyp, 34 900 kr för MVP. Skillnaden är inte primärt geografisk – den ligger i affärsmodell och verktygsval.",
       },
       {
         heading: "Fördelar med lokal partner",

@@ -811,7 +811,7 @@ function ResultStateScreen({
       label: "Inget resultat hittades",
       title: "Vi hittar ingen ifylld AI-karta",
       body:
-        "Det verkar som att du landade här utan att ha fyllt i formuläret – eller så har sessionen gått ut. Starta om analysen så bygger vi ett nytt resultat på under 2 minuter.",
+        "Det verkar som att du landade här utan att ha fyllt i formuläret – eller så har sessionen gått ut. Starta om analysen så bygger vi ett nytt resultat på under två minuter.",
     },
     error: {
       Icon: AlertTriangle,

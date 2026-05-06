@@ -33,9 +33,9 @@ export const cities: CityContent[] = [
     localContext:
       "Mjärdevi Science Park, LiU och försvarsindustrin gör Linköping till en av Sveriges tätaste tech-kluster per capita. Jag bygger interna verktyg åt bolag som tröttnat på att betala konsultbyråer 1 800 kr/h för enkla CRUD-appar.",
     comparison:
-      "En traditionell webbyrå i Linköping tar 80 000–250 000 kr för en företagshemsida och 6–12 månader för en SaaS. Jag levererar prototyp på 3–5 dagar (14 900 kr), MVP på 2 veckor (34 900 kr) och full SaaS på 4 veckor (69 000 kr). Fast pris, ingen timdebitering.",
+      "En traditionell webbyrå i Linköping tar 80 000–250 000 kr för en företagshemsida och sex till tolv månader för en SaaS. Jag levererar prototyp på tre till fem dagar (14 900 kr), MVP på två veckor (34 900 kr) och full SaaS på fyra veckor (69 000 kr). Fast pris, ingen timdebitering.",
     caseNote:
-      "Aurora Transport, ett dispatching-system för svenska transportbolag, byggdes från grunden i Linköping på 3 veckor. Det visar vad som faktiskt går att leverera lokalt med rätt verktyg.",
+      "Aurora Transport, ett dispatching-system för svenska transportbolag, byggdes från grunden i Linköping på tre veckor. Det visar vad som faktiskt går att leverera lokalt med rätt verktyg.",
     faqs: [
       {
         q: "Finns det bra SaaS-utvecklare i Linköping 2026?",
@@ -51,7 +51,7 @@ export const cities: CityContent[] = [
       },
       {
         q: "Hur snabbt kan vi börja?",
-        a: "Skickar du e-post idag svarar jag inom 24 timmar vardagar. Vi har ett kort samtal samma vecka, jag levererar offert dagen efter, och vi kan vara igång inom 7–10 dagar.",
+        a: "Skickar du e-post idag svarar jag inom 24 timmar vardagar. Vi har ett kort samtal samma vecka, jag levererar offert dagen efter, och vi kan vara igång inom sju till tio dagar.",
       },
     ],
   },
@@ -64,7 +64,7 @@ export const cities: CityContent[] = [
     localContext:
       "Logistik, transport, e-handel och digital konst dominerar Norrköpings näringsliv. Närheten till Linköping ger tillgång till tech-kompetens utan storstadens prislapp.",
     comparison:
-      "Lokala byråer i Norrköping ligger ofta på 800–1 500 kr/timmen och 3–6 månaders ledtid. Jag har fast pris från 14 900 kr och levererar prototyp på 3–5 dagar. För Norrköpings logistikbolag betyder det att en intern app går från idé till produktion innan kvartalet är slut.",
+      "Lokala byråer i Norrköping ligger ofta på 800–1 500 kr/timmen och tre till sex månaders ledtid. Jag har fast pris från 14 900 kr och levererar prototyp på tre till fem dagar. För Norrköpings logistikbolag betyder det att en intern app går från idé till produktion innan kvartalet är slut.",
     faqs: [
       {
         q: "Bygger du för logistikbolag i Norrköping?",
@@ -72,7 +72,7 @@ export const cities: CityContent[] = [
       },
       {
         q: "Hur fungerar samarbete på distans från Norrköping?",
-        a: "Jag är 45 min bort i Linköping och kan ses fysiskt vid behov. Annars kör vi video-möten 1–2 gånger per vecka under projektet. Lika smidigt som lokalt.",
+        a: "Jag är 45 min bort i Linköping och kan ses fysiskt vid behov. Annars kör vi video-möten en till två gånger per vecka under projektet. Lika smidigt som lokalt.",
       },
       {
         q: "Kan ni bygga ihop oss med Fortnox eller Visma?",
@@ -80,7 +80,7 @@ export const cities: CityContent[] = [
       },
       {
         q: "Vad kostar en intern app som ersätter Excel?",
-        a: "Oftast 34 900–69 000 kr beroende på komplexitet. Det betalar sig på 3–6 månader genom sparad administrativ tid.",
+        a: "Oftast 34 900–69 000 kr beroende på komplexitet. Det betalar sig på tre till sex månader genom sparad administrativ tid.",
       },
     ],
   },
@@ -93,7 +93,7 @@ export const cities: CityContent[] = [
     localContext:
       "Handel, logistik, träindustri och tillverkning. Familjeföretag som vuxit ur sina Excel-flöden men inte vill betala 500 000 kr för en intern app.",
     comparison:
-      "Jönköpings webbyråer fokuserar oftast på WordPress och e-handel. För moderna SaaS-projekt får du leta längre. Jag bygger React + Supabase-baserade produkter på fast pris med 2–4 veckors leverans.",
+      "Jönköpings webbyråer fokuserar oftast på WordPress och e-handel. För moderna SaaS-projekt får du leta längre. Jag bygger React + Supabase-baserade produkter på fast pris med två till fyra veckors leverans.",
     faqs: [
       {
         q: "Bygger du e-handel i Jönköping?",
@@ -118,11 +118,11 @@ export const cities: CityContent[] = [
     city: "Stockholm",
     region: "Stockholms län",
     intro:
-      "Stockholms tech-scen är Sveriges tätaste men också dyraste. Att bygga en SaaS med en stockholmsbyrå kostar ofta 500 000–2 000 000 kr och tar 6–12 månader. Jag levererar samma sak från Linköping på 2–4 veckor till en bråkdel av priset – samma React + Supabase-stack, samma kvalitet, ingen Stockholm-overhead.",
+      "Stockholms tech-scen är Sveriges tätaste men också dyraste. Att bygga en SaaS med en stockholmsbyrå kostar ofta 500 000–2 000 000 kr och tar sex till tolv månader. Jag levererar samma sak från Linköping på två till fyra veckor till en bråkdel av priset – samma React + Supabase-stack, samma kvalitet, ingen Stockholm-overhead.",
     localContext:
       "Fintech, SaaS, hälsa, e-handel och AI-startups dominerar. Många grundare här har redan testat traditionella byråer och tröttnat på prislappar och ledtider.",
     comparison:
-      "Stockholmsbyråer ligger på 1 500–2 500 kr/timmen och 6–12 månaders projekt. Jag har fast pris från 14 900 kr och 2–4 veckors leverans. Samma slutprodukt – ofta bättre eftersom jag kan iterera snabbare.",
+      "Stockholmsbyråer ligger på 1 500–2 500 kr/timmen och sex till tolv månaders projekt. Jag har fast pris från 14 900 kr och två till fyra veckors leverans. Samma slutprodukt – ofta bättre eftersom jag kan iterera snabbare.",
     faqs: [
       {
         q: "Du sitter i Linköping – funkar det för stockholmsbolag?",
@@ -138,7 +138,7 @@ export const cities: CityContent[] = [
       },
       {
         q: "Hur jämför ni er med Stockholms AI-byråer som dyker upp 2026?",
-        a: "Jag har byggt 7 egna SaaS-produkter och har 10 års bakgrund i säkerhetsbranschen innan det. Ren erfarenhet av att leverera, inte bara använda verktygen.",
+        a: "Jag har byggt sju egna SaaS-produkter och har tio års bakgrund i säkerhetsbranschen innan det. Ren erfarenhet av att leverera, inte bara använda verktygen.",
       },
     ],
   },
@@ -159,7 +159,7 @@ export const cities: CityContent[] = [
       },
       {
         q: "Hur ofta åker du till Göteborg för möten?",
-        a: "Vid behov 1–2 gånger per projekt. Annars video-möten. De flesta kunder här föredrar effektiv distans framför fysiska möten.",
+        a: "Vid behov en till två gånger per projekt. Annars video-möten. De flesta kunder här föredrar effektiv distans framför fysiska möten.",
       },
       {
         q: "Är ni rätt val för en industribolag i Göteborg?",
@@ -180,7 +180,7 @@ export const cities: CityContent[] = [
     localContext:
       "Gaming, fintech, greentech, e-handel och kreativa byråer. Många grundare med svenskt-danskt nätverk som tänker norden från start.",
     comparison:
-      "Malmöbyråer är ofta starka på design men dyra på utveckling. Jag levererar både design och kod på fast pris. För en startup som behöver MVP betyder det 34 900 kr och 2 veckor istället för 200 000 kr och 4 månader.",
+      "Malmöbyråer är ofta starka på design men dyra på utveckling. Jag levererar både design och kod på fast pris. För en startup som behöver MVP betyder det 34 900 kr och två veckor istället för 200 000 kr och fyra månader.",
     faqs: [
       {
         q: "Bygger du för danska kunder också?",
@@ -196,7 +196,7 @@ export const cities: CityContent[] = [
       },
       {
         q: "Vad är ledtiden för Malmö-projekt?",
-        a: "Samma som för alla andra: prototyp 3–5 dagar, MVP 2 veckor, skalbar SaaS 4 veckor. Geografin spelar ingen roll på distans.",
+        a: "Samma som för alla andra: prototyp tre till fem dagar, MVP två veckor, skalbar SaaS fyra veckor. Geografin spelar ingen roll på distans.",
       },
     ],
   },
@@ -221,11 +221,11 @@ export const cities: CityContent[] = [
       },
       {
         q: "Hur fungerar samarbetet på distans från Uppsala?",
-        a: "Video-möten 1–2 gånger per vecka under projektet. Vid behov åker jag upp för workshops eller större milstolpar.",
+        a: "Video-möten en till två gånger per vecka under projektet. Vid behov åker jag upp för workshops eller större milstolpar.",
       },
       {
         q: "Vad ingår i ett MVP-paket för en biotech-startup?",
-        a: "Allt som behövs för att lansera: design, utveckling, databas, autentisering, betalningar om relevant, deploy. 34 900 kr fast pris, 2 veckor.",
+        a: "Allt som behövs för att lansera: design, utveckling, databas, autentisering, betalningar om relevant, deploy. 34 900 kr fast pris, två veckor.",
       },
     ],
   },
@@ -238,7 +238,7 @@ export const cities: CityContent[] = [
     localContext:
       "Energi, industri-automation, tillverkning och tunga maskiner. Bolag som behöver dashboards, rapportverktyg och interna portaler men inte vill bygga själva.",
     comparison:
-      "Industribolag i Västerås har historiskt anlitat IT-konsulter på 1 500 kr/timmen för långa projekt. Jag levererar fast pris från 14 900 kr på 3–5 dagar för prototyp. Stor förändring för CFO:n.",
+      "Industribolag i Västerås har historiskt anlitat IT-konsulter på 1 500 kr/timmen för långa projekt. Jag levererar fast pris från 14 900 kr på tre till fem dagar för prototyp. Stor förändring för CFO:n.",
     faqs: [
       {
         q: "Bygger du dashboards för industri?",
@@ -250,7 +250,7 @@ export const cities: CityContent[] = [
       },
       {
         q: "Hur långa projekt brukar Västerås-bolag beställa?",
-        a: "Oftast börjar de med prototyp eller MVP (2 veckor) för att testa konceptet, sedan skalar upp till full SaaS (4 veckor) när det är validerat.",
+        a: "Oftast börjar de med prototyp eller MVP (två veckor) för att testa konceptet, sedan skalar upp till full SaaS (fyra veckor) när det är validerat.",
       },
       {
         q: "Tar du fysiska möten i Västerås?",

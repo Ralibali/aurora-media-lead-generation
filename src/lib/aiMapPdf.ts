@@ -568,7 +568,7 @@ export function downloadAiMapPdf(result: AiMapResult) {
     { title: "Välj första piloten med disciplin", body: "Börja med EN process med tydlig ägare, mätbar tidsbesparing och låg integrationskostnad. Det skapar fart och ett internt referensexempel." },
     { title: "Kartlägg data och system", body: "Säkerställ att data finns digitalt och åtkomstbart (CRM, mejl, Excel, ärendesystem). AI utan data är bara ett tomt skal." },
     { title: "Designa människa + AI tillsammans", body: "Bestäm var AI agerar autonomt och var en människa godkänner. Detta minskar risk och bygger förtroende internt." },
-    { title: "Bygg minsta möjliga arbetsflöde", body: "Använd LLM, automation (n8n/Make/Zapier) och era befintliga system. Lansera i 2–4 veckor – inte 6 månader." },
+    { title: "Bygg minsta möjliga arbetsflöde", body: "Använd LLM, automation (n8n/Make/Zapier) och era befintliga system. Lansera i två till fyra veckor – inte sex månader." },
     { title: "Mät, justera, skala", body: "Mät tid sparad, kvalitet och användarnöjdhet. När piloten levererar – skala till nästa process i er topp-lista." },
     { title: "Bygg en AI-färdplan", body: "Använd AI-kartan som levande dokument. Uppdatera kvartalsvis – nya processer dyker upp i takt med att personalen förstår vad AI kan." },
   ];
