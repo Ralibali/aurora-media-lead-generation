@@ -26,7 +26,7 @@ import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
 const proofStats = [
   { value: "5–15 h", label: "sparat per anställd och vecka", sub: "i typiska AI-piloter som vi byggt" },
-  { value: "10 min", label: "att fylla i online", sub: "klart innan ditt nästa möte" },
+  { value: "Några min", label: "att fylla i online", sub: "klart innan ditt nästa möte" },
   { value: "0 kr", label: "för analysen", sub: "och inget säljmöte krävs" },
 ];
 
@@ -59,7 +59,7 @@ const objections = [
 ];
 
 const steps = [
-  { icon: Sparkles, title: "1. Fyll i AI-kartan online", body: "5–10 minuter. Lista era vanligaste tidskrävande processer.", time: "5–10 min" },
+  { icon: Sparkles, title: "1. Fyll i AI-kartan online", body: "Några minuter. Lista era vanligaste tidskrävande processer.", time: "Några min" },
   { icon: Gauge, title: "2. Få mini-analys direkt", body: "Topp-3 områden, tidsbesparing, lösningsförslag och AI-djupanalys – på skärmen, direkt.", time: "Direkt" },
   { icon: Workflow, title: "3. Ladda ner PDF:en", body: "Innehållsrikt underlag att dela med ledning, personal eller styrelse.", time: "1 klick" },
   { icon: Clock3, title: "4. (Valfritt) Boka genomlysning", body: "Vi går igenom era svar och pekar ut bästa första pilot. Helt kostnadsfritt.", time: "45 min" },
@@ -81,7 +81,7 @@ const jsonLd = {
   "@type": "DigitalDocument",
   name: "Aurora AI-karta",
   description:
-    "Kostnadsfri AI-analys för svenska företag. Identifiera vilka processer som kan automatiseras med AI – på 10 minuter, utan säljmöte.",
+    "Kostnadsfri AI-analys för svenska företag. Identifiera vilka processer som kan automatiseras med AI – på några minuter, utan säljmöte.",
   provider: { "@type": "Organization", name: "Aurora Media AB", url: "https://auroramedia.se" },
 };
 
@@ -100,9 +100,9 @@ const AiKarta = () => {
 
   useEffect(() => {
     setSEOMeta({
-      title: "Kostnadsfri AI-analys för ditt företag (10 min) | Aurora Media",
+      title: "Kostnadsfri AI-analys för ditt företag | Aurora Media",
       description:
-        "Ta reda på exakt vilka processer i ditt företag som kan automatiseras med AI. Personlig analys + innehållsrik PDF – på 10 minuter, helt kostnadsfritt.",
+        "Ta reda på exakt vilka processer i ditt företag som kan automatiseras med AI. Personlig analys + innehållsrik PDF – på några minuter, helt kostnadsfritt.",
       canonical: "/ai-karta",
     });
     setBreadcrumb([
@@ -140,7 +140,7 @@ const AiKarta = () => {
                 </h1>
 
                 <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:mt-7 sm:text-lg md:text-2xl">
-                  Få en personlig AI-analys av era processer på <strong className="text-foreground">10 minuter</strong>.
+                  Få en personlig AI-analys av era processer på <strong className="text-foreground">några minuter</strong>.
                   Vi pekar ut exakt vilka uppgifter som kan automatiseras – och hur mycket tid det sparar.
                 </p>
 
@@ -152,7 +152,7 @@ const AiKarta = () => {
                   </Button>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
                     <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    <span>Inget säljmöte · Inget spam · 10 min</span>
+                    <span>Inget säljmöte · Inget spam · Några min</span>
                   </div>
                 </div>
 
@@ -274,7 +274,7 @@ const AiKarta = () => {
               <div className="mt-12 flex flex-col items-center gap-4 rounded-[1.7rem] border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-8 text-center sm:flex-row sm:justify-between sm:text-left">
                 <div>
                   <p className="font-display text-xl font-bold sm:text-2xl">Redo att se vad AI kan göra för er?</p>
-                  <p className="mt-1 text-sm text-muted-foreground">10 minuter. Direktanalys. Ingen kontaktinfo krävs förrän ni vill ha PDF:en.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Några minuter. Direktanalys. Ingen kontaktinfo krävs förrän ni vill ha PDF:en.</p>
                 </div>
                 <Button asChild size="lg" className="rounded-full shrink-0">
                   <Link to="/ai-karta/start">
@@ -368,7 +368,7 @@ const AiKarta = () => {
                     <Star className="h-3.5 w-3.5" /> Begränsat antal pilotplatser kvartalsvis
                   </div>
                   <h2 className="mt-5 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                    10 minuter nu kan spara er verksamhet hundratals timmar nästa år.
+                    Några minuter nu kan spara er verksamhet hundratals timmar nästa år.
                   </h2>
                   <p className="mt-5 max-w-2xl text-muted-foreground md:text-lg">
                     Starta AI-kartan och se exakt vad som bör automatiseras först. Hittar vi inte minst 3 konkreta områden ni kan jobba vidare med – då har ni ändå fått en gratis nulägesanalys.
