@@ -8,6 +8,7 @@ import AuroraIntegrations from "@/components/landing/AuroraIntegrations";
 import AuroraProcess from "@/components/landing/AuroraProcess";
 import AuroraPricing from "@/components/landing/AuroraPricing";
 import AuroraFinalCTA from "@/components/landing/AuroraFinalCTA";
+import AuroraLeadCTA from "@/components/landing/AuroraLeadCTA";
 import AuroraFooter from "@/components/landing/AuroraFooter";
 import AuroraStickyMobileCTA from "@/components/landing/AuroraStickyMobileCTA";
 import {
@@ -69,10 +70,18 @@ const Index = () => {
         <AuroraHero />
         <AuroraServices />
         <AuroraProducts />
+        <AuroraLeadCTA
+          variant="compact"
+          eyebrow="Redo att räkna på det?"
+          title="Få ett personligt e-postsvar inom 24 timmar."
+          description="Skicka in din förfrågan så återkommer vi med konkret förslag och pris – inte ett standardsvar."
+          ctaLabel="Skicka förfrågan"
+        />
         <AuroraIndustries />
         <AuroraIntegrations />
         <AuroraProcess />
         <AuroraPricing />
+        <AuroraLeadCTA />
         <AuroraFinalCTA />
       </main>
       <AuroraFooter />
