@@ -63,10 +63,20 @@ function dripStatusLabel(d: DripRow): string {
   return `Skickat: ${sent.join(" · ")} ✓`;
 }
 
+type Stats = {
+  hero_clicks: number;
+  pdf_clicks: number;
+  total_clicks: number;
+  ai_karta_leads: number;
+  conversion_rate: number;
+  window_days: number;
+};
+
 const Leads = () => {
   const [password, setPassword] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? "");
   const [authed, setAuthed] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [drip, setDrip] = useState<DripRow[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
