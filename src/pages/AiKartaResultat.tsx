@@ -448,10 +448,12 @@ const AiKartaResultat = () => {
                     </ul>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <Button asChild size="lg" className="h-14 w-full rounded-full text-base shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]">
-                      <Link to="/kontakt">
-                        Boka kostnadsfri genomlysning <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
+                    <Button
+                      size="lg"
+                      className="h-14 w-full rounded-full text-base shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]"
+                      onClick={openBooking}
+                    >
+                      Boka kostnadsfri genomlysning <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                     <Button
                       size="lg"
