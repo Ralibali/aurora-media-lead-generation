@@ -38,6 +38,31 @@ const statusLabel: Record<Lead["status"], string> = {
   archived: "Arkiverad",
 };
 
+type DripRow = {
+  id: string;
+  lead_id: string;
+  email: string;
+  created_at: string;
+  unsubscribed_at: string | null;
+  unsubscribed_reason: string | null;
+  step_2_sent_at: string | null;
+  step_5_sent_at: string | null;
+  step_9_sent_at: string | null;
+  step_14_sent_at: string | null;
+  lead?: { company_name?: string; contact_name?: string; total_potential?: string } | null;
+};
+
+function dripStatusLabel(d: DripRow): string {
+  if (d.unsubscribed_at) return `Avregistrerad (${d.unsubscribed_reason ?? "—"})`;
+  const sent: string[] = [];
+  if (d.step_2_sent_at) sent.push("D2");
+  if (d.step_5_sent_at) sent.push("D5");
+  if (d.step_9_sent_at) sent.push("D9");
+  if (d.step_14_sent_at) sent.push("D14");
+  if (sent.length === 0) return "Bekräftelse skickad";
+  return `Skickat: ${sent.join(" · ")} ✓`;
+}
+
 type Stats = {
   hero_clicks: number;
   pdf_clicks: number;
@@ -51,6 +76,7 @@ const Leads = () => {
   const [password, setPassword] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? "");
   const [authed, setAuthed] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [drip, setDrip] = useState<DripRow[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -80,6 +106,7 @@ const Leads = () => {
       if (!res.ok) throw new Error(await res.text());
       const json = await res.json();
       setLeads(json.leads ?? []);
+      setDrip(json.drip ?? []);
       setStats(json.stats ?? null);
       setAuthed(true);
       sessionStorage.setItem(STORAGE_KEY, pwd);
@@ -178,6 +205,30 @@ const Leads = () => {
             <p className="text-xs uppercase tracking-wider text-primary">Konvertering</p>
             <p className="mt-1 font-serif text-2xl">{stats.conversion_rate}%</p>
             <p className="mt-1 text-[10px] text-muted-foreground">leads / hero-klick</p>
+          </div>
+        </div>
+      )}
+
+      {drip.length > 0 && (
+        <div className="mb-8 rounded-xl border border-border bg-card/40 overflow-hidden">
+          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+            <h2 className="font-serif text-xl">AI-karta drip-status</h2>
+            <span className="text-xs text-muted-foreground">{drip.length} sekvenser</span>
+          </div>
+          <div className="max-h-80 overflow-y-auto divide-y divide-border">
+            {drip.map((d) => (
+              <div key={d.id} className="px-4 py-2.5 text-sm flex items-center justify-between gap-3 hover:bg-muted/30">
+                <div className="min-w-0">
+                  <div className="font-medium truncate">{d.lead?.company_name ?? d.email}</div>
+                  <div className="text-xs text-muted-foreground truncate">
+                    {d.lead?.contact_name ? `${d.lead.contact_name} · ` : ""}{d.email} · inskickad {new Date(d.created_at).toLocaleDateString("sv-SE")}
+                  </div>
+                </div>
+                <Badge variant={d.unsubscribed_at ? "outline" : "secondary"} className="shrink-0">
+                  {dripStatusLabel(d)}
+                </Badge>
+              </div>
+            ))}
           </div>
         </div>
       )}

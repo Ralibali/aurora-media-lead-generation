@@ -44,6 +44,56 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_map_email_sequence: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          lead_id: string
+          step_14_sent_at: string | null
+          step_2_sent_at: string | null
+          step_5_sent_at: string | null
+          step_9_sent_at: string | null
+          unsubscribe_token: string
+          unsubscribed_at: string | null
+          unsubscribed_reason: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          lead_id: string
+          step_14_sent_at?: string | null
+          step_2_sent_at?: string | null
+          step_5_sent_at?: string | null
+          step_9_sent_at?: string | null
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          unsubscribed_reason?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          lead_id?: string
+          step_14_sent_at?: string | null
+          step_2_sent_at?: string | null
+          step_5_sent_at?: string | null
+          step_9_sent_at?: string | null
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          unsubscribed_reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_map_email_sequence_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "ai_map_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_map_leads: {
         Row: {
           company_name: string

@@ -55,15 +55,21 @@ Deno.serve(async (req: Request) => {
     const url = new URL(req.url);
     const limit = Math.min(parseInt(url.searchParams.get("limit") ?? "100"), 500);
 
-    const [{ data: leads, error: leadsErr }, { data: clicks, error: clicksErr }] = await Promise.all([
+    const [{ data: leads, error: leadsErr }, { data: clicks, error: clicksErr }, { data: drip, error: dripErr }] = await Promise.all([
       admin.from("leads").select("*").order("created_at", { ascending: false }).limit(limit),
       admin
         .from("ai_karta_clicks")
         .select("button, created_at")
         .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString()),
+      admin
+        .from("ai_map_email_sequence")
+        .select("id, lead_id, email, created_at, unsubscribed_at, unsubscribed_reason, step_2_sent_at, step_5_sent_at, step_9_sent_at, step_14_sent_at, lead:ai_map_leads(company_name, contact_name, total_potential)")
+        .order("created_at", { ascending: false })
+        .limit(200),
     ]);
     if (leadsErr) throw leadsErr;
     if (clicksErr) console.warn("[list-leads] clicks fetch failed", clicksErr);
+    if (dripErr) console.warn("[list-leads] drip fetch failed", dripErr);
 
     const aiKartaLeads = (leads ?? []).filter((l: { paket?: string }) => l.paket === "ai-karta").length;
     const heroClicks = (clicks ?? []).filter((c: { button: string }) => c.button === "hero_cta").length;
@@ -79,7 +85,7 @@ Deno.serve(async (req: Request) => {
       window_days: 30,
     };
 
-    return new Response(JSON.stringify({ leads: leads ?? [], stats }), {
+    return new Response(JSON.stringify({ leads: leads ?? [], stats, drip: drip ?? [] }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

@@ -433,6 +433,16 @@ Skriv också:
     const { error: procErr } = await admin.from("ai_map_processes").insert(procRows);
     if (procErr) console.error("[submit-ai-map] process insert failed", procErr);
 
+    // Skriv in lead i drip-sekvensen för automatiska uppföljningsmail (dag 2/5/9/14)
+    try {
+      const { error: dripErr } = await admin
+        .from("ai_map_email_sequence")
+        .insert({ lead_id: leadId, email });
+      if (dripErr) console.error("[submit-ai-map] failed to enqueue drip", dripErr);
+    } catch (e) {
+      console.error("[submit-ai-map] drip enqueue threw", e);
+    }
+
     // Notifiera info@ via Resend (om nyckel finns)
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (RESEND_API_KEY) {
