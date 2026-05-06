@@ -38,14 +38,30 @@ const statusLabel: Record<Lead["status"], string> = {
   archived: "Arkiverad",
 };
 
-type Stats = {
-  hero_clicks: number;
-  pdf_clicks: number;
-  total_clicks: number;
-  ai_karta_leads: number;
-  conversion_rate: number;
-  window_days: number;
+type DripRow = {
+  id: string;
+  lead_id: string;
+  email: string;
+  created_at: string;
+  unsubscribed_at: string | null;
+  unsubscribed_reason: string | null;
+  step_2_sent_at: string | null;
+  step_5_sent_at: string | null;
+  step_9_sent_at: string | null;
+  step_14_sent_at: string | null;
+  lead?: { company_name?: string; contact_name?: string; total_potential?: string } | null;
 };
+
+function dripStatusLabel(d: DripRow): string {
+  if (d.unsubscribed_at) return `Avregistrerad (${d.unsubscribed_reason ?? "—"})`;
+  const sent: string[] = [];
+  if (d.step_2_sent_at) sent.push("D2");
+  if (d.step_5_sent_at) sent.push("D5");
+  if (d.step_9_sent_at) sent.push("D9");
+  if (d.step_14_sent_at) sent.push("D14");
+  if (sent.length === 0) return "Bekräftelse skickad";
+  return `Skickat: ${sent.join(" · ")} ✓`;
+}
 
 const Leads = () => {
   const [password, setPassword] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? "");
