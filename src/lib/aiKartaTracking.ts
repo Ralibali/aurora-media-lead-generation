@@ -20,7 +20,9 @@ export type AiKartaButton =
   | "pdf_direct"
   | "result_pdf_download"
   | "result_print_dialog_opened"
-  | "result_resend_email";
+  | "result_resend_email"
+  | "booking_open"
+  | "booking_submit";
 
 export async function trackAiKartaClick(button: AiKartaButton): Promise<void> {
   try {

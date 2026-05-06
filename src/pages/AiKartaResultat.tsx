@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  AlertTriangle, ArrowRight, CheckCircle2, Clock, Database, Download, Loader2, Mail,
+  AlertTriangle, ArrowRight, CalendarCheck, CheckCircle2, Clock, Database, Download, Loader2, Mail,
   RefreshCw, Sparkles, Target, TrendingUp, Workflow, Zap,
 } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
 import { downloadAiMapPdf } from "@/lib/aiMapPdf";
@@ -54,6 +61,11 @@ const AiKartaResultat = () => {
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [bookingStatus, setBookingStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [bookingErr, setBookingErr] = useState<string | null>(null);
+  const [bookForm, setBookForm] = useState({ name: "", email: "", phone: "", preferred_time: "", message: "", website: "" });
+  const [bookFieldErrors, setBookFieldErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     setSEOMeta({
@@ -168,6 +180,70 @@ const AiKartaResultat = () => {
     }
   };
 
+  const openBooking = () => {
+    void trackAiKartaClick("booking_open");
+    setBookingErr(null);
+    setBookingStatus("idle");
+    setBookFieldErrors({});
+    setBookForm((f) => ({
+      ...f,
+      name: f.name || meta.contact_name || "",
+      email: f.email || meta.email || "",
+    }));
+    setBookingOpen(true);
+  };
+
+  const BookingSchema = z.object({
+    name: z.string().trim().min(2, "Ange ditt namn").max(80),
+    email: z.string().trim().email("Ogiltig e-postadress").max(160),
+    phone: z.string().trim().max(40).optional().or(z.literal("")),
+    preferred_time: z.string().trim().max(120).optional().or(z.literal("")),
+    message: z.string().trim().max(1000).optional().or(z.literal("")),
+  });
+
+  const submitBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (bookingStatus === "submitting") return;
+    setBookingErr(null);
+    setBookFieldErrors({});
+    const parsed = BookingSchema.safeParse(bookForm);
+    if (!parsed.success) {
+      const fe: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const k = issue.path[0]?.toString() ?? "form";
+        if (!fe[k]) fe[k] = issue.message;
+      }
+      setBookFieldErrors(fe);
+      return;
+    }
+    setBookingStatus("submitting");
+    void trackAiKartaClick("booking_submit");
+    try {
+      const { data, error } = await supabase.functions.invoke("book-ai-genomlysning", {
+        body: {
+          contact_name: parsed.data.name,
+          email: parsed.data.email,
+          company_name: meta.company_name,
+          phone: parsed.data.phone,
+          preferred_time: parsed.data.preferred_time,
+          message: parsed.data.message,
+          total_potential,
+          totalSavedPerYear,
+          topProcesses: top3.map((p) => p.process_name),
+          website: bookForm.website,
+        },
+      });
+      if (error || (data && (data as { error?: string }).error)) {
+        throw new Error((data as { error?: string })?.error || error?.message || "Okänt fel");
+      }
+      setBookingStatus("success");
+      toast.success("Bokningsförfrågan skickad", { description: "Du får en kalenderinbjudan inom kort." });
+    } catch (err) {
+      console.error("[book-ai-genomlysning]", err);
+      setBookingStatus("idle");
+      setBookingErr(err instanceof Error ? err.message : "Något gick fel. Försök igen.");
+    }
+  };
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
@@ -436,10 +512,12 @@ const AiKartaResultat = () => {
                     </ul>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <Button asChild size="lg" className="h-14 w-full rounded-full text-base shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]">
-                      <Link to="/kontakt">
-                        Boka kostnadsfri genomlysning <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
+                    <Button
+                      size="lg"
+                      className="h-14 w-full rounded-full text-base shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]"
+                      onClick={openBooking}
+                    >
+                      Boka kostnadsfri genomlysning <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                     <Button
                       size="lg"
@@ -478,6 +556,188 @@ const AiKartaResultat = () => {
         </section>
       </main>
       <Footer />
+
+      <Dialog
+        open={bookingOpen}
+        onOpenChange={(o) => {
+          if (!o && bookingStatus === "submitting") return;
+          setBookingOpen(o);
+          if (!o) {
+            // reset success state next time it opens
+            setTimeout(() => {
+              if (bookingStatus === "success") {
+                setBookingStatus("idle");
+              }
+            }, 200);
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-lg">
+          {bookingStatus === "success" ? (
+            <div className="text-center">
+              <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-primary/15 text-primary ring-4 ring-primary/10">
+                <CalendarCheck className="h-7 w-7" />
+              </div>
+              <DialogHeader className="mt-4">
+                <DialogTitle className="text-center text-2xl">Tack – vi hör av oss!</DialogTitle>
+                <DialogDescription className="text-center">
+                  Vi har tagit emot din förfrågan och skickar en kalenderinbjudan inom kort
+                  (oftast samma arbetsdag) till{" "}
+                  <strong className="text-foreground">{bookForm.email}</strong>.
+                </DialogDescription>
+              </DialogHeader>
+              <p className="mt-4 text-xs text-muted-foreground">
+                Brådskar det? Mejla{" "}
+                <a href="mailto:info@auroramedia.se" className="text-primary underline-offset-2 hover:underline">
+                  info@auroramedia.se
+                </a>
+                .
+              </p>
+              <DialogFooter className="mt-6 sm:justify-center">
+                <Button onClick={() => setBookingOpen(false)} className="w-full sm:w-auto">
+                  Stäng
+                </Button>
+              </DialogFooter>
+            </div>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle>Boka kostnadsfri AI-genomlysning</DialogTitle>
+                <DialogDescription>
+                  Fyll i uppgifterna så återkommer vi med en kalenderinbjudan (45 min via Teams/Meet).
+                  Inga köpkrav.
+                </DialogDescription>
+              </DialogHeader>
+
+              <form onSubmit={submitBooking} className="mt-2 space-y-4" noValidate>
+                {/* honeypot */}
+                <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                  <Label htmlFor="book-website">Webbplats</Label>
+                  <Input
+                    id="book-website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={bookForm.website}
+                    onChange={(e) => setBookForm((f) => ({ ...f, website: e.target.value }))}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="book-name" className="text-xs uppercase tracking-wider text-muted-foreground">
+                    Namn
+                  </Label>
+                  <Input
+                    id="book-name"
+                    value={bookForm.name}
+                    onChange={(e) => setBookForm((f) => ({ ...f, name: e.target.value }))}
+                    className="mt-1 h-11 rounded-full text-base"
+                    disabled={bookingStatus === "submitting"}
+                    required
+                  />
+                  {bookFieldErrors.name && (
+                    <p className="mt-1 text-xs text-destructive">{bookFieldErrors.name}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label htmlFor="book-email" className="text-xs uppercase tracking-wider text-muted-foreground">
+                    E-post
+                  </Label>
+                  <Input
+                    id="book-email"
+                    type="email"
+                    value={bookForm.email}
+                    onChange={(e) => setBookForm((f) => ({ ...f, email: e.target.value }))}
+                    className="mt-1 h-11 rounded-full text-base"
+                    disabled={bookingStatus === "submitting"}
+                    required
+                  />
+                  {bookFieldErrors.email && (
+                    <p className="mt-1 text-xs text-destructive">{bookFieldErrors.email}</p>
+                  )}
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <Label htmlFor="book-phone" className="text-xs uppercase tracking-wider text-muted-foreground">
+                      Telefon (valfritt)
+                    </Label>
+                    <Input
+                      id="book-phone"
+                      value={bookForm.phone}
+                      onChange={(e) => setBookForm((f) => ({ ...f, phone: e.target.value }))}
+                      className="mt-1 h-11 rounded-full text-base"
+                      disabled={bookingStatus === "submitting"}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="book-time" className="text-xs uppercase tracking-wider text-muted-foreground">
+                      Önskad tid (valfritt)
+                    </Label>
+                    <Input
+                      id="book-time"
+                      placeholder="t.ex. tis/tor em"
+                      value={bookForm.preferred_time}
+                      onChange={(e) => setBookForm((f) => ({ ...f, preferred_time: e.target.value }))}
+                      className="mt-1 h-11 rounded-full text-base"
+                      disabled={bookingStatus === "submitting"}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="book-message" className="text-xs uppercase tracking-wider text-muted-foreground">
+                    Meddelande (valfritt)
+                  </Label>
+                  <Textarea
+                    id="book-message"
+                    rows={3}
+                    placeholder="Något särskilt vi bör veta inför mötet?"
+                    value={bookForm.message}
+                    onChange={(e) => setBookForm((f) => ({ ...f, message: e.target.value }))}
+                    className="mt-1 rounded-2xl"
+                    disabled={bookingStatus === "submitting"}
+                  />
+                </div>
+
+                {bookingErr && (
+                  <div className="flex items-start gap-2 rounded-2xl border border-destructive/30 bg-destructive/[0.08] p-3 text-sm text-destructive">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                    <p>{bookingErr}</p>
+                  </div>
+                )}
+
+                <DialogFooter className="mt-2 gap-2 sm:gap-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setBookingOpen(false)}
+                    disabled={bookingStatus === "submitting"}
+                    className="w-full sm:w-auto"
+                  >
+                    Avbryt
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={bookingStatus === "submitting"}
+                    className="w-full rounded-full sm:w-auto"
+                  >
+                    {bookingStatus === "submitting" ? (
+                      <>
+                        Skickar… <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        Skicka bokningsförfrågan <CalendarCheck className="ml-2 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
