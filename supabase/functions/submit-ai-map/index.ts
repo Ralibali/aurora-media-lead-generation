@@ -484,6 +484,11 @@ Skriv också:
         )
         .join("");
 
+      const aiCaseLookup = (name: string) =>
+        aiAnalysis?.cases?.find(
+          (c) => c.process_name.trim().toLowerCase() === name.trim().toLowerCase()
+        ) ?? null;
+
       const topCasesHtml = top3
         .map((t, i) => {
           const potentialColor =
@@ -496,6 +501,22 @@ Skriv också:
             : t.potential === "Hög potential" ? "#dbeafe"
             : t.potential === "Medelpotential" ? "#fef3c7"
             : "#f1f5f9";
+          const ai = aiCaseLookup(t.process_name);
+          const aiBlock = ai
+            ? `
+              <div style="margin-top:14px;padding:14px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;">
+                <div style="font-size:11px;font-weight:600;color:#0f5132;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;">Aurora-analys</div>
+                <p style="font-size:13px;line-height:1.6;color:#0f172a;margin:0 0 8px;"><strong>Varför just detta:</strong> ${escape(ai.why_it_matters)}</p>
+                <p style="font-size:13px;line-height:1.6;color:#334155;margin:0 0 8px;"><strong style="color:#0f172a;">Vad AI kan ta över:</strong> ${escape(ai.deep_analysis)}</p>
+                <p style="font-size:13px;line-height:1.6;color:#334155;font-style:italic;margin:0 0 8px;">${escape(ai.concrete_example)}</p>
+                ${
+                  ai.quick_wins?.length
+                    ? `<div style="margin:8px 0 0;"><div style="font-size:12px;font-weight:600;color:#0f172a;margin:0 0 4px;">Snabba vinster:</div><ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:#334155;">${ai.quick_wins.map((q) => `<li>${escape(q)}</li>`).join("")}</ul></div>`
+                    : ""
+                }
+                ${ai.risks ? `<p style="font-size:12px;line-height:1.5;color:#92400e;margin:10px 0 0;"><strong>Att vara uppmärksam på:</strong> ${escape(ai.risks)}</p>` : ""}
+              </div>`
+            : "";
           return `
             <div style="border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin:0 0 12px;background:#ffffff;">
               <div style="margin:0 0 10px;">
@@ -511,9 +532,25 @@ Skriv också:
                   ? `<div style="font-size:13px;color:#0f5132;background:#f0fdf4;border:1px solid #bbf7d0;padding:8px 12px;border-radius:8px;display:inline-block;">≈ ${t.saved_hours_per_week} h/vecka kan automatiseras</div>`
                   : ""
               }
+              ${aiBlock}
             </div>`;
         })
         .join("");
+
+      const aiSummaryHtml = aiAnalysis
+        ? `
+        <div style="padding:24px 28px 8px;">
+          <div style="background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border:1px solid #bbf7d0;border-radius:12px;padding:20px 22px;">
+            <div style="font-size:11px;font-weight:600;color:#0f5132;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 8px;">Aurora-analys för er</div>
+            <p style="font-size:14px;line-height:1.6;color:#0f172a;margin:0 0 12px;">${escape(aiAnalysis.executive_summary)}</p>
+            <p style="font-size:13px;line-height:1.6;color:#334155;margin:0 0 12px;"><strong style="color:#0f172a;">Mognadsläge:</strong> ${escape(aiAnalysis.maturity_note)}</p>
+            <div style="background:#ffffff;border:1px solid #bbf7d0;border-radius:8px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:600;color:#0f5132;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">Vår rekommendation</div>
+              <p style="font-size:14px;line-height:1.6;color:#0f172a;margin:0;">${escape(aiAnalysis.overall_recommendation)}</p>
+            </div>
+          </div>
+        </div>`
+        : "";
 
       const userHtml = `
 <div style="background:#f8fafc;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
