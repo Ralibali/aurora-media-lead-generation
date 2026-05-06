@@ -436,13 +436,17 @@ Skriv också:
     // Notifiera info@ via Resend (om nyckel finns)
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (RESEND_API_KEY) {
+      const companyNormalized = normalizeCompanyName(company_name);
+      const savedWeekRounded = Math.round(totalSavedPerWeek * 10) / 10;
+
       const internalHtml = `
         <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:600px;color:#0f172a;">
           <h2 style="margin:0 0 12px;">Ny AI-karta inskickad</h2>
-          <p><strong>Företag:</strong> ${escape(company_name)} (${escape(industry)}, ${escape(employee_count)} anst.)</p>
+          <p><strong>Företag:</strong> ${escape(companyNormalized)} (${escape(industry)}, ${escape(employee_count)} anst.)</p>
           <p><strong>Kontakt:</strong> ${escape(contact_name)} · ${escape(email)}</p>
           <p><strong>Total potential:</strong> ${escape(total_potential)} (snitt ${avg.toFixed(1)}, totalt ${totalScore})</p>
-          <h3 style="margin-top:18px;">Topp 3 case</h3>
+          <p><strong>Sparad tid (uppskattat):</strong> ~${savedWeekRounded} h/vecka · ~${totalSavedPerYear} h/år</p>
+          <h3 style="margin-top:18px;">Topp 3 AI-områden</h3>
           <ol>${top3.map((t) => `<li><strong>${escape(t.process_name)}</strong> – ${escape(t.potential)} (${t.score} p)<br/>→ ${escape(t.recommended_solution)}</li>`).join("")}</ol>
           <p><a href="https://auroramedia.se/admin/leads">Öppna admin/leads</a> · Lead-ID: ${leadId}</p>
         </div>`;
@@ -453,22 +457,143 @@ Skriv också:
           from: "Aurora Media <noreply@auroramedia.se>",
           to: [Deno.env.get("INTERNAL_LEADS_EMAIL")?.trim() || "info@auroramedia.se"],
           reply_to: email,
-          subject: `Ny AI-karta – ${company_name} (${total_potential})`,
+          subject: `Ny AI-karta – ${companyNormalized} (${total_potential})`,
           html: internalHtml,
         }),
       }).catch((e) => console.error("[submit-ai-map] internal mail threw", e));
 
       // Bekräftelse till kunden
       const firstName = escape(contact_name.split(" ")[0]);
+      const companyDisplay = escape(companyNormalized);
+      const painAreasFiltered = pain_areas.filter((p) => p && p.toLowerCase() !== "annat");
+      const painChips = painAreasFiltered
+        .slice(0, 8)
+        .map(
+          (p) =>
+            `<span style="display:inline-block;background:#eef2ff;border:1px solid #c7d2fe;color:#3730a3;font-size:13px;padding:6px 12px;border-radius:999px;margin:0 6px 6px 0;">${escape(p)}</span>`
+        )
+        .join("");
+
+      const topCasesHtml = top3
+        .map((t, i) => {
+          const potentialColor =
+            t.potential === "Direkt AI-case" ? "#16a34a"
+            : t.potential === "Hög potential" ? "#2563eb"
+            : t.potential === "Medelpotential" ? "#ca8a04"
+            : "#64748b";
+          const potentialBg =
+            t.potential === "Direkt AI-case" ? "#dcfce7"
+            : t.potential === "Hög potential" ? "#dbeafe"
+            : t.potential === "Medelpotential" ? "#fef3c7"
+            : "#f1f5f9";
+          return `
+            <div style="border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin:0 0 12px;background:#ffffff;">
+              <div style="margin:0 0 10px;">
+                <span style="display:inline-block;font-size:12px;font-weight:600;color:#64748b;letter-spacing:0.04em;margin-right:8px;">#${i + 1}</span>
+                <span style="display:inline-block;background:${potentialBg};color:${potentialColor};font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;">${escape(readablePotential(t.potential))}</span>
+              </div>
+              <div style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 6px;">${escape(t.process_name)}</div>
+              <div style="font-size:14px;color:#334155;margin:0 0 ${t.saved_hours_per_week > 0 ? "10" : "0"}px;">
+                <strong style="color:#0f172a;">Rekommenderat:</strong> ${escape(t.recommended_solution)}
+              </div>
+              ${
+                t.saved_hours_per_week > 0
+                  ? `<div style="font-size:13px;color:#0f5132;background:#f0fdf4;border:1px solid #bbf7d0;padding:8px 12px;border-radius:8px;display:inline-block;">≈ ${t.saved_hours_per_week} h/vecka kan automatiseras</div>`
+                  : ""
+              }
+            </div>`;
+        })
+        .join("");
+
       const userHtml = `
-        <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:600px;color:#0f172a;">
-          <h1 style="margin:0 0 12px;">Tack ${firstName}!</h1>
-          <p>Vi har tagit emot er AI-karta för <strong>${escape(company_name)}</strong>. Total potential: <strong>${escape(total_potential)}</strong>.</p>
-          <h3>Era topp 3 case</h3>
-          <ol>${top3.map((t) => `<li><strong>${escape(t.process_name)}</strong> (${escape(t.potential)})<br/>Rekommenderat: ${escape(t.recommended_solution)}</li>`).join("")}</ol>
-          <p style="margin-top:18px;"><a href="https://auroramedia.se/kontakt" style="display:inline-block;background:#0f5132;color:#fff;text-decoration:none;padding:12px 22px;border-radius:999px;">Boka kostnadsfri AI-genomlysning →</a></p>
-          <p style="font-size:12px;color:#64748b;margin-top:24px;">Aurora Media AB · info@auroramedia.se</p>
-        </div>`;
+<div style="background:#f8fafc;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
+
+    <div style="background:#0f5132;padding:20px 28px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+        <tr>
+          <td style="vertical-align:middle;width:42px;">
+            <div style="width:36px;height:36px;border-radius:10px;background:#ffffff;color:#0f5132;font-weight:700;font-size:18px;text-align:center;line-height:36px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">A</div>
+          </td>
+          <td style="vertical-align:middle;padding-left:12px;color:#ffffff;font-size:14px;font-weight:600;letter-spacing:0.08em;">AURORA MEDIA</td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="padding:32px 28px 8px;">
+      <div style="font-size:12px;font-weight:600;color:#0f5132;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 8px;">AI-Analys klar</div>
+      <h1 style="font-size:24px;line-height:1.25;color:#0f172a;margin:0 0 12px;font-weight:700;">Tack ${firstName}, här är er analys</h1>
+      <p style="font-size:15px;line-height:1.55;color:#334155;margin:0 0 20px;">
+        Vi har gått igenom era svar för <strong>${companyDisplay}</strong> och räknat på hur stor AI-potential ni har just nu.
+      </p>
+    </div>
+
+    <div style="padding:0 28px 8px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:separate;border-spacing:8px 0;">
+        <tr>
+          <td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 12px;text-align:center;width:33.33%;">
+            <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">Total potential</div>
+            <div style="font-size:18px;color:#0f172a;font-weight:700;">${escape(total_potential)}</div>
+          </td>
+          <td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 12px;text-align:center;width:33.33%;">
+            <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">Sparad tid / vecka</div>
+            <div style="font-size:18px;color:#0f172a;font-weight:700;">${savedWeekRounded} h</div>
+          </td>
+          <td style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 12px;text-align:center;width:33.33%;">
+            <div style="font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin:0 0 4px;">Sparad tid / år</div>
+            <div style="font-size:18px;color:#0f172a;font-weight:700;">${totalSavedPerYear} h</div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    ${
+      painAreasFiltered.length > 0
+        ? `
+    <div style="padding:24px 28px 8px;">
+      <h2 style="font-size:14px;color:#0f172a;margin:0 0 12px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Områden ni lyfte</h2>
+      <div>${painChips}</div>
+    </div>`
+        : ""
+    }
+
+    <div style="padding:24px 28px 8px;">
+      <h2 style="font-size:14px;color:#0f172a;margin:0 0 14px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">${escape(topAreasTitle(top3.length))}</h2>
+      ${topCasesHtml}
+    </div>
+
+    <div style="padding:20px 28px 28px;">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:22px 24px;">
+        <h2 style="font-size:16px;color:#0f172a;margin:0 0 10px;font-weight:700;">Vad händer nu?</h2>
+        <p style="font-size:14px;line-height:1.6;color:#334155;margin:0 0 18px;">
+          Ni har två vägar framåt. Antingen tar ni resultatet internt och börjar testa själva – det är därför vi gjorde analysen synlig på er skärm direkt. Eller så bokar ni en kostnadsfri AI-genomlysning där vi går igenom era topp-områden tillsammans och jag ger en konkret uppskattning av tid och kostnad för det första bygget.
+        </p>
+        <a href="https://auroramedia.se/kontakt" style="display:inline-block;background:#0f5132;color:#ffffff;text-decoration:none;padding:13px 24px;border-radius:999px;font-size:14px;font-weight:600;">Boka AI-genomlysning (45 min, gratis) →</a>
+      </div>
+    </div>
+
+    <div style="padding:0 28px 28px;">
+      <p style="font-size:13px;line-height:1.6;color:#64748b;margin:0;">
+        Har ni redan en bild av vilket område ni vill börja med? Svara bara på det här mejlet med en mening – jag läser allt själv och hör av mig inom en arbetsdag.
+      </p>
+    </div>
+
+    <div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:20px 28px;font-size:12px;color:#64748b;line-height:1.6;">
+      <div style="margin:0 0 4px;"><strong style="color:#334155;">Aurora Media AB</strong> · Org.nr 559272-0220 · Linköping, Sverige</div>
+      <div style="margin:0 0 8px;">
+        <a href="https://auroramedia.se" style="color:#0f5132;text-decoration:none;">auroramedia.se</a> ·
+        <a href="mailto:info@auroramedia.se" style="color:#0f5132;text-decoration:none;">info@auroramedia.se</a>
+      </div>
+      <div style="color:#94a3b8;">Du fick det här mejlet eftersom du nyss skickade in AI-kartan på auroramedia.se/ai-karta.</div>
+    </div>
+  </div>
+</div>`;
+
+      const subjectLine =
+        total_potential === "Mycket hög" || total_potential === "Hög"
+          ? `Er AI-analys är klar – ${total_potential.toLowerCase()} potential identifierad`
+          : `Er AI-analys är klar – ${companyNormalized}`;
+
       fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
@@ -476,7 +601,7 @@ Skriv också:
           from: "Aurora Media <noreply@auroramedia.se>",
           to: [email],
           reply_to: "info@auroramedia.se",
-          subject: "Er AI-karta från Aurora Media",
+          subject: subjectLine,
           html: userHtml,
         }),
       }).catch((e) => console.error("[submit-ai-map] user mail threw", e));
