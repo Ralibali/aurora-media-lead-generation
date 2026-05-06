@@ -438,7 +438,7 @@ const AiKartaResultat = () => {
                             {ai.quick_wins?.length > 0 && (
                               <div>
                                 <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                  Quick wins ni kan testa själva
+                                  Snabba vinster ni kan testa själva
                                 </p>
                                 <ul className="mt-2 space-y-1.5">
                                   {ai.quick_wins.map((qw, idx) => (

@@ -26,7 +26,7 @@ const Seo = () => {
       ]}
       process={[
         { label: "Steg 1", title: "Audit", body: "Crawl + manuell genomgång. Du får en prioriterad lista." },
-        { label: "Steg 2", title: "Quick wins", body: "Allt som kan fixas på en vecka körs först. Tekniska fel, schema, indexering." },
+        { label: "Steg 2", title: "Snabba vinster", body: "Allt som kan fixas på en vecka körs först. Tekniska fel, schema, indexering." },
         { label: "Steg 3", title: "On-page", body: "Titlar, meta, intern länkning, innehåll. Sida för sida." },
         { label: "Steg 4", title: "Mätning", body: "GSC + GA4-uppsättning så du själv kan följa effekten." },
       ]}
