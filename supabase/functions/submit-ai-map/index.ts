@@ -11,12 +11,12 @@ const corsHeaders = {
 
 interface ProcessIn {
   process_name: string;
-  frequency: "daily" | "weekly" | "monthly" | "rare";
-  weekly_time: "0-1" | "1-3" | "3-5" | "5-10" | "10+";
+  frequency: "daily" | "weekly" | "monthly" | "rare" | "unknown";
+  weekly_time: "0-1" | "1-3" | "3-5" | "5-10" | "10+" | "unknown";
   systems?: string;
-  rule_based: "yes" | "partial" | "no";
-  data_available: "yes" | "partial" | "no";
-  business_value: "high" | "medium" | "low";
+  rule_based: "yes" | "partial" | "no" | "unknown";
+  data_available: "yes" | "partial" | "no" | "unknown";
+  business_value: "high" | "medium" | "low" | "unknown";
 }
 
 interface Body {
@@ -32,11 +32,11 @@ interface Body {
   website?: string; // honeypot
 }
 
-const FREQ = { daily: 3, weekly: 2, monthly: 1, rare: 0 } as const;
-const TIME = { "0-1": 0, "1-3": 1, "3-5": 2, "5-10": 3, "10+": 4 } as const;
-const RULE = { yes: 3, partial: 2, no: 0 } as const;
-const DATA = { yes: 3, partial: 2, no: 0 } as const;
-const VALUE = { high: 3, medium: 2, low: 1 } as const;
+const FREQ = { daily: 3, weekly: 2, monthly: 1, rare: 0, unknown: 1 } as const;
+const TIME = { "0-1": 0, "1-3": 1, "3-5": 2, "5-10": 3, "10+": 4, unknown: 1 } as const;
+const RULE = { yes: 3, partial: 2, no: 0, unknown: 1 } as const;
+const DATA = { yes: 3, partial: 2, no: 0, unknown: 1 } as const;
+const VALUE = { high: 3, medium: 2, low: 1, unknown: 2 } as const;
 
 function potentialFromScore(score: number): string {
   if (score >= 13) return "Direkt AI-case";

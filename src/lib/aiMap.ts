@@ -1,9 +1,9 @@
 // Delade typer + scoringkonstanter för AI-kartan-formuläret.
 // Scoring körs både klient- och serverside; servern är auktoritativ.
-export type Frequency = "daily" | "weekly" | "monthly" | "rare";
-export type WeeklyTime = "0-1" | "1-3" | "3-5" | "5-10" | "10+";
-export type YesPartialNo = "yes" | "partial" | "no";
-export type BusinessValue = "high" | "medium" | "low";
+export type Frequency = "daily" | "weekly" | "monthly" | "rare" | "unknown";
+export type WeeklyTime = "0-1" | "1-3" | "3-5" | "5-10" | "10+" | "unknown";
+export type YesPartialNo = "yes" | "partial" | "no" | "unknown";
+export type BusinessValue = "high" | "medium" | "low" | "unknown";
 
 export interface ProcessInput {
   process_name: string;
@@ -31,6 +31,7 @@ export const FREQ_LABELS: Record<Frequency, string> = {
   weekly: "Veckovis",
   monthly: "Månadsvis",
   rare: "Sällan",
+  unknown: "Vet ej",
 };
 export const TIME_LABELS: Record<WeeklyTime, string> = {
   "0-1": "0–1 h/vecka",
@@ -38,16 +39,19 @@ export const TIME_LABELS: Record<WeeklyTime, string> = {
   "3-5": "3–5 h/vecka",
   "5-10": "5–10 h/vecka",
   "10+": "10+ h/vecka",
+  unknown: "Vet ej",
 };
 export const YPN_LABELS: Record<YesPartialNo, string> = {
   yes: "Ja",
   partial: "Delvis",
   no: "Nej",
+  unknown: "Vet ej",
 };
 export const VALUE_LABELS: Record<BusinessValue, string> = {
   high: "Hög",
   medium: "Medel",
   low: "Låg",
+  unknown: "Vet ej",
 };
 
 export const PAIN_AREAS = [
