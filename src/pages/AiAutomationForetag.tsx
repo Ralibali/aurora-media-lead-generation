@@ -49,7 +49,7 @@ const services = [
   {
     icon: Bot,
     title: "AI-assistenter",
-    body: "Vi bygger assistenter för support, sälj, dokument, onboarding och intern kunskap – tränade på företagets egna processer och material.",
+    body: "Vi bygger assistenter för support, sälj, dokument, introduktion och intern kunskap – tränade på företagets egna processer och material.",
   },
   {
     icon: MailCheck,

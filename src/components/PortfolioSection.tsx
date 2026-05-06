@@ -51,7 +51,7 @@ const PortfolioSection = () => {
             </p>
           </div>
           <p className="hidden max-w-xs text-base text-muted-foreground md:block">
-            Inga vaporware-mockups. Inga case-studies från praktikperioden 2014. Klicka och se.
+            Inga luftslott. Inga kundcase från praktikperioden 2014. Klicka och se.
           </p>
         </motion.div>
 

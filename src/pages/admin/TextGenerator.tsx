@@ -23,7 +23,7 @@ const TEXT_TYPES = [
   { value: "hero", label: "Hero" },
   { value: "service-page", label: "Tjänstesida" },
   { value: "article", label: "Artikel" },
-  { value: "case-study", label: "Case study" },
+  { value: "case-study", label: "Kundcase" },
   { value: "faq-answer", label: "FAQ-svar" },
   { value: "email-response", label: "E-postsvar" },
   { value: "landing-section", label: "Landningssektion" },

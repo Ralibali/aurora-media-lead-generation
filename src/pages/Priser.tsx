@@ -34,7 +34,7 @@ const packages = [
   {
     name: "Aurora AI Ops",
     price: "Fast offert",
-    time: "Efter scope",
+    time: "Efter omfattning",
     desc: "AI-automationer och interna verktyg för företag som vill kapa manuellt arbete.",
     features: ["Processkartläggning", "AI-flöden", "API-kopplingar", "Behörigheter", "Driftbar lösning"],
   },

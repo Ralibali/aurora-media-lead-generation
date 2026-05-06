@@ -7,7 +7,7 @@ import { useContactModal } from "@/components/ContactModal";
 
 const journey = [
   ["01", "Idé & scope", "Vi kokar ner AI-snacket till en tydlig produkt, automation eller intern app."],
-  ["02", "Prototyp", "Klickbar version snabbt, så teamet faktiskt ser vad som ska byggas."],
+  ["02", "Prototyp", "Klickbar version snabbt, så ni faktiskt ser vad som ska byggas."],
   ["03", "MVP", "Inloggning, databas, betalning, admin och kärnflöden — inget fluff."],
   ["04", "Data & integrationer", "Supabase, Stripe, Brevo, Fortnox, interna API:er och säkra behörigheter."],
   ["05", "Automation", "AI-flöden som gör jobbet, inte bara imponerar på en workshop."],

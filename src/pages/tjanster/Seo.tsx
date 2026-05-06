@@ -31,8 +31,8 @@ const Seo = () => {
         { label: "Steg 4", title: "Mätning", body: "GSC + GA4-uppsättning så du själv kan följa effekten." },
       ]}
       tiers={[
-        { name: "Audit", price: "2 490 kr", time: "Två dagar", desc: "Teknisk audit + åtgärdslista. Du fixar själv eller betalar för implementation.", features: ["Teknisk crawl", "On-page review", "Konkurrentanalys", "Prioriterad åtgärdslista"], paketValue: "SEO – Audit" },
-        { name: "Audit + fix", price: "6 900 kr", time: "En vecka", desc: "Allt i Audit – plus jag fixar de tekniska och on-page-bitarna.", features: ["Allt i Audit", "Tekniska fixar", "On-page-implementation", "Schema-markup"], featured: true, paketValue: "SEO – Audit + fix" },
+        { name: "Audit", price: "2 490 kr", time: "Två dagar", desc: "Teknisk audit + åtgärdslista. Du fixar själv eller betalar för implementation.", features: ["Teknisk crawl", "On-page-granskning", "Konkurrentanalys", "Prioriterad åtgärdslista"], paketValue: "SEO – Audit" },
+        { name: "Audit + fix", price: "6 900 kr", time: "En vecka", desc: "Allt i Audit – plus jag fixar de tekniska och on-page-bitarna.", features: ["Allt i Audit", "Tekniska fixar", "On-page-genomförande", "Schema-markup"], featured: true, paketValue: "SEO – Audit + fix" },
         { name: "Lokal SEO", price: "Från 4 900 kr", time: "En vecka", desc: "Google Business Profile, citations, lokala sidor.", features: ["GBP-optimering", "Citations & länkar", "Lokala landningssidor", "Recensionsstrategi"], paketValue: "SEO – Lokal" },
       ]}
       pricingNote={
@@ -45,7 +45,7 @@ const Seo = () => {
             <ul className="divide-y divide-border text-sm">
               {[
                 { label: "Teknisk crawl & rapport", a: true, b: true },
-                { label: "On-page review", a: true, b: true },
+                { label: "On-page-granskning", a: true, b: true },
                 { label: "Konkurrentanalys", a: true, b: true },
                 { label: "Prioriterad åtgärdslista", a: true, b: true },
                 { label: "Tekniska fixar implementeras", a: false, b: true },
@@ -90,14 +90,14 @@ const Seo = () => {
           </div>
         </>
       }
-      whyAffordable="SEO är hantverk, men 80% är samma checklista varje gång. Jag använder mina egna verktyg och AI för att speed-runa audit och on-page – utan att kompromissa på kvalitet."
+      whyAffordable="SEO är hantverk, men 80% är samma checklista varje gång. Jag använder mina egna verktyg och AI för att snabba upp granskning och on-page-arbete – utan att kompromissa på kvalitet."
       faqs={[
         { q: "Hur lång tid tar det att se resultat?", a: "Tekniska fixar syns ofta inom 2–4 veckor. On-page tar 1–3 månader. Innehållsbaserad ranking 3–6 månader. Inga garantier på exakta positioner – det vore fusk.", category: "SEO-teknik" },
         { q: "Kan ni garantera plats 1 på Google?", a: "Nej. Den som lovar det ljuger. Jag lovar mätbara förbättringar i synlighet, klick och konvertering.", category: "Pris & process" },
         { q: "Behöver jag löpande SEO?", a: "Inte alltid. Många klarar sig med en grundlig audit + fix, sen content varje månad. Jag säger till om du behöver mer.", category: "Pris & process" },
         { q: "Hjälper du med innehåll?", a: "Ja, se Content-tjänsten. SEO-optimerade artiklar från 995 kr/styck.", category: "Innehåll" },
         { q: "Hjälper SEO även för en mobilapp?", a: "Ja, men på två sätt. Indirekt: en SEO-optimerad webb driver nedladdningar till din app. Direkt: App Store / Play Store har egen sökoptimering (ASO). Bygger du en app med mig kombinerar vi ofta SEO på sajten med ASO – läs mer på /tjanster/mobilapp.", category: "SEO-teknik" },
-        { q: "Lite dyrt va?", a: "Jag förstår reaktionen, men jämför med vad du faktiskt får. I Audit ingår teknisk crawl, on-page-genomgång, konkurrentanalys och en prioriterad åtgärdslista – arbete som tar mig två fulla dagar. Audit + fix lägger till själva implementationen av tekniska fixar, on-page och schema, vilket annars motsvarar 8–12 timmars utvecklarjobb hos en byrå (15 000–25 000 kr). Jag jobbar med fast pris så att du vet exakt vad du betalar – inga timmar som tickar, inga överraskningar och inga månadsbindningar.", category: "Pris & process" },
+        { q: "Är det inte lite dyrt?", a: "Jag förstår reaktionen, men jämför med vad du faktiskt får. I Audit ingår teknisk crawl, on-page-genomgång, konkurrentanalys och en prioriterad åtgärdslista – arbete som tar mig två fulla dagar. Audit + fix lägger till själva implementationen av tekniska fixar, on-page och schema, vilket annars motsvarar 8–12 timmars utvecklarjobb hos en byrå (15 000–25 000 kr). Jag jobbar med fast pris så att du vet exakt vad du betalar – inga timmar som tickar, inga överraskningar och inga månadsbindningar.", category: "Pris & process" },
       ]}
       postFaq={
         <section className="border-t border-border bg-secondary/30 py-20 md:py-24">
@@ -176,7 +176,7 @@ const Seo = () => {
                   {[
                     { d: "Dag 1–2", t: "Audit", b: "Samma genomgång som Audit-paketet – men jag äger åtgärdslistan." },
                     { d: "Dag 3–4", t: "Tekniska fixar", b: "Schema, canonicals, indexering, Core Web Vitals-quick wins." },
-                    { d: "Dag 5–6", t: "On-page-implementation", b: "Titlar, meta, intern länkning och struktur körs sida för sida." },
+                    { d: "Dag 5–6", t: "On-page-genomförande", b: "Titlar, meta, intern länkning och struktur körs sida för sida." },
                     { d: "Dag 7", t: "Mätning & överlämning", b: "GSC + GA4, kort genomgång och 30-dagars uppföljningslista." },
                   ].map((s) => (
                     <li key={s.t} className="relative">

@@ -17,7 +17,7 @@ const Hemsidor = () => (
       "SEO-grund med metadata, sitemap, struktur och prestanda",
       "Snabb hosting och SSL via modern plattform",
       "Kontaktflöde, CTA-struktur och mätning",
-      "Möjlighet till blogg/content-hub för organisk trafik",
+      "Möjlighet till blogg/innehållsnav för organisk trafik",
       "Kan byggas vidare till app, SaaS eller kundportal",
       "Källkod och dokumentation lämnas över",
     ]}
@@ -30,7 +30,7 @@ const Hemsidor = () => (
     tiers={[
       {
         name: "Landningssida",
-        price: "Offert efter scope",
+        price: "Offert efter omfattning",
         time: "Ofta 1–2 veckor",
         desc: "För kampanj, ny tjänst eller tydlig leadgenerering.",
         features: ["1 fokuserad sida", "CTA och kontaktflöde", "SEO-grund", "Responsiv design"],
@@ -46,7 +46,7 @@ const Hemsidor = () => (
       {
         name: "Webbplattform",
         price: "Från 34 900 kr",
-        time: "Efter scope",
+        time: "Efter omfattning",
         desc: "När sajten behöver login, databas, kundportal, betalning eller integrationer.",
         features: ["Databas", "Auth/login", "Admin eller dashboard", "Integrationer", "Skalbar grund"],
       },
@@ -92,13 +92,13 @@ const Hemsidor = () => (
         </div>
       </section>
     }
-    whyAffordable="Jag bygger med AI-assisterad utveckling och en modern React-stack. Det gör processen snabbare, men värdet ligger fortfarande i scope, struktur, SEO, designbeslut och att sajten byggs på en grund som kan växa vidare."
+    whyAffordable="Jag bygger med AI-assisterad utveckling och en modern React-stack. Det gör processen snabbare, men värdet ligger fortfarande i omfattning, struktur, SEO, designbeslut och att sajten byggs på en grund som kan växa vidare."
     faqs={[
       { q: "Är det WordPress?", a: "Nej, huvudspåret är React/TypeScript med modern hosting. Det passar bäst när du vill ha prestanda, kontroll och möjlighet att bygga vidare till app eller plattform." },
       { q: "Kan jag uppdatera innehåll själv?", a: "Ja. Beroende på behov kan vi lägga till CMS, enkel datakälla eller ett adminflöde." },
       { q: "Äger jag sajten?", a: "Ja. Du får kod, repo och dokumentation. Du ska inte bli låst till Aurora Media." },
       { q: "Kan hemsidan bli en app eller SaaS senare?", a: "Ja. Det är en av poängerna med att bygga i riktig kod istället för mallverktyg." },
-      { q: "Vad kostar det?", a: "Det beror på scope. En enkel landningssida är mindre. En webbplattform med login, databas eller betalning hamnar närmare MVP-upplägget." },
+      { q: "Vad kostar det?", a: "Det beror på omfattning. En enkel landningssida är mindre. En webbplattform med login, databas eller betalning hamnar närmare MVP-upplägget." },
     ]}
     related={[
       { name: "AI-konsult Sverige", price: "Från strategi till produkt", to: "/ai-konsult-sverige" },

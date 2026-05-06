@@ -62,7 +62,7 @@ const services = [
     title: "Sökmotoroptimering (SEO)",
     description: "Hamna högst på Google – organiskt och hållbart.",
     details: [
-      "Teknisk SEO-audit för att hitta och åtgärda dolda problem",
+      "Teknisk SEO-granskning för att hitta och åtgärda dolda problem",
       "On-page-optimering av titlar, meta-beskrivningar och struktur",
       "Sökordanalys och konkurrentbevakning för er bransch",
       "Länkbygge och off-page-strategier som stärker er auktoritet",

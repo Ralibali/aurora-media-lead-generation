@@ -12,11 +12,11 @@ import { setSEOMeta, setJsonLd, setBreadcrumb, SITE_URL } from "@/lib/seoHelpers
 const steps = [
   {
     title: "1. Idé & scope",
-    body: "Vi börjar med att kapa bort fluffet. Vad ska byggas, vem ska använda det, vad måste fungera i första versionen och vad kan vänta? Du får ett tydligt scope och ett fast pris innan start.",
+    body: "Vi börjar med att kapa bort fluffet. Vad ska byggas, vem ska använda det, vad måste fungera i första versionen och vad kan vänta? Du får en tydlig omfattning och ett fast pris innan start.",
   },
   {
     title: "2. Prototyp",
-    body: "Vi bygger en klickbar version snabbt så du, teamet eller kunden kan känna på flödet. Här validerar vi produkten innan den blir dyr eller för stor.",
+    body: "Vi bygger en klickbar version snabbt så du, dina medarbetare eller kunden kan känna på flödet. Här validerar vi produkten innan den blir dyr eller för stor.",
   },
   {
     title: "3. MVP",
@@ -28,17 +28,17 @@ const steps = [
   },
   {
     title: "5. QA, säkerhet & lansering",
-    body: "Jag testar manuellt, kontrollerar edge cases, RLS/behörigheter, prestanda och deployment. Du får GitHub-repo, dokumentation och genomgång.",
+    body: "Jag testar manuellt, kontrollerar gränsfall, RLS/behörigheter, prestanda och driftsättning. Du får GitHub-repo, dokumentation och genomgång.",
   },
   {
     title: "6. Skala vidare",
-    body: "När riktiga användare börjar använda produkten bygger vi vidare baserat på data, feedback och affärsnytta — inte gissningar från en workshop.",
+    body: "När riktiga användare börjar använda produkten bygger vi vidare baserat på data, återkoppling och affärsnytta — inte gissningar från en workshop.",
   },
 ];
 
 const principles = [
   { icon: Sparkles, title: "Mindre workshop", body: "Målet är inte en AI-strategi som samlar damm. Målet är en produkt, automation eller app som används." },
-  { icon: Code2, title: "Fast pris", body: "Du vet vad det kostar innan vi bygger. Scope först, offert sen, kod därefter." },
+  { icon: Code2, title: "Fast pris", body: "Du vet vad det kostar innan vi bygger. Omfattning först, offert sen, kod därefter." },
   { icon: ShieldCheck, title: "Kod du äger", body: "Repo, databasstruktur och dokumentation lämnas över. Ingen onödig vendor lock-in." },
   { icon: Database, title: "Riktig grund", body: "Datamodell, auth, behörigheter och integrationer byggs för verklig drift — inte bara demo." },
 ];

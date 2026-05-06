@@ -26,7 +26,7 @@ const FOOTER_COLUMNS = [
   {
     title: "Aurora Media",
     items: [
-      { label: "Case & projekt", href: "/arbete" },
+      { label: "Arbete", href: "/arbete" },
       { label: "Blogg", href: "/blogg" },
       { label: "Om Aurora Media", href: "/om" },
       { label: "Webbyrå Linköping", href: "/webbyra-linkoping" },

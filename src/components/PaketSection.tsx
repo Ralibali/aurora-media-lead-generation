@@ -49,7 +49,7 @@ export const paket = [
     name: "Skalbar SaaS",
     price: "Offert efter behov",
     priceFrom: "Pris",
-    priceAmount: "Anpassas efter scope",
+    priceAmount: "Anpassas efter omfattning",
     priceCurrency: "",
     time: "2–3 veckor · Tydlig plan",
     desc: "Komplett app redo för betalande kunder. Vi bygger det som skapar värde först och skalar därifrån.",

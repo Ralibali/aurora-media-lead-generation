@@ -4,19 +4,19 @@ const GrafiskProfil = () => (
   <ServicePageTemplate
     slug="grafisk-profil"
     title="Grafisk profil från 5 900 kr."
-    intro="Logo, färger, typografi och mallar. Tillräckligt för att se ut som ett riktigt varumärke – inte mer, inte mindre."
+    intro="Logotyp, färger, typografi och mallar. Tillräckligt för att se ut som ett riktigt varumärke – inte mer, inte mindre."
     paketName="Annat"
     seoTitle="Grafisk profil från 5 900 kr – logo, färger, typografi | Aurora Media"
     seoDescription="Komplett grafisk profil: logo, färgpalett, typografi och mallar. Levereras på 5 dagar. Från 5 900 kr."
     includes={[
-      "Logo i 3 varianter (primär, monokrom, ikon)",
+      "Logotyp i 3 varianter (primär, monokrom, ikon)",
       "Färgpalett (HEX, RGB, CMYK)",
       "Typografi (display + body, med fallback)",
       "Visitkort-mall (PDF + Canva-template)",
       "Brevmall (Word + Google Docs)",
       "Social media-mallar (Instagram, LinkedIn-cover)",
       "Logofil i SVG, PNG och AI-format",
-      "Korta brand guidelines (1-sidig PDF)",
+      "Korta varumärkesriktlinjer (1-sidig PDF)",
     ]}
     process={[
       { label: "Steg 1", title: "Brief", body: "Vad gör företaget, vilken känsla, vilka konkurrenter att inte likna." },
@@ -25,9 +25,9 @@ const GrafiskProfil = () => (
       { label: "Steg 4", title: "Leverans", body: "Komplett mappstruktur med alla filer + guidelines." },
     ]}
     tiers={[
-      { name: "Liten", price: "5 900 kr", time: "5 dagar", desc: "Logo, färger, typografi. Det grundläggande.", features: ["Logo i 3 varianter", "Färgpalett", "Typografi", "Logofiler"] },
-      { name: "Komplett", price: "9 900 kr", time: "1 vecka", desc: "Alla mallar och brand guidelines.", features: ["Allt i Liten", "Visitkort + brevmall", "Sociala mallar", "Brand guidelines"], featured: true },
-      { name: "Refresh", price: "3 900 kr", time: "3 dagar", desc: "Du har en logo, men allt annat har glidit. Återställning.", features: ["Färgöversyn", "Typografival", "Logofil-cleanup", "Brand guidelines"] },
+      { name: "Liten", price: "5 900 kr", time: "5 dagar", desc: "Logotyp, färger, typografi. Det grundläggande.", features: ["Logotyp i 3 varianter", "Färgpalett", "Typografi", "Logotypfiler"] },
+      { name: "Komplett", price: "9 900 kr", time: "1 vecka", desc: "Alla mallar och varumärkesriktlinjer.", features: ["Allt i Liten", "Visitkort + brevmall", "Sociala mallar", "Brand guidelines"], featured: true },
+      { name: "Refresh", price: "3 900 kr", time: "3 dagar", desc: "Du har en logotyp, men allt annat har glidit. Återställning.", features: ["Färgöversyn", "Typografival", "Logotyp-uppstädning", "Brand guidelines"] },
     ]}
     whyAffordable="Med bra AI-verktyg och 15 års förmåga att se vad som funkar visuellt, behövs inte en designerstudio i en vecka för en liten profil. Större varumärken kräver mer – då säger jag det och kopplar in en designerpartner."
     faqs={[

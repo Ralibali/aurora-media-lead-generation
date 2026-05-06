@@ -13,7 +13,7 @@ const steps = [
     n: "02",
     label: "Steg två · Vecka ett",
     title: "Prototyp",
-    body: "Jag bygger en interaktiv prototyp du kan klicka dig runt i från dag tre. Inte Figma — en riktig app live på en URL. Du ger feedback, vi justerar tills den känns rätt.",
+    body: "Jag bygger en interaktiv prototyp du kan klicka dig runt i från dag tre. Inte Figma — en riktig app live på en URL. Du ger återkoppling, vi justerar tills den känns rätt.",
     detail: "Fem feedbackrundor ingår. Prototyp-koden återanvänds i produktionen.",
   },
   {
