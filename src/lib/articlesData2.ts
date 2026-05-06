@@ -28,12 +28,12 @@ export const articles7to12: Article[] = [
       {
         heading: "Hur mycket ska du bygga i MVP?",
         content:
-          "Tre flöden: registrering, kärnvärde, betalning. Det är allt. Inga sociala inloggningar. Inga komplexa adminvyer. Ingen mobilapp. Ingen marknadsföringssite med 12 sektioner. Du behöver: en landningssida som förklarar värdet, ett registreringsflöde, det enda mest värdefulla användningsområdet, och ett betalflöde via Stripe. Allt annat är feature creep.",
+          "Tre flöden: registrering, kärnvärde, betalning. Det är allt. Inga sociala inloggningar. Inga komplexa adminvyer. Ingen mobilapp. Ingen marknadsföringssite med tolv sektioner. Du behöver: en landningssida som förklarar värdet, ett registreringsflöde, det enda mest värdefulla användningsområdet, och ett betalflöde via Stripe. Allt annat är feature creep.",
       },
       {
         heading: "Så validerar du tidigt",
         content:
-          "Innan du bygger någonting: skaffa 5-10 personer som säger att de vill betala. Helst betalar de innan produkten finns – då vet du att det är riktigt. När MVP:n är live: be om feedback från första 20 användarna inom 14 dagar. Vad använder de? Vad ignorerar de? Vad saknas? Bygg det de saknar i v1.1 efter två veckor. Inte tidigare.",
+          "Innan du bygger någonting: skaffa fem till tio personer som säger att de vill betala. Helst betalar de innan produkten finns – då vet du att det är riktigt. När MVP:n är live: be om återkoppling från första 20 användarna inom 14 dagar. Vad använder de? Vad ignorerar de? Vad saknas? Bygg det de saknar i v1.1 efter två veckor. Inte tidigare.",
       },
       {
         heading: "Från MVP till betal-SaaS",
@@ -49,7 +49,7 @@ export const articles7to12: Article[] = [
     faq: [
       {
         q: "Räcker en MVP för att söka externt kapital?",
-        a: "Den hjälper enormt. Investerare vill se demand – det syns bäst i en MVP med betalande kunder. En vacker pitch-deck utan produkt är värt mindre än 5 betalande pilotkunder.",
+        a: "Den hjälper enormt. Investerare vill se demand – det syns bäst i en MVP med betalande kunder. En vacker pitch-deck utan produkt är värt mindre än fem betalande pilotkunder.",
       },
       {
         q: "Hur långt ska jag ta MVP:n innan jag visar för marknaden?",
@@ -102,7 +102,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Hur du räknar på ROI för en intern app",
         content:
-          "Räknet: hur många timmar i veckan lägger ni totalt på att underhålla nuvarande Excel-process? Multiplicera med er genomsnittliga timkostnad. En SMB med fem personer som lägger två timmar i veckan vardera på Excel-pyssel: 10 timmar á 600 kr = 6 000 kr/vecka = 312 000 kr/år. En intern app för 69 000 kr som halverar det arbetet betalar sig på fem månader. Sen är det vinst hela vägen.",
+          "Räknet: hur många timmar i veckan lägger ni totalt på att underhålla nuvarande Excel-process? Multiplicera med er genomsnittliga timkostnad. En SMB med fem personer som lägger två timmar i veckan vardera på Excel-pyssel: tio timmar á 600 kr = 6 000 kr/vecka = 312 000 kr/år. En intern app för 69 000 kr som halverar det arbetet betalar sig på fem månader. Sen är det vinst hela vägen.",
       },
       {
         heading: "Byggmetodik med AI-verktyg",
@@ -123,7 +123,7 @@ export const articles7to12: Article[] = [
     faq: [
       {
         q: "Hur lång tid tar det att bygga en intern app?",
-        a: "Beroende på komplexitet: 1-4 veckor. En enkel app som ersätter ett medelstort Excel-ark tar oftast 2 veckor.",
+        a: "Beroende på komplexitet: en till fyra veckor. En enkel app som ersätter ett medelstort Excel-ark tar oftast två veckor.",
       },
       {
         q: "Måste vi flytta all data direkt?",
@@ -131,7 +131,7 @@ export const articles7to12: Article[] = [
       },
       {
         q: "Vad händer om någon i teamet inte vill byta?",
-        a: "Det är ett vanligare problem än ni tror. Lösningen är att designa appen så att den är märkbart enklare än Excel inom 5 minuters användning.",
+        a: "Det är ett vanligare problem än ni tror. Lösningen är att designa appen så att den är märkbart enklare än Excel inom fem minuters användning.",
       },
       {
         q: "Behöver vi IT-support efter bygget?",
@@ -176,7 +176,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Vad det kostar i tid",
         content:
-          "En icke-utvecklare som ska bygga en seriös SaaS från noll får räkna med 200-500 timmar inklusive lärande. Det är 1-3 månaders heltid eller 6-12 månader på fritiden. Värdet av din tid? Om du tjänar 500 kr/h på ditt riktiga jobb är det 100 000-250 000 kr i alternativkostnad. Lägg därtill risken att produkten blir tekniskt skuldsatt och måste skrivas om.",
+          "En icke-utvecklare som ska bygga en seriös SaaS från noll får räkna med 200-500 timmar inklusive lärande. Det är en till tre månaders heltid eller sex till tolv månader på fritiden. Värdet av din tid? Om du tjänar 500 kr/h på ditt riktiga jobb är det 100 000-250 000 kr i alternativkostnad. Lägg därtill risken att produkten blir tekniskt skuldsatt och måste skrivas om.",
       },
       {
         heading: "Hybridmodellen som faktiskt funkar",
@@ -276,7 +276,7 @@ export const articles7to12: Article[] = [
     faq: [
       {
         q: "Kan jag migrera från Firebase till Supabase?",
-        a: "Ja, men det kräver översättning från NoSQL till SQL. Tidsåtgång: 1-3 veckor beroende på datamängd. Vi gör såna projekt på fast pris.",
+        a: "Ja, men det kräver översättning från NoSQL till SQL. Tidsåtgång: en till tre veckor beroende på datamängd. Vi gör såna projekt på fast pris.",
       },
       {
         q: "Är Supabase verkligen GDPR-säkert?",
@@ -339,7 +339,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Pris och tid för Fortnox-integration",
         content:
-          "Som tilläggsfeature i ett befintligt projekt: 12 000 - 25 000 kr beroende på komplexitet. Som del av ett nytt SaaS-projekt med Skalbar SaaS-paketet (69 000 kr): ingår om det är prioriterat. Tid: 1-2 veckor extra om allt annat är klart. Skapande av Fortnox API-konto är gratis men kräver att du eller kunden är godkänd som integrationspartner.",
+          "Som tilläggsfeature i ett befintligt projekt: 12 000 - 25 000 kr beroende på komplexitet. Som del av ett nytt SaaS-projekt med Skalbar SaaS-paketet (69 000 kr): ingår om det är prioriterat. Tid: en till två veckor extra om allt annat är klart. Skapande av Fortnox API-konto är gratis men kräver att du eller kunden är godkänd som integrationspartner.",
       },
       {
         heading: "Alternativ till Fortnox",
@@ -362,7 +362,7 @@ export const articles7to12: Article[] = [
       },
       {
         q: "Hur länge tar en Fortnox-integration?",
-        a: "1-2 veckor för en grundlig implementation med felhantering. 3-5 dagar om det bara är simpel envägs-fakturasync.",
+        a: "En till två veckor för en grundlig implementation med felhantering. Tre till fem dagar om det bara är simpel envägs-fakturasync.",
       },
       {
         q: "Är Fortnox-integration GDPR-säker?",
@@ -398,7 +398,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Leveranstid: veckor istället för månader",
         content:
-          "Byrå: 6-26 veckor från första möte till lansering. Det inkluderar kravsamling, design-sprintar, godkännande-iterationer, utveckling, QA och deploy. AI-byggare: 1-4 veckor totalt. Mindre overhead, parallellt arbete med AI och granskning, och en operatör istället för ett team som måste koordineras.",
+          "Byrå: 6-26 veckor från första möte till lansering. Det inkluderar kravsamling, design-sprintar, godkännande-iterationer, utveckling, QA och deploy. AI-byggare: en till fyra veckor totalt. Mindre overhead, parallellt arbete med AI och granskning, och en operatör istället för ett team som måste koordineras.",
       },
       {
         heading: "Kvalitet: skiljer mer på person än modell",

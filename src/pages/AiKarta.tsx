@@ -35,7 +35,7 @@ const valueStack = [
   { icon: Workflow, title: "Förslag på lösning per område", body: "AI-assistent, automation, dashboard, internt system eller integration – med motivering." },
   { icon: Sparkles, title: "Djupanalys av Aurora-analysen", body: "Snabba vinster, risker att hantera och en rekommenderad ordning på pilotprojekten." },
   { icon: ShieldCheck, title: "Innehållsrik PDF att dela internt", body: "Snyggt formaterad, byggd för att ta med till ledningsmöte eller workshop med personalen." },
-  { icon: Zap, title: "Metodguide: Så automatiserar ni", body: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt AI-lösning på 2–4 veckor." },
+  { icon: Zap, title: "Metodguide: Så automatiserar ni", body: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt AI-lösning på två till fyra veckor." },
 ];
 
 const objections = [

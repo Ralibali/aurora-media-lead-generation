@@ -92,7 +92,7 @@ const Seo = () => {
       }
       whyAffordable="SEO är hantverk, men 80% är samma checklista varje gång. Jag använder mina egna verktyg och AI för att snabba upp granskning och on-page-arbete – utan att kompromissa på kvalitet."
       faqs={[
-        { q: "Hur lång tid tar det att se resultat?", a: "Tekniska fixar syns ofta inom 2–4 veckor. On-page tar 1–3 månader. Innehållsbaserad ranking 3–6 månader. Inga garantier på exakta positioner – det vore fusk.", category: "SEO-teknik" },
+        { q: "Hur lång tid tar det att se resultat?", a: "Tekniska fixar syns ofta inom två till fyra veckor. On-page tar en till tre månader. Innehållsbaserad ranking tre till sex månader. Inga garantier på exakta positioner – det vore fusk.", category: "SEO-teknik" },
         { q: "Kan ni garantera plats 1 på Google?", a: "Nej. Den som lovar det ljuger. Jag lovar mätbara förbättringar i synlighet, klick och konvertering.", category: "Pris & process" },
         { q: "Behöver jag löpande SEO?", a: "Inte alltid. Många klarar sig med en grundlig audit + fix, sen content varje månad. Jag säger till om du behöver mer.", category: "Pris & process" },
         { q: "Hjälper du med innehåll?", a: "Ja, se Content-tjänsten. SEO-optimerade artiklar från 995 kr/styck.", category: "Innehåll" },

@@ -232,7 +232,7 @@ const AiKartaStart = () => {
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
                 {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
-                {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till 5) – vi räknar ut AI-potentialen för varje."}
+                {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
                 {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
               </p>
             </Reveal>

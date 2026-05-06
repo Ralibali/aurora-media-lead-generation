@@ -29,7 +29,7 @@ const Content = () => (
       { name: "5-pack", price: "3 990 kr", time: "Tre dagar", desc: "Vanligaste valet. 5 artiklar med tematisk röd tråd.", features: ["5 artiklar", "Innehållsplan", "Internlänkning mellan artiklarna", "Bättre styckpris"], featured: true },
       { name: "Månadspaket", price: "Från 7 980 kr/mån", time: "Löpande", desc: "10 artiklar/månad. För dig som bygger SEO-trafik systematiskt.", features: ["10 artiklar/mån", "Kvartalsvis innehållsplan", "Resultatrapport", "Säg upp med 30 dagars varsel"] },
     ]}
-    whyAffordable="AI gör tunga lyftet, jag gör skillnaden. En traditionell copywriter behöver 4–6 timmar per artikel. Jag behöver 60 minuter med rätt verktyg – och kan därför ta 995 kr istället för 4 000–8 000 kr."
+    whyAffordable="AI gör tunga lyftet, jag gör skillnaden. En traditionell copywriter behöver fyra till sex timmar per artikel. Jag behöver 60 minuter med rätt verktyg – och kan därför ta 995 kr istället för 4 000–8 000 kr."
     faqs={[
       { q: "Är det inte uppenbart AI-skrivet?", a: "Inte med min process. AI gör utkast, jag skriver om allt som låter generiskt – meningsstruktur, exempel, ton. Lägg gärna en blindtest-artikel mot din befintliga byrås text och jämför." },
       { q: "Vilka ämnen klarar du?", a: "Jag kan skriva om de flesta ämnen eftersom jag grundar alla texter på vetenskapliga artiklar, branschrapporter och primärkällor. Jag faktagranskar alltid noggrant och anger källor när det behövs. För djupt nischade områden, som avancerad medicin eller juridik på paragrafnivå, erbjuder jag istället en expertintervju eller granskning av en sakkunnig." },

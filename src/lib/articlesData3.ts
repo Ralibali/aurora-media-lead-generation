@@ -38,7 +38,7 @@ export const articles13to18: Article[] = [
       {
         heading: "Produkt på veckor, inte månader",
         content:
-          "Med AI-assisterad utveckling kan vi gå snabbare från idé till testbar produkt. En prototyp kan ofta tas fram på 1–2 veckor. En MVP med inloggning, databas, betalning via Stripe, e-postflöden och adminpanel kan ofta byggas på 3–5 veckor. Det viktiga är inte att första versionen innehåller allt. Det viktiga är att den går att testa på riktiga användare och riktiga affärscase.",
+          "Med AI-assisterad utveckling kan vi gå snabbare från idé till testbar produkt. En prototyp kan ofta tas fram på en till två veckor. En MVP med inloggning, databas, betalning via Stripe, e-postflöden och adminpanel kan ofta byggas på tre till fem veckor. Det viktiga är inte att första versionen innehåller allt. Det viktiga är att den går att testa på riktiga användare och riktiga affärscase.",
       },
       {
         heading: "Du äger koden och kan ta den vidare",
@@ -88,7 +88,7 @@ export const articles13to18: Article[] = [
       },
       {
         q: "Hur snabbt kan jag få en SaaS-prototyp?",
-        a: "En klickbar prototyp kan ofta tas fram på 1–2 veckor. En MVP som går att lansera tar vanligtvis cirka 3–5 veckor beroende på funktioner och beslutstempo.",
+        a: "En klickbar prototyp kan ofta tas fram på en till två veckor. En MVP som går att lansera tar vanligtvis cirka tre till fem veckor beroende på funktioner och beslutstempo.",
       },
       {
         q: "Äger jag koden efter projektet?",

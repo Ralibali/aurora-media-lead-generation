@@ -7,11 +7,11 @@ const blocks = [
   },
   {
     h: "Färdiga komponenter.",
-    p: "Jag har byggt ett eget bibliotek med återanvändbara kodblock från mina 7 egna SaaS-projekt. Betalningar, login, dashboards, SEO. Varför uppfinna hjulet varje gång?",
+    p: "Jag har byggt ett eget bibliotek med återanvändbara kodblock från mina sju egna SaaS-projekt. Betalningar, login, dashboards, SEO. Varför uppfinna hjulet varje gång?",
   },
   {
     h: "En person, en process.",
-    p: "Du pratar direkt med mig, personen som bygger. Inga projektledare, inga mellanhänder, inga möten som slösar tid. 10 år i säkerhetsbranschen lärde mig att rutiner levererar resultat.",
+    p: "Du pratar direkt med mig, personen som bygger. Inga projektledare, inga mellanhänder, inga möten som slösar tid. Tio år i säkerhetsbranschen lärde mig att rutiner levererar resultat.",
   },
 ];
 

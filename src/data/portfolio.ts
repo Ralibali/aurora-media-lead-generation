@@ -49,7 +49,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     tagline: "Dispatching-SaaS för svenska transportbolag.",
     taglineEn: "Dispatching SaaS for Swedish transport companies.",
     description:
-      "Komplett dispatch- och fakturasystem för åkerier. Bygger schemaläggning, körorder, Fortnox-export och Stripe-fakturering på under 2 veckor.",
+      "Komplett dispatch- och fakturasystem för åkerier. Bygger schemaläggning, körorder, Fortnox-export och Stripe-fakturering på under två veckor.",
     descriptionEn:
       "Full dispatch and invoicing platform for trucking firms. Built scheduling, work orders, Fortnox export and Stripe invoicing in under 2 weeks.",
     stack: ["Lovable", "Supabase", "Stripe", "Fortnox API", "React", "Tailwind"],

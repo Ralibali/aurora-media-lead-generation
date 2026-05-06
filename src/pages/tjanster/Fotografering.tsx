@@ -34,7 +34,7 @@ const Fotografering = () => (
       { q: "Var fotograferar du?", a: "Linköping, Norrköping, Mjölby, Motala – ingen reseersättning. Andra städer i Östergötland: 250 kr/h körning." },
       { q: "Behövs studio?", a: "För större produktbatcher hyr vi studio – 1 500 kr extra. Mindre setup gör jag i din lokal." },
       { q: "Får jag rättigheterna?", a: "Ja, fri användning för ditt företag. Säljer jag inte bilderna vidare." },
-      { q: "Hur många kan vara med på en halvdag?", a: "Upp till 5 personer för porträtt. Fler – välj heldag." },
+      { q: "Hur många kan vara med på en halvdag?", a: "Upp till fem personer för porträtt. Fler – välj heldag." },
     ]}
     related={[
       { name: "Grafisk profil", price: "Från 5 900 kr", to: "/tjanster/grafisk-profil" },
