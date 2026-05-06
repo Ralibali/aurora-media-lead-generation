@@ -107,6 +107,33 @@ function automationFactor(p: ProcessIn): number {
 const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
+function normalizeCompanyName(name: string): string {
+  if (!name) return "ert företag";
+  const trimmed = name.trim();
+  if (trimmed === trimmed.toLowerCase() || trimmed === trimmed.toUpperCase()) {
+    return trimmed
+      .toLowerCase()
+      .split(/\s+/)
+      .map((w) => {
+        if (/^(ab|hb|kb|as)$/i.test(w)) return w.toUpperCase();
+        return w.charAt(0).toUpperCase() + w.slice(1);
+      })
+      .join(" ");
+  }
+  return trimmed;
+}
+
+function readablePotential(p: string): string {
+  if (p === "Direkt AI-case") return "Direkt redo";
+  return p;
+}
+
+function topAreasTitle(count: number): string {
+  if (count === 1) return "Ert högst rankade AI-område";
+  if (count === 2) return "Era topp 2 AI-områden";
+  return "Era topp 3 AI-områden";
+}
+
 function getClientIp(req: Request): string {
   const xff = req.headers.get("x-forwarded-for");
   if (xff) return xff.split(",")[0].trim();
