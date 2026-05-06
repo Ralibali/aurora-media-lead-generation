@@ -8,6 +8,7 @@ import AuroraIntegrations from "@/components/landing/AuroraIntegrations";
 import AuroraProcess from "@/components/landing/AuroraProcess";
 import AuroraPricing from "@/components/landing/AuroraPricing";
 import AuroraFinalCTA from "@/components/landing/AuroraFinalCTA";
+import AuroraLeadCTA from "@/components/landing/AuroraLeadCTA";
 import AuroraFooter from "@/components/landing/AuroraFooter";
 import AuroraStickyMobileCTA from "@/components/landing/AuroraStickyMobileCTA";
 import {
