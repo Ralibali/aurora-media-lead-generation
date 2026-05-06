@@ -59,7 +59,7 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/",
   },
   "/ai-karta": {
-    title: "AI-kartan | Hitta företagets bästa AI-case | Aurora Media",
+    title: "AI-kartan | Hitta företagets bästa AI-områden | Aurora Media",
     description:
       "Ladda ner Aurora AI-karta och identifiera vilka arbetsuppgifter, system och processer i företaget som kan automatiseras, effektiviseras eller byggas om med AI.",
     canonical: "https://auroramedia.se/ai-karta",
@@ -83,9 +83,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/en",
   },
   "/arbete": {
-    title: "Case & projekt | Aurora Media AB",
+    title: "Arbete & projekt | Aurora Media AB",
     description:
-      "Se case, projekt och digitala lösningar som Aurora Media har byggt för företag i olika branscher.",
+      "Se arbeten, projekt och digitala lösningar som Aurora Media har byggt för företag i olika branscher.",
     canonical: "https://auroramedia.se/arbete",
   },
   "/priser": {
@@ -201,7 +201,7 @@ const seoMap: Record<string, SEOConfig> = {
 function getDynamicSeo(pathname: string): SEOConfig {
   if (pathname.startsWith("/arbete/")) {
     return {
-      title: "Case | Aurora Media AB",
+      title: "Projekt | Aurora Media AB",
       description:
         "Läs mer om vårt arbete, processen bakom lösningen och resultatet i det här caset.",
       canonical: `https://auroramedia.se${pathname}`,

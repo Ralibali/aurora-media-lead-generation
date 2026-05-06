@@ -21,11 +21,11 @@ const GoogleAds = () => (
     process={[
       { label: "Steg 1", title: "Strategi", body: "30 min samtal: vad säljer du, till vem, vad är värdet av en konvertering?" },
       { label: "Steg 2", title: "Setup", body: "Konto, kampanjer, annonser, tracking. 3–5 dagar." },
-      { label: "Steg 3", title: "Lansering", body: "Soft launch med liten budget. Justeringar dag 3 och 7." },
+      { label: "Steg 3", title: "Lansering", body: "Mjukstart med liten budget. Justeringar dag 3 och 7." },
       { label: "Steg 4", title: "Överlämning", body: "Du får tillgång till kontot. Vill du att jag fortsätter? Det är ett val, inte ett tvång." },
     ]}
     tiers={[
-      { name: "Setup", price: "3 900 kr", time: "3–5 dagar", desc: "Engångsuppsättning. Du driver vidare själv eller med ett annat team.", features: ["Kontosetup", "1–3 sökkampanjer", "Conversion tracking", "30 dagars uppföljning"] },
+      { name: "Setup", price: "3 900 kr", time: "3–5 dagar", desc: "Engångsuppsättning. Du driver vidare själv eller med någon annan.", features: ["Kontosetup", "1–3 sökkampanjer", "Conversion tracking", "30 dagars uppföljning"] },
       { name: "Setup + 3 mån", price: "9 900 kr", time: "Setup + 3 månaders optimering", desc: "Det vanligaste valet. Jag optimerar varje vecka i 3 månader.", features: ["Allt i Setup", "Veckovis optimering", "A/B-test annonser", "Månatlig rapport"], featured: true },
       { name: "Löpande", price: "2 490 kr/mån", time: "Månadsvis, säg upp när du vill", desc: "Efter setup eller efter 3-månaders. Inga bindningstider.", features: ["Veckovis optimering", "Annonsuppdateringar", "Budget-justering", "Månatlig rapport"] },
     ]}

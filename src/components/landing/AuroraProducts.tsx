@@ -190,7 +190,7 @@ const AuroraProducts = () => {
             <h2 className="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1] tracking-[-0.035em]">
               {liveCount} live just nu.{" "}
               <span style={{ color: "hsl(152 80% 60%)" }}>
-                Inga case från praktiken.
+                Inga exempel från praktiken.
               </span>
             </h2>
           </div>

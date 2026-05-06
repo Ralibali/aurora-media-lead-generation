@@ -20,7 +20,7 @@ const services = [
   { icon: MagnifyingGlass, name: "SEO", price: "Från 2 490 kr", desc: "Teknisk SEO, on-page och lokal SEO för Linköping.", to: "/tjanster/seo" },
   { icon: CursorClick, name: "Google Ads", price: "3 900 kr setup", desc: "Sökannonser som faktiskt konverterar.", to: "/tjanster/google-ads" },
   { icon: Megaphone, name: "Meta Ads", price: "3 900 kr setup", desc: "Facebook och Instagram. Pixelinstallation ingår.", to: "/tjanster/meta-ads" },
-  { icon: PencilSimple, name: "Content", price: "995 kr/artikel", desc: "SEO-optimerade artiklar skrivna med AI och redigerade av mig.", to: "/tjanster/content" },
+  { icon: PencilSimple, name: "Innehåll", price: "995 kr/artikel", desc: "SEO-optimerade artiklar skrivna med AI och redigerade av mig.", to: "/tjanster/content" },
   { icon: Palette, name: "Grafisk profil", price: "Från 5 900 kr", desc: "Logo, färger, typografi och mallar du faktiskt vågar använda.", to: "/tjanster/grafisk-profil" },
   { icon: Camera, name: "Fotografering", price: "4 900 kr/halvdag", desc: "Produkt-, miljö- och porträttfoto i Linköping.", to: "/tjanster/fotografering" },
 ];

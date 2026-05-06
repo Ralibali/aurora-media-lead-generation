@@ -21,7 +21,7 @@ export const faqs: FaqItem[] = [
   },
   {
     q: "Använder du AI för att bygga?",
-    a: "Ja. Jag använder AI-verktyg som Lovable, Bolt, Cursor och Claude för att bygga snabbare. Men arkitektur, scope, säkerhet, QA och slutansvar ligger hos mig.",
+    a: "Ja. Jag använder AI-verktyg som Lovable, Bolt, Cursor och Claude för att bygga snabbare. Men arkitektur, omfattning, säkerhet, QA och slutansvar ligger hos mig.",
     category: "Process",
   },
   {
@@ -31,7 +31,7 @@ export const faqs: FaqItem[] = [
   },
   {
     q: "Vad kostar det?",
-    a: "En prototyp börjar från 14 900 kr, en MVP från 34 900 kr och en mer skalbar SaaS från 89 000 kr. Exakt pris beror på scope, integrationer och komplexitet.",
+    a: "En prototyp börjar från 14 900 kr, en MVP från 34 900 kr och en mer skalbar SaaS från 89 000 kr. Exakt pris beror på omfattning, integrationer och komplexitet.",
     category: "Pris",
   },
   {

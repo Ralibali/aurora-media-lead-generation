@@ -43,8 +43,8 @@ const primary: Service = {
 };
 
 const services: Service[] = [
-  { icon: Code2, name: "SaaS & interna system", price: "Från 34 900 kr", desc: "Dashboard, login, databas, Stripe, admin och integrationer. Byggt för riktig användning, inte bara demo.", to: "/priser" },
-  { icon: Globe, name: "Hemsidor & plattformar", price: "Offert efter scope", desc: "Moderna React-sajter, landningssidor och SEO-hubbar som matchar nya Aurora-standarden.", to: "/tjanster/hemsidor" },
+  { icon: Code2, name: "SaaS & interna system", price: "Från 34 900 kr", desc: "Kontrollpanel, login, databas, Stripe, admin och integrationer. Byggt för riktig användning, inte bara demo.", to: "/priser" },
+  { icon: Globe, name: "Hemsidor & plattformar", price: "Offert efter omfattning", desc: "Moderna React-sajter, landningssidor och SEO-hubbar som matchar nya Aurora-standarden.", to: "/tjanster/hemsidor" },
   { icon: ShoppingBag, name: "E-handel", price: "Offert efter butik", desc: "Shopify, Stripe eller skräddarsytt flöde med betalning, orderlogik och spårning från start.", to: "/tjanster/ehandel" },
   { icon: Smartphone, name: "Mobilappar", price: "PWA eller app efter behov", desc: "Installerbara webbappar eller app-liknande lösningar med samma kodbas som produkten.", to: "/tjanster/mobilapp" },
   { icon: Search, name: "SEO", price: "Engångsinsats eller löpande", desc: "Teknisk SEO, sitemap, prerendering, AI-discovery, content och interna länkar som faktiskt hjälper ranking.", to: "/tjanster/seo" },

@@ -16,7 +16,7 @@ const lokalaFaqs = [
   },
   {
     q: "Vad kostar en hemsida eller webbplattform?",
-    a: "Det beror på scope. En enkel landningssida är billigare än en plattform med databas, login och integrationer. För SaaS och MVP börjar paketen från 14 900 kr för prototyp och 34 900 kr för MVP.",
+    a: "Det beror på omfattning. En enkel landningssida är billigare än en plattform med databas, login och integrationer. För SaaS och MVP börjar paketen från 14 900 kr för prototyp och 34 900 kr för MVP.",
   },
   {
     q: "Hur skiljer ni er från en traditionell webbyrå?",
@@ -115,7 +115,7 @@ const WebbyraLinkoping = () => {
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <li><Link to="/ai-konsult-sverige" className="text-sm underline hover:text-primary">AI-konsult Sverige →</Link></li>
               <li><Link to="/priser" className="text-sm underline hover:text-primary">Priser & paket →</Link></li>
-              <li><Link to="/arbete" className="text-sm underline hover:text-primary">Case & projekt →</Link></li>
+              <li><Link to="/arbete" className="text-sm underline hover:text-primary">Vårt arbete →</Link></li>
               <li><Link to="/metodik" className="text-sm underline hover:text-primary">Metodik →</Link></li>
               <li><Link to="/tjanster/hemsidor" className="text-sm underline hover:text-primary">Hemsidor →</Link></li>
               <li><Link to="/tjanster/seo" className="text-sm underline hover:text-primary">SEO →</Link></li>

@@ -49,7 +49,7 @@ const services = [
   {
     icon: Bot,
     title: "AI-assistenter",
-    body: "Vi bygger assistenter för support, sälj, dokument, onboarding och intern kunskap – tränade på företagets egna processer och material.",
+    body: "Vi bygger assistenter för support, sälj, dokument, introduktion och intern kunskap – tränade på företagets egna processer och material.",
   },
   {
     icon: MailCheck,
@@ -76,7 +76,7 @@ const packages = [
   {
     name: "AI Start",
     price: "För företag som vill börja rätt",
-    points: ["AI-genomlysning", "3–5 konkreta automationscase", "prioriterad roadmap", "förslag på första implementation"],
+    points: ["AI-genomlysning", "3–5 konkreta automationsmöjligheter", "prioriterad färdplan", "förslag på första genomförande"],
   },
   {
     name: "Automation Sprint",

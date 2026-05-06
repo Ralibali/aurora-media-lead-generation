@@ -23,7 +23,7 @@ const Ehandel = () => (
       { label: "Steg 1", title: "Affärsflöde", body: "Vi går igenom vad du säljer, hur betalning/frakt ska fungera och vilka system e-handeln måste prata med." },
       { label: "Steg 2", title: "Tekniskt val", body: "Shopify om det är smartast. Egen lösning om regler, checkout eller data kräver mer kontroll." },
       { label: "Steg 3", title: "Bygg & kopplingar", body: "Butik, produktstruktur, betalning, mätning, e-postflöden och integrationer byggs ihop." },
-      { label: "Steg 4", title: "Lansering", body: "Soft launch, testköp, tracking, justeringar och överlämning så du kan börja sälja tryggt." },
+      { label: "Steg 4", title: "Lansering", body: "Mjukstart, testköp, spårning, justeringar och överlämning så du kan börja sälja tryggt." },
     ]}
     tiers={[
       {
@@ -36,7 +36,7 @@ const Ehandel = () => (
       {
         name: "Growth Commerce",
         price: "Fast offert",
-        time: "Efter scope",
+        time: "Efter omfattning",
         desc: "För butiker som behöver e-postflöden, annonsering, SEO och integrationer från start.",
         features: ["Allt i Launch", "SEO-grund", "Meta/Google tracking", "E-postflöden", "Integrationer"],
         featured: true,
@@ -44,7 +44,7 @@ const Ehandel = () => (
       {
         name: "Custom Commerce",
         price: "Från 89 000 kr",
-        time: "Efter scope",
+        time: "Efter omfattning",
         desc: "När du behöver egen checkout, databas, kundportal eller mer avancerad logik.",
         features: ["React + Stripe", "Egen admin", "Kundkonton", "API-integrationer", "Kod du äger"],
       },

@@ -70,7 +70,7 @@ const AiKartaResultat = () => {
   useEffect(() => {
     setSEOMeta({
       title: "Er AI-karta · Resultat | Aurora Media",
-      description: "Mini-analys av era topp-3 AI-case och rekommenderat nästa steg.",
+      description: "Mini-analys av era topp-3 AI-områden och rekommenderat nästa steg.",
       canonical: "https://auroramedia.se/ai-karta/resultat",
       noindex: true,
     });
@@ -380,7 +380,7 @@ const AiKartaResultat = () => {
                         {p.rule_based === "yes" && " Processen är regelstyrd – väl lämpad för automation."}
                         {p.rule_based === "partial" && " Processen är delvis regelstyrd – AI kan ta hand om merparten."}
                         {p.data_available === "yes" && " Datan finns redan i era system."}
-                        {p.business_value === "high" && " Hög affärsnytta gör detta till ett tydligt första case."}
+                        {p.business_value === "high" && " Hög affärsnytta gör detta till ett tydligt första område."}
                       </p>
 
                       <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -438,7 +438,7 @@ const AiKartaResultat = () => {
                             {ai.quick_wins?.length > 0 && (
                               <div>
                                 <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                  Quick wins ni kan testa själva
+                                  Snabba vinster ni kan testa själva
                                 </p>
                                 <ul className="mt-2 space-y-1.5">
                                   {ai.quick_wins.map((qw, idx) => (
@@ -802,7 +802,7 @@ function ResultStateScreen({
       label: "Bearbetar er AI-karta",
       title: "Vi sätter ihop er mini-analys…",
       body:
-        "Vi kör era svar genom Aurora-modellen, räknar fram tidsbesparing och identifierar topp-3 case. Det tar oftast bara några sekunder.",
+        "Vi kör era svar genom Aurora-modellen, räknar fram tidsbesparing och identifierar topp-3 områden. Det tar oftast bara några sekunder.",
     },
     missing: {
       Icon: Sparkles,
