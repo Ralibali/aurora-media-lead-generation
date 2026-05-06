@@ -253,6 +253,52 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    // Auto-svar till avsändaren — bekräftelse på att vi tagit emot meddelandet
+    try {
+      const autoReplyHtml = `
+        <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a;">
+          <h2 style="font-size:20px;margin:0 0 16px;color:#0f1f1a;">Tack ${escape(name)} – vi har tagit emot din förfrågan!</h2>
+          <p style="font-size:15px;line-height:1.55;color:#333;margin:0 0 16px;">
+            Vi återkommer personligen inom 24 timmar (vardagar) med nästa steg. Under tiden – om något brådskar
+            är du välkommen att svara direkt på det här mejlet eller ringa oss.
+          </p>
+          <div style="padding:14px 16px;background:#f3f6f4;border-left:3px solid #1f7a5e;border-radius:4px;margin:18px 0;">
+            <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:#1f7a5e;font-weight:600;">Din förfrågan</p>
+            <p style="margin:0 0 4px;font-size:14px;"><strong>Ämne:</strong> ${escape(subjectLabel)}</p>
+            ${company ? `<p style="margin:0 0 4px;font-size:14px;"><strong>Företag:</strong> ${escape(company)}</p>` : ""}
+            <p style="margin:8px 0 0;font-size:14px;white-space:pre-wrap;color:#444;">${escape(message)}</p>
+          </div>
+          <p style="font-size:14px;color:#555;margin:18px 0 4px;">Vänliga hälsningar,</p>
+          <p style="font-size:14px;color:#1a1a1a;margin:0;font-weight:600;">Aurora Media</p>
+          <p style="font-size:13px;color:#666;margin:2px 0 0;">info@auroramedia.se · auroramedia.se</p>
+          <hr style="border:none;border-top:1px solid #eee;margin:22px 0 12px;" />
+          <p style="font-size:11px;color:#999;line-height:1.5;">
+            Det här är ett automatiskt bekräftelsemejl. Du behöver inte svara – ett personligt svar är på väg.
+          </p>
+        </div>
+      `;
+      const autoRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "Aurora Media <noreply@auroramedia.se>",
+          to: [email],
+          reply_to: "info@auroramedia.se",
+          subject: "Vi har tagit emot din förfrågan – Aurora Media",
+          html: autoReplyHtml,
+        }),
+      });
+      if (!autoRes.ok) {
+        const t = await autoRes.text();
+        console.error("[send-contact-email] auto-reply failed", autoRes.status, t);
+      }
+    } catch (e) {
+      console.error("[send-contact-email] auto-reply threw", e);
+    }
+
     return new Response(JSON.stringify({ ok: true, leadId }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
