@@ -180,6 +180,70 @@ const AiKartaResultat = () => {
     }
   };
 
+  const openBooking = () => {
+    void trackAiKartaClick("booking_open");
+    setBookingErr(null);
+    setBookingStatus("idle");
+    setBookFieldErrors({});
+    setBookForm((f) => ({
+      ...f,
+      name: f.name || meta.contact_name || "",
+      email: f.email || meta.email || "",
+    }));
+    setBookingOpen(true);
+  };
+
+  const BookingSchema = z.object({
+    name: z.string().trim().min(2, "Ange ditt namn").max(80),
+    email: z.string().trim().email("Ogiltig e-postadress").max(160),
+    phone: z.string().trim().max(40).optional().or(z.literal("")),
+    preferred_time: z.string().trim().max(120).optional().or(z.literal("")),
+    message: z.string().trim().max(1000).optional().or(z.literal("")),
+  });
+
+  const submitBooking = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (bookingStatus === "submitting") return;
+    setBookingErr(null);
+    setBookFieldErrors({});
+    const parsed = BookingSchema.safeParse(bookForm);
+    if (!parsed.success) {
+      const fe: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const k = issue.path[0]?.toString() ?? "form";
+        if (!fe[k]) fe[k] = issue.message;
+      }
+      setBookFieldErrors(fe);
+      return;
+    }
+    setBookingStatus("submitting");
+    void trackAiKartaClick("booking_submit");
+    try {
+      const { data, error } = await supabase.functions.invoke("book-ai-genomlysning", {
+        body: {
+          contact_name: parsed.data.name,
+          email: parsed.data.email,
+          company_name: meta.company_name,
+          phone: parsed.data.phone,
+          preferred_time: parsed.data.preferred_time,
+          message: parsed.data.message,
+          total_potential,
+          totalSavedPerYear,
+          topProcesses: top3.map((p) => p.process_name),
+          website: bookForm.website,
+        },
+      });
+      if (error || (data && (data as { error?: string }).error)) {
+        throw new Error((data as { error?: string })?.error || error?.message || "Okänt fel");
+      }
+      setBookingStatus("success");
+      toast.success("Bokningsförfrågan skickad", { description: "Du får en kalenderinbjudan inom kort." });
+    } catch (err) {
+      console.error("[book-ai-genomlysning]", err);
+      setBookingStatus("idle");
+      setBookingErr(err instanceof Error ? err.message : "Något gick fel. Försök igen.");
+    }
+  };
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
