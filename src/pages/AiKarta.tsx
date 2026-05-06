@@ -336,6 +336,26 @@ const AiKarta = () => {
           </div>
         </section>
 
+        {/* ============== KONTAKTFORMULÄR ============== */}
+        <section id="kontakt" className="border-t border-white/10 py-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <Reveal>
+              <p className="label-caps">Kontakt</p>
+              <h2 className="mt-3 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+                Hellre prata direkt? Skicka en rad.
+              </h2>
+              <p className="mt-4 max-w-2xl text-muted-foreground">
+                Inget formulär-träsk – bara dig och oss. Vi läser allt själva och svarar inom 24 timmar (vardagar).
+              </p>
+            </Reveal>
+            <div className="mt-10">
+              <Reveal y={16}>
+                <AuroraContactForm />
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
         {/* ============== FINAL CTA ============== */}
         <section className="pb-28">
           <div className="container mx-auto px-6 max-w-6xl">
