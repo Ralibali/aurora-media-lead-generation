@@ -51,10 +51,17 @@ const AuroraNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const goToNav = (href: string, type: string) => {
-    if (type === "route") return navigate(href);
+    if (type === "route") {
+      if (location.pathname === href) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        navigate(href);
+        setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 0);
+      }
+      return;
+    }
     if (location.pathname === "/") return smoothTo(href);
     navigate(`/${href}`);
-    // Scroll after route renders
     setTimeout(() => smoothTo(href), 350);
   };
 
