@@ -129,6 +129,12 @@ const WebbyraLinkoping = () => {
         <FAQSection items={lokalaFaqs} title="Vanliga frågor om webbyrå i Linköping" />
         <CTABanner />
       </main>
+      <StickyMobileCTABar
+        primaryLabel="Få offert"
+        primaryTo="#kontakt"
+        secondaryLabel="Tjänster"
+        secondaryTo="/"
+      />
       <Footer />
     </div>
   );
