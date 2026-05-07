@@ -20,6 +20,7 @@ import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import AuroraContactForm from "@/components/AuroraContactForm";
+import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
 // — Conversion-driven copy. Specifika siffror > vaga löften. —
