@@ -70,6 +70,18 @@ type Stats = {
   ai_karta_leads: number;
   conversion_rate: number;
   window_days: number;
+  cta_clicks_total?: number;
+  cta_clicks_unique_sessions?: number;
+};
+
+type CtaClick = {
+  id: string;
+  button: string;
+  location: string | null;
+  lead_label: string | null;
+  page_path: string | null;
+  session_id: string | null;
+  created_at: string;
 };
 
 const Leads = () => {
