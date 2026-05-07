@@ -657,13 +657,27 @@ const ContactDialog = ({
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <Checkbox id="consent" name="consent" required className="mt-1" />
+              <Checkbox
+                id="consent"
+                name="consent"
+                required
+                className="mt-1"
+                checked={consentChecked}
+                onCheckedChange={(v) => setConsentChecked(v === true)}
+              />
               <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.
+                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.{" "}
+                <span className="text-destructive">*</span>
               </Label>
             </div>
-            <Button type="submit" disabled={submitting} className="w-full" size="lg">
-              {submitting ? "Skickar…" : "Skicka"}
+            <Button
+              type="submit"
+              disabled={submitting || !isFormValid}
+              className="w-full"
+              size="lg"
+              aria-disabled={submitting || !isFormValid}
+            >
+              {submitting ? "Skickar…" : isFormValid ? "Skicka förfrågan" : "Fyll i obligatoriska fält"}
             </Button>
             <p className="text-center text-sm text-muted-foreground pt-2">
               Hellre mejla direkt?{" "}
