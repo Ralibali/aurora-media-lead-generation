@@ -86,6 +86,16 @@ const schema = z.object({
     }, "Använd en riktig e-postadress, inte en engångsadress")
     .refine((v) => !/\+.*\+/.test(v), "Ogiltig e-postadress"),
   company: z.string().trim().max(120).optional().or(z.literal("")),
+  phone: z
+    .string()
+    .trim()
+    .max(30, "Telefonnumret är för långt")
+    .optional()
+    .or(z.literal(""))
+    .refine(
+      (v) => !v || /^[+0-9][0-9\s\-()]{5,}$/.test(v),
+      "Ange ett giltigt telefonnummer (siffror, mellanslag och +)"
+    ),
   paket: z.string().min(1, "Välj vilket paket du är intresserad av"),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
