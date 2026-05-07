@@ -179,7 +179,7 @@ const AiKartaStart = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(4)) return;
+    if (!validateStep(3)) return;
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("submit-ai-map", {
