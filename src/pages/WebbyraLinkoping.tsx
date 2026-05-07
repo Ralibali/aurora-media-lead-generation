@@ -131,9 +131,9 @@ const WebbyraLinkoping = () => {
       </main>
       <StickyMobileCTABar
         primaryLabel="Få offert"
-        primaryTo="#kontakt"
-        secondaryLabel="Tjänster"
-        secondaryTo="/"
+        primaryOnClick={() => open("Hemsida")}
+        secondaryLabel="AI-tjänster"
+        secondaryTo="/ai-automation-foretag"
       />
       <Footer />
     </div>
