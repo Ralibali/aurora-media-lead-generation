@@ -39,6 +39,29 @@ const DISPOSABLE_EMAIL_DOMAINS = new Set([
   "tempr.email", "mailnesia.com", "emailondeck.com", "moakt.com",
 ]);
 
+// Vanliga felstavningar av e-postdomäner → korrekt domän
+const EMAIL_DOMAIN_TYPOS: Record<string, string> = {
+  "gmial.com": "gmail.com", "gmai.com": "gmail.com", "gmal.com": "gmail.com",
+  "gmail.co": "gmail.com", "gmail.con": "gmail.com", "gnail.com": "gmail.com",
+  "gmaill.com": "gmail.com", "gmali.com": "gmail.com",
+  "hotnail.com": "hotmail.com", "hotmai.com": "hotmail.com", "hotmial.com": "hotmail.com",
+  "hotmail.co": "hotmail.com", "hotmail.con": "hotmail.com", "hotmail.se": "hotmail.com",
+  "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com", "yahoo.co": "yahoo.com",
+  "outlok.com": "outlook.com", "outloo.com": "outlook.com", "outlook.con": "outlook.com",
+  "iclould.com": "icloud.com", "icloud.con": "icloud.com", "iclod.com": "icloud.com",
+  "live.con": "live.com", "live.co": "live.com",
+  "telia.se.com": "telia.se", "telia.com": "telia.se",
+};
+
+const suggestEmailFix = (email: string): string | null => {
+  const at = email.lastIndexOf("@");
+  if (at < 1) return null;
+  const local = email.slice(0, at);
+  const domain = email.slice(at + 1).toLowerCase();
+  const fix = EMAIL_DOMAIN_TYPOS[domain];
+  return fix ? `${local}@${fix}` : null;
+};
+
 // Tillåt bokstäver (inkl. åäö och internationella), mellanslag, bindestreck och apostrof
 const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
 
