@@ -275,54 +275,6 @@ const AiKartaStart = () => {
                 </div>
 
                 {step === 1 && (
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <Field label="Företagsnamn" error={errors.company_name} required>
-                      <Input
-                        value={form.company_name}
-                        onChange={(e) => update("company_name", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                      />
-                    </Field>
-                    <Field label="Bransch" error={errors.industry} required>
-                      <Input
-                        value={form.industry}
-                        onChange={(e) => update("industry", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                        placeholder="t.ex. e-handel, bygg, konsult"
-                      />
-                    </Field>
-                    <Field label="Antal anställda" error={errors.employee_count} required full>
-                      <div className="flex flex-wrap gap-2.5">
-                        {EMPLOYEE_OPTIONS.map((opt) => (
-                          <ChoicePill
-                            key={opt}
-                            active={form.employee_count === opt}
-                            onClick={() => update("employee_count", opt)}
-                          >
-                            {opt}
-                          </ChoicePill>
-                        ))}
-                      </div>
-                    </Field>
-                    <Field label="Kontaktperson" error={errors.contact_name} required>
-                      <Input
-                        value={form.contact_name}
-                        onChange={(e) => update("contact_name", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                      />
-                    </Field>
-                    <Field label="E-post" error={errors.email} required>
-                      <Input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => update("email", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                      />
-                    </Field>
-                  </div>
-                )}
-
-                {step === 2 && (
                   <div
                     className={
                       errors.pain_areas
@@ -347,7 +299,7 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 3 && (
+                {step === 2 && (
                   <div className="space-y-5">
                     {form.processes.map((p, idx) => (
                       <div
@@ -437,25 +389,60 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 4 && (
-                  <div className="space-y-5">
-                    <SummaryRow label="Företag" value={`${form.company_name} · ${form.industry} · ${form.employee_count} anställda`} />
-                    <SummaryRow label="Kontakt" value={`${form.contact_name} · ${form.email}`} />
-                    <SummaryRow label="Tidstjuvar" value={form.pain_areas.join(", ") || "—"} />
-                    <div>
-                      <p className="label-caps">Processer</p>
-                      <ul className="mt-3 space-y-2 text-sm">
-                        {form.processes.map((p, i) => (
-                          <li key={i} className="rounded-xl border border-white/10 bg-background/30 p-3">
-                            <span className="font-semibold text-foreground">{i + 1}. {p.process_name || "—"}</span>
-                            <br />
-                            <span className="text-xs text-muted-foreground">
-                              {p.frequency && FREQ_LABELS[p.frequency]} · {p.weekly_time && TIME_LABELS[p.weekly_time]} ·
-                              {" "}affärsnytta {p.business_value && VALUE_LABELS[p.business_value].toLowerCase()}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
+                {step === 3 && (
+                  <div className="space-y-6">
+                    <div className="rounded-2xl border border-primary/25 bg-primary/[0.06] p-4 text-sm leading-relaxed text-foreground/90">
+                      <p className="font-semibold text-primary">Klart! Era svar är registrerade.</p>
+                      <p className="mt-1 text-muted-foreground">
+                        Fyll i kontaktuppgifter nedan så genererar vi er personliga AI-analys direkt –
+                        ni får både resultatet på skärmen och PDF:en på mejlen.
+                      </p>
+                    </div>
+
+                    <div className="grid gap-5 sm:grid-cols-2">
+                      <Field label="Företagsnamn" error={errors.company_name} required>
+                        <Input
+                          value={form.company_name}
+                          onChange={(e) => update("company_name", e.target.value)}
+                          className="rounded-full h-12 text-base"
+                        />
+                      </Field>
+                      <Field label="Bransch" error={errors.industry} required>
+                        <Input
+                          value={form.industry}
+                          onChange={(e) => update("industry", e.target.value)}
+                          className="rounded-full h-12 text-base"
+                          placeholder="t.ex. e-handel, bygg, konsult"
+                        />
+                      </Field>
+                      <Field label="Antal anställda" error={errors.employee_count} required full>
+                        <div className="flex flex-wrap gap-2.5">
+                          {EMPLOYEE_OPTIONS.map((opt) => (
+                            <ChoicePill
+                              key={opt}
+                              active={form.employee_count === opt}
+                              onClick={() => update("employee_count", opt)}
+                            >
+                              {opt}
+                            </ChoicePill>
+                          ))}
+                        </div>
+                      </Field>
+                      <Field label="Kontaktperson" error={errors.contact_name} required>
+                        <Input
+                          value={form.contact_name}
+                          onChange={(e) => update("contact_name", e.target.value)}
+                          className="rounded-full h-12 text-base"
+                        />
+                      </Field>
+                      <Field label="E-post" error={errors.email} required>
+                        <Input
+                          type="email"
+                          value={form.email}
+                          onChange={(e) => update("email", e.target.value)}
+                          className="rounded-full h-12 text-base"
+                        />
+                      </Field>
                     </div>
 
                     <div
