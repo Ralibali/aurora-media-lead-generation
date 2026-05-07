@@ -280,6 +280,25 @@ const ContactDialog = ({
     ? `Intresserad av: ${selectedOption.label}${platformOption ? ` · Plattform: ${platformOption.label}` : ""}`
     : "";
 
+  // Live-form-validitet → styr om Skicka-knappen är aktiv
+  const isFormValid = (() => {
+    const result = schema.safeParse({
+      name: nameValue,
+      email: emailValue,
+      company: "",
+      phone: phoneValue,
+      paket: paketValue,
+      platform: platformValue,
+      leadLabel,
+      internalNote,
+      message: messageValue,
+      consent: consentChecked,
+      website: "",
+    });
+    if (result.success && isMobileApp && !platformValue) return false;
+    return result.success;
+  })();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
