@@ -204,6 +204,42 @@ export type Database = {
           },
         ]
       }
+      cta_clicks: {
+        Row: {
+          button: string
+          created_at: string
+          id: string
+          lead_label: string | null
+          location: string | null
+          page_path: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          button: string
+          created_at?: string
+          id?: string
+          lead_label?: string | null
+          location?: string | null
+          page_path?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          button?: string
+          created_at?: string
+          id?: string
+          lead_label?: string | null
+          location?: string | null
+          page_path?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       faq_cta_clicks: {
         Row: {
           category: string | null

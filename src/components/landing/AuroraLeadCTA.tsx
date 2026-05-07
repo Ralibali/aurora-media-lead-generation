@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Mail, Clock, ShieldCheck, Sparkles } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
+import { trackCtaClick } from "@/lib/ctaTracking";
 
 interface Props {
   variant?: "wide" | "compact";
@@ -60,7 +61,10 @@ const AuroraLeadCTA = ({
                 </p>
               </div>
               <button
-                onClick={() => open()}
+                onClick={() => {
+                  trackCtaClick("lead_cta_compact", { location: "compact", lead_label: leadLabel });
+                  open(leadLabel);
+                }}
                 className="au-btn-coral whitespace-nowrap self-start md:self-auto"
               >
                 {ctaLabel}
@@ -123,13 +127,20 @@ const AuroraLeadCTA = ({
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button
-                  onClick={() => open()}
+                  onClick={() => {
+                    trackCtaClick("lead_cta_wide", { location: "wide", lead_label: leadLabel });
+                    open(leadLabel);
+                  }}
                   className="au-btn-coral"
                 >
                   {ctaLabel}
                   <ArrowRight size={16} strokeWidth={2.5} />
                 </button>
-                <a href="mailto:info@auroramedia.se" className="au-btn-ghost">
+                <a
+                  href="mailto:info@auroramedia.se"
+                  onClick={() => trackCtaClick("lead_cta_mailto", { location: "wide" })}
+                  className="au-btn-ghost"
+                >
                   <Mail size={16} strokeWidth={2.2} />
                   info@auroramedia.se
                 </a>

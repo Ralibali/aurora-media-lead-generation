@@ -55,26 +55,45 @@ Deno.serve(async (req: Request) => {
     const url = new URL(req.url);
     const limit = Math.min(parseInt(url.searchParams.get("limit") ?? "100"), 500);
 
-    const [{ data: leads, error: leadsErr }, { data: clicks, error: clicksErr }, { data: drip, error: dripErr }] = await Promise.all([
+    const since30 = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString();
+
+    const [
+      { data: leads, error: leadsErr },
+      { data: clicks, error: clicksErr },
+      { data: drip, error: dripErr },
+      { data: ctaClicks, error: ctaErr },
+    ] = await Promise.all([
       admin.from("leads").select("*").order("created_at", { ascending: false }).limit(limit),
       admin
         .from("ai_karta_clicks")
         .select("button, created_at")
-        .gte("created_at", new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString()),
+        .gte("created_at", since30),
       admin
         .from("ai_map_email_sequence")
         .select("id, lead_id, email, created_at, unsubscribed_at, unsubscribed_reason, step_2_sent_at, step_5_sent_at, step_9_sent_at, step_14_sent_at, lead:ai_map_leads(company_name, contact_name, total_potential)")
         .order("created_at", { ascending: false })
         .limit(200),
+      admin
+        .from("cta_clicks")
+        .select("id, button, location, lead_label, page_path, session_id, created_at")
+        .gte("created_at", since30)
+        .order("created_at", { ascending: false })
+        .limit(500),
     ]);
     if (leadsErr) throw leadsErr;
     if (clicksErr) console.warn("[list-leads] clicks fetch failed", clicksErr);
     if (dripErr) console.warn("[list-leads] drip fetch failed", dripErr);
+    if (ctaErr) console.warn("[list-leads] cta fetch failed", ctaErr);
 
     const aiKartaLeads = (leads ?? []).filter((l: { paket?: string }) => l.paket === "ai-karta").length;
     const heroClicks = (clicks ?? []).filter((c: { button: string }) => c.button === "hero_cta").length;
     const pdfClicks = (clicks ?? []).filter((c: { button: string }) => c.button === "pdf_direct").length;
     const totalClicks = heroClicks + pdfClicks;
+
+    const ctaList = ctaClicks ?? [];
+    const ctaUniqueSessions = new Set(
+      ctaList.map((c: { session_id: string | null }) => c.session_id).filter(Boolean),
+    ).size;
 
     const stats = {
       hero_clicks: heroClicks,
@@ -83,12 +102,14 @@ Deno.serve(async (req: Request) => {
       ai_karta_leads: aiKartaLeads,
       conversion_rate: heroClicks > 0 ? Math.round((aiKartaLeads / heroClicks) * 1000) / 10 : 0,
       window_days: 30,
+      cta_clicks_total: ctaList.length,
+      cta_clicks_unique_sessions: ctaUniqueSessions,
     };
 
-    return new Response(JSON.stringify({ leads: leads ?? [], stats, drip: drip ?? [] }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ leads: leads ?? [], stats, drip: drip ?? [], cta_clicks: ctaList }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
   } catch (err) {
     console.error("[list-leads] error", err);
     return new Response(JSON.stringify({ error: String(err) }), {
