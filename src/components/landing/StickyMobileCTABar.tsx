@@ -5,9 +5,11 @@ import { ArrowRight } from "lucide-react";
 
 type Props = {
   primaryLabel: string;
-  primaryTo: string;
+  primaryTo?: string;
+  primaryOnClick?: () => void;
   secondaryLabel?: string;
   secondaryTo?: string;
+  secondaryOnClick?: () => void;
   showAfter?: number;
 };
 
