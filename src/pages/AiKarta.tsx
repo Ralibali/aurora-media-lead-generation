@@ -156,6 +156,22 @@ const AiKarta = () => {
                   </div>
                 </div>
 
+                {/* Snabb-navigation: minska bounce genom att ge tydliga interna val */}
+                <div className="mt-6 flex flex-wrap gap-2">
+                  <a href="#sa-funkar-det" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Så funkar det →
+                  </a>
+                  <a href="#exempel" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Exempel →
+                  </a>
+                  <a href="#faq" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Vanliga frågor →
+                  </a>
+                  <Link to="/" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Se alla tjänster →
+                  </Link>
+                </div>
+
                 {/* Proof stats row */}
                 <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
                   {proofStats.map((s) => (
