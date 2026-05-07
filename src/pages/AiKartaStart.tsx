@@ -36,7 +36,7 @@ const Step1Schema = z.object({
   email: z.string().trim().email("Ogiltig e-postadress").max(160),
 });
 
-const STEPS = ["Kontakt", "Tidstjuvar", "Processer", "Sammanfattning"];
+const STEPS = ["Tidstjuvar", "Processer", "Kontakt & resultat"];
 
 const stepCardClass =
   "rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]";
