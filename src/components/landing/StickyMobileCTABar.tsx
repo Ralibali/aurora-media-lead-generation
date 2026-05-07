@@ -5,9 +5,11 @@ import { ArrowRight } from "lucide-react";
 
 type Props = {
   primaryLabel: string;
-  primaryTo: string;
+  primaryTo?: string;
+  primaryOnClick?: () => void;
   secondaryLabel?: string;
   secondaryTo?: string;
+  secondaryOnClick?: () => void;
   showAfter?: number;
 };
 
@@ -19,8 +21,10 @@ type Props = {
 const StickyMobileCTABar = ({
   primaryLabel,
   primaryTo,
+  primaryOnClick,
   secondaryLabel,
   secondaryTo,
+  secondaryOnClick,
   showAfter = 400,
 }: Props) => {
   const [show, setShow] = useState(false);
@@ -44,20 +48,41 @@ const StickyMobileCTABar = ({
           style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
         >
           <div className="mx-3 mt-3 flex items-stretch gap-2 rounded-2xl border border-white/10 bg-background/95 p-2 shadow-[0_-12px_40px_-8px_rgba(0,0,0,0.5)] backdrop-blur-xl">
-            <Link
-              to={primaryTo}
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/85 px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.8)] active:scale-[0.98] transition-transform"
-            >
-              {primaryLabel}
-              <ArrowRight size={16} strokeWidth={2.5} />
-            </Link>
-            {secondaryLabel && secondaryTo && (
-              <Link
-                to={secondaryTo}
-                className="flex items-center justify-center rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3.5 text-xs font-semibold text-foreground/85 hover:text-foreground active:scale-[0.98] transition-transform"
+            {primaryOnClick ? (
+              <button
+                type="button"
+                onClick={primaryOnClick}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/85 px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.8)] active:scale-[0.98] transition-transform"
               >
-                {secondaryLabel}
+                {primaryLabel}
+                <ArrowRight size={16} strokeWidth={2.5} />
+              </button>
+            ) : (
+              <Link
+                to={primaryTo ?? "#"}
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/85 px-4 py-3.5 text-sm font-bold text-primary-foreground shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.8)] active:scale-[0.98] transition-transform"
+              >
+                {primaryLabel}
+                <ArrowRight size={16} strokeWidth={2.5} />
               </Link>
+            )}
+            {secondaryLabel && (secondaryOnClick || secondaryTo) && (
+              secondaryOnClick ? (
+                <button
+                  type="button"
+                  onClick={secondaryOnClick}
+                  className="flex items-center justify-center rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3.5 text-xs font-semibold text-foreground/85 hover:text-foreground active:scale-[0.98] transition-transform"
+                >
+                  {secondaryLabel}
+                </button>
+              ) : (
+                <Link
+                  to={secondaryTo!}
+                  className="flex items-center justify-center rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3.5 text-xs font-semibold text-foreground/85 hover:text-foreground active:scale-[0.98] transition-transform"
+                >
+                  {secondaryLabel}
+                </Link>
+              )
             )}
           </div>
         </motion.div>

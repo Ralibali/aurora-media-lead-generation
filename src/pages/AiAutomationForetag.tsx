@@ -17,6 +17,7 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
+import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
@@ -286,6 +287,12 @@ const AiAutomationForetag = () => {
           </div>
         </section>
       </main>
+      <StickyMobileCTABar
+        primaryLabel="Boka AI-genomgång"
+        primaryOnClick={() => open()}
+        secondaryLabel="AI-kartan"
+        secondaryTo="/ai-karta"
+      />
       <Footer />
     </div>
   );
