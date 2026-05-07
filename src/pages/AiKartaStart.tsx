@@ -224,16 +224,14 @@ const AiKartaStart = () => {
             <Reveal>
               <p className="label-caps">AI-kartan · steg {step} av {STEPS.length}</p>
               <h1 className="mt-4 font-display text-[clamp(2.4rem,5.2vw,4rem)] font-bold leading-[0.95] tracking-tight">
-                {step === 1 && "Berätta lite om er"}
-                {step === 2 && "Var sitter era största tidstjuvar?"}
-                {step === 3 && "Lägg till 1–5 processer"}
-                {step === 4 && "Kontrollera och skicka in"}
+                {step === 1 && "Var sitter era största tidstjuvar?"}
+                {step === 2 && "Lägg till 1–5 processer"}
+                {step === 3 && "Vart ska vi skicka analysen?"}
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
-                {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
-                {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
-                {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
+                {step === 1 && "Markera de områden där ni lägger mest manuell tid i dag."}
+                {step === 2 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
+                {step === 3 && "Sista steget. Era svar är klara – fyll i kontaktuppgifter så får ni mini-analysen direkt på skärmen."}
               </p>
             </Reveal>
 
