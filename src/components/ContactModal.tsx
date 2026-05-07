@@ -306,13 +306,22 @@ const ContactDialog = ({
 
         {done ? (
           <div className="py-6 space-y-6">
-            <div className="text-center space-y-3">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                <CheckCircle2 className="h-8 w-8 text-primary" strokeWidth={1.5} />
+            <div className="text-center space-y-4">
+              <div className="relative mx-auto flex h-20 w-20 items-center justify-center">
+                <span className="absolute inset-0 animate-ping rounded-full bg-primary/30" />
+                <span className="absolute inset-0 rounded-full bg-primary/15" />
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 ring-2 ring-primary/40">
+                  <CheckCircle2 className="h-10 w-10 text-primary" strokeWidth={1.5} />
+                </div>
               </div>
-              <p className="font-serif text-3xl">Tack!</p>
-              <p className="text-muted-foreground">
-                Din förfrågan är mottagen. Jag återkommer inom 24 timmar vardagar.
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                Lead mottaget
+              </div>
+              <p className="font-serif text-3xl">Tack — ditt lead är skickat!</p>
+              <p className="text-muted-foreground max-w-sm mx-auto">
+                Jag har fått din förfrågan och hör av mig personligen{" "}
+                <strong className="text-foreground">inom 24 timmar</strong> (vardagar, ofta snabbare).
               </p>
             </div>
 
