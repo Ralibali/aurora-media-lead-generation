@@ -251,9 +251,34 @@ const ContactDialog = ({
       setMessageTouched(false);
       setPlatformValue("");
       setFieldErrors({});
+      setEmailSuggestion(null);
+      setEmailValue("");
+      setNameValue("");
+      setPhoneValue("");
+      setConsentChecked(false);
+      setTouched({});
       setRenderedAt(Date.now());
     }
   }, [isOpen, defaultPaket]);
+
+  // Live-form-validitet → styr om Skicka-knappen är aktiv
+  const isFormValid = (() => {
+    const result = schema.safeParse({
+      name: nameValue,
+      email: emailValue,
+      company: "",
+      phone: phoneValue,
+      paket: paketValue,
+      platform: platformValue,
+      leadLabel,
+      internalNote,
+      message: messageValue,
+      consent: consentChecked,
+      website: "",
+    });
+    if (result.success && isMobileApp && !platformValue) return false;
+    return result.success;
+  })();
 
   // Uppdatera meddelandet när paketet ändras – men bara om användaren inte börjat redigera
   useEffect(() => {
