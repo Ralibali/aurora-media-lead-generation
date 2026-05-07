@@ -271,6 +271,7 @@ const ContactDialog = ({
       name: data.get("name"),
       email: data.get("email"),
       company: data.get("company") ?? "",
+      phone: data.get("phone") ?? "",
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
       platform: platformValue,
       leadLabel,
