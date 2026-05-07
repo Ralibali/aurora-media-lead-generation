@@ -89,6 +89,7 @@ const Leads = () => {
   const [authed, setAuthed] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [drip, setDrip] = useState<DripRow[]>([]);
+  const [ctaClicks, setCtaClicks] = useState<CtaClick[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
