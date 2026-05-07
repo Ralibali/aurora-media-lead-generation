@@ -215,10 +215,39 @@ const Leads = () => {
             <p className="text-xs uppercase tracking-wider text-muted-foreground">AI-karta-leads</p>
             <p className="mt-1 font-serif text-2xl">{stats.ai_karta_leads}</p>
           </div>
-          <div className="rounded-xl border border-primary/30 bg-primary/[0.06] p-4">
-            <p className="text-xs uppercase tracking-wider text-primary">Konvertering</p>
-            <p className="mt-1 font-serif text-2xl">{stats.conversion_rate}%</p>
-            <p className="mt-1 text-[10px] text-muted-foreground">leads / hero-klick</p>
+          <div className="rounded-xl border border-border bg-card/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">CTA-klick (30d)</p>
+            <p className="mt-1 font-serif text-2xl">{stats.cta_clicks_total ?? 0}</p>
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              {stats.cta_clicks_unique_sessions ?? 0} unika besökare
+            </p>
+          </div>
+        </div>
+      )}
+
+      {ctaClicks.length > 0 && (
+        <div className="mb-8 rounded-xl border border-border bg-card/40 overflow-hidden">
+          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+            <h2 className="font-serif text-xl">Senaste CTA-klick</h2>
+            <span className="text-xs text-muted-foreground">{ctaClicks.length} klick (30d)</span>
+          </div>
+          <div className="max-h-80 overflow-y-auto divide-y divide-border">
+            {ctaClicks.slice(0, 50).map((c) => (
+              <div key={c.id} className="px-4 py-2.5 text-sm flex items-center justify-between gap-3 hover:bg-muted/30">
+                <div className="min-w-0">
+                  <div className="font-medium truncate">
+                    {c.button}
+                    {c.location && <span className="text-muted-foreground"> · {c.location}</span>}
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">
+                    {c.lead_label ?? "—"} · {c.page_path ?? "/"} · session {c.session_id?.slice(0, 8) ?? "—"}
+                  </div>
+                </div>
+                <span className="text-xs text-muted-foreground shrink-0">
+                  {new Date(c.created_at).toLocaleString("sv-SE")}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       )}
