@@ -120,6 +120,7 @@ const Leads = () => {
       const json = await res.json();
       setLeads(json.leads ?? []);
       setDrip(json.drip ?? []);
+      setCtaClicks(json.cta_clicks ?? []);
       setStats(json.stats ?? null);
       setAuthed(true);
       sessionStorage.setItem(STORAGE_KEY, pwd);
