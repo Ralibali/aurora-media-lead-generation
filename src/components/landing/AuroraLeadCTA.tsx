@@ -63,7 +63,7 @@ const AuroraLeadCTA = ({
               <button
                 onClick={() => {
                   trackCtaClick("lead_cta_compact", { location: "compact", lead_label: leadLabel });
-                  open({ leadLabel });
+                  open(leadLabel);
                 }}
                 className="au-btn-coral whitespace-nowrap self-start md:self-auto"
               >
