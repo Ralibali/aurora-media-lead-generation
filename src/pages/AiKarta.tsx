@@ -331,7 +331,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== OBJECTION HANDLING / FAQ ============== */}
-        <section className="py-20">
+        <section id="faq" className="py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
               <p className="label-caps">Vanliga invändningar</p>
