@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Mail, Clock, ShieldCheck, Sparkles } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
+import { trackCtaClick } from "@/lib/ctaTracking";
 
 interface Props {
   variant?: "wide" | "compact";
