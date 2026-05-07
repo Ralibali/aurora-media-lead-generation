@@ -39,6 +39,29 @@ const DISPOSABLE_EMAIL_DOMAINS = new Set([
   "tempr.email", "mailnesia.com", "emailondeck.com", "moakt.com",
 ]);
 
+// Vanliga felstavningar av e-postdomäner → korrekt domän
+const EMAIL_DOMAIN_TYPOS: Record<string, string> = {
+  "gmial.com": "gmail.com", "gmai.com": "gmail.com", "gmal.com": "gmail.com",
+  "gmail.co": "gmail.com", "gmail.con": "gmail.com", "gnail.com": "gmail.com",
+  "gmaill.com": "gmail.com", "gmali.com": "gmail.com",
+  "hotnail.com": "hotmail.com", "hotmai.com": "hotmail.com", "hotmial.com": "hotmail.com",
+  "hotmail.co": "hotmail.com", "hotmail.con": "hotmail.com", "hotmail.se": "hotmail.com",
+  "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com", "yahoo.co": "yahoo.com",
+  "outlok.com": "outlook.com", "outloo.com": "outlook.com", "outlook.con": "outlook.com",
+  "iclould.com": "icloud.com", "icloud.con": "icloud.com", "iclod.com": "icloud.com",
+  "live.con": "live.com", "live.co": "live.com",
+  "telia.se.com": "telia.se", "telia.com": "telia.se",
+};
+
+const suggestEmailFix = (email: string): string | null => {
+  const at = email.lastIndexOf("@");
+  if (at < 1) return null;
+  const local = email.slice(0, at);
+  const domain = email.slice(at + 1).toLowerCase();
+  const fix = EMAIL_DOMAIN_TYPOS[domain];
+  return fix ? `${local}@${fix}` : null;
+};
+
 // Tillåt bokstäver (inkl. åäö och internationella), mellanslag, bindestreck och apostrof
 const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
 
@@ -63,6 +86,16 @@ const schema = z.object({
     }, "Använd en riktig e-postadress, inte en engångsadress")
     .refine((v) => !/\+.*\+/.test(v), "Ogiltig e-postadress"),
   company: z.string().trim().max(120).optional().or(z.literal("")),
+  phone: z
+    .string()
+    .trim()
+    .max(30, "Telefonnumret är för långt")
+    .optional()
+    .or(z.literal(""))
+    .refine(
+      (v) => !v || /^[+0-9][0-9\s\-()]{5,}$/.test(v),
+      "Ange ett giltigt telefonnummer (siffror, mellanslag och +)"
+    ),
   paket: z.string().min(1, "Välj vilket paket du är intresserad av"),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
@@ -166,6 +199,12 @@ const ContactDialog = ({
   const [submittedLabel, setSubmittedLabel] = useState<string>("");
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
+  const [emailValue, setEmailValue] = useState<string>("");
+  const [nameValue, setNameValue] = useState<string>("");
+  const [phoneValue, setPhoneValue] = useState<string>("");
+  const [consentChecked, setConsentChecked] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const [platformValue, setPlatformValue] = useState<string>("");
   const [renderedAt, setRenderedAt] = useState<number>(() => Date.now());
@@ -179,10 +218,13 @@ const ContactDialog = ({
     });
   };
 
-  const validateField = (field: "name" | "email" | "message", value: string) => {
-    const fieldSchema = schema.shape[field];
+  const validateField = (field: "name" | "email" | "message" | "phone", value: string) => {
+    const fieldSchema = (schema.shape as any)[field];
     const result = fieldSchema.safeParse(value);
     setFieldError(field, result.success ? null : result.error.issues[0].message);
+    if (field === "email") {
+      setEmailSuggestion(result.success ? suggestEmailFix(value.trim().toLowerCase()) : null);
+    }
   };
 
   const isMobileApp = paketValue.startsWith("Mobilapp") || paketValue === "Kombination – SaaS + app";
@@ -209,9 +251,17 @@ const ContactDialog = ({
       setMessageTouched(false);
       setPlatformValue("");
       setFieldErrors({});
+      setEmailSuggestion(null);
+      setEmailValue("");
+      setNameValue("");
+      setPhoneValue("");
+      setConsentChecked(false);
+      setTouched({});
       setRenderedAt(Date.now());
     }
   }, [isOpen, defaultPaket]);
+
+  // (isFormValid beräknas nedan, efter leadLabel)
 
   // Uppdatera meddelandet när paketet ändras – men bara om användaren inte börjat redigera
   useEffect(() => {
@@ -230,6 +280,25 @@ const ContactDialog = ({
     ? `Intresserad av: ${selectedOption.label}${platformOption ? ` · Plattform: ${platformOption.label}` : ""}`
     : "";
 
+  // Live-form-validitet → styr om Skicka-knappen är aktiv
+  const isFormValid = (() => {
+    const result = schema.safeParse({
+      name: nameValue,
+      email: emailValue,
+      company: "",
+      phone: phoneValue,
+      paket: paketValue,
+      platform: platformValue,
+      leadLabel,
+      internalNote,
+      message: messageValue,
+      consent: consentChecked,
+      website: "",
+    });
+    if (result.success && isMobileApp && !platformValue) return false;
+    return result.success;
+  })();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -238,6 +307,7 @@ const ContactDialog = ({
       name: data.get("name"),
       email: data.get("email"),
       company: data.get("company") ?? "",
+      phone: data.get("phone") ?? "",
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
       platform: platformValue,
       leadLabel,
@@ -387,25 +457,38 @@ const ContactDialog = ({
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="name">Namn *</Label>
+                <Label htmlFor="name">
+                  Namn <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="name"
                   name="name"
                   required
                   maxLength={80}
                   autoComplete="name"
+                  autoCapitalize="words"
+                  spellCheck={false}
                   placeholder="Förnamn Efternamn"
+                  value={nameValue}
                   aria-invalid={!!fieldErrors.name}
                   className={fieldErrors.name ? "border-destructive focus-visible:ring-destructive" : undefined}
-                  onBlur={(e) => validateField("name", e.target.value)}
-                  onChange={() => fieldErrors.name && setFieldError("name", null)}
+                  onBlur={(e) => {
+                    setTouched((t) => ({ ...t, name: true }));
+                    validateField("name", e.target.value);
+                  }}
+                  onChange={(e) => {
+                    setNameValue(e.target.value);
+                    if (touched.name) validateField("name", e.target.value);
+                  }}
                 />
                 {fieldErrors.name && (
                   <p className="text-xs text-destructive" role="alert">{fieldErrors.name}</p>
                 )}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="email">E-post *</Label>
+                <Label htmlFor="email">
+                  E-post <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="email"
                   name="email"
@@ -414,20 +497,81 @@ const ContactDialog = ({
                   maxLength={160}
                   autoComplete="email"
                   inputMode="email"
+                  spellCheck={false}
+                  autoCapitalize="off"
                   placeholder="namn@foretag.se"
+                  value={emailValue}
                   aria-invalid={!!fieldErrors.email}
                   className={fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : undefined}
-                  onBlur={(e) => validateField("email", e.target.value)}
-                  onChange={() => fieldErrors.email && setFieldError("email", null)}
+                  onBlur={(e) => {
+                    setTouched((t) => ({ ...t, email: true }));
+                    validateField("email", e.target.value);
+                  }}
+                  onChange={(e) => {
+                    setEmailValue(e.target.value);
+                    if (touched.email) validateField("email", e.target.value);
+                    else if (emailSuggestion) setEmailSuggestion(null);
+                  }}
                 />
                 {fieldErrors.email && (
                   <p className="text-xs text-destructive" role="alert">{fieldErrors.email}</p>
                 )}
+                {!fieldErrors.email && emailSuggestion && (
+                  <p className="text-xs text-muted-foreground">
+                    Menade du{" "}
+                    <button
+                      type="button"
+                      className="font-medium text-primary underline-offset-2 hover:underline"
+                      onClick={() => {
+                        setEmailValue(emailSuggestion);
+                        setEmailSuggestion(null);
+                        validateField("email", emailSuggestion);
+                      }}
+                    >
+                      {emailSuggestion}
+                    </button>
+                    ?
+                  </p>
+                )}
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="company">Företag</Label>
-              <Input id="company" name="company" maxLength={120} autoComplete="organization" />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="company">Företag</Label>
+                <Input
+                  id="company"
+                  name="company"
+                  maxLength={120}
+                  autoComplete="organization"
+                  placeholder="Valfritt"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="phone">Telefon</Label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  maxLength={30}
+                  placeholder="070-123 45 67 (valfritt)"
+                  value={phoneValue}
+                  aria-invalid={!!fieldErrors.phone}
+                  className={fieldErrors.phone ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onBlur={(e) => {
+                    setTouched((t) => ({ ...t, phone: true }));
+                    if (e.target.value) validateField("phone", e.target.value);
+                  }}
+                  onChange={(e) => {
+                    setPhoneValue(e.target.value);
+                    if (touched.phone) validateField("phone", e.target.value);
+                  }}
+                />
+                {fieldErrors.phone && (
+                  <p className="text-xs text-destructive" role="alert">{fieldErrors.phone}</p>
+                )}
+              </div>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="paket">Vilket paket är du intresserad av? *</Label>
@@ -513,13 +657,27 @@ const ContactDialog = ({
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <Checkbox id="consent" name="consent" required className="mt-1" />
+              <Checkbox
+                id="consent"
+                name="consent"
+                required
+                className="mt-1"
+                checked={consentChecked}
+                onCheckedChange={(v) => setConsentChecked(v === true)}
+              />
               <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.
+                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.{" "}
+                <span className="text-destructive">*</span>
               </Label>
             </div>
-            <Button type="submit" disabled={submitting} className="w-full" size="lg">
-              {submitting ? "Skickar…" : "Skicka"}
+            <Button
+              type="submit"
+              disabled={submitting || !isFormValid}
+              className="w-full"
+              size="lg"
+              aria-disabled={submitting || !isFormValid}
+            >
+              {submitting ? "Skickar…" : isFormValid ? "Skicka förfrågan" : "Fyll i obligatoriska fält"}
             </Button>
             <p className="text-center text-sm text-muted-foreground pt-2">
               Hellre mejla direkt?{" "}
