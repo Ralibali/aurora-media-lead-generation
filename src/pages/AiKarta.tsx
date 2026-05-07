@@ -20,6 +20,7 @@ import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import AuroraContactForm from "@/components/AuroraContactForm";
+import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
 // — Conversion-driven copy. Specifika siffror > vaga löften. —
@@ -156,6 +157,22 @@ const AiKarta = () => {
                   </div>
                 </div>
 
+                {/* Snabb-navigation: minska bounce genom att ge tydliga interna val */}
+                <div className="mt-6 flex flex-wrap gap-2">
+                  <a href="#sa-funkar-det" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Så funkar det →
+                  </a>
+                  <a href="#exempel" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Exempel →
+                  </a>
+                  <a href="#faq" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Vanliga frågor →
+                  </a>
+                  <Link to="/" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
+                    Se alla tjänster →
+                  </Link>
+                </div>
+
                 {/* Proof stats row */}
                 <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
                   {proofStats.map((s) => (
@@ -244,7 +261,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== VALUE STACK ============== */}
-        <section className="py-20">
+        <section id="exempel" className="py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps text-primary">Vad ni får – allt kostnadsfritt</p>
@@ -287,7 +304,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== HOW IT WORKS ============== */}
-        <section className="border-y border-white/10 bg-secondary/20 py-20">
+        <section id="sa-funkar-det" className="border-y border-white/10 bg-secondary/20 py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps">Så fungerar det</p>
@@ -315,7 +332,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== OBJECTION HANDLING / FAQ ============== */}
-        <section className="py-20">
+        <section id="faq" className="py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
               <p className="label-caps">Vanliga invändningar</p>
@@ -395,6 +412,12 @@ const AiKarta = () => {
           </div>
         </section>
       </main>
+      <StickyMobileCTABar
+        primaryLabel="Starta AI-analys"
+        primaryTo="/ai-karta/start"
+        secondaryLabel="Tjänster"
+        secondaryTo="/"
+      />
       <Footer />
     </div>
   );
