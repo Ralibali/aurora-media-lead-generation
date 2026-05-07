@@ -457,25 +457,38 @@ const ContactDialog = ({
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="name">Namn *</Label>
+                <Label htmlFor="name">
+                  Namn <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="name"
                   name="name"
                   required
                   maxLength={80}
                   autoComplete="name"
+                  autoCapitalize="words"
+                  spellCheck={false}
                   placeholder="Förnamn Efternamn"
+                  value={nameValue}
                   aria-invalid={!!fieldErrors.name}
                   className={fieldErrors.name ? "border-destructive focus-visible:ring-destructive" : undefined}
-                  onBlur={(e) => validateField("name", e.target.value)}
-                  onChange={() => fieldErrors.name && setFieldError("name", null)}
+                  onBlur={(e) => {
+                    setTouched((t) => ({ ...t, name: true }));
+                    validateField("name", e.target.value);
+                  }}
+                  onChange={(e) => {
+                    setNameValue(e.target.value);
+                    if (touched.name) validateField("name", e.target.value);
+                  }}
                 />
                 {fieldErrors.name && (
                   <p className="text-xs text-destructive" role="alert">{fieldErrors.name}</p>
                 )}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="email">E-post *</Label>
+                <Label htmlFor="email">
+                  E-post <span className="text-destructive">*</span>
+                </Label>
                 <Input
                   id="email"
                   name="email"
@@ -484,20 +497,81 @@ const ContactDialog = ({
                   maxLength={160}
                   autoComplete="email"
                   inputMode="email"
+                  spellCheck={false}
+                  autoCapitalize="off"
                   placeholder="namn@foretag.se"
+                  value={emailValue}
                   aria-invalid={!!fieldErrors.email}
                   className={fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : undefined}
-                  onBlur={(e) => validateField("email", e.target.value)}
-                  onChange={() => fieldErrors.email && setFieldError("email", null)}
+                  onBlur={(e) => {
+                    setTouched((t) => ({ ...t, email: true }));
+                    validateField("email", e.target.value);
+                  }}
+                  onChange={(e) => {
+                    setEmailValue(e.target.value);
+                    if (touched.email) validateField("email", e.target.value);
+                    else if (emailSuggestion) setEmailSuggestion(null);
+                  }}
                 />
                 {fieldErrors.email && (
                   <p className="text-xs text-destructive" role="alert">{fieldErrors.email}</p>
                 )}
+                {!fieldErrors.email && emailSuggestion && (
+                  <p className="text-xs text-muted-foreground">
+                    Menade du{" "}
+                    <button
+                      type="button"
+                      className="font-medium text-primary underline-offset-2 hover:underline"
+                      onClick={() => {
+                        setEmailValue(emailSuggestion);
+                        setEmailSuggestion(null);
+                        validateField("email", emailSuggestion);
+                      }}
+                    >
+                      {emailSuggestion}
+                    </button>
+                    ?
+                  </p>
+                )}
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="company">Företag</Label>
-              <Input id="company" name="company" maxLength={120} autoComplete="organization" />
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="company">Företag</Label>
+                <Input
+                  id="company"
+                  name="company"
+                  maxLength={120}
+                  autoComplete="organization"
+                  placeholder="Valfritt"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="phone">Telefon</Label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  maxLength={30}
+                  placeholder="070-123 45 67 (valfritt)"
+                  value={phoneValue}
+                  aria-invalid={!!fieldErrors.phone}
+                  className={fieldErrors.phone ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onBlur={(e) => {
+                    setTouched((t) => ({ ...t, phone: true }));
+                    if (e.target.value) validateField("phone", e.target.value);
+                  }}
+                  onChange={(e) => {
+                    setPhoneValue(e.target.value);
+                    if (touched.phone) validateField("phone", e.target.value);
+                  }}
+                />
+                {fieldErrors.phone && (
+                  <p className="text-xs text-destructive" role="alert">{fieldErrors.phone}</p>
+                )}
+              </div>
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="paket">Vilket paket är du intresserad av? *</Label>
