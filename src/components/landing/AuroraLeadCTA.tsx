@@ -127,13 +127,20 @@ const AuroraLeadCTA = ({
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button
-                  onClick={() => open()}
+                  onClick={() => {
+                    trackCtaClick("lead_cta_wide", { location: "wide", lead_label: leadLabel });
+                    open(leadLabel);
+                  }}
                   className="au-btn-coral"
                 >
                   {ctaLabel}
                   <ArrowRight size={16} strokeWidth={2.5} />
                 </button>
-                <a href="mailto:info@auroramedia.se" className="au-btn-ghost">
+                <a
+                  href="mailto:info@auroramedia.se"
+                  onClick={() => trackCtaClick("lead_cta_mailto", { location: "wide" })}
+                  className="au-btn-ghost"
+                >
                   <Mail size={16} strokeWidth={2.2} />
                   info@auroramedia.se
                 </a>
