@@ -199,6 +199,12 @@ const ContactDialog = ({
   const [submittedLabel, setSubmittedLabel] = useState<string>("");
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
+  const [emailValue, setEmailValue] = useState<string>("");
+  const [nameValue, setNameValue] = useState<string>("");
+  const [phoneValue, setPhoneValue] = useState<string>("");
+  const [consentChecked, setConsentChecked] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const [platformValue, setPlatformValue] = useState<string>("");
   const [renderedAt, setRenderedAt] = useState<number>(() => Date.now());
@@ -212,10 +218,13 @@ const ContactDialog = ({
     });
   };
 
-  const validateField = (field: "name" | "email" | "message", value: string) => {
-    const fieldSchema = schema.shape[field];
+  const validateField = (field: "name" | "email" | "message" | "phone", value: string) => {
+    const fieldSchema = (schema.shape as any)[field];
     const result = fieldSchema.safeParse(value);
     setFieldError(field, result.success ? null : result.error.issues[0].message);
+    if (field === "email") {
+      setEmailSuggestion(result.success ? suggestEmailFix(value.trim().toLowerCase()) : null);
+    }
   };
 
   const isMobileApp = paketValue.startsWith("Mobilapp") || paketValue === "Kombination – SaaS + app";
