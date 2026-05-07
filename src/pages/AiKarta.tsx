@@ -303,7 +303,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== HOW IT WORKS ============== */}
-        <section className="border-y border-white/10 bg-secondary/20 py-20">
+        <section id="sa-funkar-det" className="border-y border-white/10 bg-secondary/20 py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps">Så fungerar det</p>
