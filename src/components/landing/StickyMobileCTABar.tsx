@@ -21,8 +21,10 @@ type Props = {
 const StickyMobileCTABar = ({
   primaryLabel,
   primaryTo,
+  primaryOnClick,
   secondaryLabel,
   secondaryTo,
+  secondaryOnClick,
   showAfter = 400,
 }: Props) => {
   const [show, setShow] = useState(false);
