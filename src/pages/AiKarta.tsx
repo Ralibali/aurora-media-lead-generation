@@ -260,7 +260,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== VALUE STACK ============== */}
-        <section className="py-20">
+        <section id="exempel" className="py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps text-primary">Vad ni får – allt kostnadsfritt</p>
