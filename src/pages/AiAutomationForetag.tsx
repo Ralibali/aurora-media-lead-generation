@@ -287,6 +287,12 @@ const AiAutomationForetag = () => {
           </div>
         </section>
       </main>
+      <StickyMobileCTABar
+        primaryLabel="Boka AI-genomgång"
+        primaryOnClick={() => open()}
+        secondaryLabel="AI-kartan"
+        secondaryTo="/ai-karta"
+      />
       <Footer />
     </div>
   );
