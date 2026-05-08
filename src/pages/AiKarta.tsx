@@ -236,7 +236,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== PAIN / PROBLEM ============== */}
-        <section className="border-y border-white/10 bg-white/[0.025] py-20">
+        <section className="border-y border-white/10 bg-white/[0.025] py-14 md:py-20">
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
               <Reveal>
@@ -269,7 +269,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== VALUE STACK ============== */}
-        <section id="exempel" className="py-20 scroll-mt-24">
+        <section id="exempel" className="py-14 md:py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps text-primary">Vad ni får – allt kostnadsfritt</p>
@@ -312,7 +312,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== HOW IT WORKS ============== */}
-        <section id="sa-funkar-det" className="border-y border-white/10 bg-secondary/20 py-20 scroll-mt-24">
+        <section id="sa-funkar-det" className="border-y border-white/10 bg-secondary/20 py-14 md:py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-7xl">
             <Reveal>
               <p className="label-caps">Så fungerar det</p>
@@ -340,7 +340,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== OBJECTION HANDLING / FAQ ============== */}
-        <section id="faq" className="py-20 scroll-mt-24">
+        <section id="faq" className="py-14 md:py-20 scroll-mt-24">
           <div className="container mx-auto px-6 max-w-5xl">
             <Reveal>
               <p className="label-caps">Vanliga invändningar</p>
@@ -362,7 +362,7 @@ const AiKarta = () => {
         </section>
 
         {/* ============== KONTAKTFORMULÄR ============== */}
-        <section id="kontakt" className="border-t border-white/10 py-20">
+        <section id="kontakt" className="border-t border-white/10 py-14 md:py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <Reveal>
               <p className="label-caps">Kontakt</p>
