@@ -288,9 +288,9 @@ const AiAutomationForetag = () => {
         </section>
       </main>
       <StickyMobileCTABar
-        primaryLabel="Boka AI-genomgång"
-        primaryOnClick={() => open()}
-        secondaryLabel="AI-kartan"
+        primaryLabel="Boka gratis AI-genomgång"
+        primaryOnClick={() => open("AI-automation")}
+        secondaryLabel="Se exempel"
         secondaryTo="/ai-karta"
       />
       <Footer />

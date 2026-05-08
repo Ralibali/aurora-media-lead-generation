@@ -413,10 +413,10 @@ const AiKarta = () => {
         </section>
       </main>
       <StickyMobileCTABar
-        primaryLabel="Starta AI-analys"
+        primaryLabel="Få min AI-karta gratis"
         primaryTo="/ai-karta/start"
-        secondaryLabel="Tjänster"
-        secondaryTo="/"
+        secondaryLabel="Så funkar det"
+        secondaryTo="/ai-karta#sa-funkar-det"
       />
       <Footer />
     </div>

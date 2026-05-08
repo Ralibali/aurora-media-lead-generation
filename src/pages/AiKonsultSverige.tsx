@@ -204,10 +204,10 @@ const AiKonsultSverige = () => {
       </main>
       <Footer />
       <StickyMobileCTABar
-        primaryLabel="Boka AI-genomgång"
-        primaryOnClick={() => open()}
-        secondaryLabel="AI-kartan"
-        secondaryTo="/ai-karta"
+        primaryLabel="Boka gratis AI-genomgång"
+        primaryOnClick={() => open("AI-konsult")}
+        secondaryLabel="Få AI-karta"
+        secondaryTo="/ai-karta/start"
       />
     </div>
   );

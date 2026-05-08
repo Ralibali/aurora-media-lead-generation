@@ -164,9 +164,9 @@ const Metodik = () => {
       </main>
       <Footer />
       <StickyMobileCTABar
-        primaryLabel="Boka samtal"
+        primaryLabel="Boka kostnadsfritt samtal"
         primaryOnClick={() => open()}
-        secondaryLabel="Priser"
+        secondaryLabel="Se priser"
         secondaryTo="/priser"
       />
     </div>
