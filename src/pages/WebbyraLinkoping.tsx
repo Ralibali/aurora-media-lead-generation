@@ -130,10 +130,10 @@ const WebbyraLinkoping = () => {
         <CTABanner />
       </main>
       <StickyMobileCTABar
-        primaryLabel="Få offert"
+        primaryLabel="Få gratis offert på hemsida"
         primaryOnClick={() => open("Hemsida")}
-        secondaryLabel="AI-tjänster"
-        secondaryTo="/ai-automation-foretag"
+        secondaryLabel="Se priser"
+        secondaryTo="/priser"
       />
       <Footer />
     </div>

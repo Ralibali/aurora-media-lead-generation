@@ -300,9 +300,9 @@ const CityPage = () => {
       </main>
       <Footer />
       <StickyMobileCTABar
-        primaryLabel="Starta projekt"
-        primaryOnClick={() => open()}
-        secondaryLabel="Priser"
+        primaryLabel={isAiVariant ? `Boka AI-möte i ${city.city}` : `Få offert i ${city.city}`}
+        primaryOnClick={() => open(isAiVariant ? "AI-automation" : "Hemsida", { internalNote: `Stad: ${city.city}` })}
+        secondaryLabel="Se priser"
         secondaryTo="/priser"
       />
     </div>
