@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Code2, Database, LockKeyhole, Rocket, ShieldCheck, Sparkles, Workflow, XCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 
@@ -202,6 +203,12 @@ const AiKonsultSverige = () => {
         </section>
       </main>
       <Footer />
+      <StickyMobileCTABar
+        primaryLabel="Boka AI-genomgång"
+        primaryOnClick={() => open()}
+        secondaryLabel="AI-kartan"
+        secondaryTo="/ai-karta"
+      />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { useParams, Link, Navigate, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
+import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { Check } from "lucide-react";
@@ -298,6 +299,12 @@ const CityPage = () => {
         <CTABanner />
       </main>
       <Footer />
+      <StickyMobileCTABar
+        primaryLabel="Starta projekt"
+        primaryOnClick={() => open()}
+        secondaryLabel="Priser"
+        secondaryTo="/priser"
+      />
     </div>
   );
 };
