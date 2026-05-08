@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Code2, Database, Rocket, ShieldCheck, Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import CTABanner from "@/components/CTABanner";
 import Reveal from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
@@ -162,6 +163,12 @@ const Metodik = () => {
         <CTABanner />
       </main>
       <Footer />
+      <StickyMobileCTABar
+        primaryLabel="Boka samtal"
+        primaryOnClick={() => open()}
+        secondaryLabel="Priser"
+        secondaryTo="/priser"
+      />
     </div>
   );
 };
