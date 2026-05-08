@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 type OpenOptions = { paket?: string; internalNote?: string };
 type ContactModalCtx = {
   open: (paketOrOptions?: string | OpenOptions, options?: OpenOptions) => void;
+  isOpen: boolean;
 };
 const Ctx = createContext<ContactModalCtx | null>(null);
 
@@ -168,7 +169,7 @@ export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <Ctx.Provider value={{ open }}>
+    <Ctx.Provider value={{ open, isOpen }}>
       {children}
       <ContactDialog
         isOpen={isOpen}
