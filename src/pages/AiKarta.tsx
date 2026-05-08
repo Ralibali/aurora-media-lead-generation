@@ -119,7 +119,7 @@ const AiKarta = () => {
       <Navbar />
       <main className="overflow-hidden">
         {/* ============== HERO ============== */}
-        <section className="relative pt-28 pb-16 md:pt-36 md:pb-24">
+        <section className="relative pt-24 pb-12 md:pt-36 md:pb-24">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.22),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.16),transparent_32%)]" />
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
@@ -132,7 +132,7 @@ const AiKarta = () => {
                   Helt kostnadsfri · Inget säljmöte krävs
                 </div>
 
-                <h1 className="mt-5 max-w-full font-display text-[clamp(2rem,8vw,6.2rem)] font-bold leading-[0.95] tracking-tight break-words sm:max-w-5xl sm:leading-[0.92]">
+                <h1 className="mt-4 max-w-full font-display text-[clamp(1.85rem,7vw,6.2rem)] font-bold leading-[0.98] tracking-tight break-words sm:mt-5 sm:max-w-5xl sm:leading-[0.92]">
                   Vad i ert företag kan{" "}
                   <span className="bg-gradient-to-r from-primary via-primary to-purple-400 bg-clip-text text-transparent">
                     AI sköta åt er
@@ -140,9 +140,9 @@ const AiKarta = () => {
                   ?
                 </h1>
 
-                <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:mt-7 sm:text-lg md:text-2xl">
-                  Få en personlig AI-analys av era processer på <strong className="text-foreground">några minuter</strong>.
-                  Vi pekar ut exakt vilka uppgifter som kan automatiseras – och hur mycket tid det sparar.
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:mt-7 sm:text-lg md:text-2xl">
+                  Personlig AI-analys av era processer på <strong className="text-foreground">några minuter</strong>.
+                  <span className="hidden sm:inline"> Vi pekar ut exakt vilka uppgifter som kan automatiseras – och hur mycket tid det sparar.</span>
                 </p>
 
                 <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center sm:flex-wrap">
@@ -157,8 +157,8 @@ const AiKarta = () => {
                   </div>
                 </div>
 
-                {/* Snabb-navigation: minska bounce genom att ge tydliga interna val */}
-                <div className="mt-6 flex flex-wrap gap-2">
+                {/* Snabb-navigation: dold på mobil för att hålla fokus på CTA */}
+                <div className="mt-6 hidden flex-wrap gap-2 sm:flex">
                   <a href="#sa-funkar-det" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
                     Så funkar det →
                   </a>
@@ -173,8 +173,16 @@ const AiKarta = () => {
                   </Link>
                 </div>
 
-                {/* Proof stats row */}
-                <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
+                {/* Proof stats – kompakt rad på mobil, kort på desktop */}
+                <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground sm:hidden">
+                  {proofStats.map((s) => (
+                    <span key={s.label} className="inline-flex items-baseline gap-1.5">
+                      <strong className="font-display text-sm font-bold text-primary">{s.value}</strong>
+                      {s.label}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-10 hidden gap-4 sm:grid sm:grid-cols-3">
                   {proofStats.map((s) => (
                     <div key={s.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                       <p className="font-display text-2xl font-bold text-primary">{s.value}</p>
