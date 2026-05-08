@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useContactModal } from "@/components/ContactModal";
 
 type Props = {
   primaryLabel: string;
@@ -28,6 +29,7 @@ const StickyMobileCTABar = ({
   showAfter = 400,
 }: Props) => {
   const [show, setShow] = useState(false);
+  const { isOpen: contactOpen } = useContactModal();
 
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > showAfter);
@@ -36,9 +38,11 @@ const StickyMobileCTABar = ({
     return () => window.removeEventListener("scroll", onScroll);
   }, [showAfter]);
 
+  const visible = show && !contactOpen;
+
   return (
     <AnimatePresence>
-      {show && (
+      {visible && (
         <motion.div
           initial={{ y: 90, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
