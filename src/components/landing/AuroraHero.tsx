@@ -5,13 +5,13 @@ import { useContactModal } from "@/components/MvpContactModal";
 
 const TIMELINE = [
   { day: "Vecka 1", title: "Scope & produktkarta", desc: "Vi låser målgrupp, kärnflöde, datamodell och vad som inte ska byggas." },
-  { day: "Vecka 2–3", title: "Bygg & test", desc: "Lovable, Supabase, Stripe och integrationsflöden sätts ihop till en fungerande MVP." },
+  { day: "Vecka 2–3", title: "Bygg & test", desc: "Vi bygger i Cursor med AI-stöd, Supabase, Stripe och rätt integrationer för en fungerande MVP." },
   { day: "Vecka 4", title: "Lansering & handoff", desc: "Vi polerar, mäter, dokumenterar och gör produkten redo för riktiga användare." },
 ];
 
 const TRUST = [
   { icon: Rocket, text: "SaaS-MVP på 3–4 veckor" },
-  { icon: Target, text: "Fast pris från 49 000 kr" },
+  { icon: Target, text: "AI-byrå med fast pris" },
   { icon: Check, text: "Du äger kod, data och produkt" },
 ];
 
@@ -22,7 +22,7 @@ const PhoneMockup = () => (
       <div className="overflow-hidden rounded-[2.4rem] bg-card">
         <div className="flex items-center justify-between border-b border-border/60 bg-secondary/60 px-5 py-3">
           <span className="font-mono text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-            mvp.aurora
+            ai.aurora
           </span>
           <span className="flex gap-1">
             <span className="h-1.5 w-1.5 rounded-full bg-primary/40" />
@@ -34,7 +34,7 @@ const PhoneMockup = () => (
         <div className="space-y-4 p-5">
           <div>
             <p className="font-mono text-[9px] font-bold uppercase tracking-[0.25em] text-primary/70">
-              SaaS MVP
+              AI + SaaS MVP
             </p>
             <p className="mt-1 font-display text-lg font-bold text-foreground">
               Produkt redo för test
@@ -48,9 +48,9 @@ const PhoneMockup = () => (
               <p className="text-[10px] font-semibold text-primary">fast scope</p>
             </div>
             <div className="rounded-xl bg-primary p-3 text-primary-foreground">
-              <p className="text-[10px] uppercase tracking-wider opacity-80">Stack</p>
-              <p className="mt-1 font-display text-2xl font-bold">L+S</p>
-              <p className="text-[10px] font-semibold opacity-90">Lovable/Supabase</p>
+              <p className="text-[10px] uppercase tracking-wider opacity-80">Byggmiljö</p>
+              <p className="mt-1 font-display text-2xl font-bold">AI</p>
+              <p className="text-[10px] font-semibold opacity-90">Cursor + modern stack</p>
             </div>
           </div>
 
@@ -90,20 +90,20 @@ const AuroraHero = () => {
           transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-4 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-primary">
-            <Sparkles size={12} /> Lovable-byrån för svenska entreprenörer
+            <Sparkles size={12} /> AI-byrån för svenska entreprenörer
           </span>
 
           <h1 className="mt-6 font-display text-[clamp(2.6rem,6vw,4.6rem)] font-bold leading-[1.02] tracking-tight text-foreground">
             Bygg en fungerande
             <br />
             <span className="italic font-medium text-primary" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 600 }}>
-              SaaS-MVP
+              AI- eller SaaS-MVP
             </span>{" "}
             på 3–4 veckor.
           </h1>
 
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Aurora Media bygger fungerande SaaS-MVP:er åt svenska entreprenörer som vill testa idéer i marknaden snabbt — istället för att vänta sex månader på en traditionell byrå.
+            Aurora Media är en AI-byrå som bygger fungerande MVP:er, SaaS-produkter och AI-drivna system åt svenska entreprenörer som vill testa idéer i marknaden snabbt.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -118,7 +118,7 @@ const AuroraHero = () => {
               to="/arbete"
               className="inline-flex items-center justify-center rounded-full border border-foreground/25 bg-transparent px-7 py-4 text-base font-semibold text-foreground/90 transition hover:border-primary/60 hover:text-foreground"
             >
-              Se byggda SaaS-case
+              Se byggda case
             </Link>
           </div>
 
