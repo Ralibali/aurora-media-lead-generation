@@ -1,4 +1,4 @@
-import { ContactModalProvider } from "@/components/ContactModal";
+import { ContactModalProvider } from "@/components/MvpContactModal";
 import { SEO } from "@/components/SEO";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -53,9 +53,9 @@ type SEOConfig = {
 
 const seoMap: Record<string, SEOConfig> = {
   "/": {
-    title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
+    title: "SaaS-MVP på 3–4 veckor | Lovable-byrån Aurora Media",
     description:
-      "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
+      "Aurora Media bygger fungerande SaaS-MVP:er på 3–4 veckor åt svenska entreprenörer med fast pris, Lovable, Supabase och Stripe.",
     canonical: "https://auroramedia.se/",
   },
   "/ai-karta": {
@@ -83,197 +83,64 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/en",
   },
   "/arbete": {
-    title: "Arbete & projekt | Aurora Media AB",
+    title: "SaaS-case och byggda MVP:er | Aurora Media AB",
     description:
-      "Se arbeten, projekt och digitala lösningar som Aurora Media har byggt för företag i olika branscher.",
+      "Se SaaS-produkter och MVP:er som Aurora Media har byggt med Lovable, Supabase, Stripe och snabb produktleverans.",
     canonical: "https://auroramedia.se/arbete",
   },
   "/priser": {
-    title: "Priser | Aurora Media AB",
+    title: "MVP-priser | Aurora Media AB",
     description:
-      "Utforska priser och upplägg för SaaS, AI-lösningar, webb och digital utveckling från Aurora Media.",
+      "Fasta priser för SaaS-MVP: Starter 49 000 kr, Standard 89 000 kr och Premium MVP+ 149 000 kr.",
     canonical: "https://auroramedia.se/priser",
   },
   "/om": {
     title: "Om Aurora Media AB",
     description:
-      "Lär känna Aurora Media och hur vi hjälper företag att bygga modern mjukvara, AI-flöden och digital tillväxt.",
+      "Lär känna Aurora Media och hur vi bygger SaaS-MVP:er snabbt åt svenska entreprenörer.",
     canonical: "https://auroramedia.se/om",
   },
   "/kontakt": {
     title: "Kontakt | Aurora Media AB",
     description:
-      "Kontakta Aurora Media för att diskutera SaaS, AI, webb eller skräddarsydd digital utveckling.",
+      "Kontakta Aurora Media för att diskutera en SaaS-MVP med fast pris och snabb leverans.",
     canonical: "https://auroramedia.se/kontakt",
   },
   "/tjanster": {
     title: "Tjänster | Aurora Media AB",
     description:
-      "Upptäck våra tjänster inom SaaS, AI, webbutveckling, annonsering, innehåll och digital tillväxt.",
+      "Aurora Media bygger SaaS-MVP:er, AI-flöden och digitala produkter för entreprenörer och företag.",
     canonical: "https://auroramedia.se/tjanster",
   },
-  "/tjanster/hemsidor": {
-    title: "Hemsidor | Aurora Media AB",
-    description:
-      "Vi bygger moderna hemsidor som laddar snabbt, konverterar bättre och stärker ditt varumärke online.",
-    canonical: "https://auroramedia.se/tjanster/hemsidor",
-  },
-  "/tjanster/ehandel": {
-    title: "E-handel | Aurora Media AB",
-    description:
-      "Skalbar e-handel med fokus på användarupplevelse, konvertering och smarta integrationer.",
-    canonical: "https://auroramedia.se/tjanster/ehandel",
-  },
-  "/tjanster/mobilapp": {
-    title: "React Native apputveckling | Appar för iOS och Android | Aurora Media",
-    description:
-      "Aurora Media är experter på React Native och bygger moderna appar för iOS och Android: kundappar, interna appar, MVP:er, SaaS-appar och AI-drivna mobila lösningar.",
-    canonical: "https://auroramedia.se/tjanster/mobilapp",
-  },
-  "/tjanster/seo": {
-    title: "SEO | Aurora Media AB",
-    description:
-      "SEO som förbättrar synlighet, ranking och kvalitativ organisk trafik för ditt företag.",
-    canonical: "https://auroramedia.se/tjanster/seo",
-  },
-  "/tjanster/google-ads": {
-    title: "Google Ads | Aurora Media AB",
-    description:
-      "Datadrivna Google Ads-kampanjer som skapar relevant trafik, leads och bättre avkastning.",
-    canonical: "https://auroramedia.se/tjanster/google-ads",
-  },
-  "/tjanster/meta-ads": {
-    title: "Meta Ads | Aurora Media AB",
-    description:
-      "Effektiva annonser på Facebook och Instagram med fokus på rätt målgrupp och fler konverteringar.",
-    canonical: "https://auroramedia.se/tjanster/meta-ads",
-  },
-  "/tjanster/content": {
-    title: "Content | Aurora Media AB",
-    description:
-      "Strategiskt innehåll som bygger förtroende, stärker varumärket och hjälper kunder att välja dig.",
-    canonical: "https://auroramedia.se/tjanster/content",
-  },
-  "/tjanster/grafisk-profil": {
-    title: "Grafisk profil | Aurora Media AB",
-    description:
-      "Grafisk profil och visuell identitet som gör ditt varumärke tydligt, enhetligt och minnesvärt.",
-    canonical: "https://auroramedia.se/tjanster/grafisk-profil",
-  },
-  "/tjanster/fotografering": {
-    title: "Fotografering | Aurora Media AB",
-    description:
-      "Professionell fotografering för webb, kampanjer och varumärken som vill sticka ut visuellt.",
-    canonical: "https://auroramedia.se/tjanster/fotografering",
-  },
-  "/webbyra-linkoping": {
-    title: "Webbyrå i Linköping | Aurora Media AB",
-    description:
-      "Aurora Media är en webbyrå i Linköping som bygger webb, SaaS och AI-lösningar för moderna företag.",
-    canonical: "https://auroramedia.se/webbyra-linkoping",
-  },
-  "/blogg": {
-    title: "Blogg | Aurora Media AB",
-    description:
-      "Artiklar, guider och insikter om SaaS, AI, digital marknadsföring och modern webbutveckling.",
-    canonical: "https://auroramedia.se/blogg",
-  },
-  "/metodik": {
-    title: "Metodik | Aurora Media AB",
-    description:
-      "Så arbetar Aurora Media med strategi, design, utveckling och lansering av digitala produkter.",
-    canonical: "https://auroramedia.se/metodik",
-  },
-  "/redaktionell-policy": {
-    title: "Redaktionell policy | Aurora Media AB",
-    description:
-      "Läs vår redaktionella policy och hur vi arbetar med kvalitet, transparens och innehållsansvar.",
-    canonical: "https://auroramedia.se/redaktionell-policy",
-  },
-  "/integritetspolicy": {
-    title: "Integritetspolicy | Aurora Media AB",
-    description:
-      "Läs hur Aurora Media behandlar personuppgifter och arbetar för att skydda din integritet.",
-    canonical: "https://auroramedia.se/integritetspolicy",
-  },
+  "/tjanster/hemsidor": { title: "Hemsidor | Aurora Media AB", description: "Vi bygger moderna hemsidor som laddar snabbt, konverterar bättre och stärker ditt varumärke online.", canonical: "https://auroramedia.se/tjanster/hemsidor" },
+  "/tjanster/ehandel": { title: "E-handel | Aurora Media AB", description: "Skalbar e-handel med fokus på användarupplevelse, konvertering och smarta integrationer.", canonical: "https://auroramedia.se/tjanster/ehandel" },
+  "/tjanster/mobilapp": { title: "React Native apputveckling | Appar för iOS och Android | Aurora Media", description: "Aurora Media bygger moderna appar för iOS och Android: kundappar, interna appar, MVP:er, SaaS-appar och AI-drivna mobila lösningar.", canonical: "https://auroramedia.se/tjanster/mobilapp" },
+  "/tjanster/seo": { title: "SEO | Aurora Media AB", description: "SEO som förbättrar synlighet, ranking och kvalitativ organisk trafik för ditt företag.", canonical: "https://auroramedia.se/tjanster/seo" },
+  "/tjanster/google-ads": { title: "Google Ads | Aurora Media AB", description: "Datadrivna Google Ads-kampanjer som skapar relevant trafik, leads och bättre avkastning.", canonical: "https://auroramedia.se/tjanster/google-ads" },
+  "/tjanster/meta-ads": { title: "Meta Ads | Aurora Media AB", description: "Effektiva annonser på Facebook och Instagram med fokus på rätt målgrupp och fler konverteringar.", canonical: "https://auroramedia.se/tjanster/meta-ads" },
+  "/tjanster/content": { title: "Content | Aurora Media AB", description: "Strategiskt innehåll som bygger förtroende, stärker varumärket och hjälper kunder att välja dig.", canonical: "https://auroramedia.se/tjanster/content" },
+  "/tjanster/grafisk-profil": { title: "Grafisk profil | Aurora Media AB", description: "Grafisk profil och visuell identitet som gör ditt varumärke tydligt, enhetligt och minnesvärt.", canonical: "https://auroramedia.se/tjanster/grafisk-profil" },
+  "/tjanster/fotografering": { title: "Fotografering | Aurora Media AB", description: "Professionell fotografering för webb, kampanjer och varumärken som vill sticka ut visuellt.", canonical: "https://auroramedia.se/tjanster/fotografering" },
+  "/webbyra-linkoping": { title: "Webbyrå i Linköping | Aurora Media AB", description: "Aurora Media är en webbyrå i Linköping som bygger webb, SaaS och AI-lösningar för moderna företag.", canonical: "https://auroramedia.se/webbyra-linkoping" },
+  "/blogg": { title: "Blogg | Aurora Media AB", description: "Artiklar, guider och insikter om SaaS, AI, digital marknadsföring och modern webbutveckling.", canonical: "https://auroramedia.se/blogg" },
+  "/metodik": { title: "Metodik | Aurora Media AB", description: "Så bygger Aurora Media SaaS-MVP:er från scope till lansering på 3–4 veckor.", canonical: "https://auroramedia.se/metodik" },
+  "/redaktionell-policy": { title: "Redaktionell policy | Aurora Media AB", description: "Läs vår redaktionella policy och hur vi arbetar med kvalitet, transparens och innehållsansvar.", canonical: "https://auroramedia.se/redaktionell-policy" },
+  "/integritetspolicy": { title: "Integritetspolicy | Aurora Media AB", description: "Läs hur Aurora Media behandlar personuppgifter och arbetar för att skydda din integritet.", canonical: "https://auroramedia.se/integritetspolicy" },
 };
 
 function getDynamicSeo(pathname: string): SEOConfig {
-  if (pathname.startsWith("/arbete/")) {
-    return {
-      title: "Projekt | Aurora Media AB",
-      description:
-        "Läs mer om vårt arbete, processen bakom lösningen och resultatet i det här caset.",
-      canonical: `https://auroramedia.se${pathname}`,
-    };
-  }
-
-  if (pathname.startsWith("/blogg/")) {
-    return {
-      title: "Bloggartikel | Aurora Media AB",
-      description:
-        "Läs en artikel från Aurora Media om AI, SaaS, marknadsföring och digital tillväxt.",
-      canonical: `https://auroramedia.se${pathname}`,
-    };
-  }
-
-  if (pathname.startsWith("/saas-utveckling-") || pathname.startsWith("/ai-byra-")) {
-    return {
-      title: "Lokal digital partner | Aurora Media AB",
-      description:
-        "Aurora Media hjälper företag lokalt med webb, AI, SaaS och digital tillväxt.",
-      canonical: `https://auroramedia.se${pathname}`,
-    };
-  }
-
-  if (pathname.startsWith("/admin")) {
-    return {
-      title: "Aurora Media Admin",
-      description: "Internt administrationsgränssnitt för Aurora Media.",
-      canonical: `https://auroramedia.se${pathname}`,
-      noindex: true,
-    };
-  }
-
-  return {
-    title: "Aurora Media AB",
-    description:
-      "Aurora Media bygger moderna digitala lösningar inom SaaS, AI och webbutveckling.",
-    canonical: `https://auroramedia.se${pathname}`,
-  };
+  if (pathname.startsWith("/arbete/")) return { title: "SaaS-case | Aurora Media AB", description: "Läs mer om processen, MVP-bygget och resultatet i det här caset.", canonical: `https://auroramedia.se${pathname}` };
+  if (pathname.startsWith("/blogg/")) return { title: "Bloggartikel | Aurora Media AB", description: "Läs en artikel från Aurora Media om SaaS, MVP:er, AI och digital produktutveckling.", canonical: `https://auroramedia.se${pathname}` };
+  if (pathname.startsWith("/saas-utveckling-") || pathname.startsWith("/ai-byra-")) return { title: "Lokal digital partner | Aurora Media AB", description: "Aurora Media hjälper företag lokalt med webb, AI, SaaS och digital tillväxt.", canonical: `https://auroramedia.se${pathname}` };
+  if (pathname.startsWith("/admin")) return { title: "Aurora Media Admin", description: "Internt administrationsgränssnitt för Aurora Media.", canonical: `https://auroramedia.se${pathname}`, noindex: true };
+  return { title: "Aurora Media AB", description: "Aurora Media bygger SaaS-MVP:er på 3–4 veckor åt svenska entreprenörer.", canonical: `https://auroramedia.se${pathname}` };
 }
 
 function RouteSEO() {
   const { pathname } = useLocation();
-  const is404 =
-    pathname !== "/" &&
-    !Object.keys(seoMap).includes(pathname) &&
-    !pathname.startsWith("/arbete/") &&
-    !pathname.startsWith("/blogg/") &&
-    !pathname.startsWith("/saas-utveckling-") &&
-    !pathname.startsWith("/ai-byra-") &&
-    !pathname.startsWith("/admin") &&
-    !["/artiklar", "/blog", "/webbbyra-linkoping"].includes(pathname) &&
-    !pathname.startsWith("/artiklar/");
-
-  const seo = is404
-    ? {
-        title: "Sidan kunde inte hittas | Aurora Media AB",
-        description: "Sidan du försöker nå finns inte.",
-        canonical: `https://auroramedia.se${pathname}`,
-        noindex: true,
-      }
-    : seoMap[pathname] ?? getDynamicSeo(pathname);
-
-  return (
-    <SEO
-      title={seo.title}
-      description={seo.description}
-      canonical={seo.canonical}
-      ogImage={seo.ogImage}
-      noindex={seo.noindex}
-    />
-  );
+  const is404 = pathname !== "/" && !Object.keys(seoMap).includes(pathname) && !pathname.startsWith("/arbete/") && !pathname.startsWith("/blogg/") && !pathname.startsWith("/saas-utveckling-") && !pathname.startsWith("/ai-byra-") && !pathname.startsWith("/admin") && !["/artiklar", "/blog", "/webbbyra-linkoping"].includes(pathname) && !pathname.startsWith("/artiklar/");
+  const seo = is404 ? { title: "Sidan kunde inte hittas | Aurora Media AB", description: "Sidan du försöker nå finns inte.", canonical: `https://auroramedia.se${pathname}`, noindex: true } : seoMap[pathname] ?? getDynamicSeo(pathname);
+  return <SEO title={seo.title} description={seo.description} canonical={seo.canonical} ogImage={seo.ogImage} noindex={seo.noindex} />;
 }
 
 const App = () => (
