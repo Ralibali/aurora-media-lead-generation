@@ -21,9 +21,10 @@ const PACKAGES: Pkg[] = [
     name: "Starter MVP",
     price: "49 000 kr",
     timeline: "3 veckor · 1 användartyp",
-    intro: "För entreprenören som vill testa en SaaS-idé med en skarp första version.",
+    intro: "För entreprenören som vill testa en AI- eller SaaS-idé med en skarp första version.",
     features: [
-      "Lovable + Supabase + Stripe-stack",
+      "Cursor-bygge med modern AI-stack",
+      "Supabase + Stripe där det passar",
       "1 användartyp + grundfunktioner",
       "Auth, betalningar och basanalys",
       "Hosting & support i 3 månader",
@@ -42,6 +43,7 @@ const PACKAGES: Pkg[] = [
       "Allt i Starter",
       "2–3 användartyper med roller",
       "Stripe-prenumeration eller freemium",
+      "AI-flöde, adminpanel eller integration",
       "SEO-grundsetup + landningssida",
       "Hosting & support i 6 månader",
       "2 revisionsrundor",
@@ -59,7 +61,7 @@ const PACKAGES: Pkg[] = [
     intro: "För dig som vill ha en MVP som både fungerar, säljer och är redo för trafik.",
     features: [
       "Allt i Standard",
-      "iOS/Android via Capacitor",
+      "iOS/Android via Capacitor vid behov",
       "Programmatisk SEO + bloggsystem",
       "Ad-creatives och lanseringstexter",
       "Hosting & support i 12 månader",
@@ -79,12 +81,12 @@ const AuroraPricing = () => {
           <div className="lg:col-span-5">
             <p className="au-eyebrow">FASTA MVP-PAKET</p>
             <h2 className="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1] tracking-[-0.035em]">
-              Tre paket. Fast pris. <span style={{ color: "hsl(152 80% 60%)" }}>Ingen offertdimma.</span>
+              AI-byrå med fast pris. <span style={{ color: "hsl(152 80% 60%)" }}>Ingen offertdimma.</span>
             </h2>
           </div>
           <div className="lg:col-span-7 lg:pt-2">
             <p className="text-base leading-relaxed text-[hsl(var(--au-cream)/0.7)] md:text-lg">
-              Fast pris filtrerar bort fel leads, skyddar byggtid och gör beslutet enklare. Scope större än fem veckor delas upp i faser — aldrig öppen tidshorisont.
+              Vi bygger i Cursor med AI-stöd och väljer stack efter projektet. Fast pris filtrerar bort fel leads, skyddar byggtid och gör beslutet enklare.
             </p>
           </div>
         </div>
