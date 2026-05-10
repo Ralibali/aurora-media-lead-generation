@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useContactModal } from "@/components/ContactModal";
+import { useContactModal } from "@/components/MvpContactModal";
 import auroraMonogram from "@/assets/aurora-monogram.png";
 
 const NAV = [
@@ -31,7 +31,7 @@ const AuroraLogo = () => (
         Aurora Media
       </span>
       <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-        Lovable-byrån
+        AI-byrån
       </span>
     </span>
   </Link>
