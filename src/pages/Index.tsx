@@ -23,15 +23,15 @@ import {
 const Index = () => {
   useEffect(() => {
     setSEOMeta({
-      title: "SaaS-MVP på 3–4 veckor | Lovable-byrån Aurora Media",
+      title: "AI-byrå för SaaS-MVP och AI-produkter | Aurora Media",
       description:
-        "Aurora Media bygger fungerande SaaS-MVP:er på 3–4 veckor åt svenska entreprenörer som vill testa idéer snabbt med fast pris, Lovable, Supabase och Stripe.",
+        "Aurora Media bygger AI-drivna system, SaaS-MVP:er och digitala produkter på 3–4 veckor åt svenska entreprenörer med fast pris och modern Cursor-baserad utveckling.",
       canonical: "/",
       ogImage: "/og-image-sv.jpg",
       ogType: "website",
       ogLocale: "sv_SE",
       keywords:
-        "SaaS MVP, Lovable byrå, bygga MVP, SaaS utveckling Sverige, MVP byrå, Supabase, Stripe, Aurora Media",
+        "AI byrå, AI-byrå Sverige, SaaS MVP, AI produktutveckling, bygga MVP, Cursor utveckling, SaaS utveckling Sverige, Aurora Media",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
