@@ -23,15 +23,15 @@ import {
 const Index = () => {
   useEffect(() => {
     setSEOMeta({
-      title: "AI, automation och skräddarsydda system för företag | Aurora Media",
+      title: "SaaS-MVP på 3–4 veckor | Lovable-byrån Aurora Media",
       description:
-        "Aurora Media hjälper företag att ersätta Excel, manuella rutiner och omoderna system med AI-lösningar, automationer, SaaS, interna system och smarta digitala arbetsflöden.",
+        "Aurora Media bygger fungerande SaaS-MVP:er på 3–4 veckor åt svenska entreprenörer som vill testa idéer snabbt med fast pris, Lovable, Supabase och Stripe.",
       canonical: "/",
       ogImage: "/og-image-sv.jpg",
       ogType: "website",
       ogLocale: "sv_SE",
       keywords:
-        "AI automation företag, automatisera Excel, AI konsult Sverige, skräddarsydda system, SaaS-utveckling, CRM automation, digitalisering företag, Aurora Media",
+        "SaaS MVP, Lovable byrå, bygga MVP, SaaS utveckling Sverige, MVP byrå, Supabase, Stripe, Aurora Media",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
@@ -72,10 +72,10 @@ const Index = () => {
         <AuroraProducts />
         <AuroraLeadCTA
           variant="compact"
-          eyebrow="Redo att räkna på det?"
-          title="Få ett personligt e-postsvar inom 24 timmar."
-          description="Skicka in din förfrågan så återkommer vi med konkret förslag och pris – inte ett standardsvar."
-          ctaLabel="Skicka förfrågan"
+          eyebrow="Redo att testa idén?"
+          title="Få ett konkret MVP-förslag inom 24 timmar."
+          description="Beskriv idén, målgruppen och vad som måste fungera i första versionen — så återkommer vi med rekommenderat paket och nästa steg."
+          ctaLabel="Skicka MVP-förfrågan"
         />
         <AuroraIndustries />
         <AuroraIntegrations />
