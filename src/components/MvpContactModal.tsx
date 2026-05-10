@@ -25,10 +25,10 @@ export const useContactModal = () => {
 };
 
 const MVP_OPTIONS = [
-  { value: "Starter MVP", label: "Starter MVP – 49 000 kr · 3 veckor" },
-  { value: "Standard MVP", label: "Standard MVP – 89 000 kr · 4 veckor" },
-  { value: "Premium MVP+", label: "Premium MVP+ – 149 000 kr · 5 veckor" },
-  { value: "Osäker MVP", label: "Osäker – hjälp mig välja rätt MVP-paket" },
+  { value: "AI Sprint", label: "AI Sprint – 49 000 kr · 3 veckor" },
+  { value: "AI MVP", label: "AI MVP – 89 000 kr · 4 veckor" },
+  { value: "AI Product+", label: "AI Product+ – 149 000 kr · 5 veckor" },
+  { value: "Osäker", label: "Osäker – hjälp mig välja rätt upplägg" },
 ] as const;
 
 const BUDGET_OPTIONS = [
@@ -49,29 +49,29 @@ const schema = z.object({
   email: z.string().trim().toLowerCase().email("Ogiltig e-postadress").max(160),
   company: z.string().trim().max(120).optional().or(z.literal("")),
   phone: z.string().trim().max(30).optional().or(z.literal("")),
-  paket: z.string().min(1, "Välj MVP-paket"),
+  paket: z.string().min(1, "Välj upplägg"),
   budget: z.string().min(1, "Välj budgetnivå"),
   timeline: z.string().min(1, "Välj tidsplan"),
   audience: z.string().trim().min(8, "Beskriv målgruppen kort").max(500),
-  problem: z.string().trim().min(12, "Beskriv problemet som MVP:n ska lösa").max(800),
-  message: z.string().trim().min(30, "Beskriv MVP-idén med minst 30 tecken").max(2000),
+  problem: z.string().trim().min(12, "Beskriv problemet som AI-lösningen ska lösa").max(800),
+  message: z.string().trim().min(30, "Beskriv idén med minst 30 tecken").max(2000),
   consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna integritetspolicyn" }) }),
   website: z.string().max(0, "").optional().or(z.literal("")),
 });
 
 export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [defaultPaket, setDefaultPaket] = useState<string>("Standard MVP");
+  const [defaultPaket, setDefaultPaket] = useState<string>("AI MVP");
   const [internalNote, setInternalNote] = useState<string>("");
 
   const open: ContactModalCtx["open"] = (paketOrOptions, options) => {
-    let paket = "Standard MVP";
+    let paket = "AI MVP";
     let note = "";
     if (typeof paketOrOptions === "string") {
       paket = paketOrOptions;
       note = options?.internalNote ?? "";
     } else if (paketOrOptions) {
-      paket = paketOrOptions.paket ?? "Standard MVP";
+      paket = paketOrOptions.paket ?? "AI MVP";
       note = paketOrOptions.internalNote ?? "";
     }
     setDefaultPaket(paket);
@@ -101,7 +101,7 @@ const ContactDialog = ({
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [paketValue, setPaketValue] = useState("Standard MVP");
+  const [paketValue, setPaketValue] = useState("AI MVP");
   const [budgetValue, setBudgetValue] = useState("");
   const [timelineValue, setTimelineValue] = useState("");
   const [consentChecked, setConsentChecked] = useState(false);
@@ -110,7 +110,7 @@ const ContactDialog = ({
   useEffect(() => {
     if (!isOpen) return;
     const known = MVP_OPTIONS.some((o) => o.value === defaultPaket);
-    setPaketValue(known ? defaultPaket : "Standard MVP");
+    setPaketValue(known ? defaultPaket : "AI MVP");
     setBudgetValue("");
     setTimelineValue("");
     setConsentChecked(false);
@@ -155,14 +155,14 @@ const ContactDialog = ({
     if (parsed.data.website) return;
 
     if (parsed.data.budget === "not-ready") {
-      setFieldErrors({ budget: "MVP-projekt startar från 49 000 kr. Återkom när budgeten finns, så sparar vi bådas tid." });
-      toast.error("MVP-projekt startar från 49 000 kr.");
+      setFieldErrors({ budget: "AI-projekt startar från 49 000 kr. Återkom när budgeten finns, så sparar vi bådas tid." });
+      toast.error("AI-projekt startar från 49 000 kr.");
       return;
     }
 
     setSubmitting(true);
     try {
-      const leadLabel = `MVP-förfrågan: ${selectedPackage?.label ?? paketValue} · Budget: ${selectedBudget?.label ?? budgetValue} · Tidsplan: ${selectedTimeline?.label ?? timelineValue}`;
+      const leadLabel = `AI-byråförfrågan: ${selectedPackage?.label ?? paketValue} · Budget: ${selectedBudget?.label ?? budgetValue} · Tidsplan: ${selectedTimeline?.label ?? timelineValue}`;
       const message = [
         parsed.data.message,
         "",
@@ -171,6 +171,7 @@ const ContactDialog = ({
         `Problem: ${parsed.data.problem}`,
         `Budget: ${selectedBudget?.label ?? budgetValue}`,
         `Tidsplan: ${selectedTimeline?.label ?? timelineValue}`,
+        "Verktygslåda vid behov: Cursor, Lovable, Codex, Claude, ChatGPT, Supabase, Stripe, API:er och egna integrationer.",
         internalNote ? `Intern notering: ${internalNote}` : "",
       ].filter(Boolean).join("\n");
 
@@ -191,7 +192,7 @@ const ContactDialog = ({
       setSubmittedEmail(parsed.data.email);
       setDone(true);
       form.reset();
-      toast.success("Tack! Din MVP-förfrågan är skickad. Jag svarar personligen inom 24 timmar.");
+      toast.success("Tack! Din AI-förfrågan är skickad. Jag svarar personligen inom 24 timmar.");
     } catch (err) {
       console.error("[MvpContactModal] submit error", err);
       toast.error("Något gick fel. Mejla istället info@auroramedia.se");
@@ -206,8 +207,8 @@ const ContactDialog = ({
     <Dialog open={isOpen} onOpenChange={(v) => { onOpenChange(v); if (!v) setTimeout(() => setDone(false), 300); }}>
       <DialogContent className="max-w-2xl max-h-[92vh] overflow-y-auto sm:max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle className="font-serif text-3xl font-normal">Boka MVP-samtal</DialogTitle>
-          <DialogDescription>För SaaS-MVP:er från 49 000 kr. Svar inom 24 timmar vardagar.</DialogDescription>
+          <DialogTitle className="font-serif text-3xl font-normal">Boka AI-samtal</DialogTitle>
+          <DialogDescription>För AI-lösningar, SaaS-MVP:er och digitala produkter från 49 000 kr. Vi använder rätt verktyg för uppdraget: Cursor, Lovable, Codex, Claude, Supabase, Stripe och annat som gör jobbet snabbare.</DialogDescription>
         </DialogHeader>
 
         {done ? (
@@ -216,14 +217,14 @@ const ContactDialog = ({
               <CheckCircle2 className="h-10 w-10 text-primary" strokeWidth={1.5} />
             </div>
             <div>
-              <p className="font-serif text-3xl">Tack — MVP-förfrågan är skickad.</p>
-              <p className="mx-auto mt-2 max-w-md text-muted-foreground">Jag återkommer personligen till {submittedEmail || "din mejl"} med nästa steg, scope-frågor och rekommenderat paket.</p>
+              <p className="font-serif text-3xl">Tack — AI-förfrågan är skickad.</p>
+              <p className="mx-auto mt-2 max-w-md text-muted-foreground">Jag återkommer personligen till {submittedEmail || "din mejl"} med nästa steg, scope-frågor och rekommenderat upplägg.</p>
             </div>
             <div className="rounded-xl border border-border bg-card/60 px-5 py-4 text-left">
               <p className="label-caps">Vad händer nu?</p>
               <ul className="mt-3 space-y-3 text-sm">
                 <li className="flex items-start gap-3"><Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Du får ett personligt svar inom 24 timmar.</li>
-                <li className="flex items-start gap-3"><Calendar className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Vi bokar ett kort 20-minuters samtal om scope, risk och tidsplan.</li>
+                <li className="flex items-start gap-3"><Calendar className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Vi bokar ett kort 20-minuters samtal om scope, risk och tekniskt upplägg.</li>
                 <li className="flex items-start gap-3"><Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />Brådskande? Mejla info@auroramedia.se.</li>
               </ul>
             </div>
@@ -248,8 +249,8 @@ const ContactDialog = ({
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="space-y-1.5">
-                <Label>MVP-paket *</Label>
-                <Select value={paketValue} onValueChange={setPaketValue}><SelectTrigger><SelectValue placeholder="Välj paket" /></SelectTrigger><SelectContent>{MVP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+                <Label>Upplägg *</Label>
+                <Select value={paketValue} onValueChange={setPaketValue}><SelectTrigger><SelectValue placeholder="Välj upplägg" /></SelectTrigger><SelectContent>{MVP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
                 <ErrorText name="paket" />
               </div>
               <div className="space-y-1.5">
@@ -265,18 +266,18 @@ const ContactDialog = ({
             </div>
 
             <div className="space-y-1.5"><Label htmlFor="audience">Vem är målgruppen? *</Label><Input id="audience" name="audience" placeholder="Ex: svenska åkerier med 5–30 fordon" /><ErrorText name="audience" /></div>
-            <div className="space-y-1.5"><Label htmlFor="problem">Vilket problem ska MVP:n lösa? *</Label><Textarea id="problem" name="problem" rows={3} placeholder="Beskriv problemet, dagens manuella lösning och varför någon skulle betala." /><ErrorText name="problem" /></div>
-            <div className="space-y-1.5"><Label htmlFor="message">Beskriv MVP-idén kort *</Label><Textarea id="message" name="message" rows={6} placeholder="Vad ska första versionen kunna göra? Vilka funktioner är absolut nödvändiga?" /><ErrorText name="message" /></div>
+            <div className="space-y-1.5"><Label htmlFor="problem">Vilket problem ska AI-lösningen lösa? *</Label><Textarea id="problem" name="problem" rows={3} placeholder="Beskriv problemet, dagens manuella lösning och varför någon skulle betala." /><ErrorText name="problem" /></div>
+            <div className="space-y-1.5"><Label htmlFor="message">Beskriv idén kort *</Label><Textarea id="message" name="message" rows={6} placeholder="Vad ska första versionen kunna göra? Handlar det om AI, automation, SaaS, app, intern portal eller något annat?" /><ErrorText name="message" /></div>
 
             {internalNote && <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm"><div className="flex items-start gap-2.5"><Tag className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" /><p className="text-foreground/85">{internalNote}</p></div></div>}
 
             <label className="flex items-start gap-3 rounded-xl border border-border bg-card/50 p-4 text-sm text-muted-foreground">
               <input type="checkbox" name="consent" checked={consentChecked} onChange={(e) => setConsentChecked(e.target.checked)} className="mt-1" />
-              <span>Jag godkänner att Aurora Media behandlar mina uppgifter för att svara på min MVP-förfrågan.</span>
+              <span>Jag godkänner att Aurora Media behandlar mina uppgifter för att svara på min AI-förfrågan.</span>
             </label>
             <ErrorText name="consent" />
 
-            <Button type="submit" disabled={submitting} className="w-full" size="lg">{submitting ? "Skickar..." : "Skicka MVP-förfrågan"}</Button>
+            <Button type="submit" disabled={submitting} className="w-full" size="lg">{submitting ? "Skickar..." : "Skicka AI-förfrågan"}</Button>
           </form>
         )}
       </DialogContent>
