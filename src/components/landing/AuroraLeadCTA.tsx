@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Mail, Clock, ShieldCheck, Sparkles } from "lucide-react";
-import { useContactModal } from "@/components/ContactModal";
+import { useContactModal } from "@/components/MvpContactModal";
 import { trackCtaClick } from "@/lib/ctaTracking";
 
 interface Props {
@@ -15,10 +15,10 @@ interface Props {
 const AuroraLeadCTA = ({
   variant = "wide",
   eyebrow = "Få svar inom 24 timmar",
-  title = "Skicka din förfrågan – vi mejlar tillbaka.",
-  description = "Berätta kort vad ni vill bygga eller automatisera. Vi läser, analyserar och återkommer personligen via e-post med ärligt svar och nästa steg – helt utan kostnad.",
+  title = "Skicka din AI- eller MVP-förfrågan – vi mejlar tillbaka.",
+  description = "Berätta kort vad ni vill bygga, automatisera eller testa. Vi återkommer personligen med ärligt svar, rekommenderad stack och nästa steg.",
   ctaLabel = "Skicka förfrågan",
-  leadLabel = "Lead via CTA-ruta",
+  leadLabel = "Standard MVP",
 }: Props) => {
   const { open } = useContactModal();
 
