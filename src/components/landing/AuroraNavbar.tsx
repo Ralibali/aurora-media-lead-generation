@@ -6,11 +6,11 @@ import { useContactModal } from "@/components/ContactModal";
 import auroraMonogram from "@/assets/aurora-monogram.png";
 
 const NAV = [
-  { label: "AI-kartan", href: "/ai-karta", type: "route" },
-  { label: "AI & automation", href: "/ai-automation-foretag", type: "route" },
-  { label: "Tjänster", href: "#tjanster", type: "section" },
+  { label: "Case", href: "#projekt", type: "section" },
   { label: "Process", href: "#process", type: "section" },
   { label: "Paket", href: "#paket", type: "section" },
+  { label: "Metodik", href: "/metodik", type: "route" },
+  { label: "Kontakt", href: "/kontakt", type: "route" },
 ];
 
 const AuroraLogo = () => (
@@ -31,7 +31,7 @@ const AuroraLogo = () => (
         Aurora Media
       </span>
       <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.3em] text-muted-foreground">
-        AB
+        Lovable-byrån
       </span>
     </span>
   </Link>
@@ -105,10 +105,10 @@ const AuroraNavbar = () => {
           </nav>
 
           <button
-            onClick={() => open()}
+            onClick={() => open("Standard MVP")}
             className="hidden items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-10px_hsl(var(--primary)/0.55)] transition hover:brightness-110 md:inline-flex"
           >
-            Boka rådgivning
+            Boka MVP-samtal
           </button>
 
           <button
@@ -143,12 +143,12 @@ const AuroraNavbar = () => {
                 </motion.a>
               ))}
               <motion.button
-                onClick={() => { setMobileOpen(false); setTimeout(() => open(), 200); }}
+                onClick={() => { setMobileOpen(false); setTimeout(() => open("Standard MVP"), 200); }}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.35 }}
                 className="mt-8 w-full rounded-full bg-primary px-6 py-4 text-base font-semibold text-primary-foreground"
               >
-                Boka rådgivning
+                Boka MVP-samtal
               </motion.button>
             </div>
           </motion.div>
