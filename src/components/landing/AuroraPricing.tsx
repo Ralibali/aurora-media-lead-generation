@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
-import { useContactModal } from "@/components/ContactModal";
+import { useContactModal } from "@/components/MvpContactModal";
 
 type Pkg = {
   num: string;
