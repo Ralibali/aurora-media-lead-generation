@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Rocket, Target, Check } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useContactModal } from "@/components/ContactModal";
+import { useContactModal } from "@/components/MvpContactModal";
 
 const TIMELINE = [
   { day: "Vecka 1", title: "Scope & produktkarta", desc: "Vi låser målgrupp, kärnflöde, datamodell och vad som inte ska byggas." },
