@@ -128,122 +128,167 @@ const AiKarta = () => {
         rel="stylesheet"
       />
 
-      {/* === Minimal header === */}
-      <header className="border-b" style={{ borderColor: RULE }}>
-        <div className="mx-auto flex max-w-6xl items-center px-6 py-5">
-          <Link to="/" aria-label="Aurora Media">
-            <img
-              src={auroraLogo}
-              alt="Aurora Media"
-              className="h-7 w-auto"
-              style={{ filter: "brightness(0)" }}
-            />
-          </Link>
-        </div>
-      </header>
+      {/* === Hero (warm dark, solid) === */}
+      <section style={{ background: HERO_BG, color: HERO_BODY }}>
+        <header style={{ background: HERO_BG }}>
+          <div
+            className="mx-auto flex max-w-6xl items-center px-6"
+            style={{ height: 64 }}
+          >
+            <Link
+              to="/"
+              aria-label="Aurora Media"
+              style={{
+                fontSize: 12,
+                letterSpacing: "0.18em",
+                color: HERO_H1,
+                fontWeight: 500,
+                fontFamily: "Inter, sans-serif",
+                textTransform: "uppercase",
+              }}
+            >
+              AURORA MEDIA
+            </Link>
+          </div>
+        </header>
 
-      <main>
-        {/* === Hero === */}
-        <section className="mx-auto max-w-6xl px-6 pt-16 pb-24 md:pt-24 md:pb-32">
-          <div className="grid gap-12 md:grid-cols-12 md:items-center md:gap-16">
-            <div className="md:col-span-7">
+        <div
+          className="mx-auto max-w-6xl"
+          style={{ padding: "80px 24px 64px" }}
+        >
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-16">
+            <div className="lg:col-span-7">
               <p
-                className="text-[11px] font-medium uppercase tracking-[0.18em]"
-                style={{ color: ACCENT }}
+                style={{
+                  fontSize: 12,
+                  letterSpacing: "0.15em",
+                  color: HERO_MUTED,
+                  fontWeight: 500,
+                  textTransform: "uppercase",
+                  margin: 0,
+                  fontFamily: "Inter, sans-serif",
+                }}
               >
-                Hej — Christoffer här
+                HEJ — CHRISTOFFER HÄR
               </p>
 
               <h1
-                className="mt-6 leading-[0.98] tracking-[-0.02em]"
                 style={{
-                  fontFamily: "'Fraunces', Georgia, serif",
+                  fontFamily: "'Fraunces', 'Instrument Serif', Georgia, serif",
                   fontWeight: 400,
-                  fontSize: "clamp(2.4rem, 6.4vw, 4.8rem)",
-                  color: INK,
+                  fontSize: "clamp(40px, 6.5vw, 64px)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.02em",
+                  color: HERO_H1,
+                  marginTop: 24,
+                  marginBottom: 0,
                 }}
               >
-                Jag bygger system som tar bort de tråkiga uppgifterna i
-                ert företag.
+                Jag bygger system som tar bort de tråkiga uppgifterna i ert företag.
               </h1>
 
               <p
-                className="mt-8 max-w-xl text-[1.0625rem] leading-[1.65]"
-                style={{ color: MUTED }}
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 16,
+                  lineHeight: 1.6,
+                  color: HERO_BODY,
+                  marginTop: 24,
+                  marginBottom: 0,
+                  maxWidth: 560,
+                }}
               >
-                Berätta lite om vad ni gör i ett kort frågeformulär — så
-                får ni tillbaka en konkret karta över vilka uppgifter som
-                kan automatiseras, hur många timmar det skulle spara, och
-                om det ens är värt att bygga. Tar tre minuter.
+                Berätta lite om vad ni gör i ett kort frågeformulär — så får ni
+                tillbaka en konkret karta över vilka uppgifter som kan
+                automatiseras, hur många timmar det skulle spara, och om det
+                ens är värt att bygga. Tar tre minuter.
               </p>
 
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div style={{ marginTop: 32 }}>
                 <Link
                   to="/ai-karta/start"
-                  className="inline-flex items-center justify-center rounded-full px-7 py-4 text-[15px] font-medium transition hover:opacity-90"
-                  style={{ background: ACCENT, color: BG }}
+                  className="block w-full text-center sm:inline-block sm:w-auto"
+                  style={{
+                    background: HERO_ACCENT,
+                    color: HERO_BG,
+                    padding: "18px 32px",
+                    borderRadius: 999,
+                    fontWeight: 500,
+                    fontSize: 15,
+                    fontFamily: "Inter, sans-serif",
+                    textDecoration: "none",
+                  }}
                 >
                   Skapa min karta →
                 </Link>
               </div>
 
               <p
-                className="mt-4 text-[13px]"
-                style={{ color: MUTED }}
+                style={{
+                  fontSize: 13,
+                  color: HERO_MUTED,
+                  marginTop: 12,
+                  marginBottom: 0,
+                  fontFamily: "Inter, sans-serif",
+                }}
               >
-                Helt gratis. Inget säljmöte. Du får svaret direkt på
-                skärmen.
+                Helt gratis. Inget säljmöte. Du får svaret direkt på skärmen.
               </p>
             </div>
 
-            {/* Portrait — polaroid feel */}
-            <div className="md:col-span-5">
-              <figure className="mx-auto max-w-[320px] md:ml-auto md:mr-0">
+            <div className="lg:col-span-5">
+              <figure className="m-0">
                 <div
-                  className="rotate-[-2deg] bg-white p-3 pb-5 shadow-[0_24px_60px_-30px_rgba(26,26,26,0.45)]"
-                  style={{ border: `1px solid ${RULE}` }}
+                  className="w-full lg:ml-auto"
+                  style={{
+                    maxWidth: 480,
+                    aspectRatio: "4 / 5",
+                    borderRadius: 2,
+                    overflow: "hidden",
+                    background: HERO_PLACEHOLDER_BG,
+                  }}
                 >
-                  <div
-                    className="aspect-[4/5] w-full overflow-hidden"
-                    style={{ background: "#EFEAE0" }}
-                  >
-                    {!imgFailed ? (
-                      <img
-                        src="/christoffer.jpg"
-                        alt="Christoffer Holstensson, Linköping"
-                        className="h-full w-full object-cover"
-                        onError={() => setImgFailed(true)}
-                        loading="eager"
-                      />
-                    ) : (
-                      <div
-                        className="flex h-full w-full items-center justify-center"
-                        style={{
-                          fontFamily: "'Fraunces', Georgia, serif",
-                          color: ACCENT,
-                          fontSize: "5rem",
-                        }}
-                      >
-                        CH
-                      </div>
-                    )}
-                  </div>
-                  <figcaption
-                    className="mt-3 text-center"
-                    style={{
-                      fontFamily: "'Caveat', cursive",
-                      color: INK,
-                      fontSize: "1.15rem",
-                    }}
-                  >
-                    Christoffer Holstensson — Linköping
-                  </figcaption>
+                  {!imgFailed ? (
+                    <img
+                      src="/christoffer.jpg"
+                      alt="Christoffer Holstensson, Linköping"
+                      className="h-full w-full object-cover"
+                      onError={() => setImgFailed(true)}
+                      loading="eager"
+                      style={{ display: "block" }}
+                    />
+                  ) : (
+                    <div
+                      className="flex h-full w-full items-center justify-center"
+                      style={{
+                        color: HERO_MUTED,
+                        fontFamily: "Inter, sans-serif",
+                        fontSize: 14,
+                      }}
+                    >
+                      Foto kommer
+                    </div>
+                  )}
                 </div>
+                <figcaption
+                  className="lg:ml-auto"
+                  style={{
+                    maxWidth: 480,
+                    marginTop: 12,
+                    fontSize: 14,
+                    color: HERO_MUTED,
+                    fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  Christoffer Holstensson — Linköping
+                </figcaption>
               </figure>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
+      <main>
         {/* === Products === */}
         <section
           className="border-t"
