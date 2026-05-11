@@ -1,432 +1,576 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight,
-  CheckCircle2,
-  Clock,
-  Clock3,
-  Gauge,
-  Sparkles,
-  ShieldCheck,
-  Star,
-  Target,
-  TrendingUp,
-  Workflow,
-  Zap,
-} from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Reveal from "@/components/Reveal";
-import { Button } from "@/components/ui/button";
-import { useContactModal } from "@/components/ContactModal";
-import AuroraContactForm from "@/components/AuroraContactForm";
-import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import auroraLogo from "@/assets/aurora-monogram.png";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
-// — Conversion-driven copy. Specifika siffror > vaga löften. —
+// Editorial palette (Alt A — light, warm, deep green accent)
+// bg #FAF7F2 · ink #1A1A1A · accent #1F3D2E
+const BG = "#FAF7F2";
+const INK = "#1A1A1A";
+const ACCENT = "#1F3D2E";
+const MUTED = "#6B6760";
+const RULE = "#E5E0D6";
 
-const proofStats = [
-  { value: "5–15 h", label: "sparat per anställd och vecka", sub: "i typiska AI-piloter som vi byggt" },
-  { value: "Några min", label: "att fylla i online", sub: "klart innan ditt nästa möte" },
-  { value: "0 kr", label: "för analysen", sub: "och inget säljmöte krävs" },
-];
-
-const valueStack = [
-  { icon: Target, title: "Personlig topp-3-analys", body: "Vilka av era processer som ger störst effekt först – inte en generisk lista." },
-  { icon: Clock, title: "Konkret tidsbesparing i timmar", body: "Beräknat per process, per vecka och per år. Lätt att räkna ROI på." },
-  { icon: Workflow, title: "Förslag på lösning per område", body: "AI-assistent, automation, dashboard, internt system eller integration – med motivering." },
-  { icon: Sparkles, title: "Djupanalys av Aurora-analysen", body: "Snabba vinster, risker att hantera och en rekommenderad ordning på pilotprojekten." },
-  { icon: ShieldCheck, title: "Innehållsrik PDF att dela internt", body: "Snyggt formaterad, byggd för att ta med till ledningsmöte eller workshop med personalen." },
-  { icon: Zap, title: "Metodguide: Så automatiserar ni", body: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt AI-lösning på två till fyra veckor." },
-];
-
-const objections = [
+const products = [
   {
-    q: "Vi är inte tekniska – förstår vi ens svaren?",
-    a: "Ja. Allt är på vanlig svenska, utan AI-jargong. Du svarar på frågor om hur ni jobbar idag – vi översätter till lösningar.",
+    name: "Hönsgården",
+    url: "https://honsgarden.se",
+    blurb: "App för hönsgårdar med 5 000+ aktiva användare.",
   },
   {
-    q: "Är det här bara ett sätt att fånga in leads för att ringa oss sen?",
-    a: "Nej. Ni får hela analysen och PDF:en direkt på skärmen, utan säljmöte. Vill ni boka en genomlysning är det helt frivilligt – och alltid kostnadsfritt.",
+    name: "AgilityManager",
+    url: "https://agilitymanager.se",
+    blurb: "Träningsplattform för hundagility-tränare.",
   },
   {
-    q: "Vi har redan testat ChatGPT, behöver vi det här?",
-    a: "ChatGPT är ett verktyg. AI-kartan handlar om VAD i er verksamhet som faktiskt sparar tid och pengar att automatisera – och i vilken ordning. Det är skillnaden mellan att leka med AI och att tjäna på det.",
+    name: "Odlingsdagboken",
+    url: "https://odlingsdagboken.com",
+    blurb: "Odlingsapp med AI-coachen Gro.",
   },
   {
-    q: "Hur vet ni vad som passar just oss?",
-    a: "Analysen är byggd på era egna svar om frekvens, tidsåtgång, regelstyrning, datatillgång och affärsvärde – samma kriterier som vi använder med betalande kunder.",
+    name: "Updro",
+    url: "https://updro.se",
+    blurb: "Marknadsplats för digitalbyråer i Sverige.",
+  },
+  {
+    name: "Aurora Transport",
+    url: "https://auroratransport.se",
+    blurb: "Transportadministration för åkerier.",
+  },
+  {
+    name: "GoGlamping Sweden",
+    url: "https://goglampingsweden.se",
+    blurb: "Min egen glampingverksamhet vid Göta kanal.",
   },
 ];
 
-const steps = [
-  { icon: Sparkles, title: "1. Fyll i AI-kartan online", body: "Några minuter. Lista era vanligaste tidskrävande processer.", time: "Några min" },
-  { icon: Gauge, title: "2. Få mini-analys direkt", body: "Topp-3 områden, tidsbesparing, lösningsförslag och AI-djupanalys – på skärmen, direkt.", time: "Direkt" },
-  { icon: Workflow, title: "3. Ladda ner PDF:en", body: "Innehållsrikt underlag att dela med ledning, personal eller styrelse.", time: "1 klick" },
-  { icon: Clock3, title: "4. (Valfritt) Boka genomlysning", body: "Vi går igenom era svar och pekar ut bästa första pilot. Helt kostnadsfritt.", time: "45 min" },
+const faqs = [
+  {
+    q: "Vad kostar kartan?",
+    a: "Inget. Den är gratis och du behöver inte uppge kortuppgifter eller boka något möte.",
+  },
+  {
+    q: "Vad händer efter att jag fyllt i?",
+    a: "Du får svaret direkt på skärmen — vilka uppgifter som kan automatiseras, ungefär hur många timmar det skulle spara, och om jag tycker att det är värt att bygga.",
+  },
+  {
+    q: "Måste jag bygga något efter?",
+    a: "Nej. Många använder kartan som ett internt diskussionsunderlag. Vill ni att jag bygger något så finns jag — annars hör vi inte av oss igen.",
+  },
+  {
+    q: "Hur snabbt får jag svar?",
+    a: "Direkt. Analysen är klar samma sekund du skickat in formuläret.",
+  },
+  {
+    q: "Kan jag ringa istället?",
+    a: "Absolut. Mejla mig på info@auroramedia.se så ringer jag upp samma dag.",
+  },
 ];
 
-const examples = [
-  "kundfrågor som besvaras om och om igen",
-  "CRM-uppdateringar efter möten och säljsamtal",
-  "Excel-listor som uppdateras manuellt",
-  "rapporter som sammanställs från flera källor",
-  "offerter, avtal eller dokument som följer mallar",
-  "fakturor, kostnader eller ärenden som kontrolleras enligt regler",
-  "intern kunskap som personal behöver leta efter",
-  "uppföljningar till leads som lätt glöms bort",
-];
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "DigitalDocument",
-  name: "Aurora AI-karta",
-  description:
-    "Kostnadsfri AI-analys för svenska företag. Identifiera vilka processer som kan automatiseras med AI – på några minuter, utan säljmöte.",
-  provider: { "@type": "Organization", name: "Aurora Media AB", url: "https://auroramedia.se" },
-};
-
-const faqJsonLd = {
+const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: objections.map((o) => ({
+  mainEntity: faqs.map((f) => ({
     "@type": "Question",
-    name: o.q,
-    acceptedAnswer: { "@type": "Answer", text: o.a },
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
   })),
 };
 
 const AiKarta = () => {
-  const { open } = useContactModal();
+  const [imgFailed, setImgFailed] = useState(false);
 
   useEffect(() => {
     setSEOMeta({
-      title: "Kostnadsfri AI-analys för ditt företag | Aurora Media",
+      title: "Skapa er AI-karta – Aurora Media",
       description:
-        "Ta reda på exakt vilka processer i ditt företag som kan automatiseras med AI. Personlig analys + innehållsrik PDF – på några minuter, helt kostnadsfritt.",
+        "Tre minuters formulär. Få en konkret karta över vad som kan automatiseras i er verksamhet.",
       canonical: "/ai-karta",
+      ogImage: "/og-image-sv.jpg",
     });
     setBreadcrumb([
       { name: "Start", url: "/" },
       { name: "AI-kartan", url: "/ai-karta" },
     ]);
-    setJsonLd("ai-karta-jsonld", jsonLd);
-    setJsonLd("ai-karta-faq-jsonld", faqJsonLd);
+    setJsonLd("ai-karta-faq-jsonld", breadcrumbJsonLd);
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-      <main className="overflow-hidden">
-        {/* ============== HERO ============== */}
-        <section className="relative pt-24 pb-12 md:pt-36 md:pb-24">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.22),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.16),transparent_32%)]" />
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-              <Reveal>
-                <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.08] px-3 py-1.5 text-[11px] font-semibold text-primary sm:text-xs">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-70" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-                  </span>
-                  Helt kostnadsfri · Inget säljmöte krävs
-                </div>
+    <div
+      className="min-h-screen font-sans antialiased"
+      style={{
+        background: BG,
+        color: INK,
+        fontFamily:
+          "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif",
+      }}
+    >
+      {/* Editorial fonts */}
+      <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+      />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=Caveat:wght@400;500&display=swap"
+        rel="stylesheet"
+      />
 
-                <h1 className="mt-4 max-w-full font-display text-[clamp(1.85rem,7vw,6.2rem)] font-bold leading-[0.98] tracking-tight break-words sm:mt-5 sm:max-w-5xl sm:leading-[0.92]">
-                  Vad i ert företag kan{" "}
-                  <span className="bg-gradient-to-r from-primary via-primary to-purple-400 bg-clip-text text-transparent">
-                    AI sköta åt er
-                  </span>
-                  ?
-                </h1>
+      {/* === Minimal header === */}
+      <header className="border-b" style={{ borderColor: RULE }}>
+        <div className="mx-auto flex max-w-6xl items-center px-6 py-5">
+          <Link to="/" aria-label="Aurora Media">
+            <img
+              src={auroraLogo}
+              alt="Aurora Media"
+              className="h-7 w-auto"
+              style={{ filter: "brightness(0)" }}
+            />
+          </Link>
+        </div>
+      </header>
 
-                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:mt-7 sm:text-lg md:text-2xl">
-                  Personlig AI-analys av era processer på <strong className="text-foreground">några minuter</strong>.
-                  <span className="hidden sm:inline"> Vi pekar ut exakt vilka uppgifter som kan automatiseras – och hur mycket tid det sparar.</span>
-                </p>
+      <main>
+        {/* === Hero === */}
+        <section className="mx-auto max-w-6xl px-6 pt-16 pb-24 md:pt-24 md:pb-32">
+          <div className="grid gap-12 md:grid-cols-12 md:items-center md:gap-16">
+            <div className="md:col-span-7">
+              <p
+                className="text-[11px] font-medium uppercase tracking-[0.18em]"
+                style={{ color: ACCENT }}
+              >
+                Hej — Christoffer här
+              </p>
 
-                <div className="mt-8 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center sm:flex-wrap">
-                  <Button asChild size="lg" className="w-full rounded-full shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)] sm:w-auto">
-                    <Link to="/ai-karta/start">
-                      Starta min AI-analys – gratis <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    <span>Inget säljmöte · Inget spam · Några min</span>
-                  </div>
-                </div>
+              <h1
+                className="mt-6 leading-[0.98] tracking-[-0.02em]"
+                style={{
+                  fontFamily: "'Fraunces', Georgia, serif",
+                  fontWeight: 400,
+                  fontSize: "clamp(2.4rem, 6.4vw, 4.8rem)",
+                  color: INK,
+                }}
+              >
+                Jag bygger system som tar bort de tråkiga uppgifterna i
+                ert företag.
+              </h1>
 
-                {/* Snabb-navigation: dold på mobil för att hålla fokus på CTA */}
-                <div className="mt-6 hidden flex-wrap gap-2 sm:flex">
-                  <a href="#sa-funkar-det" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
-                    Så funkar det →
-                  </a>
-                  <a href="#exempel" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
-                    Exempel →
-                  </a>
-                  <a href="#faq" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
-                    Vanliga frågor →
-                  </a>
-                  <Link to="/" className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-foreground/85 transition hover:border-primary/40 hover:text-foreground">
-                    Se alla tjänster →
-                  </Link>
-                </div>
+              <p
+                className="mt-8 max-w-xl text-[1.0625rem] leading-[1.65]"
+                style={{ color: MUTED }}
+              >
+                Berätta lite om vad ni gör i ett kort frågeformulär — så
+                får ni tillbaka en konkret karta över vilka uppgifter som
+                kan automatiseras, hur många timmar det skulle spara, och
+                om det ens är värt att bygga. Tar tre minuter.
+              </p>
 
-                {/* Proof stats – kompakt rad på mobil, kort på desktop */}
-                <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted-foreground sm:hidden">
-                  {proofStats.map((s) => (
-                    <span key={s.label} className="inline-flex items-baseline gap-1.5">
-                      <strong className="font-display text-sm font-bold text-primary">{s.value}</strong>
-                      {s.label}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-10 hidden gap-4 sm:grid sm:grid-cols-3">
-                  {proofStats.map((s) => (
-                    <div key={s.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                      <p className="font-display text-2xl font-bold text-primary">{s.value}</p>
-                      <p className="mt-1 text-sm font-semibold text-foreground">{s.label}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">{s.sub}</p>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <Link
+                  to="/ai-karta/start"
+                  className="inline-flex items-center justify-center rounded-full px-7 py-4 text-[15px] font-medium transition hover:opacity-90"
+                  style={{ background: ACCENT, color: BG }}
+                >
+                  Skapa min karta →
+                </Link>
+              </div>
 
-              <Reveal y={18}>
-                <div className="relative rounded-[2rem] border border-white/10 bg-white/[0.055] p-5 shadow-2xl backdrop-blur-xl">
-                  <div className="absolute -top-3 left-6 rounded-full bg-gradient-to-r from-primary to-purple-400 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary-foreground shadow-lg">
-                    Så ser resultatet ut
-                  </div>
-                  <div className="rounded-[1.5rem] border border-white/10 bg-black/55 p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">Topp 1 av 3</p>
-                        <h2 className="mt-2 font-display text-2xl font-bold text-white">Offerthantering</h2>
+              <p
+                className="mt-4 text-[13px]"
+                style={{ color: MUTED }}
+              >
+                Helt gratis. Inget säljmöte. Du får svaret direkt på
+                skärmen.
+              </p>
+            </div>
+
+            {/* Portrait — polaroid feel */}
+            <div className="md:col-span-5">
+              <figure className="mx-auto max-w-[320px] md:ml-auto md:mr-0">
+                <div
+                  className="rotate-[-2deg] bg-white p-3 pb-5 shadow-[0_24px_60px_-30px_rgba(26,26,26,0.45)]"
+                  style={{ border: `1px solid ${RULE}` }}
+                >
+                  <div
+                    className="aspect-[4/5] w-full overflow-hidden"
+                    style={{ background: "#EFEAE0" }}
+                  >
+                    {!imgFailed ? (
+                      <img
+                        src="/christoffer.jpg"
+                        alt="Christoffer Holstensson, Linköping"
+                        className="h-full w-full object-cover"
+                        onError={() => setImgFailed(true)}
+                        loading="eager"
+                      />
+                    ) : (
+                      <div
+                        className="flex h-full w-full items-center justify-center"
+                        style={{
+                          fontFamily: "'Fraunces', Georgia, serif",
+                          color: ACCENT,
+                          fontSize: "5rem",
+                        }}
+                      >
+                        CH
                       </div>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-primary to-primary/60 px-3 py-1 text-xs font-semibold text-primary-foreground">
-                        <TrendingUp className="h-3 w-3" /> Hög potential
+                    )}
+                  </div>
+                  <figcaption
+                    className="mt-3 text-center"
+                    style={{
+                      fontFamily: "'Caveat', cursive",
+                      color: INK,
+                      fontSize: "1.15rem",
+                    }}
+                  >
+                    Christoffer Holstensson — Linköping
+                  </figcaption>
+                </div>
+              </figure>
+            </div>
+          </div>
+        </section>
+
+        {/* === Products === */}
+        <section
+          className="border-t"
+          style={{ borderColor: RULE }}
+        >
+          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+            <p
+              className="text-[11px] font-medium uppercase tracking-[0.18em]"
+              style={{ color: ACCENT }}
+            >
+              Produkter jag byggt och driver
+            </p>
+            <h2
+              className="mt-4 max-w-2xl leading-[1.05] tracking-[-0.02em]"
+              style={{
+                fontFamily: "'Fraunces', Georgia, serif",
+                fontSize: "clamp(1.75rem, 3.6vw, 2.6rem)",
+                fontWeight: 400,
+              }}
+            >
+              Sex egna produkter som lever idag.
+            </h2>
+
+            <ul className="mt-12 grid grid-cols-1 gap-x-10 gap-y-10 md:grid-cols-2">
+              {products.map((p) => (
+                <li
+                  key={p.url}
+                  className="border-t pt-6"
+                  style={{ borderColor: RULE }}
+                >
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block"
+                  >
+                    <div className="flex items-baseline justify-between gap-4">
+                      <h3
+                        style={{
+                          fontFamily: "'Fraunces', Georgia, serif",
+                          fontSize: "1.5rem",
+                          fontWeight: 500,
+                          color: INK,
+                        }}
+                      >
+                        {p.name}
+                      </h3>
+                      <span
+                        className="text-[12px] underline-offset-4 group-hover:underline"
+                        style={{ color: ACCENT }}
+                      >
+                        {p.url.replace(/^https?:\/\//, "")} ↗
                       </span>
                     </div>
-                    <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.10] px-3 py-1.5 text-xs">
-                      <Clock className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-foreground">~6 h/vecka kan automatiseras (≈ 276 h/år)</span>
-                    </div>
-                    <div className="mt-5 grid gap-2.5">
-                      {[
-                        { k: "Lösning", v: "AI-assistent + dokumentmall" },
-                        { k: "Snabb vinst", v: "Auto-genererat utkast på 30 sek" },
-                        { k: "Risk", v: "Kvalitetskontroll av priser" },
-                      ].map((row) => (
-                        <div key={row.k} className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm">
-                          <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{row.k}</span>
-                          <span className="text-right text-foreground/90">{row.v}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-5 rounded-2xl border border-primary/25 bg-primary/[0.08] p-3 text-xs leading-relaxed text-foreground/85">
-                      <Sparkles className="mr-1 inline h-3 w-3 text-primary" />
-                      Du får djupanalys, konkret exempel och Aurora Medias rekommendation för varje område.
-                    </div>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* ============== PAIN / PROBLEM ============== */}
-        <section className="border-y border-white/10 bg-white/[0.025] py-14 md:py-20">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-              <Reveal>
-                <p className="label-caps">Problemet</p>
-                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                  Ni vet att AI borde fixa det här. Men <em className="font-display italic text-primary">vad</em> ska ni börja med?
-                </h2>
-                <p className="mt-5 text-muted-foreground md:text-lg">
-                  De flesta företag experimenterar med ChatGPT lite då och då – men har ingen aning om vilka processer som faktiskt skulle ge mätbar effekt om de automatiserades. Resultatet: tiden går, konkurrenterna drar ifrån, och AI förblir ett experiment istället för en konkurrensfördel.
-                </p>
-                <p className="mt-4 text-muted-foreground md:text-lg">
-                  AI-kartan ger er svaret – baserat på <strong className="text-foreground">era egna processer</strong>, inte generiska råd.
-                </p>
-              </Reveal>
-              <Reveal y={18}>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {examples.map((example) => (
-                    <div key={example} className="flex items-start gap-2 rounded-2xl border border-white/10 bg-white/[0.045] p-4 text-sm text-foreground/85">
-                      <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
-                      <span>{example}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="mt-4 text-xs italic text-muted-foreground">
-                  Känner ni igen er? Allt detta är typiska områden vi automatiserar.
-                </p>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* ============== VALUE STACK ============== */}
-        <section id="exempel" className="py-14 md:py-20 scroll-mt-24">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <Reveal>
-              <p className="label-caps text-primary">Vad ni får – allt kostnadsfritt</p>
-              <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Inte ännu en AI-rapport. <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">Ett färdigt beslutsunderlag.</span>
-              </h2>
-              <p className="mt-4 max-w-3xl text-muted-foreground md:text-lg">
-                Det här hade kostat 15 000–40 000 kr hos en typisk AI-konsult. Hos oss får ni det direkt på skärmen – för att vi vet att <strong className="text-foreground">en bra analys är vägen till en bra kund</strong>.
-              </p>
-            </Reveal>
-            <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {valueStack.map(({ icon: Icon, title, body }, index) => (
-                <Reveal key={title} delay={index * 0.04} y={16}>
-                  <div className="group h-full rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur transition hover:border-primary/30 hover:bg-primary/[0.04]">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/12 transition group-hover:bg-primary/20">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
-                  </div>
-                </Reveal>
+                    <p
+                      className="mt-2 text-[15px] leading-[1.6]"
+                      style={{ color: MUTED }}
+                    >
+                      {p.blurb}
+                    </p>
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
 
-            {/* Mid-page CTA */}
-            <Reveal y={16}>
-              <div className="mt-12 flex flex-col items-center gap-4 rounded-[1.7rem] border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-8 text-center sm:flex-row sm:justify-between sm:text-left">
-                <div>
-                  <p className="font-display text-xl font-bold sm:text-2xl">Redo att se vad AI kan göra för er?</p>
-                  <p className="mt-1 text-sm text-muted-foreground">Några minuter. Direktanalys. Ingen kontaktinfo krävs förrän ni vill ha PDF:en.</p>
-                </div>
-                <Button asChild size="lg" className="rounded-full shrink-0">
-                  <Link to="/ai-karta/start">
-                    Starta nu <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </Reveal>
+            <p
+              className="mt-12 text-[13px]"
+              style={{ color: MUTED }}
+            >
+              + Klientarbeten som Viriditas (massagesalong, Uddevalla)
+            </p>
           </div>
         </section>
 
-        {/* ============== HOW IT WORKS ============== */}
-        <section id="sa-funkar-det" className="border-y border-white/10 bg-secondary/20 py-14 md:py-20 scroll-mt-24">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <Reveal>
-              <p className="label-caps">Så fungerar det</p>
-              <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Från första klick till färdig AI-plan.
-              </h2>
-            </Reveal>
-            <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-              {steps.map(({ icon: Icon, title, body, time }, index) => (
-                <Reveal key={title} delay={index * 0.05} y={16}>
-                  <div className="relative h-full rounded-[1.6rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur">
-                    <div className="absolute right-5 top-5 rounded-full border border-primary/25 bg-primary/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                      {time}
-                    </div>
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/12">
-                      <Icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
+        {/* === How it works === */}
+        <section
+          className="border-t"
+          style={{ borderColor: RULE }}
+        >
+          <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+            <h2
+              className="max-w-2xl leading-[1.05] tracking-[-0.02em]"
+              style={{
+                fontFamily: "'Fraunces', Georgia, serif",
+                fontSize: "clamp(1.75rem, 3.6vw, 2.6rem)",
+                fontWeight: 400,
+              }}
+            >
+              Så här går det till
+            </h2>
+
+            <div className="mt-14 grid gap-12 md:grid-cols-3 md:gap-10">
+              {[
+                {
+                  n: "01",
+                  t: "Du svarar på några frågor",
+                  b: "Tio enkla frågor om vad ni gör och var det tar mest tid. Tre minuter.",
+                },
+                {
+                  n: "02",
+                  t: "Jag analyserar processerna",
+                  b: "Du får en karta över vilka uppgifter som kan automatiseras, vad det skulle spara i timmar, och hur en lösning skulle kunna se ut.",
+                },
+                {
+                  n: "03",
+                  t: "Du bestämmer vad ni vill göra",
+                  b: "Bygg det själva. Anlita mig. Lägg på hyllan. Inga förpliktelser, ingen säljare som ringer.",
+                },
+              ].map((s) => (
+                <div key={s.n}>
+                  <div
+                    style={{
+                      fontFamily: "'Fraunces', Georgia, serif",
+                      fontSize: "3.25rem",
+                      lineHeight: 1,
+                      color: ACCENT,
+                      fontWeight: 300,
+                    }}
+                  >
+                    {s.n}
                   </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ============== OBJECTION HANDLING / FAQ ============== */}
-        <section id="faq" className="py-14 md:py-20 scroll-mt-24">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <Reveal>
-              <p className="label-caps">Vanliga invändningar</p>
-              <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Innan ni klickar – det här undrar de flesta.
-              </h2>
-            </Reveal>
-            <div className="mt-10 grid gap-4 md:grid-cols-2">
-              {objections.map((o, i) => (
-                <Reveal key={o.q} delay={i * 0.05} y={16}>
-                  <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                    <p className="font-display text-base font-bold text-foreground">{o.q}</p>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{o.a}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ============== KONTAKTFORMULÄR ============== */}
-        <section id="kontakt" className="border-t border-white/10 py-14 md:py-20">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <Reveal>
-              <p className="label-caps">Kontakt</p>
-              <h2 className="mt-3 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Hellre prata direkt? Skicka en rad.
-              </h2>
-              <p className="mt-4 max-w-2xl text-muted-foreground">
-                Inget formulär-träsk – bara dig och oss. Vi läser allt själva och svarar inom 24 timmar (vardagar).
-              </p>
-            </Reveal>
-            <div className="mt-10">
-              <Reveal y={16}>
-                <AuroraContactForm />
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* ============== FINAL CTA ============== */}
-        <section className="pb-28">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <Reveal>
-              <div className="relative overflow-hidden rounded-[2rem] border border-primary/30 bg-gradient-to-br from-primary/[0.18] via-primary/[0.06] to-transparent p-8 md:p-14 shadow-[0_40px_100px_-50px_hsl(var(--primary)/0.6)]">
-                <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
-                <div className="absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-purple-500/20 blur-3xl" />
-                <div className="relative">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.10] px-3 py-1.5 text-xs font-semibold text-primary">
-                    <Star className="h-3.5 w-3.5" /> Begränsat antal pilotplatser kvartalsvis
-                  </div>
-                  <h2 className="mt-5 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                    Några minuter nu kan spara er verksamhet hundratals timmar nästa år.
-                  </h2>
-                  <p className="mt-5 max-w-2xl text-muted-foreground md:text-lg">
-                    Starta AI-kartan och se exakt vad som bör automatiseras först. Hittar vi inte minst 3 konkreta områden ni kan jobba vidare med – då har ni ändå fått en gratis nulägesanalys.
+                  <h3
+                    className="mt-5"
+                    style={{
+                      fontFamily: "'Fraunces', Georgia, serif",
+                      fontSize: "1.35rem",
+                      fontWeight: 500,
+                      color: INK,
+                    }}
+                  >
+                    {s.t}
+                  </h3>
+                  <p
+                    className="mt-3 text-[15px] leading-[1.65]"
+                    style={{ color: MUTED }}
+                  >
+                    {s.b}
                   </p>
-                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <Button asChild size="lg" className="rounded-full shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]">
-                      <Link to="/ai-karta/start">
-                        Starta min AI-analys nu <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                    <Button size="lg" variant="ghost" onClick={() => open()} className="rounded-full">
-                      Hellre boka ett samtal direkt
-                    </Button>
-                  </div>
-                  <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-primary" /> Helt kostnadsfritt</span>
-                    <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-primary" /> Inget säljmöte krävs</span>
-                    <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-primary" /> GDPR-säkrad</span>
-                    <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-primary" /> Aurora Media AB · Linköping</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* === About === */}
+        <section
+          className="border-t"
+          style={{ borderColor: RULE }}
+        >
+          <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-12 md:gap-16 md:py-28">
+            <div className="md:col-span-5">
+              <figure className="mx-auto max-w-[300px]">
+                <div
+                  className="rotate-[1.5deg] bg-white p-3 pb-5 shadow-[0_24px_60px_-30px_rgba(26,26,26,0.45)]"
+                  style={{ border: `1px solid ${RULE}` }}
+                >
+                  <div
+                    className="aspect-[4/5] w-full overflow-hidden"
+                    style={{ background: "#EFEAE0" }}
+                  >
+                    {!imgFailed ? (
+                      <img
+                        src="/christoffer.jpg"
+                        alt="Christoffer Holstensson"
+                        className="h-full w-full object-cover"
+                        onError={() => setImgFailed(true)}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div
+                        className="flex h-full w-full items-center justify-center"
+                        style={{
+                          fontFamily: "'Fraunces', Georgia, serif",
+                          color: ACCENT,
+                          fontSize: "5rem",
+                        }}
+                      >
+                        CH
+                      </div>
+                    )}
                   </div>
                 </div>
+              </figure>
+            </div>
+
+            <div className="md:col-span-7">
+              <p
+                className="text-[11px] font-medium uppercase tracking-[0.18em]"
+                style={{ color: ACCENT }}
+              >
+                Lite om mig
+              </p>
+              <h2
+                className="mt-4 leading-[1.05] tracking-[-0.02em]"
+                style={{
+                  fontFamily: "'Fraunces', Georgia, serif",
+                  fontSize: "clamp(1.75rem, 3.6vw, 2.6rem)",
+                  fontWeight: 400,
+                }}
+              >
+                Polis till vardags. Byggare på kvällarna.
+              </h2>
+
+              <div
+                className="mt-8 space-y-5 text-[1.0625rem] leading-[1.75]"
+                style={{ color: "#2A2A2A" }}
+              >
+                <p>
+                  Jag heter Christoffer Holstensson, är 33 och bor i
+                  Linköping. Vid sidan av mitt jobb som polis driver jag
+                  Aurora Media AB, där jag bygger SaaS-produkter och
+                  system åt svenska företag.
+                </p>
+                <p>
+                  Jag har byggt sex egna produkter som lever idag, varav
+                  flera har betalande prenumeranter. Det är inte teori
+                  för mig — jag äter min egen hundmat.
+                </p>
+                <p>
+                  Det som gör det här tilltaget annorlunda är att jag
+                  inte är en konsult som föreslår saker. Jag är en
+                  byggare. Om kartan visar att något är värt att göra —
+                  då kan jag bygga det. Snabbt och utan onödig overhead.
+                </p>
               </div>
-            </Reveal>
+            </div>
+          </div>
+        </section>
+
+        {/* === FAQ === */}
+        <section
+          className="border-t"
+          style={{ borderColor: RULE }}
+        >
+          <div className="mx-auto max-w-3xl px-6 py-20 md:py-28">
+            <h2
+              className="leading-[1.05] tracking-[-0.02em]"
+              style={{
+                fontFamily: "'Fraunces', Georgia, serif",
+                fontSize: "clamp(1.75rem, 3.6vw, 2.6rem)",
+                fontWeight: 400,
+              }}
+            >
+              Vanliga frågor
+            </h2>
+
+            <Accordion type="single" collapsible className="mt-10">
+              {faqs.map((f, i) => (
+                <AccordionItem
+                  key={i}
+                  value={`q-${i}`}
+                  className="border-0 border-b"
+                  style={{ borderColor: RULE }}
+                >
+                  <AccordionTrigger
+                    className="py-5 text-left hover:no-underline"
+                    style={{
+                      fontFamily: "'Fraunces', Georgia, serif",
+                      fontSize: "1.15rem",
+                      fontWeight: 500,
+                      color: INK,
+                    }}
+                  >
+                    {f.q}
+                  </AccordionTrigger>
+                  <AccordionContent
+                    className="pb-5 text-[15px] leading-[1.7]"
+                    style={{ color: MUTED }}
+                  >
+                    {f.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </section>
+
+        {/* === Final CTA === */}
+        <section
+          className="border-t"
+          style={{ borderColor: RULE, background: "#F2EDE3" }}
+        >
+          <div className="mx-auto max-w-3xl px-6 py-24 text-center md:py-32">
+            <h2
+              className="mx-auto max-w-2xl leading-[1.02] tracking-[-0.02em]"
+              style={{
+                fontFamily: "'Fraunces', Georgia, serif",
+                fontSize: "clamp(2rem, 5vw, 3.4rem)",
+                fontWeight: 400,
+              }}
+            >
+              Vill ni se vad som är möjligt?
+            </h2>
+            <p
+              className="mx-auto mt-5 max-w-md text-[1.0625rem] leading-[1.6]"
+              style={{ color: MUTED }}
+            >
+              Tre minuters formulär. Sen vet ni.
+            </p>
+            <div className="mt-10">
+              <Link
+                to="/ai-karta/start"
+                className="inline-flex items-center justify-center rounded-full px-8 py-4 text-[15px] font-medium transition hover:opacity-90"
+                style={{ background: ACCENT, color: BG }}
+              >
+                Skapa min karta →
+              </Link>
+            </div>
           </div>
         </section>
       </main>
-      <StickyMobileCTABar
-        primaryLabel="Få min AI-karta gratis"
-        primaryTo="/ai-karta/start"
-        secondaryLabel="Så funkar det"
-        secondaryTo="/ai-karta#sa-funkar-det"
-      />
-      <Footer />
+
+      {/* === Minimal footer === */}
+      <footer
+        className="border-t"
+        style={{ borderColor: RULE }}
+      >
+        <div
+          className="mx-auto flex max-w-6xl flex-col items-start gap-3 px-6 py-10 text-[13px] sm:flex-row sm:items-center sm:justify-between"
+          style={{ color: MUTED }}
+        >
+          <p>
+            Aurora Media AB · Org.nr 559272-0220 · Linköping
+          </p>
+          <Link
+            to="/integritetspolicy"
+            className="underline-offset-4 hover:underline"
+            style={{ color: MUTED }}
+          >
+            Integritetspolicy
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 };
