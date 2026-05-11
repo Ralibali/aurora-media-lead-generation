@@ -6,11 +6,17 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import auroraLogo from "@/assets/aurora-monogram.png";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
-// Editorial palette (Alt A — light, warm, deep green accent)
-// bg #FAF7F2 · ink #1A1A1A · accent #1F3D2E
+// Hero palette (warm dark)
+const HERO_BG = "#0F0E0C";
+const HERO_H1 = "#FAF7F2";
+const HERO_BODY = "#E8E1D4";
+const HERO_MUTED = "#9A9388";
+const HERO_ACCENT = "#D97D3C";
+const HERO_PLACEHOLDER_BG = "#1A1814";
+
+// Rest of page (editorial light)
 const BG = "#FAF7F2";
 const INK = "#1A1A1A";
 const ACCENT = "#1F3D2E";
