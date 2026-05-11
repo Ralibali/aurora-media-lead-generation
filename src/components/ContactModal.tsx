@@ -18,9 +18,21 @@ type ContactModalCtx = {
 };
 const Ctx = createContext<ContactModalCtx | null>(null);
 
-export const useContactModal = () => {
+export const useContactModal = (): ContactModalCtx => {
   const c = useContext(Ctx);
-  if (!c) throw new Error("useContactModal must be used inside ContactModalProvider");
+  if (!c) {
+    if (typeof window !== "undefined") {
+      console.warn("[ContactModal] useContactModal used outside ContactModalProvider — falling back to mailto");
+    }
+    return {
+      isOpen: false,
+      open: () => {
+        if (typeof window !== "undefined") {
+          window.location.href = "mailto:info@auroramedia.se";
+        }
+      },
+    };
+  }
   return c;
 };
 
