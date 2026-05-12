@@ -1,11 +1,7 @@
 import { useEffect } from "react";
-import { useParams, Link, Navigate, useLocation } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import CTABanner from "@/components/CTABanner";
-import { Button } from "@/components/ui/button";
-import { useContactModal } from "@/components/ContactModal";
-import { Check } from "lucide-react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import { getCity, getCitySeo, cities } from "@/lib/cityContent";
 import { paket } from "@/components/PaketSection";
 import {
@@ -17,81 +13,106 @@ import {
   SITE_URL,
 } from "@/lib/seoHelpers";
 
-const CityPage = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const { pathname } = useLocation();
-  const city = slug ? getCity(slug) : undefined;
-  const seo = slug ? getCitySeo(slug) : undefined;
-  const { open } = useContactModal();
+const F = "'Fraunces',Georgia,serif";
+const I = "'Inter',system-ui,sans-serif";
+const M = "'JetBrains Mono',ui-monospace,monospace";
+const C = "#EDE9DC";
 
-  // Two routes share this component – differentiate SEO copy.
-  const isAiVariant = pathname.startsWith("/ai-byra-");
-  const path = isAiVariant ? `/ai-byra-${slug}` : `/saas-utveckling-${slug}`;
+const rule: React.CSSProperties = {
+  height: "0.5px",
+  background: "rgba(237,233,220,0.12)",
+  border: "none",
+  margin: "0",
+};
+
+const eyebrow: React.CSSProperties = {
+  fontFamily: M,
+  fontSize: 10,
+  letterSpacing: "0.1em",
+  color: "rgba(237,233,220,0.35)",
+  textTransform: "uppercase",
+  marginBottom: "1rem",
+};
+
+export default function CityPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isAiVariant = location.pathname.startsWith("/ai-byra-");
+  const routeVariant = isAiVariant ? "ai-byra" : "saas-utveckling";
+
+  const city = slug ? getCity(slug) : null;
+  const seo = slug ? getCitySeo(slug, routeVariant) : null;
 
   useEffect(() => {
-    if (!city || !seo) return;
-    const title = isAiVariant ? seo.metaTitleAI : seo.metaTitleSaaS;
-    const description = isAiVariant ? seo.metaDescAI : seo.metaDescSaaS;
+    if (!city || !seo || !slug) {
+      navigate("/404", { replace: true });
+      return;
+    }
+
+    setSEOMeta({
+      title: seo.title,
+      description: seo.description,
+      canonical: `${SITE_URL}/${routeVariant}-${slug}`,
+    });
+
+    // Keyword meta tag
+    let metaKw = document.querySelector<HTMLMetaElement>('meta[name="keywords"]');
+    if (seo.keywords) {
+      if (!metaKw) {
+        metaKw = document.createElement("meta");
+        metaKw.setAttribute("name", "keywords");
+        document.head.appendChild(metaKw);
+      }
+      metaKw.setAttribute(
+        "content",
+        Array.isArray(seo.keywords) ? seo.keywords.join(", ") : seo.keywords,
+      );
+    }
+
     const breadcrumbLabel = isAiVariant
       ? `AI-byrå ${city.city}`
       : `SaaS-utveckling ${city.city}`;
 
-    setSEOMeta({
-      title,
-      description,
-      canonical: path,
-      ogType: "website",
-    });
-
-    // Keyword meta (low SEO weight, but useful for SERP previews/audits).
-    const kwMeta = document.head.querySelector<HTMLMetaElement>(
-      'meta[name="keywords"]',
-    );
-    if (kwMeta) kwMeta.content = seo.keywords.join(", ");
-    else {
-      const m = document.createElement("meta");
-      m.name = "keywords";
-      m.content = seo.keywords.join(", ");
-      document.head.appendChild(m);
-    }
-
     setBreadcrumb([
-      { name: "Hem", url: "/" },
-      { name: breadcrumbLabel, url: path },
+      { name: "Hem", url: SITE_URL },
+      {
+        name: breadcrumbLabel,
+        url: `${SITE_URL}/${routeVariant}-${slug}`,
+      },
     ]);
 
     setJsonLd("city-localbusiness", {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
-      "@id": `${SITE_URL}${path}#service`,
-      name: `Aurora Media AB – ${breadcrumbLabel}`,
-      description,
-      url: `${SITE_URL}${path}`,
-      provider: { "@id": `${SITE_URL}/#organization` },
+      "@id": `${SITE_URL}/${routeVariant}-${slug}#service`,
+      name: `Plymate – ${breadcrumbLabel}`,
+      description: seo.description,
+      url: `${SITE_URL}/${routeVariant}-${slug}`,
       areaServed: {
         "@type": "City",
         name: city.city,
-        containedInPlace: { "@type": "AdministrativeArea", name: city.region },
       },
-      priceRange: "14900-89000 SEK",
-      knowsAbout: seo.keywords,
-      makesOffer: paket.map((p) => ({
+      makesOffer: paket.map((p: { name: string; price?: string }) => ({
         "@type": "Offer",
         name: p.name,
-        price: p.price.replace(/\D/g, "") || "0",
         priceCurrency: "SEK",
       })),
     });
 
-    setJsonLd("city-faq", {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: city.faqs.map((f) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
-      })),
-    });
+    const faqItems = city.faq ?? city.faqs ?? [];
+    if (faqItems.length > 0) {
+      setJsonLd("city-faq", {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faqItems.map((item: { q: string; a: string }) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      });
+    }
 
     setJsonLd("city-organization", organizationSchema);
 
@@ -99,207 +120,468 @@ const CityPage = () => {
       removeJsonLd("city-localbusiness");
       removeJsonLd("city-faq");
       removeJsonLd("city-organization");
-      removeJsonLd("breadcrumb-jsonld");
     };
-  }, [city, seo, isAiVariant, path]);
+  }, [slug, city, seo, isAiVariant, routeVariant, navigate]);
 
-  if (!slug) return <Navigate to="/" replace />;
-  if (!city || !seo) return <Navigate to="/404" replace />;
+  if (!city || !seo || !slug) return null;
 
-  const otherCities = cities.filter((c) => c.slug !== city.slug).slice(0, 5);
   const breadcrumbLabel = isAiVariant
     ? `AI-byrå ${city.city}`
     : `SaaS-utveckling ${city.city}`;
-  // Cross-link to the other variant for the same city.
+
   const altPath = isAiVariant
-    ? `/saas-utveckling-${city.slug}`
-    : `/ai-byra-${city.slug}`;
+    ? `/saas-utveckling-${slug}`
+    : `/ai-byra-${slug}`;
   const altLabel = isAiVariant
-    ? `Se SaaS-utveckling i ${city.city}`
-    : `Se AI-byrå-tjänster i ${city.city}`;
+    ? `SaaS-utveckling i ${city.city}`
+    : `AI-byrå i ${city.city}`;
+
+  const otherCities = cities.filter((c) => c.slug !== slug).slice(0, 5);
+  const faqItems: { q: string; a: string }[] = city.faq ?? city.faqs ?? [];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
+    <div style={{ background: "#100F0D", color: C, fontFamily: I, minHeight: "100vh" }}>
+      <SiteHeader />
+
       <main>
-        {/* Hero */}
-        <section className="pt-24 pb-12 md:pt-32 md:pb-16">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <nav aria-label="Brödsmulor" className="text-sm text-muted-foreground mb-6">
-              <Link to="/" className="hover:text-foreground">Hem</Link>
-              <span className="mx-2">›</span>
-              <span className="text-foreground">{breadcrumbLabel}</span>
-            </nav>
-            <p className="label-caps">{breadcrumbLabel}</p>
-            <h1 className="mt-4 font-serif text-5xl md:text-6xl leading-[1.05]">
+        {/* ── Hero ──────────────────────────────────────────────────────── */}
+        <section style={{ padding: "clamp(5rem,12vw,9rem) 0 clamp(3rem,6vw,5rem)" }}>
+          <div className="wrap">
+            <p style={eyebrow}>
+              {isAiVariant ? "AI-byrå" : "SaaS-utveckling"}&nbsp;·&nbsp;{city.city}
+            </p>
+            <h1
+              style={{
+                fontFamily: F,
+                fontSize: "clamp(2.2rem,5.5vw,4.2rem)",
+                fontWeight: 300,
+                lineHeight: 1.12,
+                letterSpacing: "-0.02em",
+                marginBottom: "clamp(1.25rem,3vw,2rem)",
+                maxWidth: "820px",
+              }}
+            >
               {seo.h1Pre}{" "}
-              <em className="italic text-primary">{seo.h1Em}</em>
+              <em style={{ fontStyle: "italic" }}>{seo.h1Em}</em>
             </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-2xl">{city.intro}</p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-3">
-              <Button size="lg" onClick={() => open()}>Starta ett projekt</Button>
-              <a
-                href="mailto:info@auroramedia.se"
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-border px-6 text-sm hover:bg-secondary transition-colors"
-              >
-                info@auroramedia.se
+            <p
+              style={{
+                fontFamily: I,
+                fontSize: "clamp(1rem,1.8vw,1.15rem)",
+                lineHeight: 1.7,
+                color: "rgba(237,233,220,0.7)",
+                maxWidth: "620px",
+                marginBottom: "clamp(2rem,4vw,3rem)",
+              }}
+            >
+              {city.intro}
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
+              <a href="/kontakt" className="btn-primary">
+                Starta projekt&nbsp;→
+              </a>
+              <a href="mailto:hej@plymate.se" className="btn-ghost">
+                Maila oss
               </a>
             </div>
           </div>
         </section>
 
-        {/* Lokal kontext */}
-        <section className="border-t border-border py-20">
-          <div className="container mx-auto px-6 max-w-3xl space-y-6">
-            <h2 className="font-serif text-3xl md:text-4xl">
+        <hr style={rule} />
+
+        {/* ── Lokal kontext ─────────────────────────────────────────────── */}
+        <section style={{ padding: "clamp(3rem,6vw,5rem) 0" }}>
+          <div className="wrap">
+            <p style={eyebrow}>Lokal kontext</p>
+            <h2
+              style={{
+                fontFamily: F,
+                fontSize: "clamp(1.6rem,3.5vw,2.6rem)",
+                fontWeight: 300,
+                lineHeight: 1.2,
+                letterSpacing: "-0.02em",
+                marginBottom: "1.5rem",
+                maxWidth: "680px",
+              }}
+            >
               {isAiVariant
-                ? `Varför välja en AI-byrå i ${city.city}`
-                : `Därför funkar SaaS-utveckling i ${city.city}`}
+                ? `AI-kompetens förankrad i ${city.city}`
+                : `SaaS-erfarenhet i ${city.city}s marknad`}
             </h2>
-            <p className="text-muted-foreground leading-relaxed text-lg">{city.localContext}</p>
+            <p
+              style={{
+                fontFamily: I,
+                fontSize: "clamp(0.95rem,1.6vw,1.05rem)",
+                lineHeight: 1.75,
+                color: "rgba(237,233,220,0.65)",
+                maxWidth: "700px",
+              }}
+            >
+              {city.localContext}
+            </p>
           </div>
         </section>
 
-        {/* Tjänster / paket */}
-        <section className="border-t border-border py-20 bg-secondary/30">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <h2 className="font-serif text-3xl md:text-4xl">
+        <hr style={rule} />
+
+        {/* ── Tjänster / paket ──────────────────────────────────────────── */}
+        <section style={{ padding: "clamp(3rem,6vw,5rem) 0" }}>
+          <div className="wrap">
+            <p style={eyebrow}>Tjänster</p>
+            <h2
+              style={{
+                fontFamily: F,
+                fontSize: "clamp(1.6rem,3.5vw,2.6rem)",
+                fontWeight: 300,
+                lineHeight: 1.2,
+                letterSpacing: "-0.02em",
+                marginBottom: "1rem",
+                maxWidth: "680px",
+              }}
+            >
               Tjänster för företag i {city.city}
             </h2>
-            <p className="mt-3 text-muted-foreground max-w-2xl">{seo.tjansterIntro}</p>
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
-              {paket.map((p) => (
-                <div key={p.name} className="rounded-xl border border-border bg-background p-6">
-                  <p className="label-caps">{p.name}</p>
-                  <p className="mt-3 font-serif text-2xl">{p.price}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{p.desc}</p>
-                  {p.features && (
-                    <ul className="mt-4 space-y-2 text-sm">
-                      {p.features.slice(0, 4).map((b: string) => (
-                        <li key={b} className="flex gap-2">
-                          <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 text-center">
-              <Link to="/priser" className="text-sm underline hover:text-primary">
-                Se alla paket och vad som ingår →
-              </Link>
-            </div>
+            {seo.tjansterIntro && (
+              <p
+                style={{
+                  fontFamily: I,
+                  fontSize: "clamp(0.95rem,1.6vw,1.05rem)",
+                  lineHeight: 1.75,
+                  color: "rgba(237,233,220,0.65)",
+                  maxWidth: "680px",
+                  marginBottom: "2.5rem",
+                }}
+              >
+                {seo.tjansterIntro}
+              </p>
+            )}
+            <ol
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: "0 0 2.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0",
+              }}
+            >
+              {paket.map(
+                (p: { name: string; features: string[] }, i: number) => (
+                  <li
+                    key={p.name}
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: "1.25rem",
+                      padding: "1rem 0",
+                      borderBottom: "0.5px solid rgba(237,233,220,0.08)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: M,
+                        fontSize: 11,
+                        color: "rgba(237,233,220,0.3)",
+                        minWidth: "1.6rem",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: I,
+                        fontSize: "0.95rem",
+                        fontWeight: 500,
+                        color: C,
+                        minWidth: "9rem",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {p.name}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: I,
+                        fontSize: "0.875rem",
+                        color: "rgba(237,233,220,0.5)",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {p.features.slice(0, 3).join(" · ")}
+                    </span>
+                  </li>
+                ),
+              )}
+            </ol>
+            <a
+              href="/priser"
+              style={{
+                fontFamily: M,
+                fontSize: 11,
+                letterSpacing: "0.08em",
+                color: "rgba(237,233,220,0.5)",
+                textDecoration: "none",
+                borderBottom: "0.5px solid rgba(237,233,220,0.2)",
+                paddingBottom: "1px",
+              }}
+            >
+              Se fullständiga priser&nbsp;→
+            </a>
           </div>
         </section>
 
-        {/* Jämförelse */}
-        <section className="border-t border-border py-20">
-          <div className="container mx-auto px-6 max-w-3xl space-y-6">
-            <h2 className="font-serif text-3xl md:text-4xl">
-              Så skiljer jag mig från traditionella byråer i {city.city}
+        <hr style={rule} />
+
+        {/* ── Jämförelse ────────────────────────────────────────────────── */}
+        <section style={{ padding: "clamp(3rem,6vw,5rem) 0" }}>
+          <div className="wrap">
+            <p style={eyebrow}>Jämförelse</p>
+            <h2
+              style={{
+                fontFamily: F,
+                fontSize: "clamp(1.6rem,3.5vw,2.6rem)",
+                fontWeight: 300,
+                lineHeight: 1.2,
+                letterSpacing: "-0.02em",
+                marginBottom: "1.5rem",
+                maxWidth: "680px",
+              }}
+            >
+              Så skiljer vi oss
             </h2>
-            <p className="text-muted-foreground leading-relaxed text-lg">{city.comparison}</p>
+            <p
+              style={{
+                fontFamily: I,
+                fontSize: "clamp(0.95rem,1.6vw,1.05rem)",
+                lineHeight: 1.75,
+                color: "rgba(237,233,220,0.65)",
+                maxWidth: "700px",
+              }}
+            >
+              {city.comparison}
+            </p>
             {city.caseNote && (
-              <div className="mt-8 rounded-xl border border-border bg-secondary/40 p-6">
-                <p className="label-caps mb-2">Lokalt case</p>
-                <p className="text-sm">{city.caseNote}</p>
-                <Link to="/arbete" className="mt-3 inline-block text-sm underline hover:text-primary">
-                  Se hela portföljen →
-                </Link>
+              <div
+                style={{
+                  marginTop: "2rem",
+                  padding: "1.25rem 1.5rem",
+                  border: "0.5px solid rgba(237,233,220,0.15)",
+                  borderRadius: "4px",
+                  maxWidth: "640px",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: I,
+                    fontSize: "0.9rem",
+                    color: "rgba(237,233,220,0.55)",
+                    lineHeight: 1.65,
+                    margin: "0 0 0.75rem",
+                  }}
+                >
+                  {city.caseNote}
+                </p>
+                <a
+                  href="/arbete"
+                  style={{
+                    fontFamily: M,
+                    fontSize: 11,
+                    letterSpacing: "0.08em",
+                    color: "rgba(237,233,220,0.45)",
+                    textDecoration: "none",
+                    borderBottom: "0.5px solid rgba(237,233,220,0.15)",
+                    paddingBottom: "1px",
+                  }}
+                >
+                  Se vårt arbete&nbsp;→
+                </a>
               </div>
             )}
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="border-t border-border py-20 bg-secondary/30">
-          <div className="container mx-auto px-6 max-w-3xl">
-            <h2 className="font-serif text-3xl md:text-4xl mb-10">
-              FAQ – {breadcrumbLabel}
+        <hr style={rule} />
+
+        {/* ── FAQ ───────────────────────────────────────────────────────── */}
+        {faqItems.length > 0 && (
+          <section style={{ padding: "clamp(3rem,6vw,5rem) 0" }}>
+            <div className="wrap">
+              <p style={eyebrow}>Vanliga frågor</p>
+              <h2
+                style={{
+                  fontFamily: F,
+                  fontSize: "clamp(1.6rem,3.5vw,2.6rem)",
+                  fontWeight: 300,
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                  marginBottom: "2.5rem",
+                  maxWidth: "680px",
+                }}
+              >
+                FAQ – {breadcrumbLabel}
+              </h2>
+              <div style={{ maxWidth: "720px" }}>
+                {faqItems.map((item, idx) => (
+                  <div key={idx}>
+                    {idx > 0 && (
+                      <div
+                        style={{
+                          height: "0.5px",
+                          background: "rgba(237,233,220,0.08)",
+                        }}
+                      />
+                    )}
+                    <details style={{ padding: "1.25rem 0" }}>
+                      <summary
+                        style={{
+                          fontFamily: I,
+                          fontSize: "clamp(0.95rem,1.6vw,1.05rem)",
+                          fontWeight: 500,
+                          color: C,
+                          listStyle: "none",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: "1rem",
+                          cursor: "pointer",
+                          userSelect: "none",
+                        }}
+                      >
+                        {item.q}
+                        <span
+                          style={{
+                            fontFamily: M,
+                            fontSize: 16,
+                            color: "rgba(237,233,220,0.3)",
+                            flexShrink: 0,
+                            lineHeight: 1,
+                          }}
+                        >
+                          +
+                        </span>
+                      </summary>
+                      <p
+                        style={{
+                          fontFamily: I,
+                          fontSize: "0.925rem",
+                          lineHeight: 1.72,
+                          color: "rgba(237,233,220,0.6)",
+                          marginTop: "0.875rem",
+                          marginBottom: "0",
+                        }}
+                      >
+                        {item.a}
+                      </p>
+                    </details>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        <hr style={rule} />
+
+        {/* ── Internlänkar ─────────────────────────────────────────────── */}
+        <section style={{ padding: "clamp(3rem,6vw,5rem) 0" }}>
+          <div className="wrap">
+            <p style={eyebrow}>Relaterade sidor</p>
+            <nav
+              style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1.5rem" }}
+              aria-label="Internlänkar"
+            >
+              {[
+                { href: altPath, label: altLabel },
+                { href: "/priser", label: "Priser" },
+                { href: "/arbete", label: "Vårt arbete" },
+                { href: "/metodik", label: "Metodik" },
+                ...(slug === "linkoping"
+                  ? [{ href: "/webbyra-linkoping", label: "Webbyrå Linköping" }]
+                  : []),
+                { href: "/blogg", label: "Blogg" },
+              ].map(({ href, label }) => (
+                <a
+                  key={href}
+                  href={href}
+                  style={{
+                    fontFamily: I,
+                    fontSize: "0.9rem",
+                    color: "rgba(237,233,220,0.55)",
+                    textDecoration: "none",
+                    borderBottom: "0.5px solid rgba(237,233,220,0.15)",
+                    paddingBottom: "1px",
+                  }}
+                >
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </section>
+
+        <hr style={rule} />
+
+        {/* ── Andra städer ─────────────────────────────────────────────── */}
+        {otherCities.length > 0 && (
+          <>
+            <section style={{ padding: "clamp(2.5rem,5vw,4rem) 0" }}>
+              <div className="wrap">
+                <p style={eyebrow}>Andra städer</p>
+                <nav
+                  style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1.5rem" }}
+                  aria-label="Andra städer"
+                >
+                  {otherCities.map((c) => (
+                    <a
+                      key={c.slug}
+                      href={`/${routeVariant}-${c.slug}`}
+                      style={{
+                        fontFamily: I,
+                        fontSize: "0.9rem",
+                        color: "rgba(237,233,220,0.5)",
+                        textDecoration: "none",
+                        borderBottom: "0.5px solid rgba(237,233,220,0.12)",
+                        paddingBottom: "1px",
+                      }}
+                    >
+                      {isAiVariant
+                        ? `AI-byrå ${c.city}`
+                        : `SaaS-utveckling ${c.city}`}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </section>
+            <hr style={rule} />
+          </>
+        )}
+
+        {/* ── CTA ──────────────────────────────────────────────────────── */}
+        <section style={{ padding: "clamp(4rem,9vw,7rem) 0" }}>
+          <div className="wrap">
+            <h2
+              style={{
+                fontFamily: F,
+                fontStyle: "italic",
+                fontSize: "clamp(1.8rem,4vw,3.2rem)",
+                fontWeight: 300,
+                lineHeight: 1.15,
+                letterSpacing: "-0.02em",
+                marginBottom: "2rem",
+                maxWidth: "560px",
+              }}
+            >
+              Redo att börja?
             </h2>
-            <div className="space-y-4">
-              {city.faqs.map((f) => (
-                <details
-                  key={f.q}
-                  className="group rounded-xl border border-border bg-background p-6"
-                >
-                  <summary className="cursor-pointer font-medium list-none flex justify-between items-start gap-4">
-                    <span>{f.q}</span>
-                    <span className="text-primary group-open:rotate-45 transition-transform">+</span>
-                  </summary>
-                  <p className="mt-4 text-muted-foreground leading-relaxed">{f.a}</p>
-                </details>
-              ))}
-            </div>
+            <a href="/kontakt" className="btn-primary">
+              Starta ett projekt&nbsp;→
+            </a>
           </div>
         </section>
-
-        {/* Internlänkar – tjänster + auktoritetssidor */}
-        <section className="border-t border-border py-16">
-          <div className="container mx-auto px-6 max-w-3xl">
-            <p className="label-caps mb-4">Relaterat för {city.city}</p>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              <li>
-                <Link to={altPath} className="text-sm underline hover:text-primary">
-                  {altLabel} →
-                </Link>
-              </li>
-              <li>
-                <Link to="/priser" className="text-sm underline hover:text-primary">
-                  Priser & paket från 14 900 kr →
-                </Link>
-              </li>
-              <li>
-                <Link to="/arbete" className="text-sm underline hover:text-primary">
-                  Cases & portfölj →
-                </Link>
-              </li>
-              <li>
-                <Link to="/metodik" className="text-sm underline hover:text-primary">
-                  Vår AI-metodik →
-                </Link>
-              </li>
-              {city.slug === "linkoping" && (
-                <li>
-                  <Link to="/webbbyra-linkoping" className="text-sm underline hover:text-primary">
-                    Webbyrå Linköping →
-                  </Link>
-                </li>
-              )}
-              <li>
-                <Link to="/artiklar" className="text-sm underline hover:text-primary">
-                  Artiklar om SaaS & AI →
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Andra städer */}
-        <section className="border-t border-border py-16">
-          <div className="container mx-auto px-6 max-w-3xl">
-            <p className="label-caps mb-4">Också aktiv i</p>
-            <div className="flex flex-wrap gap-3">
-              {otherCities.map((c) => (
-                <Link
-                  key={c.slug}
-                  to={isAiVariant ? `/ai-byra-${c.slug}` : `/saas-utveckling-${c.slug}`}
-                  className="rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary transition-colors"
-                >
-                  {c.city}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <CTABanner />
       </main>
-      <Footer />
+
+      <SiteFooter />
     </div>
   );
-};
-
-export default CityPage;
+}

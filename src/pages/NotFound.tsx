@@ -28,7 +28,7 @@ const NotFound = () => {
         }}
       >
         <p style={{
-          fontFamily: "'Instrument Serif',Georgia,serif",
+          fontFamily: "'Fraunces',Georgia,serif",
           fontSize: "clamp(80px,14vw,140px)",
           lineHeight: 1,
           color: "#EDE9DC",
@@ -44,7 +44,7 @@ const NotFound = () => {
           maxWidth: 340, marginBottom: 40,
         }}>
           Sidan finns inte.{" "}
-          <em style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontStyle: "italic", color: "rgba(237,233,220,0.75)" }}>
+          <em style={{ fontFamily: "'Fraunces',Georgia,serif", fontStyle: "italic", color: "rgba(237,233,220,0.75)" }}>
             Eller så har vi inte byggt den än.
           </em>
         </p>

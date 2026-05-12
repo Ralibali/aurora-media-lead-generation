@@ -1,134 +1,164 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import CTABanner from "@/components/CTABanner";
-import FAQSection from "@/components/FAQSection";
-import { Button } from "@/components/ui/button";
-import { useContactModal } from "@/components/ContactModal";
-import { Check, ArrowRight } from "lucide-react";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd } from "@/lib/seoHelpers";
 
-const lokalaFaqs = [
-  {
-    q: "Är Aurora Media en webbyrå i Linköping?",
-    a: "Ja, Aurora Media AB är baserat i Linköping men jobbar med kunder i hela Sverige. Fokus är inte bara hemsidor, utan SaaS, AI-automationer, interna appar och moderna webbplattformar.",
-  },
-  {
-    q: "Vad kostar en hemsida eller webbplattform?",
-    a: "Det beror på omfattning. En enkel landningssida är billigare än en plattform med databas, login och integrationer. För SaaS och MVP börjar paketen från 14 900 kr för prototyp och 34 900 kr för MVP.",
-  },
-  {
-    q: "Hur skiljer ni er från en traditionell webbyrå?",
-    a: "Aurora jobbar som AI-builder snarare än klassisk byrå. Det betyder mindre workshop, snabbare prototyp, fast pris, modern kodbas och direktkontakt med personen som bygger.",
-  },
-  {
-    q: "Bygger ni WordPress?",
-    a: "Huvudspåret är inte WordPress. Aurora bygger främst med React, TypeScript, Supabase, Stripe och modern hosting. Det ger bättre kontroll, prestanda och ägande för många moderna projekt.",
-  },
+const F = "'Fraunces',Georgia,serif";
+const I = "'Inter',system-ui,sans-serif";
+const M = "'JetBrains Mono',ui-monospace,monospace";
+const C = "#EDE9DC";
+
+const FAQS = [
+  { q: "Är Aurora Media en webbyrå i Linköping?", a: "Ja, Aurora Media AB är baserat i Linköping men jobbar med kunder i hela Sverige. Fokus är inte bara hemsidor — vi bygger SaaS, AI-automationer, interna appar och moderna webbplattformar." },
+  { q: "Vad kostar en hemsida eller webbplattform?", a: "Det beror på omfattning. En landningssida är billigare än en plattform med databas, login och integrationer. SaaS och MVP börjar från 14 900 kr för prototyp och 34 900 kr för MVP." },
+  { q: "Hur skiljer ni er från en traditionell webbyrå?", a: "Aurora jobbar som AI-builder snarare än klassisk byrå. Mindre workshop, snabbare prototyp, fast pris, modern kodbas och direktkontakt med personen som bygger." },
+  { q: "Bygger ni WordPress?", a: "Nej. Vi bygger med React, TypeScript, Supabase och modern hosting. Det ger bättre kontroll, prestanda och ägande." },
+];
+
+const BUILDS = [
+  "Företagshemsidor med stark SEO och modern design",
+  "SaaS och MVP med login, databas och betalning",
+  "Interna verktyg som ersätter Excel och manuella flöden",
+  "AI-automationer kopplade till riktiga arbetsprocesser",
+  "E-handel och betalflöden med Stripe",
+  "SEO-hubbar, artiklar och AI-vänlig informationsstruktur",
+];
+
+const RELATED = [
+  { to: "/ai-konsult-sverige", label: "AI-konsult Sverige" },
+  { to: "/priser", label: "Priser & paket" },
+  { to: "/arbete", label: "Vårt arbete" },
+  { to: "/metodik", label: "Metodik" },
+  { to: "/tjanster/hemsidor", label: "Hemsidor" },
+  { to: "/tjanster/seo", label: "SEO" },
+  { to: "/blogg", label: "Blogg" },
+  { to: "/kontakt", label: "Kontakt" },
 ];
 
 const WebbyraLinkoping = () => {
-  const { open } = useContactModal();
   useEffect(() => {
     setSEOMeta({
-      title: "Webbyrå Linköping – AI-builder för SaaS, webb och automation | Aurora Media",
-      description:
-        "Aurora Media är en AI-driven webbyrå i Linköping som bygger SaaS, MVP, hemsidor, interna appar och AI-automationer med fast pris och kod kunden äger.",
+      title: "Webbyrå Linköping – SaaS, webb och AI | Aurora Media",
+      description: "Aurora Media är en AI-driven webbyrå i Linköping som bygger SaaS, MVP, hemsidor och AI-automationer. Fast pris, kod ni äger.",
       canonical: "/webbyra-linkoping",
     });
-    setBreadcrumb([
-      { name: "Hem", url: "/" },
-      { name: "Webbyrå Linköping", url: "/webbyra-linkoping" },
-    ]);
+    setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Webbyrå Linköping", url: "/webbyra-linkoping" }]);
     setJsonLd("webbyra-faq", {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: lokalaFaqs.map((f) => ({
-        "@type": "Question",
-        name: f.q,
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question", name: f.q,
         acceptedAnswer: { "@type": "Answer", text: f.a },
       })),
     });
-    return () => {
-      removeJsonLd("breadcrumb-jsonld");
-      removeJsonLd("webbyra-faq");
-    };
+    return () => { removeJsonLd("breadcrumb-jsonld"); removeJsonLd("webbyra-faq"); };
   }, []);
+
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <section className="pt-28 pb-16 md:pt-36 md:pb-20">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <p className="label-caps">Webbyrå Linköping · AI-builder</p>
-            <h1 className="mt-4 font-display text-[clamp(3rem,7vw,6.5rem)] leading-[0.92] tracking-tight">
-              Webbyrå i Linköping för dig som vill bygga mer än en broschyr.
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main">
+
+        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20 }}>webbyrå linköping · ai-builder</p>
+            <h1 style={{ fontFamily: F, fontSize: "clamp(36px,6vw,60px)", lineHeight: 1.02, letterSpacing: "-0.025em", color: C, fontWeight: 400, maxWidth: 620, marginBottom: 16 }}>
+              Webbyrå för dig som vill
+              <br /><em>bygga mer än en broschyr.</em>
             </h1>
-            <p className="mt-7 text-lg text-muted-foreground max-w-2xl md:text-xl">
-              Aurora Media bygger hemsidor, SaaS, MVP:er, interna appar och AI-automationer åt företag i Linköping och resten av Sverige. Mindre byråprocess. Mer färdig produkt.
+            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", maxWidth: 460, marginBottom: 32 }}>
+              Hemsidor, SaaS, MVP:er, interna appar och AI-automationer. Mindre byråprocess. Mer färdig produkt.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <Button size="lg" onClick={() => open()} className="rounded-full">Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" /></Button>
-              <Button size="lg" variant="outline" asChild className="rounded-full"><Link to="/ai-konsult-sverige">AI-konsult vs AI-builder</Link></Button>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+              <Link to="/ai-konsult-sverige" className="btn-ghost">AI-konsult vs AI-builder</Link>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-white/10 py-20">
-          <div className="container mx-auto px-6 max-w-5xl grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+        {/* Why */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap sm:grid-cols-[1fr_1.2fr]" style={{ display: "grid", gap: "clamp(28px,4vw,56px)" }}>
             <div>
-              <p className="label-caps">Varför Aurora Media</p>
-              <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Lokal partner. Modern leverans.</h2>
+              <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 12 }}>varför aurora</p>
+              <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,30px)", color: C, letterSpacing: "-0.01em", lineHeight: 1.1 }}>
+                Lokal partner. <em>Modern leverans.</em>
+              </h2>
             </div>
-            <div className="space-y-5 text-base leading-relaxed text-foreground/85">
-              <p>Jag är Christoffer och driver Aurora Media AB från Linköping. Jag bygger inte bara snygga ytor — jag bygger digitala produkter som kan ha login, databas, betalning, admin, automationer och integrationer.</p>
-              <p>För dig som företagare i Linköping betyder det en partner som kan ta dig från idé till fungerande system utan att du behöver koordinera designer, utvecklare, SEO-person och projektledare separat.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.70)" }}>
+                Aurora Media AB drivs från Linköping. Jag bygger inte bara snygga ytor — jag bygger digitala produkter som kan ha login, databas, betalning, admin, automationer och integrationer.
+              </p>
+              <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.55)" }}>
+                Det innebär en partner som kan ta er från idé till fungerande system utan att ni behöver koordinera designer, utvecklare, SEO-person och projektledare separat.
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-white/10 py-20 bg-secondary/20">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <p className="label-caps">Vad vi bygger</p>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Från hemsida till SaaS.</h2>
-            <ul className="mt-10 grid gap-4 md:grid-cols-2">
-              {[
-                "Företagshemsidor med stark SEO och modern design",
-                "SaaS och MVP med login, databas och betalning",
-                "Interna verktyg som ersätter Excel, mejl och manuella flöden",
-                "AI-automationer kopplade till riktiga arbetsprocesser",
-                "E-handel och betalflöden med Stripe eller Shopify",
-                "SEO-hubbar, artiklar och AI-vänlig informationsstruktur",
-              ].map((item) => (
-                <li key={item} className="flex gap-3 rounded-2xl border border-white/12 bg-white/[0.045] p-5 text-foreground/85">
-                  <Check className="mt-1 h-4 w-4 text-blue-200 shrink-0" /> {item}
-                </li>
+        {/* What we build */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>vad vi bygger</p>
+            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 28, letterSpacing: "-0.015em" }}>
+              Från hemsida till SaaS.
+            </h2>
+            {BUILDS.map((item, i) => (
+              <div key={item} style={{ display: "flex", gap: 16, padding: "14px 0", borderBottom: "0.5px solid rgba(237,233,220,0.07)", alignItems: "center" }}>
+                <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)", minWidth: 20 }}>{String(i + 1).padStart(2, "0")}</span>
+                <span style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.70)" }}>{item}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 24 }}>vanliga frågor om webbyrå i linköping</p>
+            {FAQS.map((f) => (
+              <div key={f.q} style={{ display: "grid", gap: "8px 40px", padding: "22px 0", borderBottom: "0.5px solid rgba(237,233,220,0.07)" }} className="sm:grid-cols-[1fr_1.4fr]">
+                <p style={{ fontFamily: I, fontSize: 14, fontWeight: 500, color: C }}>{f.q}</p>
+                <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.50)" }}>{f.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Related links */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(32px,4vw,48px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 20 }}>relaterade sidor</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px,1fr))", gap: 8 }}>
+              {RELATED.map((r) => (
+                <Link key={r.to} to={r.to}
+                  style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.45)", textDecoration: "none", transition: "color 0.15s", padding: "10px 0", borderBottom: "0.5px solid rgba(237,233,220,0.07)", display: "block" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = C)}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.45)")}>
+                  {r.label} →
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
         </section>
 
-        <section className="border-t border-white/10 py-16">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <p className="label-caps mb-4">Relaterade sidor</p>
-            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <li><Link to="/ai-konsult-sverige" className="text-sm underline hover:text-primary">AI-konsult Sverige →</Link></li>
-              <li><Link to="/priser" className="text-sm underline hover:text-primary">Priser & paket →</Link></li>
-              <li><Link to="/arbete" className="text-sm underline hover:text-primary">Vårt arbete →</Link></li>
-              <li><Link to="/metodik" className="text-sm underline hover:text-primary">Metodik →</Link></li>
-              <li><Link to="/tjanster/hemsidor" className="text-sm underline hover:text-primary">Hemsidor →</Link></li>
-              <li><Link to="/tjanster/seo" className="text-sm underline hover:text-primary">SEO →</Link></li>
-              <li><Link to="/blogg" className="text-sm underline hover:text-primary">Blogg →</Link></li>
-              <li><Link to="/kontakt" className="text-sm underline hover:text-primary">Kontakt →</Link></li>
-            </ul>
+        {/* CTA */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <h2 style={{ fontFamily: F, fontStyle: "italic", fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 20 }}>
+              Redo att börja?
+            </h2>
+            <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
           </div>
         </section>
-
-        <FAQSection items={lokalaFaqs} title="Vanliga frågor om webbyrå i Linköping" />
-        <CTABanner />
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 };

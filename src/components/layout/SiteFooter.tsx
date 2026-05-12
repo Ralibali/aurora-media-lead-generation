@@ -51,7 +51,7 @@ const SiteFooter = () => (
       <a
         href="mailto:info@auroramedia.se"
         style={{
-          fontFamily: "'Instrument Serif', Georgia, serif",
+          fontFamily: "'Fraunces', Georgia, serif",
           fontSize: "clamp(28px, 5vw, 52px)",
           fontStyle: "italic",
           fontWeight: 400,
@@ -83,7 +83,7 @@ const SiteFooter = () => (
           <Link
             to="/"
             style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
+              fontFamily: "'Fraunces', Georgia, serif",
               fontSize: 20,
               fontStyle: "italic",
               color: "#EDE9DC",

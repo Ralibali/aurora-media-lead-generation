@@ -142,7 +142,7 @@ const SiteHeader = () => {
                 to={n.href}
                 style={{
                   display: "block",
-                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontFamily: "'Fraunces', Georgia, serif",
                   fontSize: "clamp(28px, 6vw, 40px)",
                   fontWeight: 400,
                   color: "#EDE9DC",

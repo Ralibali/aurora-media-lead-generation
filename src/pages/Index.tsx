@@ -105,7 +105,7 @@ function Hero() {
             bygger för
           </span>
           <span style={{
-            fontFamily: "'Instrument Serif',Georgia,serif",
+            fontFamily: "'Fraunces',Georgia,serif",
             fontSize: "clamp(15px,2vw,18px)",
             color: "rgba(237,233,220,0.65)",
             fontStyle: "italic",
@@ -264,7 +264,7 @@ function Services() {
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.30)", letterSpacing: "0.06em" }}>{s.num}</span>
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.40)", letterSpacing: "0.04em" }}>{s.price}</span>
               </div>
-              <p style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: 20, color: "#EDE9DC", marginBottom: 10, lineHeight: 1.2 }}>{s.name}</p>
+              <p style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 20, color: "#EDE9DC", marginBottom: 10, lineHeight: 1.2 }}>{s.name}</p>
               <p style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 13, color: "rgba(237,233,220,0.55)", lineHeight: 1.65 }}>{s.desc}</p>
             </div>
           ))}
@@ -369,7 +369,7 @@ function About() {
               display: "flex", alignItems: "center", justifyContent: "center",
               marginBottom: 16,
             }}>
-              <span style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: 28, color: "#EDE9DC", fontStyle: "italic" }}>C</span>
+              <span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 28, color: "#EDE9DC", fontStyle: "italic" }}>C</span>
             </div>
 
             <p style={{ fontSize: 14, fontWeight: 500, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif" }}>Christoffer Holstensson</p>
@@ -428,7 +428,7 @@ const STATS = [
 function StatNum({ val, suffix }: { val: number; suffix: string }) {
   const n = useCountUp(val);
   return (
-    <span style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: "clamp(36px,5vw,52px)", lineHeight: 1, color: "#EDE9DC", fontWeight: 400 }}>
+    <span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: "clamp(36px,5vw,52px)", lineHeight: 1, color: "#EDE9DC", fontWeight: 400 }}>
       {n}{suffix}
     </span>
   );

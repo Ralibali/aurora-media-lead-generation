@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  AlertTriangle, ArrowRight, CalendarCheck, CheckCircle2, Clock, Database, Download, Loader2, Mail,
-  RefreshCw, Sparkles, Target, TrendingUp, Workflow, Zap,
-} from "lucide-react";
+import { TriangleAlert as AlertTriangle, ArrowRight, CalendarCheck, CircleCheck as CheckCircle2, Clock, Database, Download, Loader as Loader2, Mail, RefreshCw, Sparkles, Target, TrendingUp, Workflow, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Reveal from "@/components/Reveal";
-import { Button } from "@/components/ui/button";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +18,10 @@ import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 import { supabase } from "@/integrations/supabase/client";
 
 const RESULT_KEY = "ai_map_result";
+const F = "'Fraunces',Georgia,serif";
+const I = "'Inter',system-ui,sans-serif";
+const M = "'JetBrains Mono',ui-monospace,monospace";
+const C = "#EDE9DC";
 
 const potentialColor: Record<string, string> = {
   "Mycket hög": "from-primary to-primary/60",
@@ -245,24 +244,24 @@ const AiKartaResultat = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-      <main className="overflow-hidden">
-        <section className="relative pt-24 pb-14 md:pt-36 md:pb-24">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.18),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_30%)]" />
-          <div className="container mx-auto max-w-4xl px-5 sm:px-6">
-            <Reveal>
-              <p className="label-caps">Mini-analys för {meta.company_name}</p>
-              <h1 className="mt-4 font-display text-[clamp(2rem,8vw,5rem)] font-bold leading-[1.02] tracking-tight break-words">
-                Ni har <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">{lead}</span> {tail}
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main">
+        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div className="wrap">
+            <div>
+              <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 16 }}>Mini-analys för {meta.company_name}</p>
+              <h1 style={{ fontFamily: F, fontSize: "clamp(28px,6vw,56px)", lineHeight: 1.05, letterSpacing: "-0.025em", color: C, fontWeight: 400, marginBottom: 12 }}>
+                Ni har <em>{lead}</em> {tail}
               </h1>
-              <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base md:text-lg">
+              <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", maxWidth: 560, marginBottom: 32 }}>
                 Baserat på era svar har vi identifierat {top3.length} processer där AI och automation
                 kan göra störst skillnad. Här är en första uppskattning – inte en exakt lösningsdesign.
               </p>
 
               {/* Konkreta värdesiffror, inte abstrakta poäng */}
-              <div className="mt-7 grid gap-3 grid-cols-1 sm:grid-cols-3">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px,1fr))", gap: 12, marginBottom: 24 }}>
                 <StatCard
                   icon={Clock}
                   label="Uppskattad tidsbesparing"
@@ -285,118 +284,82 @@ const AiKartaResultat = () => {
 
               {/* Speglar tillbaka kundens egna pain areas */}
               {pain_areas.length > 0 && (
-                <div className="mt-6 flex flex-wrap items-center gap-2">
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground">
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8, marginBottom: 24 }}>
+                  <span style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)" }}>
                     Era utmaningsområden:
                   </span>
                   {pain_areas.map((area) => (
-                    <span
-                      key={area}
-                      className="rounded-full border border-primary/25 bg-primary/[0.07] px-3 py-1 text-xs text-foreground"
-                    >
+                    <span key={area} style={{ fontFamily: I, fontSize: 12, color: C, border: "0.5px solid rgba(237,233,220,0.20)", borderRadius: 100, padding: "4px 12px" }}>
                       {area}
                     </span>
                   ))}
                 </div>
               )}
-            </Reveal>
+            </div>
 
             {ai_analysis && (
-              <Reveal y={18}>
-                <div className="mt-10 rounded-3xl border border-primary/25 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-5 sm:p-8">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                    <p className="label-caps text-primary">Aurora-analys</p>
-                  </div>
-                  <h2 className="mt-3 font-display text-xl font-bold sm:text-3xl">
-                    Vad vi ser i era svar
-                  </h2>
-                  <p className="mt-4 text-sm leading-relaxed text-foreground/90 sm:text-base">
-                    {ai_analysis.executive_summary}
+              <div style={{ marginBottom: 40, padding: "24px 28px", border: "0.5px solid rgba(237,233,220,0.15)", borderRadius: 8, background: "rgba(237,233,220,0.02)" }}>
+                <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 12 }}>aurora-analys</p>
+                <h2 style={{ fontFamily: F, fontSize: "clamp(18px,2.5vw,26px)", color: C, marginBottom: 12, fontWeight: 400 }}>
+                  Vad vi ser i era svar
+                </h2>
+                <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.75, color: "rgba(237,233,220,0.70)", marginBottom: 12 }}>
+                  {ai_analysis.executive_summary}
+                </p>
+                <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 16 }}>
+                  <strong style={{ color: C }}>Mognadsläge: </strong>
+                  {ai_analysis.maturity_note}
+                </p>
+                <div style={{ padding: "14px 18px", border: "0.5px solid rgba(237,233,220,0.15)", borderRadius: 6, background: "rgba(237,233,220,0.03)" }}>
+                  <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>vår rekommendation</p>
+                  <p style={{ fontFamily: I, fontSize: 13, color: C, lineHeight: 1.65 }}>
+                    {ai_analysis.overall_recommendation}
                   </p>
-                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                    <strong className="text-foreground">Mognadsläge: </strong>
-                    {ai_analysis.maturity_note}
-                  </p>
-                  <div className="mt-5 rounded-2xl border border-primary/30 bg-primary/[0.08] p-4">
-                    <p className="text-[11px] uppercase tracking-wider text-primary">
-                      Vår rekommendation
-                    </p>
-                    <p className="mt-2 text-sm text-foreground sm:text-base">
-                      {ai_analysis.overall_recommendation}
-                    </p>
-                  </div>
                 </div>
-              </Reveal>
+              </div>
             )}
 
-            <div className="mt-12 space-y-5">
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 40 }}>
               {top3.map((p, i) => {
                 const Icon = solutionIcon(p.recommended_solution);
                 const saved = p.saved_hours_per_week ?? 0;
                 return (
-                  <Reveal key={`${p.position}-${i}`} y={18}>
-                    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 sm:p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]">
-                      <div className="flex flex-wrap items-start justify-between gap-3">
-                        <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="label-caps text-primary">Topp {i + 1}</span>
-                            <span className="text-xs text-muted-foreground">·</span>
-                            <span className="text-xs font-medium text-muted-foreground">{p.potential}</span>
-                          </div>
-                          <h2 className="mt-2 font-display text-xl font-bold leading-tight break-words sm:text-3xl">
+                  <div key={`${p.position}-${i}`} style={{ border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 8, padding: "clamp(20px,3vw,32px)" }}>
+                      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
+                        <div>
+                          <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 8 }}>Topp {i + 1} · {p.potential}</p>
+                          <h2 style={{ fontFamily: F, fontSize: "clamp(18px,2.5vw,26px)", color: C, fontWeight: 400, lineHeight: 1.1 }}>
                             {p.process_name}
                           </h2>
                         </div>
-                        <span
-                          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r ${
-                            potentialColor[
-                              p.potential.includes("Hög") || p.potential.includes("Direkt")
-                                ? "Hög"
-                                : p.potential.includes("Medel")
-                                ? "Medel"
-                                : "Låg"
-                            ] ?? "from-primary to-primary/60"
-                          } px-3 py-1 text-xs font-semibold text-primary-foreground sm:px-4 sm:py-1.5 sm:text-sm`}
-                        >
-                          <TrendingUp className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {p.score} p
+                        <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.40)", border: "0.5px solid rgba(237,233,220,0.15)", borderRadius: 100, padding: "4px 12px", whiteSpace: "nowrap" }}>
+                          {p.score} p
                         </span>
                       </div>
 
-                      {/* Konkret tidsvärde per case */}
                       {saved > 0 && (
-                        <div className="mt-4 flex w-full items-start gap-2 rounded-2xl border border-primary/30 bg-primary/[0.08] px-3 py-2 sm:inline-flex sm:w-auto sm:items-center sm:rounded-full sm:py-1.5">
-                          <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary sm:mt-0" />
-                          <span className="text-xs leading-relaxed sm:text-sm">
-                            <strong className="text-foreground">~{saved} h/vecka</strong>
-                            <span className="text-muted-foreground"> kan automatiseras (≈ {Math.round(saved * 46)} h/år)</span>
-                          </span>
-                        </div>
+                        <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.65)", marginBottom: 16 }}>
+                          <strong style={{ color: C }}>~{saved} h/vecka</strong> kan automatiseras (≈ {Math.round(saved * 46)} h/år)
+                        </p>
                       )}
 
-                      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                        Görs <strong className="text-foreground">{FREQ_LABELS[p.frequency].toLowerCase()}</strong>,
-                        tar uppskattningsvis <strong className="text-foreground">{TIME_LABELS[p.weekly_time]}</strong>.
+                      <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.55)", marginBottom: 20 }}>
+                        Görs <strong style={{ color: C }}>{FREQ_LABELS[p.frequency]?.toLowerCase()}</strong>,
+                        tar uppskattningsvis <strong style={{ color: C }}>{TIME_LABELS[p.weekly_time]}</strong>.
                         {p.rule_based === "yes" && " Processen är regelstyrd – väl lämpad för automation."}
                         {p.rule_based === "partial" && " Processen är delvis regelstyrd – AI kan ta hand om merparten."}
                         {p.data_available === "yes" && " Datan finns redan i era system."}
                         {p.business_value === "high" && " Hög affärsnytta gör detta till ett tydligt första område."}
                       </p>
 
-                      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-2xl border border-primary/25 bg-primary/[0.06] p-4">
-                          <div className="flex items-center gap-2">
-                            <Icon className="h-4 w-4 text-primary" />
-                            <p className="text-[11px] uppercase tracking-wider text-primary">Aurora Media bygger</p>
-                          </div>
-                          <p className="mt-2 font-semibold text-foreground">{p.recommended_solution}</p>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 10, marginBottom: 16 }}>
+                        <div style={{ border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 6, padding: "16px 18px" }}>
+                          <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>aurora media bygger</p>
+                          <p style={{ fontFamily: I, fontSize: 13, color: C, fontWeight: 500 }}>{p.recommended_solution}</p>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-background/40 p-4">
-                          <div className="flex items-center gap-2">
-                            <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-                            <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Rekommenderat första steg</p>
-                          </div>
-                          <p className="mt-2 text-sm text-foreground">{p.next_step}</p>
+                        <div style={{ border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 6, padding: "16px 18px" }}>
+                          <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>rekommenderat första steg</p>
+                          <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.70)", lineHeight: 1.6 }}>{p.next_step}</p>
                         </div>
                       </div>
 
@@ -404,158 +367,82 @@ const AiKartaResultat = () => {
                         const ai = aiCaseFor(p.process_name);
                         if (!ai) return null;
                         return (
-                          <div className="mt-6 space-y-4 rounded-2xl border border-primary/20 bg-primary/[0.04] p-4 sm:p-5">
-                            <div className="flex items-center gap-2">
-                              <Sparkles className="h-4 w-4 text-primary" />
-                              <p className="text-[11px] uppercase tracking-wider text-primary">
-                                Djupare analys
-                              </p>
+                          <div style={{ border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6, padding: "18px 20px", display: "flex", flexDirection: "column", gap: 14 }}>
+                            <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)" }}>djupare analys</p>
+                            <div>
+                              <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 6 }}>Varför just detta?</p>
+                              <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.65)" }}>{ai.why_it_matters}</p>
                             </div>
                             <div>
-                              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                Varför just detta?
-                              </p>
-                              <p className="mt-1 text-sm leading-relaxed text-foreground/90">
-                                {ai.why_it_matters}
-                              </p>
+                              <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 6 }}>Vad AI realistiskt kan ta över</p>
+                              <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.65)" }}>{ai.deep_analysis}</p>
                             </div>
-                            <div>
-                              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                Vad AI realistiskt kan ta över
-                              </p>
-                              <p className="mt-1 text-sm leading-relaxed text-foreground/90">
-                                {ai.deep_analysis}
-                              </p>
-                            </div>
-                            <div className="rounded-xl border border-white/10 bg-background/40 p-3">
-                              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                Så skulle det kännas i vardagen
-                              </p>
-                              <p className="mt-1 text-sm italic leading-relaxed text-foreground/80">
-                                {ai.concrete_example}
-                              </p>
+                            <div style={{ border: "0.5px solid rgba(237,233,220,0.08)", borderRadius: 4, padding: "12px 14px" }}>
+                              <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 6 }}>Så skulle det kännas i vardagen</p>
+                              <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.7, fontStyle: "italic", color: "rgba(237,233,220,0.60)" }}>{ai.concrete_example}</p>
                             </div>
                             {ai.quick_wins?.length > 0 && (
                               <div>
-                                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                                  Snabba vinster ni kan testa själva
-                                </p>
-                                <ul className="mt-2 space-y-1.5">
-                                  {ai.quick_wins.map((qw, idx) => (
-                                    <li
-                                      key={idx}
-                                      className="flex items-start gap-2 text-sm leading-relaxed text-foreground/90"
-                                    >
-                                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                                      <span>{qw}</span>
-                                    </li>
-                                  ))}
-                                </ul>
+                                <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 8 }}>Snabba vinster ni kan testa själva</p>
+                                {ai.quick_wins.map((qw, idx) => (
+                                  <div key={idx} style={{ display: "flex", gap: 10, paddingBlock: 4 }}>
+                                    <span style={{ fontFamily: M, fontSize: 10, color: "rgba(80,200,120,0.7)" }}>✓</span>
+                                    <span style={{ fontFamily: I, fontSize: 13, lineHeight: 1.65, color: "rgba(237,233,220,0.65)" }}>{qw}</span>
+                                  </div>
+                                ))}
                               </div>
                             )}
                             <div>
-                              <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-400/80">
-                                Att vara uppmärksam på
-                              </p>
-                              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                                {ai.risks}
-                              </p>
+                              <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 6 }}>Att vara uppmärksam på</p>
+                              <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.50)" }}>{ai.risks}</p>
                             </div>
                           </div>
                         );
                       })()}
                     </div>
-                  </Reveal>
                 );
               })}
             </div>
 
-            {/* CTA – conversion-optimized */}
-            <Reveal y={18}>
-              <div className="relative mt-12 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] border border-primary/30 bg-gradient-to-br from-primary/[0.16] via-primary/[0.06] to-transparent p-5 sm:p-12 shadow-[0_40px_100px_-50px_hsl(var(--primary)/0.6)]">
-                <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
-                <div className="absolute -left-16 -bottom-16 h-64 w-64 rounded-full bg-purple-500/20 blur-3xl" />
-                <div className="relative grid gap-7 sm:grid-cols-[1.3fr_1fr] sm:items-center">
-                  <div>
-                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.10] px-3 py-1.5 text-xs font-semibold text-primary">
-                      <Sparkles className="h-3.5 w-3.5" /> Era nästa 30 dagar
-                    </div>
-                    <h2 className="mt-4 font-display text-2xl font-bold leading-tight sm:text-4xl break-words">
-                      Vill ni att vi bygger <span className="bg-gradient-to-r from-primary to-purple-400 bg-clip-text text-transparent">första piloten</span> åt er?
-                    </h2>
-                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                      Boka en kostnadsfri AI-genomlysning (45 min). Vi går igenom era svar live, pekar ut bästa första pilot och ger en uppskattning av <strong className="text-foreground">lösning, tid och kostnad</strong>. Inga köpkrav.
-                    </p>
-                    {totalSavedPerYear > 0 && (
-                      <div className="mt-5 flex items-start gap-3 rounded-2xl border border-primary/30 bg-primary/[0.08] px-4 py-3">
-                        <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                        <p className="text-sm leading-relaxed text-foreground/90">
-                          Med era topp-3 case kan ni spara cirka{" "}
-                          <strong className="text-foreground">{totalSavedPerYear} timmar/år</strong>.
-                          Det motsvarar ungefär{" "}
-                          <strong className="text-foreground">{Math.round((totalSavedPerYear * 600) / 1000)} 000 kr</strong>{" "}
-                          i frigjord arbetstid (à 600 kr/h).
-                        </p>
-                      </div>
-                    )}
-                    <ul className="mt-6 grid gap-2 text-sm text-foreground/85 grid-cols-1 sm:grid-cols-2">
-                      {[
-                        "Helt kostnadsfritt",
-                        "Inget köpkrav",
-                        "45 min via Teams/Meet",
-                        "Konkret offert om ni vill",
-                      ].map((b) => (
-                        <li key={b} className="flex items-center gap-2">
-                          <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary" /> {b}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <Button
-                      size="lg"
-                      className="h-14 w-full rounded-full text-base shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]"
-                      onClick={openBooking}
-                    >
-                      Boka kostnadsfri genomlysning <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="h-12 w-full rounded-full text-base"
-                      onClick={handlePrint}
-                    >
-                      Ladda ner PDF-analys <Download className="ml-2 h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="lg"
-                      variant="ghost"
-                      className="h-12 w-full rounded-full text-base"
-                      onClick={handleResend}
-                      disabled={sending}
-                      aria-label={`Skicka analysen till ${meta.email}`}
-                    >
-                      <Mail className="mr-2 h-4 w-4" />
-                      {sending ? "Skickar…" : "Mejla mig analysen"}
-                    </Button>
-                    <p className="text-center text-[11px] leading-relaxed text-muted-foreground break-words">
-                      En kopia skickades redan till{" "}
-                      <strong className="text-foreground break-all">{meta.email}</strong>{" "}
-                      direkt efter formuläret.
-                    </p>
-                  </div>
-                </div>
+            {/* CTA */}
+            <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(32px,5vw,48px)" }} />
+            <div style={{ marginBottom: 40 }}>
+              <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 12 }}>era nästa 30 dagar</p>
+              <h2 style={{ fontFamily: F, fontStyle: "italic", fontSize: "clamp(22px,3vw,36px)", color: C, letterSpacing: "-0.015em", marginBottom: 12 }}>
+                Vill ni att vi bygger första piloten åt er?
+              </h2>
+              <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", maxWidth: 520, marginBottom: 20 }}>
+                Boka en kostnadsfri AI-genomlysning (45 min). Vi går igenom era svar live, pekar ut bästa första pilot och ger en uppskattning av lösning, tid och kostnad. Inga köpkrav.
+              </p>
+              {totalSavedPerYear > 0 && (
+                <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.65)", marginBottom: 20 }}>
+                  Med era topp-3 case kan ni spara cirka <strong style={{ color: C }}>{totalSavedPerYear} timmar/år</strong> — ungefär <strong style={{ color: C }}>{Math.round((totalSavedPerYear * 600) / 1000)} 000 kr</strong> i frigjord arbetstid.
+                </p>
+              )}
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <button type="button" onClick={openBooking} className="btn-primary">
+                  Boka kostnadsfri genomlysning →
+                </button>
+                <button type="button" onClick={handlePrint} className="btn-ghost" style={{ fontSize: 13 }}>
+                  Ladda ner PDF-analys
+                </button>
+                <button type="button" onClick={handleResend} disabled={sending} className="btn-ghost" style={{ fontSize: 13 }}>
+                  {sending ? "Skickar…" : "Mejla mig analysen"}
+                </button>
               </div>
-            </Reveal>
+              <p style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.30)", marginTop: 16 }}>
+                En kopia skickades redan till <strong style={{ color: "rgba(237,233,220,0.50)" }}>{meta.email}</strong> direkt efter formuläret.
+              </p>
+            </div>
 
-            <p className="mt-10 text-center text-xs text-muted-foreground">
+            <p style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.30)", lineHeight: 1.6, textAlign: "center", marginBottom: 32 }}>
               Mini-analysen är automatiskt genererad och ska ses som en första indikation.
               Tidsbesparing är en uppskattning baserad på era svar – exakt scope kräver genomgång av processer, system och data.
             </p>
           </div>
         </section>
       </main>
-      <Footer />
+      <SiteFooter />
 
       <Dialog
         open={bookingOpen}
@@ -743,7 +630,7 @@ const AiKartaResultat = () => {
 };
 
 function StatCard({
-  label, value, sub, highlight, icon: Icon,
+  label, value, sub,
 }: {
   label: string;
   value: string;
@@ -751,34 +638,15 @@ function StatCard({
   highlight?: boolean;
   icon?: React.ComponentType<{ className?: string }>;
 }) {
+  const F3 = "'Fraunces',Georgia,serif";
+  const I3 = "'Inter',system-ui,sans-serif";
+  const M3 = "'JetBrains Mono',ui-monospace,monospace";
+  const C3 = "#EDE9DC";
   return (
-    <div
-      className={`flex h-full flex-col rounded-2xl border p-4 sm:p-5 ${
-        highlight
-          ? "border-primary/30 bg-primary/[0.08]"
-          : "border-white/10 bg-white/[0.03]"
-      }`}
-    >
-      <div className="flex items-start gap-2">
-        {Icon && (
-          <Icon
-            className={`mt-0.5 h-4 w-4 shrink-0 ${
-              highlight ? "text-primary" : "text-muted-foreground"
-            }`}
-          />
-        )}
-        <p className="text-[11px] uppercase leading-tight tracking-wider text-muted-foreground">
-          {label}
-        </p>
-      </div>
-      <p
-        className={`mt-2 font-display text-2xl font-bold leading-tight break-words sm:text-3xl ${
-          highlight ? "text-primary" : ""
-        }`}
-      >
-        {value}
-      </p>
-      {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
+    <div style={{ border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 6, padding: "16px 18px" }}>
+      <p style={{ fontFamily: M3, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>{label}</p>
+      <p style={{ fontFamily: F3, fontSize: "clamp(20px,2.5vw,28px)", color: C3, fontWeight: 400 }}>{value}</p>
+      {sub && <p style={{ fontFamily: I3, fontSize: 12, color: "rgba(237,233,220,0.40)", marginTop: 4 }}>{sub}</p>}
     </div>
   );
 }
@@ -825,61 +693,45 @@ function ResultStateScreen({
     },
   }[kind];
 
+  const F2 = "'Fraunces',Georgia,serif";
+  const I2 = "'Inter',system-ui,sans-serif";
+  const M2 = "'JetBrains Mono',ui-monospace,monospace";
+  const C2 = "#EDE9DC";
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-      <main className="overflow-hidden">
-        <section className="relative pt-28 pb-24 md:pt-36 md:pb-32">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.18),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_30%)]" />
-          <div className="container mx-auto max-w-2xl px-6">
-            <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 text-center shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)] sm:p-12">
-              <div className={`mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border ${config.ring}`}>
-                <config.Icon className={`h-7 w-7 ${config.iconClass}`} />
-              </div>
-              <p className="label-caps mt-6 text-primary">{config.label}</p>
-              <h1 className="mt-3 font-display text-3xl font-bold leading-tight sm:text-4xl">
-                {config.title}
-              </h1>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {config.body}
-              </p>
-
-              {kind === "loading" && (
-                <div className="mt-8 space-y-3">
-                  <div className="mx-auto h-3 w-3/4 animate-pulse rounded-full bg-white/10" />
-                  <div className="mx-auto h-3 w-full animate-pulse rounded-full bg-white/10" />
-                  <div className="mx-auto h-3 w-2/3 animate-pulse rounded-full bg-white/10" />
-                </div>
-              )}
-
-              {kind !== "loading" && (
-                <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                  <Button onClick={onPrimary} size="lg" className="w-full sm:w-auto">
-                    {kind === "missing" ? "Starta AI-kartan" : "Tillbaka till start"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  {kind === "error" && onSecondary && (
-                    <Button onClick={onSecondary} size="lg" variant="outline" className="w-full sm:w-auto">
-                      <RefreshCw className="mr-2 h-4 w-4" /> Försök igen
-                    </Button>
-                  )}
-                </div>
-              )}
-
-              {kind === "error" && (
-                <p className="mt-6 text-xs text-muted-foreground">
-                  Problemet kvarstår? Mejla{" "}
-                  <a href="mailto:info@auroramedia.se" className="text-primary underline-offset-4 hover:underline">
-                    info@auroramedia.se
-                  </a>{" "}
-                  så hjälper vi er direkt.
-                </p>
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main" style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+        <div className="wrap" style={{ maxWidth: 600, textAlign: "center" }}>
+          <p style={{ fontFamily: M2, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 16 }}>{config.label}</p>
+          <h1 style={{ fontFamily: F2, fontSize: "clamp(24px,4vw,40px)", color: C2, fontWeight: 400, marginBottom: 12, letterSpacing: "-0.02em" }}>
+            {config.title}
+          </h1>
+          <p style={{ fontFamily: I2, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 32 }}>
+            {config.body}
+          </p>
+          {kind !== "loading" && (
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <button type="button" onClick={onPrimary} className="btn-primary">
+                {kind === "missing" ? "Starta AI-kartan →" : "Tillbaka till start →"}
+              </button>
+              {kind === "error" && onSecondary && (
+                <button type="button" onClick={onSecondary} className="btn-ghost">Försök igen</button>
               )}
             </div>
-          </div>
-        </section>
+          )}
+          {kind === "error" && (
+            <p style={{ fontFamily: I2, fontSize: 12, color: "rgba(237,233,220,0.35)", marginTop: 24 }}>
+              Mejla{" "}
+              <a href="mailto:info@auroramedia.se" style={{ color: C2 }}>
+                info@auroramedia.se
+              </a>{" "}
+              om problemet kvarstår.
+            </p>
+          )}
+        </div>
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }

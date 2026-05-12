@@ -1,142 +1,182 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, ShieldCheck, Sparkles } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import StickyMobileCTA from "@/components/StickyMobileCTA";
-import { Button } from "@/components/ui/button";
-import { useContactModal } from "@/components/ContactModal";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
-const packages = [
+const F = "'Fraunces',Georgia,serif";
+const I = "'Inter',system-ui,sans-serif";
+const M = "'JetBrains Mono',ui-monospace,monospace";
+const C = "#EDE9DC";
+
+const PACKAGES = [
   {
-    name: "Aurora Sprint",
-    price: "Från 14 900 kr",
-    time: "1–2 veckor",
+    num: "01", name: "Aurora Sprint", price: "Från 14 900 kr", time: "1–2 veckor",
     desc: "Klickbar prototyp eller första fungerande version för att validera idén snabbt.",
     features: ["Produktworkshop light", "Klickbart huvudflöde", "Modern design", "Demo-URL", "Nästa-steg-rekommendation"],
   },
   {
-    name: "Aurora MVP",
-    price: "Från 34 900 kr",
-    time: "3–5 veckor",
+    num: "02", name: "Aurora MVP", price: "Från 34 900 kr", time: "3–5 veckor", featured: true,
     desc: "Lanseringsbar MVP med riktiga användare, data och kärnfunktioner.",
-    features: ["Inloggning", "Databas", "Adminvy", "Stripe eller annat betalflöde", "GitHub-repo och dokumentation"],
-    featured: true,
+    features: ["Inloggning och autentisering", "Databas (Supabase/Postgres)", "Admin-panel", "Betalflöde med Stripe", "GitHub-repo och dokumentation"],
   },
   {
-    name: "Aurora Scale",
-    price: "Från 89 000 kr",
-    time: "6–10 veckor",
+    num: "03", name: "Aurora Scale", price: "Från 89 000 kr", time: "6–10 veckor",
     desc: "Skalbar SaaS eller intern plattform med roller, integrationer och automation.",
-    features: ["Multi-tenant-struktur", "Roller och behörigheter", "Integrationer", "AI-flöden", "Teknisk överlämning"],
+    features: ["Multi-tenant-struktur", "Roller och behörigheter", "Tredjepartsintegrationer", "AI-flöden", "Teknisk överlämning"],
   },
   {
-    name: "Aurora AI Ops",
-    price: "Fast offert",
-    time: "Efter omfattning",
+    num: "04", name: "Aurora AI Ops", price: "Fast offert", time: "Variabel",
     desc: "AI-automationer och interna verktyg för företag som vill kapa manuellt arbete.",
-    features: ["Processkartläggning", "AI-flöden", "API-kopplingar", "Behörigheter", "Driftbar lösning"],
+    features: ["Processkartläggning", "AI-agent-flöden", "API-kopplingar", "Behörighetshantering", "Driftbar lösning"],
   },
 ];
 
-const rows = [
-  ["Fast pris innan start", true, true, true, true],
-  ["Kod/repo du äger", true, true, true, true],
-  ["Klickbar produkt", true, true, true, true],
-  ["Databas och autentisering", false, true, true, true],
-  ["Betalningar", false, true, true, false],
-  ["Roller och behörigheter", false, false, true, true],
-  ["Integrationer", false, "Enkel", true, true],
-  ["AI-automation", false, "Tillägg", true, true],
-];
+const COMPARE_ROWS = [
+  ["Fast pris innan start",        true,  true,  true,  true],
+  ["Kod/repo ni äger",             true,  true,  true,  true],
+  ["Klickbar produkt",             true,  true,  true,  false],
+  ["Databas och autentisering",    false, true,  true,  true],
+  ["Betalningar",                  false, true,  true,  false],
+  ["Roller och behörigheter",      false, false, true,  true],
+  ["Integrationer",                false, "Enkel", true, true],
+  ["AI-automation",                false, "Tillägg", true, true],
+] as const;
 
 const Priser = () => {
-  const { open } = useContactModal();
-
   useEffect(() => {
     setSEOMeta({
-      title: "Priser – SaaS, MVP och AI-automation med fast pris | Aurora Media",
-      description:
-        "Aktuella priser hos Aurora Media: prototyp från 14 900 kr, MVP från 34 900 kr och skalbar SaaS från 89 000 kr. Fast pris, snabb leverans och kod du äger.",
+      title: "Priser – SaaS, MVP och AI-automation | Aurora Media",
+      description: "Prototyp från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 89 000 kr. Fast pris, snabb leverans, kod ni äger.",
       canonical: "/priser",
     });
-    setBreadcrumb([
-      { name: "Hem", url: "/" },
-      { name: "Priser", url: "/priser" },
-    ]);
+    setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Priser", url: "/priser" }]);
     return () => removeJsonLd("breadcrumb-jsonld");
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="overflow-hidden">
-        <section className="pt-28 pb-16 md:pt-36 md:pb-20">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <p className="label-caps">Priser · fast scope · ingen timrapport</p>
-            <h1 className="mt-4 font-display text-[clamp(3rem,7vw,6.5rem)] leading-[0.92] tracking-tight">
-              Du ska veta priset innan vi bygger.
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main">
+
+        {/* Hero */}
+        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20, textTransform: "lowercase" }}>priser · fast scope · ingen timrapport</p>
+            <h1 style={{ fontFamily: F, fontSize: "clamp(36px,6vw,60px)", lineHeight: 1.02, letterSpacing: "-0.025em", color: C, fontWeight: 400, maxWidth: 580, marginBottom: 16 }}>
+              Ni ska veta priset
+              <br /><em>innan vi börjar.</em>
             </h1>
-            <p className="mt-7 max-w-2xl text-lg text-muted-foreground md:text-xl">
-              Inga diffusa timbanker. Inga “vi får återkomma”. Vi ramar in scope, pris och leverans — sedan bygger vi en produkt som faktiskt går att använda.
+            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", maxWidth: 440, marginBottom: 32 }}>
+              Inga diffusa timbanker. Vi ramar in scope, pris och leverans — sedan bygger vi en produkt som faktiskt används.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" onClick={() => open()} className="rounded-full">Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" /></Button>
-              <Button size="lg" variant="outline" asChild className="rounded-full"><Link to="/ai-konsult-sverige">Se AI-builder-upplägget</Link></Button>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+              <Link to="/process" className="btn-ghost">Hur processen ser ut</Link>
             </div>
           </div>
         </section>
 
-        <section className="pb-20 md:pb-28">
-          <div className="container mx-auto px-6">
-            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {packages.map((p) => (
-                <div key={p.name} className={`relative flex flex-col rounded-[1.7rem] border p-7 backdrop-blur-2xl ${p.featured ? "border-blue-300/40 bg-blue-400/10 shadow-[0_34px_100px_-52px_rgba(59,130,246,0.9)]" : "border-white/12 bg-white/[0.055]"}`}>
-                  {p.featured && <span className="absolute -top-3 left-6 rounded-full border border-blue-300/30 bg-blue-500/30 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-50">Populärast</span>}
-                  <Sparkles className="h-6 w-6 text-blue-200" />
-                  <h2 className="mt-5 font-display text-2xl font-bold">{p.name}</h2>
-                  <p className="mt-3 text-3xl font-bold text-white">{p.price}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">{p.time}</p>
-                  <p className="mt-4 text-sm leading-relaxed text-white/70">{p.desc}</p>
-                  <ul className="mt-6 flex-1 space-y-2.5">
+        {/* Packages */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 28 }}>paket</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))", gap: 10 }}>
+              {PACKAGES.map((p) => (
+                <div
+                  key={p.num}
+                  style={{
+                    display: "flex", flexDirection: "column",
+                    padding: "clamp(20px,3vw,28px)",
+                    border: p.featured ? "0.5px solid rgba(237,233,220,0.30)" : "0.5px solid rgba(237,233,220,0.10)",
+                    borderRadius: 8,
+                    background: p.featured ? "rgba(237,233,220,0.025)" : "transparent",
+                    position: "relative",
+                  }}
+                >
+                  {p.featured && (
+                    <span style={{ position: "absolute", top: -10, left: 20, fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: C, background: "#100F0D", padding: "0 8px", border: "0.5px solid rgba(237,233,220,0.25)", borderRadius: 3 }}>
+                      populärast
+                    </span>
+                  )}
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
+                    <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)", letterSpacing: "0.06em" }}>{p.num}</span>
+                    <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.35)" }}>{p.time}</span>
+                  </div>
+                  <p style={{ fontFamily: F, fontSize: "clamp(18px,2.2vw,22px)", color: C, lineHeight: 1.2, marginBottom: 6 }}>{p.name}</p>
+                  <p style={{ fontFamily: F, fontSize: "clamp(20px,2.5vw,28px)", color: C, lineHeight: 1, marginBottom: 12, fontStyle: "italic" }}>{p.price}</p>
+                  <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)", lineHeight: 1.6, marginBottom: 20 }}>{p.desc}</p>
+                  <ul style={{ flex: 1, listStyle: "none", display: "flex", flexDirection: "column", gap: 8, marginBottom: 24 }}>
                     {p.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-white/70"><Check className="mt-0.5 h-4 w-4 shrink-0 text-blue-200" />{f}</li>
+                      <li key={f} style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                        <span style={{ fontSize: 10, color: "rgba(237,233,220,0.40)", flexShrink: 0 }}>→</span>
+                        <span style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.65)" }}>{f}</span>
+                      </li>
                     ))}
                   </ul>
-                  <Button onClick={() => open(p.name)} className="mt-7 w-full rounded-full" variant={p.featured ? "default" : "outline"}>Välj upplägg</Button>
+                  <Link to="/kontakt" className={p.featured ? "btn-primary" : "btn-ghost"} style={{ textAlign: "center", justifyContent: "center" }}>
+                    Välj upplägg
+                  </Link>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-t border-white/10 py-20 md:py-24">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <p className="label-caps">Jämförelse</p>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Vad ingår?</h2>
-            <div className="mt-10 overflow-x-auto rounded-2xl border border-white/12 bg-white/[0.045]">
-              <table className="w-full min-w-[760px] text-left text-sm">
-                <thead><tr className="border-b border-white/10 bg-white/[0.06]"><th className="p-4"></th>{packages.map((p) => <th key={p.name} className="p-4 text-white">{p.name}</th>)}</tr></thead>
+        {/* Comparison table */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 16 }}>jämförelse</p>
+            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 28, letterSpacing: "-0.015em" }}>Vad ingår?</h2>
+            <div style={{ overflowX: "auto", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 8 }}>
+              <table style={{ width: "100%", minWidth: 680, borderCollapse: "collapse", textAlign: "left" }}>
+                <thead>
+                  <tr style={{ borderBottom: "0.5px solid rgba(237,233,220,0.10)", background: "rgba(237,233,220,0.02)" }}>
+                    <th style={{ padding: "12px 16px", fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)" }}></th>
+                    {PACKAGES.map((p) => (
+                      <th key={p.num} style={{ padding: "12px 16px", fontFamily: I, fontSize: 12, fontWeight: 500, color: C, whiteSpace: "nowrap" }}>{p.name}</th>
+                    ))}
+                  </tr>
+                </thead>
                 <tbody>
-                  {rows.map((row) => <tr key={row[0] as string} className="border-b border-white/10 last:border-0"><td className="p-4 text-white/80">{row[0]}</td>{row.slice(1).map((v, i) => <td key={i} className="p-4 text-white/65">{typeof v === "boolean" ? (v ? <Check className="h-4 w-4 text-blue-200" /> : "—") : v}</td>)}</tr>)}
+                  {COMPARE_ROWS.map((row) => (
+                    <tr key={row[0] as string} style={{ borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
+                      <td style={{ padding: "11px 16px", fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.65)" }}>{row[0]}</td>
+                      {(row.slice(1) as (boolean | string)[]).map((v, i) => (
+                        <td key={i} style={{ padding: "11px 16px", fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)" }}>
+                          {typeof v === "boolean" ? (v ? <span style={{ color: "rgba(80,200,120,0.9)" }}>✓</span> : <span style={{ color: "rgba(237,233,220,0.20)" }}>—</span>) : v}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-white/10 py-20 md:py-24">
-          <div className="container mx-auto px-6 max-w-4xl text-center">
-            <ShieldCheck className="mx-auto h-8 w-8 text-blue-200" />
-            <h2 className="mt-5 font-display text-4xl font-bold">Osäker på nivå?</h2>
-            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">Boka 30 minuter. Du får ett ärligt svar på om du behöver prototyp, MVP, scale eller om idén behöver tänkas om först.</p>
-            <Button size="lg" onClick={() => open()} className="mt-8 rounded-full">Boka AI-genomgång</Button>
+        {/* FAQ inline */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 20 }}>osäker på nivå?</p>
+            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 12, letterSpacing: "-0.015em" }}>
+              Boka 30 minuter.
+            </h2>
+            <p style={{ fontFamily: I, fontSize: 14, color: "rgba(237,233,220,0.50)", marginBottom: 28, maxWidth: 420, lineHeight: 1.7 }}>
+              Ni får ett ärligt svar på om ni behöver prototyp, MVP, scale — eller om idén behöver tänkas om först.
+            </p>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+              <a href="https://cal.com" target="_blank" rel="noopener noreferrer" className="btn-ghost">Boka 30 min ↗</a>
+            </div>
           </div>
         </section>
       </main>
-      <Footer />
-      <StickyMobileCTA />
+      <SiteFooter />
     </div>
   );
 };

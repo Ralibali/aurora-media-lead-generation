@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import Reveal from "@/components/Reveal";
-import { Button } from "@/components/ui/button";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,6 +35,11 @@ const Step1Schema = z.object({
 });
 
 const STEPS = ["Kontakt", "Tidstjuvar", "Processer", "Sammanfattning"];
+
+const F = "'Fraunces',Georgia,serif";
+const I = "'Inter',system-ui,sans-serif";
+const M = "'JetBrains Mono',ui-monospace,monospace";
+const C = "#EDE9DC";
 
 const stepCardClass =
   "rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]";
@@ -215,55 +218,45 @@ const AiKartaStart = () => {
   const progress = useMemo(() => Math.round(((step - 1) / (STEPS.length - 1)) * 100), [step]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-      <main className="overflow-hidden">
-        <section className="relative pt-28 pb-20 md:pt-36 md:pb-28">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.18),transparent_34%),radial-gradient(circle_at_80%_20%,rgba(168,85,247,0.12),transparent_30%)]" />
-          <div className="container mx-auto max-w-3xl px-6">
-            <Reveal>
-              <p className="label-caps">AI-kartan · steg {step} av {STEPS.length}</p>
-              <h1 className="mt-4 font-display text-[clamp(2.4rem,5.2vw,4rem)] font-bold leading-[0.95] tracking-tight">
-                {step === 1 && "Berätta lite om er"}
-                {step === 2 && "Var sitter era största tidstjuvar?"}
-                {step === 3 && "Lägg till 1–5 processer"}
-                {step === 4 && "Kontrollera och skicka in"}
-              </h1>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
-                {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
-                {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
-                {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
-              </p>
-            </Reveal>
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main">
+        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div className="wrap" style={{ maxWidth: 720 }}>
+            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20 }}>AI-kartan · steg {step} av {STEPS.length}</p>
+            <h1 style={{ fontFamily: F, fontSize: "clamp(28px,5vw,48px)", lineHeight: 1.05, letterSpacing: "-0.02em", color: C, fontWeight: 400, marginBottom: 12 }}>
+              {step === 1 && "Berätta lite om er"}
+              {step === 2 && "Var sitter era största tidstjuvar?"}
+              {step === 3 && "Lägg till 1–5 processer"}
+              {step === 4 && "Kontrollera och skicka in"}
+            </h1>
+            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 32 }}>
+              {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
+              {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
+              {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
+              {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
+            </p>
 
             {/* Progress */}
-            <div className="mt-8">
-              <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+            <div style={{ marginBottom: 32 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 8 }}>
                 {STEPS.map((label, i) => {
                   const reached = i + 1 <= step;
                   const isCurrent = i + 1 === step;
                   return (
-                    <span
-                      key={label}
-                      className={`flex-1 truncate text-center ${reached ? "text-primary" : ""} ${isCurrent ? "font-semibold" : ""}`}
-                    >
-                      <span className="hidden sm:inline">{i + 1}. {label}</span>
-                      <span className="sm:hidden">{isCurrent ? label : i + 1}</span>
+                    <span key={label} style={{ flex: 1, textAlign: "center", fontFamily: M, fontSize: 10, letterSpacing: "0.08em", color: reached ? C : "rgba(237,233,220,0.25)", fontWeight: isCurrent ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {i + 1}. {label}
                     </span>
                   );
                 })}
               </div>
-              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary to-primary/70 transition-all duration-500"
-                  style={{ width: `${progress + 25}%` }}
-                />
+              <div style={{ height: 2, width: "100%", background: "rgba(237,233,220,0.08)", borderRadius: 2, overflow: "hidden" }}>
+                <div style={{ height: "100%", background: C, borderRadius: 2, transition: "width 0.5s ease", width: `${progress + 25}%` }} />
               </div>
             </div>
 
-            <Reveal y={18}>
-              <div className={`mt-10 ${stepCardClass}`}>
+            <div className={stepCardClass}>
                 {/* Honeypot */}
                 <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
                   <Label htmlFor="aimap-website">Webbplats</Label>
@@ -489,38 +482,33 @@ const AiKartaStart = () => {
                   </div>
                 )}
               </div>
-            </Reveal>
 
-            <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+            <div style={{ marginTop: 32, display: "flex", flexDirection: "row", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
               {step > 1 ? (
-                <Button variant="outline" onClick={prev} className="h-12 w-full rounded-full text-base sm:w-auto" disabled={submitting}>
-                  <ArrowLeft className="mr-2 h-4 w-4" /> Tillbaka
-                </Button>
+                <button type="button" onClick={prev} disabled={submitting} className="btn-ghost" style={{ fontSize: 13 }}>
+                  ← Tillbaka
+                </button>
               ) : (
-                <span className="hidden sm:block" />
+                <span />
               )}
               {step < STEPS.length ? (
-                <Button onClick={next} size="lg" className="h-14 w-full rounded-full text-base sm:w-auto">
-                  Fortsätt <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <button type="button" onClick={next} className="btn-primary">
+                  Fortsätt →
+                </button>
               ) : (
-                <Button onClick={handleSubmit} size="lg" className="h-14 w-full rounded-full text-base sm:w-auto" disabled={submitting}>
-                  {submitting ? (
-                    <>Beräknar... <Loader2 className="ml-2 h-4 w-4 animate-spin" /></>
-                  ) : (
-                    <>Få min kostnadsfria mini-analys <Sparkles className="ml-2 h-4 w-4" /></>
-                  )}
-                </Button>
+                <button type="button" onClick={handleSubmit} disabled={submitting} className="btn-primary">
+                  {submitting ? "Beräknar..." : "Få min kostnadsfria mini-analys"}
+                </button>
               )}
             </div>
 
-            <p className="mt-8 text-center text-xs text-muted-foreground">
+            <p style={{ marginTop: 32, textAlign: "center", fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.30)", lineHeight: 1.6 }}>
               Mini-analysen är automatiskt genererad och ska ses som en första indikation. För exakt scope krävs genomgång av processer, system och data.
             </p>
           </div>
         </section>
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 };

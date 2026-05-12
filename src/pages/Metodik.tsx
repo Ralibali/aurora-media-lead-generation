@@ -1,167 +1,147 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, CheckCircle2, Code2, Database, Rocket, ShieldCheck, Sparkles } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import CTABanner from "@/components/CTABanner";
-import Reveal from "@/components/Reveal";
-import { Button } from "@/components/ui/button";
-import { useContactModal } from "@/components/ContactModal";
-import { setSEOMeta, setJsonLd, setBreadcrumb, SITE_URL } from "@/lib/seoHelpers";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
+import { setSEOMeta, setBreadcrumb, setJsonLd, SITE_URL } from "@/lib/seoHelpers";
 
-const steps = [
-  {
-    title: "1. Idé & scope",
-    body: "Vi börjar med att kapa bort fluffet. Vad ska byggas, vem ska använda det, vad måste fungera i första versionen och vad kan vänta? Du får en tydlig omfattning och ett fast pris innan start.",
-  },
-  {
-    title: "2. Prototyp",
-    body: "Vi bygger en klickbar version snabbt så du, dina medarbetare eller kunden kan känna på flödet. Här validerar vi produkten innan den blir dyr eller för stor.",
-  },
-  {
-    title: "3. MVP",
-    body: "Vi bygger den första versionen som faktiskt kan användas: login, databas, admin, betalning, e-postflöden och kärnfunktioner beroende på projekt.",
-  },
-  {
-    title: "4. Data & integrationer",
-    body: "När grunden sitter kopplar vi på rätt system: Supabase, Stripe, Brevo, Fortnox, interna API:er eller AI-flöden. Behörigheter och datagränser sätts tidigt.",
-  },
-  {
-    title: "5. QA, säkerhet & lansering",
-    body: "Jag testar manuellt, kontrollerar gränsfall, RLS/behörigheter, prestanda och driftsättning. Du får GitHub-repo, dokumentation och genomgång.",
-  },
-  {
-    title: "6. Skala vidare",
-    body: "När riktiga användare börjar använda produkten bygger vi vidare baserat på data, återkoppling och affärsnytta — inte gissningar från en workshop.",
-  },
+const F = "'Fraunces',Georgia,serif";
+const I = "'Inter',system-ui,sans-serif";
+const M = "'JetBrains Mono',ui-monospace,monospace";
+const C = "#EDE9DC";
+
+const STEPS = [
+  { title: "Idé & scope", body: "Vi klipper bort fluffet. Vad ska byggas, vem ska använda det, vad måste fungera i v1 och vad kan vänta? Fast pris och tydlig spec innan start." },
+  { title: "Prototyp", body: "En klickbar version snabbt — ni, era medarbetare eller kunden kan känna på flödet. Validering innan produkten blir dyr." },
+  { title: "MVP", body: "Första versionen som faktiskt kan användas: login, databas, admin, betalning och kärnfunktioner." },
+  { title: "Data & integrationer", body: "Supabase, Stripe, Brevo, Fortnox, interna API:er eller AI-flöden kopplas på. Behörigheter och datagränser sätts tidigt." },
+  { title: "QA & lansering", body: "Manuell testning, gränsfall, RLS/behörigheter, prestanda och driftsättning. GitHub-repo, dokumentation och genomgång." },
+  { title: "Skala vidare", body: "När riktiga användare börjar använda produkten bygger vi vidare baserat på data — inte gissningar från en workshop." },
 ];
 
-const principles = [
-  { icon: Sparkles, title: "Mindre workshop", body: "Målet är inte en AI-strategi som samlar damm. Målet är en produkt, automation eller app som används." },
-  { icon: Code2, title: "Fast pris", body: "Du vet vad det kostar innan vi bygger. Omfattning först, offert sen, kod därefter." },
-  { icon: ShieldCheck, title: "Kod du äger", body: "Repo, databasstruktur och dokumentation lämnas över. Ingen onödig vendor lock-in." },
-  { icon: Database, title: "Riktig grund", body: "Datamodell, auth, behörigheter och integrationer byggs för verklig drift — inte bara demo." },
+const PRINCIPLES = [
+  { title: "Mindre workshop", desc: "Målet är inte en strategi som samlar damm. Målet är en produkt som används." },
+  { title: "Fast pris", desc: "Ni vet vad det kostar innan vi bygger. Scope först, offert sen, kod därefter." },
+  { title: "Kod ni äger", desc: "Repo, databasstruktur och dokumentation lämnas över. Ingen vendor lock-in." },
+  { title: "Riktig grund", desc: "Auth, behörigheter och integrationer byggs för verklig drift — inte demo." },
 ];
 
-const tools = [
-  { name: "Lovable", use: "Snabb produktbas, SaaS-prototyper och fullstack-flöden med Supabase." },
-  { name: "Bolt", use: "Snabba prototyper, UI-experiment och kodnära exploration i webbläsaren." },
-  { name: "Cursor + Claude", use: "Refaktorering, kvalitet, komplex logik och arbete i riktiga repon." },
-  { name: "React + TypeScript", use: "Frontend och appar med tydlig struktur, komponenter och bra underhållbarhet." },
+const TOOLS = [
+  { name: "React + TypeScript", use: "Frontend och appar med tydlig struktur och bra underhållbarhet." },
   { name: "Supabase", use: "Postgres, Auth, RLS, Storage och Edge Functions." },
-  { name: "Stripe, Brevo, Fortnox", use: "Betalning, e-post, automation och svenska affärsintegrationer." },
+  { name: "Cursor + Claude", use: "Refaktorering, komplex logik och arbete i riktiga repon." },
+  { name: "Stripe", use: "Betalflöden, prenumerationer och fakturering." },
+  { name: "Brevo / Resend", use: "E-post, notifikationer och marknadsföringsflöden." },
+  { name: "Vite + Vercel", use: "Snabba builds och enkel deployment med preview-URLs." },
 ];
 
 const Metodik = () => {
-  const { open } = useContactModal();
-
   useEffect(() => {
     setSEOMeta({
-      title: "Metodik – från AI-idé till färdig produkt | Aurora Media",
-      description:
-        "Aurora Produktresan: idé, prototyp, MVP, integrationer, säkerhet och lansering. Så bygger Aurora Media SaaS, appar och AI-automationer med fast pris.",
+      title: "Metodik – från idé till färdig produkt | Aurora Media",
+      description: "Så Aurora Media går från idé till driftsatt produkt. Sex steg, fast pris, ingen onödig byråprocess.",
       canonical: "/metodik",
     });
-    setBreadcrumb([
-      { name: "Hem", url: "/" },
-      { name: "Metodik", url: "/metodik" },
-    ]);
+    setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Metodik", url: "/metodik" }]);
     setJsonLd("metodik-howto", {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
+      "@context": "https://schema.org", "@type": "HowTo",
       name: "Aurora Produktresan",
-      description: "Så Aurora Media går från AI-idé till fungerande produkt.",
-      step: steps.map((s, i) => ({
-        "@type": "HowToStep",
-        position: i + 1,
-        name: s.title,
-        text: s.body,
+      description: "Från idé till fungerande produkt med Aurora Media.",
+      step: STEPS.map((s, i) => ({
+        "@type": "HowToStep", position: i + 1, name: s.title, text: s.body,
       })),
       author: { "@id": `${SITE_URL}/#organization` },
     });
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="overflow-hidden">
-        <section className="pt-28 pb-16 md:pt-36 md:pb-20">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <Reveal>
-              <p className="label-caps">Metodik · Aurora Produktresan</p>
-              <h1 className="mt-4 font-display text-[clamp(3rem,7vw,6.5rem)] leading-[0.92] tracking-tight">
-                Från Notion-idé till använd produkt.
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg text-muted-foreground md:text-xl">
-                En rak process för att bygga SaaS, MVP:er, interna appar och AI-automationer utan att fastna i månader av möten.
-              </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" onClick={() => open()} className="rounded-full">Boka AI-genomgång <ArrowRight className="ml-2 h-4 w-4" /></Button>
-                <Button size="lg" variant="outline" asChild className="rounded-full"><Link to="/priser">Se priser</Link></Button>
-              </div>
-            </Reveal>
-          </div>
-        </section>
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main">
 
-        <section className="border-t border-white/10 py-20">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <Reveal>
-              <p className="label-caps">Steg för steg</p>
-              <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Så går det till.</h2>
-            </Reveal>
-            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {steps.map((s, i) => (
-                <Reveal key={s.title} delay={i * 0.05} y={16} duration={0.6}>
-                  <div className="h-full rounded-[1.5rem] border border-white/12 bg-white/[0.055] p-6 backdrop-blur-2xl">
-                    <p className="text-sm font-bold text-blue-200">0{i + 1}</p>
-                    <h3 className="mt-4 font-display text-2xl font-bold">{s.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-white/64">{s.body}</p>
-                  </div>
-                </Reveal>
-              ))}
+        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20, textTransform: "lowercase" }}>metodik · aurora produktresan</p>
+            <h1 style={{ fontFamily: F, fontSize: "clamp(36px,6vw,60px)", lineHeight: 1.02, letterSpacing: "-0.025em", color: C, fontWeight: 400, maxWidth: 560, marginBottom: 16 }}>
+              Från idé till
+              <br /><em>använd produkt.</em>
+            </h1>
+            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", maxWidth: 440, marginBottom: 32 }}>
+              En rak process för att bygga SaaS, MVP:er och AI-automationer utan att fastna i månader av möten.
+            </p>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+              <Link to="/priser" className="btn-ghost">Se priser</Link>
             </div>
           </div>
         </section>
 
-        <section className="border-t border-white/10 py-20 bg-secondary/20">
-          <div className="container mx-auto px-6 max-w-6xl">
-            <p className="label-caps">Principer</p>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Det här styr varje projekt.</h2>
-            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-              {principles.map(({ icon: Icon, title, body }) => (
-                <div key={title} className="rounded-[1.45rem] border border-white/12 bg-white/[0.055] p-6 backdrop-blur-2xl">
-                  <Icon className="h-6 w-6 text-blue-200" />
-                  <h3 className="mt-5 font-display text-xl font-bold">{title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/62">{body}</p>
+        {/* Steps */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>steg för steg</p>
+            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 32, letterSpacing: "-0.015em" }}>Så går det till.</h2>
+            {STEPS.map((s, i) => (
+              <div key={s.title} style={{ display: "grid", gap: "8px 40px", padding: "22px 0", borderBottom: "0.5px solid rgba(237,233,220,0.07)" }} className="sm:grid-cols-[28px_180px_1fr]">
+                <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)", paddingTop: 2 }}>0{i + 1}</span>
+                <span style={{ fontFamily: I, fontSize: 14, fontWeight: 500, color: C }}>{s.title}</span>
+                <span style={{ fontFamily: I, fontSize: 13, lineHeight: 1.65, color: "rgba(237,233,220,0.55)" }}>{s.body}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Principles */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>principer</p>
+            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 32, letterSpacing: "-0.015em" }}>Det här styr varje projekt.</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))", gap: 10 }}>
+              {PRINCIPLES.map((p) => (
+                <div key={p.title} style={{ padding: "clamp(20px,2.5vw,28px)", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6, transition: "background 0.15s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(237,233,220,0.025)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
+                  <p style={{ fontFamily: F, fontSize: "clamp(17px,2vw,20px)", color: C, marginBottom: 8 }}>{p.title}</p>
+                  <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.55)", lineHeight: 1.65 }}>{p.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-t border-white/10 py-20">
-          <div className="container mx-auto px-6 max-w-5xl">
-            <p className="label-caps">Stack</p>
-            <h2 className="mt-3 font-display text-4xl font-bold tracking-tight">Verktygen väljs efter jobbet.</h2>
-            <ul className="mt-10 grid gap-4 md:grid-cols-2">
-              {tools.map((t) => (
-                <li key={t.name} className="rounded-2xl border border-white/12 bg-white/[0.045] p-5">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-blue-200" />
-                    <div>
-                      <p className="font-display text-lg font-bold">{t.name}</p>
-                      <p className="mt-1 text-sm text-muted-foreground">{t.use}</p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+        {/* Tools */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>stack</p>
+            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 32, letterSpacing: "-0.015em" }}>Verktygen väljs efter jobbet.</h2>
+            {TOOLS.map((t) => (
+              <div key={t.name} style={{ display: "grid", gap: "8px 40px", padding: "16px 0", borderBottom: "0.5px solid rgba(237,233,220,0.07)" }} className="sm:grid-cols-[160px_1fr]">
+                <span style={{ fontFamily: I, fontSize: 13, fontWeight: 500, color: C }}>{t.name}</span>
+                <span style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)", lineHeight: 1.6 }}>{t.use}</span>
+              </div>
+            ))}
           </div>
         </section>
 
-        <CTABanner />
+        {/* CTA */}
+        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
+          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
+          <div className="wrap">
+            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 12 }}>nästa steg</p>
+            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 10, letterSpacing: "-0.015em" }}>
+              Redo att börja?
+            </h2>
+            <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.45)", marginBottom: 24, maxWidth: 380 }}>
+              Berätta om projektet. Vi återkommer med offert inom 24 timmar.
+            </p>
+            <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+          </div>
+        </section>
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 };

@@ -1,34 +1,19 @@
 import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowUpRight, ArrowLeft } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import StickyMobileCTA from "@/components/StickyMobileCTA";
-import FinalCTASection from "@/components/FinalCTASection";
-import Reveal from "@/components/Reveal";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import {
-  setSEOMeta,
-  setBreadcrumb,
-  removeJsonLd,
-  setJsonLd,
-  SITE_URL,
+  setSEOMeta, setBreadcrumb, removeJsonLd, setJsonLd, SITE_URL,
 } from "@/lib/seoHelpers";
-import { cn } from "@/lib/utils";
 import {
-  getPortfolioBySlug,
-  getRelatedPortfolio,
-  CATEGORY_LABEL,
-  CATEGORY_BADGE,
-  STATUS_LABEL,
-  STATUS_DOT,
+  getPortfolioBySlug, getRelatedPortfolio,
+  CATEGORY_LABEL, STATUS_LABEL,
 } from "@/data/portfolio";
 
-const fadeIn = {
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-};
+const F = "'Fraunces',Georgia,serif";
+const I = "'Inter',system-ui,sans-serif";
+const M = "'JetBrains Mono',ui-monospace,monospace";
+const C = "#EDE9DC";
 
 const CasePage = () => {
   const { slug = "" } = useParams<{ slug: string }>();
@@ -48,295 +33,186 @@ const CasePage = () => {
       { name: project.name, url: `/arbete/${project.slug}` },
     ]);
     setJsonLd("case-creativework", {
-      "@context": "https://schema.org",
-      "@type": "CreativeWork",
+      "@context": "https://schema.org", "@type": "CreativeWork",
       name: project.name,
       url: `${SITE_URL}/arbete/${project.slug}`,
       description: project.description,
       creator: { "@id": `${SITE_URL}/#organization` },
       keywords: project.stack.join(", "),
     });
-    return () => {
-      removeJsonLd("breadcrumb-jsonld");
-      removeJsonLd("case-creativework");
-    };
+    return () => { removeJsonLd("breadcrumb-jsonld"); removeJsonLd("case-creativework"); };
   }, [project]);
 
-  if (!project) {
-    return <Navigate to="/arbete" replace />;
-  }
+  if (!project) return <Navigate to="/arbete" replace />;
 
   const related = getRelatedPortfolio(project.slug, 3);
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="pt-16">
-        {/* Back-link */}
-        <div className="container mx-auto max-w-5xl px-6 pt-10">
-          <Link
-            to="/arbete"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Tillbaka till arbete
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main" style={{ paddingTop: "clamp(88px,12vw,120px)" }}>
+
+        {/* Back */}
+        <div className="wrap" style={{ paddingBottom: 20 }}>
+          <Link to="/arbete"
+            style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.40)", textDecoration: "none", transition: "color 0.15s", display: "inline-flex", alignItems: "center", gap: 6 }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = C)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
+            ← Tillbaka till arbete
           </Link>
         </div>
 
         {/* Hero */}
-        <section className="pt-8 pb-12 md:pt-12 md:pb-16">
-          <div className="container mx-auto max-w-5xl px-6">
-            <motion.div {...fadeIn}>
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className={cn(
-                    "inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider",
-                    CATEGORY_BADGE[project.category],
-                  )}
-                >
-                  {CATEGORY_LABEL[project.category]}
-                </span>
-                <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                  <span className={cn("h-1.5 w-1.5 rounded-full", STATUS_DOT[project.status])} />
-                  {STATUS_LABEL[project.status]}
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                  · {project.type}
-                </span>
-              </div>
+        <section className="wrap" style={{ paddingBottom: "clamp(32px,5vw,56px)" }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 20, flexWrap: "wrap" }}>
+            <span style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", border: "0.5px solid rgba(237,233,220,0.14)", borderRadius: 3, padding: "3px 8px" }}>
+              {CATEGORY_LABEL[project.category]}
+            </span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span style={{ width: 5, height: 5, borderRadius: "50%", background: project.status === "live" ? "rgba(80,200,120,0.9)" : "rgba(237,233,220,0.35)", display: "block" }} />
+              <span style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.35)" }}>{STATUS_LABEL[project.status]}</span>
+            </span>
+          </div>
 
-              <h1 className="mt-5 font-serif text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.05] tracking-[-0.02em]">
-                {project.name}
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-                {project.tagline}
-              </p>
+          <h1 style={{ fontFamily: F, fontSize: "clamp(32px,6vw,60px)", color: C, lineHeight: 1.02, letterSpacing: "-0.025em", fontWeight: 400, maxWidth: 700, marginBottom: 16 }}>
+            {project.name}
+          </h1>
+          <p style={{ fontFamily: I, fontSize: "clamp(15px,2vw,18px)", color: "rgba(237,233,220,0.60)", lineHeight: 1.65, maxWidth: 540, marginBottom: 28 }}>
+            {project.tagline}
+          </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a
-                  href={project.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group inline-flex items-center gap-2 rounded-full bg-foreground py-2 pl-5 pr-2 text-sm text-background transition-all hover:shadow-lg"
-                >
-                  <span className="font-medium">Besök {project.domain}</span>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-background text-foreground transition-transform group-hover:translate-x-0.5">
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
-                </a>
-              </div>
-            </motion.div>
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-primary"
+          >
+            Besök {project.domain} ↗
+          </a>
+        </section>
+
+        {/* Screenshot */}
+        <section className="wrap" style={{ paddingBottom: "clamp(32px,5vw,56px)" }}>
+          <div style={{ border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 8, overflow: "hidden" }}>
+            {/* Browser chrome */}
+            <div style={{ display: "flex", alignItems: "center", gap: 6, borderBottom: "0.5px solid rgba(237,233,220,0.08)", padding: "10px 16px", background: "rgba(237,233,220,0.02)" }}>
+              {[1, 2, 3].map((n) => <span key={n} style={{ width: 10, height: 10, borderRadius: "50%", background: "rgba(237,233,220,0.12)", display: "block" }} />)}
+              <span style={{ marginLeft: 12, fontFamily: M, fontSize: 11, color: "rgba(237,233,220,0.30)" }}>{project.domain}</span>
+            </div>
+            {project.screenshot
+              ? <img src={project.screenshot} alt={`Skärmavbild av ${project.name}`} style={{ width: "100%", display: "block", aspectRatio: "16/10", objectFit: "cover" }} loading="lazy" />
+              : (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", aspectRatio: "16/10", background: "rgba(237,233,220,0.01)" }}>
+                  <div style={{ textAlign: "center" }}>
+                    <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.12em", color: "rgba(237,233,220,0.25)", marginBottom: 12 }}>preview</p>
+                    <p style={{ fontFamily: F, fontSize: "clamp(28px,5vw,52px)", color: "rgba(237,233,220,0.35)", fontStyle: "italic" }}>{project.domain}</p>
+                  </div>
+                </div>
+              )
+            }
           </div>
         </section>
 
-        {/* Screenshot / Placeholder */}
-        <section className="pb-16 md:pb-24">
-          <div className="container mx-auto max-w-5xl px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.32, 0.72, 0, 1] }}
-              className="bezel-shell"
-            >
-              <div className="bezel-core overflow-hidden">
-                {/* Browser chrome */}
-                <div className="flex items-center gap-1.5 border-b border-border/50 px-4 py-3">
-                  <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-foreground/15" />
-                  <span className="ml-3 font-mono text-[11px] text-muted-foreground">
-                    {project.domain}
-                  </span>
+        {/* Content */}
+        <section className="wrap" style={{ paddingBottom: "clamp(40px,6vw,64px)" }}>
+          <div style={{ display: "grid", gap: "clamp(32px,6vw,64px)" }} className="md:grid-cols-[1fr_220px]">
+
+            {/* Prose */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+              {[
+                { label: "Problemet", content: project.problem },
+                { label: "Vad vi byggde", content: project.solution },
+                { label: "Lärdomar", content: project.lessons },
+              ].filter((s) => s.content).map((s) => (
+                <div key={s.label} style={{ paddingBottom: 32, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
+                  <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 12, textTransform: "lowercase" }}>{s.label}</p>
+                  <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.70)" }}>{s.content}</p>
                 </div>
-                {project.screenshot ? (
-                  <img
-                    src={project.screenshot}
-                    alt={`Skärmavbild av ${project.name}`}
-                    className="aspect-[4/3] w-full object-cover md:aspect-[16/10]"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-[hsl(154_43%_21%)]/10 via-[hsl(137_30%_50%)]/10 to-[hsl(60_20%_97%)] md:aspect-[16/10]">
-                    <div className="text-center">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        Preview
-                      </p>
-                      <p className="mt-3 font-serif text-3xl text-foreground/75 md:text-6xl">
-                        {project.domain}
-                      </p>
-                    </div>
-                    <span className="absolute bottom-4 right-4 font-mono text-[9px] uppercase tracking-wider text-muted-foreground/60">
-                      Skärmavbild kommer
-                    </span>
+              ))}
+            </div>
+
+            {/* Meta sidebar */}
+            <aside style={{ position: "sticky", top: 88, alignSelf: "start" }}>
+              <div style={{ border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 8, padding: 20 }}>
+
+                {project.buildTime && (
+                  <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
+                    <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 6, textTransform: "lowercase" }}>leveranstid</p>
+                    <p style={{ fontFamily: F, fontSize: 24, color: C, fontStyle: "italic" }}>{project.buildTime}</p>
                   </div>
                 )}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Content grid */}
-        <section className="pb-20 md:pb-28">
-          <div className="container mx-auto max-w-5xl px-6">
-            <div className="grid gap-12 md:grid-cols-3 md:gap-16">
-              {/* Vänster: prosa */}
-              <div className="md:col-span-2 space-y-12">
-                {project.problem && (
-                  <Reveal>
-                    <p className="label-caps">Problemet</p>
-                    <p className="mt-4 text-lg leading-relaxed text-foreground/85">
-                      {project.problem}
-                    </p>
-                  </Reveal>
-                )}
-
-                {project.solution && (
-                  <Reveal delay={0.05}>
-                    <p className="label-caps">Vad jag gjorde</p>
-                    <p className="mt-4 text-lg leading-relaxed text-foreground/85">
-                      {project.solution}
-                    </p>
-                  </Reveal>
-                )}
-
-                {project.lessons && (
-                  <Reveal delay={0.1}>
-                    <p className="label-caps">Lärdomar</p>
-                    <p className="mt-4 text-lg leading-relaxed text-foreground/85">
-                      {project.lessons}
-                    </p>
-                  </Reveal>
-                )}
-              </div>
-
-              {/* Höger: meta */}
-              <aside className="space-y-8 md:sticky md:top-24 md:self-start">
-                <div>
-                  <p className="label-caps">Teknisk stack</p>
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {project.stack.map((tech) => (
-                      <li
-                        key={tech}
-                        className="rounded-full border border-border bg-card px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground"
-                      >
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {project.buildTime &&
-                  !project.results?.some(
-                    (r) => r.value.toLowerCase() === project.buildTime!.toLowerCase(),
-                  ) && (
-                    <div>
-                      <p className="label-caps">Leveranstid</p>
-                      <p
-                        className={cn(
-                          "mt-3 font-serif leading-tight",
-                          project.buildTime.length <= 6 ? "text-3xl" : "text-xl md:text-2xl",
-                        )}
-                      >
-                        {project.buildTime}
-                      </p>
-                    </div>
-                  )}
 
                 {project.results && project.results.length > 0 && (
-                  <div>
-                    <p className="label-caps">Resultat</p>
-                    <div className="mt-4 space-y-3">
-                      {project.results.map((r) => {
-                        // Skala typografi efter textlängd så långa strängar inte spränger boxen.
-                        const len = r.value.length;
-                        const valueClass =
-                          len <= 4
-                            ? "text-4xl md:text-5xl"
-                            : len <= 10
-                              ? "text-2xl md:text-3xl"
-                              : "text-xl md:text-2xl";
-                        return (
-                          <div
-                            key={r.label}
-                            className="rounded-2xl border border-border bg-card p-5"
-                          >
-                            <p
-                              className={cn(
-                                "font-serif leading-tight text-primary",
-                                valueClass,
-                              )}
-                            >
-                              {r.value}
-                            </p>
-                            <p className="mt-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                              {r.label}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </div>
+                  <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
+                    <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 10, textTransform: "lowercase" }}>resultat</p>
+                    {project.results.map((r) => (
+                      <div key={r.label} style={{ marginBottom: 10 }}>
+                        <p style={{ fontFamily: F, fontSize: r.value.length <= 6 ? 28 : 20, color: C, lineHeight: 1, fontStyle: "italic" }}>{r.value}</p>
+                        <p style={{ fontFamily: M, fontSize: 9, color: "rgba(237,233,220,0.30)", letterSpacing: "0.08em", marginTop: 3 }}>{r.label}</p>
+                      </div>
+                    ))}
                   </div>
                 )}
 
+                <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
+                  <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 10, textTransform: "lowercase" }}>teknisk stack</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                    {project.stack.map((t) => (
+                      <span key={t} style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.06em", color: "rgba(237,233,220,0.45)", border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 3, padding: "3px 7px" }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+
                 <div>
-                  <p className="label-caps">Live på</p>
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-3 inline-flex items-center gap-1.5 font-mono text-sm text-primary underline-offset-4 hover:underline"
-                  >
-                    {project.domain}
-                    <ArrowUpRight className="h-3.5 w-3.5" />
+                  <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 8, textTransform: "lowercase" }}>live på</p>
+                  <a href={project.url} target="_blank" rel="noreferrer"
+                    style={{ fontFamily: M, fontSize: 11, color: "rgba(237,233,220,0.55)", textDecoration: "none", transition: "color 0.15s" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = C)}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.55)")}>
+                    {project.domain} ↗
                   </a>
                 </div>
-              </aside>
-            </div>
+              </div>
+            </aside>
           </div>
         </section>
 
         {/* Related */}
         {related.length > 0 && (
-          <section className="border-t border-border py-20 md:py-28">
-            <div className="container mx-auto max-w-5xl px-6">
-              <Reveal>
-                <p className="label-caps">Andra projekt</p>
-                <h2 className="mt-3 font-serif text-3xl md:text-4xl">Mer arbete i samma anda</h2>
-              </Reveal>
-
-              <div className="mt-10 grid gap-5 md:grid-cols-3">
-                {related.map((r, i) => (
-                  <Reveal key={r.slug} delay={i * 0.06} y={16} duration={0.5}>
-                    <Link
-                      to={`/arbete/${r.slug}`}
-                      className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary hover:shadow-lg"
-                    >
-                      <span
-                        className={cn(
-                          "inline-flex w-fit items-center rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider",
-                          CATEGORY_BADGE[r.category],
-                        )}
-                      >
-                        {CATEGORY_LABEL[r.category]}
-                      </span>
-                      <h3 className="mt-4 font-serif text-2xl">{r.name}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">{r.tagline}</p>
-                      <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                        Läs caset
-                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                      </span>
-                    </Link>
-                  </Reveal>
+          <section style={{ borderTop: "0.5px solid rgba(237,233,220,0.10)", paddingBlock: "clamp(40px,6vw,64px)" }}>
+            <div className="wrap">
+              <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 24 }}>andra projekt</p>
+              <div style={{ display: "grid", gap: 10 }} className="sm:grid-cols-3">
+                {related.map((r) => (
+                  <Link key={r.slug} to={`/arbete/${r.slug}`}
+                    style={{ display: "flex", flexDirection: "column", padding: "20px", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6, textDecoration: "none", transition: "border-color 0.15s, background 0.15s" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(237,233,220,0.25)"; e.currentTarget.style.background = "rgba(237,233,220,0.025)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(237,233,220,0.10)"; e.currentTarget.style.background = "transparent"; }}
+                  >
+                    <span style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 8 }}>{CATEGORY_LABEL[r.category]}</span>
+                    <span style={{ fontFamily: F, fontSize: 18, color: C, lineHeight: 1.2, fontWeight: 400 }}>{r.name}</span>
+                    <span style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.40)", marginTop: 4 }}>{r.tagline}</span>
+                    <span style={{ marginTop: 16, fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.35)" }}>Läs caset ↗</span>
+                  </Link>
                 ))}
               </div>
             </div>
           </section>
         )}
 
-        <FinalCTASection />
+        {/* Footer CTA */}
+        <section style={{ borderTop: "0.5px solid rgba(237,233,220,0.10)", paddingBlock: "clamp(40px,6vw,64px)" }}>
+          <div className="wrap">
+            <p style={{ fontFamily: F, fontStyle: "italic", fontSize: "clamp(20px,2.8vw,28px)", color: C, marginBottom: 16 }}>
+              Vill ni ha ett liknande projekt byggt?
+            </p>
+            <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+          </div>
+        </section>
+
       </main>
-      <Footer />
-      <StickyMobileCTA />
+      <SiteFooter />
     </div>
   );
 };

@@ -107,7 +107,7 @@ const Process = () => {
           <Rule />
           <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
             <Label>vad ni får tillbaka</Label>
-            <h2 style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", color: "#EDE9DC", marginBottom: 32, letterSpacing: "-0.01em" }}>
+            <h2 style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", color: "#EDE9DC", marginBottom: 32, letterSpacing: "-0.01em" }}>
               Allt är ert. <em>Alltid.</em>
             </h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 0 }}>
@@ -143,7 +143,7 @@ const Process = () => {
           <Rule />
           <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
             <Label>redo?</Label>
-            <h2 style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: "clamp(24px,3.5vw,36px)", color: "#EDE9DC", marginBottom: 10, letterSpacing: "-0.015em" }}>
+            <h2 style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: "clamp(24px,3.5vw,36px)", color: "#EDE9DC", marginBottom: 10, letterSpacing: "-0.015em" }}>
               Starta med ett samtal.
             </h2>
             <p style={{ fontSize: 13, color: "rgba(237,233,220,0.45)", fontFamily: "'Inter',system-ui,sans-serif", marginBottom: 28, maxWidth: 380 }}>

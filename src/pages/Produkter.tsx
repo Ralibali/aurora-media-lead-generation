@@ -90,7 +90,7 @@ const Produkter = () => {
                     ))}
                   </div>
                   {p.highlight && (
-                    <p style={{ marginTop: 16, fontFamily: "'Instrument Serif',Georgia,serif", fontStyle: "italic", fontSize: 13, color: "rgba(237,233,220,0.50)" }}>
+                    <p style={{ marginTop: 16, fontFamily: "'Fraunces',Georgia,serif", fontStyle: "italic", fontSize: 13, color: "rgba(237,233,220,0.50)" }}>
                       "{p.highlight}"
                     </p>
                   )}
@@ -98,7 +98,7 @@ const Produkter = () => {
 
                 <div>
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 6, flexWrap: "wrap" }}>
-                    <h2 style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", color: "#EDE9DC", lineHeight: 1.15, letterSpacing: "-0.01em" }}>{p.name}</h2>
+                    <h2 style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: "clamp(22px,3vw,30px)", color: "#EDE9DC", lineHeight: 1.15, letterSpacing: "-0.01em" }}>{p.name}</h2>
                     <a href={`https://${p.url}`} target="_blank" rel="noopener noreferrer"
                       style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 11, color: "rgba(237,233,220,0.35)", textDecoration: "none", transition: "color 0.15s", whiteSpace: "nowrap", marginTop: 6 }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
@@ -118,7 +118,7 @@ const Produkter = () => {
           <Rule />
           <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
             <Label>vill ni ha er egen?</Label>
-            <h2 style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: "clamp(24px,3.5vw,36px)", color: "#EDE9DC", marginBottom: 10, letterSpacing: "-0.015em" }}>
+            <h2 style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: "clamp(24px,3.5vw,36px)", color: "#EDE9DC", marginBottom: 10, letterSpacing: "-0.015em" }}>
               Vi bygger samma sak åt er.
             </h2>
             <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif", marginBottom: 28 }}>Fast pris, veckor inte månader, kod ni äger.</p>

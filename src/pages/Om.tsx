@@ -60,7 +60,7 @@ const Om = () => {
               {/* card */}
               <div>
                 <div style={{ width: 72, height: 72, borderRadius: "50%", border: "0.5px solid rgba(237,233,220,0.18)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                  <span style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: 28, color: "#EDE9DC", fontStyle: "italic" }}>C</span>
+                  <span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 28, color: "#EDE9DC", fontStyle: "italic" }}>C</span>
                 </div>
                 <p style={{ fontSize: 14, fontWeight: 500, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif" }}>Christoffer Holstensson</p>
                 <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif", marginTop: 2 }}>Grundare och utvecklare</p>

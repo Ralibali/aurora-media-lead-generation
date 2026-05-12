@@ -111,7 +111,7 @@ const Kontakt = () => {
                 <a
                   href="mailto:info@auroramedia.se"
                   style={{
-                    fontFamily: "'Instrument Serif',Georgia,serif",
+                    fontFamily: "'Fraunces',Georgia,serif",
                     fontSize: "clamp(20px,3vw,28px)",
                     fontStyle: "italic",
                     color: "#EDE9DC",
@@ -153,7 +153,7 @@ const Kontakt = () => {
               {/* Right: form */}
               {done ? (
                 <div style={{ border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 8, padding: "clamp(32px,5vw,56px)", textAlign: "center" }}>
-                  <h2 style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: 28, color: "#EDE9DC", marginBottom: 12 }}>Tack!</h2>
+                  <h2 style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 28, color: "#EDE9DC", marginBottom: 12 }}>Tack!</h2>
                   <p style={{ fontSize: 13, color: "rgba(237,233,220,0.55)", fontFamily: "'Inter',system-ui,sans-serif", marginBottom: 24 }}>
                     Vi hör av oss inom 24 timmar.
                   </p>

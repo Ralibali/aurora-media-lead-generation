@@ -66,7 +66,7 @@
   }
 
   h1, h2, h3 {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-weight: 400;
     text-wrap: balance;
   }
@@ -118,7 +118,7 @@
 
   /* Type scale */
   .t-display {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(42px, 7vw, 80px);
     line-height: 1.01;
     letter-spacing: -0.025em;
@@ -126,7 +126,7 @@
   }
 
   .t-h1 {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(36px, 5.5vw, 56px);
     line-height: 1.04;
     letter-spacing: -0.02em;
@@ -134,7 +134,7 @@
   }
 
   .t-h2 {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(26px, 3.5vw, 36px);
     line-height: 1.1;
     letter-spacing: -0.015em;
@@ -142,7 +142,7 @@
   }
 
   .t-h3 {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(20px, 2.5vw, 26px);
     line-height: 1.2;
     letter-spacing: -0.01em;
@@ -179,7 +179,7 @@
   }
 
   .t-quote {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(22px, 3vw, 30px);
     line-height: 1.4;
     font-style: italic;
@@ -187,7 +187,7 @@
   }
 
   .t-stat {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: clamp(32px, 4vw, 44px);
     line-height: 1;
     font-weight: 400;
@@ -195,7 +195,7 @@
 
   /* Wordmark */
   .wordmark {
-    font-family: 'Instrument Serif', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
     font-size: 18px;
     font-weight: 400;
     letter-spacing: -0.02em;
