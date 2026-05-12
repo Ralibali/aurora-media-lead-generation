@@ -1,526 +1,489 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SiteFooter from "@/components/layout/SiteFooter";
-import { setSEOMeta, setJsonLd, setHreflang, organizationSchema, websiteSchema, serviceSchema } from "@/lib/seoHelpers";
+import {
+  setSEOMeta, setJsonLd, setHreflang,
+  organizationSchema, websiteSchema, serviceSchema,
+} from "@/lib/seoHelpers";
 
-// ─── Shared primitives ───────────────────────────────────────────────────────
+/* ── shared ──────────────────────────────────────────────────────────────── */
+const RULE = { height: "0.5px", background: "rgba(237,233,220,0.12)" } as const;
 
-const BORDER = "rgba(237, 233, 220, 0.15)";
+function Rule() { return <div style={RULE} />; }
 
-const Eyebrow = ({ children }: { children: React.ReactNode }) => (
-  <p className="eyebrow mb-3">{children}</p>
-);
+function Label({ children }: { children: React.ReactNode }) {
+  return (
+    <p style={{
+      fontFamily: "'JetBrains Mono',ui-monospace,monospace",
+      fontSize: 11, letterSpacing: "0.1em",
+      color: "rgba(237,233,220,0.40)",
+      marginBottom: 20,
+      textTransform: "lowercase",
+    }}>
+      {children}
+    </p>
+  );
+}
 
-const SectionBorder = () => (
-  <div style={{ height: "0.5px", backgroundColor: BORDER }} />
-);
+/* ── counter animation ───────────────────────────────────────────────────── */
+function useCountUp(target: number, duration = 1200) {
+  const [val, setVal] = useState(0);
+  const ref = useRef(false);
+  useEffect(() => {
+    if (ref.current) return;
+    ref.current = true;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      setVal(Math.round(t * target));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [target, duration]);
+  return val;
+}
 
-// ─── Section: Hero ───────────────────────────────────────────────────────────
+/* ── 01 HERO ─────────────────────────────────────────────────────────────── */
+function Hero() {
+  return (
+    <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+      <div className="wrap">
 
-const Hero = () => (
-  <section id="top" className="section-pad pt-[120px]">
-    <div className="site-container">
-      <p className="eyebrow mb-6">AI-byrå · Linköping · sedan 2021</p>
+        {/* eyebrow */}
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 8,
+          borderBottom: "0.5px solid rgba(237,233,220,0.15)",
+          paddingBottom: 10, marginBottom: 32,
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#EDE9DC", display: "block", flexShrink: 0 }} />
+          <span style={{
+            fontFamily: "'JetBrains Mono',ui-monospace,monospace",
+            fontSize: 11, letterSpacing: "0.1em",
+            color: "rgba(237,233,220,0.45)",
+          }}>
+            AI-byrå · Linköping · sedan 2021
+          </span>
+        </div>
 
-      <h1 className="hero-h1 text-cream max-w-[640px]">
-        Vi pratar inte AI.
-        <br />
-        Vi <em>bygger</em> med det.
-      </h1>
-
-      <p
-        className="mt-6 max-w-[480px] font-sans text-[14px] leading-relaxed"
-        style={{ color: "rgba(237, 233, 220, 0.65)" }}
-      >
-        Snabb SaaS för svenska företag. SaaS-produkter, MVP:er och interna system levererade
-        på veckor istället för månader. Från 14 900 kr.
-      </p>
-
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Link
-          to="/kontakt"
-          className="inline-flex items-center justify-center rounded-lg px-[18px] py-[10px] font-sans text-[13px] font-medium transition-opacity hover:opacity-85"
-          style={{ backgroundColor: "#EDE9DC", color: "#100F0D" }}
+        {/* headline */}
+        <h1
+          className="anim-fade-up t-display c-cream"
+          style={{ maxWidth: 780, marginBottom: 28 }}
         >
-          Begär offert →
-        </Link>
-        <Link
-          to="/kontakt"
-          className="inline-flex items-center justify-center rounded-lg border px-[18px] py-[10px] font-sans text-[13px] transition-all hover:opacity-85"
-          style={{
-            borderWidth: "0.5px",
-            borderColor: "rgba(237, 233, 220, 0.30)",
-            color: "#EDE9DC",
-          }}
-        >
-          Boka 30 min
-        </Link>
-      </div>
+          Vi pratar inte AI.
+          <br />
+          Vi <em>bygger</em> med det.
+        </h1>
 
-      {/* Client strip */}
-      <div
-        className="mt-12 border-y py-4"
-        style={{ borderColor: BORDER, borderWidth: "0.5px" }}
-      >
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span className="eyebrow mr-2">Bygger för</span>
-          <span className="font-serif text-[16px]" style={{ color: "rgba(237, 233, 220, 0.80)" }}>
-            åkerier · vårdkliniker · friskvårdsstudios ·{" "}
-            <em>m.fl. svenska tjänsteföretag</em>
+        {/* sub */}
+        <p
+          className="anim-fade-up anim-delay-1 t-body"
+          style={{ maxWidth: 480, color: "rgba(237,233,220,0.60)", marginBottom: 40 }}
+        >
+          SaaS-produkter, MVP:er och interna system levererade på veckor
+          istället för månader. Sex egna produkter i drift. Från 14 900 kr.
+        </p>
+
+        {/* ctas */}
+        <div className="anim-fade-up anim-delay-2" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+          <Link to="/process" className="btn-ghost">Hur vi jobbar</Link>
+        </div>
+
+        {/* client strip */}
+        <div style={{
+          marginTop: 64,
+          paddingTop: 24,
+          borderTop: "0.5px solid rgba(237,233,220,0.10)",
+          display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap",
+        }}>
+          <span style={{
+            fontFamily: "'JetBrains Mono',ui-monospace,monospace",
+            fontSize: 11, color: "rgba(237,233,220,0.35)", letterSpacing: "0.08em",
+          }}>
+            bygger för
+          </span>
+          <span style={{
+            fontFamily: "'Instrument Serif',Georgia,serif",
+            fontSize: "clamp(15px,2vw,18px)",
+            color: "rgba(237,233,220,0.65)",
+            fontStyle: "italic",
+          }}>
+            åkerier · vårdkliniker · friskvårdsstudios · m.fl. svenska tjänsteföretag
           </span>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+}
 
-// ─── Section 01: Egna produkter ──────────────────────────────────────────────
-
+/* ── 02 PRODUCTS ─────────────────────────────────────────────────────────── */
 const PRODUCTS = [
-  { num: "01", name: "Hönsgården", desc: "Skötsel av hönsflocken — mobilapp", meta: "honsgarden.se" },
-  { num: "02", name: "AgilityManager", desc: "Träningslogg och kursplaner för hundsporten", meta: "agilitymanager.se" },
-  { num: "03", name: "Aurora Transport", desc: "TMS för svenska åkerier — multi-tenant", meta: "auroratransport.se" },
-  { num: "04", name: "Updro", desc: "Marknadsplats för svenska byråer", meta: "updro.se" },
-  { num: "05", name: "Odlingsdagboken", desc: "Köksträdgården med AI-coach Gro", meta: "odlingsdagboken.com" },
-  { num: "06", name: "GoGlamping", desc: "Bokning och boende vid Göta kanal", meta: "goglamping.se" },
+  { name: "Hönsgården",     desc: "Mobilapp för hönshållning",               url: "honsgarden.se" },
+  { name: "AgilityManager", desc: "Träningslogg för hundsporten",             url: "agilitymanager.se" },
+  { name: "Aurora Transport",desc: "TMS för svenska åkerier",                 url: "auroratransport.se" },
+  { name: "Updro",          desc: "Marknadsplats för svenska byråer",         url: "updro.se" },
+  { name: "Odlingsdagboken",desc: "Köksträdgård med AI-coach Gro",            url: "odlingsdagboken.com" },
+  { name: "GoGlamping",     desc: "Bokning vid Göta kanal",                   url: "goglamping.se" },
 ];
 
-const Products = () => (
-  <section id="produkter" className="section-pad">
-    <SectionBorder />
-    <div className="site-container pt-14 sm:pt-14">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <Eyebrow>01 — Egna produkter</Eyebrow>
-          <h2 className="section-h2 text-cream">
-            Sex produkter. <em>I drift idag.</em>
-          </h2>
-        </div>
-        <p
-          className="hidden font-sans text-[13px] sm:block"
-          style={{ color: "rgba(237, 233, 220, 0.50)" }}
-        >
-          Inte case studies.
-        </p>
-      </div>
+function Products() {
+  return (
+    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
+      <Rule />
+      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
 
-      <div className="mt-8">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40, gap: 16, flexWrap: "wrap" }}>
+          <div>
+            <Label>01 — egna produkter</Label>
+            <h2 className="t-h2 c-cream">
+              Sex produkter. <em>I drift idag.</em>
+            </h2>
+          </div>
+          <p style={{ fontSize: 13, color: "rgba(237,233,220,0.35)", fontFamily: "'JetBrains Mono',ui-monospace,monospace" }}>
+            Inte case studies.
+          </p>
+        </div>
+
         {PRODUCTS.map((p, i) => (
-          <div
-            key={p.num}
-            className="grid items-center gap-4 py-4"
+          <a
+            key={p.name}
+            href={`https://${p.url}`}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              gridTemplateColumns: "32px 1fr 1fr auto",
-              borderBottom: i < PRODUCTS.length - 1 ? `0.5px solid ${BORDER}` : "none",
+              display: "grid",
+              gridTemplateColumns: "28px 1fr 1fr auto",
+              alignItems: "center",
+              gap: "12px 24px",
+              padding: "18px 0",
+              borderBottom: "0.5px solid rgba(237,233,220,0.08)",
+              textDecoration: "none",
+              transition: "background 0.15s",
+              marginInline: "-12px",
+              paddingInline: "12px",
+              borderRadius: 4,
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(237,233,220,0.03)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
           >
-            <span className="mono-accent" style={{ color: "rgba(237, 233, 220, 0.40)" }}>
-              {p.num}
+            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.30)" }}>
+              {String(i + 1).padStart(2, "0")}
             </span>
-            <span className="font-sans text-[14px] font-medium text-cream">{p.name}</span>
-            <span
-              className="hidden font-sans text-[13px] sm:block"
-              style={{ color: "rgba(237, 233, 220, 0.60)" }}
-            >
+            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 14, fontWeight: 500, color: "#EDE9DC" }}>
+              {p.name}
+            </span>
+            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 13, color: "rgba(237,233,220,0.50)" }} className="hidden sm:block">
               {p.desc}
             </span>
-            <a
-              href={`https://${p.meta}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mono-accent transition-opacity hover:opacity-70 whitespace-nowrap"
-              style={{ color: "rgba(237, 233, 220, 0.50)" }}
-            >
-              {p.meta} ↗
-            </a>
-          </div>
+            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 11, color: "rgba(237,233,220,0.35)", whiteSpace: "nowrap" }}>
+              {p.url} ↗
+            </span>
+          </a>
         ))}
+
+        <div style={{ marginTop: 32 }}>
+          <Link to="/produkter" style={{ fontSize: 13, color: "rgba(237,233,220,0.45)", fontFamily: "'Inter',system-ui,sans-serif", textDecoration: "none", transition: "color 0.15s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.45)")}>
+            Läs mer om produkterna →
+          </Link>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+}
 
-// ─── Testimonial ─────────────────────────────────────────────────────────────
-
-const Testimonial = () => (
-  <section className="section-pad">
-    <SectionBorder />
-    <div className="site-container pt-14">
-      <p className="eyebrow mb-6 text-center">Vad kunder säger</p>
-      <blockquote className="mx-auto max-w-[560px] text-center">
-        <p className="testimonial-text text-cream">
-          "Aurora levererade vårt TMS på fyra veckor — något två andra byråer sa var{" "}
-          <em>omöjligt</em>."
-        </p>
-        <footer className="mt-6">
-          <p className="font-sans text-[14px] text-cream-80">Daniel, CJ Bemanning AB</p>
-          <p className="mono-accent mt-1" style={{ color: "rgba(237, 233, 220, 0.30)" }}>
-            [platshållare — byts mot verifierat citat]
+/* ── 03 TESTIMONIAL ──────────────────────────────────────────────────────── */
+function Testimonial() {
+  return (
+    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
+      <Rule />
+      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
+        <div style={{ maxWidth: 680, marginInline: "auto", textAlign: "center" }}>
+          <p className="t-quote c-cream" style={{ marginBottom: 32 }}>
+            "Aurora levererade vårt TMS på fyra veckor — något två andra byråer sa var omöjligt."
           </p>
-        </footer>
-      </blockquote>
-    </div>
-  </section>
-);
+          <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif" }}>
+            Daniel, CJ Bemanning AB
+          </p>
+          <p style={{ marginTop: 6, fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.25)", letterSpacing: "0.06em" }}>
+            [verifieras innan launch]
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-// ─── Section 02: Tjänster ────────────────────────────────────────────────────
-
+/* ── 04 SERVICES ─────────────────────────────────────────────────────────── */
 const SERVICES = [
-  {
-    num: "01",
-    name: "SaaS-produkt",
-    price: "från 14 900 kr",
-    desc: "Från MVP till lansering. Auth, betalning, e-post och admin från dag ett.",
-  },
-  {
-    num: "02",
-    name: "Hemsida",
-    price: "pris på offert",
-    desc: "Modern, snabb och SEO-optimerad. CMS som ni faktiskt vill använda.",
-  },
-  {
-    num: "03",
-    name: "Internt system",
-    price: "pris på offert",
-    desc: "Admin-paneler, dashboards och flöden som ersätter era Excel-arkiv.",
-  },
-  {
-    num: "04",
-    name: "AI-integration",
-    price: "pris på offert",
-    desc: "Språkmodeller, agenter och automatiseringar in i era befintliga system.",
-  },
+  { num: "01", name: "SaaS-produkt",   price: "från 14 900 kr", desc: "Från MVP till lansering. Auth, betalning, e-post och admin från dag ett. Samma stack som våra egna produkter." },
+  { num: "02", name: "Hemsida",        price: "pris på offert", desc: "Modern, snabb och SEO-optimerad. CMS ni faktiskt vill använda. Byggt på grund ni äger." },
+  { num: "03", name: "Internt system", price: "pris på offert", desc: "Admin-paneler, dashboards och flöden som ersätter era Excel-ark." },
+  { num: "04", name: "AI-integration", price: "pris på offert", desc: "Språkmodeller, agenter och automatiseringar in i era befintliga system." },
 ];
 
-const Services = () => (
-  <section id="tjanster" className="section-pad">
-    <SectionBorder />
-    <div className="site-container pt-14">
-      <Eyebrow>02 — Tjänster</Eyebrow>
-      <h2 className="section-h2 text-cream">
-        Vi bygger fyra saker. <em>Snabbt.</em>
-      </h2>
-      <p
-        className="mt-3 max-w-[460px] font-sans text-[14px] leading-relaxed"
-        style={{ color: "rgba(237, 233, 220, 0.65)" }}
-      >
-        Samma metodik som på våra egna produkter — moderna AI-verktyg, fast pris och fast deadline.
-        Levereras på veckor.
-      </p>
+function Services() {
+  return (
+    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
+      <Rule />
+      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
 
-      <div
-        className="mt-8 grid grid-cols-1 sm:grid-cols-2"
-        style={{ border: `0.5px solid ${BORDER}` }}
-      >
-        {SERVICES.map((s, i) => (
-          <div
-            key={s.num}
-            className="p-6 transition-colors"
-            style={{
-              borderRight: i % 2 === 0 ? `0.5px solid ${BORDER}` : "none",
-              borderBottom: i < 2 ? `0.5px solid ${BORDER}` : "none",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "rgba(237, 233, 220, 0.03)")}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-          >
-            <div className="flex items-start justify-between">
-              <span className="mono-accent" style={{ color: "rgba(237, 233, 220, 0.40)" }}>
-                {s.num}
-              </span>
-              <span className="mono-accent" style={{ color: "rgba(237, 233, 220, 0.50)" }}>
-                {s.price}
-              </span>
-            </div>
-            <p className="mt-4 font-sans text-[15px] font-medium text-cream">{s.name}</p>
-            <p
-              className="mt-2 font-sans text-[13px] leading-relaxed"
-              style={{ color: "rgba(237, 233, 220, 0.60)" }}
-            >
-              {s.desc}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <div
-        className="mt-8 flex flex-col items-start justify-between gap-4 border-t pt-6 sm:flex-row sm:items-center"
-        style={{ borderColor: BORDER, borderWidth: "0.5px" }}
-      >
-        <div>
-          <p className="font-sans text-[14px] text-cream">Har ni en idé eller en process som suger?</p>
-          <p
-            className="mt-1 font-sans text-[13px]"
-            style={{ color: "rgba(237, 233, 220, 0.65)" }}
-          >
-            Skicka över den — vi återkommer med offert inom 24 timmar.
+        <div style={{ marginBottom: 40 }}>
+          <Label>02 — tjänster</Label>
+          <h2 className="t-h2 c-cream" style={{ marginBottom: 12 }}>
+            Vi bygger fyra saker. <em>Snabbt.</em>
+          </h2>
+          <p className="t-body" style={{ maxWidth: 460, color: "rgba(237,233,220,0.55)" }}>
+            Moderna AI-verktyg, fast pris, fast deadline. Levereras på veckor.
           </p>
         </div>
-        <Link
-          to="/kontakt"
-          className="shrink-0 inline-flex items-center rounded-lg px-[18px] py-[10px] font-sans text-[13px] font-medium transition-opacity hover:opacity-85"
-          style={{ backgroundColor: "#EDE9DC", color: "#100F0D" }}
-        >
-          Begär offert →
-        </Link>
-      </div>
-    </div>
-  </section>
-);
 
-// ─── Section 03: Process ─────────────────────────────────────────────────────
-
-const STEPS = [
-  {
-    num: "01",
-    name: "Samtal",
-    desc: "Ni berättar om problemet eller idén. Vi säger ja eller nej och varför.",
-    meta: "30 min",
-  },
-  {
-    num: "02",
-    name: "Offert",
-    desc: "Skriftligt förslag med fast pris, fast omfattning och fast deadline.",
-    meta: "inom 24h",
-  },
-  {
-    num: "03",
-    name: "Bygge",
-    desc: "Ni har tillgång till live-versionen från dag ett och kan följa varje deploy. Avstämning varje vecka.",
-    meta: "1–6 veckor",
-  },
-  {
-    num: "04",
-    name: "Lansering",
-    desc: "Domän, repo, dokumentation och drift överlämnas — eller så kör vi vidare på supportavtal.",
-    meta: "1 dag",
-  },
-];
-
-const Process = () => (
-  <section id="process" className="section-pad">
-    <SectionBorder />
-    <div className="site-container pt-14">
-      <Eyebrow>03 — Process</Eyebrow>
-      <h2 className="section-h2 text-cream">
-        Från första samtal till live <em>på fyra veckor.</em>
-      </h2>
-      <p
-        className="mt-3 max-w-[460px] font-sans text-[14px] leading-relaxed"
-        style={{ color: "rgba(237, 233, 220, 0.65)" }}
-      >
-        Vi använder moderna AI-verktyg som accelererar varje del av processen. Ni betalar för
-        bygget — inte för att vi lär oss nya ramverk för varje projekt.
-      </p>
-
-      <div className="mt-8">
-        {STEPS.map((s, i) => (
-          <div
-            key={s.num}
-            className="grid items-start gap-4 py-5"
-            style={{
-              gridTemplateColumns: "32px 1fr 1.5fr auto",
-              borderBottom: i < STEPS.length - 1 ? `0.5px solid ${BORDER}` : "none",
-            }}
-          >
-            <span className="mono-accent pt-0.5" style={{ color: "rgba(237, 233, 220, 0.40)" }}>
-              {s.num}
-            </span>
-            <span className="font-sans text-[14px] font-medium text-cream">{s.name}</span>
-            <span
-              className="hidden font-sans text-[13px] leading-relaxed sm:block"
-              style={{ color: "rgba(237, 233, 220, 0.60)" }}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+          border: "0.5px solid rgba(237,233,220,0.10)",
+          borderRadius: 8,
+          overflow: "hidden",
+        }}>
+          {SERVICES.map((s, i) => (
+            <div
+              key={s.num}
+              style={{
+                padding: "clamp(24px,3vw,36px)",
+                borderRight: i % 2 === 0 ? "0.5px solid rgba(237,233,220,0.10)" : "none",
+                borderBottom: i < 2 ? "0.5px solid rgba(237,233,220,0.10)" : "none",
+                transition: "background 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(237,233,220,0.025)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
-              {s.desc}
-            </span>
-            <span
-              className="mono-accent whitespace-nowrap text-right"
-              style={{ color: "rgba(237, 233, 220, 0.50)" }}
-            >
-              {s.meta}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-// ─── Section 04: Om aurora ───────────────────────────────────────────────────
-
-const About = () => (
-  <section id="om" className="section-pad">
-    <SectionBorder />
-    <div className="site-container pt-14">
-      <Eyebrow>04 — Om aurora</Eyebrow>
-      <h2 className="section-h2 text-cream">
-        Aurora är en person. <em>Det är en feature.</em>
-      </h2>
-
-      <div className="mt-8 grid gap-10 sm:grid-cols-[1fr_1.4fr]">
-        {/* Left */}
-        <div>
-          <div
-            className="mb-6 flex h-[72px] w-[72px] items-center justify-center rounded-full"
-            style={{ border: `0.5px solid ${BORDER}` }}
-          >
-            <span className="font-serif text-[28px] text-cream">C</span>
-          </div>
-          <p className="font-sans text-[14px] font-medium text-cream">Christoffer Holstensson</p>
-          <p
-            className="font-sans text-[13px]"
-            style={{ color: "rgba(237, 233, 220, 0.65)" }}
-          >
-            Grundare och utvecklare
-          </p>
-
-          <table className="mt-5 w-full">
-            <tbody>
-              {[
-                ["Bas", "Linköping"],
-                ["Sedan", "2021"],
-                ["Specialitet", "SaaS, AI, system"],
-                ["Egna produkter", "6 i drift"],
-              ].map(([k, v]) => (
-                <tr
-                  key={k}
-                  className="border-b"
-                  style={{ borderColor: BORDER, borderWidth: "0.5px" }}
-                >
-                  <td
-                    className="py-2 font-sans text-[12px]"
-                    style={{ color: "rgba(237, 233, 220, 0.50)" }}
-                  >
-                    {k}
-                  </td>
-                  <td className="py-2 font-sans text-[12px] text-right text-cream">{v}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="mt-5 flex gap-4">
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-[13px] transition-opacity hover:opacity-70"
-              style={{ color: "rgba(237, 233, 220, 0.65)" }}
-            >
-              LinkedIn ↗
-            </a>
-            <a
-              href="https://github.com/ralibali"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-[13px] transition-opacity hover:opacity-70"
-              style={{ color: "rgba(237, 233, 220, 0.65)" }}
-            >
-              GitHub: ralibali ↗
-            </a>
-          </div>
-        </div>
-
-        {/* Right */}
-        <div
-          className="space-y-4 font-sans text-[14px] leading-[1.7]"
-          style={{ color: "rgba(237, 233, 220, 0.80)" }}
-        >
-          <p>
-            De flesta byråer skickar runt projekt mellan projektledare, designers, utvecklare och
-            konsulter. Något försvinner i varje överlämning.
-          </p>
-          <p>
-            Aurora Media är annorlunda byggt: en person bygger hela vägen, från första skissen till
-            driftsatt produkt. Det är därför vi kan leverera på veckor istället för månader — och
-            det är därför ni alltid pratar med personen som faktiskt kodar.
-          </p>
-          <p>
-            När projektet växer förbi vad en person rimligen klarar säger vi det rakt ut. Då tar vi
-            in externa specialister med ert godkännande — eller så hänvisar vi vidare.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-// ─── Stats strip ─────────────────────────────────────────────────────────────
-
-const STATS = [
-  { num: "6", label: "Egna SaaS i drift" },
-  { num: "4 år", label: "Aktiv verksamhet sedan 2021" },
-  { num: "EU", label: "All data stannar inom EU, GDPR-anpassat" },
-  { num: "100%", label: "Källkod och drift går till er" },
-];
-
-const StatsStrip = () => (
-  <section className="section-pad">
-    <div
-      className="border-y"
-      style={{ borderColor: BORDER, borderWidth: "0.5px" }}
-    >
-      <div className="site-container py-10">
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
-          {STATS.map((s) => (
-            <div key={s.num}>
-              <p className="stat-numeral text-cream">{s.num}</p>
-              <p
-                className="mt-1 font-sans text-[11px] leading-[1.4]"
-                style={{ color: "rgba(237, 233, 220, 0.55)" }}
-              >
-                {s.label}
-              </p>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
+                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.30)", letterSpacing: "0.06em" }}>{s.num}</span>
+                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.40)", letterSpacing: "0.04em" }}>{s.price}</span>
+              </div>
+              <p style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: 20, color: "#EDE9DC", marginBottom: 10, lineHeight: 1.2 }}>{s.name}</p>
+              <p style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 13, color: "rgba(237,233,220,0.55)", lineHeight: 1.65 }}>{s.desc}</p>
             </div>
           ))}
         </div>
+
+        {/* inline CTA */}
+        <div style={{
+          marginTop: 32, padding: "24px 28px",
+          border: "0.5px solid rgba(237,233,220,0.10)",
+          borderRadius: 8,
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          gap: 20, flexWrap: "wrap",
+          background: "rgba(237,233,220,0.02)",
+        }}>
+          <div>
+            <p style={{ fontSize: 14, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif", fontWeight: 500, marginBottom: 4 }}>
+              Har ni en idé eller en process som suger?
+            </p>
+            <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif" }}>
+              Vi återkommer med offert inom 24 timmar.
+            </p>
+          </div>
+          <Link to="/kontakt" className="btn-primary" style={{ flexShrink: 0 }}>Begär offert →</Link>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+}
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+/* ── 05 PROCESS ──────────────────────────────────────────────────────────── */
+const STEPS = [
+  { n: "01", name: "Samtal",    t: "30 min",    desc: "Ni berättar. Vi säger ja eller nej och varför." },
+  { n: "02", name: "Offert",    t: "< 24h",     desc: "Fast pris, fast scope, fast deadline — skriftligt." },
+  { n: "03", name: "Bygge",     t: "1–6 veckor",desc: "Live-version från dag ett. Veckovisa stämningar." },
+  { n: "04", name: "Lansering", t: "1 dag",     desc: "Repo, domän, docs överlämnas. Allt är ert." },
+];
 
+function ProcessSection() {
+  return (
+    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
+      <Rule />
+      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
+
+        <Label>03 — process</Label>
+        <h2 className="t-h2 c-cream" style={{ marginBottom: 12 }}>
+          Från samtal till live <em>på fyra veckor.</em>
+        </h2>
+        <p className="t-body" style={{ maxWidth: 460, color: "rgba(237,233,220,0.55)", marginBottom: 40 }}>
+          Ni betalar för bygget — inte för att vi lär oss nya ramverk.
+        </p>
+
+        {STEPS.map((s, i) => (
+          <div
+            key={s.n}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "28px 160px 1fr auto",
+              alignItems: "start",
+              gap: "8px 28px",
+              padding: "22px 0",
+              borderBottom: "0.5px solid rgba(237,233,220,0.08)",
+            }}
+          >
+            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.28)", paddingTop: 2 }}>{s.n}</span>
+            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 14, fontWeight: 500, color: "#EDE9DC" }}>{s.name}</span>
+            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 13, color: "rgba(237,233,220,0.50)", lineHeight: 1.6 }} className="hidden sm:block">{s.desc}</span>
+            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 11, color: "rgba(237,233,220,0.35)", whiteSpace: "nowrap", textAlign: "right" }}>{s.t}</span>
+          </div>
+        ))}
+
+        <div style={{ marginTop: 32 }}>
+          <Link to="/process" style={{ fontSize: 13, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif", textDecoration: "none", transition: "color 0.15s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
+            Djupare om processen →
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── 06 ABOUT ────────────────────────────────────────────────────────────── */
+function About() {
+  return (
+    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
+      <Rule />
+      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
+        <Label>04 — om aurora</Label>
+        <h2 className="t-h2 c-cream" style={{ marginBottom: 40 }}>
+          Aurora är en person. <em>Det är en feature.</em>
+        </h2>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px,5vw,64px)" }}
+          className="sm:grid-cols-[240px_1fr]">
+
+          {/* card */}
+          <div>
+            <div style={{
+              width: 72, height: 72, borderRadius: "50%",
+              border: "0.5px solid rgba(237,233,220,0.18)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              marginBottom: 16,
+            }}>
+              <span style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: 28, color: "#EDE9DC", fontStyle: "italic" }}>C</span>
+            </div>
+
+            <p style={{ fontSize: 14, fontWeight: 500, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif" }}>Christoffer Holstensson</p>
+            <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif", marginTop: 2 }}>Grundare och utvecklare</p>
+
+            <table style={{ marginTop: 20, width: "100%", borderCollapse: "collapse" }}>
+              {[["Bas","Linköping"],["Sedan","2021"],["Produkter","6 i drift"],["Specialitet","SaaS, AI, system"]].map(([k,v]) => (
+                <tr key={k} style={{ borderBottom: "0.5px solid rgba(237,233,220,0.08)" }}>
+                  <td style={{ padding: "8px 0", fontSize: 12, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif" }}>{k}</td>
+                  <td style={{ padding: "8px 0", fontSize: 12, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif", textAlign: "right" }}>{v}</td>
+                </tr>
+              ))}
+            </table>
+
+            <div style={{ display: "flex", gap: 16, marginTop: 20 }}>
+              {[
+                ["LinkedIn ↗", "https://linkedin.com"],
+                ["GitHub ↗", "https://github.com/ralibali"],
+              ].map(([label, href]) => (
+                <a key={label as string} href={href as string} target="_blank" rel="noopener noreferrer"
+                  style={{ fontSize: 13, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif", textDecoration: "none", transition: "color 0.15s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
+                  {label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* prose */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {[
+              "De flesta byråer skickar runt projekt mellan projektledare, designers, utvecklare och konsulter. Något försvinner i varje överlämning.",
+              "Aurora Media är annorlunda byggt: en person bygger hela vägen, från första skissen till driftsatt produkt. Det är därför vi kan leverera på veckor istället för månader — och det är därför ni alltid pratar med personen som faktiskt kodar.",
+              "När projektet växer förbi vad en person rimligen klarar säger vi det rakt ut. Då tar vi in externa specialister med ert godkännande — eller så hänvisar vi vidare.",
+            ].map((p, i) => (
+              <p key={i} style={{ fontSize: 14, lineHeight: 1.8, color: i === 0 ? "rgba(237,233,220,0.70)" : i === 1 ? "rgba(237,233,220,0.80)" : "rgba(237,233,220,0.55)", fontFamily: "'Inter',system-ui,sans-serif" }}>
+                {p}
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── 07 STATS ────────────────────────────────────────────────────────────── */
+const STATS = [
+  { val: 6,    suffix: "",    label: "Egna SaaS i drift" },
+  { val: 4,    suffix: " år", label: "Aktiv verksamhet" },
+  { val: 100,  suffix: "%",   label: "Källkod och drift överlämnas" },
+  { val: 24,   suffix: "h",   label: "Svarstid på offert" },
+];
+
+function StatNum({ val, suffix }: { val: number; suffix: string }) {
+  const n = useCountUp(val);
+  return (
+    <span style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontSize: "clamp(36px,5vw,52px)", lineHeight: 1, color: "#EDE9DC", fontWeight: 400 }}>
+      {n}{suffix}
+    </span>
+  );
+}
+
+function Stats() {
+  return (
+    <section style={{ paddingBlock: 0 }}>
+      <div style={{ borderBlock: "0.5px solid rgba(237,233,220,0.10)" }}>
+        <div className="wrap" style={{ paddingBlock: "clamp(40px,6vw,64px)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "40px 32px" }}>
+            {STATS.map((s) => (
+              <div key={s.label}>
+                <StatNum val={s.val} suffix={s.suffix} />
+                <p style={{ marginTop: 8, fontSize: 12, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif", lineHeight: 1.5 }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── PAGE ────────────────────────────────────────────────────────────────── */
 const Index = () => {
   useEffect(() => {
     setSEOMeta({
       title: "Aurora Media — AI-byrå i Linköping | SaaS, MVP och interna system",
-      description:
-        "Vi pratar inte AI. Vi bygger med det. SaaS-produkter, MVP:er och interna system levererade på veckor istället för månader. Från 14 900 kr.",
-      canonical: "/",
-      ogImage: "/og-image-sv.jpg",
-      ogType: "website",
-      ogLocale: "sv_SE",
-      keywords:
-        "AI-byrå, SaaS-utveckling, MVP, interna system, Linköping, Aurora Media, AI-integration",
+      description: "Vi pratar inte AI. Vi bygger med det. SaaS-produkter, MVP:er och interna system levererade på veckor. Från 14 900 kr.",
+      canonical: "/", ogImage: "/og-image-sv.jpg", ogType: "website", ogLocale: "sv_SE",
+      keywords: "AI-byrå, SaaS-utveckling, MVP, interna system, Linköping, Aurora Media",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
     setJsonLd("website-jsonld", websiteSchema);
     setJsonLd("service-jsonld", serviceSchema);
-
-    const themeMeta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    const prev = themeMeta?.getAttribute("content") ?? null;
-    if (themeMeta) themeMeta.setAttribute("content", "#100F0D");
-    return () => {
-      if (prev !== null && themeMeta) themeMeta.setAttribute("content", prev);
-    };
+    const m = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    const prev = m?.getAttribute("content") ?? null;
+    if (m) m.setAttribute("content", "#100F0D");
+    return () => { if (prev && m) m.setAttribute("content", prev); };
   }, []);
 
   return (
     <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">
-        Hoppa till innehåll
-      </a>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
       <SiteHeader />
       <main id="main">
         <Hero />
         <Products />
         <Testimonial />
         <Services />
-        <Process />
+        <ProcessSection />
         <About />
-        <StatsStrip />
+        <Stats />
       </main>
       <SiteFooter />
     </div>

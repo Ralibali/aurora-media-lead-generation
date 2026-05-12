@@ -20,34 +20,35 @@ const NotFound = () => {
       <SiteHeader />
       <main
         id="main"
-        className="flex min-h-screen flex-col items-center justify-center px-5 text-center"
-        style={{ paddingTop: "80px" }}
+        style={{
+          display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          minHeight: "100vh", textAlign: "center",
+          padding: "clamp(100px,14vw,160px) clamp(20px,4vw,48px) 60px",
+        }}
       >
-        <p
-          className="font-serif leading-none"
-          style={{ fontSize: "80px", color: "#EDE9DC" }}
-        >
+        <p style={{
+          fontFamily: "'Instrument Serif',Georgia,serif",
+          fontSize: "clamp(80px,14vw,140px)",
+          lineHeight: 1,
+          color: "#EDE9DC",
+          letterSpacing: "-0.04em",
+          marginBottom: 20,
+        }}>
           404.
         </p>
-        <p
-          className="mt-5 font-sans text-[16px] leading-relaxed max-w-[360px]"
-          style={{ color: "rgba(237, 233, 220, 0.65)" }}
-        >
+        <p style={{
+          fontFamily: "'Inter',system-ui,sans-serif",
+          fontSize: 15, lineHeight: 1.6,
+          color: "rgba(237,233,220,0.55)",
+          maxWidth: 340, marginBottom: 40,
+        }}>
           Sidan finns inte.{" "}
-          <em
-            className="font-serif"
-            style={{ color: "rgba(237, 233, 220, 0.80)" }}
-          >
+          <em style={{ fontFamily: "'Instrument Serif',Georgia,serif", fontStyle: "italic", color: "rgba(237,233,220,0.75)" }}>
             Eller så har vi inte byggt den än.
           </em>
         </p>
-        <Link
-          to="/"
-          className="mt-8 inline-flex items-center rounded-lg px-[18px] py-[10px] font-sans text-[13px] font-medium transition-opacity hover:opacity-85"
-          style={{ backgroundColor: "#EDE9DC", color: "#100F0D" }}
-        >
-          Tillbaka till start →
-        </Link>
+        <Link to="/" className="btn-primary">Tillbaka till start →</Link>
       </main>
     </div>
   );

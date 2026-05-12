@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
 
 const NAV = [
   { label: "Arbete", href: "/arbete" },
   { label: "Produkter", href: "/produkter" },
   { label: "Tjänster", href: "/tjanster" },
-  { label: "Kontakt", href: "/kontakt" },
+  { label: "Process", href: "/process" },
+  { label: "Om", href: "/om" },
 ];
 
 const SiteHeader = () => {
@@ -15,10 +15,10 @@ const SiteHeader = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 20);
+    fn();
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
   useEffect(() => {
@@ -26,143 +26,146 @@ const SiteHeader = () => {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
+  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
   return (
     <>
       <header
-        className="fixed inset-x-0 top-0 z-50 transition-all duration-300"
         style={{
-          backgroundColor: scrolled ? "rgba(16, 15, 13, 0.92)" : "transparent",
-          backdropFilter: scrolled ? "blur(16px)" : "none",
-          borderBottom: scrolled ? "0.5px solid rgba(237, 233, 220, 0.12)" : "0.5px solid transparent",
+          position: "fixed",
+          inset: "0 0 auto 0",
+          zIndex: 100,
+          transition: "background 0.3s ease, border-color 0.3s ease",
+          backgroundColor: scrolled ? "rgba(16,15,13,0.92)" : "transparent",
+          backdropFilter: scrolled ? "blur(20px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
+          borderBottom: `0.5px solid ${scrolled ? "rgba(237,233,220,0.10)" : "transparent"}`,
         }}
       >
-        <div className="site-container">
-          <div className="flex h-[60px] items-center justify-between">
-            {/* Wordmark */}
-            <Link
-              to="/"
-              aria-label="Aurora Media AB – startsida"
-              className="font-sans text-[17px] font-medium tracking-[-0.02em] text-cream transition-opacity hover:opacity-70"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              aurora.
-            </Link>
+        <div className="wrap" style={{ display: "flex", alignItems: "center", height: 64, gap: 40 }}>
 
-            {/* Desktop nav */}
-            <nav aria-label="Huvudnavigation" className="hidden items-center gap-7 md:flex">
-              {NAV.map((n) => (
-                <Link
-                  key={n.href}
-                  to={n.href}
-                  aria-label={n.label}
-                  className="font-sans text-[13px] transition-colors"
-                  style={{ color: "rgba(237, 233, 220, 0.65)" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237, 233, 220, 0.65)")}
-                >
-                  {n.label}
-                </Link>
-              ))}
-            </nav>
+          {/* Wordmark */}
+          <Link to="/" aria-label="Aurora Media — startsida" className="wordmark" style={{ flexShrink: 0 }}>
+            aurora.
+          </Link>
 
-            {/* CTA pill */}
-            <Link
-              to="/kontakt"
-              className="hidden items-center rounded-lg border px-3.5 py-1.5 font-sans text-[12px] transition-all md:flex"
-              style={{
-                borderWidth: "0.5px",
-                borderColor: "rgba(237, 233, 220, 0.30)",
-                color: "#EDE9DC",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(237, 233, 220, 0.60)";
-                e.currentTarget.style.backgroundColor = "rgba(237, 233, 220, 0.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(237, 233, 220, 0.30)";
-                e.currentTarget.style.backgroundColor = "transparent";
-              }}
-            >
-              Begär offert
-            </Link>
-
-            {/* Mobile hamburger */}
-            <button
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label={mobileOpen ? "Stäng meny" : "Öppna meny"}
-              className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 md:hidden"
-            >
-              <span
-                className="block h-px w-5 bg-cream transition-all duration-200"
-                style={{ transform: mobileOpen ? "translateY(3px) rotate(45deg)" : "none" }}
-              />
-              <span
-                className="block h-px w-5 bg-cream transition-all duration-200"
+          {/* Desktop nav */}
+          <nav
+            aria-label="Huvudnavigation"
+            style={{ display: "flex", alignItems: "center", gap: 28, marginLeft: "auto" }}
+            className="hidden md:flex"
+          >
+            {NAV.map((n) => (
+              <Link
+                key={n.href}
+                to={n.href}
                 style={{
-                  opacity: mobileOpen ? 0 : 1,
-                  transform: mobileOpen ? "scaleX(0)" : "none",
+                  fontFamily: "'Inter', system-ui, sans-serif",
+                  fontSize: 13,
+                  fontWeight: 400,
+                  color: location.pathname === n.href ? "#EDE9DC" : "rgba(237,233,220,0.55)",
+                  textDecoration: "none",
+                  transition: "color 0.15s",
+                  letterSpacing: "0.01em",
                 }}
-              />
-              <span
-                className="block h-px w-5 bg-cream transition-all duration-200"
-                style={{ transform: mobileOpen ? "translateY(-3px) rotate(-45deg)" : "none" }}
-              />
-            </button>
-          </div>
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = location.pathname === n.href ? "#EDE9DC" : "rgba(237,233,220,0.55)")}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* CTA */}
+          <Link
+            to="/kontakt"
+            className="btn-nav hidden md:inline-flex"
+            style={{ marginLeft: 8 }}
+          >
+            Begär offert
+          </Link>
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label={mobileOpen ? "Stäng meny" : "Öppna meny"}
+            style={{
+              marginLeft: "auto",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 8,
+              display: "flex",
+              flexDirection: "column",
+              gap: 5,
+              alignItems: "flex-end",
+            }}
+            className="md:hidden"
+          >
+            <span style={{
+              display: "block", height: 1, width: 22, background: "#EDE9DC",
+              transformOrigin: "center",
+              transition: "transform 0.2s, opacity 0.2s",
+              transform: mobileOpen ? "translateY(6px) rotate(45deg)" : "none",
+            }} />
+            <span style={{
+              display: "block", height: 1, width: 16, background: "#EDE9DC",
+              transition: "opacity 0.15s, width 0.15s",
+              opacity: mobileOpen ? 0 : 1,
+            }} />
+            <span style={{
+              display: "block", height: 1, width: 22, background: "#EDE9DC",
+              transformOrigin: "center",
+              transition: "transform 0.2s, opacity 0.2s",
+              transform: mobileOpen ? "translateY(-6px) rotate(-45deg)" : "none",
+            }} />
+          </button>
         </div>
       </header>
 
-      {/* Mobile overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 flex flex-col px-5 pt-20 pb-10 md:hidden"
-            style={{ backgroundColor: "#100F0D" }}
-          >
-            <nav aria-label="Mobilnavigation" className="flex flex-col">
-              {NAV.map((n, i) => (
-                <motion.div
-                  key={n.href}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 + i * 0.05 }}
-                >
-                  <Link
-                    to={n.href}
-                    className="block border-b py-5 font-serif text-[32px] text-cream"
-                    style={{ borderColor: "rgba(237, 233, 220, 0.12)" }}
-                  >
-                    {n.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </nav>
-
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-10"
-            >
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div
+          style={{
+            position: "fixed", inset: 0, zIndex: 90,
+            backgroundColor: "#100F0D",
+            display: "flex", flexDirection: "column",
+            paddingTop: 80, paddingBottom: 40,
+            paddingInline: "clamp(20px, 4vw, 48px)",
+          }}
+          className="md:hidden"
+        >
+          <nav style={{ flex: 1 }}>
+            {NAV.map((n, i) => (
               <Link
-                to="/kontakt"
-                className="inline-flex rounded-lg border px-5 py-3 font-sans text-[13px] font-medium text-cream"
-                style={{ borderWidth: "0.5px", borderColor: "rgba(237, 233, 220, 0.30)" }}
+                key={n.href}
+                to={n.href}
+                style={{
+                  display: "block",
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontSize: "clamp(28px, 6vw, 40px)",
+                  fontWeight: 400,
+                  color: "#EDE9DC",
+                  textDecoration: "none",
+                  padding: "14px 0",
+                  borderBottom: "0.5px solid rgba(237,233,220,0.10)",
+                  animation: `fadeUp 0.4s cubic-bezier(0.16,1,0.3,1) ${0.05 + i * 0.05}s both`,
+                }}
               >
-                Begär offert →
+                {n.label}
               </Link>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            ))}
+          </nav>
+
+          <Link
+            to="/kontakt"
+            className="btn-primary"
+            style={{ marginTop: 32, alignSelf: "flex-start" }}
+          >
+            Begär offert →
+          </Link>
+        </div>
+      )}
     </>
   );
 };
