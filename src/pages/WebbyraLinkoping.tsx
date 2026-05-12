@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CTABanner from "@/components/CTABanner";
-import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
@@ -129,12 +128,6 @@ const WebbyraLinkoping = () => {
         <FAQSection items={lokalaFaqs} title="Vanliga frågor om webbyrå i Linköping" />
         <CTABanner />
       </main>
-      <StickyMobileCTABar
-        primaryLabel="Få gratis offert på hemsida"
-        primaryOnClick={() => open("Hemsida")}
-        secondaryLabel="Se priser"
-        secondaryTo="/priser"
-      />
       <Footer />
     </div>
   );

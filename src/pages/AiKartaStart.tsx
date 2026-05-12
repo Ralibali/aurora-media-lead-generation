@@ -36,7 +36,7 @@ const Step1Schema = z.object({
   email: z.string().trim().email("Ogiltig e-postadress").max(160),
 });
 
-const STEPS = ["Tidstjuvar", "Processer", "Kontakt & resultat"];
+const STEPS = ["Kontakt", "Tidstjuvar", "Processer", "Sammanfattning"];
 
 const stepCardClass =
   "rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]";
@@ -129,11 +129,23 @@ const AiKartaStart = () => {
 
   const validateStep = (current: number): boolean => {
     setErrors({});
-    if (current === 1 && form.pain_areas.length === 0) {
+    if (current === 1) {
+      const parsed = Step1Schema.safeParse(form);
+      if (!parsed.success) {
+        const fe: Record<string, string> = {};
+        for (const issue of parsed.error.issues) {
+          const k = issue.path[0]?.toString() ?? "form";
+          if (!fe[k]) fe[k] = issue.message;
+        }
+        setErrors(fe);
+        return false;
+      }
+    }
+    if (current === 2 && form.pain_areas.length === 0) {
       setErrors({ pain_areas: "Välj minst ett område." });
       return false;
     }
-    if (current === 2) {
+    if (current === 3) {
       const fe: Record<string, string> = {};
       form.processes.forEach((p, i) => {
         if (!p.process_name.trim()) fe[`p_${i}_name`] = "Ange processnamn";
@@ -149,21 +161,9 @@ const AiKartaStart = () => {
         return false;
       }
     }
-    if (current === 3) {
-      const parsed = Step1Schema.safeParse(form);
-      if (!parsed.success) {
-        const fe: Record<string, string> = {};
-        for (const issue of parsed.error.issues) {
-          const k = issue.path[0]?.toString() ?? "form";
-          if (!fe[k]) fe[k] = issue.message;
-        }
-        setErrors(fe);
-        return false;
-      }
-      if (!form.consent) {
-        setErrors((prev) => ({ ...prev, consent: "Du måste godkänna behandlingen av dina uppgifter." }));
-        return false;
-      }
+    if (current === 4 && !form.consent) {
+      setErrors({ consent: "Du måste godkänna behandlingen av dina uppgifter." });
+      return false;
     }
     return true;
   };
@@ -179,7 +179,7 @@ const AiKartaStart = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(3)) return;
+    if (!validateStep(4)) return;
     setSubmitting(true);
     try {
       const { data, error } = await supabase.functions.invoke("submit-ai-map", {
@@ -224,14 +224,16 @@ const AiKartaStart = () => {
             <Reveal>
               <p className="label-caps">AI-kartan · steg {step} av {STEPS.length}</p>
               <h1 className="mt-4 font-display text-[clamp(2.4rem,5.2vw,4rem)] font-bold leading-[0.95] tracking-tight">
-                {step === 1 && "Var sitter era största tidstjuvar?"}
-                {step === 2 && "Lägg till 1–5 processer"}
-                {step === 3 && "Vart ska vi skicka analysen?"}
+                {step === 1 && "Berätta lite om er"}
+                {step === 2 && "Var sitter era största tidstjuvar?"}
+                {step === 3 && "Lägg till 1–5 processer"}
+                {step === 4 && "Kontrollera och skicka in"}
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
-                {step === 1 && "Markera de områden där ni lägger mest manuell tid i dag."}
-                {step === 2 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
-                {step === 3 && "Sista steget. Era svar är klara – fyll i kontaktuppgifter så får ni mini-analysen direkt på skärmen."}
+                {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
+                {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
+                {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
+                {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
               </p>
             </Reveal>
 
@@ -275,6 +277,54 @@ const AiKartaStart = () => {
                 </div>
 
                 {step === 1 && (
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <Field label="Företagsnamn" error={errors.company_name} required>
+                      <Input
+                        value={form.company_name}
+                        onChange={(e) => update("company_name", e.target.value)}
+                        className="rounded-full h-12 text-base"
+                      />
+                    </Field>
+                    <Field label="Bransch" error={errors.industry} required>
+                      <Input
+                        value={form.industry}
+                        onChange={(e) => update("industry", e.target.value)}
+                        className="rounded-full h-12 text-base"
+                        placeholder="t.ex. e-handel, bygg, konsult"
+                      />
+                    </Field>
+                    <Field label="Antal anställda" error={errors.employee_count} required full>
+                      <div className="flex flex-wrap gap-2.5">
+                        {EMPLOYEE_OPTIONS.map((opt) => (
+                          <ChoicePill
+                            key={opt}
+                            active={form.employee_count === opt}
+                            onClick={() => update("employee_count", opt)}
+                          >
+                            {opt}
+                          </ChoicePill>
+                        ))}
+                      </div>
+                    </Field>
+                    <Field label="Kontaktperson" error={errors.contact_name} required>
+                      <Input
+                        value={form.contact_name}
+                        onChange={(e) => update("contact_name", e.target.value)}
+                        className="rounded-full h-12 text-base"
+                      />
+                    </Field>
+                    <Field label="E-post" error={errors.email} required>
+                      <Input
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => update("email", e.target.value)}
+                        className="rounded-full h-12 text-base"
+                      />
+                    </Field>
+                  </div>
+                )}
+
+                {step === 2 && (
                   <div
                     className={
                       errors.pain_areas
@@ -299,7 +349,7 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 2 && (
+                {step === 3 && (
                   <div className="space-y-5">
                     {form.processes.map((p, idx) => (
                       <div
@@ -389,60 +439,25 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 3 && (
-                  <div className="space-y-6">
-                    <div className="rounded-2xl border border-primary/25 bg-primary/[0.06] p-4 text-sm leading-relaxed text-foreground/90">
-                      <p className="font-semibold text-primary">Klart! Era svar är registrerade.</p>
-                      <p className="mt-1 text-muted-foreground">
-                        Fyll i kontaktuppgifter nedan så genererar vi er personliga AI-analys direkt –
-                        ni får både resultatet på skärmen och PDF:en på mejlen.
-                      </p>
-                    </div>
-
-                    <div className="grid gap-5 sm:grid-cols-2">
-                      <Field label="Företagsnamn" error={errors.company_name} required>
-                        <Input
-                          value={form.company_name}
-                          onChange={(e) => update("company_name", e.target.value)}
-                          className="rounded-full h-12 text-base"
-                        />
-                      </Field>
-                      <Field label="Bransch" error={errors.industry} required>
-                        <Input
-                          value={form.industry}
-                          onChange={(e) => update("industry", e.target.value)}
-                          className="rounded-full h-12 text-base"
-                          placeholder="t.ex. e-handel, bygg, konsult"
-                        />
-                      </Field>
-                      <Field label="Antal anställda" error={errors.employee_count} required full>
-                        <div className="flex flex-wrap gap-2.5">
-                          {EMPLOYEE_OPTIONS.map((opt) => (
-                            <ChoicePill
-                              key={opt}
-                              active={form.employee_count === opt}
-                              onClick={() => update("employee_count", opt)}
-                            >
-                              {opt}
-                            </ChoicePill>
-                          ))}
-                        </div>
-                      </Field>
-                      <Field label="Kontaktperson" error={errors.contact_name} required>
-                        <Input
-                          value={form.contact_name}
-                          onChange={(e) => update("contact_name", e.target.value)}
-                          className="rounded-full h-12 text-base"
-                        />
-                      </Field>
-                      <Field label="E-post" error={errors.email} required>
-                        <Input
-                          type="email"
-                          value={form.email}
-                          onChange={(e) => update("email", e.target.value)}
-                          className="rounded-full h-12 text-base"
-                        />
-                      </Field>
+                {step === 4 && (
+                  <div className="space-y-5">
+                    <SummaryRow label="Företag" value={`${form.company_name} · ${form.industry} · ${form.employee_count} anställda`} />
+                    <SummaryRow label="Kontakt" value={`${form.contact_name} · ${form.email}`} />
+                    <SummaryRow label="Tidstjuvar" value={form.pain_areas.join(", ") || "—"} />
+                    <div>
+                      <p className="label-caps">Processer</p>
+                      <ul className="mt-3 space-y-2 text-sm">
+                        {form.processes.map((p, i) => (
+                          <li key={i} className="rounded-xl border border-white/10 bg-background/30 p-3">
+                            <span className="font-semibold text-foreground">{i + 1}. {p.process_name || "—"}</span>
+                            <br />
+                            <span className="text-xs text-muted-foreground">
+                              {p.frequency && FREQ_LABELS[p.frequency]} · {p.weekly_time && TIME_LABELS[p.weekly_time]} ·
+                              {" "}affärsnytta {p.business_value && VALUE_LABELS[p.business_value].toLowerCase()}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
 
                     <div

@@ -8,7 +8,6 @@ import AuroraIntegrations from "@/components/landing/AuroraIntegrations";
 import AuroraProcess from "@/components/landing/AuroraProcess";
 import AuroraPricing from "@/components/landing/AuroraPricing";
 import AuroraFinalCTA from "@/components/landing/AuroraFinalCTA";
-import AuroraLeadCTA from "@/components/landing/AuroraLeadCTA";
 import AuroraFooter from "@/components/landing/AuroraFooter";
 import AuroraStickyMobileCTA from "@/components/landing/AuroraStickyMobileCTA";
 import {
@@ -23,15 +22,15 @@ import {
 const Index = () => {
   useEffect(() => {
     setSEOMeta({
-      title: "AI-byrå för SaaS-MVP och AI-produkter | Aurora Media",
+      title: "AI, automation och skräddarsydda system för företag | Aurora Media",
       description:
-        "Aurora Media bygger AI-drivna system, SaaS-MVP:er och digitala produkter på 3–4 veckor åt svenska entreprenörer med fast pris och modern Cursor-baserad utveckling.",
+        "Aurora Media hjälper företag att ersätta Excel, manuella rutiner och omoderna system med AI-lösningar, automationer, SaaS, interna system och smarta digitala arbetsflöden.",
       canonical: "/",
       ogImage: "/og-image-sv.jpg",
       ogType: "website",
       ogLocale: "sv_SE",
       keywords:
-        "AI byrå, AI-byrå Sverige, SaaS MVP, AI produktutveckling, bygga MVP, Cursor utveckling, SaaS utveckling Sverige, Aurora Media",
+        "AI automation företag, automatisera Excel, AI konsult Sverige, skräddarsydda system, SaaS-utveckling, CRM automation, digitalisering företag, Aurora Media",
     });
     setHreflang("/", "/en");
     setJsonLd("organization-jsonld", organizationSchema);
@@ -70,18 +69,10 @@ const Index = () => {
         <AuroraHero />
         <AuroraServices />
         <AuroraProducts />
-        <AuroraLeadCTA
-          variant="compact"
-          eyebrow="Redo att testa idén?"
-          title="Få ett konkret MVP-förslag inom 24 timmar."
-          description="Beskriv idén, målgruppen och vad som måste fungera i första versionen — så återkommer vi med rekommenderat paket och nästa steg."
-          ctaLabel="Skicka MVP-förfrågan"
-        />
         <AuroraIndustries />
         <AuroraIntegrations />
         <AuroraProcess />
         <AuroraPricing />
-        <AuroraLeadCTA />
         <AuroraFinalCTA />
       </main>
       <AuroraFooter />

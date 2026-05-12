@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 
 const AuroraStickyMobileCTA = () => {
-  const { open, isOpen } = useContactModal();
+  const { open } = useContactModal();
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const AuroraStickyMobileCTA = () => {
 
   return (
     <AnimatePresence>
-      {show && !isOpen && (
+      {show && (
         <motion.div
           initial={{ y: 90, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

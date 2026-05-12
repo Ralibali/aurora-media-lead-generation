@@ -70,18 +70,6 @@ type Stats = {
   ai_karta_leads: number;
   conversion_rate: number;
   window_days: number;
-  cta_clicks_total?: number;
-  cta_clicks_unique_sessions?: number;
-};
-
-type CtaClick = {
-  id: string;
-  button: string;
-  location: string | null;
-  lead_label: string | null;
-  page_path: string | null;
-  session_id: string | null;
-  created_at: string;
 };
 
 const Leads = () => {
@@ -89,7 +77,6 @@ const Leads = () => {
   const [authed, setAuthed] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [drip, setDrip] = useState<DripRow[]>([]);
-  const [ctaClicks, setCtaClicks] = useState<CtaClick[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -120,7 +107,6 @@ const Leads = () => {
       const json = await res.json();
       setLeads(json.leads ?? []);
       setDrip(json.drip ?? []);
-      setCtaClicks(json.cta_clicks ?? []);
       setStats(json.stats ?? null);
       setAuthed(true);
       sessionStorage.setItem(STORAGE_KEY, pwd);
@@ -220,40 +206,6 @@ const Leads = () => {
             <p className="mt-1 font-serif text-2xl">{stats.conversion_rate}%</p>
             <p className="mt-1 text-[10px] text-muted-foreground">leads / hero-klick</p>
           </div>
-          <div className="rounded-xl border border-border bg-card/60 p-4">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">CTA-klick (30d)</p>
-            <p className="mt-1 font-serif text-2xl">{stats.cta_clicks_total ?? 0}</p>
-            <p className="mt-1 text-[10px] text-muted-foreground">
-              {stats.cta_clicks_unique_sessions ?? 0} unika besökare
-            </p>
-          </div>
-        </div>
-      )}
-
-      {ctaClicks.length > 0 && (
-        <div className="mb-8 rounded-xl border border-border bg-card/40 overflow-hidden">
-          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-            <h2 className="font-serif text-xl">Senaste CTA-klick</h2>
-            <span className="text-xs text-muted-foreground">{ctaClicks.length} klick (30d)</span>
-          </div>
-          <div className="max-h-80 overflow-y-auto divide-y divide-border">
-            {ctaClicks.slice(0, 50).map((c) => (
-              <div key={c.id} className="px-4 py-2.5 text-sm flex items-center justify-between gap-3 hover:bg-muted/30">
-                <div className="min-w-0">
-                  <div className="font-medium truncate">
-                    {c.button}
-                    {c.location && <span className="text-muted-foreground"> · {c.location}</span>}
-                  </div>
-                  <div className="text-xs text-muted-foreground truncate">
-                    {c.lead_label ?? "—"} · {c.page_path ?? "/"} · session {c.session_id?.slice(0, 8) ?? "—"}
-                  </div>
-                </div>
-                <span className="text-xs text-muted-foreground shrink-0">
-                  {new Date(c.created_at).toLocaleString("sv-SE")}
-                </span>
-              </div>
-            ))}
-          </div>
         </div>
       )}
 
@@ -322,9 +274,6 @@ const Leads = () => {
                       <Badge variant={statusVariant[lead.status]}>{statusLabel[lead.status]}</Badge>
                       <span className="text-xs text-muted-foreground">
                         {new Date(lead.created_at).toLocaleString("sv-SE")}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground font-mono" title={lead.id}>
-                        #{lead.id.slice(0, 8)}
                       </span>
                     </div>
                     <div className="text-sm text-muted-foreground mt-1 flex items-center gap-3 flex-wrap">

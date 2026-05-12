@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
-import { useContactModal } from "@/components/MvpContactModal";
+import { useContactModal } from "@/components/ContactModal";
 
 type Pkg = {
   num: string;
   name: string;
-  price: string;
-  timeline: string;
   intro: string;
   features: string[];
   cta: string;
@@ -18,57 +16,41 @@ type Pkg = {
 const PACKAGES: Pkg[] = [
   {
     num: "01",
-    name: "Starter MVP",
-    price: "49 000 kr",
-    timeline: "3 veckor · 1 användartyp",
-    intro: "För entreprenören som vill testa en AI- eller SaaS-idé med en skarp första version.",
-    features: [
-      "Cursor-bygge med modern AI-stack",
-      "Supabase + Stripe där det passar",
-      "1 användartyp + grundfunktioner",
-      "Auth, betalningar och basanalys",
-      "Hosting & support i 3 månader",
-      "1 revisionsrunda",
-    ],
-    cta: "Starta Starter MVP",
-    paket: "Starter MVP",
+    name: "Prototyp",
+    intro: "För dig som vill testa en idé snabbt innan större investering.",
+    features: ["Klickbar prototyp", "1–2 användarflöden", "UX-genomgång", "Leverans på några dagar"],
+    cta: "Starta med prototyp",
+    paket: "Prototyp",
   },
   {
     num: "02",
-    name: "Standard MVP",
-    price: "89 000 kr",
-    timeline: "4 veckor · 2–3 användartyper",
-    intro: "Bästa valet när produkten behöver roller, betalmodell och en tydlig lanseringssida.",
+    name: "MVP",
+    intro: "För dig som vill lansera en första fungerande produkt med riktiga kunder.",
     features: [
-      "Allt i Starter",
-      "2–3 användartyper med roller",
-      "Stripe-prenumeration eller freemium",
-      "AI-flöde, adminpanel eller integration",
-      "SEO-grundsetup + landningssida",
-      "Hosting & support i 6 månader",
-      "2 revisionsrundor",
+      "Fungerande webb-/mobilapp",
+      "Auth, betalningar, databas",
+      "Stripe + valfri integration",
+      "Leverans 1–2 veckor",
+      "Du äger koden",
     ],
     cta: "Bygg min MVP",
-    paket: "Standard MVP",
+    paket: "MVP",
     popular: true,
     filledCta: true,
   },
   {
     num: "03",
-    name: "Premium MVP+",
-    price: "149 000 kr",
-    timeline: "5 veckor · färdig att marknadsföra",
-    intro: "För dig som vill ha en MVP som både fungerar, säljer och är redo för trafik.",
+    name: "Skräddarsytt system",
+    intro: "För bolag som behöver affärssystem, integrationer eller intern plattform.",
     features: [
-      "Allt i Standard",
-      "iOS/Android via Capacitor vid behov",
-      "Programmatisk SEO + bloggsystem",
-      "Ad-creatives och lanseringstexter",
-      "Hosting & support i 12 månader",
-      "3 revisionsrundor",
+      "Anpassad arkitektur",
+      "Fortnox/Visma-integration",
+      "BankID & rollstyrning",
+      "Multi-tenant SaaS",
+      "Långsiktig utveckling",
     ],
-    cta: "Planera Premium MVP+",
-    paket: "Premium MVP+",
+    cta: "Boka rådgivning",
+    paket: "Skraddarsytt",
   },
 ];
 
@@ -79,14 +61,17 @@ const AuroraPricing = () => {
       <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <p className="au-eyebrow">FASTA MVP-PAKET</p>
+            <p className="au-eyebrow">PAKET</p>
             <h2 className="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1] tracking-[-0.035em]">
-              AI-byrå med fast pris. <span style={{ color: "hsl(152 80% 60%)" }}>Ingen offertdimma.</span>
+              Välj hur snabbt du vill{" "}
+              <span style={{ color: "hsl(152 80% 60%)" }}>komma igång.</span>
             </h2>
           </div>
           <div className="lg:col-span-7 lg:pt-2">
             <p className="text-base leading-relaxed text-[hsl(var(--au-cream)/0.7)] md:text-lg">
-              Vi bygger i Cursor med AI-stöd och väljer stack efter projektet. Fast pris filtrerar bort fel leads, skyddar byggtid och gör beslutet enklare.
+              Tre tydliga paketnivåer — från snabb prototyp till skräddarsytt
+              affärssystem. Inga konstiga tilläggsfakturor, ingen
+              abonnemangsfälla. Tydlig leveranstid, helt utan överraskningar.
             </p>
           </div>
         </div>
@@ -120,7 +105,7 @@ const AuroraPricing = () => {
                     boxShadow: "0 8px 24px -8px hsl(152 80% 50% / 0.7)",
                   }}
                 >
-                  BÄST VAL
+                  POPULÄR
                 </span>
               )}
 
@@ -133,14 +118,8 @@ const AuroraPricing = () => {
               <h3 className="mt-2 font-display text-[28px] leading-tight tracking-[-0.025em]">
                 {p.name}
               </h3>
-              <p className="mt-3 font-display text-4xl tracking-[-0.04em] text-foreground">
-                {p.price}
-              </p>
-              <p className="mt-1 font-mono-au text-[11px] uppercase tracking-[0.16em] text-[hsl(152_80%_65%)]">
-                {p.timeline}
-              </p>
 
-              <p className="mt-4 text-[14.5px] leading-relaxed text-[hsl(var(--au-cream)/0.65)]">
+              <p className="mt-3 text-[14.5px] leading-relaxed text-[hsl(var(--au-cream)/0.65)]">
                 {p.intro}
               </p>
 
@@ -171,13 +150,6 @@ const AuroraPricing = () => {
               </button>
             </motion.div>
           ))}
-        </div>
-
-        <div className="mt-6 rounded-3xl border border-primary/20 bg-primary/5 p-6 text-center text-[hsl(var(--au-cream)/0.78)]">
-          <p className="font-display text-2xl text-foreground">Efter MVP: 4 900 kr/mån</p>
-          <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed">
-            Löpande buggfix, småändringar och övervakning. Uppsägning per månad. Kunden får ett företag bakom produkten utan att anställa.
-          </p>
         </div>
       </div>
     </section>

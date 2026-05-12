@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import FAQSection from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
@@ -265,12 +265,7 @@ const ServicePageTemplate = (props: ServicePageProps) => {
         )}
       </main>
       <Footer />
-      <StickyMobileCTABar
-        primaryLabel={CTA_COPY[props.slug]?.label ?? "Få offert"}
-        primaryOnClick={() => open(props.paketName)}
-        secondaryLabel="Alla tjänster"
-        secondaryTo="/tjanster"
-      />
+      <StickyMobileCTA />
     </div>
   );
 };

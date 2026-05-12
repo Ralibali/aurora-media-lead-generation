@@ -17,7 +17,6 @@ import {
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
-import StickyMobileCTABar from "@/components/landing/StickyMobileCTABar";
 import { Button } from "@/components/ui/button";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
@@ -287,12 +286,6 @@ const AiAutomationForetag = () => {
           </div>
         </section>
       </main>
-      <StickyMobileCTABar
-        primaryLabel="Boka gratis AI-genomgång"
-        primaryOnClick={() => open("AI-automation")}
-        secondaryLabel="Se exempel"
-        secondaryTo="/ai-karta"
-      />
       <Footer />
     </div>
   );

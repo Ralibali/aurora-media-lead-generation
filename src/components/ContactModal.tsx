@@ -1,5 +1,4 @@
 import { useState, createContext, useContext, ReactNode, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CircleCheck as CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
+import { CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,25 +14,12 @@ import { supabase } from "@/integrations/supabase/client";
 type OpenOptions = { paket?: string; internalNote?: string };
 type ContactModalCtx = {
   open: (paketOrOptions?: string | OpenOptions, options?: OpenOptions) => void;
-  isOpen: boolean;
 };
 const Ctx = createContext<ContactModalCtx | null>(null);
 
-export const useContactModal = (): ContactModalCtx => {
+export const useContactModal = () => {
   const c = useContext(Ctx);
-  if (!c) {
-    if (typeof window !== "undefined") {
-      console.warn("[ContactModal] useContactModal used outside ContactModalProvider — falling back to mailto");
-    }
-    return {
-      isOpen: false,
-      open: () => {
-        if (typeof window !== "undefined") {
-          window.location.href = "mailto:info@auroramedia.se";
-        }
-      },
-    };
-  }
+  if (!c) throw new Error("useContactModal must be used inside ContactModalProvider");
   return c;
 };
 
@@ -52,29 +38,6 @@ const DISPOSABLE_EMAIL_DOMAINS = new Set([
   "maildrop.cc", "dispostable.com", "mintemail.com", "spam4.me",
   "tempr.email", "mailnesia.com", "emailondeck.com", "moakt.com",
 ]);
-
-// Vanliga felstavningar av e-postdomäner → korrekt domän
-const EMAIL_DOMAIN_TYPOS: Record<string, string> = {
-  "gmial.com": "gmail.com", "gmai.com": "gmail.com", "gmal.com": "gmail.com",
-  "gmail.co": "gmail.com", "gmail.con": "gmail.com", "gnail.com": "gmail.com",
-  "gmaill.com": "gmail.com", "gmali.com": "gmail.com",
-  "hotnail.com": "hotmail.com", "hotmai.com": "hotmail.com", "hotmial.com": "hotmail.com",
-  "hotmail.co": "hotmail.com", "hotmail.con": "hotmail.com",
-  "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com", "yahoo.co": "yahoo.com",
-  "outlok.com": "outlook.com", "outloo.com": "outlook.com", "outlook.con": "outlook.com",
-  "iclould.com": "icloud.com", "icloud.con": "icloud.com", "iclod.com": "icloud.com",
-  "live.con": "live.com", "live.co": "live.com",
-  "telia.se.com": "telia.se", "telia.com": "telia.se",
-};
-
-const suggestEmailFix = (email: string): string | null => {
-  const at = email.lastIndexOf("@");
-  if (at < 1) return null;
-  const local = email.slice(0, at);
-  const domain = email.slice(at + 1).toLowerCase();
-  const fix = EMAIL_DOMAIN_TYPOS[domain];
-  return fix ? `${local}@${fix}` : null;
-};
 
 // Tillåt bokstäver (inkl. åäö och internationella), mellanslag, bindestreck och apostrof
 const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
@@ -100,16 +63,6 @@ const schema = z.object({
     }, "Använd en riktig e-postadress, inte en engångsadress")
     .refine((v) => !/\+.*\+/.test(v), "Ogiltig e-postadress"),
   company: z.string().trim().max(120).optional().or(z.literal("")),
-  phone: z
-    .string()
-    .trim()
-    .max(30, "Telefonnumret är för långt")
-    .optional()
-    .or(z.literal(""))
-    .refine(
-      (v) => !v || /^[+0-9][0-9\s\-()]{5,}$/.test(v),
-      "Ange ett giltigt telefonnummer (siffror, mellanslag och +)"
-    ),
   paket: z.string().min(1, "Välj vilket paket du är intresserad av"),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
@@ -182,7 +135,7 @@ export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <Ctx.Provider value={{ open, isOpen }}>
+    <Ctx.Provider value={{ open }}>
       {children}
       <ContactDialog
         isOpen={isOpen}
@@ -213,12 +166,6 @@ const ContactDialog = ({
   const [submittedLabel, setSubmittedLabel] = useState<string>("");
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
-  const [emailValue, setEmailValue] = useState<string>("");
-  const [nameValue, setNameValue] = useState<string>("");
-  const [phoneValue, setPhoneValue] = useState<string>("");
-  const [consentChecked, setConsentChecked] = useState(false);
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const [platformValue, setPlatformValue] = useState<string>("");
   const [renderedAt, setRenderedAt] = useState<number>(() => Date.now());
@@ -232,13 +179,10 @@ const ContactDialog = ({
     });
   };
 
-  const validateField = (field: "name" | "email" | "message" | "phone", value: string) => {
-    const fieldSchema = (schema.shape as any)[field];
+  const validateField = (field: "name" | "email" | "message", value: string) => {
+    const fieldSchema = schema.shape[field];
     const result = fieldSchema.safeParse(value);
     setFieldError(field, result.success ? null : result.error.issues[0].message);
-    if (field === "email") {
-      setEmailSuggestion(result.success ? suggestEmailFix(value.trim().toLowerCase()) : null);
-    }
   };
 
   const isMobileApp = paketValue.startsWith("Mobilapp") || paketValue === "Kombination – SaaS + app";
@@ -265,17 +209,9 @@ const ContactDialog = ({
       setMessageTouched(false);
       setPlatformValue("");
       setFieldErrors({});
-      setEmailSuggestion(null);
-      setEmailValue("");
-      setNameValue("");
-      setPhoneValue("");
-      setConsentChecked(false);
-      setTouched({});
       setRenderedAt(Date.now());
     }
   }, [isOpen, defaultPaket]);
-
-  // (isFormValid beräknas nedan, efter leadLabel)
 
   // Uppdatera meddelandet när paketet ändras – men bara om användaren inte börjat redigera
   useEffect(() => {
@@ -294,25 +230,6 @@ const ContactDialog = ({
     ? `Intresserad av: ${selectedOption.label}${platformOption ? ` · Plattform: ${platformOption.label}` : ""}`
     : "";
 
-  // Live-form-validitet → styr om Skicka-knappen är aktiv
-  const isFormValid = (() => {
-    const result = schema.safeParse({
-      name: nameValue,
-      email: emailValue,
-      company: "",
-      phone: phoneValue,
-      paket: paketValue,
-      platform: platformValue,
-      leadLabel,
-      internalNote,
-      message: messageValue,
-      consent: consentChecked,
-      website: "",
-    });
-    if (result.success && isMobileApp && !platformValue) return false;
-    return result.success;
-  })();
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -321,7 +238,6 @@ const ContactDialog = ({
       name: data.get("name"),
       email: data.get("email"),
       company: data.get("company") ?? "",
-      phone: data.get("phone") ?? "",
       paket: paketValue || (data.get("paket") as string) || defaultPaket,
       platform: platformValue,
       leadLabel,
@@ -390,22 +306,13 @@ const ContactDialog = ({
 
         {done ? (
           <div className="py-6 space-y-6">
-            <div className="text-center space-y-4">
-              <div className="relative mx-auto flex h-20 w-20 items-center justify-center">
-                <span className="absolute inset-0 animate-ping rounded-full bg-primary/30" />
-                <span className="absolute inset-0 rounded-full bg-primary/15" />
-                <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 ring-2 ring-primary/40">
-                  <CheckCircle2 className="h-10 w-10 text-primary" strokeWidth={1.5} />
-                </div>
+            <div className="text-center space-y-3">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                <CheckCircle2 className="h-8 w-8 text-primary" strokeWidth={1.5} />
               </div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-primary">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                Lead mottaget
-              </div>
-              <p className="font-serif text-3xl">Tack — ditt lead är skickat!</p>
-              <p className="text-muted-foreground max-w-sm mx-auto">
-                Jag har fått din förfrågan och hör av mig personligen{" "}
-                <strong className="text-foreground">inom 24 timmar</strong> (vardagar, ofta snabbare).
+              <p className="font-serif text-3xl">Tack!</p>
+              <p className="text-muted-foreground">
+                Din förfrågan är mottagen. Jag återkommer inom 24 timmar vardagar.
               </p>
             </div>
 
@@ -471,38 +378,25 @@ const ContactDialog = ({
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="name">
-                  Namn <span className="text-destructive">*</span>
-                </Label>
+                <Label htmlFor="name">Namn *</Label>
                 <Input
                   id="name"
                   name="name"
                   required
                   maxLength={80}
                   autoComplete="name"
-                  autoCapitalize="words"
-                  spellCheck={false}
                   placeholder="Förnamn Efternamn"
-                  value={nameValue}
                   aria-invalid={!!fieldErrors.name}
                   className={fieldErrors.name ? "border-destructive focus-visible:ring-destructive" : undefined}
-                  onBlur={(e) => {
-                    setTouched((t) => ({ ...t, name: true }));
-                    validateField("name", e.target.value);
-                  }}
-                  onChange={(e) => {
-                    setNameValue(e.target.value);
-                    if (touched.name) validateField("name", e.target.value);
-                  }}
+                  onBlur={(e) => validateField("name", e.target.value)}
+                  onChange={() => fieldErrors.name && setFieldError("name", null)}
                 />
                 {fieldErrors.name && (
                   <p className="text-xs text-destructive" role="alert">{fieldErrors.name}</p>
                 )}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="email">
-                  E-post <span className="text-destructive">*</span>
-                </Label>
+                <Label htmlFor="email">E-post *</Label>
                 <Input
                   id="email"
                   name="email"
@@ -511,81 +405,20 @@ const ContactDialog = ({
                   maxLength={160}
                   autoComplete="email"
                   inputMode="email"
-                  spellCheck={false}
-                  autoCapitalize="off"
                   placeholder="namn@foretag.se"
-                  value={emailValue}
                   aria-invalid={!!fieldErrors.email}
                   className={fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : undefined}
-                  onBlur={(e) => {
-                    setTouched((t) => ({ ...t, email: true }));
-                    validateField("email", e.target.value);
-                  }}
-                  onChange={(e) => {
-                    setEmailValue(e.target.value);
-                    if (touched.email) validateField("email", e.target.value);
-                    else if (emailSuggestion) setEmailSuggestion(null);
-                  }}
+                  onBlur={(e) => validateField("email", e.target.value)}
+                  onChange={() => fieldErrors.email && setFieldError("email", null)}
                 />
                 {fieldErrors.email && (
                   <p className="text-xs text-destructive" role="alert">{fieldErrors.email}</p>
                 )}
-                {!fieldErrors.email && emailSuggestion && (
-                  <p className="text-xs text-muted-foreground">
-                    Menade du{" "}
-                    <button
-                      type="button"
-                      className="font-medium text-primary underline-offset-2 hover:underline"
-                      onClick={() => {
-                        setEmailValue(emailSuggestion);
-                        setEmailSuggestion(null);
-                        validateField("email", emailSuggestion);
-                      }}
-                    >
-                      {emailSuggestion}
-                    </button>
-                    ?
-                  </p>
-                )}
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="company">Företag</Label>
-                <Input
-                  id="company"
-                  name="company"
-                  maxLength={120}
-                  autoComplete="organization"
-                  placeholder="Valfritt"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="phone">Telefon</Label>
-                <Input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  maxLength={30}
-                  placeholder="070-123 45 67 (valfritt)"
-                  value={phoneValue}
-                  aria-invalid={!!fieldErrors.phone}
-                  className={fieldErrors.phone ? "border-destructive focus-visible:ring-destructive" : undefined}
-                  onBlur={(e) => {
-                    setTouched((t) => ({ ...t, phone: true }));
-                    if (e.target.value) validateField("phone", e.target.value);
-                  }}
-                  onChange={(e) => {
-                    setPhoneValue(e.target.value);
-                    if (touched.phone) validateField("phone", e.target.value);
-                  }}
-                />
-                {fieldErrors.phone && (
-                  <p className="text-xs text-destructive" role="alert">{fieldErrors.phone}</p>
-                )}
-              </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="company">Företag</Label>
+              <Input id="company" name="company" maxLength={120} autoComplete="organization" />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="paket">Vilket paket är du intresserad av? *</Label>
@@ -611,36 +444,26 @@ const ContactDialog = ({
                 </div>
               )}
             </div>
-            <AnimatePresence>
-              {isMobileApp && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: "auto", marginTop: 0 }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
-                  className="overflow-hidden"
-                >
-                  <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
-                    <Label htmlFor="platform">Vilken plattform? *</Label>
-                    <p className="text-xs text-muted-foreground">
-                      Hjälper mig att skissa rätt teknikval och tidsplan direkt.
-                    </p>
-                    <Select value={platformValue} onValueChange={setPlatformValue} name="platform">
-                      <SelectTrigger id="platform">
-                        <SelectValue placeholder="Välj plattform" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {PLATFORM_OPTIONS.map((opt) => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {isMobileApp && (
+              <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                <Label htmlFor="platform">Vilken plattform? *</Label>
+                <p className="text-xs text-muted-foreground">
+                  Hjälper mig att skissa rätt teknikval och tidsplan direkt.
+                </p>
+                <Select value={platformValue} onValueChange={setPlatformValue} name="platform">
+                  <SelectTrigger id="platform">
+                    <SelectValue placeholder="Välj plattform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PLATFORM_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
             {internalNote && (
               <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm">
                 <div className="flex items-start gap-2.5">
@@ -681,27 +504,13 @@ const ContactDialog = ({
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <Checkbox
-                id="consent"
-                name="consent"
-                required
-                className="mt-1"
-                checked={consentChecked}
-                onCheckedChange={(v) => setConsentChecked(v === true)}
-              />
+              <Checkbox id="consent" name="consent" required className="mt-1" />
               <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.{" "}
-                <span className="text-destructive">*</span>
+                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.
               </Label>
             </div>
-            <Button
-              type="submit"
-              disabled={submitting || !isFormValid}
-              className="w-full"
-              size="lg"
-              aria-disabled={submitting || !isFormValid}
-            >
-              {submitting ? "Skickar…" : isFormValid ? "Skicka förfrågan" : "Fyll i obligatoriska fält"}
+            <Button type="submit" disabled={submitting} className="w-full" size="lg">
+              {submitting ? "Skickar…" : "Skicka"}
             </Button>
             <p className="text-center text-sm text-muted-foreground pt-2">
               Hellre mejla direkt?{" "}
