@@ -1,68 +1,81 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Globe,
-  ShoppingBag,
-  Search,
-  MousePointerClick,
-  Megaphone,
-  PenTool,
-  Palette,
-  Camera,
-  Code2,
-  Smartphone,
-  Sparkles,
-  type LucideIcon,
-} from "lucide-react";
-import AuroraNavbar from "@/components/landing/AuroraNavbar";
-import AuroraFooter from "@/components/landing/AuroraFooter";
-import AuroraFinalCTA from "@/components/landing/AuroraFinalCTA";
-import AuroraStickyMobileCTA from "@/components/landing/AuroraStickyMobileCTA";
-import { useContactModal } from "@/components/ContactModal";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
-type Service = {
-  icon: LucideIcon;
-  name: string;
-  price: string;
-  desc: string;
-  to: string;
-  featured?: boolean;
-};
+const BORDER = "rgba(237, 233, 220, 0.15)";
+const SectionBorder = () => <div style={{ height: "0.5px", backgroundColor: BORDER }} />;
 
-const primary: Service = {
-  icon: Sparkles,
-  name: "AI-builder & SaaS/MVP",
-  price: "Prototyp från 14 900 kr · MVP från 34 900 kr",
-  desc: "Aurora Medias kärna: SaaS, interna appar och AI-automationer byggda snabbt, med fast pris och kod du äger. Mindre workshop. Mer fungerande produkt.",
-  to: "/ai-konsult-sverige",
-  featured: true,
-};
-
-const services: Service[] = [
-  { icon: Code2, name: "SaaS & interna system", price: "Från 34 900 kr", desc: "Kontrollpanel, login, databas, Stripe, admin och integrationer. Byggt för riktig användning, inte bara demo.", to: "/priser" },
-  { icon: Globe, name: "Hemsidor & plattformar", price: "Offert efter omfattning", desc: "Moderna React-sajter, landningssidor och SEO-hubbar som matchar nya Aurora-standarden.", to: "/tjanster/hemsidor" },
-  { icon: ShoppingBag, name: "E-handel", price: "Offert efter butik", desc: "Shopify, Stripe eller skräddarsytt flöde med betalning, orderlogik och spårning från start.", to: "/tjanster/ehandel" },
-  { icon: Smartphone, name: "Mobilappar", price: "PWA eller app efter behov", desc: "Installerbara webbappar eller app-liknande lösningar med samma kodbas som produkten.", to: "/tjanster/mobilapp" },
-  { icon: Search, name: "SEO", price: "Engångsinsats eller löpande", desc: "Teknisk SEO, sitemap, prerendering, AI-discovery, content och interna länkar som faktiskt hjälper ranking.", to: "/tjanster/seo" },
-  { icon: MousePointerClick, name: "Google Ads", price: "Setup efter konto", desc: "Kampanjstruktur, landningssidor och konverteringsspårning så trafiken har någonstans att ta vägen.", to: "/tjanster/google-ads" },
-  { icon: Megaphone, name: "Meta Ads", price: "Setup efter mål", desc: "Facebook och Instagram med Pixel/CAPI, kreativa vinklar och tydliga funnels.", to: "/tjanster/meta-ads" },
-  { icon: PenTool, name: "Content & AI-sök", price: "Artikelplan eller paket", desc: "SEO-artiklar, jämförelser, llms.txt, AI-vänliga landningssidor och content som stärker expertis.", to: "/blogg" },
-  { icon: Palette, name: "Grafisk profil", price: "Offert efter nivå", desc: "Visuell riktning, färger, typografi och komponentkänsla som håller ihop sajten.", to: "/tjanster/grafisk-profil" },
-  { icon: Camera, name: "Foto & visuellt material", price: "Offert efter upplägg", desc: "Produkt-, miljö- och porträttfoto när du behöver eget material istället för stock-känsla.", to: "/tjanster/fotografering" },
+const SERVICES = [
+  {
+    num: "01",
+    name: "SaaS-produkt",
+    price: "från 14 900 kr",
+    time: "1–4 veckor",
+    includes: [
+      "Autentisering och användarhantering",
+      "Betalningsflöde med Stripe",
+      "Admin-panel och dashboards",
+      "E-post och notifikationer",
+      "Hosting och CI/CD-pipeline",
+      "Dokumentation och kodöverlämning",
+    ],
+    desc: "Från MVP till lansering. Auth, betalning, e-post och admin från dag ett. Samma stack som vi använder på våra egna sex produkter.",
+  },
+  {
+    num: "02",
+    name: "Hemsida",
+    price: "pris på offert",
+    time: "1–2 veckor",
+    includes: [
+      "Modern React-arkitektur",
+      "SEO-optimering från grunden",
+      "CMS-integration om önskat",
+      "Responsiv design för alla skärmar",
+      "Google Analytics och sökkonsol",
+      "Domän och hosting",
+    ],
+    desc: "Modern, snabb och SEO-optimerad. CMS som ni faktiskt vill använda. Byggt på samma grund som ni kan bygga vidare på.",
+  },
+  {
+    num: "03",
+    name: "Internt system",
+    price: "pris på offert",
+    time: "2–6 veckor",
+    includes: [
+      "Admin-paneler skräddarsydda för er",
+      "Databasdesign och API-lager",
+      "Rollbaserad åtkomst",
+      "Rapporter och exportfunktioner",
+      "Integration mot befintliga system",
+      "Driftmiljö och backups",
+    ],
+    desc: "Admin-paneler, dashboards och flöden som ersätter era Excel-arkiv. Ni äger källkoden och kan bygga vidare.",
+  },
+  {
+    num: "04",
+    name: "AI-integration",
+    price: "pris på offert",
+    time: "1–3 veckor",
+    includes: [
+      "Språkmodell-integration (OpenAI, Anthropic m.fl.)",
+      "Promptdesign och finjustering",
+      "Agent-flöden och automatiseringar",
+      "RAG och kunskapsbaser",
+      "Säker hantering av API-nycklar",
+      "Monitorering och loggning",
+    ],
+    desc: "Språkmodeller, agenter och automatiseringar in i era befintliga system. Byggda för att faktiskt fungera i produktion.",
+  },
 ];
 
 const Tjanster = () => {
-  const { open } = useContactModal();
-
   useEffect(() => {
     setSEOMeta({
-      title: "Tjänster – AI-builder, SaaS, MVP, webb och SEO | Aurora Media",
+      title: "Tjänster — SaaS, hemsidor, interna system och AI | Aurora Media",
       description:
-        "Aurora Media bygger SaaS, MVP:er, interna appar, AI-automationer, hemsidor, SEO och digitala system med fast pris, snabb leverans och kod du äger.",
+        "Vi bygger fyra saker snabbt: SaaS-produkter, hemsidor, interna system och AI-integrationer. Fast pris, fast deadline, kod ni äger.",
       canonical: "/tjanster",
     });
     setBreadcrumb([
@@ -72,180 +85,101 @@ const Tjanster = () => {
     return () => removeJsonLd("breadcrumb-jsonld");
   }, []);
 
-  const totalCount = useMemo(() => services.length + 1, []);
-
   return (
-    <div className="aurora-theme min-h-screen">
-      <AuroraNavbar />
-      <main id="main" className="overflow-hidden">
-        <section className="aurora-bg relative min-h-[70vh] pt-28 md:pt-36">
-          <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 pb-16 md:px-8 lg:grid-cols-12 lg:items-end lg:pb-24">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-              className="lg:col-span-7"
-            >
-              <p className="au-eyebrow">TJÄNSTER · AI-BUILDER · {totalCount} OMRÅDEN</p>
-              <h1 className="mt-5 font-display text-[clamp(3rem,8vw,6.5rem)] leading-[0.92] tracking-[-0.045em]">
-                Från AI-snack till produkt.
-              </h1>
-              <p className="mt-6 max-w-2xl text-base leading-relaxed md:text-lg" style={{ color: "hsl(var(--au-cream) / 0.72)" }}>
-                Aurora Media bygger det andra bara workshoppar om: SaaS, MVP:er, interna appar, AI-automationer och webbar som går att använda. Fast pris, snabb leverans och kod du äger.
-              </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <button onClick={() => open()} className="au-btn-coral">
-                  Boka AI-genomgång
-                  <ArrowRight size={16} strokeWidth={2.5} />
-                </button>
-                <Link to="/ai-konsult-sverige" className="au-btn-ghost">
-                  AI-konsult vs AI-builder
-                  <ArrowUpRight size={16} strokeWidth={2.2} />
-                </Link>
-              </div>
-            </motion.div>
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main">
+        <section className="section-pad pt-[120px]">
+          <div className="site-container">
+            <p className="eyebrow mb-4">Tjänster</p>
+            <h1 className="hero-h1 text-cream max-w-[560px]">
+              Vi bygger fyra saker.{" "}
+              <em>Snabbt.</em>
+            </h1>
+            <p className="mt-4 max-w-[460px] font-sans text-[14px] leading-relaxed" style={{ color: "rgba(237, 233, 220, 0.65)" }}>
+              Samma metodik som på våra egna sex produkter — moderna AI-verktyg, fast pris och fast
+              deadline. Levereras på veckor.
+            </p>
+          </div>
+        </section>
 
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.32, 0.72, 0, 1] }}
-              className="grid gap-4 sm:grid-cols-3 lg:col-span-5"
-            >
-              {[
-                { value: "14 900", label: "prototyp från" },
-                { value: "34 900", label: "MVP från" },
-                { value: "100%", label: "kodägande" },
-              ].map((stat) => (
-                <div key={stat.label} className="au-card-static p-5">
-                  <p className="font-display text-4xl leading-none" style={{ color: "hsl(217 91% 70%)" }}>
-                    {stat.value}
+        {SERVICES.map((s, idx) => (
+          <section key={s.num} className="section-pad">
+            <SectionBorder />
+            <div className="site-container pt-14">
+              <div className="grid gap-10 sm:grid-cols-[1fr_1.4fr]">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="mono-accent" style={{ color: "rgba(237, 233, 220, 0.40)" }}>{s.num}</span>
+                    <span className="mono-accent" style={{ color: "rgba(237, 233, 220, 0.50)" }}>{s.price}</span>
+                  </div>
+                  <h2 className="section-h2 text-cream">{s.name}</h2>
+                  <p className="mt-3 font-sans text-[14px] leading-relaxed" style={{ color: "rgba(237, 233, 220, 0.65)" }}>
+                    {s.desc}
                   </p>
-                  <p className="mt-2 font-mono-au text-[10px] uppercase tracking-[0.18em]" style={{ color: "hsl(var(--au-cream) / 0.55)" }}>
-                    {stat.label}
-                  </p>
+
+                  <div className="mt-6 flex items-center gap-3">
+                    <span className="mono-accent" style={{ color: "rgba(237, 233, 220, 0.40)" }}>Tidsplan</span>
+                    <span className="font-sans text-[13px] text-cream">{s.time}</span>
+                  </div>
+
+                  <div className="mt-6">
+                    <Link
+                      to="/kontakt"
+                      className="inline-flex items-center rounded-lg px-[18px] py-[10px] font-sans text-[13px] font-medium transition-opacity hover:opacity-85"
+                      style={{ backgroundColor: "#EDE9DC", color: "#100F0D" }}
+                    >
+                      Begär offert →
+                    </Link>
+                  </div>
                 </div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
 
-        <section
-          id="tjanster-grid"
-          className="aurora-section-bg relative border-t py-20 md:py-28"
-          style={{ borderColor: "hsl(var(--au-cream) / 0.08)" }}
-        >
-          <div className="mx-auto w-full max-w-7xl px-5 md:px-8">
-            <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-              <div className="lg:col-span-5">
-                <p className="au-eyebrow">UTBUD</p>
-                <h2 className="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1] tracking-[-0.035em]">
-                  Kärnan är AI-byggda produkter. Resten finns för lansering.
-                </h2>
-              </div>
-              <div className="lg:col-span-7 lg:pt-2">
-                <p className="text-base leading-relaxed md:text-lg" style={{ color: "hsl(var(--au-cream) / 0.7)" }}>
-                  Du ska inte behöva fem leverantörer för produkt, webb, SEO, annonsering och content. Aurora håller ihop strategi, bygg, lansering och tillväxt i samma tekniska grund.
-                </p>
+                <div>
+                  <p className="eyebrow mb-4">Vad ingår</p>
+                  <div>
+                    {s.includes.map((item, i) => (
+                      <div
+                        key={item}
+                        className="flex items-center gap-3 py-3"
+                        style={{ borderBottom: i < s.includes.length - 1 ? `0.5px solid ${BORDER}` : "none" }}
+                      >
+                        <span className="mono-accent" style={{ color: "rgba(237, 233, 220, 0.30)" }}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="font-sans text-[13px] text-cream">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
+          </section>
+        ))}
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-              className="mt-12 grid gap-4 lg:grid-cols-2"
+        {/* CTA */}
+        <section className="section-pad">
+          <SectionBorder />
+          <div className="site-container pt-14">
+            <p className="eyebrow mb-4">Nästa steg</p>
+            <h2 className="section-h2 text-cream mb-3">
+              Har ni en idé eller en process som suger?
+            </h2>
+            <p className="max-w-[460px] font-sans text-[14px] leading-relaxed mb-8" style={{ color: "rgba(237, 233, 220, 0.65)" }}>
+              Skicka över den — vi återkommer med offert inom 24 timmar.
+            </p>
+            <Link
+              to="/kontakt"
+              className="inline-flex items-center rounded-lg px-[18px] py-[10px] font-sans text-[13px] font-medium transition-opacity hover:opacity-85"
+              style={{ backgroundColor: "#EDE9DC", color: "#100F0D" }}
             >
-              <ServiceCard service={primary} large />
-              <div className="grid gap-4 sm:grid-cols-2">
-                {services.slice(0, 4).map((s) => (
-                  <ServiceCard key={s.name} service={s} />
-                ))}
-              </div>
-            </motion.div>
-
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {services.slice(4).map((s, i) => (
-                <ServiceCard key={s.name} service={s} index={i} />
-              ))}
-            </div>
+              Begär offert →
+            </Link>
           </div>
         </section>
-
-        <AuroraFinalCTA />
       </main>
-      <AuroraFooter />
-      <AuroraStickyMobileCTA />
+      <SiteFooter />
     </div>
-  );
-};
-
-const ServiceCard = ({
-  service,
-  large = false,
-  index = 0,
-}: {
-  service: Service;
-  large?: boolean;
-  index?: number;
-}) => {
-  const Icon = service.icon;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.45, delay: Math.min(index * 0.04, 0.18), ease: [0.32, 0.72, 0, 1] }}
-    >
-      <Link
-        to={service.to}
-        aria-label={`Läs mer om ${service.name}`}
-        className={`group au-card relative flex h-full flex-col overflow-hidden ${large ? "min-h-[430px] p-8 md:p-10" : "min-h-[260px] p-6"}`}
-        style={
-          service.featured
-            ? {
-                background: "linear-gradient(180deg, hsl(217 70% 12% / 0.72), hsl(260 38% 12% / 0.58))",
-                boxShadow: "0 0 0 1px hsl(217 91% 64% / 0.28), 0 30px 80px -30px hsl(217 91% 46% / 0.65)",
-                borderColor: "hsl(217 91% 64% / 0.38)",
-              }
-            : undefined
-        }
-      >
-        {service.featured && <span className="au-eyebrow mb-4 inline-block">PRIMÄR POSITION</span>}
-
-        <div className="flex items-start justify-between gap-4">
-          <span className="au-icon">
-            <Icon size={20} strokeWidth={2} />
-          </span>
-          <span
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full transition-all duration-300 group-hover:rotate-[20deg]"
-            style={{
-              background: "hsl(var(--au-cream) / 0.06)",
-              border: "1px solid hsl(var(--au-cream) / 0.1)",
-              color: "hsl(var(--au-cream) / 0.85)",
-            }}
-          >
-            <ArrowUpRight size={15} strokeWidth={2.2} />
-          </span>
-        </div>
-
-        <h3 className={`mt-5 font-display tracking-[-0.025em] ${large ? "text-3xl md:text-5xl" : "text-2xl"}`}>
-          {service.name}
-        </h3>
-        <p className={`${large ? "mt-3 text-base md:text-lg" : "mt-2 text-sm"} font-mono-au`} style={{ color: "hsl(217 91% 74%)" }}>
-          {service.price}
-        </p>
-
-        <p className={`${large ? "mt-4 text-base md:text-lg" : "mt-3 text-sm"} leading-relaxed`} style={{ color: "hsl(var(--au-cream) / 0.65)" }}>
-          {service.desc}
-        </p>
-
-        <div className="mt-auto flex items-center gap-2 pt-6 font-mono-au text-[11px] uppercase tracking-[0.16em]" style={{ color: "hsl(var(--au-cream) / 0.55)" }}>
-          Läs mer
-          <ArrowUpRight size={12} strokeWidth={2.2} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-        </div>
-      </Link>
-    </motion.div>
   );
 };
 

@@ -12,6 +12,8 @@ import AiKarta from "./pages/AiKarta";
 import AiKartaStart from "./pages/AiKartaStart";
 import AiKartaResultat from "./pages/AiKartaResultat";
 import AiKonsultSverige from "./pages/AiKonsultSverige";
+import Produkter from "./pages/Produkter";
+import Process from "./pages/Process";
 import Arbete from "./pages/Arbete";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
@@ -284,7 +286,7 @@ const App = () => (
       <BrowserRouter>
         <RouteSEO />
         <ContactModalProvider>
-          <div className="aurora-theme lumina-site min-h-screen">
+          <div className="lumina-site min-h-screen" style={{ backgroundColor: "#100F0D", color: "#EDE9DC" }}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/ai-karta" element={<AiKarta />} />
@@ -297,6 +299,8 @@ const App = () => (
               <Route path="/arbete/:slug" element={<CasePage />} />
               <Route path="/priser" element={<Priser />} />
               <Route path="/om" element={<Om />} />
+              <Route path="/produkter" element={<Produkter />} />
+              <Route path="/process" element={<Process />} />
               <Route path="/kontakt" element={<Kontakt />} />
               <Route path="/tjanster" element={<Tjanster />} />
               <Route path="/tjanster/hemsidor" element={<Hemsidor />} />

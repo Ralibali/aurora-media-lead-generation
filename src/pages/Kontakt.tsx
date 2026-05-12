@@ -1,25 +1,58 @@
 import { useState, useEffect } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Link } from "react-router-dom";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SiteFooter from "@/components/layout/SiteFooter";
 import { toast } from "sonner";
-import { z } from "zod";
-import { Mail, MapPin, Clock, Sparkles } from "lucide-react";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
-const schema = z.object({
-  name: z.string().trim().min(2, "Skriv ditt namn").max(80),
-  email: z.string().trim().email("Ogiltig e-post").max(160),
-  company: z.string().trim().max(120).optional().or(z.literal("")),
-  paket: z.string().min(1, "Välj ett alternativ"),
-  message: z.string().trim().min(20, "Minst 20 tecken").max(2000),
-  consent: z.literal(true, { errorMap: () => ({ message: "Du måste godkänna" }) }),
-});
+const BORDER = "rgba(237, 233, 220, 0.15)";
+
+const inputStyle: React.CSSProperties = {
+  backgroundColor: "rgba(237, 233, 220, 0.04)",
+  border: `0.5px solid ${BORDER}`,
+  borderRadius: "8px",
+  color: "#EDE9DC",
+  fontFamily: "Inter, system-ui, sans-serif",
+  fontSize: "14px",
+  padding: "10px 14px",
+  width: "100%",
+  outline: "none",
+  transition: "border-color 0.15s",
+};
+
+const InputField = ({
+  label,
+  name,
+  type = "text",
+  required,
+  placeholder,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  required?: boolean;
+  placeholder?: string;
+}) => (
+  <div>
+    <label
+      htmlFor={name}
+      className="block font-sans text-[13px] font-medium mb-1.5"
+      style={{ color: "rgba(237, 233, 220, 0.80)" }}
+    >
+      {label}{required && " *"}
+    </label>
+    <input
+      id={name}
+      name={name}
+      type={type}
+      required={required}
+      placeholder={placeholder}
+      style={inputStyle}
+      onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(237, 233, 220, 0.40)")}
+      onBlur={(e) => (e.currentTarget.style.borderColor = BORDER)}
+    />
+  </div>
+);
 
 const Kontakt = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -27,9 +60,9 @@ const Kontakt = () => {
 
   useEffect(() => {
     setSEOMeta({
-      title: "Kontakt – boka AI-genomgång | Aurora Media",
+      title: "Kontakt — begär offert | Aurora Media",
       description:
-        "Boka 30 minuter med Aurora Media för SaaS, MVP, AI-automation, intern app eller webbprojekt. Fast pris från 14 900 kr och svar inom 24 timmar.",
+        "Berätta vad ni vill bygga. Vi återkommer med offert inom 24 timmar. Fast pris, veckor inte månader.",
       canonical: "/kontakt",
     });
     setBreadcrumb([
@@ -41,26 +74,12 @@ const Kontakt = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const data = new FormData(form);
-    const parsed = schema.safeParse({
-      name: data.get("name"),
-      email: data.get("email"),
-      company: data.get("company") ?? "",
-      paket: data.get("paket") ?? "",
-      message: data.get("message"),
-      consent: data.get("consent") === "on" ? true : false,
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0].message);
-      return;
-    }
     setSubmitting(true);
     try {
       await new Promise((r) => setTimeout(r, 600));
       setDone(true);
-      toast.success("Tack! Jag hör av mig inom 24 timmar.");
-      form.reset();
+      toast.success("Tack! Vi hör av oss inom 24 timmar.");
+      (e.target as HTMLFormElement).reset();
     } catch {
       toast.error("Något gick fel. Mejla istället info@auroramedia.se");
     } finally {
@@ -69,123 +88,181 @@ const Kontakt = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <section className="pt-24 pb-16 md:pt-32 md:pb-20">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <p className="label-caps">Kontakt · AI-genomgång</p>
-            <h1 className="mt-4 font-display text-5xl md:text-6xl leading-[1.02] tracking-tight">
-              Berätta vad du vill bygga.
+    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+      <a href="#main" className="skip-link">Hoppa till innehåll</a>
+      <SiteHeader />
+      <main id="main">
+        <section className="section-pad pt-[120px]">
+          <div className="site-container">
+            <p className="eyebrow mb-4">Kontakt</p>
+            <h1 className="hero-h1 text-cream max-w-[560px]">
+              Berätta vad ni
+              <br />
+              vill <em>bygga.</em>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-muted-foreground md:text-xl">
-              SaaS, MVP, intern app, AI-automation eller webb. Du får ett ärligt svar: bygga, skrota eller tänka om — och ett tydligt nästa steg.
-            </p>
           </div>
         </section>
 
-        <section className="pb-24">
-          <div className="container mx-auto px-6 max-w-5xl grid gap-12 md:grid-cols-2">
-            <div>
-              <h2 className="font-display text-3xl">Starta ett projekt</h2>
-              <p className="mt-3 text-muted-foreground">Svar inom 24 timmar vardagar. Ingen säljpitch.</p>
+        <section className="section-pad">
+          <div style={{ height: "0.5px", backgroundColor: BORDER }} />
+          <div className="site-container pt-14">
+            <div className="grid gap-14 sm:grid-cols-[1fr_1.2fr]">
+              {/* Left: contact info */}
+              <div>
+                <a
+                  href="mailto:info@auroramedia.se"
+                  className="big-h2 text-cream block transition-opacity hover:opacity-70 group mb-4"
+                >
+                  info@auroramedia.se{" "}
+                  <span className="font-serif" style={{ fontStyle: "italic" }}>↗</span>
+                </a>
+                <p className="font-sans text-[14px]" style={{ color: "rgba(237, 233, 220, 0.65)" }}>
+                  Svar inom 24 timmar.
+                </p>
 
-              {done ? (
-                <div className="mt-8 rounded-2xl border border-border bg-card p-8 text-center">
-                  <p className="font-display text-2xl">Tack!</p>
-                  <p className="mt-2 text-muted-foreground">Jag hör av mig inom 24 timmar.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="name">Namn *</Label>
-                      <Input id="name" name="name" required maxLength={80} />
+                <div className="mt-10 space-y-3">
+                  {[
+                    ["Plats", "Linköping, Sverige"],
+                    ["Org.nr", "559272-0220"],
+                    ["VAT", "SE559272022001"],
+                    ["Leverans", "Veckor, inte månader"],
+                  ].map(([k, v]) => (
+                    <div key={k} className="flex justify-between border-b py-2.5" style={{ borderColor: BORDER, borderWidth: "0.5px" }}>
+                      <span className="font-sans text-[12px]" style={{ color: "rgba(237, 233, 220, 0.50)" }}>{k}</span>
+                      <span className="font-sans text-[12px] text-cream">{v}</span>
                     </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="email">E-post *</Label>
-                      <Input id="email" name="email" type="email" required maxLength={160} />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="company">Företag</Label>
-                    <Input id="company" name="company" maxLength={120} />
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="paket">Vad vill du bygga? *</Label>
-                    <Select name="paket">
-                      <SelectTrigger id="paket"><SelectValue placeholder="Välj spår" /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="AI-genomgang">AI-genomgång / osäker än</SelectItem>
-                        <SelectItem value="Prototyp">Prototyp – från 14 900 kr</SelectItem>
-                        <SelectItem value="MVP">MVP – från 34 900 kr</SelectItem>
-                        <SelectItem value="Skalbar SaaS">Skalbar SaaS – från 89 000 kr</SelectItem>
-                        <SelectItem value="AI Ops">AI-automation / AI Ops</SelectItem>
-                        <SelectItem value="Webb">Hemsida, SEO eller webbplattform</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label htmlFor="message">Beskriv projektet kort *</Label>
-                    <Textarea id="message" name="message" required minLength={20} maxLength={2000} rows={6} placeholder="Vad ska systemet göra, vem ska använda det och vad vill du uppnå?" />
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Checkbox id="consent" name="consent" required className="mt-1" />
-                    <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                      Jag godkänner att Aurora Media hanterar mina uppgifter enligt integritetspolicyn.
-                    </Label>
-                  </div>
-                  <Button type="submit" disabled={submitting} size="lg" className="w-full rounded-full">
-                    {submitting ? "Skickar…" : "Skicka projektidé"}
-                  </Button>
-                </form>
-              )}
-            </div>
+                  ))}
+                </div>
 
-            <div>
-              <h2 className="font-display text-3xl">Direktkontakt</h2>
-              <p className="mt-3 text-muted-foreground">
-                Vill du hellre mejla direkt? Gör det. Skriv kort vad du vill bygga så tar vi det därifrån.
-              </p>
-
-              <div className="mt-8 space-y-5 text-sm">
-                <div className="flex items-start gap-3">
-                  <Mail className="mt-0.5 h-4 w-4 text-primary" />
-                  <div>
-                    <p className="label-caps">E-post</p>
-                    <a href="mailto:info@auroramedia.se" className="text-foreground hover:text-primary">
-                      info@auroramedia.se
-                    </a>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 text-primary" />
-                  <div>
-                    <p className="label-caps">Plats</p>
-                    <p className="text-foreground">Linköping, Sverige · kunder i hela landet</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Clock className="mt-0.5 h-4 w-4 text-primary" />
-                  <div>
-                    <p className="label-caps">Svarstid</p>
-                    <p className="text-foreground">Vanligtvis inom 24 timmar vardagar</p>
-                  </div>
-                </div>
+                <p className="mt-8 font-sans text-[13px]" style={{ color: "rgba(237, 233, 220, 0.50)" }}>
+                  Föredrar du att boka ett samtal direkt?
+                </p>
+                <a
+                  href="https://cal.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center font-sans text-[13px] transition-opacity hover:opacity-70"
+                  style={{ color: "rgba(237, 233, 220, 0.80)" }}
+                >
+                  Boka 30 min direkt ↗
+                </a>
               </div>
 
-              <div className="mt-10 rounded-2xl border border-border bg-secondary/40 p-6 text-sm text-muted-foreground space-y-1.5">
-                <p className="font-display text-xl text-foreground">Aurora Media AB</p>
-                <p>AI-builder för SaaS, MVP och automationer</p>
-                <p>Org.nr 559272-0220</p>
-                <p>VAT: SE559272022001</p>
-                <p className="flex items-center gap-2 pt-2"><Sparkles size={15} /> Fast pris. Kod du äger. Snabb leverans.</p>
+              {/* Right: form */}
+              <div>
+                {done ? (
+                  <div
+                    className="rounded-lg p-8 text-center"
+                    style={{ border: `0.5px solid ${BORDER}` }}
+                  >
+                    <h2 className="section-h2 text-cream mb-3">Tack!</h2>
+                    <p className="font-sans text-[14px]" style={{ color: "rgba(237, 233, 220, 0.65)" }}>
+                      Vi hör av oss inom 24 timmar med en första bedömning.
+                    </p>
+                    <button
+                      onClick={() => setDone(false)}
+                      className="mt-6 font-sans text-[13px] underline transition-opacity hover:opacity-70"
+                      style={{ color: "rgba(237, 233, 220, 0.65)" }}
+                    >
+                      Skicka en ny förfrågan
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <InputField label="Namn" name="name" required />
+                      <InputField label="Företag" name="company" />
+                    </div>
+                    <InputField label="E-post" name="email" type="email" required />
+
+                    <div>
+                      <label
+                        htmlFor="what"
+                        className="block font-sans text-[13px] font-medium mb-1.5"
+                        style={{ color: "rgba(237, 233, 220, 0.80)" }}
+                      >
+                        Vad vill ni bygga *
+                      </label>
+                      <textarea
+                        id="what"
+                        name="what"
+                        required
+                        minLength={20}
+                        maxLength={2000}
+                        rows={5}
+                        placeholder="Beskriv idén, problemet eller processen ni vill lösa..."
+                        style={{ ...inputStyle, resize: "vertical" }}
+                        onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(237, 233, 220, 0.40)")}
+                        onBlur={(e) => (e.currentTarget.style.borderColor = BORDER)}
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="budget"
+                        className="block font-sans text-[13px] font-medium mb-1.5"
+                        style={{ color: "rgba(237, 233, 220, 0.80)" }}
+                      >
+                        Önskad budget
+                      </label>
+                      <select
+                        id="budget"
+                        name="budget"
+                        style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                        onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(237, 233, 220, 0.40)")}
+                        onBlur={(e) => (e.currentTarget.style.borderColor = BORDER)}
+                      >
+                        <option value="" style={{ backgroundColor: "#1A1916" }}>Välj...</option>
+                        <option value="under25k" style={{ backgroundColor: "#1A1916" }}>Under 25 000 kr</option>
+                        <option value="25-100k" style={{ backgroundColor: "#1A1916" }}>25–100 000 kr</option>
+                        <option value="100k+" style={{ backgroundColor: "#1A1916" }}>100 000+ kr</option>
+                        <option value="unknown" style={{ backgroundColor: "#1A1916" }}>Vet ej</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="timeline"
+                        className="block font-sans text-[13px] font-medium mb-1.5"
+                        style={{ color: "rgba(237, 233, 220, 0.80)" }}
+                      >
+                        Tidshorisont
+                      </label>
+                      <select
+                        id="timeline"
+                        name="timeline"
+                        style={{ ...inputStyle, appearance: "none", cursor: "pointer" }}
+                        onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(237, 233, 220, 0.40)")}
+                        onBlur={(e) => (e.currentTarget.style.borderColor = BORDER)}
+                      >
+                        <option value="" style={{ backgroundColor: "#1A1916" }}>Välj...</option>
+                        <option value="asap" style={{ backgroundColor: "#1A1916" }}>Så snart som möjligt</option>
+                        <option value="1-3m" style={{ backgroundColor: "#1A1916" }}>1–3 månader</option>
+                        <option value="3-6m" style={{ backgroundColor: "#1A1916" }}>3–6 månader</option>
+                        <option value="flexible" style={{ backgroundColor: "#1A1916" }}>Flexibel</option>
+                      </select>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full rounded-lg px-5 py-3 font-sans text-[13px] font-medium transition-opacity hover:opacity-85 disabled:opacity-50"
+                      style={{ backgroundColor: "#EDE9DC", color: "#100F0D" }}
+                    >
+                      {submitting ? "Skickar…" : "Skicka förfrågan →"}
+                    </button>
+
+                    <p className="font-sans text-[12px] text-center" style={{ color: "rgba(237, 233, 220, 0.40)" }}>
+                      Vi återkommer inom 24 timmar med en första bedömning.
+                    </p>
+                  </form>
+                )}
               </div>
             </div>
           </div>
         </section>
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 };
