@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CheckCircle2, Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, CircleCheck as CheckCircle2, Loader as Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
 import SiteHeader from "@/components/layout/SiteHeader";
