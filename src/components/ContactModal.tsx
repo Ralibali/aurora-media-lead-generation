@@ -1,4 +1,5 @@
 import { useState, createContext, useContext, ReactNode, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
+import { CircleCheck as CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -58,7 +59,7 @@ const EMAIL_DOMAIN_TYPOS: Record<string, string> = {
   "gmail.co": "gmail.com", "gmail.con": "gmail.com", "gnail.com": "gmail.com",
   "gmaill.com": "gmail.com", "gmali.com": "gmail.com",
   "hotnail.com": "hotmail.com", "hotmai.com": "hotmail.com", "hotmial.com": "hotmail.com",
-  "hotmail.co": "hotmail.com", "hotmail.con": "hotmail.com", "hotmail.se": "hotmail.com",
+  "hotmail.co": "hotmail.com", "hotmail.con": "hotmail.com",
   "yaho.com": "yahoo.com", "yahooo.com": "yahoo.com", "yahoo.co": "yahoo.com",
   "outlok.com": "outlook.com", "outloo.com": "outlook.com", "outlook.con": "outlook.com",
   "iclould.com": "icloud.com", "icloud.con": "icloud.com", "iclod.com": "icloud.com",
@@ -610,26 +611,36 @@ const ContactDialog = ({
                 </div>
               )}
             </div>
-            {isMobileApp && (
-              <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
-                <Label htmlFor="platform">Vilken plattform? *</Label>
-                <p className="text-xs text-muted-foreground">
-                  Hjälper mig att skissa rätt teknikval och tidsplan direkt.
-                </p>
-                <Select value={platformValue} onValueChange={setPlatformValue} name="platform">
-                  <SelectTrigger id="platform">
-                    <SelectValue placeholder="Välj plattform" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {PLATFORM_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+            <AnimatePresence>
+              {isMobileApp && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: "auto", marginTop: 0 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                    <Label htmlFor="platform">Vilken plattform? *</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Hjälper mig att skissa rätt teknikval och tidsplan direkt.
+                    </p>
+                    <Select value={platformValue} onValueChange={setPlatformValue} name="platform">
+                      <SelectTrigger id="platform">
+                        <SelectValue placeholder="Välj plattform" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PLATFORM_OPTIONS.map((opt) => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
             {internalNote && (
               <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm">
                 <div className="flex items-start gap-2.5">

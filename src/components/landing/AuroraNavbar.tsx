@@ -92,16 +92,20 @@ const AuroraNavbar = () => {
           <AuroraLogo />
 
           <nav className="ml-auto mr-8 hidden items-center gap-7 md:flex">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                onClick={(e) => { e.preventDefault(); goToNav(n.href, n.type); }}
-                className="text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
-              >
-                {n.label}
-              </a>
-            ))}
+            {NAV.map((n) => {
+              const isActive = n.type === "route" && location.pathname === n.href;
+              return (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  onClick={(e) => { e.preventDefault(); goToNav(n.href, n.type); }}
+                  className={`text-sm font-medium transition-colors hover:text-foreground ${isActive ? "text-foreground" : "text-foreground/60"}`}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {n.label}
+                </a>
+              );
+            })}
           </nav>
 
           <button

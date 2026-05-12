@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2, Mail, Clock, Calendar, Tag } from "lucide-react";
+import { CircleCheck as CheckCircle2, Mail, Clock, Calendar, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -238,8 +238,26 @@ const ContactDialog = ({
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5"><Label htmlFor="name">Namn *</Label><Input id="name" name="name" required placeholder="Förnamn Efternamn" /><ErrorText name="name" /></div>
-              <div className="space-y-1.5"><Label htmlFor="email">E-post *</Label><Input id="email" name="email" type="email" required placeholder="namn@foretag.se" /><ErrorText name="email" /></div>
+              <div className="space-y-1.5">
+                <Label htmlFor="name">Namn *</Label>
+                <Input
+                  id="name" name="name" required placeholder="Förnamn Efternamn"
+                  aria-invalid={!!fieldErrors.name}
+                  className={fieldErrors.name ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onChange={() => { if (fieldErrors.name) setFieldErrors((p) => ({ ...p, name: undefined as unknown as string })); }}
+                />
+                <ErrorText name="name" />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="email">E-post *</Label>
+                <Input
+                  id="email" name="email" type="email" required placeholder="namn@foretag.se"
+                  aria-invalid={!!fieldErrors.email}
+                  className={fieldErrors.email ? "border-destructive focus-visible:ring-destructive" : undefined}
+                  onChange={() => { if (fieldErrors.email) setFieldErrors((p) => ({ ...p, email: undefined as unknown as string })); }}
+                />
+                <ErrorText name="email" />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -250,34 +268,79 @@ const ContactDialog = ({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="space-y-1.5">
                 <Label>Upplägg *</Label>
-                <Select value={paketValue} onValueChange={setPaketValue}><SelectTrigger><SelectValue placeholder="Välj upplägg" /></SelectTrigger><SelectContent>{MVP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+                <Select value={paketValue} onValueChange={(v) => { setPaketValue(v); if (fieldErrors.paket) setFieldErrors((p) => ({ ...p, paket: undefined as unknown as string })); }}>
+                  <SelectTrigger className={fieldErrors.paket ? "border-destructive" : undefined}><SelectValue placeholder="Välj upplägg" /></SelectTrigger>
+                  <SelectContent>{MVP_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                </Select>
                 <ErrorText name="paket" />
               </div>
               <div className="space-y-1.5">
                 <Label>Budget *</Label>
-                <Select value={budgetValue} onValueChange={setBudgetValue}><SelectTrigger><SelectValue placeholder="Välj budget" /></SelectTrigger><SelectContent>{BUDGET_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+                <Select value={budgetValue} onValueChange={(v) => { setBudgetValue(v); if (fieldErrors.budget) setFieldErrors((p) => ({ ...p, budget: undefined as unknown as string })); }}>
+                  <SelectTrigger className={fieldErrors.budget ? "border-destructive" : undefined}><SelectValue placeholder="Välj budget" /></SelectTrigger>
+                  <SelectContent>{BUDGET_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                </Select>
                 <ErrorText name="budget" />
               </div>
               <div className="space-y-1.5">
                 <Label>Tidsplan *</Label>
-                <Select value={timelineValue} onValueChange={setTimelineValue}><SelectTrigger><SelectValue placeholder="Välj tidsplan" /></SelectTrigger><SelectContent>{TIMELINE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent></Select>
+                <Select value={timelineValue} onValueChange={(v) => { setTimelineValue(v); if (fieldErrors.timeline) setFieldErrors((p) => ({ ...p, timeline: undefined as unknown as string })); }}>
+                  <SelectTrigger className={fieldErrors.timeline ? "border-destructive" : undefined}><SelectValue placeholder="Välj tidsplan" /></SelectTrigger>
+                  <SelectContent>{TIMELINE_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
+                </Select>
                 <ErrorText name="timeline" />
               </div>
             </div>
 
-            <div className="space-y-1.5"><Label htmlFor="audience">Vem är målgruppen? *</Label><Input id="audience" name="audience" placeholder="Ex: svenska åkerier med 5–30 fordon" /><ErrorText name="audience" /></div>
-            <div className="space-y-1.5"><Label htmlFor="problem">Vilket problem ska AI-lösningen lösa? *</Label><Textarea id="problem" name="problem" rows={3} placeholder="Beskriv problemet, dagens manuella lösning och varför någon skulle betala." /><ErrorText name="problem" /></div>
-            <div className="space-y-1.5"><Label htmlFor="message">Beskriv idén kort *</Label><Textarea id="message" name="message" rows={6} placeholder="Vad ska första versionen kunna göra? Handlar det om AI, automation, SaaS, app, intern portal eller något annat?" /><ErrorText name="message" /></div>
+            <div className="space-y-1.5">
+              <Label htmlFor="audience">Vem är målgruppen? *</Label>
+              <Input
+                id="audience" name="audience" placeholder="Ex: svenska åkerier med 5–30 fordon"
+                aria-invalid={!!fieldErrors.audience}
+                className={fieldErrors.audience ? "border-destructive focus-visible:ring-destructive" : undefined}
+                onChange={() => { if (fieldErrors.audience) setFieldErrors((p) => ({ ...p, audience: undefined as unknown as string })); }}
+              />
+              <ErrorText name="audience" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="problem">Vilket problem ska AI-lösningen lösa? *</Label>
+              <Textarea
+                id="problem" name="problem" rows={3} placeholder="Beskriv problemet, dagens manuella lösning och varför någon skulle betala."
+                aria-invalid={!!fieldErrors.problem}
+                className={fieldErrors.problem ? "border-destructive focus-visible:ring-destructive" : undefined}
+                onChange={() => { if (fieldErrors.problem) setFieldErrors((p) => ({ ...p, problem: undefined as unknown as string })); }}
+              />
+              <ErrorText name="problem" />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="message">Beskriv idén kort *</Label>
+              <Textarea
+                id="message" name="message" rows={6} placeholder="Vad ska första versionen kunna göra? Handlar det om AI, automation, SaaS, app, intern portal eller något annat?"
+                aria-invalid={!!fieldErrors.message}
+                className={fieldErrors.message ? "border-destructive focus-visible:ring-destructive" : undefined}
+                onChange={() => { if (fieldErrors.message) setFieldErrors((p) => ({ ...p, message: undefined as unknown as string })); }}
+              />
+              <ErrorText name="message" />
+            </div>
 
             {internalNote && <div className="rounded-xl border border-border bg-secondary/40 px-4 py-3 text-sm"><div className="flex items-start gap-2.5"><Tag className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" /><p className="text-foreground/85">{internalNote}</p></div></div>}
 
-            <label className="flex items-start gap-3 rounded-xl border border-border bg-card/50 p-4 text-sm text-muted-foreground">
-              <input type="checkbox" name="consent" checked={consentChecked} onChange={(e) => setConsentChecked(e.target.checked)} className="mt-1" />
+            <label className={`flex items-start gap-3 rounded-xl border p-4 text-sm text-muted-foreground cursor-pointer transition-colors ${fieldErrors.consent ? "border-destructive bg-destructive/5" : "border-border bg-card/50"}`}>
+              <input
+                type="checkbox" name="consent" checked={consentChecked}
+                onChange={(e) => {
+                  setConsentChecked(e.target.checked);
+                  if (fieldErrors.consent) setFieldErrors((p) => ({ ...p, consent: undefined as unknown as string }));
+                }}
+                className="mt-1"
+              />
               <span>Jag godkänner att Aurora Media behandlar mina uppgifter för att svara på min AI-förfrågan.</span>
             </label>
             <ErrorText name="consent" />
 
-            <Button type="submit" disabled={submitting} className="w-full" size="lg">{submitting ? "Skickar..." : "Skicka AI-förfrågan"}</Button>
+            <Button type="submit" disabled={submitting} className="w-full" size="lg">
+              {submitting ? "Skickar..." : "Skicka AI-förfrågan"}
+            </Button>
           </form>
         )}
       </DialogContent>
