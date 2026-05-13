@@ -63,7 +63,7 @@ const schema = z.object({
     }, "Använd en riktig e-postadress, inte en engångsadress")
     .refine((v) => !/\+.*\+/.test(v), "Ogiltig e-postadress"),
   company: z.string().trim().max(120).optional().or(z.literal("")),
-  paket: z.string().min(1, "Välj vilket paket du är intresserad av"),
+  paket: z.string().trim().max(120).optional().or(z.literal("")),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
   internalNote: z.string().trim().max(500).optional().or(z.literal("")),
@@ -419,30 +419,6 @@ const ContactDialog = ({
             <div className="space-y-1.5">
               <Label htmlFor="company">Företag</Label>
               <Input id="company" name="company" maxLength={120} autoComplete="organization" />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="paket">Vilket paket är du intresserad av? *</Label>
-              <Select value={paketValue} onValueChange={setPaketValue} name="paket">
-                <SelectTrigger id="paket">
-                  <SelectValue placeholder="Välj paket" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PAKET_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {leadLabel && (
-                <div
-                  className="mt-2 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary"
-                  aria-live="polite"
-                >
-                  <Tag className="h-3.5 w-3.5" />
-                  <span>{leadLabel}</span>
-                </div>
-              )}
             </div>
             {isMobileApp && (
               <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
