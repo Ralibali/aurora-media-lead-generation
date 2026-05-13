@@ -1,492 +1,793 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
-import {
-  setSEOMeta, setJsonLd, setHreflang,
-  organizationSchema, websiteSchema, serviceSchema,
-} from "@/lib/seoHelpers";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 
-/* ── shared ──────────────────────────────────────────────────────────────── */
-const RULE = { height: "0.5px", background: "rgba(237,233,220,0.12)" } as const;
+/* ─────────────────────────────────────────────────────────────────────────
+   AURORA MEDIA — landing page
+   Nordisk redaktionell minimalism. Asymmetri, typografisk dramatik,
+   monospace-metadata, EN accent (korall #E64A19). Allt på svenska.
+   ───────────────────────────────────────────────────────────────────────── */
 
-function Rule() { return <div style={RULE} />; }
+/* ── Tokens (scoped via CSS variables on the wrapper) ────────────────── */
+const TOKENS = `
+  .aurora {
+    --ink: #0B0F14;
+    --ink-soft: #1E222A;
+    --bone: #F2EDE3;
+    --slate: #6B6F77;
+    --glow: #E64A19;
+    --hairline: #D9D2C3;
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "Instrument Sans", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-function Label({ children }: { children: React.ReactNode }) {
+    background: var(--bone);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: clip;
+  }
+  .aurora *::selection { background: var(--glow); color: var(--bone); }
+
+  .aurora .wrap {
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: clamp(20px, 4vw, 48px);
+  }
+  .aurora .section { padding-block: clamp(64px, 10vw, 128px); }
+  .aurora .hairline { height: 1px; background: var(--hairline); width: 100%; }
+
+  /* Typography */
+  .aurora .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3.5rem, 11vw, 9.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  .aurora .h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    font-variation-settings: "opsz" 144, "SOFT" 80;
+  }
+  .aurora .h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+  .aurora .display em, .aurora .h2 em, .aurora .h3 em {
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  .aurora .mono {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .aurora .mono-sm { font-size: 10px; letter-spacing: 0.12em; }
+  .aurora .meta-label { color: var(--slate); }
+  .aurora .lead { font-size: clamp(1rem, 1.2vw, 1.1rem); line-height: 1.55; color: var(--ink); }
+  .aurora .body { font-size: 0.98rem; line-height: 1.65; color: var(--ink); }
+  .aurora .slate { color: var(--slate); }
+
+  /* Pills */
+  .aurora .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px;
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 14px; font-weight: 500;
+    text-decoration: none;
+    transition: all 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    cursor: pointer; border: 1px solid transparent;
+    white-space: nowrap;
+  }
+  .aurora .pill .arrow { display: inline-block; transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1); }
+  .aurora .pill:hover .arrow { transform: translateX(4px); }
+  .aurora .pill-primary { background: var(--ink); color: var(--bone); }
+  .aurora .pill-primary:hover { background: var(--glow); color: var(--bone); }
+  .aurora .pill-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .aurora .pill-ghost:hover { background: var(--ink); color: var(--bone); }
+  .aurora .pill-outline-light {
+    background: transparent; color: var(--bone);
+    border-color: rgba(242,237,227,0.4);
+  }
+  .aurora .pill-outline-light:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+
+  /* Focus rings */
+  .aurora a:focus-visible, .aurora button:focus-visible {
+    outline: 2px solid var(--glow);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Nav */
+  .aurora .nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    transition: backdrop-filter 220ms ease, background 220ms ease, border-color 220ms ease;
+    border-bottom: 1px solid transparent;
+  }
+  .aurora .nav.scrolled {
+    background: rgba(242,237,227,0.78);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+    border-bottom-color: var(--hairline);
+  }
+  .aurora .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px clamp(20px,4vw,48px);
+    max-width: 1440px; margin-inline: auto;
+  }
+  .aurora .nav-logo {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-display); font-style: italic;
+    font-size: 22px; letter-spacing: -0.02em; color: var(--ink);
+    text-decoration: none;
+  }
+  .aurora .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--glow);
+    display: inline-block;
+    animation: aurora-pulse 3s ease-in-out infinite;
+  }
+  @keyframes aurora-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.7); }
+  }
+  .aurora .nav-menu { display: none; gap: 28px; }
+  .aurora .nav-menu a {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink); text-decoration: none;
+    transition: color 180ms ease;
+  }
+  .aurora .nav-menu a:hover { color: var(--glow); }
+  @media (min-width: 900px) { .aurora .nav-menu { display: flex; } }
+
+  /* Ticker */
+  .aurora .ticker {
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    overflow: hidden;
+    padding-block: 22px;
+  }
+  .aurora .ticker-track {
+    display: inline-flex; gap: 56px; white-space: nowrap;
+    animation: aurora-marquee 40s linear infinite;
+    font-family: var(--font-display);
+    font-style: italic; font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+    color: var(--ink);
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  .aurora .ticker-track .star { color: var(--glow); }
+  @keyframes aurora-marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Section header grid */
+  .aurora .section-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: clamp(48px, 7vw, 96px);
+  }
+  @media (min-width: 900px) {
+    .aurora .section-header {
+      grid-template-columns: 1fr 2fr;
+      gap: clamp(32px, 5vw, 80px);
+    }
+  }
+
+  /* Services 2x2 */
+  .aurora .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--hairline);
+  }
+  @media (min-width: 760px) {
+    .aurora .services-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .aurora .service-cell {
+    padding: clamp(28px, 4vw, 56px);
+    border-bottom: 1px solid var(--hairline);
+    transition: background 180ms ease;
+  }
+  .aurora .service-cell:hover { background: rgba(11,15,20,0.025); }
+  @media (min-width: 760px) {
+    .aurora .service-cell:nth-child(odd) { border-right: 1px solid var(--hairline); }
+  }
+  .aurora .service-num {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em;
+    color: var(--glow); margin-bottom: 18px; display: inline-block;
+  }
+  .aurora .service-title {
+    font-family: var(--font-display); font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 14px;
+    font-variation-settings: "opsz" 144, "SOFT" 80;
+  }
+  .aurora .tag {
+    display: inline-block; padding: 5px 12px;
+    border: 1px solid var(--hairline); border-radius: 9999px;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--slate);
+    margin: 4px 4px 0 0;
+  }
+
+  /* Work list */
+  .aurora .work-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px 24px;
+    padding: 22px 12px;
+    border-bottom: 1px solid var(--hairline);
+    overflow: hidden;
+    transition: padding-left 320ms cubic-bezier(0.2,0.8,0.2,1);
+  }
+  @media (min-width: 900px) {
+    .aurora .work-row {
+      grid-template-columns: 60px 1.4fr 2fr 1fr auto;
+      align-items: baseline;
+      padding: 26px 12px;
+    }
+  }
+  .aurora .work-row::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: var(--glow);
+    transform: translateX(-101%);
+    transition: transform 420ms cubic-bezier(0.2,0.8,0.2,1);
+    z-index: 0; opacity: 0.06;
+  }
+  .aurora .work-row:hover { padding-left: 28px; }
+  .aurora .work-row:hover::before { transform: translateX(0); }
+  .aurora .work-row > * { position: relative; z-index: 1; }
+  .aurora .work-row .w-num {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+    color: var(--slate);
+  }
+  .aurora .work-row .w-title {
+    font-family: var(--font-display); font-size: clamp(1.4rem, 2vw, 1.9rem);
+    line-height: 1.05; letter-spacing: -0.02em;
+    transition: font-style 220ms ease;
+  }
+  .aurora .work-row:hover .w-title { font-style: italic; }
+  .aurora .work-row .w-desc { color: var(--slate); font-size: 0.95rem; line-height: 1.55; }
+  .aurora .work-row .w-type, .aurora .work-row .w-year {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--slate);
+  }
+
+  /* Process columns */
+  .aurora .process-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  @media (min-width: 900px) { .aurora .process-grid { grid-template-columns: repeat(4, 1fr); } }
+  .aurora .process-step {
+    padding: clamp(28px, 3.5vw, 48px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  @media (min-width: 900px) {
+    .aurora .process-step { border-bottom: none; border-right: 1px solid var(--hairline); }
+    .aurora .process-step:last-child { border-right: none; }
+  }
+  .aurora .process-numeral {
+    font-family: var(--font-display); font-style: italic;
+    font-size: 3rem; line-height: 1; color: var(--glow);
+    margin-bottom: 24px; display: block;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  .aurora .process-name {
+    font-family: var(--font-display); font-size: 1.6rem;
+    letter-spacing: -0.02em; margin-bottom: 12px;
+  }
+
+  /* CTA dark section */
+  .aurora .cta-dark {
+    background: var(--ink); color: var(--bone);
+    position: relative; overflow: hidden;
+  }
+  .aurora .cta-dark::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(60% 60% at 88% 12%, rgba(230,74,25,0.18), transparent 70%);
+    pointer-events: none;
+  }
+  .aurora .cta-dark .slate { color: rgba(242,237,227,0.55); }
+  .aurora .cta-dark .h2, .aurora .cta-dark .mono { color: var(--bone); }
+  .aurora .cta-dark .glow-em { color: var(--glow); font-style: italic; }
+  .aurora .cta-email {
+    font-family: var(--font-display); font-style: italic;
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    color: var(--bone); text-decoration: none;
+    border-bottom: 1px solid rgba(242,237,227,0.3);
+    padding-bottom: 6px; transition: border-color 200ms ease, color 200ms ease;
+    letter-spacing: -0.02em; display: inline-block;
+  }
+  .aurora .cta-email:hover { border-bottom-color: var(--glow); color: var(--glow); }
+
+  /* Footer */
+  .aurora .footer {
+    background: var(--ink); color: var(--bone);
+    padding-block: clamp(56px, 7vw, 96px);
+    border-top: 1px solid rgba(242,237,227,0.08);
+  }
+  .aurora .footer .slate { color: rgba(242,237,227,0.5); }
+  .aurora .footer a { color: rgba(242,237,227,0.78); text-decoration: none; transition: color 180ms ease; display: block; padding: 6px 0; font-size: 14px; }
+  .aurora .footer a:hover { color: var(--glow); }
+  .aurora .footer-grid {
+    display: grid; grid-template-columns: 1fr; gap: 40px;
+  }
+  @media (min-width: 760px) { .aurora .footer-grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; } }
+
+  /* Noise overlay */
+  .aurora-noise {
+    position: fixed; inset: 0; z-index: 60;
+    pointer-events: none; opacity: 0.35;
+    mix-blend-mode: multiply;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .aurora *, .aurora *::before, .aurora *::after {
+      animation: none !important; transition: none !important;
+    }
+  }
+`;
+
+/* ── Noise overlay (SVG turbulence) ─────────────────────────────────── */
+const NoiseOverlay = () => (
+  <svg className="aurora-noise" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <filter id="aurora-noise-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.04
+                                          0 0 0 0 0.06
+                                          0 0 0 0 0.08
+                                          0 0 0 0.55 0" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#aurora-noise-filter)" />
+  </svg>
+);
+
+/* ── Reveal helper ──────────────────────────────────────────────────── */
+const Reveal = ({ children, delay = 0, as: As = "div" as any, className }: any) => {
+  const reduce = useReducedMotion();
+  if (reduce) return <As className={className}>{children}</As>;
   return (
-    <p style={{
-      fontFamily: "'JetBrains Mono',ui-monospace,monospace",
-      fontSize: 11, letterSpacing: "0.1em",
-      color: "rgba(237,233,220,0.40)",
-      marginBottom: 20,
-      textTransform: "lowercase",
-    }}>
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.8, delay, ease: [0.2, 0.8, 0.2, 1] }}
+      className={className}
+    >
       {children}
-    </p>
+    </motion.div>
   );
-}
+};
 
-/* ── counter animation ───────────────────────────────────────────────────── */
-function useCountUp(target: number, duration = 1200) {
-  const [val, setVal] = useState(0);
-  const ref = useRef(false);
+/* ── Nav ────────────────────────────────────────────────────────────── */
+const NAV_ITEMS = [
+  { label: "Studio", href: "#studio" },
+  { label: "Tjänster", href: "#tjanster" },
+  { label: "Arbeten", href: "#arbeten" },
+  { label: "Process", href: "#process" },
+];
+
+const Nav = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    if (ref.current) return;
-    ref.current = true;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      setVal(Math.round(t * target));
-      if (t < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }, [target, duration]);
-  return val;
-}
-
-/* ── 01 HERO ─────────────────────────────────────────────────────────────── */
-function Hero() {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
-    <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
-      <div className="wrap">
-
-        {/* eyebrow */}
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 8,
-          borderBottom: "0.5px solid rgba(237,233,220,0.15)",
-          paddingBottom: 10, marginBottom: 32,
-        }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#EDE9DC", display: "block", flexShrink: 0 }} />
-          <span style={{
-            fontFamily: "'JetBrains Mono',ui-monospace,monospace",
-            fontSize: 11, letterSpacing: "0.1em",
-            color: "rgba(237,233,220,0.45)",
-          }}>
-            AI-byrå · Linköping · sedan 2021
-          </span>
-        </div>
-
-        {/* headline */}
-        <h1
-          className="anim-fade-up t-display c-cream"
-          style={{ maxWidth: 780, marginBottom: 28 }}
-        >
-          Vi pratar inte AI.
-          <br />
-          Vi <em>bygger</em> med det.
-        </h1>
-
-        {/* sub */}
-        <p
-          className="anim-fade-up anim-delay-1 t-body"
-          style={{ maxWidth: 480, color: "rgba(237,233,220,0.60)", marginBottom: 40 }}
-        >
-          SaaS-produkter, MVP:er och interna system levererade på veckor
-          istället för månader. Sex egna produkter i drift. Från 14 900 kr.
-        </p>
-
-        {/* ctas */}
-        <div className="anim-fade-up anim-delay-2" style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
-          <Link to="/process" className="btn-ghost">Hur vi jobbar</Link>
-        </div>
-
-        {/* client strip */}
-        <div style={{
-          marginTop: 64,
-          paddingTop: 24,
-          borderTop: "0.5px solid rgba(237,233,220,0.10)",
-          display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap",
-        }}>
-          <span style={{
-            fontFamily: "'JetBrains Mono',ui-monospace,monospace",
-            fontSize: 11, color: "rgba(237,233,220,0.35)", letterSpacing: "0.08em",
-          }}>
-            bygger för
-          </span>
-          <span style={{
-            fontFamily: "'Fraunces',Georgia,serif",
-            fontSize: "clamp(15px,2vw,18px)",
-            color: "rgba(237,233,220,0.65)",
-            fontStyle: "italic",
-          }}>
-            åkerier · vårdkliniker · friskvårdsstudios · m.fl. svenska tjänsteföretag
-          </span>
-        </div>
+    <header className={`nav ${scrolled ? "scrolled" : ""}`}>
+      <div className="nav-inner">
+        <a href="#top" className="nav-logo" aria-label="Aurora Media — startsida">
+          <span className="nav-dot" aria-hidden />
+          <span>Aurora Media</span>
+        </a>
+        <nav className="nav-menu" aria-label="Huvudmeny">
+          {NAV_ITEMS.map((n) => (
+            <a key={n.href} href={n.href}>{n.label}</a>
+          ))}
+        </nav>
+        <a href="#kontakt" className="pill pill-ghost" style={{ display: "none" }} data-desktop>
+          Boka samtal <span className="arrow">→</span>
+        </a>
+        <a href="#kontakt" className="pill pill-ghost aurora-cta-desktop">
+          Boka samtal <span className="arrow">→</span>
+        </a>
       </div>
-    </section>
+      <style>{`
+        .aurora .aurora-cta-desktop { display: none; }
+        @media (min-width: 760px) { .aurora .aurora-cta-desktop { display: inline-flex; } }
+      `}</style>
+    </header>
   );
-}
+};
 
-/* ── 02 PRODUCTS ─────────────────────────────────────────────────────────── */
-const PRODUCTS = [
-  { name: "Hönsgården",     desc: "Mobilapp för hönshållning",               url: "honsgarden.se" },
-  { name: "AgilityManager", desc: "Träningslogg för hundsporten",             url: "agilitymanager.se" },
-  { name: "Aurora Transport",desc: "TMS för svenska åkerier",                 url: "auroratransport.se" },
-  { name: "Updro",          desc: "Marknadsplats för svenska byråer",         url: "updro.se" },
-  { name: "Odlingsdagboken",desc: "Köksträdgård med AI-coach Gro",            url: "odlingsdagboken.com" },
-  { name: "GoGlamping",     desc: "Bokning vid Göta kanal",                   url: "goglamping.se" },
+/* ── Hero ───────────────────────────────────────────────────────────── */
+const HERO_META = [
+  { label: "Studio", value: "Linköping, SE" },
+  { label: "Sedan", value: "MMXXI" },
+  { label: "Org.nr", value: "559272-0220" },
+  { label: "Status", value: "Tar uppdrag Q3 2026" },
 ];
 
-function Products() {
-  return (
-    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-      <Rule />
-      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 40, gap: 16, flexWrap: "wrap" }}>
-          <div>
-            <Label>01 — egna produkter</Label>
-            <h2 className="t-h2 c-cream">
-              Sex produkter. <em>I drift idag.</em>
-            </h2>
-          </div>
-          <p style={{ fontSize: 13, color: "rgba(237,233,220,0.35)", fontFamily: "'JetBrains Mono',ui-monospace,monospace" }}>
-            Inte case studies.
-          </p>
-        </div>
-
-        {PRODUCTS.map((p, i) => (
-          <a
-            key={p.name}
-            href={`https://${p.url}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "28px 1fr 1fr auto",
-              alignItems: "center",
-              gap: "12px 24px",
-              padding: "18px 0",
-              borderBottom: "0.5px solid rgba(237,233,220,0.08)",
-              textDecoration: "none",
-              transition: "background 0.15s",
-              marginInline: "-12px",
-              paddingInline: "12px",
-              borderRadius: 4,
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(237,233,220,0.03)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-          >
-            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.30)" }}>
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 14, fontWeight: 500, color: "#EDE9DC" }}>
-              {p.name}
-            </span>
-            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 13, color: "rgba(237,233,220,0.50)" }} className="hidden sm:block">
-              {p.desc}
-            </span>
-            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 11, color: "rgba(237,233,220,0.35)", whiteSpace: "nowrap" }}>
-              {p.url} ↗
-            </span>
-          </a>
-        ))}
-
-        <div style={{ marginTop: 32 }}>
-          <Link to="/produkter" style={{ fontSize: 13, color: "rgba(237,233,220,0.45)", fontFamily: "'Inter',system-ui,sans-serif", textDecoration: "none", transition: "color 0.15s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.45)")}>
-            Läs mer om produkterna →
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── 03 TESTIMONIAL ──────────────────────────────────────────────────────── */
-function Testimonial() {
-  return (
-    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-      <Rule />
-      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-        <div style={{ maxWidth: 680, marginInline: "auto", textAlign: "center" }}>
-          <p className="t-quote c-cream" style={{ marginBottom: 32 }}>
-            "Aurora levererade vårt TMS på fyra veckor — något två andra byråer sa var omöjligt."
-          </p>
-          <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif" }}>
-            Daniel, CJ Bemanning AB
-          </p>
-          <p style={{ marginTop: 6, fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.25)", letterSpacing: "0.06em" }}>
-            [verifieras innan launch]
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ── 04 SERVICES ─────────────────────────────────────────────────────────── */
-const SERVICES = [
-  { num: "01", name: "SaaS-produkt",   price: "från 14 900 kr", desc: "Från MVP till lansering. Auth, betalning, e-post och admin från dag ett. Samma stack som våra egna produkter." },
-  { num: "02", name: "Hemsida",        price: "pris på offert", desc: "Modern, snabb och SEO-optimerad. CMS ni faktiskt vill använda. Byggt på grund ni äger." },
-  { num: "03", name: "Internt system", price: "pris på offert", desc: "Admin-paneler, dashboards och flöden som ersätter era Excel-ark." },
-  { num: "04", name: "AI-integration", price: "pris på offert", desc: "Språkmodeller, agenter och automatiseringar in i era befintliga system." },
+const HERO_WORDS = [
+  { t: "Vi" }, { t: "bygger" }, { t: "digitala" },
+  { t: "produkter", em: true }, { t: "som" },
+  { t: "faktiskt", em: true }, { t: "används." },
 ];
 
-function Services() {
+const Hero = () => {
+  const reduce = useReducedMotion();
   return (
-    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-      <Rule />
-      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-
-        <div style={{ marginBottom: 40 }}>
-          <Label>02 — tjänster</Label>
-          <h2 className="t-h2 c-cream" style={{ marginBottom: 12 }}>
-            Vi bygger fyra saker. <em>Snabbt.</em>
-          </h2>
-          <p className="t-body" style={{ maxWidth: 460, color: "rgba(237,233,220,0.55)" }}>
-            Moderna AI-verktyg, fast pris, fast deadline. Levereras på veckor.
-          </p>
-        </div>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          border: "0.5px solid rgba(237,233,220,0.10)",
-          borderRadius: 8,
-          overflow: "hidden",
-        }}>
-          {SERVICES.map((s, i) => (
-            <div
-              key={s.num}
-              style={{
-                padding: "clamp(24px,3vw,36px)",
-                borderRight: i % 2 === 0 ? "0.5px solid rgba(237,233,220,0.10)" : "none",
-                borderBottom: i < 2 ? "0.5px solid rgba(237,233,220,0.10)" : "none",
-                transition: "background 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(237,233,220,0.025)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 20 }}>
-                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.30)", letterSpacing: "0.06em" }}>{s.num}</span>
-                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.40)", letterSpacing: "0.04em" }}>{s.price}</span>
+    <section id="top" style={{ paddingTop: 140, paddingBottom: "clamp(64px, 10vw, 120px)", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+      <div className="wrap" style={{ width: "100%" }}>
+        {/* meta grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24, marginBottom: "clamp(48px, 8vw, 96px)" }} className="aurora-meta-grid">
+          <style>{`@media (min-width: 760px) { .aurora-meta-grid { grid-template-columns: repeat(4, 1fr) !important; } }`}</style>
+          {HERO_META.map((m, i) => (
+            <Reveal key={m.label} delay={i * 0.06}>
+              <div>
+                <div className="mono meta-label" style={{ marginBottom: 8 }}>{m.label}</div>
+                <div className="mono" style={{ color: "var(--ink)" }}>{m.value}</div>
               </div>
-              <p style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 20, color: "#EDE9DC", marginBottom: 10, lineHeight: 1.2 }}>{s.name}</p>
-              <p style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 13, color: "rgba(237,233,220,0.55)", lineHeight: 1.65 }}>{s.desc}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
 
-        {/* inline CTA */}
-        <div style={{
-          marginTop: 32, padding: "24px 28px",
-          border: "0.5px solid rgba(237,233,220,0.10)",
-          borderRadius: 8,
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          gap: 20, flexWrap: "wrap",
-          background: "rgba(237,233,220,0.02)",
-        }}>
-          <div>
-            <p style={{ fontSize: 14, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif", fontWeight: 500, marginBottom: 4 }}>
-              Har ni en idé eller en process som suger?
+        {/* H1 */}
+        <h1 className="display" style={{ maxWidth: "16ch", marginBottom: "clamp(48px, 8vw, 96px)" }}>
+          {HERO_WORDS.map((w, i) => (
+            <span key={i} style={{ display: "inline-block", overflow: "hidden", paddingRight: "0.25em" }}>
+              {reduce ? (
+                w.em ? <em>{w.t}</em> : w.t
+              ) : (
+                <motion.span
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.7, delay: 0.15 + i * 0.1, ease: [0.2, 0.8, 0.2, 1] }}
+                  style={{ display: "inline-block" }}
+                >
+                  {w.em ? <em>{w.t}</em> : w.t}
+                </motion.span>
+              )}
+            </span>
+          ))}
+        </h1>
+
+        {/* lower hero */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px, 5vw, 64px)", alignItems: "end" }} className="aurora-hero-lower">
+          <style>{`@media (min-width: 900px) { .aurora-hero-lower { grid-template-columns: 1fr 1.2fr !important; } }`}</style>
+          <Reveal delay={0.2}>
+            <p className="lead" style={{ maxWidth: 460 }}>
+              Aurora Media är en oberoende digitalstudio från Östergötland. Vi designar, utvecklar och driver
+              SaaS-plattformar och webbplatser för svenska företag som vill bygga något som håller —
+              inte bara ser bra ut i en pitch.
             </p>
-            <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif" }}>
-              Vi återkommer med offert inom 24 timmar.
-            </p>
-          </div>
-          <Link to="/kontakt" className="btn-primary" style={{ flexShrink: 0 }}>Begär offert →</Link>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "flex-start" }}>
+              <a href="#arbeten" className="pill pill-primary">Se utvalda arbeten <span className="arrow">→</span></a>
+              <a href="#kontakt" className="pill pill-ghost">Starta projekt <span className="arrow">→</span></a>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
   );
-}
+};
 
-/* ── 05 PROCESS ──────────────────────────────────────────────────────────── */
-const STEPS = [
-  { n: "01", name: "Samtal",    t: "30 min",    desc: "Ni berättar. Vi säger ja eller nej och varför." },
-  { n: "02", name: "Offert",    t: "< 24h",     desc: "Fast pris, fast scope, fast deadline — skriftligt." },
-  { n: "03", name: "Bygge",     t: "1–6 veckor",desc: "Live-version från dag ett. Veckovisa stämningar." },
-  { n: "04", name: "Lansering", t: "1 dag",     desc: "Repo, domän, docs överlämnas. Allt är ert." },
+/* ── Ticker ─────────────────────────────────────────────────────────── */
+const TICKER_ITEMS = [
+  "SaaS-utveckling", "Webbplatser", "Varumärke", "SEO & innehåll", "Drift & support",
 ];
 
-function ProcessSection() {
+const Ticker = () => {
+  const items = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
   return (
-    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-      <Rule />
-      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-
-        <Label>03 — process</Label>
-        <h2 className="t-h2 c-cream" style={{ marginBottom: 12 }}>
-          Från samtal till live <em>på fyra veckor.</em>
-        </h2>
-        <p className="t-body" style={{ maxWidth: 460, color: "rgba(237,233,220,0.55)", marginBottom: 40 }}>
-          Ni betalar för bygget — inte för att vi lär oss nya ramverk.
-        </p>
-
-        {STEPS.map((s, i) => (
-          <div
-            key={s.n}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "28px 160px 1fr auto",
-              alignItems: "start",
-              gap: "8px 28px",
-              padding: "22px 0",
-              borderBottom: "0.5px solid rgba(237,233,220,0.08)",
-            }}
-          >
-            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 10, color: "rgba(237,233,220,0.28)", paddingTop: 2 }}>{s.n}</span>
-            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 14, fontWeight: 500, color: "#EDE9DC" }}>{s.name}</span>
-            <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 13, color: "rgba(237,233,220,0.50)", lineHeight: 1.6 }} className="hidden sm:block">{s.desc}</span>
-            <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: 11, color: "rgba(237,233,220,0.35)", whiteSpace: "nowrap", textAlign: "right" }}>{s.t}</span>
-          </div>
+    <div className="ticker" aria-hidden="true">
+      <div className="ticker-track">
+        {items.map((t, i) => (
+          <span key={i}>
+            {t}<span className="star" style={{ marginLeft: 56 }}>✦</span>
+          </span>
         ))}
-
-        <div style={{ marginTop: 32 }}>
-          <Link to="/process" style={{ fontSize: 13, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif", textDecoration: "none", transition: "color 0.15s" }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
-            Djupare om processen →
-          </Link>
-        </div>
       </div>
-    </section>
+    </div>
   );
-}
+};
 
-/* ── 06 ABOUT ────────────────────────────────────────────────────────────── */
-function About() {
-  return (
-    <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-      <Rule />
-      <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-        <Label>04 — om aurora</Label>
-        <h2 className="t-h2 c-cream" style={{ marginBottom: 40 }}>
-          Aurora är en person. <em>Det är en feature.</em>
-        </h2>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px,5vw,64px)" }}
-          className="sm:grid-cols-[240px_1fr]">
-
-          {/* card */}
-          <div>
-            <div style={{
-              width: 72, height: 72, borderRadius: "50%",
-              border: "0.5px solid rgba(237,233,220,0.18)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              marginBottom: 16,
-            }}>
-              <span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 28, color: "#EDE9DC", fontStyle: "italic" }}>C</span>
-            </div>
-
-            <p style={{ fontSize: 14, fontWeight: 500, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif" }}>Christoffer Holstensson</p>
-            <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif", marginTop: 2 }}>Grundare och utvecklare</p>
-
-            <table style={{ marginTop: 20, width: "100%", borderCollapse: "collapse" }}>
-              {[["Bas","Linköping"],["Sedan","2021"],["Produkter","6 i drift"],["Specialitet","SaaS, AI, system"]].map(([k,v]) => (
-                <tr key={k} style={{ borderBottom: "0.5px solid rgba(237,233,220,0.08)" }}>
-                  <td style={{ padding: "8px 0", fontSize: 12, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif" }}>{k}</td>
-                  <td style={{ padding: "8px 0", fontSize: 12, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif", textAlign: "right" }}>{v}</td>
-                </tr>
-              ))}
-            </table>
-
-            <div style={{ display: "flex", gap: 16, marginTop: 20 }}>
-              {[
-                ["LinkedIn ↗", "https://linkedin.com"],
-                ["GitHub ↗", "https://github.com/ralibali"],
-              ].map(([label, href]) => (
-                <a key={label as string} href={href as string} target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: 13, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
-                  {label}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* prose */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            {[
-              "De flesta byråer skickar runt projekt mellan projektledare, designers, utvecklare och konsulter. Något försvinner i varje överlämning.",
-              "Aurora Media är annorlunda byggt: en person bygger hela vägen, från första skissen till driftsatt produkt. Det är därför vi kan leverera på veckor istället för månader — och det är därför ni alltid pratar med personen som faktiskt kodar.",
-              "När projektet växer förbi vad en person rimligen klarar säger vi det rakt ut. Då tar vi in externa specialister med ert godkännande — eller så hänvisar vi vidare.",
-            ].map((p, i) => (
-              <p key={i} style={{ fontSize: 14, lineHeight: 1.8, color: i === 0 ? "rgba(237,233,220,0.70)" : i === 1 ? "rgba(237,233,220,0.80)" : "rgba(237,233,220,0.55)", fontFamily: "'Inter',system-ui,sans-serif" }}>
-                {p}
-              </p>
-            ))}
-          </div>
-        </div>
+/* ── Studio ─────────────────────────────────────────────────────────── */
+const Studio = () => (
+  <section id="studio" className="section">
+    <div className="wrap">
+      <div className="section-header">
+        <Reveal>
+          <div className="mono meta-label">01 — Studio</div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="h2">En liten studio. <em>Stor verkstad.</em></h2>
+        </Reveal>
       </div>
-    </section>
-  );
-}
 
-/* ── 07 STATS ────────────────────────────────────────────────────────────── */
-const STATS = [
-  { val: 6,    suffix: "",    label: "Egna SaaS i drift" },
-  { val: 4,    suffix: " år", label: "Aktiv verksamhet" },
-  { val: 100,  suffix: "%",   label: "Källkod och drift överlämnas" },
-  { val: 24,   suffix: "h",   label: "Svarstid på offert" },
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px, 5vw, 80px)" }} className="aurora-manifest">
+        <style>{`@media (min-width: 900px) { .aurora-manifest { grid-template-columns: 1fr 1.5fr !important; } }`}</style>
+        <Reveal>
+          <p className="h3" style={{ maxWidth: "30ch" }}>
+            Vi är inte en byrå med säljare och projektledare i flera led. Vi är teknikerna, designerna och
+            strategerna — <em>samma personer</em> som faktiskt skriver koden och rättar buggarna klockan 22
+            på en söndag.
+          </p>
+        </Reveal>
+        <Reveal delay={0.15}>
+          <div style={{ display: "grid", gap: 20 }}>
+            <p className="body slate">
+              Aurora Media startades för att vi var trötta på att se goda idéer dö i Powerpoint-presentationer,
+              orealistiska budgets och team där ingen riktigt äger leveransen. Vi bygger små, fokuserade
+              projekt med få inblandade och hög teknisk kvalitet.
+            </p>
+            <p className="body slate">
+              Vid sidan av kunduppdrag driver vi en växande portfölj av egna SaaS-produkter — från flockhantering
+              för hönsuppfödare till transportsystem för svenska åkerier. Det vi lär oss där, kommer kunderna
+              till godo i nästa projekt.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+    </div>
+  </section>
+);
+
+/* ── Services ───────────────────────────────────────────────────────── */
+const SERVICES = [
+  {
+    num: "→ 01",
+    title: "Webbplatser",
+    desc: "Snabba, SEO-optimerade webbplatser byggda för konvertering. Från enkla portföljer till komplexa B2B-plattformar.",
+    tags: ["Next.js", "React", "Supabase", "SEO"],
+  },
+  {
+    num: "→ 02",
+    title: "SaaS-utveckling",
+    desc: "Vi bygger hela SaaS-produkter — från första prototyp till skalbar plattform med betalning, autentisering och mobilappar.",
+    tags: ["TypeScript", "Stripe", "RLS", "Capacitor"],
+  },
+  {
+    num: "→ 03",
+    title: "Marknadsföring",
+    desc: "Google Ads, Meta, sökmotoroptimering och innehåll som ger spårbar avkastning — inte vanity metrics.",
+    tags: ["Google Ads", "Meta", "SEO", "Innehåll"],
+  },
+  {
+    num: "→ 04",
+    title: "Drift & förvaltning",
+    desc: "Löpande utveckling, övervakning och säkerhet för kritiska digitala produkter. Vi bygger det — vi driver det.",
+    tags: ["Hosting", "Säkerhet", "Support", "Iteration"],
+  },
 ];
 
-function StatNum({ val, suffix }: { val: number; suffix: string }) {
-  const n = useCountUp(val);
-  return (
-    <span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: "clamp(36px,5vw,52px)", lineHeight: 1, color: "#EDE9DC", fontWeight: 400 }}>
-      {n}{suffix}
-    </span>
-  );
-}
+const Services = () => (
+  <section id="tjanster" className="section">
+    <div className="wrap">
+      <div className="section-header">
+        <Reveal>
+          <div className="mono meta-label">02 — Tjänster</div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="h2">Vad vi <em>faktiskt</em> gör.</h2>
+        </Reveal>
+      </div>
 
-function Stats() {
-  return (
-    <section style={{ paddingBlock: 0 }}>
-      <div style={{ borderBlock: "0.5px solid rgba(237,233,220,0.10)" }}>
-        <div className="wrap" style={{ paddingBlock: "clamp(40px,6vw,64px)" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "40px 32px" }}>
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <StatNum val={s.val} suffix={s.suffix} />
-                <p style={{ marginTop: 8, fontSize: 12, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif", lineHeight: 1.5 }}>{s.label}</p>
-              </div>
-            ))}
+      <Reveal>
+        <div className="services-grid">
+          {SERVICES.map((s) => (
+            <div className="service-cell" key={s.title}>
+              <span className="service-num">{s.num}</span>
+              <h3 className="service-title">{s.title}</h3>
+              <p className="body slate" style={{ maxWidth: "44ch", marginBottom: 20 }}>{s.desc}</p>
+              <div>{s.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
+            </div>
+          ))}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+/* ── Work ───────────────────────────────────────────────────────────── */
+const WORK = [
+  { n: "001", title: "Hönsgården", desc: "SaaS för flockhantering. Mobilapp i App Store och Google Play med över 67 % freemium-konvertering.", type: "Egen produkt", year: "2025" },
+  { n: "002", title: "AgilityManager", desc: "Plattform för agility-tränare med banplanerare i 3D, statistik och tävlingskalender.", type: "Egen produkt", year: "2026" },
+  { n: "003", title: "Aurora Transport", desc: "SaaS för transportbolag — uppdragshantering, körjournaler och digitala signaturer.", type: "Egen produkt", year: "2026" },
+  { n: "004", title: "Viriditas Massage", desc: "Hemsida, bokningssystem och Google Ads-kampanj för massagesalong i Uddevalla.", type: "Kunduppdrag", year: "2026" },
+  { n: "005", title: "Odlingsdagboken", desc: "Digital trädgårdsdagbok med AI-coachen Gro och programmatisk SEO.", type: "Egen produkt", year: "2025" },
+  { n: "006", title: "Updro", desc: "Marknadsplats för digitala uppdrag — referralsystem, escrow och SEO-driven trafik.", type: "Egen produkt", year: "2026" },
+];
+
+const Work = () => (
+  <section id="arbeten" className="section">
+    <div className="wrap">
+      <div className="section-header">
+        <Reveal>
+          <div className="mono meta-label">03 — Utvalda arbeten</div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="h2">Saker vi <em>byggt</em> och driver.</h2>
+        </Reveal>
+      </div>
+
+      <div style={{ borderTop: "1px solid var(--hairline)" }}>
+        {WORK.map((w) => (
+          <Reveal key={w.n}>
+            <div className="work-row">
+              <span className="w-num">{w.n}</span>
+              <span className="w-title">{w.title}</span>
+              <span className="w-desc">{w.desc}</span>
+              <span className="w-type">{w.type}</span>
+              <span className="w-year">{w.year}</span>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+/* ── Process ────────────────────────────────────────────────────────── */
+const STEPS = [
+  { num: "i.", name: "Förstå", desc: "Vi börjar med din affär — inte med din design. Vad ska produkten lösa, för vem, och hur mäter vi att den lyckas?" },
+  { num: "ii.", name: "Forma", desc: "Snabba prototyper i kod, inte bilder i Figma. Vi testar idéer i webbläsaren där användaren möter dem." },
+  { num: "iii.", name: "Bygg", desc: "Modern stack, robust kod, tidiga lanseringar. Vi släpper i iterationer — inte i ett stort drag." },
+  { num: "iv.", name: "Driv", desc: "Allt vi bygger förvaltas av samma team. Inga överlämningar, ingen kunskap som försvinner." },
+];
+
+const Process = () => (
+  <section id="process" className="section">
+    <div className="wrap">
+      <div className="section-header">
+        <Reveal>
+          <div className="mono meta-label">04 — Process</div>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="h2">Från idé till drift på <em>fyra steg.</em></h2>
+        </Reveal>
+      </div>
+
+      <Reveal>
+        <div className="process-grid">
+          {STEPS.map((s) => (
+            <div className="process-step" key={s.num}>
+              <span className="process-numeral">{s.num}</span>
+              <h3 className="process-name">{s.name}</h3>
+              <p className="body slate">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+/* ── CTA dark ───────────────────────────────────────────────────────── */
+const CTA = () => (
+  <section id="kontakt" className="cta-dark section" style={{ position: "relative" }}>
+    <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(40px, 6vw, 80px)", alignItems: "end" }} className="aurora-cta-grid">
+        <style>{`@media (min-width: 900px) { .aurora-cta-grid { grid-template-columns: 1fr 1fr !important; } }`}</style>
+        <Reveal>
+          <h2 className="h2">Har du <span className="glow-em">något</span> att bygga?</h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <div>
+            <div className="mono meta-label" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 18 }}>Kontakt</div>
+            <a href="mailto:info@auroramedia.se" className="cta-email">info@auroramedia.se →</a>
+            <p className="body slate" style={{ marginTop: 24, maxWidth: "32ch" }}>
+              Vi svarar inom ett arbetsdygn. Korta samtal är gratis.
+            </p>
           </div>
+        </Reveal>
+      </div>
+    </div>
+  </section>
+);
+
+/* ── Footer ─────────────────────────────────────────────────────────── */
+const Footer = () => (
+  <footer className="footer">
+    <div className="wrap">
+      <div className="footer-grid">
+        <div>
+          <div className="nav-logo" style={{ color: "var(--bone)", marginBottom: 16 }}>
+            <span className="nav-dot" aria-hidden />
+            <span style={{ color: "var(--bone)" }}>Aurora Media</span>
+          </div>
+          <p className="body slate" style={{ maxWidth: "32ch" }}>
+            En oberoende digitalstudio från Linköping. Vi bygger digitala produkter
+            för svenska företag som vill bygga något som håller.
+          </p>
+        </div>
+        <div>
+          <div className="mono" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 12 }}>Studio</div>
+          <a href="#studio">Om oss</a>
+          <a href="#process">Process</a>
+          <a href="#tjanster">Tjänster</a>
+        </div>
+        <div>
+          <div className="mono" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 12 }}>Arbeten</div>
+          <a href="#arbeten">Utvalda arbeten</a>
+          <a href="#arbeten">Egna produkter</a>
+          <a href="#arbeten">Kunduppdrag</a>
+        </div>
+        <div>
+          <div className="mono" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 12 }}>Kontakt</div>
+          <a href="mailto:info@auroramedia.se">info@auroramedia.se</a>
+          <a href="#kontakt">Boka samtal</a>
+          <a href="/integritetspolicy">Integritetspolicy</a>
         </div>
       </div>
-    </section>
-  );
-}
 
-/* ── PAGE ────────────────────────────────────────────────────────────────── */
+      <div className="hairline" style={{ background: "rgba(242,237,227,0.12)", marginBlock: 48 }} />
+
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
+        <span className="mono" style={{ color: "rgba(242,237,227,0.5)" }}>
+          © 2026 Aurora Media AB — 559272-0220
+        </span>
+        <span className="mono" style={{ color: "rgba(242,237,227,0.5)" }}>
+          Linköping · Sverige · 58°N
+        </span>
+      </div>
+    </div>
+  </footer>
+);
+
+/* ── Page ───────────────────────────────────────────────────────────── */
 const Index = () => {
+  // Override the global app dark background for this page only
   useEffect(() => {
-    setSEOMeta({
-      title: "Aurora Media — AI-byrå i Linköping | SaaS, MVP och interna system",
-      description: "Vi pratar inte AI. Vi bygger med det. SaaS-produkter, MVP:er och interna system levererade på veckor. Från 14 900 kr.",
-      canonical: "/", ogImage: "/og-image-sv.jpg", ogType: "website", ogLocale: "sv_SE",
-      keywords: "AI-byrå, SaaS-utveckling, MVP, interna system, Linköping, Aurora Media",
-    });
-    setHreflang("/", "/en");
-    setJsonLd("organization-jsonld", organizationSchema);
-    setJsonLd("website-jsonld", websiteSchema);
-    setJsonLd("service-jsonld", serviceSchema);
-    const m = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    const prev = m?.getAttribute("content") ?? null;
-    if (m) m.setAttribute("content", "#100F0D");
-    return () => { if (prev && m) m.setAttribute("content", prev); };
+    const prev = document.body.style.background;
+    document.body.style.background = "#F2EDE3";
+    return () => { document.body.style.background = prev; };
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
-      <main id="main">
-        <Hero />
-        <Products />
-        <Testimonial />
-        <Services />
-        <ProcessSection />
-        <About />
-        <Stats />
-      </main>
-      <SiteFooter />
-    </div>
+    <>
+      <style>{TOKENS}</style>
+      <div className="aurora">
+        <NoiseOverlay />
+        <Nav />
+        <main>
+          <Hero />
+          <Ticker />
+          <Studio />
+          <Services />
+          <Work />
+          <Process />
+          <CTA />
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 
