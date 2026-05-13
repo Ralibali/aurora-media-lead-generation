@@ -35,7 +35,7 @@ const Hero = () => {
   const { open } = useContactModal();
   const time = useStockholmTime();
   return (
-    <section id="top" className="hero">
+    <section id="top" className="hero lumina-hero">
       <div className="wrap hero-content">
         <div className="hero-text">
         <Reveal>
