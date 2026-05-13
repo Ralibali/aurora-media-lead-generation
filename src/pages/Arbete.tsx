@@ -167,7 +167,7 @@ const Arbete = () => {
         </section>
 
       </main>
-      </div>
+      </NordicLayout>
   );
 };
 
