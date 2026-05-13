@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { SEO } from "@/components/SEO";
-import heroImg from "@/assets/aurora-hero-borealis.jpg";
+import heroImg from "@/assets/aurora-hero-nordic.jpg";
 
 /* ─────────────────────────────────────────────────────────────────────────
    AURORA MEDIA — cinematic Nordic landing
@@ -291,7 +291,7 @@ const Hero = () => {
   return (
     <section id="top" className="hero">
       <div className="hero-bg">
-        <img src={heroImg} alt="Aurora borealis över svensk fjällskog" width={1920} height={1080} fetchPriority="high" />
+        <img src={heroImg} alt="Dimmig svensk sjö med röd stuga vid skogsbrynet" width={1920} height={1080} fetchPriority="high" />
       </div>
 
       <div className="wrap hero-content">
