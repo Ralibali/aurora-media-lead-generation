@@ -38,6 +38,35 @@ Aurora Media bygger ofta med React, TypeScript, Vite, Tailwind, shadcn/ui, Supab
 - Metodik: https://auroramedia.se/metodik
 - Integritetspolicy: https://auroramedia.se/integritetspolicy
 
+## Pages
+
+- [Startsida](/): AI-driven mjukvarubyrå i Linköping — SaaS, MVP och webbappar.
+- [Tjänster](/tjanster): Översikt av tjänster: hemsidor, SEO, ads, content, app.
+- [Hemsidor](/tjanster/hemsidor): Modern webbutveckling med React och Supabase.
+- [SEO](/tjanster/seo): SEO-strategi, content och teknisk optimering.
+- [E-handel](/tjanster/ehandel): E-handelslösningar med Stripe och modern stack.
+- [Mobilapp](/tjanster/mobilapp): Mobilapputveckling för iOS och Android.
+- [Google Ads](/tjanster/google-ads): Google Ads-kampanjer för svenska företag.
+- [Meta Ads](/tjanster/meta-ads): Annonsering på Facebook och Instagram.
+- [Content](/tjanster/content): Content och copywriting för webb och SEO.
+- [Grafisk profil](/tjanster/grafisk-profil): Visuell identitet och varumärke.
+- [Fotografering](/tjanster/fotografering): Företagsfotografering i Linköping.
+- [Priser](/priser): Fasta priser från 14 900 kr för prototyp till 89 000 kr för SaaS.
+- [Arbete](/arbete): Case och projekt vi byggt.
+- [Produkter](/produkter): Egna SaaS-produkter och verktyg.
+- [Process](/process): Hur vi jobbar från idé till lansering.
+- [Metodik](/metodik): AI-driven leveransmetodik och arbetssätt.
+- [Om](/om): Om Aurora Media AB och Christoffer Holstensson.
+- [Kontakt](/kontakt): Kontakta oss för offert.
+- [Webbyrå Linköping](/webbyra-linkoping): Lokal webbyrå för Linköping och Östergötland.
+- [AI-konsult Sverige](/ai-konsult-sverige): AI-konsult och AI-builder i Sverige.
+- [AI-automation företag](/ai-automation-foretag): AI-automation för svenska bolag.
+- [AI-karta](/ai-karta): Kartlägg AI-möjligheter i din verksamhet.
+- [Blogg](/blogg): Artiklar om SaaS, AI, utveckling och SEO.
+- [Redaktionell policy](/redaktionell-policy): Vår policy för publicerat innehåll.
+- [Integritetspolicy](/integritetspolicy): Hur vi hanterar personuppgifter.
+- [English](/en): English version of Aurora Media.
+
 ## Viktiga artiklar
 
 - Lovable vs Bolt vs Cursor 2026: https://auroramedia.se/blogg/lovable-vs-bolt-vs-cursor-2026
