@@ -411,6 +411,32 @@ const AiKarta = () => {
           </div>
         </section>
 
+        {/* Sticky mobil-CTA → direkt till formuläret (minskar bounce från sociala medier) */}
+        <Link
+          to="/ai-karta/start"
+          className="btn-primary"
+          style={{
+            position: "fixed",
+            left: 12,
+            right: 12,
+            bottom: 12,
+            zIndex: 40,
+            justifyContent: "center",
+            textAlign: "center",
+            boxShadow: "0 12px 32px rgba(0,0,0,0.45)",
+          }}
+          aria-label="Starta gratis AI-analys"
+          data-aikarta-sticky
+        >
+          Starta gratis AI-analys (2 min) →
+        </Link>
+        <style>{`
+          [data-aikarta-sticky]{display:none !important}
+          @media (max-width: 760px){
+            [data-aikarta-sticky]{display:inline-flex !important}
+          }
+        `}</style>
+
       </main>
       </NordicLayout>
   );
