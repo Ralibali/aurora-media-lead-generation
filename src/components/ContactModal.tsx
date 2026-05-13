@@ -420,30 +420,6 @@ const ContactDialog = ({
               <Label htmlFor="company">Företag</Label>
               <Input id="company" name="company" maxLength={120} autoComplete="organization" />
             </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="paket">Vilket paket är du intresserad av? *</Label>
-              <Select value={paketValue} onValueChange={setPaketValue} name="paket">
-                <SelectTrigger id="paket">
-                  <SelectValue placeholder="Välj paket" />
-                </SelectTrigger>
-                <SelectContent>
-                  {PAKET_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {leadLabel && (
-                <div
-                  className="mt-2 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary"
-                  aria-live="polite"
-                >
-                  <Tag className="h-3.5 w-3.5" />
-                  <span>{leadLabel}</span>
-                </div>
-              )}
-            </div>
             {isMobileApp && (
               <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-4">
                 <Label htmlFor="platform">Vilken plattform? *</Label>
