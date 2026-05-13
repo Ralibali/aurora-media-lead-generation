@@ -1,382 +1,291 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useContactModal } from "@/components/ContactModal";
+import { SEO } from "@/components/SEO";
+import heroImg from "@/assets/aurora-hero-nordic.jpg";
 
 /* ─────────────────────────────────────────────────────────────────────────
-   AURORA MEDIA — landing page
-   Nordisk redaktionell minimalism. Asymmetri, typografisk dramatik,
-   monospace-metadata, EN accent (korall #E64A19). Allt på svenska.
+   AURORA MEDIA — cinematic Nordic redesign
+   Inspired by satoriml.se: atmospheric hero, mono branding, editorial steps,
+   forest-green accent on deep ink.
    ───────────────────────────────────────────────────────────────────────── */
 
-/* ── Tokens (scoped via CSS variables on the wrapper) ────────────────── */
 const TOKENS = `
-  .aurora {
-    --ink: #0B0F14;
-    --ink-soft: #1E222A;
-    --bone: #F2EDE3;
-    --slate: #6B6F77;
-    --glow: #E64A19;
-    --hairline: #D9D2C3;
-    --font-display: "Fraunces", Georgia, serif;
-    --font-body: "Instrument Sans", system-ui, sans-serif;
-    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  .aur {
+    --ink:#0C100E;
+    --ink-2:#141815;
+    --bone:#E9E4D6;
+    --bone-soft:rgba(233,228,214,0.72);
+    --bone-mute:rgba(233,228,214,0.5);
+    --bone-faint:rgba(233,228,214,0.22);
+    --hair:rgba(233,228,214,0.14);
+    --moss:#9BC07A;
+    --moss-soft:#7FA862;
+    --font-mono:"JetBrains Mono", ui-monospace, monospace;
+    --font-display:"Fraunces", Georgia, serif;
+    --font-body:"Inter", system-ui, sans-serif;
 
-    background: var(--bone);
-    color: var(--ink);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.55;
-    letter-spacing: -0.005em;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: clip;
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--font-body);
+    font-size:15px;
+    line-height:1.6;
+    min-height:100vh;
+    overflow-x:clip;
+    position:relative;
   }
-  .aurora *::selection { background: var(--glow); color: var(--bone); }
+  .aur *::selection{ background:var(--moss); color:var(--ink); }
 
-  .aurora .wrap {
-    max-width: 1440px;
-    margin-inline: auto;
-    padding-inline: clamp(20px, 4vw, 48px);
-  }
-  .aurora .section { padding-block: clamp(64px, 10vw, 128px); }
-  .aurora .hairline { height: 1px; background: var(--hairline); width: 100%; }
+  .aur .wrap{ max-width:1320px; margin-inline:auto; padding-inline:clamp(20px,4vw,56px); }
 
-  /* Typography */
-  .aurora .display {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(3.5rem, 11vw, 9.5rem);
-    line-height: 0.92;
-    letter-spacing: -0.045em;
-    font-variation-settings: "opsz" 144, "SOFT" 100;
+  /* Mono utility */
+  .aur .mono{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--moss);
+    font-weight:500;
   }
-  .aurora .h2 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    line-height: 0.95;
-    letter-spacing: -0.035em;
-    font-variation-settings: "opsz" 144, "SOFT" 80;
-  }
-  .aurora .h3 {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: clamp(1.5rem, 2.4vw, 2rem);
-    line-height: 1.05;
-    letter-spacing: -0.025em;
-  }
-  .aurora .display em, .aurora .h2 em, .aurora .h3 em {
-    font-style: italic;
-    font-variation-settings: "opsz" 144, "SOFT" 100;
-  }
-  .aurora .mono {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.10em;
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .aurora .mono-sm { font-size: 10px; letter-spacing: 0.12em; }
-  .aurora .meta-label { color: var(--slate); }
-  .aurora .lead { font-size: clamp(1rem, 1.2vw, 1.1rem); line-height: 1.55; color: var(--ink); }
-  .aurora .body { font-size: 0.98rem; line-height: 1.65; color: var(--ink); }
-  .aurora .slate { color: var(--slate); }
+  .aur .mono-sm{ font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--bone-mute); }
+  .aur .mono-md{ font-family:var(--font-mono); font-size:13px; letter-spacing:0.02em; color:var(--bone); font-weight:500; }
 
-  /* Pills */
-  .aurora .pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 22px;
-    border-radius: 9999px;
-    font-family: var(--font-body);
-    font-size: 14px; font-weight: 500;
-    text-decoration: none;
-    transition: all 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-    cursor: pointer; border: 1px solid transparent;
-    white-space: nowrap;
+  /* Display headlines using monospace for satori-like editorial code feel */
+  .aur .hero-line{
+    font-family:var(--font-mono);
+    font-weight:500;
+    font-size:clamp(2.4rem, 7vw, 6.4rem);
+    line-height:1.02;
+    letter-spacing:-0.03em;
+    color:var(--bone);
   }
-  .aurora .pill .arrow { display: inline-block; transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1); }
-  .aurora .pill:hover .arrow { transform: translateX(4px); }
-  .aurora .pill-primary { background: var(--ink); color: var(--bone); }
-  .aurora .pill-primary:hover { background: var(--glow); color: var(--bone); }
-  .aurora .pill-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
-  .aurora .pill-ghost:hover { background: var(--ink); color: var(--bone); }
-  .aurora .pill-outline-light {
-    background: transparent; color: var(--bone);
-    border-color: rgba(242,237,227,0.4);
-  }
-  .aurora .pill-outline-light:hover { background: var(--bone); color: var(--ink); border-color: var(--bone); }
+  .aur .hero-line .amp{ color:var(--moss); font-weight:400; }
+  .aur .hero-line .it{ font-family:var(--font-display); font-style:italic; font-weight:400; letter-spacing:-0.02em; }
 
-  /* Focus rings */
-  .aurora a:focus-visible, .aurora button:focus-visible {
-    outline: 2px solid var(--glow);
-    outline-offset: 3px;
-    border-radius: 2px;
+  .aur .h2{
+    font-family:var(--font-mono);
+    font-weight:500;
+    font-size:clamp(1.8rem, 4.4vw, 3.6rem);
+    line-height:1.08;
+    letter-spacing:-0.025em;
+    color:var(--bone);
   }
+  .aur .h2 .it{ font-family:var(--font-display); font-style:italic; color:var(--moss); }
+
+  .aur .h3{
+    font-family:var(--font-mono);
+    font-weight:500;
+    font-size:clamp(1.05rem,1.6vw,1.35rem);
+    letter-spacing:-0.01em;
+    color:var(--bone);
+  }
+
+  .aur .lead{
+    font-family:var(--font-body);
+    font-size:clamp(1rem,1.2vw,1.15rem);
+    line-height:1.65;
+    color:var(--bone-soft);
+    max-width:48ch;
+  }
+
+  /* Buttons */
+  .aur .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:11px 20px 11px 22px;
+    border-radius:9999px;
+    font-family:var(--font-mono); font-size:12px; letter-spacing:0.04em;
+    font-weight:500; cursor:pointer; text-decoration:none;
+    transition:all 220ms cubic-bezier(0.2,0.8,0.2,1);
+    border:1px solid transparent; white-space:nowrap;
+  }
+  .aur .btn .a{ display:inline-flex; transition:transform 220ms cubic-bezier(0.2,0.8,0.2,1); }
+  .aur .btn:hover .a{ transform:translateX(3px); }
+  .aur .btn-moss{ background:var(--moss); color:var(--ink); }
+  .aur .btn-moss:hover{ background:var(--bone); }
+  .aur .btn-ghost{ background:transparent; color:var(--bone); border-color:var(--bone-faint); }
+  .aur .btn-ghost:hover{ border-color:var(--moss); color:var(--moss); }
 
   /* Nav */
-  .aurora .nav {
-    position: fixed; inset: 0 0 auto 0; z-index: 50;
-    transition: backdrop-filter 220ms ease, background 220ms ease, border-color 220ms ease;
-    border-bottom: 1px solid transparent;
+  .aur .nav{
+    position:fixed; inset:0 0 auto 0; z-index:50;
+    padding:18px clamp(20px,4vw,56px);
+    display:flex; align-items:center; justify-content:space-between;
+    transition:background 240ms ease, backdrop-filter 240ms ease, border-color 240ms ease;
+    border-bottom:1px solid transparent;
   }
-  .aurora .nav.scrolled {
-    background: rgba(242,237,227,0.78);
-    backdrop-filter: saturate(140%) blur(14px);
-    -webkit-backdrop-filter: saturate(140%) blur(14px);
-    border-bottom-color: var(--hairline);
+  .aur .nav.scrolled{
+    background:rgba(12,16,14,0.72);
+    backdrop-filter:saturate(140%) blur(14px);
+    -webkit-backdrop-filter:saturate(140%) blur(14px);
+    border-bottom-color:var(--hair);
   }
-  .aurora .nav-inner {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px clamp(20px,4vw,48px);
-    max-width: 1440px; margin-inline: auto;
+  .aur .brand{
+    font-family:var(--font-mono); font-size:18px; letter-spacing:-0.02em;
+    color:var(--moss); text-decoration:none; font-weight:500;
+    display:inline-flex; align-items:center; gap:6px;
   }
-  .aurora .nav-logo {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-family: var(--font-display); font-style: italic;
-    font-size: 22px; letter-spacing: -0.02em; color: var(--ink);
-    text-decoration: none;
-  }
-  .aurora .nav-dot {
-    width: 8px; height: 8px; border-radius: 50%; background: var(--glow);
-    display: inline-block;
-    animation: aurora-pulse 3s ease-in-out infinite;
-  }
-  @keyframes aurora-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.45; transform: scale(0.7); }
-  }
-  .aurora .nav-menu { display: none; gap: 28px; }
-  .aurora .nav-menu a {
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--ink); text-decoration: none;
-    transition: color 180ms ease;
-  }
-  .aurora .nav-menu a:hover { color: var(--glow); }
-  @media (min-width: 900px) { .aurora .nav-menu { display: flex; } }
+  .aur .brand .glyph{ color:var(--bone); font-style:italic; font-family:var(--font-display); }
 
-  /* Ticker */
-  .aurora .ticker {
-    border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
-    overflow: hidden;
-    padding-block: 18px;
+  .aur .nav-progress{
+    flex:1; max-width:380px; margin:0 32px;
+    height:1px; background:var(--hair); position:relative; overflow:hidden;
+    display:none;
   }
-  .aurora .ticker + .ticker { border-top: none; }
-  .aurora .ticker-track {
-    display: inline-flex; gap: 56px; white-space: nowrap;
-    animation: aurora-marquee 38s linear infinite;
-    font-family: var(--font-display);
-    font-style: italic; font-size: clamp(1.2rem, 1.8vw, 1.6rem);
-    color: var(--ink);
-    font-variation-settings: "opsz" 144, "SOFT" 100;
-    will-change: transform;
-  }
-  .aurora .ticker-track.reverse { animation-direction: reverse; animation-duration: 52s; }
-  .aurora .ticker:hover .ticker-track { animation-play-state: paused; }
-  .aurora .ticker-track .star { color: var(--glow); }
-  @keyframes aurora-marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+  @media(min-width:760px){ .aur .nav-progress{ display:block; } }
+  .aur .nav-progress::after{
+    content:""; position:absolute; left:0; top:0; bottom:0;
+    width:var(--p,12%); background:var(--moss);
+    box-shadow:0 0 12px var(--moss);
+    transition:width 220ms ease;
   }
 
-  /* Section header grid */
-  .aurora .section-header {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 24px;
-    margin-bottom: clamp(48px, 7vw, 96px);
+  /* Hero */
+  .aur .hero{
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column;
+    isolation:isolate;
   }
-  @media (min-width: 900px) {
-    .aurora .section-header {
-      grid-template-columns: 1fr 2fr;
-      gap: clamp(32px, 5vw, 80px);
-    }
+  .aur .hero-bg{
+    position:absolute; inset:0; z-index:-2;
+    overflow:hidden;
   }
-
-  /* Services 2x2 */
-  .aurora .services-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    border-top: 1px solid var(--hairline);
+  .aur .hero-bg img{
+    width:100%; height:100%; object-fit:cover;
+    filter:saturate(0.85) brightness(0.78);
   }
-  @media (min-width: 760px) {
-    .aurora .services-grid { grid-template-columns: 1fr 1fr; }
-  }
-  .aurora .service-cell {
-    padding: clamp(28px, 4vw, 56px);
-    border-bottom: 1px solid var(--hairline);
-    transition: background 180ms ease;
-  }
-  .aurora .service-cell:hover { background: rgba(11,15,20,0.025); }
-  @media (min-width: 760px) {
-    .aurora .service-cell:nth-child(odd) { border-right: 1px solid var(--hairline); }
-  }
-  .aurora .service-num {
-    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em;
-    color: var(--glow); margin-bottom: 18px; display: inline-block;
-  }
-  .aurora .service-title {
-    font-family: var(--font-display); font-size: clamp(1.6rem, 2.4vw, 2.2rem);
-    line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 14px;
-    font-variation-settings: "opsz" 144, "SOFT" 80;
-  }
-  .aurora .tag {
-    display: inline-block; padding: 5px 12px;
-    border: 1px solid var(--hairline); border-radius: 9999px;
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--slate);
-    margin: 4px 4px 0 0;
+  .aur .hero-bg::after{
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(12,16,14,0.55) 0%, rgba(12,16,14,0.05) 30%, rgba(12,16,14,0.15) 60%, rgba(12,16,14,0.95) 100%),
+      radial-gradient(60% 50% at 30% 90%, rgba(12,16,14,0.7), transparent 70%);
   }
 
-  /* Work list */
-  .aurora .work-row {
-    position: relative;
-    display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 16px 24px;
-    padding: 22px 12px;
-    border-bottom: 1px solid var(--hairline);
-    overflow: hidden;
-    transition: padding-left 320ms cubic-bezier(0.2,0.8,0.2,1);
-  }
-  @media (min-width: 900px) {
-    .aurora .work-row {
-      grid-template-columns: 60px 1.4fr 2fr 1fr auto;
-      align-items: baseline;
-      padding: 26px 12px;
-    }
-  }
-  .aurora .work-row::before {
-    content: "";
-    position: absolute; inset: 0;
-    background: var(--glow);
-    transform: translateX(-101%);
-    transition: transform 420ms cubic-bezier(0.2,0.8,0.2,1);
-    z-index: 0; opacity: 0.06;
-  }
-  .aurora .work-row:hover { padding-left: 28px; }
-  .aurora .work-row:hover::before { transform: translateX(0); }
-  .aurora .work-row > * { position: relative; z-index: 1; }
-  .aurora .work-row .w-num {
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
-    color: var(--slate);
-  }
-  .aurora .work-row .w-title {
-    font-family: var(--font-display); font-size: clamp(1.4rem, 2vw, 1.9rem);
-    line-height: 1.05; letter-spacing: -0.02em;
-    transition: font-style 220ms ease;
-  }
-  .aurora .work-row:hover .w-title { font-style: italic; }
-  .aurora .work-row .w-desc { color: var(--slate); font-size: 0.95rem; line-height: 1.55; }
-  .aurora .work-row .w-type, .aurora .work-row .w-year {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--slate);
+  .aur .hero-content{
+    position:relative;
+    margin-top:auto;
+    padding-bottom:clamp(48px, 8vh, 96px);
   }
 
-  /* Process columns */
-  .aurora .process-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
+  .aur .hero-meta{
+    display:flex; flex-wrap:wrap; gap:18px 28px; align-items:center;
+    margin-top:32px;
   }
-  @media (min-width: 900px) { .aurora .process-grid { grid-template-columns: repeat(4, 1fr); } }
-  .aurora .process-step {
-    padding: clamp(28px, 3.5vw, 48px);
-    border-bottom: 1px solid var(--hairline);
+  .aur .hero-meta .dot{ width:6px; height:6px; border-radius:50%; background:var(--moss); box-shadow:0 0 10px var(--moss); animation:aur-pulse 2.6s ease-in-out infinite; }
+  @keyframes aur-pulse{ 0%,100%{opacity:1; transform:scale(1);} 50%{opacity:.45; transform:scale(.7);} }
+
+  /* Firefly particles */
+  .aur .fireflies{ position:absolute; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+  .aur .fly{
+    position:absolute; width:3px; height:3px; border-radius:50%;
+    background:#FFD58A; box-shadow:0 0 8px #FFC76E, 0 0 18px rgba(255,199,110,0.5);
+    animation:aur-fly linear infinite;
+    opacity:0.8;
   }
-  @media (min-width: 900px) {
-    .aurora .process-step { border-bottom: none; border-right: 1px solid var(--hairline); }
-    .aurora .process-step:last-child { border-right: none; }
-  }
-  .aurora .process-numeral {
-    font-family: var(--font-display); font-style: italic;
-    font-size: 3rem; line-height: 1; color: var(--glow);
-    margin-bottom: 24px; display: block;
-    font-variation-settings: "opsz" 144, "SOFT" 100;
-  }
-  .aurora .process-name {
-    font-family: var(--font-display); font-size: 1.6rem;
-    letter-spacing: -0.02em; margin-bottom: 12px;
+  @keyframes aur-fly{
+    0%{ transform:translate(0,0) scale(0.6); opacity:0; }
+    20%{ opacity:0.9; }
+    50%{ transform:translate(40px,-60px) scale(1); opacity:0.6; }
+    80%{ opacity:0.9; }
+    100%{ transform:translate(80px,-130px) scale(0.5); opacity:0; }
   }
 
-  /* CTA dark section */
-  .aurora .cta-dark {
-    background: var(--ink); color: var(--bone);
-    position: relative; overflow: hidden;
+  /* Section base */
+  .aur .section{ padding-block:clamp(80px, 12vw, 160px); position:relative; }
+  .aur .section + .section{ border-top:1px solid var(--hair); }
+
+  /* Steps */
+  .aur .steps{
+    display:grid; grid-template-columns:1fr; gap:0;
+    margin-top:clamp(48px,7vw,96px);
+    border-top:1px solid var(--hair);
   }
-  .aurora .cta-dark::after {
-    content: ""; position: absolute; inset: 0;
-    background: radial-gradient(60% 60% at 88% 12%, rgba(230,74,25,0.18), transparent 70%);
-    pointer-events: none;
+  .aur .step{
+    display:grid; grid-template-columns:auto 1fr;
+    gap:24px 36px;
+    padding:clamp(28px,4vw,48px) clamp(8px,2vw,16px);
+    border-bottom:1px solid var(--hair);
+    transition:background 240ms ease, padding-left 320ms cubic-bezier(0.2,0.8,0.2,1);
+    position:relative;
   }
-  .aurora .cta-dark .slate { color: rgba(242,237,227,0.55); }
-  .aurora .cta-dark .h2, .aurora .cta-dark .mono { color: var(--bone); }
-  .aurora .cta-dark .glow-em { color: var(--glow); font-style: italic; }
-  .aurora .cta-email {
-    font-family: var(--font-display); font-style: italic;
-    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
-    color: var(--bone); text-decoration: none;
-    border-bottom: 1px solid rgba(242,237,227,0.3);
-    padding-bottom: 6px; transition: border-color 200ms ease, color 200ms ease;
-    letter-spacing: -0.02em; display: inline-block;
+  .aur .step:hover{ background:rgba(155,192,122,0.04); padding-left:clamp(20px,3vw,32px); }
+  @media(min-width:900px){
+    .aur .step{ grid-template-columns:120px 1fr 1.4fr; align-items:start; }
   }
-  .aurora .cta-email:hover { border-bottom-color: var(--glow); color: var(--glow); }
+  .aur .step-num{
+    font-family:var(--font-mono); font-size:13px; letter-spacing:0.04em;
+    color:var(--moss); font-weight:500;
+  }
+  .aur .step-title{
+    font-family:var(--font-mono); font-size:clamp(1.1rem,1.7vw,1.4rem);
+    color:var(--bone); letter-spacing:-0.01em; font-weight:500; line-height:1.2;
+  }
+  .aur .step-desc{ color:var(--bone-soft); font-size:0.98rem; line-height:1.65; }
+
+  /* Pillars */
+  .aur .pillars{
+    display:grid; grid-template-columns:1fr; gap:1px;
+    background:var(--hair);
+    border:1px solid var(--hair);
+    margin-top:clamp(48px,6vw,80px);
+  }
+  @media(min-width:760px){ .aur .pillars{ grid-template-columns:repeat(3,1fr); } }
+  .aur .pillar{
+    background:var(--ink);
+    padding:clamp(28px,3vw,40px);
+    transition:background 220ms ease;
+  }
+  .aur .pillar:hover{ background:var(--ink-2); }
+  .aur .pillar-num{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em;
+    color:var(--moss); margin-bottom:24px; display:block;
+  }
+
+  /* CTA dark band */
+  .aur .cta-band{
+    padding-block:clamp(96px,14vw,180px);
+    text-align:left;
+    position:relative; overflow:hidden;
+    border-top:1px solid var(--hair);
+  }
+  .aur .cta-band::after{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(50% 60% at 80% 20%, rgba(155,192,122,0.18), transparent 70%);
+    pointer-events:none;
+  }
+  .aur .cta-email{
+    font-family:var(--font-display); font-style:italic;
+    font-size:clamp(1.6rem, 3.4vw, 2.6rem);
+    color:var(--bone); text-decoration:none;
+    border-bottom:1px solid var(--bone-faint);
+    padding-bottom:6px; letter-spacing:-0.02em;
+    transition:color 200ms, border-color 200ms;
+  }
+  .aur .cta-email:hover{ color:var(--moss); border-bottom-color:var(--moss); }
 
   /* Footer */
-  .aurora .footer {
-    background: var(--ink); color: var(--bone);
-    padding-block: clamp(56px, 7vw, 96px);
-    border-top: 1px solid rgba(242,237,227,0.08);
-  }
-  .aurora .footer .slate { color: rgba(242,237,227,0.5); }
-  .aurora .footer a { color: rgba(242,237,227,0.78); text-decoration: none; transition: color 180ms ease; display: block; padding: 6px 0; font-size: 14px; }
-  .aurora .footer a:hover { color: var(--glow); }
-  .aurora .footer-grid {
-    display: grid; grid-template-columns: 1fr; gap: 40px;
-  }
-  @media (min-width: 760px) { .aurora .footer-grid { grid-template-columns: 1.6fr 1fr 1fr 1fr; } }
-
-  /* Noise overlay */
-  .aurora-noise {
-    position: fixed; inset: 0; z-index: 60;
-    pointer-events: none; opacity: 0.35;
-    mix-blend-mode: multiply;
-  }
+  .aur .foot{ padding-block:clamp(56px,7vw,88px); border-top:1px solid var(--hair); color:var(--bone-mute); font-family:var(--font-mono); font-size:12px; letter-spacing:0.04em; }
+  .aur .foot a{ color:var(--bone-soft); text-decoration:none; transition:color 180ms; }
+  .aur .foot a:hover{ color:var(--moss); }
+  .aur .foot-grid{ display:grid; grid-template-columns:1fr; gap:32px; }
+  @media(min-width:760px){ .aur .foot-grid{ grid-template-columns:2fr 1fr 1fr 1fr; } }
 
   /* Reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    .aurora *, .aurora *::before, .aurora *::after {
-      animation: none !important; transition: none !important;
-    }
+  @media (prefers-reduced-motion: reduce){
+    .aur *, .aur *::before, .aur *::after{ animation:none !important; transition:none !important; }
   }
 `;
 
-/* ── Noise overlay (SVG turbulence) ─────────────────────────────────── */
-const NoiseOverlay = () => (
-  <svg className="aurora-noise" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-    <filter id="aurora-noise-filter">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
-      <feColorMatrix type="matrix" values="0 0 0 0 0.04
-                                          0 0 0 0 0.06
-                                          0 0 0 0 0.08
-                                          0 0 0 0.55 0" />
-    </filter>
-    <rect width="100%" height="100%" filter="url(#aurora-noise-filter)" />
-  </svg>
-);
-
-/* ── Reveal helper ──────────────────────────────────────────────────── */
-const Reveal = ({ children, delay = 0, as: As = "div" as any, className }: any) => {
+/* ───── Reveal helper ───── */
+const Reveal = ({ children, delay = 0, y = 24, className = "" }: any) => {
   const reduce = useReducedMotion();
-  if (reduce) return <As className={className}>{children}</As>;
+  if (reduce) return <div className={className}>{children}</div>;
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: 0.8, delay, ease: [0.2, 0.8, 0.2, 1] }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.85, delay, ease: [0.2, 0.8, 0.2, 1] }}
       className={className}
     >
       {children}
@@ -384,436 +293,208 @@ const Reveal = ({ children, delay = 0, as: As = "div" as any, className }: any) 
   );
 };
 
-/* ── Nav ────────────────────────────────────────────────────────────── */
-const NAV_ITEMS = [
-  { label: "Studio", href: "#studio" },
-  { label: "Tjänster", href: "#tjanster" },
-  { label: "Arbeten", href: "#arbeten" },
-  { label: "Process", href: "#process" },
-];
+/* ───── Live time ───── */
+const useStockholmTime = () => {
+  const [t, setT] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setT(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return t.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Stockholm" });
+};
 
+/* ───── Nav ───── */
 const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const { scrollYProgress } = useScroll();
+  const progress = useTransform(scrollYProgress, (v) => `${Math.max(8, v * 100)}%`);
+  const { open } = useContactModal();
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   return (
     <header className={`nav ${scrolled ? "scrolled" : ""}`}>
-      <div className="nav-inner">
-        <a href="#top" className="nav-logo" aria-label="Aurora Media — startsida">
-          <span className="nav-dot" aria-hidden />
-          <span>Aurora Media</span>
-        </a>
-        <nav className="nav-menu" aria-label="Huvudmeny">
-          {NAV_ITEMS.map((n) => (
-            <a key={n.href} href={n.href}>{n.label}</a>
-          ))}
-        </nav>
-        <a href="#kontakt" className="pill pill-ghost" style={{ display: "none" }} data-desktop>
-          Boka samtal <span className="arrow">→</span>
-        </a>
-        <a href="#kontakt" className="pill pill-ghost aurora-cta-desktop">
-          Boka samtal <span className="arrow">→</span>
-        </a>
-      </div>
-      <style>{`
-        .aurora .aurora-cta-desktop { display: none; }
-        @media (min-width: 760px) { .aurora .aurora-cta-desktop { display: inline-flex; } }
-      `}</style>
+      <a href="#top" className="brand" aria-label="Aurora Media — startsida">
+        aurora<span className="glyph">.✦</span>
+      </a>
+      <motion.div className="nav-progress" style={{ ["--p" as any]: progress }} aria-hidden />
+      <button onClick={() => open()} className="btn btn-ghost">
+        Boka möte <span className="a"><ArrowRight size={14} /></span>
+      </button>
     </header>
   );
 };
 
-/* ── Magnetic pill (cursor-attracted CTA) ───────────────────────────── */
-const Magnetic = ({ children, strength = 18, className, href }: any) => {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const reduce = useReducedMotion();
-  const onMove = (e: React.MouseEvent) => {
-    if (reduce || !ref.current) return;
-    const r = ref.current.getBoundingClientRect();
-    const x = ((e.clientX - r.left) / r.width - 0.5) * strength;
-    const y = ((e.clientY - r.top) / r.height - 0.5) * strength;
-    ref.current.style.transform = `translate(${x}px, ${y}px)`;
-  };
-  const onLeave = () => { if (ref.current) ref.current.style.transform = "translate(0,0)"; };
+/* ───── Fireflies ───── */
+const Fireflies = () => {
+  const flies = Array.from({ length: 18 }).map((_, i) => ({
+    left: Math.random() * 100,
+    top: 40 + Math.random() * 60,
+    delay: Math.random() * 6,
+    dur: 8 + Math.random() * 10,
+  }));
   return (
-    <a ref={ref} href={href} className={className} onMouseMove={onMove} onMouseLeave={onLeave} style={{ transition: "transform 360ms cubic-bezier(0.2,0.8,0.2,1)" }}>
-      {children}
-    </a>
+    <div className="fireflies" aria-hidden>
+      {flies.map((f, i) => (
+        <span
+          key={i}
+          className="fly"
+          style={{
+            left: `${f.left}%`,
+            top: `${f.top}%`,
+            animationDelay: `-${f.delay}s`,
+            animationDuration: `${f.dur}s`,
+          }}
+        />
+      ))}
+    </div>
   );
 };
 
-/* ── Live Linköping clock ───────────────────────────────────────────── */
-const useLinkopingTime = () => {
-  const [t, setT] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setT(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return t.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "Europe/Stockholm" });
-};
-
-/* ── Hero ───────────────────────────────────────────────────────────── */
-const HERO_META = [
-  { label: "Studio", value: "Linköping · 58.41°N" },
-  { label: "Sedan", value: "MMXXI" },
-  { label: "Status", value: "Tar uppdrag Q3 2026" },
-];
-
-const HERO_LINE_1 = ["Vi", "bygger"];
-const HERO_LINE_2 = ["digitala"];
-const HERO_LINE_3_PRE = ["som"];
-const HERO_LINE_4 = ["faktiskt"];
-
+/* ───── Hero ───── */
 const Hero = () => {
-  const reduce = useReducedMotion();
-  const time = useLinkopingTime();
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [glow, setGlow] = useState({ x: 50, y: 30 });
-
-  const onMove = (e: React.MouseEvent) => {
-    if (reduce || !heroRef.current) return;
-    const r = heroRef.current.getBoundingClientRect();
-    setGlow({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
-  };
-
-  const Word = ({ t, em, i, base = 0.15 }: any) => (
-    <span style={{ display: "inline-block", overflow: "hidden", paddingRight: "0.18em", verticalAlign: "bottom" }}>
-      {reduce ? (em ? <em>{t}</em> : t) : (
-        <motion.span
-          initial={{ y: "110%", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.85, delay: base + i * 0.08, ease: [0.2, 0.8, 0.2, 1] }}
-          style={{ display: "inline-block" }}
-        >
-          {em ? <em>{t}</em> : t}
-        </motion.span>
-      )}
-    </span>
-  );
-
+  const { open } = useContactModal();
+  const time = useStockholmTime();
   return (
-    <section
-      id="top"
-      ref={heroRef}
-      onMouseMove={onMove}
-      style={{
-        paddingTop: 132,
-        paddingBottom: "clamp(48px, 8vw, 96px)",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        position: "relative",
-      }}
-    >
-      {/* Cursor-driven aurora glow */}
-      <div
-        aria-hidden
-        style={{
-          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-          background: `radial-gradient(420px circle at ${glow.x}% ${glow.y}%, rgba(230,74,25,0.12), transparent 60%)`,
-          transition: reduce ? "none" : "background 600ms cubic-bezier(0.2,0.8,0.2,1)",
-        }}
-      />
-
-      <div className="wrap" style={{ width: "100%", position: "relative", zIndex: 1 }}>
-        {/* top meta strip */}
-        <div className="aurora-hero-meta">
-          <style>{`
-            .aurora .aurora-hero-meta {
-              display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px;
-              margin-bottom: clamp(40px, 7vw, 80px);
-              padding-bottom: 22px; border-bottom: 1px solid var(--hairline);
-            }
-            @media (min-width: 760px) {
-              .aurora .aurora-hero-meta { grid-template-columns: repeat(4, 1fr); align-items: end; }
-            }
-            .aurora .aurora-hero-clock {
-              font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
-              color: var(--ink); display: inline-flex; align-items: center; gap: 8px;
-            }
-            .aurora .aurora-hero-clock::before {
-              content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--glow);
-              animation: aurora-pulse 2s ease-in-out infinite;
-            }
-          `}</style>
-          {HERO_META.map((m, i) => (
-            <Reveal key={m.label} delay={i * 0.06}>
-              <div>
-                <div className="mono meta-label" style={{ marginBottom: 8 }}>{m.label}</div>
-                <div className="mono" style={{ color: "var(--ink)" }}>{m.value}</div>
-              </div>
-            </Reveal>
-          ))}
-          <Reveal delay={0.18}>
-            <div>
-              <div className="mono meta-label" style={{ marginBottom: 8 }}>Lokal tid</div>
-              <span className="aurora-hero-clock">{time}</span>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Editorial H1 — multi-line with oversized italic break */}
-        <h1 className="display aurora-h1" style={{ marginBottom: "clamp(40px, 7vw, 88px)" }}>
-          <style>{`
-            .aurora .aurora-h1 { display: block; }
-            .aurora .aurora-h1 .line { display: block; }
-            .aurora .aurora-h1 .line-2 { padding-left: clamp(0px, 6vw, 84px); }
-            .aurora .aurora-h1 .line-3 { display: flex; align-items: baseline; gap: clamp(12px, 2vw, 28px); flex-wrap: wrap; }
-            .aurora .aurora-h1 .mega {
-              font-style: italic; color: var(--glow);
-              font-size: clamp(4.2rem, 14vw, 12rem); line-height: 0.86;
-              letter-spacing: -0.055em;
-              font-variation-settings: "opsz" 144, "SOFT" 100;
-              display: inline-block;
-            }
-            .aurora .aurora-h1 .rule {
-              flex: 1 1 80px; height: 1px; background: var(--ink);
-              transform-origin: left center;
-            }
-            .aurora .aurora-h1 .tail { display: block; }
-          `}</style>
-
-          <span className="line">
-            {HERO_LINE_1.map((t, i) => <Word key={i} t={t} i={i} />)}
-          </span>
-          <span className="line line-2">
-            {HERO_LINE_2.map((t, i) => <Word key={i} t={t} em i={i + HERO_LINE_1.length} />)}
-            {" "}
-            {HERO_LINE_3_PRE.map((t, i) => <Word key={i} t={t} i={i + HERO_LINE_1.length + 1} />)}
-          </span>
-          <span className="line line-3">
-            {HERO_LINE_4.map((t, i) => <Word key={i} t={t} em i={i + 4} />)}
-            {!reduce && (
-              <motion.span className="rule" aria-hidden
-                initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-                transition={{ duration: 1.1, delay: 0.85, ease: [0.2,0.8,0.2,1] }}
-              />
-            )}
-            {reduce && <span className="rule" aria-hidden />}
-          </span>
-          <span className="tail" style={{ overflow: "hidden", display: "block", marginTop: "clamp(4px, 1vw, 10px)" }}>
-            {reduce ? <span className="mega">används.</span> : (
-              <motion.span className="mega"
-                initial={{ y: "110%", opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 1.0, delay: 0.95, ease: [0.2,0.8,0.2,1] }}
-                style={{ display: "inline-block" }}
-              >
-                används.
-              </motion.span>
-            )}
-          </span>
-        </h1>
-
-        {/* lower hero */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(28px, 4vw, 56px)", alignItems: "end" }} className="aurora-hero-lower">
-          <style>{`@media (min-width: 900px) { .aurora-hero-lower { grid-template-columns: 1fr 1.2fr !important; } }`}</style>
-          <Reveal delay={0.9}>
-            <p className="lead" style={{ maxWidth: 460 }}>
-              <span className="mono meta-label" style={{ display: "block", marginBottom: 12 }}>↳ Manifest</span>
-              Aurora Media är en oberoende digitalstudio från Östergötland. Vi designar, utvecklar och driver
-              SaaS-plattformar och webbplatser för svenska företag som vill bygga <em style={{ fontFamily: "var(--font-display)" }}>något som håller</em> —
-              inte bara ser bra ut i en pitch.
-            </p>
-          </Reveal>
-          <Reveal delay={1.0}>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "flex-start" }}>
-              <Magnetic href="#arbeten" className="pill pill-primary">
-                Se utvalda arbeten <span className="arrow">→</span>
-              </Magnetic>
-              <Magnetic href="#kontakt" className="pill pill-ghost">
-                Starta projekt <span className="arrow">→</span>
-              </Magnetic>
-            </div>
-          </Reveal>
-        </div>
+    <section id="top" className="hero">
+      <div className="hero-bg">
+        <img src={heroImg} alt="" width={1920} height={1080} fetchPriority="high" />
       </div>
+      <Fireflies />
 
-      {/* Scroll hint */}
-      {!reduce && (
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4, duration: 0.8 }}
-          className="wrap" style={{ width: "100%", position: "relative", zIndex: 1, marginTop: 48 }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-            <span className="mono meta-label">↓ Skrolla</span>
-            <span className="mono meta-label">№ 001 / Aurora Media — index</span>
+      <div className="wrap hero-content">
+        <Reveal>
+          <p className="mono">aurora media · linköping</p>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <h1 className="hero-line" style={{ marginTop: 18 }}>
+            Bryggan mellan
+          </h1>
+        </Reveal>
+        <Reveal delay={0.2}>
+          <h1 className="hero-line">
+            <span className="it">idé</span> <span className="amp">&</span> <span className="it">system</span>
+          </h1>
+        </Reveal>
+        <Reveal delay={0.35}>
+          <p className="lead" style={{ marginTop: 28 }}>
+            Vi accelererar er digitalisering. SaaS, AI och automation
+            byggt för svenska företag som vill ersätta manuellt arbete
+            med smarta digitala flöden.
+          </p>
+        </Reveal>
+        <Reveal delay={0.5}>
+          <div className="hero-meta">
+            <button onClick={() => open()} className="btn btn-moss">
+              Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
+            </button>
+            <Link to="/ai-automation-foretag" className="btn btn-ghost">
+              AI &amp; automation <span className="a"><ArrowUpRight size={14} /></span>
+            </Link>
+            <span className="mono-sm" style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+              <span className="dot" /> Linköping · {time}
+            </span>
           </div>
-        </motion.div>
-      )}
+        </Reveal>
+      </div>
     </section>
   );
 };
 
-/* ── Ticker ─────────────────────────────────────────────────────────── */
-const TICKER_ITEMS = [
-  "SaaS-utveckling", "Webbplatser", "Varumärke", "SEO & innehåll", "Drift & support",
-];
-const TICKER_ITEMS_2 = [
-  "Linköping", "Stockholm", "Göteborg", "Östergötland", "Norden",
+/* ───── Steps (AI-resan / Aurora-metoden) ───── */
+const STEPS = [
+  { n: "01", t: "Kostnadsfri kartläggning", d: "Vi börjar med ett samtal. Vad gör ni varje dag som borde varit automatiserat? Var blöder tiden? Inga säljare, bara byggare." },
+  { n: "02", t: "Strategi & arkitektur", d: "Vi ritar lösningen. Klickbar prototyp, teknikval, integrationer mot Fortnox, HubSpot, Pipedrive eller vad ni redan kör. Ni ser exakt vad ni får." },
+  { n: "03", t: "Bygg på riktigt", d: "Inte WordPress-tema. Riktiga SaaS-system, AI-agenter och kundappar. Skrivet i kod, deployat i molnet, testat hårt." },
+  { n: "04", t: "AI på era data", d: "Era dokument, era processer, era kunder. När AI:n förstår er vardag går svaren från generiska till precisa. Här händer 3x-effekten." },
+  { n: "05", t: "Automatisera flödet", d: "När grunden sitter kopplar vi ihop allt. E-post, fakturor, leads, rapporter. Det som tog en arbetsdag tar nu sex sekunder." },
+  { n: "06", t: "Drift & vidareutveckling", d: "Vi släpper inte taget vid lansering. Övervakning, support, nya funktioner när verksamheten växer. Långsiktiga partners, inte projektleverantörer." },
 ];
 
-const Ticker = () => {
-  const items = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
-  const items2 = [...TICKER_ITEMS_2, ...TICKER_ITEMS_2, ...TICKER_ITEMS_2, ...TICKER_ITEMS_2];
-  return (
-    <>
-      <div className="ticker" aria-hidden="true">
-        <div className="ticker-track">
-          {items.map((t, i) => (
-            <span key={i}>
-              {t}<span className="star" style={{ marginLeft: 56 }}>✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-      <div className="ticker" aria-hidden="true">
-        <div className="ticker-track reverse">
-          {items2.map((t, i) => (
-            <span key={i} style={{ color: "var(--slate)" }}>
-              {t}<span className="star" style={{ marginLeft: 56 }}>·</span>
-            </span>
-          ))}
-        </div>
-      </div>
-    </>
-  );
-};
-
-/* ── Studio ─────────────────────────────────────────────────────────── */
-const Studio = () => (
-  <section id="studio" className="section">
+const StepsSection = () => (
+  <section className="section" id="metod">
     <div className="wrap">
-      <div className="section-header">
-        <Reveal>
-          <div className="mono meta-label">01 — Studio</div>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="h2">En liten studio. <em>Stor verkstad.</em></h2>
-        </Reveal>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px, 5vw, 80px)" }} className="aurora-manifest">
-        <style>{`@media (min-width: 900px) { .aurora-manifest { grid-template-columns: 1fr 1.5fr !important; } }`}</style>
-        <Reveal>
-          <p className="h3" style={{ maxWidth: "30ch" }}>
-            Vi är inte en byrå med säljare och projektledare i flera led. Vi är teknikerna, designerna och
-            strategerna — <em>samma personer</em> som faktiskt skriver koden och rättar buggarna klockan 22
-            på en söndag.
-          </p>
-        </Reveal>
-        <Reveal delay={0.15}>
-          <div style={{ display: "grid", gap: 20 }}>
-            <p className="body slate">
-              Aurora Media startades för att vi var trötta på att se goda idéer dö i Powerpoint-presentationer,
-              orealistiska budgets och team där ingen riktigt äger leveransen. Vi bygger små, fokuserade
-              projekt med få inblandade och hög teknisk kvalitet.
-            </p>
-            <p className="body slate">
-              Vid sidan av kunduppdrag driver vi en växande portfölj av egna SaaS-produkter — från flockhantering
-              för hönsuppfödare till transportsystem för svenska åkerier. Det vi lär oss där, kommer kunderna
-              till godo i nästa projekt.
-            </p>
-          </div>
-        </Reveal>
-      </div>
-    </div>
-  </section>
-);
-
-/* ── Services ───────────────────────────────────────────────────────── */
-const SERVICES = [
-  {
-    num: "→ 01",
-    title: "Webbplatser",
-    desc: "Snabba, SEO-optimerade webbplatser byggda för konvertering. Från enkla portföljer till komplexa B2B-plattformar.",
-    tags: ["Next.js", "React", "Supabase", "SEO"],
-  },
-  {
-    num: "→ 02",
-    title: "SaaS-utveckling",
-    desc: "Vi bygger hela SaaS-produkter — från första prototyp till skalbar plattform med betalning, autentisering och mobilappar.",
-    tags: ["TypeScript", "Stripe", "RLS", "Capacitor"],
-  },
-  {
-    num: "→ 03",
-    title: "Marknadsföring",
-    desc: "Google Ads, Meta, sökmotoroptimering och innehåll som ger spårbar avkastning — inte vanity metrics.",
-    tags: ["Google Ads", "Meta", "SEO", "Innehåll"],
-  },
-  {
-    num: "→ 04",
-    title: "Drift & förvaltning",
-    desc: "Löpande utveckling, övervakning och säkerhet för kritiska digitala produkter. Vi bygger det — vi driver det.",
-    tags: ["Hosting", "Säkerhet", "Support", "Iteration"],
-  },
-];
-
-const Services = () => (
-  <section id="tjanster" className="section">
-    <div className="wrap">
-      <div className="section-header">
-        <Reveal>
-          <div className="mono meta-label">02 — Tjänster</div>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="h2">Vad vi <em>faktiskt</em> gör.</h2>
-        </Reveal>
-      </div>
-
       <Reveal>
-        <div className="services-grid">
-          {SERVICES.map((s) => (
-            <div className="service-cell" key={s.title}>
-              <span className="service-num">{s.num}</span>
-              <h3 className="service-title">{s.title}</h3>
-              <p className="body slate" style={{ maxWidth: "44ch", marginBottom: 20 }}>{s.desc}</p>
-              <div>{s.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
-            </div>
-          ))}
-        </div>
+        <p className="mono">// metoden</p>
       </Reveal>
+      <Reveal delay={0.1}>
+        <h2 className="h2" style={{ marginTop: 18, maxWidth: "20ch" }}>
+          Ni vet redan att <span className="it">AI</span> förändrar allt.
+        </h2>
+      </Reveal>
+      <Reveal delay={0.2}>
+        <p className="lead" style={{ marginTop: 18 }}>
+          Frågan är bara hur ni tar er dit. Det här är vägen — sex steg från första samtalet till en organisation som jobbar smartare än innan.
+        </p>
+      </Reveal>
+
+      <ol className="steps" aria-label="Aurora-metoden i sex steg">
+        {STEPS.map((s, i) => (
+          <Reveal key={s.n} delay={i * 0.05}>
+            <li className="step">
+              <span className="step-num">{s.n}</span>
+              <span className="step-title">{s.t}</span>
+              <span className="step-desc">{s.d}</span>
+            </li>
+          </Reveal>
+        ))}
+      </ol>
     </div>
   </section>
 );
 
-/* ── Work ───────────────────────────────────────────────────────────── */
-const WORK = [
-  { n: "001", title: "Hönsgården", desc: "SaaS för flockhantering. Mobilapp i App Store och Google Play med över 67 % freemium-konvertering.", type: "Egen produkt", year: "2025" },
-  { n: "002", title: "AgilityManager", desc: "Plattform för agility-tränare med banplanerare i 3D, statistik och tävlingskalender.", type: "Egen produkt", year: "2026" },
-  { n: "003", title: "Aurora Transport", desc: "SaaS för transportbolag — uppdragshantering, körjournaler och digitala signaturer.", type: "Egen produkt", year: "2026" },
-  { n: "004", title: "Viriditas Massage", desc: "Hemsida, bokningssystem och Google Ads-kampanj för massagesalong i Uddevalla.", type: "Kunduppdrag", year: "2026" },
-  { n: "005", title: "Odlingsdagboken", desc: "Digital trädgårdsdagbok med AI-coachen Gro och programmatisk SEO.", type: "Egen produkt", year: "2025" },
-  { n: "006", title: "Updro", desc: "Marknadsplats för digitala uppdrag — referralsystem, escrow och SEO-driven trafik.", type: "Egen produkt", year: "2026" },
+/* ───── Pillars (what we build) ───── */
+const PILLARS = [
+  {
+    n: "01",
+    title: "SaaS & kundportaler",
+    desc: "Era egna verktyg, byggda för era processer. Inloggning, betalningar, dashboards, rapporter — allt under ert varumärke.",
+    tags: ["React", "Supabase", "Stripe"],
+  },
+  {
+    n: "02",
+    title: "AI-agenter & automation",
+    desc: "Tröttsamma uppgifter försvinner. Inkommande mail svaras, offerter skrivs, fakturor matchas — av AI som känner ert företag.",
+    tags: ["GPT-5", "n8n", "Make"],
+  },
+  {
+    n: "03",
+    title: "Mobilappar & webb",
+    desc: "Snabba, hårt designade appar för iOS och Android, eller marknadssajter som faktiskt konverterar besökare till kunder.",
+    tags: ["React Native", "Next.js", "SEO"],
+  },
 ];
 
-const Work = () => (
-  <section id="arbeten" className="section">
+const PillarsSection = () => (
+  <section className="section" id="tjanster">
     <div className="wrap">
-      <div className="section-header">
-        <Reveal>
-          <div className="mono meta-label">03 — Utvalda arbeten</div>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="h2">Saker vi <em>byggt</em> och driver.</h2>
-        </Reveal>
-      </div>
+      <Reveal>
+        <p className="mono">// vad vi bygger</p>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <h2 className="h2" style={{ marginTop: 18, maxWidth: "22ch" }}>
+          Tre saker vi gör <span className="it">på riktigt bra</span>.
+        </h2>
+      </Reveal>
 
-      <div style={{ borderTop: "1px solid var(--hairline)" }}>
-        {WORK.map((w) => (
-          <Reveal key={w.n}>
-            <div className="work-row">
-              <span className="w-num">{w.n}</span>
-              <span className="w-title">{w.title}</span>
-              <span className="w-desc">{w.desc}</span>
-              <span className="w-type">{w.type}</span>
-              <span className="w-year">{w.year}</span>
-            </div>
+      <div className="pillars">
+        {PILLARS.map((p) => (
+          <Reveal key={p.n}>
+            <article className="pillar">
+              <span className="pillar-num">{p.n}</span>
+              <h3 className="h3">{p.title}</h3>
+              <p style={{ color: "var(--bone-soft)", marginTop: 14, lineHeight: 1.65 }}>{p.desc}</p>
+              <div style={{ marginTop: 24, display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {p.tags.map((t) => (
+                  <span key={t} className="mono-sm" style={{ padding: "5px 10px", border: "1px solid var(--hair)", borderRadius: 999 }}>
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </article>
           </Reveal>
         ))}
       </div>
@@ -821,141 +502,97 @@ const Work = () => (
   </section>
 );
 
-/* ── Process ────────────────────────────────────────────────────────── */
-const STEPS = [
-  { num: "i.", name: "Förstå", desc: "Vi börjar med din affär — inte med din design. Vad ska produkten lösa, för vem, och hur mäter vi att den lyckas?" },
-  { num: "ii.", name: "Forma", desc: "Snabba prototyper i kod, inte bilder i Figma. Vi testar idéer i webbläsaren där användaren möter dem." },
-  { num: "iii.", name: "Bygg", desc: "Modern stack, robust kod, tidiga lanseringar. Vi släpper i iterationer — inte i ett stort drag." },
-  { num: "iv.", name: "Driv", desc: "Allt vi bygger förvaltas av samma team. Inga överlämningar, ingen kunskap som försvinner." },
-];
-
-const Process = () => (
-  <section id="process" className="section">
-    <div className="wrap">
-      <div className="section-header">
+/* ───── CTA ───── */
+const CTASection = () => {
+  const { open } = useContactModal();
+  return (
+    <section className="cta-band" id="kontakt">
+      <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         <Reveal>
-          <div className="mono meta-label">04 — Process</div>
+          <p className="mono">// nästa steg</p>
         </Reveal>
         <Reveal delay={0.1}>
-          <h2 className="h2">Från idé till drift på <em>fyra steg.</em></h2>
+          <h2 className="h2" style={{ marginTop: 18, maxWidth: "20ch" }}>
+            Har ni en idé som <span className="it">borde varit</span> ett system?
+          </h2>
         </Reveal>
-      </div>
-
-      <Reveal>
-        <div className="process-grid">
-          {STEPS.map((s) => (
-            <div className="process-step" key={s.num}>
-              <span className="process-numeral">{s.num}</span>
-              <h3 className="process-name">{s.name}</h3>
-              <p className="body slate">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </Reveal>
-    </div>
-  </section>
-);
-
-/* ── CTA dark ───────────────────────────────────────────────────────── */
-const CTA = () => (
-  <section id="kontakt" className="cta-dark section" style={{ position: "relative" }}>
-    <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(40px, 6vw, 80px)", alignItems: "end" }} className="aurora-cta-grid">
-        <style>{`@media (min-width: 900px) { .aurora-cta-grid { grid-template-columns: 1fr 1fr !important; } }`}</style>
-        <Reveal>
-          <h2 className="h2">Har du <span className="glow-em">något</span> att bygga?</h2>
+        <Reveal delay={0.2}>
+          <p className="lead" style={{ marginTop: 22 }}>
+            Boka en kostnadsfri rådgivning. Trettio minuter, inga säljare, ingen pitch — bara konkreta svar på vad som går att bygga, hur snabbt, och vad det kostar.
+          </p>
         </Reveal>
-        <Reveal delay={0.1}>
-          <div>
-            <div className="mono meta-label" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 18 }}>Kontakt</div>
-            <a href="mailto:info@auroramedia.se" className="cta-email">info@auroramedia.se →</a>
-            <p className="body slate" style={{ marginTop: 24, maxWidth: "32ch" }}>
-              Vi svarar inom ett arbetsdygn. Korta samtal är gratis.
-            </p>
+        <Reveal delay={0.3}>
+          <div style={{ marginTop: 36, display: "flex", flexWrap: "wrap", gap: 20, alignItems: "center" }}>
+            <button onClick={() => open()} className="btn btn-moss">
+              Boka samtal <span className="a"><ArrowRight size={14} /></span>
+            </button>
+            <a href="mailto:info@auroramedia.se" className="cta-email">info@auroramedia.se</a>
           </div>
         </Reveal>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
-/* ── Footer ─────────────────────────────────────────────────────────── */
+/* ───── Footer ───── */
 const Footer = () => (
-  <footer className="footer">
+  <footer className="foot">
     <div className="wrap">
-      <div className="footer-grid">
+      <div className="foot-grid">
         <div>
-          <div className="nav-logo" style={{ color: "var(--bone)", marginBottom: 16 }}>
-            <span className="nav-dot" aria-hidden />
-            <span style={{ color: "var(--bone)" }}>Aurora Media</span>
-          </div>
-          <p className="body slate" style={{ maxWidth: "32ch" }}>
-            En oberoende digitalstudio från Linköping. Vi bygger digitala produkter
-            för svenska företag som vill bygga något som håller.
+          <a href="#top" className="brand" style={{ fontSize: 22 }}>
+            aurora<span className="glyph">.✦</span>
+          </a>
+          <p style={{ marginTop: 18, color: "var(--bone-mute)", maxWidth: 36 + "ch" }}>
+            Aurora Media AB — Linköping. SaaS, AI och automation för svenska företag som vill växa snabbare.
           </p>
         </div>
         <div>
-          <div className="mono" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 12 }}>Studio</div>
-          <a href="#studio">Om oss</a>
-          <a href="#process">Process</a>
-          <a href="#tjanster">Tjänster</a>
+          <p className="mono-sm" style={{ marginBottom: 12 }}>tjänster</p>
+          <Link to="/tjanster/hemsidor">Hemsidor</Link>
+          <Link to="/tjanster/seo">SEO</Link>
+          <Link to="/tjanster/mobilapp">Mobilapp</Link>
+          <Link to="/ai-automation-foretag">AI-automation</Link>
         </div>
         <div>
-          <div className="mono" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 12 }}>Arbeten</div>
-          <a href="#arbeten">Utvalda arbeten</a>
-          <a href="#arbeten">Egna produkter</a>
-          <a href="#arbeten">Kunduppdrag</a>
+          <p className="mono-sm" style={{ marginBottom: 12 }}>företag</p>
+          <Link to="/om">Om oss</Link>
+          <Link to="/arbete">Arbete</Link>
+          <Link to="/process">Process</Link>
+          <Link to="/priser">Priser</Link>
         </div>
         <div>
-          <div className="mono" style={{ color: "rgba(242,237,227,0.45)", marginBottom: 12 }}>Kontakt</div>
+          <p className="mono-sm" style={{ marginBottom: 12 }}>kontakt</p>
           <a href="mailto:info@auroramedia.se">info@auroramedia.se</a>
-          <a href="#kontakt">Boka samtal</a>
-          <a href="/integritetspolicy">Integritetspolicy</a>
+          <Link to="/kontakt">Kontaktformulär</Link>
+          <Link to="/integritetspolicy">Integritetspolicy</Link>
         </div>
       </div>
-
-      <div className="hairline" style={{ background: "rgba(242,237,227,0.12)", marginBlock: 48 }} />
-
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-        <span className="mono" style={{ color: "rgba(242,237,227,0.5)" }}>
-          © 2026 Aurora Media AB — 559272-0220
-        </span>
-        <span className="mono" style={{ color: "rgba(242,237,227,0.5)" }}>
-          Linköping · Sverige · 58°N
-        </span>
+      <div style={{ marginTop: 56, paddingTop: 24, borderTop: "1px solid var(--hair)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+        <span>© {new Date().getFullYear()} Aurora Media AB</span>
+        <span>Org.nr 559XXX-XXXX · Linköping, Sverige</span>
       </div>
     </div>
   </footer>
 );
 
-/* ── Page ───────────────────────────────────────────────────────────── */
-const Index = () => {
-  // Override the global app dark background for this page only
-  useEffect(() => {
-    const prev = document.body.style.background;
-    document.body.style.background = "#F2EDE3";
-    return () => { document.body.style.background = prev; };
-  }, []);
-
-  return (
-    <>
-      <style>{TOKENS}</style>
-      <div className="aurora">
-        <NoiseOverlay />
-        <Nav />
-        <main>
-          <Hero />
-          <Ticker />
-          <Studio />
-          <Services />
-          <Work />
-          <Process />
-          <CTA />
-        </main>
-        <Footer />
-      </div>
-    </>
-  );
-};
+/* ───── Page ───── */
+const Index = () => (
+  <>
+    <SEO
+      title="Aurora Media — SaaS, AI & automation för svenska företag"
+      description="Aurora Media bygger SaaS, AI-lösningar och skräddarsydda system för företag i Linköping och hela Sverige. Från idé till lansering på under fyra veckor."
+    />
+    <style>{TOKENS}</style>
+    <div className="aur">
+      <Nav />
+      <Hero />
+      <StepsSection />
+      <PillarsSection />
+      <CTASection />
+      <Footer />
+    </div>
+  </>
+);
 
 export default Index;
