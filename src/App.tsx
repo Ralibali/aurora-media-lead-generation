@@ -21,6 +21,7 @@ import CasePage from "./pages/CasePage";
 import CityPage from "./pages/CityPage";
 import Integritetspolicy from "./pages/Integritetspolicy";
 import Index from "./pages/Index";
+import IndexV5 from "./pages/_versions/IndexV5";
 import Kontakt from "./pages/Kontakt";
 import Metodik from "./pages/Metodik";
 import NotFound from "./pages/NotFound";
@@ -284,6 +285,14 @@ function RouteSEO() {
   );
 }
 
+function PreviewOnlyV5() {
+  const hostname = window.location.hostname;
+  const isPreview =
+    import.meta.env.DEV || hostname.includes("id-preview--") || hostname.includes("localhost");
+
+  return isPreview ? <IndexV5 /> : <Navigate to="/" replace />;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -296,6 +305,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/index" element={<Navigate to="/" replace />} />
+              <Route path="/v5" element={<PreviewOnlyV5 />} />
               <Route path="/ai-karta" element={<AiKarta />} />
               <Route path="/ai-karta/start" element={<AiKartaStart />} />
               <Route path="/ai-karta/resultat" element={<AiKartaResultat />} />
