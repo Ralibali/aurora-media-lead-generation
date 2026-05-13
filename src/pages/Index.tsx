@@ -654,19 +654,34 @@ const Hero = () => {
 const TICKER_ITEMS = [
   "SaaS-utveckling", "Webbplatser", "Varumärke", "SEO & innehåll", "Drift & support",
 ];
+const TICKER_ITEMS_2 = [
+  "Linköping", "Stockholm", "Göteborg", "Östergötland", "Norden",
+];
 
 const Ticker = () => {
   const items = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
+  const items2 = [...TICKER_ITEMS_2, ...TICKER_ITEMS_2, ...TICKER_ITEMS_2, ...TICKER_ITEMS_2];
   return (
-    <div className="ticker" aria-hidden="true">
-      <div className="ticker-track">
-        {items.map((t, i) => (
-          <span key={i}>
-            {t}<span className="star" style={{ marginLeft: 56 }}>✦</span>
-          </span>
-        ))}
+    <>
+      <div className="ticker" aria-hidden="true">
+        <div className="ticker-track">
+          {items.map((t, i) => (
+            <span key={i}>
+              {t}<span className="star" style={{ marginLeft: 56 }}>✦</span>
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
+      <div className="ticker" aria-hidden="true">
+        <div className="ticker-track reverse">
+          {items2.map((t, i) => (
+            <span key={i} style={{ color: "var(--slate)" }}>
+              {t}<span className="star" style={{ marginLeft: 56 }}>·</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
 
