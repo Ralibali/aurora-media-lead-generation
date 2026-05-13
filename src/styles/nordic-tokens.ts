@@ -110,13 +110,13 @@ export const NORDIC_TOKENS = `
       radial-gradient(60% 50% at 85% 15%, rgba(127,227,176,0.08), transparent 70%),
       radial-gradient(50% 60% at 5% 90%, rgba(127,227,176,0.05), transparent 70%);
   }
-  .aur .hero-content{ position:relative; padding-bottom:clamp(40px, 6vh, 72px); padding-top:clamp(96px, 14vh, 132px); display:grid; grid-template-columns:1fr; gap:clamp(20px, 4vw, 40px); align-items:center; }
-  @media(min-width:980px){ .aur .hero-content{ grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr); } }
+  .aur .hero-content{ position:relative; padding-bottom:clamp(40px, 6vh, 72px); padding-top:clamp(96px, 14vh, 132px); display:grid; grid-template-columns:1fr; gap:clamp(16px, 3vw, 28px); align-items:center; }
+  @media(min-width:980px){ .aur .hero-content{ grid-template-columns: minmax(0, 1fr) auto; } }
   .aur .hero-text{ display:flex; flex-direction:column; justify-content:center; }
   .aur .hero-figure-wrap{ display:flex; justify-content:center; align-items:center; order:-1; }
   @media(min-width:980px){ .aur .hero-figure-wrap{ order:0; justify-content:flex-end; } }
-  .aur .hero-figure{ position:relative; width:100%; max-width:min(82vw, 320px); aspect-ratio: 4/5; border-radius:6px; overflow:hidden; border:1px solid var(--hair); background:var(--ink-soft); box-shadow:0 24px 60px -36px rgba(0,0,0,0.8); }
-  @media(min-width:980px){ .aur .hero-figure{ max-width:340px; } }
+  .aur .hero-figure{ position:relative; width:160px; aspect-ratio: 4/5; border-radius:6px; overflow:hidden; border:1px solid var(--hair); background:var(--ink-soft); box-shadow:0 16px 40px -28px rgba(0,0,0,0.8); }
+  @media(min-width:980px){ .aur .hero-figure{ width:200px; } }
   .aur .hero-figure img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(0.92) brightness(0.88); }
   .aur .hero-figure-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,14,12,0.05) 0%, rgba(11,14,12,0.35) 75%, rgba(11,14,12,0.7) 100%); pointer-events:none; }
   .aur .hero-figure-tag{ position:absolute; left:14px; bottom:12px; font-family:var(--font-mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--bone); padding:5px 9px; border:1px solid rgba(245,242,234,0.2); border-radius:999px; background:rgba(11,14,12,0.4); backdrop-filter:blur(6px); }
