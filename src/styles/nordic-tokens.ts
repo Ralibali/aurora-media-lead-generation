@@ -110,7 +110,7 @@ export const NORDIC_TOKENS = `
       radial-gradient(60% 50% at 85% 15%, rgba(127,227,176,0.08), transparent 70%),
       radial-gradient(50% 60% at 5% 90%, rgba(127,227,176,0.05), transparent 70%);
   }
-  .aur .hero-content{ position:relative; padding-bottom:clamp(18px, 3vh, 32px); padding-top:clamp(88px, 10vh, 104px); display:grid; grid-template-columns:1fr; gap:clamp(10px, 1.5vw, 16px); align-items:center; }
+  .aur .hero-content{ position:relative; padding-bottom:clamp(18px, 3vh, 32px); padding-top:clamp(40px, 5vh, 64px); display:grid; grid-template-columns:1fr; gap:clamp(10px, 1.5vw, 16px); align-items:center; }
   @media(min-width:980px){ .aur .hero-content{ grid-template-columns: minmax(0, 1fr) auto; } }
   .aur .hero-text{ display:flex; flex-direction:column; justify-content:center; }
   .aur .hero-figure-wrap{ display:flex; justify-content:center; align-items:center; order:-1; }
