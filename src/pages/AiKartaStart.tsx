@@ -343,9 +343,7 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 3 && (
-                  <div className="space-y-5">
-                    {form.processes.map((p, idx) => (
+                {step === 2 && (
                       <div
                         key={idx}
                         className="rounded-2xl border border-white/10 bg-background/40 p-4 sm:p-5"
