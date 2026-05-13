@@ -36,17 +36,8 @@ const Hero = () => {
   const time = useStockholmTime();
   return (
     <section id="top" className="hero">
-      <div className="hero-bg">
-        <img
-          src={heroImg}
-          alt="Dimmig svensk sjö med röd stuga vid skogsbrynet"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-        />
-      </div>
-
       <div className="wrap hero-content">
+        <div className="hero-text">
         <Reveal>
           <p className="mono">aurora media · ai-driven mjukvarubyrå · linköping</p>
         </Reveal>
@@ -82,6 +73,20 @@ const Hero = () => {
               AI &amp; effektivisering <span className="a"><ArrowUpRight size={14} /></span>
             </Link>
             <span className="clock" style={{ marginLeft: 4 }}>Linköping · {time}</span>
+          </div>
+        </Reveal>
+        </div>
+        <Reveal delay={0.15}>
+          <div className="hero-figure">
+            <img
+              src={heroImg}
+              alt="Dimmig svensk sjö i gryningen med skog och berg"
+              width={1024}
+              height={1280}
+              fetchPriority="high"
+            />
+            <div className="hero-figure-overlay" />
+            <span className="hero-figure-tag">Östergötland · Gryning</span>
           </div>
         </Reveal>
       </div>
