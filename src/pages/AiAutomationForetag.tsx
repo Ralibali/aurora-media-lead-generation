@@ -1,13 +1,9 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import { ArrowRight, Check, X } from "lucide-react";
+import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
-
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
 
 const PROBLEMS = [
   "Excel-filer som blivit affärskritiska men är svåra att lita på",
@@ -27,7 +23,7 @@ const SERVICES = [
   { num: "06", name: "SaaS och digitala produkter", desc: "Har ni en idé till en SaaS, kundportal eller MVP bygger vi lösningen från strategi till lansering." },
 ];
 
-const BEFORE_AFTER = [
+const BEFORE_AFTER: [string, string][] = [
   ["Leads ligger i inkorgen",     "Leads hamnar direkt i CRM med ansvarig säljare"],
   ["Excel uppdateras manuellt",   "Dashboarden uppdateras automatiskt"],
   ["Kundfrågor skrivs från noll", "AI föreslår svar baserat på er kunskap"],
@@ -43,6 +39,7 @@ const PACKAGES = [
 ];
 
 const AiAutomationForetag = () => {
+  const { open } = useContactModal();
   useEffect(() => {
     setSEOMeta({
       title: "AI automation för företag | Automatisera Excel, leads och administration",
@@ -60,130 +57,134 @@ const AiAutomationForetag = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
-      <main id="main">
-
-        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div className="wrap">
-            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20 }}>AI · automation · effektivisering</p>
-            <h1 style={{ fontFamily: F, fontSize: "clamp(36px,6vw,64px)", lineHeight: 1.02, letterSpacing: "-0.025em", color: C, fontWeight: 400, maxWidth: 640, marginBottom: 16 }}>
-              Från Excel-kaos
-              <br /><em>till smarta AI-flöden.</em>
+    <NordicLayout>
+      <section className="page-hero">
+        <div className="wrap">
+          <Reveal><p className="mono">ai · automation · effektivisering</p></Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>
+              Från Excel-kaos till <span className="it">smarta AI-flöden.</span>
             </h1>
-            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", maxWidth: 480, marginBottom: 32 }}>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="lead" style={{ marginTop: 24 }}>
               Vi hjälper företag ersätta manuella rutiner, gamla system och tidskrävande administration med AI-lösningar och automationer som sparar tid och skapar fler affärer.
             </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link to="/kontakt" className="btn-primary">Boka AI-genomlysning →</Link>
-              <Link to="/kontakt" className="btn-ghost">Berätta vad ni vill effektivisera</Link>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <button onClick={() => open()} className="btn btn-moss">
+                Boka AI-genomlysning <span className="a"><ArrowRight size={14} /></span>
+              </button>
+              <Link to="/kontakt" className="btn btn-ghost">Berätta vad ni vill effektivisera</Link>
             </div>
-          </div>
-        </section>
+          </Reveal>
+        </div>
+      </section>
 
-        {/* Problems */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
-          <div className="wrap">
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>känner ni igen er?</p>
-            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 28, letterSpacing: "-0.015em" }}>
-              Det är inte personalen som är problemet.
-              <br /><em>Det är arbetsflödena.</em>
-            </h2>
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Känner ni igen er?</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2">Det är inte personalen. <span className="it">Det är arbetsflödena.</span></h2>
+            </Reveal>
+          </div>
+          <div className="feat-list">
             {PROBLEMS.map((p, i) => (
-              <div key={p} style={{ display: "flex", gap: 16, padding: "13px 0", borderBottom: "0.5px solid rgba(237,233,220,0.07)", alignItems: "center" }}>
-                <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)", minWidth: 20 }}>{String(i + 1).padStart(2, "0")}</span>
-                <span style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.65)" }}>{p}</span>
+              <Reveal key={p} delay={i * 0.04}>
+                <div className="feat-row" style={{ gridTemplateColumns: "60px 1fr" }}>
+                  <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="feat-body">{p}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Det vi bygger</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2">AI där det faktiskt <span className="it">gör nytta.</span></h2>
+            </Reveal>
+          </div>
+          <div className="svc-grid">
+            {SERVICES.map((s) => (
+              <div key={s.num} className="svc-cell">
+                <span className="svc-num">{s.num}</span>
+                <h3 className="svc-title">{s.name}</h3>
+                <p className="body" style={{ marginTop: 8 }}>{s.desc}</p>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Services */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
-          <div className="wrap">
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>det vi bygger</p>
-            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 28, letterSpacing: "-0.015em" }}>
-              AI där det faktiskt <em>gör nytta.</em>
-            </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 8, overflow: "hidden" }}>
-              {SERVICES.map((s, i) => (
-                <div key={s.num} style={{
-                  padding: "clamp(20px,2.5vw,28px)",
-                  borderRight: (i + 1) % 2 === 0 ? "none" : "0.5px solid rgba(237,233,220,0.10)",
-                  borderBottom: i < SERVICES.length - 2 ? "0.5px solid rgba(237,233,220,0.10)" : "none",
-                  transition: "background 0.15s",
-                }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(237,233,220,0.025)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}>
-                  <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)", display: "block", marginBottom: 10 }}>{s.num}</span>
-                  <p style={{ fontFamily: F, fontSize: "clamp(17px,2vw,20px)", color: C, marginBottom: 8 }}>{s.name}</p>
-                  <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)", lineHeight: 1.6 }}>{s.desc}</p>
-                </div>
-              ))}
-            </div>
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Innan · efter</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2">Hur vardagen <span className="it">förändras.</span></h2>
+            </Reveal>
           </div>
-        </section>
+          <div className="feat-list" style={{ marginTop: 0 }}>
+            {BEFORE_AFTER.map(([before, after], i) => (
+              <Reveal key={i} delay={i * 0.04}>
+                <div className="feat-row" style={{ gridTemplateColumns: "60px 1fr 1fr" }}>
+                  <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="feat-body" style={{ display: "flex", gap: 10, alignItems: "flex-start", opacity: 0.55 }}>
+                    <X size={14} style={{ marginTop: 4, flexShrink: 0 }} /> {before}
+                  </span>
+                  <span className="feat-body" style={{ display: "flex", gap: 10, alignItems: "flex-start", color: "var(--bone)" }}>
+                    <Check size={14} style={{ marginTop: 4, color: "var(--moss)", flexShrink: 0 }} /> {after}
+                  </span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        {/* Before/After */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
-          <div className="wrap">
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 24 }}>innan · efter</p>
-            <div style={{ border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 8, overflow: "hidden" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", background: "rgba(237,233,220,0.02)", borderBottom: "0.5px solid rgba(237,233,220,0.10)" }}>
-                <div style={{ padding: "10px 16px", fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)" }}>idag</div>
-                <div style={{ padding: "10px 16px", fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", borderLeft: "0.5px solid rgba(237,233,220,0.08)" }}>med aurora</div>
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Upplägg</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2">Välj <span className="it">startpunkt.</span></h2>
+            </Reveal>
+          </div>
+          <div className="price-grid">
+            {PACKAGES.map((p) => (
+              <div key={p.name} className="price-card">
+                <h3>{p.name}</h3>
+                <span className="meta-label">Pris på {p.price}</span>
+                <p className="body" style={{ marginTop: 18, flex: 1 }}>{p.desc}</p>
+                <button onClick={() => open()} className="btn btn-ghost" style={{ marginTop: 24 }}>
+                  Välj upplägg <span className="a"><ArrowRight size={14} /></span>
+                </button>
               </div>
-              {BEFORE_AFTER.map(([before, after], i) => (
-                <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: i < BEFORE_AFTER.length - 1 ? "0.5px solid rgba(237,233,220,0.07)" : "none" }}>
-                  <div style={{ padding: "12px 16px", fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.40)", display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: 10, color: "rgba(237,233,220,0.20)" }}>✗</span> {before}
-                  </div>
-                  <div style={{ padding: "12px 16px", fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.75)", borderLeft: "0.5px solid rgba(237,233,220,0.08)", display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ fontSize: 10, color: "rgba(80,200,120,0.8)" }}>✓</span> {after}
-                  </div>
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Packages */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
-          <div className="wrap">
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>upplägg</p>
-            <h2 style={{ fontFamily: F, fontSize: "clamp(22px,3vw,32px)", color: C, marginBottom: 28, letterSpacing: "-0.015em" }}>Välj startpunkt.</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px,1fr))", gap: 10 }}>
-              {PACKAGES.map((p) => (
-                <div key={p.name} style={{ padding: "clamp(20px,2.5vw,28px)", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6, display: "flex", flexDirection: "column", gap: 10 }}>
-                  <p style={{ fontFamily: F, fontSize: "clamp(18px,2vw,22px)", color: C }}>{p.name}</p>
-                  <p style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.35)", letterSpacing: "0.06em" }}>pris på {p.price}</p>
-                  <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)", lineHeight: 1.6, flex: 1 }}>{p.desc}</p>
-                  <Link to="/kontakt" className="btn-ghost" style={{ justifyContent: "center", textAlign: "center", fontSize: 12, marginTop: 4 }}>Välj upplägg</Link>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)", marginBottom: "clamp(40px,6vw,64px)" }} />
-          <div className="wrap">
-            <h2 style={{ fontFamily: F, fontStyle: "italic", fontSize: "clamp(22px,3vw,36px)", color: C, marginBottom: 10, letterSpacing: "-0.015em" }}>
-              Berätta vad som tar för lång tid.
-            </h2>
-            <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.45)", marginBottom: 24 }}>Vi återkommer med offert inom 24 timmar.</p>
-            <Link to="/kontakt" className="btn-primary">Boka AI-genomlysning →</Link>
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </div>
+      <section className="cta-band">
+        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+          <div className="meta-label">Nästa steg</div>
+          <h2 className="h2" style={{ marginTop: 18 }}>
+            Berätta vad som <span className="it">tar för lång tid.</span>
+          </h2>
+          <p className="lead" style={{ marginTop: 22 }}>Offert inom 24 timmar.</p>
+          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
+            Boka AI-genomlysning <span className="a"><ArrowRight size={14} /></span>
+          </button>
+        </div>
+      </section>
+    </NordicLayout>
   );
 };
 
