@@ -60,6 +60,12 @@ const seoMap: Record<string, SEOConfig> = {
       "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
     canonical: "https://auroramedia.se/",
   },
+  "/index": {
+    title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
+    description:
+      "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
+    canonical: "https://auroramedia.se/",
+  },
   "/ai-karta": {
     title: "AI-kartan | Hitta företagets bästa AI-områden | Aurora Media",
     description:
@@ -289,6 +295,7 @@ const App = () => (
           <div className="lumina-site min-h-screen" style={{ backgroundColor: "#100F0D", color: "#EDE9DC" }}>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/index" element={<Navigate to="/" replace />} />
               <Route path="/ai-karta" element={<AiKarta />} />
               <Route path="/ai-karta/start" element={<AiKartaStart />} />
               <Route path="/ai-karta/resultat" element={<AiKartaResultat />} />
