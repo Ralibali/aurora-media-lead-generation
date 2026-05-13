@@ -33,7 +33,7 @@ export const NORDIC_TOKENS = `
 
   .aur .hero-line{
     font-family:var(--font-mono); font-weight:500;
-    font-size:clamp(2rem, 6vw, 5rem);
+    font-size:clamp(1.65rem, 4.4vw, 3.65rem);
     line-height:1.04; letter-spacing:-0.03em; color:var(--bone);
   }
   .aur .hero-line .it{ font-family:var(--font-display); font-style:italic; font-weight:400; color:var(--moss); letter-spacing:-0.02em; }
@@ -110,7 +110,7 @@ export const NORDIC_TOKENS = `
       radial-gradient(60% 50% at 85% 15%, rgba(127,227,176,0.08), transparent 70%),
       radial-gradient(50% 60% at 5% 90%, rgba(127,227,176,0.05), transparent 70%);
   }
-  .aur .hero-content{ position:relative; padding-bottom:clamp(40px, 6vh, 72px); padding-top:clamp(72px, 9vh, 96px); display:grid; grid-template-columns:1fr; gap:clamp(16px, 3vw, 28px); align-items:center; }
+  .aur .hero-content{ position:relative; padding-bottom:clamp(24px, 4vh, 44px); padding-top:clamp(58px, 7vh, 74px); display:grid; grid-template-columns:1fr; gap:clamp(12px, 2vw, 20px); align-items:center; }
   @media(min-width:980px){ .aur .hero-content{ grid-template-columns: minmax(0, 1fr) auto; } }
   .aur .hero-text{ display:flex; flex-direction:column; justify-content:center; }
   .aur .hero-figure-wrap{ display:flex; justify-content:center; align-items:center; order:-1; }
@@ -125,7 +125,7 @@ export const NORDIC_TOKENS = `
   .aur .clock::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--moss); box-shadow:0 0 10px var(--moss); animation:aur-pulse 2.4s ease-in-out infinite; }
   @keyframes aur-pulse{ 0%,100%{opacity:1; transform:scale(1);} 50%{opacity:.4; transform:scale(.65);} }
 
-  .aur .hero-trust{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:30px; max-width:560px; }
+  .aur .hero-trust{ display:grid; grid-template-columns:1fr; gap:10px; margin-top:18px; max-width:560px; }
   @media(min-width:760px){ .aur .hero-trust{ grid-template-columns:repeat(2,1fr); } }
   .aur .trust-item{ display:flex; gap:10px; align-items:flex-start; color:var(--bone-soft); font-size:0.92rem; line-height:1.45; }
   .aur .trust-item .ic{ color:var(--moss); margin-top:2px; flex-shrink:0; }
