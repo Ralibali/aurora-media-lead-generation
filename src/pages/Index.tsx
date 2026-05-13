@@ -159,16 +159,20 @@ const TOKENS = `
     border-top: 1px solid var(--hairline);
     border-bottom: 1px solid var(--hairline);
     overflow: hidden;
-    padding-block: 22px;
+    padding-block: 18px;
   }
+  .aurora .ticker + .ticker { border-top: none; }
   .aurora .ticker-track {
     display: inline-flex; gap: 56px; white-space: nowrap;
-    animation: aurora-marquee 40s linear infinite;
+    animation: aurora-marquee 38s linear infinite;
     font-family: var(--font-display);
     font-style: italic; font-size: clamp(1.2rem, 1.8vw, 1.6rem);
     color: var(--ink);
     font-variation-settings: "opsz" 144, "SOFT" 100;
+    will-change: transform;
   }
+  .aurora .ticker-track.reverse { animation-direction: reverse; animation-duration: 52s; }
+  .aurora .ticker:hover .ticker-track { animation-play-state: paused; }
   .aurora .ticker-track .star { color: var(--glow); }
   @keyframes aurora-marquee {
     0% { transform: translateX(0); }
