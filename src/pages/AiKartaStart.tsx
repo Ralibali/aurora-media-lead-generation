@@ -142,9 +142,7 @@ const AiKartaStart = () => {
         if (!p.process_name.trim()) fe[`p_${i}_name`] = "Ange processnamn";
         if (!p.frequency) fe[`p_${i}_freq`] = "Välj frekvens";
         if (!p.weekly_time) fe[`p_${i}_time`] = "Välj tid";
-        if (!p.rule_based) fe[`p_${i}_rule`] = "Välj";
-        if (!p.data_available) fe[`p_${i}_data`] = "Välj";
-        if (!p.business_value) fe[`p_${i}_value`] = "Välj";
+        // rule_based, data_available och business_value är valfria – defaultas till "unknown" vid submit
       });
       if (Object.keys(fe).length) {
         setErrors(fe);
@@ -185,8 +183,14 @@ const AiKartaStart = () => {
     if (!validateStep(4)) return;
     setSubmitting(true);
     try {
+      const normalizedProcesses = form.processes.map((p) => ({
+        ...p,
+        rule_based: p.rule_based || "unknown",
+        data_available: p.data_available || "unknown",
+        business_value: p.business_value || "unknown",
+      }));
       const { data, error } = await supabase.functions.invoke("submit-ai-map", {
-        body: { ...form, website },
+        body: { ...form, processes: normalizedProcesses, website },
       });
       if (error) throw error;
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
@@ -397,21 +401,21 @@ const AiKartaStart = () => {
                           </Field>
 
                           <PillRow
-                            label="Är processen regelstyrd eller mallbaserad?"
+                            label="Är processen regelstyrd eller mallbaserad? (valfritt)"
                             error={errors[`p_${idx}_rule`]}
                             options={Object.entries(YPN_LABELS) as [string, string][]}
                             value={p.rule_based}
                             onChange={(v) => updateProcess(idx, { rule_based: v as ProcessInput["rule_based"] })}
                           />
                           <PillRow
-                            label="Finns data/system AI kan använda?"
+                            label="Finns data/system AI kan använda? (valfritt)"
                             error={errors[`p_${idx}_data`]}
                             options={Object.entries(YPN_LABELS) as [string, string][]}
                             value={p.data_available}
                             onChange={(v) => updateProcess(idx, { data_available: v as ProcessInput["data_available"] })}
                           />
                           <PillRow
-                            label="Affärsnytta att effektivisera detta?"
+                            label="Affärsnytta att effektivisera detta? (valfritt)"
                             error={errors[`p_${idx}_value`]}
                             options={Object.entries(VALUE_LABELS) as [string, string][]}
                             value={p.business_value}
