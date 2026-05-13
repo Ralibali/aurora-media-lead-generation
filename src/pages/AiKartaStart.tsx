@@ -505,7 +505,7 @@ const AiKartaStart = () => {
           </div>
         </section>
       </main>
-      </div>
+      </NordicLayout>
   );
 };
 
