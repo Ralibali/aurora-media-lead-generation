@@ -424,28 +424,120 @@ const Nav = () => {
   );
 };
 
+/* ── Magnetic pill (cursor-attracted CTA) ───────────────────────────── */
+const Magnetic = ({ children, strength = 18, className, href }: any) => {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const reduce = useReducedMotion();
+  const onMove = (e: React.MouseEvent) => {
+    if (reduce || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * strength;
+    const y = ((e.clientY - r.top) / r.height - 0.5) * strength;
+    ref.current.style.transform = `translate(${x}px, ${y}px)`;
+  };
+  const onLeave = () => { if (ref.current) ref.current.style.transform = "translate(0,0)"; };
+  return (
+    <a ref={ref} href={href} className={className} onMouseMove={onMove} onMouseLeave={onLeave} style={{ transition: "transform 360ms cubic-bezier(0.2,0.8,0.2,1)" }}>
+      {children}
+    </a>
+  );
+};
+
+/* ── Live Linköping clock ───────────────────────────────────────────── */
+const useLinkopingTime = () => {
+  const [t, setT] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setT(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return t.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "Europe/Stockholm" });
+};
+
 /* ── Hero ───────────────────────────────────────────────────────────── */
 const HERO_META = [
-  { label: "Studio", value: "Linköping, SE" },
+  { label: "Studio", value: "Linköping · 58.41°N" },
   { label: "Sedan", value: "MMXXI" },
-  { label: "Org.nr", value: "559272-0220" },
   { label: "Status", value: "Tar uppdrag Q3 2026" },
 ];
 
-const HERO_WORDS = [
-  { t: "Vi" }, { t: "bygger" }, { t: "digitala" },
-  { t: "produkter", em: true }, { t: "som" },
-  { t: "faktiskt", em: true }, { t: "används." },
-];
+const HERO_LINE_1 = ["Vi", "bygger"];
+const HERO_LINE_2 = ["digitala"];
+const HERO_LINE_3_PRE = ["som"];
+const HERO_LINE_4 = ["faktiskt"];
 
 const Hero = () => {
   const reduce = useReducedMotion();
+  const time = useLinkopingTime();
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [glow, setGlow] = useState({ x: 50, y: 30 });
+
+  const onMove = (e: React.MouseEvent) => {
+    if (reduce || !heroRef.current) return;
+    const r = heroRef.current.getBoundingClientRect();
+    setGlow({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
+  };
+
+  const Word = ({ t, em, i, base = 0.15 }: any) => (
+    <span style={{ display: "inline-block", overflow: "hidden", paddingRight: "0.18em", verticalAlign: "bottom" }}>
+      {reduce ? (em ? <em>{t}</em> : t) : (
+        <motion.span
+          initial={{ y: "110%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.85, delay: base + i * 0.08, ease: [0.2, 0.8, 0.2, 1] }}
+          style={{ display: "inline-block" }}
+        >
+          {em ? <em>{t}</em> : t}
+        </motion.span>
+      )}
+    </span>
+  );
+
   return (
-    <section id="top" style={{ paddingTop: 140, paddingBottom: "clamp(64px, 10vw, 120px)", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-      <div className="wrap" style={{ width: "100%" }}>
-        {/* meta grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 24, marginBottom: "clamp(48px, 8vw, 96px)" }} className="aurora-meta-grid">
-          <style>{`@media (min-width: 760px) { .aurora-meta-grid { grid-template-columns: repeat(4, 1fr) !important; } }`}</style>
+    <section
+      id="top"
+      ref={heroRef}
+      onMouseMove={onMove}
+      style={{
+        paddingTop: 132,
+        paddingBottom: "clamp(48px, 8vw, 96px)",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        position: "relative",
+      }}
+    >
+      {/* Cursor-driven aurora glow */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+          background: `radial-gradient(420px circle at ${glow.x}% ${glow.y}%, rgba(230,74,25,0.12), transparent 60%)`,
+          transition: reduce ? "none" : "background 600ms cubic-bezier(0.2,0.8,0.2,1)",
+        }}
+      />
+
+      <div className="wrap" style={{ width: "100%", position: "relative", zIndex: 1 }}>
+        {/* top meta strip */}
+        <div className="aurora-hero-meta">
+          <style>{`
+            .aurora .aurora-hero-meta {
+              display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px;
+              margin-bottom: clamp(40px, 7vw, 80px);
+              padding-bottom: 22px; border-bottom: 1px solid var(--hairline);
+            }
+            @media (min-width: 760px) {
+              .aurora .aurora-hero-meta { grid-template-columns: repeat(4, 1fr); align-items: end; }
+            }
+            .aurora .aurora-hero-clock {
+              font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
+              color: var(--ink); display: inline-flex; align-items: center; gap: 8px;
+            }
+            .aurora .aurora-hero-clock::before {
+              content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--glow);
+              animation: aurora-pulse 2s ease-in-out infinite;
+            }
+          `}</style>
           {HERO_META.map((m, i) => (
             <Reveal key={m.label} delay={i * 0.06}>
               <div>
@@ -454,46 +546,102 @@ const Hero = () => {
               </div>
             </Reveal>
           ))}
+          <Reveal delay={0.18}>
+            <div>
+              <div className="mono meta-label" style={{ marginBottom: 8 }}>Lokal tid</div>
+              <span className="aurora-hero-clock">{time}</span>
+            </div>
+          </Reveal>
         </div>
 
-        {/* H1 */}
-        <h1 className="display" style={{ maxWidth: "16ch", marginBottom: "clamp(48px, 8vw, 96px)" }}>
-          {HERO_WORDS.map((w, i) => (
-            <span key={i} style={{ display: "inline-block", overflow: "hidden", paddingRight: "0.25em" }}>
-              {reduce ? (
-                w.em ? <em>{w.t}</em> : w.t
-              ) : (
-                <motion.span
-                  initial={{ y: 40, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.7, delay: 0.15 + i * 0.1, ease: [0.2, 0.8, 0.2, 1] }}
-                  style={{ display: "inline-block" }}
-                >
-                  {w.em ? <em>{w.t}</em> : w.t}
-                </motion.span>
-              )}
-            </span>
-          ))}
+        {/* Editorial H1 — multi-line with oversized italic break */}
+        <h1 className="display aurora-h1" style={{ marginBottom: "clamp(40px, 7vw, 88px)" }}>
+          <style>{`
+            .aurora .aurora-h1 { display: block; }
+            .aurora .aurora-h1 .line { display: block; }
+            .aurora .aurora-h1 .line-2 { padding-left: clamp(0px, 6vw, 84px); }
+            .aurora .aurora-h1 .line-3 { display: flex; align-items: baseline; gap: clamp(12px, 2vw, 28px); flex-wrap: wrap; }
+            .aurora .aurora-h1 .mega {
+              font-style: italic; color: var(--glow);
+              font-size: clamp(4.2rem, 14vw, 12rem); line-height: 0.86;
+              letter-spacing: -0.055em;
+              font-variation-settings: "opsz" 144, "SOFT" 100;
+              display: inline-block;
+            }
+            .aurora .aurora-h1 .rule {
+              flex: 1 1 80px; height: 1px; background: var(--ink);
+              transform-origin: left center;
+            }
+            .aurora .aurora-h1 .tail { display: block; }
+          `}</style>
+
+          <span className="line">
+            {HERO_LINE_1.map((t, i) => <Word key={i} t={t} i={i} />)}
+          </span>
+          <span className="line line-2">
+            {HERO_LINE_2.map((t, i) => <Word key={i} t={t} em i={i + HERO_LINE_1.length} />)}
+            {" "}
+            {HERO_LINE_3_PRE.map((t, i) => <Word key={i} t={t} i={i + HERO_LINE_1.length + 1} />)}
+          </span>
+          <span className="line line-3">
+            {HERO_LINE_4.map((t, i) => <Word key={i} t={t} em i={i + 4} />)}
+            {!reduce && (
+              <motion.span className="rule" aria-hidden
+                initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+                transition={{ duration: 1.1, delay: 0.85, ease: [0.2,0.8,0.2,1] }}
+              />
+            )}
+            {reduce && <span className="rule" aria-hidden />}
+          </span>
+          <span className="tail" style={{ overflow: "hidden", display: "block", marginTop: "clamp(4px, 1vw, 10px)" }}>
+            {reduce ? <span className="mega">används.</span> : (
+              <motion.span className="mega"
+                initial={{ y: "110%", opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1.0, delay: 0.95, ease: [0.2,0.8,0.2,1] }}
+                style={{ display: "inline-block" }}
+              >
+                används.
+              </motion.span>
+            )}
+          </span>
         </h1>
 
         {/* lower hero */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(32px, 5vw, 64px)", alignItems: "end" }} className="aurora-hero-lower">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "clamp(28px, 4vw, 56px)", alignItems: "end" }} className="aurora-hero-lower">
           <style>{`@media (min-width: 900px) { .aurora-hero-lower { grid-template-columns: 1fr 1.2fr !important; } }`}</style>
-          <Reveal delay={0.2}>
+          <Reveal delay={0.9}>
             <p className="lead" style={{ maxWidth: 460 }}>
+              <span className="mono meta-label" style={{ display: "block", marginBottom: 12 }}>↳ Manifest</span>
               Aurora Media är en oberoende digitalstudio från Östergötland. Vi designar, utvecklar och driver
-              SaaS-plattformar och webbplatser för svenska företag som vill bygga något som håller —
+              SaaS-plattformar och webbplatser för svenska företag som vill bygga <em style={{ fontFamily: "var(--font-display)" }}>något som håller</em> —
               inte bara ser bra ut i en pitch.
             </p>
           </Reveal>
-          <Reveal delay={0.3}>
+          <Reveal delay={1.0}>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "flex-start" }}>
-              <a href="#arbeten" className="pill pill-primary">Se utvalda arbeten <span className="arrow">→</span></a>
-              <a href="#kontakt" className="pill pill-ghost">Starta projekt <span className="arrow">→</span></a>
+              <Magnetic href="#arbeten" className="pill pill-primary">
+                Se utvalda arbeten <span className="arrow">→</span>
+              </Magnetic>
+              <Magnetic href="#kontakt" className="pill pill-ghost">
+                Starta projekt <span className="arrow">→</span>
+              </Magnetic>
             </div>
           </Reveal>
         </div>
       </div>
+
+      {/* Scroll hint */}
+      {!reduce && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4, duration: 0.8 }}
+          className="wrap" style={{ width: "100%", position: "relative", zIndex: 1, marginTop: 48 }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <span className="mono meta-label">↓ Skrolla</span>
+            <span className="mono meta-label">№ 001 / Aurora Media — index</span>
+          </div>
+        </motion.div>
+      )}
     </section>
   );
 };
