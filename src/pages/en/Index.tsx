@@ -121,9 +121,9 @@ const EnIndex = () => {
 
   useEffect(() => {
     setSEOMeta({
-      title: "Ship SaaS in Weeks, Not Months | Aurora Media – AI Builder from Sweden",
+      title: "Ship SaaS in Weeks – Aurora Media, AI Builder Sweden",
       description:
-        "Sweden-based AI-augmented builder shipping production SaaS in 2–4 weeks. Lovable, Bolt, Claude, Cursor. 7 products live. Fixed price from $1,400. Book a free intro call.",
+        "Sweden-based AI builder shipping production SaaS in 2–4 weeks. 7 products live. Fixed price from $1,400. Book a free intro call.",
       canonical: "/en",
       ogImage: "/og-image-en.jpg",
       ogType: "website",
