@@ -220,20 +220,23 @@ const AiKartaStart = () => {
   return (
     <NordicLayout>
       <main id="main">
-        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+        <section style={{ paddingTop: "clamp(80px,10vw,140px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
           <div className="wrap" style={{ maxWidth: 720 }}>
-            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20 }}>AI-kartan · steg {step} av {STEPS.length}</p>
+            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 14 }}>AI-kartan · steg {step} av {STEPS.length} · ca 2 min</p>
             <h1 style={{ fontFamily: F, fontSize: "clamp(28px,5vw,48px)", lineHeight: 1.05, letterSpacing: "-0.02em", color: C, fontWeight: 400, marginBottom: 12 }}>
-              {step === 1 && "Berätta lite om er"}
-              {step === 2 && "Var sitter era största tidstjuvar?"}
-              {step === 3 && "Lägg till 1–5 processer"}
-              {step === 4 && "Kontrollera och skicka in"}
+              {step === 1 && "Var sitter era största tidstjuvar?"}
+              {step === 2 && "Lägg till 1–5 processer"}
+              {step === 3 && "Vart ska vi skicka analysen?"}
+              {step === 4 && "Klart – kontrollera och skicka in"}
             </h1>
-            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 32 }}>
-              {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
-              {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
-              {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
+            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 24 }}>
+              {step === 1 && "Markera de områden där ni lägger mest manuell tid i dag. Klicka så många som passar."}
+              {step === 2 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
+              {step === 3 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet. Ingen säljkampanj – ni får analysen direkt på skärmen."}
               {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
+            </p>
+            <p style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.30)", marginBottom: 24, letterSpacing: "0.06em" }}>
+              ✓ sparas automatiskt – kom tillbaka när ni vill
             </p>
 
             {/* Progress */}
