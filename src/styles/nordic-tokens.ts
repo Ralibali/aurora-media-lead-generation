@@ -33,8 +33,8 @@ export const NORDIC_TOKENS = `
 
   .aur .hero-line{
     font-family:var(--font-mono); font-weight:500;
-    font-size:clamp(2.4rem, 7.6vw, 6.4rem);
-    line-height:1.02; letter-spacing:-0.03em; color:var(--bone);
+    font-size:clamp(2rem, 6vw, 5rem);
+    line-height:1.04; letter-spacing:-0.03em; color:var(--bone);
   }
   .aur .hero-line .it{ font-family:var(--font-display); font-style:italic; font-weight:400; color:var(--moss); letter-spacing:-0.02em; }
   .aur .h2{
