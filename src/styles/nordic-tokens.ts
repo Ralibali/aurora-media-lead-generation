@@ -66,6 +66,8 @@ export const NORDIC_TOKENS = `
   .aur .btn-ghost:hover{ border-color:var(--moss); color:var(--moss); }
 
   /* Nav */
+  .aur{ --nav-h:62px; }
+  @media(min-width:980px){ .aur{ --nav-h:64px; } }
   .aur .nav{
     position:fixed; inset:0 0 auto 0; z-index:50;
     padding:18px clamp(20px,4vw,56px);
