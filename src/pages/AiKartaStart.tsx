@@ -585,7 +585,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
         <p className="text-[12px] uppercase tracking-wider text-muted-foreground">{label}</p>
         <p className="text-sm text-foreground">{value}</p>
       </div>
-    </NordicLayout>
+    </div>
   );
 }
 
