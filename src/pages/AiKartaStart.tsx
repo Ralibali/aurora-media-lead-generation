@@ -33,7 +33,7 @@ const Step1Schema = z.object({
   email: z.string().trim().email("Ogiltig e-postadress").max(160),
 });
 
-const STEPS = ["Kontakt", "Tidstjuvar", "Processer", "Sammanfattning"];
+const STEPS = ["Tidstjuvar", "Processer", "Kontakt", "Klart"];
 
 const F = "'Fraunces',Georgia,serif";
 const I = "'Inter',system-ui,sans-serif";
@@ -131,23 +131,12 @@ const AiKartaStart = () => {
 
   const validateStep = (current: number): boolean => {
     setErrors({});
-    if (current === 1) {
-      const parsed = Step1Schema.safeParse(form);
-      if (!parsed.success) {
-        const fe: Record<string, string> = {};
-        for (const issue of parsed.error.issues) {
-          const k = issue.path[0]?.toString() ?? "form";
-          if (!fe[k]) fe[k] = issue.message;
-        }
-        setErrors(fe);
-        return false;
-      }
-    }
-    if (current === 2 && form.pain_areas.length === 0) {
+    // 1: Tidstjuvar  2: Processer  3: Kontakt  4: Klart (consent)
+    if (current === 1 && form.pain_areas.length === 0) {
       setErrors({ pain_areas: "Välj minst ett område." });
       return false;
     }
-    if (current === 3) {
+    if (current === 2) {
       const fe: Record<string, string> = {};
       form.processes.forEach((p, i) => {
         if (!p.process_name.trim()) fe[`p_${i}_name`] = "Ange processnamn";
@@ -160,6 +149,18 @@ const AiKartaStart = () => {
       if (Object.keys(fe).length) {
         setErrors(fe);
         toast.error("Fyll i alla fält för varje process.");
+        return false;
+      }
+    }
+    if (current === 3) {
+      const parsed = Step1Schema.safeParse(form);
+      if (!parsed.success) {
+        const fe: Record<string, string> = {};
+        for (const issue of parsed.error.issues) {
+          const k = issue.path[0]?.toString() ?? "form";
+          if (!fe[k]) fe[k] = issue.message;
+        }
+        setErrors(fe);
         return false;
       }
     }
@@ -219,20 +220,23 @@ const AiKartaStart = () => {
   return (
     <NordicLayout>
       <main id="main">
-        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+        <section style={{ paddingTop: "clamp(80px,10vw,140px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
           <div className="wrap" style={{ maxWidth: 720 }}>
-            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20 }}>AI-kartan · steg {step} av {STEPS.length}</p>
+            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 14 }}>AI-kartan · steg {step} av {STEPS.length} · ca 2 min</p>
             <h1 style={{ fontFamily: F, fontSize: "clamp(28px,5vw,48px)", lineHeight: 1.05, letterSpacing: "-0.02em", color: C, fontWeight: 400, marginBottom: 12 }}>
-              {step === 1 && "Berätta lite om er"}
-              {step === 2 && "Var sitter era största tidstjuvar?"}
-              {step === 3 && "Lägg till 1–5 processer"}
-              {step === 4 && "Kontrollera och skicka in"}
+              {step === 1 && "Var sitter era största tidstjuvar?"}
+              {step === 2 && "Lägg till 1–5 processer"}
+              {step === 3 && "Vart ska vi skicka analysen?"}
+              {step === 4 && "Klart – kontrollera och skicka in"}
             </h1>
-            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 32 }}>
-              {step === 1 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet och kontakta er om ni vill gå vidare."}
-              {step === 2 && "Markera de områden där ni lägger mest manuell tid i dag."}
-              {step === 3 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
+            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 24 }}>
+              {step === 1 && "Markera de områden där ni lägger mest manuell tid i dag. Klicka så många som passar."}
+              {step === 2 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
+              {step === 3 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet. Ingen säljkampanj – ni får analysen direkt på skärmen."}
               {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
+            </p>
+            <p style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.30)", marginBottom: 24, letterSpacing: "0.06em" }}>
+              ✓ sparas automatiskt – kom tillbaka när ni vill
             </p>
 
             {/* Progress */}
@@ -266,7 +270,7 @@ const AiKartaStart = () => {
                   />
                 </div>
 
-                {step === 1 && (
+                {step === 3 && (
                   <div className="grid gap-5 sm:grid-cols-2">
                     <Field label="Företagsnamn" error={errors.company_name} required>
                       <Input
@@ -314,7 +318,7 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 2 && (
+                {step === 1 && (
                   <div
                     className={
                       errors.pain_areas
@@ -339,7 +343,7 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 3 && (
+                {step === 2 && (
                   <div className="space-y-5">
                     {form.processes.map((p, idx) => (
                       <div
