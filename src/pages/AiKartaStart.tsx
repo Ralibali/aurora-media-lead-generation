@@ -270,7 +270,7 @@ const AiKartaStart = () => {
                   />
                 </div>
 
-                {step === 1 && (
+                {step === 3 && (
                   <div className="grid gap-5 sm:grid-cols-2">
                     <Field label="Företagsnamn" error={errors.company_name} required>
                       <Input
@@ -318,7 +318,7 @@ const AiKartaStart = () => {
                   </div>
                 )}
 
-                {step === 2 && (
+                {step === 1 && (
                   <div
                     className={
                       errors.pain_areas
