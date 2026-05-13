@@ -3,7 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
-import SEO from "@/components/SEO";
+import { SEO } from "@/components/SEO";
 import heroImg from "@/assets/aurora-hero-nordic.jpg";
 
 /* ─────────────────────────────────────────────────────────────────────────
