@@ -131,23 +131,12 @@ const AiKartaStart = () => {
 
   const validateStep = (current: number): boolean => {
     setErrors({});
-    if (current === 1) {
-      const parsed = Step1Schema.safeParse(form);
-      if (!parsed.success) {
-        const fe: Record<string, string> = {};
-        for (const issue of parsed.error.issues) {
-          const k = issue.path[0]?.toString() ?? "form";
-          if (!fe[k]) fe[k] = issue.message;
-        }
-        setErrors(fe);
-        return false;
-      }
-    }
-    if (current === 2 && form.pain_areas.length === 0) {
+    // 1: Tidstjuvar  2: Processer  3: Kontakt  4: Klart (consent)
+    if (current === 1 && form.pain_areas.length === 0) {
       setErrors({ pain_areas: "Välj minst ett område." });
       return false;
     }
-    if (current === 3) {
+    if (current === 2) {
       const fe: Record<string, string> = {};
       form.processes.forEach((p, i) => {
         if (!p.process_name.trim()) fe[`p_${i}_name`] = "Ange processnamn";
@@ -160,6 +149,18 @@ const AiKartaStart = () => {
       if (Object.keys(fe).length) {
         setErrors(fe);
         toast.error("Fyll i alla fält för varje process.");
+        return false;
+      }
+    }
+    if (current === 3) {
+      const parsed = Step1Schema.safeParse(form);
+      if (!parsed.success) {
+        const fe: Record<string, string> = {};
+        for (const issue of parsed.error.issues) {
+          const k = issue.path[0]?.toString() ?? "form";
+          if (!fe[k]) fe[k] = issue.message;
+        }
+        setErrors(fe);
         return false;
       }
     }
