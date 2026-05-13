@@ -43,7 +43,9 @@ export default function CityPage() {
   const routeVariant = isAiVariant ? "ai-byra" : "saas-utveckling";
 
   const city = slug ? getCity(slug) : null;
-  const seo = slug ? getCitySeo(slug, routeVariant) : null;
+  const seo = slug ? getCitySeo(slug) : null;
+  const seoTitle = seo ? (isAiVariant ? seo.metaTitleAI : seo.metaTitleSaaS) : "";
+  const seoDescription = seo ? (isAiVariant ? seo.metaDescAI : seo.metaDescSaaS) : "";
 
   useEffect(() => {
     if (!city || !seo || !slug) {
@@ -52,8 +54,8 @@ export default function CityPage() {
     }
 
     setSEOMeta({
-      title: seo.title,
-      description: seo.description,
+      title: seoTitle,
+      description: seoDescription,
       canonical: `${SITE_URL}/${routeVariant}-${slug}`,
     });
 
@@ -88,7 +90,7 @@ export default function CityPage() {
       "@type": "ProfessionalService",
       "@id": `${SITE_URL}/${routeVariant}-${slug}#service`,
       name: `Plymate – ${breadcrumbLabel}`,
-      description: seo.description,
+      description: seoDescription,
       url: `${SITE_URL}/${routeVariant}-${slug}`,
       areaServed: {
         "@type": "City",
@@ -101,7 +103,7 @@ export default function CityPage() {
       })),
     });
 
-    const faqItems = city.faq ?? city.faqs ?? [];
+    const faqItems = city.faqs ?? [];
     if (faqItems.length > 0) {
       setJsonLd("city-faq", {
         "@context": "https://schema.org",
@@ -137,7 +139,7 @@ export default function CityPage() {
     : `AI-byrå i ${city.city}`;
 
   const otherCities = cities.filter((c) => c.slug !== slug).slice(0, 5);
-  const faqItems: { q: string; a: string }[] = city.faq ?? city.faqs ?? [];
+  const faqItems: { q: string; a: string }[] = city.faqs ?? [];
 
   return (
     <div style={{ background: "#100F0D", color: C, fontFamily: I, minHeight: "100vh" }}>

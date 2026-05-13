@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
 import { downloadAiMapPdf } from "@/lib/aiMapPdf";
