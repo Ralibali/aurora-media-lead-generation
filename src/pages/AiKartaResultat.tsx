@@ -621,7 +621,7 @@ const AiKartaResultat = () => {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </NordicLayout>
   );
 };
 
@@ -725,7 +725,7 @@ function ResultStateScreen({
           )}
         </div>
       </main>
-      </NordicLayout>
+      </div>
   );
 }
 
