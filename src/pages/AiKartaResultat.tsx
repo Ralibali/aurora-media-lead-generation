@@ -725,7 +725,7 @@ function ResultStateScreen({
           )}
         </div>
       </main>
-      </NordicLayout>
+      </div>
   );
 }
 
