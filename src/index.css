@@ -209,8 +209,8 @@
     align-items: center;
     gap: 8px;
     padding: 11px 22px;
-    background: #EDE9DC;
-    color: #100F0D;
+    background: #7FE3B0;
+    color: #0B0E0C;
     font-family: 'Inter', system-ui, sans-serif;
     font-size: 13px;
     font-weight: 500;
@@ -221,7 +221,7 @@
     text-decoration: none;
     white-space: nowrap;
   }
-  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:hover { background: #EDE9DC; color: #0B0E0C; opacity: 1; }
 
   .btn-ghost {
     display: inline-flex;
