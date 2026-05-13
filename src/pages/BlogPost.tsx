@@ -4,10 +4,8 @@ import NordicLayout from "@/components/nordic/NordicLayout";
 import { getArticle, getRelatedArticles } from "@/lib/articles";
 import { setSEOMeta, setJsonLd, setBreadcrumb, SITE_URL } from "@/lib/seoHelpers";
 
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
+const formatDate = (d: string) =>
+  new Date(d).toLocaleDateString("sv-SE", { year: "numeric", month: "short", day: "numeric" });
 
 const BlogPost = () => {
   const { slug = "" } = useParams();
@@ -45,7 +43,8 @@ const BlogPost = () => {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: article.faq.map((f) => ({
-        "@type": "Question", name: f.q,
+        "@type": "Question",
+        name: f.q,
         acceptedAnswer: { "@type": "Answer", text: f.a },
       })),
     });
@@ -58,75 +57,67 @@ const BlogPost = () => {
 
   return (
     <NordicLayout>
-      <main id="main" style={{ paddingTop: "clamp(88px,12vw,120px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+      <main id="main" style={{ paddingTop: "clamp(110px,14vw,150px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
         <div className="wrap">
-
           {/* Breadcrumb */}
-          <nav aria-label="Brödsmulor" style={{ marginBottom: 32, display: "flex", gap: 8, alignItems: "center" }}>
+          <nav aria-label="Brödsmulor" style={{ marginBottom: 32, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
             {[
               { label: "Hem", to: "/" },
               { label: "Blogg", to: "/blogg" },
               { label: article.category },
             ].map((crumb, i, arr) => (
               <span key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                {crumb.to
-                  ? <Link to={crumb.to} style={{ fontFamily: M, fontSize: 11, color: "rgba(237,233,220,0.35)", textDecoration: "none", transition: "color 0.15s" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = C)}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.35)")}>{crumb.label}</Link>
-                  : <span style={{ fontFamily: M, fontSize: 11, color: "rgba(237,233,220,0.50)" }}>{crumb.label}</span>}
-                {i < arr.length - 1 && <span style={{ color: "rgba(237,233,220,0.20)", fontSize: 11 }}>›</span>}
+                {crumb.to ? (
+                  <Link to={crumb.to} className="mono" style={{ color: "var(--bone-mute)", textDecoration: "none" }}>
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span className="mono" style={{ color: "var(--bone-soft)" }}>{crumb.label}</span>
+                )}
+                {i < arr.length - 1 && <span style={{ color: "var(--bone-faint)", fontSize: 11 }}>›</span>}
               </span>
             ))}
           </nav>
 
-          <div style={{ display: "grid", gap: "clamp(32px,6vw,80px)" }} className="lg:grid-cols-[1fr_240px]">
-
+          <div className="article-grid">
             {/* Article */}
             <article>
-              <header style={{ marginBottom: 48, paddingBottom: 32, borderBottom: "0.5px solid rgba(237,233,220,0.10)" }}>
-                <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 20, flexWrap: "wrap" }}>
-                  <span style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.08em", color: "rgba(237,233,220,0.40)", border: "0.5px solid rgba(237,233,220,0.14)", borderRadius: 3, padding: "3px 8px" }}>{article.category}</span>
-                  <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.30)" }}>{article.readMinutes} min</span>
-                  <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)" }}>
-                    {new Date(article.publishedDate).toLocaleDateString("sv-SE", { year: "numeric", month: "short", day: "numeric" })}
-                  </span>
+              <header style={{ marginBottom: 48, paddingBottom: 32, borderBottom: "1px solid var(--hair)" }}>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 22, flexWrap: "wrap" }}>
+                  <span className="chip">{article.category}</span>
+                  <span className="chip chip-mute">{article.readMinutes} min</span>
+                  <span className="chip chip-mute">{formatDate(article.publishedDate)}</span>
                 </div>
-                <h1 style={{ fontFamily: F, fontSize: "clamp(28px,5vw,48px)", color: C, lineHeight: 1.05, letterSpacing: "-0.02em", fontWeight: 400, marginBottom: 20 }}>
+                <h1 className="hero-line" style={{ fontSize: "clamp(1.8rem,4.6vw,3.4rem)", marginBottom: 22 }}>
                   {article.title}
                 </h1>
-                <p style={{ fontFamily: I, fontSize: 16, lineHeight: 1.75, color: "rgba(237,233,220,0.70)", fontWeight: 500 }}>
-                  {article.intro}
-                </p>
+                <p className="lead">{article.intro}</p>
               </header>
 
-              <div>
+              <div className="prose">
                 {article.sections.map((s, i) => (
-                  <section key={i} style={{ marginBottom: 48 }}>
-                    <h2 style={{ fontFamily: F, fontSize: "clamp(20px,2.8vw,28px)", color: C, lineHeight: 1.15, letterSpacing: "-0.015em", fontWeight: 400, marginBottom: 16 }}>
-                      {s.heading}
-                    </h2>
-                    <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.72)", whiteSpace: "pre-line" }}>
-                      {s.content}
-                    </p>
+                  <section key={i} className="prose-section">
+                    <h2>{s.heading}</h2>
+                    <p style={{ whiteSpace: "pre-line" }}>{s.content}</p>
 
                     {s.code && (
-                      <pre style={{ marginTop: 20, overflowX: "auto", borderRadius: 6, border: "0.5px solid rgba(237,233,220,0.10)", background: "rgba(0,0,0,0.4)", padding: "16px 20px", fontFamily: M, fontSize: 12, lineHeight: 1.65, color: "rgba(237,233,220,0.80)" }}>
+                      <pre className="pre-block">
                         <code>{s.code}</code>
                       </pre>
                     )}
 
                     {s.table && (
-                      <div style={{ marginTop: 20, overflowX: "auto", borderRadius: 6, border: "0.5px solid rgba(237,233,220,0.10)" }}>
-                        <table style={{ width: "100%", minWidth: 640, textAlign: "left", borderCollapse: "collapse" }}>
+                      <div className="table-wrap">
+                        <table className="data-table">
                           <thead>
-                            <tr style={{ borderBottom: "0.5px solid rgba(237,233,220,0.10)", background: "rgba(237,233,220,0.03)" }}>
-                              {s.table.headers.map((h) => <th key={h} style={{ padding: "10px 14px", fontFamily: I, fontSize: 12, fontWeight: 500, color: C }}>{h}</th>)}
+                            <tr>
+                              {s.table.headers.map((h) => <th key={h}>{h}</th>)}
                             </tr>
                           </thead>
                           <tbody>
                             {s.table.rows.map((row, ri) => (
-                              <tr key={ri} style={{ borderBottom: "0.5px solid rgba(237,233,220,0.06)" }}>
-                                {row.map((cell, ci) => <td key={ci} style={{ padding: "10px 14px", fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.65)" }}>{cell}</td>)}
+                              <tr key={ri}>
+                                {row.map((cell, ci) => <td key={ci}>{cell}</td>)}
                               </tr>
                             ))}
                           </tbody>
@@ -135,15 +126,16 @@ const BlogPost = () => {
                     )}
 
                     {i === midpoint && (
-                      <div style={{ marginTop: 28, padding: "22px 24px", border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 6, background: "rgba(237,233,220,0.02)" }}>
-                        <p style={{ fontFamily: F, fontSize: 18, color: C, marginBottom: 6, fontStyle: "italic" }}>
-                          Behöver ni det här byggt?
+                      <div className="surface surface-pad" style={{ marginTop: 28 }}>
+                        <p className="eyebrow" style={{ marginBottom: 10 }}>nästa steg</p>
+                        <p className="h2" style={{ fontSize: "clamp(1.2rem,2vw,1.6rem)", marginBottom: 8 }}>
+                          Behöver ni det här <span className="it">byggt?</span>
                         </p>
-                        <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)", marginBottom: 16 }}>
+                        <p className="body" style={{ marginBottom: 18 }}>
                           Prototyp från 14 900 kr. Fast pris. Svar inom 24h.
                         </p>
-                        <Link to="/kontakt" className="btn-primary" style={{ fontSize: 12, padding: "9px 18px" }}>
-                          Begär offert →
+                        <Link to="/kontakt" className="btn btn-moss">
+                          Begär offert <span className="a">→</span>
                         </Link>
                       </div>
                     )}
@@ -152,45 +144,41 @@ const BlogPost = () => {
               </div>
 
               {/* FAQ */}
-              <section style={{ marginTop: 48, paddingTop: 32, borderTop: "0.5px solid rgba(237,233,220,0.10)" }}>
-                <h2 style={{ fontFamily: F, fontSize: "clamp(20px,2.8vw,28px)", color: C, lineHeight: 1.15, fontWeight: 400, marginBottom: 24 }}>
-                  Vanliga frågor
+              <section style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--hair)" }}>
+                <h2 className="h2" style={{ fontSize: "clamp(1.4rem,2.8vw,2rem)", marginBottom: 20 }}>
+                  Vanliga <span className="it">frågor</span>
                 </h2>
                 {article.faq.map((f, i) => (
-                  <details key={i} style={{ padding: "16px 0", borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
-                    <summary style={{ fontFamily: I, fontSize: 14, fontWeight: 500, color: C, cursor: "pointer", listStyle: "none", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16 }}>
-                      <span>{f.q}</span>
-                      <span style={{ color: "rgba(237,233,220,0.35)", fontSize: 16, flexShrink: 0 }}>+</span>
-                    </summary>
-                    <p style={{ marginTop: 12, fontFamily: I, fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.55)" }}>{f.a}</p>
+                  <details key={i} className="faq-row">
+                    <summary><span>{f.q}</span></summary>
+                    <p>{f.a}</p>
                   </details>
                 ))}
               </section>
 
               {/* Bottom CTA */}
-              <section style={{ marginTop: 48, padding: "28px 28px", border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 8, textAlign: "center" }}>
-                <h2 style={{ fontFamily: F, fontSize: "clamp(20px,2.8vw,26px)", color: C, marginBottom: 8, fontStyle: "italic", fontWeight: 400 }}>
-                  Har ni en idé värd att bygga?
+              <section className="surface surface-pad" style={{ marginTop: 48, textAlign: "center" }}>
+                <p className="eyebrow" style={{ marginBottom: 10 }}>kontakt</p>
+                <h2 className="h2" style={{ fontSize: "clamp(1.4rem,2.4vw,1.8rem)", marginBottom: 10 }}>
+                  Har ni en idé värd att <span className="it">bygga?</span>
                 </h2>
-                <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.45)", marginBottom: 20 }}>
+                <p className="body" style={{ marginBottom: 22 }}>
                   Svar inom 24 timmar. Fast pris från 14 900 kr.
                 </p>
-                <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+                <Link to="/kontakt" className="btn btn-moss">
+                  Begär offert <span className="a">→</span>
+                </Link>
               </section>
 
               {/* Related */}
               {related.length > 0 && (
                 <section style={{ marginTop: 48 }}>
-                  <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 20 }}>relaterade artiklar</p>
-                  <div style={{ display: "grid", gap: 8 }} className="sm:grid-cols-2">
+                  <p className="kicker" style={{ marginBottom: 18 }}>relaterade artiklar</p>
+                  <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))" }}>
                     {related.map((r) => (
-                      <Link key={r.slug} to={`/blogg/${r.slug}`}
-                        style={{ display: "block", padding: "16px", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6, textDecoration: "none", transition: "border-color 0.15s, background 0.15s" }}
-                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(237,233,220,0.25)"; e.currentTarget.style.background = "rgba(237,233,220,0.025)"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(237,233,220,0.10)"; e.currentTarget.style.background = "transparent"; }}
-                      >
-                        <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 6 }}>{r.category}</p>
-                        <p style={{ fontFamily: F, fontSize: 16, color: C, lineHeight: 1.2, fontWeight: 400 }}>{r.title}</p>
+                      <Link key={r.slug} to={`/blogg/${r.slug}`} className="surface surface-pad">
+                        <p className="chip" style={{ marginBottom: 10 }}>{r.category}</p>
+                        <p style={{ fontFamily: "var(--font-mono)", fontSize: 15, color: "var(--bone)", lineHeight: 1.3 }}>{r.title}</p>
                       </Link>
                     ))}
                   </div>
@@ -200,18 +188,21 @@ const BlogPost = () => {
 
             {/* Sidebar */}
             <aside style={{ display: "none" }} className="lg:block">
-              <div style={{ position: "sticky", top: 88 }}>
-                <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 16 }}>innehåll</p>
+              <div style={{ position: "sticky", top: 96 }}>
+                <p className="kicker" style={{ marginBottom: 16 }}>innehåll</p>
                 {article.sections.map((s, i) => (
-                  <p key={i} style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.40)", lineHeight: 1.5, padding: "5px 0", borderBottom: "0.5px solid rgba(237,233,220,0.06)" }}>
+                  <p key={i} style={{ fontSize: 12, color: "var(--bone-mute)", lineHeight: 1.5, padding: "6px 0", borderBottom: "1px solid var(--hair)" }}>
                     {s.heading}
                   </p>
                 ))}
-                <div style={{ marginTop: 28, padding: "18px", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6, background: "rgba(237,233,220,0.02)" }}>
-                  <p style={{ fontFamily: F, fontSize: 15, color: C, marginBottom: 8, fontStyle: "italic", fontWeight: 400 }}>Bygg det själv?</p>
-                  <p style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.45)", marginBottom: 14 }}>Från 14 900 kr.</p>
-                  <Link to="/kontakt" className="btn-primary" style={{ fontSize: 11, padding: "8px 14px", display: "block", textAlign: "center" }}>
-                    Offert →
+                <div className="surface surface-pad" style={{ marginTop: 24 }}>
+                  <p className="eyebrow" style={{ marginBottom: 10 }}>bygg det</p>
+                  <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--bone)", fontSize: 18, marginBottom: 6 }}>
+                    Vill ni bygga det själva?
+                  </p>
+                  <p className="body" style={{ marginBottom: 14, fontSize: 13 }}>Från 14 900 kr.</p>
+                  <Link to="/kontakt" className="btn btn-moss" style={{ fontSize: 11 }}>
+                    Offert <span className="a">→</span>
                   </Link>
                 </div>
               </div>
@@ -219,7 +210,7 @@ const BlogPost = () => {
           </div>
         </div>
       </main>
-      </NordicLayout>
+    </NordicLayout>
   );
 };
 

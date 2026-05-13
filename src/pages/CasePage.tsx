@@ -9,11 +9,6 @@ import {
   CATEGORY_LABEL, STATUS_LABEL,
 } from "@/data/portfolio";
 
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
-
 const CasePage = () => {
   const { slug = "" } = useParams<{ slug: string }>();
   const project = getPortfolioBySlug(slug);
@@ -32,14 +27,18 @@ const CasePage = () => {
       { name: project.name, url: `/arbete/${project.slug}` },
     ]);
     setJsonLd("case-creativework", {
-      "@context": "https://schema.org", "@type": "CreativeWork",
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
       name: project.name,
       url: `${SITE_URL}/arbete/${project.slug}`,
       description: project.description,
       creator: { "@id": `${SITE_URL}/#organization` },
       keywords: project.stack.join(", "),
     });
-    return () => { removeJsonLd("breadcrumb-jsonld"); removeJsonLd("case-creativework"); };
+    return () => {
+      removeJsonLd("breadcrumb-jsonld");
+      removeJsonLd("case-creativework");
+    };
   }, [project]);
 
   if (!project) return <Navigate to="/arbete" replace />;
@@ -48,125 +47,111 @@ const CasePage = () => {
 
   return (
     <NordicLayout>
-      <main id="main" style={{ paddingTop: "clamp(88px,12vw,120px)" }}>
-
+      <main id="main" style={{ paddingTop: "clamp(110px,14vw,150px)" }}>
         {/* Back */}
         <div className="wrap" style={{ paddingBottom: 20 }}>
-          <Link to="/arbete"
-            style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.40)", textDecoration: "none", transition: "color 0.15s", display: "inline-flex", alignItems: "center", gap: 6 }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = C)}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
+          <Link to="/arbete" className="mono" style={{ color: "var(--bone-mute)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}>
             ← Tillbaka till arbete
           </Link>
         </div>
 
         {/* Hero */}
-        <section className="wrap" style={{ paddingBottom: "clamp(32px,5vw,56px)" }}>
-          <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 20, flexWrap: "wrap" }}>
-            <span style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", border: "0.5px solid rgba(237,233,220,0.14)", borderRadius: 3, padding: "3px 8px" }}>
-              {CATEGORY_LABEL[project.category]}
-            </span>
+        <section className="wrap section-pad-sm" style={{ paddingTop: 0 }}>
+          <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 22, flexWrap: "wrap" }}>
+            <span className="chip">{CATEGORY_LABEL[project.category]}</span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 5, height: 5, borderRadius: "50%", background: project.status === "live" ? "rgba(80,200,120,0.9)" : "rgba(237,233,220,0.35)", display: "block" }} />
-              <span style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.35)" }}>{STATUS_LABEL[project.status]}</span>
+              <span className={`dot ${project.status === "live" ? "live" : ""}`} />
+              <span className="mono" style={{ color: "var(--bone-mute)" }}>{STATUS_LABEL[project.status]}</span>
             </span>
           </div>
 
-          <h1 style={{ fontFamily: F, fontSize: "clamp(32px,6vw,60px)", color: C, lineHeight: 1.02, letterSpacing: "-0.025em", fontWeight: 400, maxWidth: 700, marginBottom: 16 }}>
-            {project.name}
-          </h1>
-          <p style={{ fontFamily: I, fontSize: "clamp(15px,2vw,18px)", color: "rgba(237,233,220,0.60)", lineHeight: 1.65, maxWidth: 540, marginBottom: 28 }}>
-            {project.tagline}
-          </p>
+          <h1 className="hero-line" style={{ maxWidth: 820, marginBottom: 18 }}>{project.name}</h1>
+          <p className="lead" style={{ marginBottom: 28 }}>{project.tagline}</p>
 
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-primary"
-          >
-            Besök {project.domain} ↗
+          <a href={project.url} target="_blank" rel="noreferrer" className="btn btn-moss">
+            Besök {project.domain} <span className="a">↗</span>
           </a>
         </section>
 
         {/* Screenshot */}
-        <section className="wrap" style={{ paddingBottom: "clamp(32px,5vw,56px)" }}>
-          <div style={{ border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 8, overflow: "hidden" }}>
-            {/* Browser chrome */}
-            <div style={{ display: "flex", alignItems: "center", gap: 6, borderBottom: "0.5px solid rgba(237,233,220,0.08)", padding: "10px 16px", background: "rgba(237,233,220,0.02)" }}>
-              {[1, 2, 3].map((n) => <span key={n} style={{ width: 10, height: 10, borderRadius: "50%", background: "rgba(237,233,220,0.12)", display: "block" }} />)}
-              <span style={{ marginLeft: 12, fontFamily: M, fontSize: 11, color: "rgba(237,233,220,0.30)" }}>{project.domain}</span>
+        <section className="wrap section-pad-sm" style={{ paddingTop: 0 }}>
+          <div className="browser-frame">
+            <div className="browser-bar">
+              {[1, 2, 3].map((n) => <i key={n} />)}
+              <span className="url">{project.domain}</span>
             </div>
-            {project.screenshot
-              ? <img src={project.screenshot} alt={`Skärmavbild av ${project.name}`} style={{ width: "100%", display: "block", aspectRatio: "16/10", objectFit: "cover" }} loading="lazy" />
-              : (
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", aspectRatio: "16/10", background: "rgba(237,233,220,0.01)" }}>
-                  <div style={{ textAlign: "center" }}>
-                    <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.12em", color: "rgba(237,233,220,0.25)", marginBottom: 12 }}>preview</p>
-                    <p style={{ fontFamily: F, fontSize: "clamp(28px,5vw,52px)", color: "rgba(237,233,220,0.35)", fontStyle: "italic" }}>{project.domain}</p>
-                  </div>
+            {project.screenshot ? (
+              <img
+                src={project.screenshot}
+                alt={`Skärmavbild av ${project.name}`}
+                style={{ width: "100%", display: "block", aspectRatio: "16/10", objectFit: "cover" }}
+                loading="lazy"
+              />
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", aspectRatio: "16/10", background: "rgba(233,228,214,0.01)" }}>
+                <div style={{ textAlign: "center" }}>
+                  <p className="eyebrow" style={{ marginBottom: 14 }}>preview</p>
+                  <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--bone-mute)", fontSize: "clamp(28px,5vw,52px)" }}>
+                    {project.domain}
+                  </p>
                 </div>
-              )
-            }
+              </div>
+            )}
           </div>
         </section>
 
         {/* Content */}
-        <section className="wrap" style={{ paddingBottom: "clamp(40px,6vw,64px)" }}>
-          <div style={{ display: "grid", gap: "clamp(32px,6vw,64px)" }} className="md:grid-cols-[1fr_220px]">
-
-            {/* Prose */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
+        <section className="wrap section-pad-sm">
+          <div className="article-grid">
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[
                 { label: "Problemet", content: project.problem },
                 { label: "Vad vi byggde", content: project.solution },
                 { label: "Lärdomar", content: project.lessons },
               ].filter((s) => s.content).map((s) => (
-                <div key={s.label} style={{ paddingBottom: 32, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
-                  <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 12, textTransform: "lowercase" }}>{s.label}</p>
-                  <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.70)" }}>{s.content}</p>
+                <div key={s.label} className="prose-section" style={{ paddingBottom: 28, borderBottom: "1px solid var(--hair)" }}>
+                  <p className="kicker" style={{ marginBottom: 12 }}>{s.label}</p>
+                  <p className="prose">{s.content}</p>
                 </div>
               ))}
             </div>
 
             {/* Meta sidebar */}
-            <aside style={{ position: "sticky", top: 88, alignSelf: "start" }}>
-              <div style={{ border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 8, padding: 20 }}>
-
+            <aside style={{ alignSelf: "start" }}>
+              <div className="case-meta" style={{ position: "sticky", top: 96 }}>
                 {project.buildTime && (
-                  <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
-                    <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 6, textTransform: "lowercase" }}>leveranstid</p>
-                    <p style={{ fontFamily: F, fontSize: 24, color: C, fontStyle: "italic" }}>{project.buildTime}</p>
+                  <div className="case-meta-block">
+                    <p className="kicker" style={{ marginBottom: 8 }}>leveranstid</p>
+                    <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--bone)", fontSize: 24 }}>
+                      {project.buildTime}
+                    </p>
                   </div>
                 )}
 
                 {project.results && project.results.length > 0 && (
-                  <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
-                    <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 10, textTransform: "lowercase" }}>resultat</p>
+                  <div className="case-meta-block">
+                    <p className="kicker" style={{ marginBottom: 12 }}>resultat</p>
                     {project.results.map((r) => (
-                      <div key={r.label} style={{ marginBottom: 10 }}>
-                        <p style={{ fontFamily: F, fontSize: r.value.length <= 6 ? 28 : 20, color: C, lineHeight: 1, fontStyle: "italic" }}>{r.value}</p>
-                        <p style={{ fontFamily: M, fontSize: 9, color: "rgba(237,233,220,0.30)", letterSpacing: "0.08em", marginTop: 3 }}>{r.label}</p>
+                      <div key={r.label} style={{ marginBottom: 12 }}>
+                        <span className="stat-num" style={{ fontSize: r.value.length <= 6 ? "1.8rem" : "1.4rem" }}>{r.value}</span>
+                        <p className="mono" style={{ color: "var(--bone-mute)", marginTop: 4 }}>{r.label}</p>
                       </div>
                     ))}
                   </div>
                 )}
 
-                <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: "0.5px solid rgba(237,233,220,0.07)" }}>
-                  <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 10, textTransform: "lowercase" }}>teknisk stack</p>
+                <div className="case-meta-block">
+                  <p className="kicker" style={{ marginBottom: 12 }}>teknisk stack</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
                     {project.stack.map((t) => (
-                      <span key={t} style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.06em", color: "rgba(237,233,220,0.45)", border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 3, padding: "3px 7px" }}>{t}</span>
+                      <span key={t} className="chip chip-mute">{t}</span>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <p style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 8, textTransform: "lowercase" }}>live på</p>
-                  <a href={project.url} target="_blank" rel="noreferrer"
-                    style={{ fontFamily: M, fontSize: 11, color: "rgba(237,233,220,0.55)", textDecoration: "none", transition: "color 0.15s" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = C)}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.55)")}>
+                  <p className="kicker" style={{ marginBottom: 8 }}>live på</p>
+                  <a href={project.url} target="_blank" rel="noreferrer" className="text-link mono">
                     {project.domain} ↗
                   </a>
                 </div>
@@ -177,20 +162,16 @@ const CasePage = () => {
 
         {/* Related */}
         {related.length > 0 && (
-          <section style={{ borderTop: "0.5px solid rgba(237,233,220,0.10)", paddingBlock: "clamp(40px,6vw,64px)" }}>
+          <section className="section-pad-sm divide-top">
             <div className="wrap">
-              <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 24 }}>andra projekt</p>
-              <div style={{ display: "grid", gap: 10 }} className="sm:grid-cols-3">
+              <p className="kicker" style={{ marginBottom: 22 }}>andra projekt</p>
+              <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))" }}>
                 {related.map((r) => (
-                  <Link key={r.slug} to={`/arbete/${r.slug}`}
-                    style={{ display: "flex", flexDirection: "column", padding: "20px", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6, textDecoration: "none", transition: "border-color 0.15s, background 0.15s" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(237,233,220,0.25)"; e.currentTarget.style.background = "rgba(237,233,220,0.025)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(237,233,220,0.10)"; e.currentTarget.style.background = "transparent"; }}
-                  >
-                    <span style={{ fontFamily: M, fontSize: 9, letterSpacing: "0.08em", color: "rgba(237,233,220,0.30)", marginBottom: 8 }}>{CATEGORY_LABEL[r.category]}</span>
-                    <span style={{ fontFamily: F, fontSize: 18, color: C, lineHeight: 1.2, fontWeight: 400 }}>{r.name}</span>
-                    <span style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.40)", marginTop: 4 }}>{r.tagline}</span>
-                    <span style={{ marginTop: 16, fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.35)" }}>Läs caset ↗</span>
+                  <Link key={r.slug} to={`/arbete/${r.slug}`} className="surface surface-pad">
+                    <span className="chip" style={{ marginBottom: 10 }}>{CATEGORY_LABEL[r.category]}</span>
+                    <p style={{ fontFamily: "var(--font-mono)", fontSize: 17, color: "var(--bone)", lineHeight: 1.25, marginTop: 8 }}>{r.name}</p>
+                    <p className="body" style={{ fontSize: 13, marginTop: 6 }}>{r.tagline}</p>
+                    <p className="mono" style={{ color: "var(--moss)", marginTop: 16 }}>Läs caset ↗</p>
                   </Link>
                 ))}
               </div>
@@ -199,17 +180,19 @@ const CasePage = () => {
         )}
 
         {/* Footer CTA */}
-        <section style={{ borderTop: "0.5px solid rgba(237,233,220,0.10)", paddingBlock: "clamp(40px,6vw,64px)" }}>
-          <div className="wrap">
-            <p style={{ fontFamily: F, fontStyle: "italic", fontSize: "clamp(20px,2.8vw,28px)", color: C, marginBottom: 16 }}>
-              Vill ni ha ett liknande projekt byggt?
-            </p>
-            <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
+        <section className="cta-band">
+          <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+            <p className="mono" style={{ marginBottom: 18 }}>nästa steg</p>
+            <h2 className="h2" style={{ maxWidth: 760, marginBottom: 28 }}>
+              Vill ni ha ett liknande projekt <span className="it">byggt?</span>
+            </h2>
+            <Link to="/kontakt" className="btn btn-moss">
+              Begär offert <span className="a">→</span>
+            </Link>
           </div>
         </section>
-
       </main>
-      </NordicLayout>
+    </NordicLayout>
   );
 };
 

@@ -264,6 +264,59 @@ export const NORDIC_TOKENS = `
   .aur .foot-grid{ display:grid; grid-template-columns:1fr; gap:32px; }
   @media(min-width:760px){ .aur .foot-grid{ grid-template-columns:2fr 1fr 1fr 1fr; } }
 
+  /* Editorial helpers (Blog, Arbete, Case) */
+  .aur .kicker{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; color:var(--bone-mute); text-transform:lowercase; }
+  .aur .eyebrow{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.16em; color:var(--moss); text-transform:uppercase; }
+  .aur .chip{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--bone-soft); border:1px solid var(--hair); border-radius:4px; padding:3px 8px; display:inline-block; }
+  .aur .chip-mute{ color:var(--bone-mute); border-color:var(--hair); }
+  .aur .dot{ width:6px; height:6px; border-radius:50%; background:var(--bone-faint); display:inline-block; }
+  .aur .dot.live{ background:var(--moss); box-shadow:0 0 8px rgba(127,227,176,0.5); }
+  .aur .surface{ border:1px solid var(--hair); border-radius:8px; background:transparent; transition:border-color 200ms, background 200ms, transform 200ms; }
+  .aur a.surface, .aur button.surface{ display:block; text-decoration:none; color:inherit; }
+  .aur .surface:hover{ border-color:var(--bone-faint); background:rgba(233,228,214,0.025); }
+  .aur .surface.featured{ background:rgba(127,227,176,0.04); border-color:rgba(127,227,176,0.25); }
+  .aur .surface-pad{ padding:clamp(20px,3vw,32px); }
+  .aur .list-row{ display:grid; grid-template-columns:1fr auto; gap:8px 24px; align-items:center; padding:18px 14px; margin-inline:-14px; border-bottom:1px solid var(--hair); border-radius:6px; text-decoration:none; color:inherit; transition:background 180ms; }
+  @media(min-width:760px){ .aur .list-row{ grid-template-columns:110px 1fr auto; } }
+  .aur .list-row:hover{ background:rgba(233,228,214,0.03); }
+  .aur .list-row .arr{ color:var(--bone-faint); font-size:14px; }
+  .aur .list-row:hover .arr{ color:var(--moss); }
+  .aur .section-pad{ padding-block:clamp(56px,8vw,96px); }
+  .aur .section-pad-sm{ padding-block:clamp(32px,5vw,64px); }
+  .aur .divide-top{ border-top:1px solid var(--hair); }
+  .aur .article-grid{ display:grid; grid-template-columns:1fr; gap:clamp(32px,5vw,64px); }
+  @media(min-width:1024px){ .aur .article-grid{ grid-template-columns:minmax(0,1fr) 240px; } }
+  .aur .prose{ color:var(--bone-soft); font-size:0.97rem; line-height:1.75; }
+  .aur .prose p{ margin-bottom:1em; }
+  .aur .prose-section{ margin-bottom:clamp(32px,5vw,56px); }
+  .aur .prose-section h2{ font-family:var(--font-display); font-style:italic; font-weight:400; color:var(--bone); font-size:clamp(1.4rem,2.6vw,2rem); line-height:1.15; letter-spacing:-0.015em; margin-bottom:14px; }
+  .aur .pre-block{ overflow-x:auto; border-radius:6px; border:1px solid var(--hair); background:rgba(0,0,0,0.4); padding:16px 20px; font-family:var(--font-mono); font-size:12px; line-height:1.65; color:var(--bone-soft); margin-block:16px; }
+  .aur .data-table{ width:100%; min-width:560px; text-align:left; border-collapse:collapse; }
+  .aur .data-table th{ padding:10px 14px; font-family:var(--font-mono); font-size:11px; font-weight:500; color:var(--bone); border-bottom:1px solid var(--hair); background:rgba(233,228,214,0.03); letter-spacing:0.05em; text-transform:uppercase; }
+  .aur .data-table td{ padding:10px 14px; font-size:13px; color:var(--bone-soft); border-bottom:1px solid var(--hair); }
+  .aur .table-wrap{ overflow-x:auto; border:1px solid var(--hair); border-radius:6px; margin-block:16px; }
+  .aur details.faq-row{ padding:18px 0; border-bottom:1px solid var(--hair); }
+  .aur details.faq-row summary{ list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; font-family:var(--font-mono); font-size:13px; color:var(--bone); font-weight:500; letter-spacing:-0.005em; }
+  .aur details.faq-row summary::-webkit-details-marker{ display:none; }
+  .aur details.faq-row summary::after{ content:"+"; color:var(--bone-mute); font-size:18px; flex-shrink:0; transition:transform 200ms; }
+  .aur details.faq-row[open] summary::after{ content:"–"; }
+  .aur details.faq-row p{ margin-top:12px; color:var(--bone-soft); font-size:14px; line-height:1.7; }
+  .aur .stat-num{ font-family:var(--font-display); font-style:italic; font-weight:400; color:var(--moss); font-size:clamp(2rem,3.6vw,2.8rem); line-height:1; display:block; }
+  .aur .stat-num.bone{ color:var(--bone); }
+  .aur .filter-bar{ position:sticky; top:62px; z-index:30; background:rgba(11,14,12,0.85); backdrop-filter:saturate(140%) blur(14px); -webkit-backdrop-filter:saturate(140%) blur(14px); border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .aur .filter-bar .row{ display:flex; gap:8px; overflow-x:auto; padding-block:12px; }
+  .aur .filter-chip{ flex-shrink:0; font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; padding:7px 14px; border-radius:999px; border:1px solid var(--hair); background:transparent; color:var(--bone-mute); cursor:pointer; transition:all 180ms; }
+  .aur .filter-chip:hover{ color:var(--bone); border-color:var(--bone-faint); }
+  .aur .filter-chip.on{ color:var(--ink); background:var(--moss); border-color:var(--moss); }
+  .aur .card-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+  .aur .browser-frame{ border:1px solid var(--hair); border-radius:8px; overflow:hidden; background:var(--ink-2); }
+  .aur .browser-bar{ display:flex; align-items:center; gap:6px; border-bottom:1px solid var(--hair); padding:10px 16px; background:rgba(233,228,214,0.03); }
+  .aur .browser-bar i{ width:10px; height:10px; border-radius:50%; background:var(--bone-faint); display:block; }
+  .aur .browser-bar .url{ margin-left:12px; font-family:var(--font-mono); font-size:11px; color:var(--bone-mute); }
+  .aur .case-meta{ border:1px solid var(--hair); border-radius:8px; padding:22px; }
+  .aur .case-meta-block{ padding-bottom:18px; margin-bottom:18px; border-bottom:1px solid var(--hair); }
+  .aur .case-meta-block:last-child{ border-bottom:none; padding-bottom:0; margin-bottom:0; }
+
   @media (prefers-reduced-motion: reduce){
     .aur *, .aur *::before, .aur *::after{ animation:none !important; transition:none !important; }
   }
