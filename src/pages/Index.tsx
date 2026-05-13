@@ -76,19 +76,21 @@ const Hero = () => {
           </div>
         </Reveal>
         </div>
-        <Reveal delay={0.15}>
-          <div className="hero-figure">
-            <img
-              src={heroImg}
-              alt="Dimmig svensk sjö i gryningen med skog och berg"
-              width={1024}
-              height={1280}
-              fetchPriority="high"
-            />
-            <div className="hero-figure-overlay" />
-            <span className="hero-figure-tag">Östergötland · Gryning</span>
-          </div>
-        </Reveal>
+        <div className="hero-figure-wrap">
+          <Reveal delay={0.15}>
+            <div className="hero-figure">
+              <img
+                src={heroImg}
+                alt="Dimmig svensk sjö i gryningen med skog och berg"
+                width={1024}
+                height={1280}
+                fetchPriority="high"
+              />
+              <div className="hero-figure-overlay" />
+              <span className="hero-figure-tag">Östergötland · Gryning</span>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
