@@ -42,15 +42,15 @@ const Hero = () => {
           <p className="mono">aurora media · ai-driven mjukvarubyrå · linköping</p>
         </Reveal>
         <Reveal delay={0.1}>
-          <h1 className="hero-line" style={{ marginTop: 10 }}>Idén finns.</h1>
+          <h1 className="hero-line" style={{ marginTop: 4 }}>Idén finns.</h1>
         </Reveal>
         <Reveal delay={0.2}>
-          <h1 className="hero-line" style={{ paddingLeft: "clamp(0px,6vw,84px)" }}>
+          <h1 className="hero-line" style={{ paddingLeft: "clamp(0px,4vw,56px)" }}>
             Vi <span className="it">bygger</span> systemet.
           </h1>
         </Reveal>
         <Reveal delay={0.35}>
-          <p className="lead" style={{ marginTop: 28 }}>
+          <p className="lead" style={{ marginTop: 18 }}>
             Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa
             snabbare, effektivisera arbetet och ersätta manuella rutiner med smarta digitala flöden.
           </p>
@@ -65,7 +65,7 @@ const Hero = () => {
           </div>
         </Reveal>
         <Reveal delay={0.55}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 36 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 24 }}>
             <button onClick={() => open()} className="btn btn-moss">
               Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
             </button>
