@@ -1,21 +1,8 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import { ArrowRight } from "lucide-react";
+import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta } from "@/lib/seoHelpers";
-
-const Rule = () => <div style={{ height: "0.5px", background: "rgba(237,233,220,0.12)" }} />;
-
-function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <p style={{
-      fontFamily: "'JetBrains Mono',ui-monospace,monospace",
-      fontSize: 11, letterSpacing: "0.1em",
-      color: "rgba(237,233,220,0.40)",
-      marginBottom: 20, textTransform: "lowercase",
-    }}>{children}</p>
-  );
-}
 
 const VALUES = [
   { title: "Ärlighet framför allt", desc: "Om något inte är möjligt eller inte passar ert behov — vi säger det direkt. Ingen projektledning för projektledningens skull." },
@@ -25,7 +12,16 @@ const VALUES = [
   { title: "Data stannar i EU", desc: "Alla produkter vi bygger är GDPR-anpassade och körs på EU-baserad infrastruktur som standard." },
 ];
 
+const FACTS: [string, string][] = [
+  ["Bas", "Linköping"],
+  ["Sedan", "2021"],
+  ["Utbildning", "Södertörns högskola"],
+  ["Produkter", "6 i drift"],
+  ["Specialitet", "SaaS, AI, system"],
+];
+
 const Om = () => {
+  const { open } = useContactModal();
   useEffect(() => {
     setSEOMeta({
       title: "Om aurora — Christoffer Holstensson | Aurora Media",
@@ -35,109 +31,88 @@ const Om = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
-      <main id="main">
-
-        {/* Hero */}
-        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div className="wrap">
-            <Label>om aurora</Label>
-            <h1 className="t-h1 c-cream anim-fade-up" style={{ maxWidth: 600 }}>
-              Aurora är en person.
-              <br /><em>Det är en feature.</em>
+    <NordicLayout>
+      <section className="page-hero">
+        <div className="wrap">
+          <Reveal><p className="mono">om aurora · christoffer holstensson</p></Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>
+              Aurora är en person. <span className="it">Det är en feature.</span>
             </h1>
-          </div>
-        </section>
+          </Reveal>
+        </div>
+      </section>
 
-        {/* Bio */}
-        <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-          <Rule />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-            <div style={{ display: "grid", gap: "clamp(32px,5vw,64px)" }} className="sm:grid-cols-[240px_1fr]">
-
-              {/* card */}
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal>
               <div>
-                <div style={{ width: 72, height: 72, borderRadius: "50%", border: "0.5px solid rgba(237,233,220,0.18)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-                  <span style={{ fontFamily: "'Fraunces',Georgia,serif", fontSize: 28, color: "#EDE9DC", fontStyle: "italic" }}>C</span>
+                <div style={{ width: 84, height: 84, borderRadius: "50%", border: "1px solid var(--hair)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                  <span style={{ fontFamily: "var(--font-display)", fontSize: 32, color: "var(--bone)", fontStyle: "italic" }}>C</span>
                 </div>
-                <p style={{ fontSize: 14, fontWeight: 500, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif" }}>Christoffer Holstensson</p>
-                <p style={{ fontSize: 13, color: "rgba(237,233,220,0.50)", fontFamily: "'Inter',system-ui,sans-serif", marginTop: 2 }}>Grundare och utvecklare</p>
-
-                <table style={{ marginTop: 20, width: "100%", borderCollapse: "collapse" }}>
-                  {[["Bas","Linköping"],["Sedan","2021"],["Utbildning","Södertörns högskola"],["Produkter","6 i drift"],["Specialitet","SaaS, AI, system"]].map(([k,v]) => (
-                    <tr key={k} style={{ borderBottom: "0.5px solid rgba(237,233,220,0.08)" }}>
-                      <td style={{ padding: "8px 0", fontSize: 12, color: "rgba(237,233,220,0.40)", fontFamily: "'Inter',system-ui,sans-serif" }}>{k}</td>
-                      <td style={{ padding: "8px 0", fontSize: 12, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif", textAlign: "right" }}>{v}</td>
-                    </tr>
-                  ))}
+                <p style={{ color: "var(--bone)", fontSize: 15, fontWeight: 500 }}>Christoffer Holstensson</p>
+                <p className="body" style={{ fontSize: 13, marginTop: 2 }}>Grundare och utvecklare</p>
+                <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 24 }}>
+                  <tbody>
+                    {FACTS.map(([k, v]) => (
+                      <tr key={k} style={{ borderBottom: "1px solid var(--hair)" }}>
+                        <td style={{ padding: "9px 0", fontSize: 12, color: "var(--bone-mute)", fontFamily: "var(--font-mono)" }}>{k}</td>
+                        <td style={{ padding: "9px 0", fontSize: 13, color: "var(--bone)", textAlign: "right" }}>{v}</td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
-
-                <div style={{ display: "flex", gap: 16, marginTop: 20 }}>
-                  {[["LinkedIn ↗","https://linkedin.com"],["GitHub ↗","https://github.com/ralibali"]].map(([l,h]) => (
-                    <a key={l as string} href={h as string} target="_blank" rel="noopener noreferrer"
-                      style={{ fontSize: 13, color: "rgba(237,233,220,0.40)", textDecoration: "none", transition: "color 0.15s", fontFamily: "'Inter',system-ui,sans-serif" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = "#EDE9DC")}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
-                      {l}
-                    </a>
-                  ))}
-                </div>
               </div>
-
-              {/* prose */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-                <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.70)", fontFamily: "'Inter',system-ui,sans-serif" }}>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+                <p className="lead">
                   De flesta byråer skickar runt projekt mellan projektledare, designers, utvecklare och konsulter. Något försvinner i varje överlämning.
                 </p>
-                <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.80)", fontFamily: "'Inter',system-ui,sans-serif" }}>
+                <p className="body">
                   Aurora Media är annorlunda byggt: en person bygger hela vägen, från första skissen till driftsatt produkt. Det är därför vi kan leverera på veckor istället för månader — och det är därför ni alltid pratar med personen som faktiskt kodar.
                 </p>
-                <p style={{ fontSize: 14, lineHeight: 1.8, color: "rgba(237,233,220,0.55)", fontFamily: "'Inter',system-ui,sans-serif" }}>
+                <p className="body">
                   När projektet växer förbi vad en person rimligen klarar säger vi det rakt ut. Då tar vi in externa specialister med ert godkännande — eller så hänvisar vi vidare.
                 </p>
-                <div style={{ height: "0.5px", background: "rgba(237,233,220,0.08)", marginBlock: 4 }} />
-                <p style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.45)", fontFamily: "'Inter',system-ui,sans-serif" }}>
-                  Bakgrunden är inom säkerhet och systemvetenskap — studerade vid Södertörns högskola och hamnade sedan i skärningspunkten mellan teknisk problemlösning och affärsnytta. AI-byrå-spåret kom naturligt när moderna verktyg förändrade vad en person faktiskt kan bygga.
+                <p className="body" style={{ color: "var(--bone-mute)" }}>
+                  Bakgrunden är inom säkerhet och systemvetenskap — studerade vid Södertörns högskola och hamnade sedan i skärningspunkten mellan teknisk problemlösning och affärsnytta.
                 </p>
               </div>
-            </div>
+            </Reveal>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Values */}
-        <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-          <Rule />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-            <Label>värderingar</Label>
-            <h2 className="t-h2 c-cream" style={{ marginBottom: 40 }}>Hur vi jobbar.</h2>
-
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Värderingar</div></Reveal>
+            <Reveal delay={0.1}><h2 className="h2">Hur vi <span className="it">jobbar.</span></h2></Reveal>
+          </div>
+          <div className="feat-list" style={{ marginTop: 0 }}>
             {VALUES.map((v, i) => (
-              <div key={v.title} style={{
-                display: "grid", gap: "8px 40px", padding: "24px 0",
-                borderBottom: "0.5px solid rgba(237,233,220,0.08)",
-              }} className="sm:grid-cols-[200px_1fr]">
-                <p style={{ fontSize: 14, fontWeight: 500, color: "#EDE9DC", fontFamily: "'Inter',system-ui,sans-serif" }}>{v.title}</p>
-                <p style={{ fontSize: 13, lineHeight: 1.65, color: "rgba(237,233,220,0.55)", fontFamily: "'Inter',system-ui,sans-serif" }}>{v.desc}</p>
+              <div key={v.title} className="feat-row">
+                <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
+                <span className="feat-title">{v.title}</span>
+                <span className="feat-body">{v.desc}</span>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA */}
-        <section style={{ paddingBlock: "clamp(56px,8vw,88px)" }}>
-          <Rule />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-            <Label>nästa steg</Label>
-            <h2 className="t-h2 c-cream" style={{ marginBottom: 28 }}>Vill ni jobba med oss?</h2>
-            <Link to="/kontakt" className="btn-primary">Begär offert →</Link>
-          </div>
-        </section>
-
-      </main>
-      <SiteFooter />
-    </div>
+      <section className="cta-band">
+        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+          <div className="meta-label">Nästa steg</div>
+          <h2 className="h2" style={{ marginTop: 18 }}>Vill ni jobba <span className="it">med oss?</span></h2>
+          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
+            Begär offert <span className="a"><ArrowRight size={14} /></span>
+          </button>
+        </div>
+      </section>
+    </NordicLayout>
   );
 };
 
