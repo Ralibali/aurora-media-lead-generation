@@ -621,7 +621,7 @@ const AiKartaResultat = () => {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </NordicLayout>
   );
 };
 
