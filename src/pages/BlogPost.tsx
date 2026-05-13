@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import { getArticle, getRelatedArticles } from "@/lib/articles";
 import { setSEOMeta, setJsonLd, setBreadcrumb, SITE_URL } from "@/lib/seoHelpers";
 
@@ -58,9 +57,7 @@ const BlogPost = () => {
   const midpoint = Math.floor(article.sections.length / 2);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
+    <NordicLayout>
       <main id="main" style={{ paddingTop: "clamp(88px,12vw,120px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
         <div className="wrap">
 
@@ -222,8 +219,7 @@ const BlogPost = () => {
           </div>
         </div>
       </main>
-      <SiteFooter />
-    </div>
+      </NordicLayout>
   );
 };
 

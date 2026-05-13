@@ -1,28 +1,8 @@
 import { useEffect, type ReactNode } from "react";
-import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import { ArrowRight } from "lucide-react";
+import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
-
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
-
-const RULE = {
-  height: "0.5px",
-  background: "rgba(237,233,220,0.12)",
-  marginBottom: "clamp(40px,6vw,64px)",
-} as const;
-
-const eyebrow = {
-  fontFamily: M,
-  fontSize: 10,
-  letterSpacing: "0.1em",
-  textTransform: "uppercase" as const,
-  color: "rgba(237,233,220,0.35)",
-  marginBottom: 16,
-};
 
 export type ServiceTier = {
   name: string;
@@ -61,6 +41,8 @@ export type ServicePageProps = {
 };
 
 const ServicePageTemplate = (props: ServicePageProps) => {
+  const { open } = useContactModal();
+
   useEffect(() => {
     setSEOMeta({
       title: props.seoTitle,
@@ -76,227 +58,120 @@ const ServicePageTemplate = (props: ServicePageProps) => {
   }, [props.slug, props.seoTitle, props.seoDescription, props.title, props.label]);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a
-        href="#main"
-        className="skip-link"
-        style={{
-          position: "absolute",
-          left: -9999,
-          top: "auto",
-          width: 1,
-          height: 1,
-          overflow: "hidden",
-        }}
-      >
-        Hoppa till innehåll
-      </a>
-      <SiteHeader />
-      <main id="main">
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
-        <section
-          className="wrap"
-          style={{
-            paddingTop: "clamp(120px,14vw,160px)",
-            paddingBottom: "clamp(64px,8vw,96px)",
-          }}
-        >
-          <p style={eyebrow}>{props.label ?? props.title}</p>
-          <h1
-            style={{
-              fontFamily: F,
-              fontSize: "clamp(2.8rem,6vw,5.5rem)",
-              fontWeight: 400,
-              lineHeight: 1.0,
-              letterSpacing: "-0.02em",
-              color: C,
-              maxWidth: 820,
-              marginBottom: "clamp(20px,3vw,32px)",
-            }}
-          >
-            {props.title}
-            {props.titleEm && (
-              <em
-                style={{
-                  display: "block",
-                  fontStyle: "italic",
-                  color: "rgba(237,233,220,0.65)",
-                }}
-              >
-                {props.titleEm}
-              </em>
-            )}
-          </h1>
-          <p
-            style={{
-              fontFamily: I,
-              fontSize: "clamp(1rem,1.8vw,1.2rem)",
-              color: "rgba(237,233,220,0.60)",
-              lineHeight: 1.7,
-              maxWidth: 640,
-              marginBottom: "clamp(32px,4vw,48px)",
-            }}
-          >
-            {props.intro}
-          </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link to="/kontakt" className="btn-primary">
-              Boka genomgång →
-            </Link>
-            <Link to="/priser" className="btn-ghost">
-              Se priser
-            </Link>
-          </div>
-        </section>
+    <NordicLayout>
+      {/* Hero */}
+      <section className="page-hero">
+        <div className="wrap">
+          <Reveal>
+            <p className="mono">{(props.label ?? props.title).toLowerCase()} · fast scope · kod ni äger</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "20ch" }}>
+              {props.title}
+              {props.titleEm && <> <span className="it">{props.titleEm}</span></>}
+            </h1>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="lead" style={{ marginTop: 24 }}>{props.intro}</p>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <button onClick={() => open()} className="btn btn-moss">
+                Boka genomgång <span className="a"><ArrowRight size={14} /></span>
+              </button>
+              <a href="/priser" className="btn btn-ghost">Se priser</a>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
-        {/* ── Features / Vad som ingår ─────────────────────────────────── */}
-        <section className="wrap" style={{ paddingBottom: "clamp(64px,8vw,96px)" }}>
-          <div style={RULE} />
-          <p style={eyebrow}>vad som ingår</p>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
-          >
+      {/* Vad ingår */}
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Vad som ingår</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2">Det här <span className="it">levereras</span>.</h2>
+            </Reveal>
+          </div>
+          <div className="feat-list">
             {props.includes.map((item, i) => (
-              <li
-                key={item}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 20,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: M,
-                    fontSize: 10,
-                    color: "rgba(237,233,220,0.25)",
-                    letterSpacing: "0.05em",
-                    minWidth: 24,
-                    paddingTop: 3,
-                  }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span
-                  style={{
-                    fontFamily: I,
-                    fontSize: "clamp(0.9rem,1.4vw,1rem)",
-                    color: "rgba(237,233,220,0.72)",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  {item}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        {/* ── Process / Så jobbar vi ───────────────────────────────────── */}
-        <section className="wrap" style={{ paddingBottom: "clamp(64px,8vw,96px)" }}>
-          <div style={RULE} />
-          <p style={eyebrow}>så jobbar vi</p>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 0,
-              borderTop: "0.5px solid rgba(237,233,220,0.10)",
-            }}
-          >
-            {props.process.map((step, i) => (
-              <div
-                key={step.title}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "40px 1fr 2fr",
-                  gap: "clamp(16px,2vw,32px)",
-                  padding: "clamp(20px,3vw,28px) 0",
-                  borderBottom: "0.5px solid rgba(237,233,220,0.10)",
-                  alignItems: "start",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: M,
-                    fontSize: 10,
-                    color: "rgba(237,233,220,0.25)",
-                    letterSpacing: "0.05em",
-                    paddingTop: 3,
-                  }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span
-                  style={{
-                    fontFamily: F,
-                    fontSize: "clamp(1rem,1.6vw,1.15rem)",
-                    fontWeight: 400,
-                    color: C,
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {step.title}
-                </span>
-                <span
-                  style={{
-                    fontFamily: I,
-                    fontSize: "clamp(0.875rem,1.3vw,0.95rem)",
-                    color: "rgba(237,233,220,0.55)",
-                    lineHeight: 1.65,
-                  }}
-                >
-                  {step.body}
-                </span>
-              </div>
+              <Reveal key={item} delay={i * 0.04}>
+                <div className="feat-row" style={{ gridTemplateColumns: "60px 1fr" }}>
+                  <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="feat-body">{item}</span>
+                </div>
+              </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── CTA ─────────────────────────────────────────────────────── */}
-        <section className="wrap" style={{ paddingBottom: "clamp(80px,10vw,120px)" }}>
-          <div style={RULE} />
-          <h2
-            style={{
-              fontFamily: F,
-              fontSize: "clamp(2rem,4vw,3.2rem)",
-              fontWeight: 400,
-              fontStyle: "italic",
-              letterSpacing: "-0.02em",
-              color: C,
-              maxWidth: 600,
-              marginBottom: "clamp(16px,2vw,24px)",
-              lineHeight: 1.15,
-            }}
-          >
-            Redo att komma igång?
-          </h2>
-          <p
-            style={{
-              fontFamily: I,
-              fontSize: "clamp(0.95rem,1.5vw,1.05rem)",
-              color: "rgba(237,233,220,0.55)",
-              lineHeight: 1.7,
-              maxWidth: 520,
-              marginBottom: "clamp(24px,3vw,36px)",
-            }}
-          >
-            Berätta om ditt projekt så återkommer jag med ett konkret förslag inom 24 timmar.
-          </p>
-          <Link to="/kontakt" className="btn-primary">
-            Kontakta mig →
-          </Link>
+      {/* Process */}
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Så jobbar vi</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2"><span className="it">Process</span> utan onödiga möten.</h2>
+            </Reveal>
+          </div>
+          <div className="feat-list">
+            {props.process.map((step, i) => (
+              <Reveal key={step.title} delay={i * 0.05}>
+                <div className="feat-row">
+                  <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="feat-title">{step.title}</span>
+                  <span className="feat-body">{step.body}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      {props.faqs.length > 0 && (
+        <section className="section">
+          <div className="wrap">
+            <div className="sec-head">
+              <Reveal><div className="meta-label">Vanliga frågor</div></Reveal>
+              <Reveal delay={0.1}>
+                <h2 className="h2"><span className="it">Frågor</span> vi får ofta.</h2>
+              </Reveal>
+            </div>
+            <div className="feat-list">
+              {props.faqs.map((f, i) => (
+                <Reveal key={f.q} delay={i * 0.04}>
+                  <div className="feat-row">
+                    <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="feat-title">{f.q}</span>
+                    <span className="feat-body">{f.a}</span>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
         </section>
-      </main>
-      <SiteFooter />
-    </div>
+      )}
+
+      {props.extra}
+      {props.postFaq}
+
+      {/* CTA */}
+      <section className="cta-band">
+        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+          <div className="meta-label">Nästa steg</div>
+          <h2 className="h2" style={{ marginTop: 18 }}>
+            Redo att <span className="it">komma igång?</span>
+          </h2>
+          <p className="lead" style={{ marginTop: 22 }}>Berätta om projektet — konkret förslag inom 24 timmar.</p>
+          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
+            Kontakta oss <span className="a"><ArrowRight size={14} /></span>
+          </button>
+        </div>
+      </section>
+    </NordicLayout>
   );
 };
 

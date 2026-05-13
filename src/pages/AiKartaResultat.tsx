@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { TriangleAlert as AlertTriangle, ArrowRight, CalendarCheck, CircleCheck as CheckCircle2, Clock, Database, Download, Loader as Loader2, Mail, RefreshCw, Sparkles, Target, TrendingUp, Workflow, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -245,9 +244,7 @@ const AiKartaResultat = () => {
     }
   };
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
+    <NordicLayout>
       <main id="main">
         <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
           <div className="wrap">
@@ -443,8 +440,6 @@ const AiKartaResultat = () => {
           </div>
         </section>
       </main>
-      <SiteFooter />
-
       <Dialog
         open={bookingOpen}
         onOpenChange={(o) => {
@@ -700,8 +695,6 @@ function ResultStateScreen({
   const C2 = "#EDE9DC";
   return (
     <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
       <main id="main" style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
         <div className="wrap" style={{ maxWidth: 600, textAlign: "center" }}>
           <p style={{ fontFamily: M2, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 16 }}>{config.label}</p>
@@ -732,8 +725,7 @@ function ResultStateScreen({
           )}
         </div>
       </main>
-      <SiteFooter />
-    </div>
+      </NordicLayout>
   );
 }
 

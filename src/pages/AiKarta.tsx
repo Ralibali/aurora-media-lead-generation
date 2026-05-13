@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
 
 const F = "'Fraunces',Georgia,serif";
@@ -87,9 +86,7 @@ const AiKarta = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
+    <NordicLayout>
       <main id="main">
 
         {/* ============== HERO ============== */}
@@ -416,8 +413,7 @@ const AiKarta = () => {
         </section>
 
       </main>
-      <SiteFooter />
-    </div>
+      </NordicLayout>
   );
 };
 

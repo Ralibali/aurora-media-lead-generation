@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import PortfolioPlaceholder from "@/components/PortfolioPlaceholder";
 import {
   PORTFOLIO,
@@ -166,9 +165,7 @@ const EnIndex = () => {
   const saasCount = PORTFOLIO.filter((p) => p.category === "saas").length;
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
+    <NordicLayout>
       <main id="main">
         {/* HERO */}
         <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
@@ -352,8 +349,7 @@ const EnIndex = () => {
           </div>
         </section>
       </main>
-      <SiteFooter />
-    </div>
+      </NordicLayout>
   );
 };
 
