@@ -36,17 +36,8 @@ const Hero = () => {
   const time = useStockholmTime();
   return (
     <section id="top" className="hero">
-      <div className="hero-bg">
-        <img
-          src={heroImg}
-          alt="Dimmig svensk sjö med röd stuga vid skogsbrynet"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-        />
-      </div>
-
       <div className="wrap hero-content">
+        <div className="hero-text">
         <Reveal>
           <p className="mono">aurora media · ai-driven mjukvarubyrå · linköping</p>
         </Reveal>
