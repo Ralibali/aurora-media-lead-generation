@@ -141,6 +141,7 @@ export const NORDIC_TOKENS = `
 
   /* Section base */
   .aur .section{ padding-block:clamp(80px, 11vw, 150px); position:relative; }
+  .aur .hero + .section{ padding-top:clamp(42px, 6vw, 72px); }
   .aur .section + .section{ border-top:1px solid var(--hair); }
   .aur .sec-head{ display:grid; grid-template-columns:1fr; gap:24px; margin-bottom:clamp(48px,7vw,88px); }
   @media(min-width:900px){ .aur .sec-head{ grid-template-columns:1fr 2fr; gap:clamp(32px,5vw,80px); align-items:start; } }
