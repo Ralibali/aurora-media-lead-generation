@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CircleCheck as CheckCircle2, Loader as Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -218,9 +217,7 @@ const AiKartaStart = () => {
   const progress = useMemo(() => Math.round(((step - 1) / (STEPS.length - 1)) * 100), [step]);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
+    <NordicLayout>
       <main id="main">
         <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
           <div className="wrap" style={{ maxWidth: 720 }}>
@@ -508,8 +505,7 @@ const AiKartaStart = () => {
           </div>
         </section>
       </main>
-      <SiteFooter />
-    </div>
+      </div>
   );
 };
 
@@ -589,7 +585,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
         <p className="text-[12px] uppercase tracking-wider text-muted-foreground">{label}</p>
         <p className="text-sm text-foreground">{value}</p>
       </div>
-    </div>
+    </NordicLayout>
   );
 }
 

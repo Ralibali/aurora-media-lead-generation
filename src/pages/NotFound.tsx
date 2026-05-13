@@ -1,6 +1,6 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import SiteHeader from "@/components/layout/SiteHeader";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import { setSEOMeta } from "@/lib/seoHelpers";
 
 const NotFound = () => {
@@ -16,8 +16,7 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <SiteHeader />
+    <NordicLayout>
       <main
         id="main"
         style={{
@@ -50,7 +49,7 @@ const NotFound = () => {
         </p>
         <Link to="/" className="btn-primary">Tillbaka till start →</Link>
       </main>
-    </div>
+    </NordicLayout>
   );
 };
 

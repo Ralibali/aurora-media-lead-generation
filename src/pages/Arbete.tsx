@@ -1,8 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import { setSEOMeta, setBreadcrumb, removeJsonLd, setJsonLd, SITE_URL } from "@/lib/seoHelpers";
 import {
   PORTFOLIO,
@@ -70,9 +69,7 @@ const Arbete = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: BG, minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
+    <NordicLayout>
       <main id="main">
 
         {/* Hero */}
@@ -170,8 +167,7 @@ const Arbete = () => {
         </section>
 
       </main>
-      <SiteFooter />
-    </div>
+      </div>
   );
 };
 

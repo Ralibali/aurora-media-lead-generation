@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import NordicLayout from "@/components/nordic/NordicLayout";
 import {
   setSEOMeta, setBreadcrumb, removeJsonLd, setJsonLd, SITE_URL,
 } from "@/lib/seoHelpers";
@@ -48,9 +47,7 @@ const CasePage = () => {
   const related = getRelatedPortfolio(project.slug, 3);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
-      <a href="#main" className="skip-link">Hoppa till innehåll</a>
-      <SiteHeader />
+    <NordicLayout>
       <main id="main" style={{ paddingTop: "clamp(88px,12vw,120px)" }}>
 
         {/* Back */}
@@ -212,8 +209,7 @@ const CasePage = () => {
         </section>
 
       </main>
-      <SiteFooter />
-    </div>
+      </NordicLayout>
   );
 };
 
