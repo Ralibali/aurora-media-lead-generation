@@ -33,7 +33,7 @@ const Step1Schema = z.object({
   email: z.string().trim().email("Ogiltig e-postadress").max(160),
 });
 
-const STEPS = ["Kontakt", "Tidstjuvar", "Processer", "Sammanfattning"];
+const STEPS = ["Tidstjuvar", "Processer", "Kontakt", "Klart"];
 
 const F = "'Fraunces',Georgia,serif";
 const I = "'Inter',system-ui,sans-serif";
