@@ -50,7 +50,7 @@ const Hero = () => {
           </h1>
         </Reveal>
         <Reveal delay={0.35}>
-          <p className="lead" style={{ marginTop: 18 }}>
+          <p className="lead" style={{ marginTop: 14 }}>
             Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa
             snabbare, effektivisera arbetet och ersätta manuella rutiner med smarta digitala flöden.
           </p>
@@ -65,7 +65,7 @@ const Hero = () => {
           </div>
         </Reveal>
         <Reveal delay={0.55}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 24 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginTop: 18 }}>
             <button onClick={() => open()} className="btn btn-moss">
               Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
             </button>
