@@ -90,36 +90,35 @@ const AiKarta = () => {
       <main id="main">
 
         {/* ============== HERO ============== */}
-        <section style={{ paddingTop: "clamp(120px,14vw,160px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
+        <section style={{ paddingTop: "clamp(80px,10vw,140px)", paddingBottom: "clamp(40px,6vw,80px)" }}>
           <div className="wrap">
-            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20, textTransform: "lowercase" }}>
-              kostnadsfri ai-analys
+            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 14, textTransform: "lowercase" }}>
+              kostnadsfri ai-analys · 2 min
             </p>
             <h1 style={{
               fontFamily: F,
-              fontSize: "clamp(36px,6vw,72px)",
+              fontSize: "clamp(32px,6vw,72px)",
               lineHeight: 1.02,
               letterSpacing: "-0.025em",
               color: C,
               fontWeight: 400,
               maxWidth: 760,
-              marginBottom: 20,
+              marginBottom: 16,
             }}>
               Vad i ert företag kan AI sköta åt er?
             </h1>
             <p style={{
               fontFamily: I,
               fontSize: "clamp(15px,1.6vw,18px)",
-              lineHeight: 1.7,
+              lineHeight: 1.6,
               color: "rgba(237,233,220,0.60)",
               maxWidth: 520,
-              marginBottom: 36,
+              marginBottom: 24,
             }}>
-              Få en personlig AI-analys av era processer på <strong style={{ color: C, fontWeight: 500 }}>några minuter</strong>.
-              Vi pekar ut exakt vilka uppgifter som kan automatiseras – och hur mycket tid det sparar.
+              Få en personlig analys på <strong style={{ color: C, fontWeight: 500 }}>2 minuter</strong> – topp-3 processer som sparar mest tid hos er, helt kostnadsfritt och utan säljmöte.
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link to="/ai-karta/start" className="btn-primary">Starta min AI-analys →</Link>
+              <Link to="/ai-karta/start" className="btn-primary">Starta gratis (2 min) →</Link>
               <Link to="/kontakt" className="btn-ghost">Hellre prata direkt?</Link>
             </div>
 
@@ -411,6 +410,32 @@ const AiKarta = () => {
             <Link to="/ai-karta/start" className="btn-primary">Starta min AI-analys →</Link>
           </div>
         </section>
+
+        {/* Sticky mobil-CTA → direkt till formuläret (minskar bounce från sociala medier) */}
+        <Link
+          to="/ai-karta/start"
+          className="btn-primary"
+          style={{
+            position: "fixed",
+            left: 12,
+            right: 12,
+            bottom: 12,
+            zIndex: 40,
+            justifyContent: "center",
+            textAlign: "center",
+            boxShadow: "0 12px 32px rgba(0,0,0,0.45)",
+          }}
+          aria-label="Starta gratis AI-analys"
+          data-aikarta-sticky
+        >
+          Starta gratis AI-analys (2 min) →
+        </Link>
+        <style>{`
+          [data-aikarta-sticky]{display:none !important}
+          @media (max-width: 760px){
+            [data-aikarta-sticky]{display:inline-flex !important}
+          }
+        `}</style>
 
       </main>
       </NordicLayout>
