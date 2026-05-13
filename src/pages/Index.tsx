@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { SEO } from "@/components/SEO";
-import heroImg from "@/assets/aurora-hero-borealis.jpg";
+import heroImg from "@/assets/aurora-hero-nordic.jpg";
 
 /* ─────────────────────────────────────────────────────────────────────────
    AURORA MEDIA — cinematic Nordic landing
