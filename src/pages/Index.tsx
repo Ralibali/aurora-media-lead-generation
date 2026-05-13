@@ -42,7 +42,7 @@ const Hero = () => {
           <p className="mono">aurora media · ai-driven mjukvarubyrå · linköping</p>
         </Reveal>
         <Reveal delay={0.1}>
-          <h1 className="hero-line" style={{ marginTop: 18 }}>Idén finns.</h1>
+          <h1 className="hero-line" style={{ marginTop: 10 }}>Idén finns.</h1>
         </Reveal>
         <Reveal delay={0.2}>
           <h1 className="hero-line" style={{ paddingLeft: "clamp(0px,6vw,84px)" }}>
