@@ -73,6 +73,20 @@ const seoMap: Record<string, SEOConfig> = {
       "Ladda ner Aurora AI-karta och identifiera vilka arbetsuppgifter, system och processer i företaget som kan automatiseras, effektiviseras eller byggas om med AI.",
     canonical: "https://auroramedia.se/ai-karta",
   },
+  "/ai-karta/start": {
+    title: "Starta AI-kartan | Aurora Media",
+    description:
+      "Svara på några frågor och få en kostnadsfri AI-baserad mini-analys av era bästa möjligheter för automation, AI-assistenter och smartare system.",
+    canonical: "https://auroramedia.se/ai-karta/start",
+    noindex: true,
+  },
+  "/ai-karta/resultat": {
+    title: "AI-kartans resultat | Aurora Media",
+    description:
+      "Se sammanställningen från AI-kartan och vilka processer som har störst potential för AI och automation.",
+    canonical: "https://auroramedia.se/ai-karta/resultat",
+    noindex: true,
+  },
   "/ai-automation-foretag": {
     title: "AI automation för företag | Automatisera Excel, leads och administration",
     description:
