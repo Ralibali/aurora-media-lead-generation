@@ -74,9 +74,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/ai-karta",
   },
   "/ai-karta/start": {
-    title: "Starta AI-kartan | Aurora Media",
+    title: "Starta AI-kartan – gratis AI-analys på 3 minuter | Aurora Media",
     description:
-      "Svara på några frågor och få en kostnadsfri AI-baserad mini-analys av era bästa möjligheter för automation, AI-assistenter och smartare system.",
+      "Svara på några snabba frågor och få en kostnadsfri AI-baserad mini-analys av era största tidstjuvar och bästa möjligheter för automation och AI.",
     canonical: "https://auroramedia.se/ai-karta/start",
     noindex: true,
   },
