@@ -2,8 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertTriangle, FileUp, Loader2, UploadCloud } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
+import { getSupabase } from "@/lib/getSupabase";
 
 const RESULT_KEY = "aurora_ai_map_result";
 const MAX_BYTES = 8 * 1024 * 1024; // 8 MB
@@ -56,6 +56,7 @@ const AiKartaPdfUpload = () => {
         const b64 = await fileToBase64(file);
 
         setStatus("uploading");
+        const supabase = await getSupabase();
         const { data, error: invokeErr } = await supabase.functions.invoke("import-ai-map-pdf", {
           body: { pdf_base64: b64 },
         });

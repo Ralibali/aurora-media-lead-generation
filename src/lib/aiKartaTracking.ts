@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/lib/getSupabase";
 
 const SESSION_KEY = "aikarta_session_id";
 
@@ -26,6 +26,7 @@ export type AiKartaButton =
 
 export async function trackAiKartaClick(button: AiKartaButton): Promise<void> {
   try {
+    const supabase = await getSupabase();
     await supabase.from("ai_karta_clicks").insert({
       button,
       session_id: getSessionId(),

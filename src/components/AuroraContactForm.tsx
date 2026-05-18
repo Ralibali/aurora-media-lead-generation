@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/lib/getSupabase";
 
 const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
 
@@ -76,6 +76,7 @@ const AuroraContactForm = ({
 
     setSubmitting(true);
     try {
+      const supabase = await getSupabase();
       const { error } = await supabase.functions.invoke("send-contact-email", {
         body: { ...parsed.data, _renderedAt: Date.now() },
       });

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { getSupabase } from "@/lib/getSupabase";
 import {
   Select,
   SelectContent,
@@ -107,6 +107,7 @@ const TextGenerator = () => {
   const [search, setSearch] = useState("");
 
   const loadLibrary = async () => {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from("text_library")
       .select("*")
@@ -129,6 +130,7 @@ const TextGenerator = () => {
     setOutput(null);
     setMeta(null);
     try {
+      const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke("generate-text", {
         body: {
           textType,
@@ -154,6 +156,7 @@ const TextGenerator = () => {
 
   const saveToLibrary = async () => {
     if (!output) return;
+    const supabase = await getSupabase();
     const { error } = await supabase.from("text_library").insert({
       text_type: textType,
       topic,
@@ -180,6 +183,7 @@ const TextGenerator = () => {
   };
 
   const rate = async (id: string, rating: number) => {
+    const supabase = await getSupabase();
     const { error } = await supabase
       .from("text_library")
       .update({ quality_rating: rating })
@@ -189,6 +193,7 @@ const TextGenerator = () => {
   };
 
   const setStatus = async (id: string, status: string) => {
+    const supabase = await getSupabase();
     const { error } = await supabase
       .from("text_library")
       .update({ status })
@@ -199,6 +204,7 @@ const TextGenerator = () => {
 
   const remove = async (id: string) => {
     if (!confirm("Ta bort denna text?")) return;
+    const supabase = await getSupabase();
     const { error } = await supabase.from("text_library").delete().eq("id", id);
     if (error) toast.error(error.message);
     else loadLibrary();
@@ -217,6 +223,7 @@ const TextGenerator = () => {
   const quickGenerate = async (jobs: Array<{ textType: string; topic: string; context?: string }>) => {
     setLoading(true);
     let success = 0;
+    const supabase = await getSupabase();
     for (const job of jobs) {
       try {
         const { data, error } = await supabase.functions.invoke("generate-text", {

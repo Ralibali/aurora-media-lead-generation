@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/lib/getSupabase";
 
 const Schema = z.object({
   name: z.string().min(2, "Ange ditt namn").max(80),
@@ -74,6 +74,7 @@ const AiKartaForm = () => {
     setStatus("submitting");
 
     try {
+      const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke<{
         ok: boolean;
         downloadUrl?: string;

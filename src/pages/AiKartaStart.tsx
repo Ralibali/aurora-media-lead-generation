@@ -7,8 +7,8 @@ import NordicLayout from "@/components/nordic/NordicLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { supabase } from "@/integrations/supabase/client";
 import { setSEOMeta } from "@/lib/seoHelpers";
+import { getSupabase } from "@/lib/getSupabase";
 import {
   AiMapFormState,
   EMPLOYEE_OPTIONS,
@@ -189,6 +189,7 @@ const AiKartaStart = () => {
         data_available: p.data_available || "unknown",
         business_value: p.business_value || "unknown",
       }));
+      const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke("submit-ai-map", {
         body: { ...form, processes: normalizedProcesses, website },
       });
