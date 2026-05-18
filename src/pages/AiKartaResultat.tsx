@@ -15,7 +15,7 @@ import { setSEOMeta } from "@/lib/seoHelpers";
 import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
 import { downloadAiMapPdf } from "@/lib/aiMapPdf";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/lib/getSupabase";
 
 const RESULT_KEY = "ai_map_result";
 const F = "'Fraunces',Georgia,serif";
@@ -150,6 +150,7 @@ const AiKartaResultat = () => {
     void trackAiKartaClick("result_resend_email");
     const t = toast.loading(`Skickar analysen till ${result.meta.email}…`);
     try {
+      const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke("resend-ai-map-email", {
         body: {
           email: result.meta.email,
@@ -218,6 +219,7 @@ const AiKartaResultat = () => {
     setBookingStatus("submitting");
     void trackAiKartaClick("booking_submit");
     try {
+      const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke("book-ai-genomlysning", {
         body: {
           contact_name: parsed.data.name,
