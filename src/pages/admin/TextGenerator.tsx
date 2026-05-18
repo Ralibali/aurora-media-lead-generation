@@ -223,6 +223,7 @@ const TextGenerator = () => {
   const quickGenerate = async (jobs: Array<{ textType: string; topic: string; context?: string }>) => {
     setLoading(true);
     let success = 0;
+    const supabase = await getSupabase();
     for (const job of jobs) {
       try {
         const { data, error } = await supabase.functions.invoke("generate-text", {
