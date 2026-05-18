@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { getSupabase } from "@/lib/getSupabase";
 import {
   Select,
   SelectContent,
@@ -107,6 +107,7 @@ const TextGenerator = () => {
   const [search, setSearch] = useState("");
 
   const loadLibrary = async () => {
+    const supabase = await getSupabase();
     const { data, error } = await supabase
       .from("text_library")
       .select("*")
@@ -129,6 +130,7 @@ const TextGenerator = () => {
     setOutput(null);
     setMeta(null);
     try {
+      const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke("generate-text", {
         body: {
           textType,
