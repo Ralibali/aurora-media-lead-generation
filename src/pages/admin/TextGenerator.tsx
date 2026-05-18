@@ -156,6 +156,7 @@ const TextGenerator = () => {
 
   const saveToLibrary = async () => {
     if (!output) return;
+    const supabase = await getSupabase();
     const { error } = await supabase.from("text_library").insert({
       text_type: textType,
       topic,
@@ -182,6 +183,7 @@ const TextGenerator = () => {
   };
 
   const rate = async (id: string, rating: number) => {
+    const supabase = await getSupabase();
     const { error } = await supabase
       .from("text_library")
       .update({ quality_rating: rating })
@@ -191,6 +193,7 @@ const TextGenerator = () => {
   };
 
   const setStatus = async (id: string, status: string) => {
+    const supabase = await getSupabase();
     const { error } = await supabase
       .from("text_library")
       .update({ status })
@@ -201,6 +204,7 @@ const TextGenerator = () => {
 
   const remove = async (id: string) => {
     if (!confirm("Ta bort denna text?")) return;
+    const supabase = await getSupabase();
     const { error } = await supabase.from("text_library").delete().eq("id", id);
     if (error) toast.error(error.message);
     else loadLibrary();
