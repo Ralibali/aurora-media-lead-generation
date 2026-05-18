@@ -1,4 +1,4 @@
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/lib/getSupabase";
 
 const SESSION_KEY = "faq_session_id";
 
@@ -30,6 +30,7 @@ export async function trackFaqSearch({ query, resultCount, openedQuestion }: Sea
   if (!query.trim()) return;
 
   try {
+    const supabase = await getSupabase();
     const payload = {
       query: query.trim().slice(0, 200),
       result_count: resultCount,
@@ -73,6 +74,7 @@ export async function trackFaqCtaClick({
   openedQuestion,
 }: CtaClickEvent) {
   try {
+    const supabase = await getSupabase();
     const payload = {
       cta_source: source,
       paket: paket ?? null,
