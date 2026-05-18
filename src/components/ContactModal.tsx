@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { getSupabase } from "@/lib/getSupabase";
 
 type OpenOptions = { paket?: string; internalNote?: string };
 type ContactModalCtx = {
@@ -267,6 +267,7 @@ const ContactDialog = ({
     setFieldErrors({});
     setSubmitting(true);
     try {
+      const supabase = await getSupabase();
       const { error } = await supabase.functions.invoke("send-contact-email", {
         body: { ...parsed.data, _renderedAt: renderedAt },
       });
