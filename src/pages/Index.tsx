@@ -39,7 +39,12 @@ const Hero = () => {
       <div className="wrap hero-content">
         <div className="hero-text">
         <Reveal>
-          <p className="mono">aurora media · ai-driven mjukvarubyrå · linköping</p>
+          <p className="mono">aurora media · ai-byrå i linköping · ai-driven mjukvara</p>
+        </Reveal>
+        <Reveal delay={0.05}>
+          <p className="mono" style={{ marginTop: 6, opacity: 0.75 }}>
+            AI-byrå i Linköping som bygger SaaS, automationer och interna verktyg.
+          </p>
         </Reveal>
         <Reveal delay={0.1}>
           <h1 className="hero-line" style={{ marginTop: 4 }}>Idén finns.</h1>
@@ -471,8 +476,8 @@ const CTA = () => {
 const Index = () => (
   <>
     <SEO
-      title="Aurora Media AB — AI-driven mjukvarubyrå i Linköping"
-      description="Aurora Media bygger SaaS, MVP:er, interna system, webbappar, mobilappar, e-handel, integrationer och AI-automationer för svenska företag. Från idé till lansering på under fyra veckor."
+      title="Aurora Media – AI-byrå i Linköping | SaaS & AI från 14 900 kr"
+      description="AI-byrå i Linköping. Vi bygger SaaS, AI-automationer och interna verktyg med fast pris från 14 900 kr. Leverans på veckor, kod du äger."
     />
     <NordicLayout>
       <Hero />

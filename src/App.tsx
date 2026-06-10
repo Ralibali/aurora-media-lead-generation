@@ -56,15 +56,15 @@ type SEOConfig = {
 
 const seoMap: Record<string, SEOConfig> = {
   "/": {
-    title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
+    title: "Aurora Media – AI-byrå i Linköping | SaaS & AI från 14 900 kr",
     description:
-      "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
+      "AI-byrå i Linköping. Vi bygger SaaS, AI-automationer och interna verktyg med fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
     canonical: "https://auroramedia.se/",
   },
   "/index": {
-    title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
+    title: "Aurora Media – AI-byrå i Linköping | SaaS & AI från 14 900 kr",
     description:
-      "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
+      "AI-byrå i Linköping. Vi bygger SaaS, AI-automationer och interna verktyg med fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
     canonical: "https://auroramedia.se/",
   },
   "/ai-karta": {
