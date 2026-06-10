@@ -112,7 +112,7 @@ export default function CityPage() {
     ? `SaaS-utveckling i ${city.city}`
     : `AI-byrå i ${city.city}`;
 
-  const otherCities = cities.filter((c) => c.slug !== slug).slice(0, 5);
+  const otherCities = cities.filter((c) => c.slug !== slug).slice(0, 3);
   const faqItems: { q: string; a: string }[] = city.faqs ?? [];
 
   return (

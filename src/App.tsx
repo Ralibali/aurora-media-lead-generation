@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import AiAutomationForetag from "./pages/AiAutomationForetag";
+import AiByraLinkoping from "./pages/AiByraLinkoping";
 import AiKarta from "./pages/AiKarta";
 import AiKartaStart from "./pages/AiKartaStart";
 import AiKartaResultat from "./pages/AiKartaResultat";
@@ -56,15 +57,15 @@ type SEOConfig = {
 
 const seoMap: Record<string, SEOConfig> = {
   "/": {
-    title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
+    title: "Aurora Media – AI-byrå i Linköping | SaaS & AI från 14 900 kr",
     description:
-      "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
+      "AI-byrå i Linköping. Vi bygger SaaS, AI-automationer och interna verktyg med fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
     canonical: "https://auroramedia.se/",
   },
   "/index": {
-    title: "AI, automation och skräddarsydda system för företag | Aurora Media AB",
+    title: "Aurora Media – AI-byrå i Linköping | SaaS & AI från 14 900 kr",
     description:
-      "Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare och effektivisera arbetet.",
+      "AI-byrå i Linköping. Vi bygger SaaS, AI-automationer och interna verktyg med fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
     canonical: "https://auroramedia.se/",
   },
   "/ai-karta": {
@@ -98,6 +99,12 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Aurora Media är AI-konsulten som bygger produkten: SaaS, interna appar och AI-automationer med fast pris, snabb leverans och kod du äger.",
     canonical: "https://auroramedia.se/ai-konsult-sverige",
+  },
+  "/ai-byra-linkoping": {
+    title: "AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media",
+    description:
+      "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg. Fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
+    canonical: "https://auroramedia.se/ai-byra-linkoping",
   },
   "/en": {
     title: "Aurora Media AB – We build AI-powered SaaS",
@@ -356,6 +363,7 @@ const App = () => (
               <Route path="/admin/leads" element={<Leads />} />
               <Route path="/admin/text-generator" element={<TextGenerator />} />
               <Route path="/admin/faq-rapport" element={<FaqRapport />} />
+              <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
               <Route path="/saas-utveckling-:city" element={<CityPage />} />
               <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />

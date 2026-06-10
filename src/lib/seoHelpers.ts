@@ -117,9 +117,10 @@ export const organizationSchema = {
   name: "Aurora Media AB",
   alternateName: "Aurora Media",
   url: SITE_URL,
-  logo: `${SITE_URL}/logo.png`,
+  logo: `${SITE_URL}/og-image-sv.jpg`,
+  image: `${SITE_URL}/og-image-sv.jpg`,
   description:
-    "Bygger SaaS-produkter och interna verktyg åt svenska företag med AI-kodning. Från 14 900 kr. Leverans på veckor.",
+    "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg åt svenska företag. Från 14 900 kr. Leverans på veckor.",
   email: "info@auroramedia.se",
   address: {
     "@type": "PostalAddress",
@@ -127,13 +128,27 @@ export const organizationSchema = {
     addressRegion: "Östergötlands län",
     addressCountry: "SE",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 58.4108,
+    longitude: 15.6214,
+  },
   areaServed: { "@type": "Country", name: "Sweden" },
   priceRange: "14900-89000 SEK",
   foundingDate: "2020",
-  slogan: "Bygger SaaS med AI – veckor, inte månader",
+  slogan: "AI-byrå i Linköping – SaaS, AI och interna verktyg på veckor.",
+  founder: {
+    "@type": "Person",
+    name: "Christoffer Holstensson",
+  },
+  sameAs: [
+    "https://github.com/Ralibali",
+    "https://www.allabolag.se/5592720220/aurora-media-ab",
+  ],
   serviceType: [
     "SaaS-utveckling",
     "AI-kodning",
+    "AI-automation",
     "Webbutveckling",
     "MVP-utveckling",
     "Intern verktygsutveckling",

@@ -11,6 +11,7 @@ const BUILD_DATE = new Date().toISOString().slice(0, 10);
 
 const STATIC_ROUTES = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
+  { path: '/ai-byra-linkoping', changefreq: 'weekly', priority: '0.95' },
   { path: '/ai-konsult-sverige', changefreq: 'weekly', priority: '0.95' },
   { path: '/tjanster', changefreq: 'weekly', priority: '0.9' },
   { path: '/tjanster/hemsidor', changefreq: 'monthly', priority: '0.85' },
@@ -46,7 +47,10 @@ const CITY_ROUTES = [
 
 for (const slug of CITY_ROUTES) {
   STATIC_ROUTES.push({ path: `/saas-utveckling-${slug}`, changefreq: 'monthly', priority: '0.7' });
-  STATIC_ROUTES.push({ path: `/ai-byra-${slug}`, changefreq: 'monthly', priority: '0.7' });
+  // /ai-byra-linkoping already included as pillar above with higher priority
+  if (slug !== 'linkoping') {
+    STATIC_ROUTES.push({ path: `/ai-byra-${slug}`, changefreq: 'monthly', priority: '0.7' });
+  }
 }
 
 function escapeXml(s) {
