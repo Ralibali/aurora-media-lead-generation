@@ -95,6 +95,110 @@ export const articles25to30: Article[] = [
     ],
     relatedSlugs: [
       "lovable-vs-bolt-vs-cursor-2026",
+      "ai-byra-vs-webbyra-skillnaden",
+    ],
+  },
+  {
+    slug: "ai-byra-vs-webbyra-skillnaden",
+    keyword:
+      "AI-byrå vs webbyrå, skillnad AI-byrå webbyrå, välja webbyrå, välja AI-byrå, webbyrå Linköping, AI-byrå Linköping",
+    category: "AI-byrå",
+    title: "AI-byrå vs webbyrå – vad är skillnaden 2026?",
+    metaTitle: "AI-byrå vs webbyrå – vad är skillnaden? | Aurora Media",
+    metaDesc:
+      "AI-byrå eller webbyrå 2026? Vi går igenom skillnaderna i tjänster, pris, teknik och leveranstid – och hjälper dig välja rätt för ditt projekt.",
+    publishedDate: "2026-06-10",
+    updatedDate: "2026-06-10",
+    readMinutes: 10,
+    intro:
+      "”Behöver vi en webbyrå eller en AI-byrå?” Det är frågan vi får varje vecka. Svaret beror på vad du faktiskt ska bygga. En webbyrå och en AI-byrå låter likt, men levererar väldigt olika saker, till olika pris och på olika tid. Den här guiden bryter ner skillnaderna konkret – så du slipper betala 300 000 kr för fel partner.",
+    sections: [
+      {
+        heading: "Den korta versionen",
+        content:
+          "Behöver du en presentationssajt, blogg eller enkel företagswebb – välj en webbyrå. Behöver du en produkt med login, betalningar, AI eller automatisering av interna flöden – välj en AI-byrå. Webbyrån är specialist på innehåll, design och CMS (oftast WordPress). AI-byrån är specialist på fullstack-produkter, SaaS och AI-integrationer. Båda kan bygga ”en hemsida” – men de gör det på helt olika sätt, med olika teknik och olika prislapp. Gränsen suddas ut ibland: en modern AI-byrå som [Aurora Media](/ai-byra-linkoping) bygger även marknadssajter, och vissa webbyråer har börjat erbjuda enklare automationer. Men kärnkompetenserna skiljer sig.",
+      },
+      {
+        heading: "Vad en webbyrå faktiskt gör",
+        content:
+          "En klassisk webbyrå levererar presentationssajter, e-handel och bloggar. Stacken är oftast WordPress, Wix, Squarespace eller Shopify. Fokus ligger på design, varumärke, copywriting och SEO. Många webbyråer har en stark grafisk profil och jobbar med fotografering, content och löpande marknadsföring. De är experter på CMS som låter kunden själv uppdatera innehåll. Webbyrån är rätt val när målet är att kommunicera ett budskap, presentera tjänster, sälja fysiska produkter via standardlösningar, eller bygga ett varumärke visuellt. Det är fel val när du behöver custom logik, multi-tenant SaaS, komplexa AI-integrationer eller automatiseringar mot affärssystem. Då hamnar projekten i timdebitering som snabbt skenar.",
+      },
+      {
+        heading: "Vad en AI-byrå faktiskt gör",
+        content:
+          "En AI-byrå bygger fullstack-produkter med en modern stack: React, TypeScript, Supabase eller Postgres, Vercel/Netlify, och AI-modeller från OpenAI, Anthropic eller Google. Typiska leveranser: SaaS-produkter med login och prenumerationer, MVP för startups, AI-automationer som ersätter manuella Excel-flöden, interna verktyg och dashboards, samt AI-integrationer mot Fortnox, Visma, HubSpot eller egna affärssystem. AI-byrån använder ofta AI-kodning (Lovable, Bolt, Cursor, Claude) för att leverera snabbare och billigare. En MVP som tidigare kostade 300 000 kr levereras idag för 30 000–50 000 kr på två veckor. Läs mer om vad vi gör på [vår tjänsteöversikt](/tjanster).",
+      },
+      {
+        heading: "Jämförelse: AI-byrå vs webbyrå punkt för punkt",
+        content:
+          "Här är de praktiska skillnaderna som påverkar beslutet. Notera att en bra AI-byrå ofta kan göra det en webbyrå gör – men inte tvärtom. Det är därför vi ser allt fler bolag samla webb och produkt hos samma AI-byrå när man väl gjort övergången.",
+        table: {
+          headers: ["Område", "Webbyrå", "AI-byrå"],
+          rows: [
+            ["Typisk stack", "WordPress, Wix, Shopify", "React, TypeScript, Supabase"],
+            ["Login & prenumerationer", "Sällan / via plugin", "Standard"],
+            ["AI-integrationer", "Chatbot-plugin", "Egen RAG, agents, automationer"],
+            ["Custom affärslogik", "Begränsat", "Standard"],
+            ["Leveranstid presentationssajt", "3–6 veckor", "1–2 veckor"],
+            ["Leveranstid SaaS / MVP", "Ej i scope", "1–4 veckor"],
+            ["Prismodell", "Timpris", "Oftast fast pris"],
+            ["Pris presentationssajt", "40 000–150 000 kr", "14 900–34 900 kr"],
+            ["Pris MVP / SaaS", "Ej i scope", "34 900–89 000 kr fast pris"],
+            ["Underhåll", "Plugin- och temauppdateringar", "Kodbaserad CI/CD"],
+            ["Äger du koden", "Oftast inte (CMS lock-in)", "Alltid (GitHub-tillgång)"],
+          ],
+        },
+      },
+      {
+        heading: "Pris: varför en AI-byrå ofta blir billigare 2026",
+        content:
+          "Det överraskar många: en AI-byrå är ofta billigare än en webbyrå även för ”bara en hemsida”. Anledningen är AI-kodning. Där webbyrån fakturerar 1 200 kr/h × 60 timmar = 72 000 kr för en presentationssajt, levererar en AI-byrå samma sak till fast pris 14 900 kr på en vecka. Skillnaden är inte kvalitet – det är verktyg. När du dessutom slipper WordPress-plugin-helvetet (säkerhetspatchar varje månad, plugin-licenser, hosting-tillägg) blir TCO över 3 år dramatiskt lägre. För bygg-priser, se [vår prissida](/priser). Caveat: behöver du tunga visuella koncept, varumärkesutveckling från noll, eller storskalig content-produktion – då tjänar webbyrån fortfarande sin marginal. Det är ett annat hantverk.",
+      },
+      {
+        heading: "Tid: två veckor vs två månader",
+        content:
+          "Tempot är den största skillnaden i praktiken. En typisk webbyrå-process: kick-off, designförslag, kundfeedback, revideringar, utveckling, QA, lansering – 6–12 veckor är normalt. En AI-byrå med modern process: kostnadsfri rådgivning på 30 min, offert inom 24 h, daglig preview-länk där du ser progress live, lansering inom 1–4 veckor beroende på scope. Det går inte för att vi är smartare – det går för att verktygen (Lovable, Cursor, Claude, Supabase) tar bort 70 % av det manuella kodandet. Webbyråer som inte adopterat detta tappar mot AI-byråer på både pris och tid. Det är därför vi ser konsolidering i marknaden just nu.",
+      },
+      {
+        heading: "När du behöver båda – och hur du kombinerar",
+        content:
+          "För många bolag är svaret faktiskt ”båda”. Klassisk uppdelning: webbyrå äger marknadssajten, varumärket och content. AI-byrå äger produkten, kundportalen, interna verktyg och automationer. Det fungerar – men kräver tydlig ansvarsfördelning. Modernare modell: en AI-byrå tar både marknadssajt och produkt. Det blir billigare, snabbare och du har en partner som förstår hela kedjan. Aurora Media jobbar t.ex. med kunder där vi äger både hemsidan ([/webbyra-linkoping](/webbyra-linkoping)) och deras SaaS-produkt. Färre möten, snabbare iteration, lägre totalkostnad. Om du redan har en webbyrå du gillar – behåll dem för det de är bra på och lägg produkt/automation hos en AI-byrå.",
+      },
+      {
+        heading: "Så väljer du rätt – en checklista",
+        content:
+          "Innan du tar in offerter, svara på dessa fem frågor. 1) Är det innehåll eller logik som driver värdet? Innehåll → webbyrå. Logik/data → AI-byrå. 2) Ska användare logga in? Ja → AI-byrå. 3) Ska systemet integreras mot Fortnox/Visma/HubSpot/egen databas? Ja → AI-byrå. 4) Är leveranstid kritisk (under 4 veckor)? Ja → AI-byrå. 5) Behöver du en CMS där icke-tekniska personer dagligen uppdaterar text och bild? Ja → webbyrå (eller AI-byrå med headless CMS). Är du fortfarande osäker – boka 30 min kostnadsfri rådgivning via [kontaktsidan](/kontakt). Vi säger ärligt om vi är rätt eller fel partner. Hellre ett ärligt nej än ett dyrt ja.",
+      },
+    ],
+    faq: [
+      {
+        q: "Vad är skillnaden mellan en AI-byrå och en webbyrå?",
+        a: "En webbyrå bygger oftast presentationssajter och e-handel i WordPress eller Shopify på timpris. En AI-byrå bygger fullstack-produkter, SaaS och AI-automationer med modern stack (React, TypeScript, Supabase) – oftast med fast pris och kortare leveranstid.",
+      },
+      {
+        q: "Är en AI-byrå dyrare än en webbyrå?",
+        a: "Nej, oftast billigare 2026. En presentationssajt som kostar 72 000 kr på timpris hos en webbyrå levereras av en AI-byrå för 14 900 kr fast pris, tack vare AI-kodning som Lovable och Cursor.",
+      },
+      {
+        q: "Kan en AI-byrå bygga en vanlig hemsida?",
+        a: "Ja. En modern AI-byrå som Aurora Media bygger både marknadssajter, e-handel, SaaS-produkter och AI-automationer. Webbyråer kan oftast inte bygga SaaS – men AI-byråer kan bygga både och.",
+      },
+      {
+        q: "När ska jag välja en webbyrå istället?",
+        a: "Om du behöver tunga varumärkeskoncept från noll, storskalig content-produktion, fotografering och löpande marknadsföringskampanjer – då har en specialiserad webbyrå djupare hantverk i de delarna.",
+      },
+      {
+        q: "Kan jag använda både en webbyrå och en AI-byrå?",
+        a: "Absolut. Vanlig modell: webbyrån äger marknadssajt och varumärke, AI-byrån äger produkt, kundportal och automationer. Tydlig ansvarsfördelning är nyckeln.",
+      },
+      {
+        q: "Vilken AI-byrå finns i Linköping?",
+        a: "Aurora Media är en AI-byrå i Linköping som bygger SaaS, automationer och webbsajter åt svenska företag. Läs mer på /ai-byra-linkoping eller boka kostnadsfri rådgivning på /kontakt.",
+      },
+    ],
+    relatedSlugs: [
+      "vad-gor-en-ai-byra-komplett-guide-2026",
+      "traditionell-webbyra-vs-ai-byggare",
     ],
   },
 ];
