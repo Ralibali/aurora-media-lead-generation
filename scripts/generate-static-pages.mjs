@@ -291,7 +291,7 @@ function extractFaq(block) {
 }
 
 function extractArticles() {
-  const files = ['articlesData1.ts', 'articlesData2.ts', 'articlesData3.ts', 'articlesData4.ts'];
+  const files = ['articlesData1.ts', 'articlesData2.ts', 'articlesData3.ts', 'articlesData4.ts', 'articlesData5.ts'];
   const articles = [];
 
   for (const file of files) {
