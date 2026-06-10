@@ -196,7 +196,27 @@ const NordicFooter = () => (
         </div>
       </div>
 
-      <div style={{ height: 1, background: "var(--hair)", marginBlock: 48 }} />
+      <div style={{ height: 1, background: "var(--hair)", marginBlock: 32 }} />
+
+      <div>
+        <p className="meta-label" style={{ marginBottom: 14 }}>
+          AI-byrå nära dig
+        </p>
+        <nav
+          aria-label="AI-byrå nära dig"
+          style={{ display: "flex", flexWrap: "wrap", gap: "8px 18px" }}
+        >
+          <Link to="/ai-byra-linkoping">AI-byrå Linköping</Link>
+          <Link to="/ai-byra-norrkoping">AI-byrå Norrköping</Link>
+          <Link to="/ai-byra-stockholm">AI-byrå Stockholm</Link>
+          <Link to="/ai-byra-goteborg">AI-byrå Göteborg</Link>
+          <Link to="/ai-byra-malmo">AI-byrå Malmö</Link>
+          <Link to="/ai-byra-uppsala">AI-byrå Uppsala</Link>
+          <Link to="/saas-utveckling-linkoping">SaaS-utveckling Linköping</Link>
+        </nav>
+      </div>
+
+      <div style={{ height: 1, background: "var(--hair)", marginBlock: 32 }} />
 
       <div
         style={{

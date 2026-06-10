@@ -146,6 +146,31 @@ const WebbyraLinkoping = () => {
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
+            <Reveal><div className="meta-label">AI i Linköping</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2">
+                Letar du efter en <span className="it">AI-byrå</span> i Linköping?
+              </h2>
+            </Reveal>
+          </div>
+          <Reveal>
+            <p className="lead" style={{ maxWidth: "60ch" }}>
+              Aurora Media är både webbyrå och AI-byrå. Om ert behov handlar mer om AI-automation,
+              AI-integrationer eller SaaS med AI-funktioner – läs vidare på vår dedikerade sida.
+            </p>
+          </Reveal>
+          <div style={{ marginTop: 24 }}>
+            <Link to="/ai-byra-linkoping" className="btn btn-ghost">
+              Till AI-byrå i Linköping <span className="a"><ArrowRight size={14} /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
             <Reveal><div className="meta-label">Relaterade sidor</div></Reveal>
             <Reveal delay={0.1}><h2 className="h2">Läs vidare.</h2></Reveal>
           </div>
