@@ -3,10 +3,11 @@ import { articles1to6 } from "./articlesData1";
 import { articles7to12 } from "./articlesData2";
 import { articles13to18 } from "./articlesData3";
 import { articles19to24 } from "./articlesData4";
+import { articles25to30 } from "./articlesData5";
 
 export type { Article } from "./articleTypes";
 
-export const articles: Article[] = [...articles19to24, ...articles13to18, ...articles1to6, ...articles7to12];
+export const articles: Article[] = [...articles25to30, ...articles19to24, ...articles13to18, ...articles1to6, ...articles7to12];
 
 export const getArticle = (slug: string): Article | undefined =>
   articles.find((a) => a.slug === slug);
