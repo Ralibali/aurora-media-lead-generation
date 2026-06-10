@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import AiAutomationForetag from "./pages/AiAutomationForetag";
+import AiByraLinkoping from "./pages/AiByraLinkoping";
 import AiKarta from "./pages/AiKarta";
 import AiKartaStart from "./pages/AiKartaStart";
 import AiKartaResultat from "./pages/AiKartaResultat";
@@ -356,6 +357,7 @@ const App = () => (
               <Route path="/admin/leads" element={<Leads />} />
               <Route path="/admin/text-generator" element={<TextGenerator />} />
               <Route path="/admin/faq-rapport" element={<FaqRapport />} />
+              <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
               <Route path="/saas-utveckling-:city" element={<CityPage />} />
               <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
