@@ -11,9 +11,17 @@ const SRC_LIB_DIR = path.resolve(process.cwd(), 'src/lib');
 const STATIC_PAGES = [
   {
     route: '/',
-    title: 'Aurora Media AB – AI-driven mjukvarubyrå',
-    description: 'Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för svenska bolag med fast pris och kod du äger.',
-    body: 'Aurora Media AB är en AI-driven mjukvarubyrå i Linköping. Vi bygger SaaS, MVP:er, interna system, webbappar, mobilappar, e-handel, integrationer och automatiseringar för svenska företag.',
+    title: 'Aurora Media – AI-byrå i Linköping | SaaS & AI från 14 900 kr',
+    description: 'AI-byrå i Linköping. Vi bygger SaaS, AI-automationer och interna verktyg med fast pris från 14 900 kr. Leverans på veckor, kod du äger.',
+    body: 'Aurora Media AB är en AI-byrå i Linköping. Vi bygger SaaS, MVP:er, interna system, webbappar, mobilappar, e-handel, integrationer och AI-automationer för svenska företag.',
+    hreflang: true,
+  },
+  {
+    route: '/ai-byra-linkoping',
+    title: 'AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media',
+    description: 'AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg. Fast pris från 14 900 kr. Leverans på veckor, kod du äger.',
+    body: 'Aurora Media är en AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg åt svenska företag. Fast pris från 14 900 kr. Leverans på veckor.',
+    cityName: 'Linköping',
   },
   {
     route: '/ai-konsult-sverige',
@@ -138,7 +146,46 @@ function buildArticleSchema(article) {
   ];
 }
 
-function injectHtml({ template, route, title, description, ogType = 'website', jsonLd = [], body }) {
+function buildCityServiceSchema({ route, title, description, cityName }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': `${fullUrl(route)}#service`,
+    name: title,
+    description,
+    url: fullUrl(route),
+    image: `${SITE_URL}/og-image-sv.jpg`,
+    priceRange: '14900-89000 SEK',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Linköping',
+      addressRegion: 'Östergötlands län',
+      addressCountry: 'SE',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: 58.4108, longitude: 15.6214 },
+    areaServed: { '@type': 'City', name: cityName },
+    makesOffer: [
+      { '@type': 'Offer', name: 'Prototyp', price: '14900', priceCurrency: 'SEK' },
+      { '@type': 'Offer', name: 'MVP', price: '34900', priceCurrency: 'SEK' },
+      { '@type': 'Offer', name: 'Skalbar SaaS', price: '89000', priceCurrency: 'SEK' },
+    ],
+  };
+}
+
+function buildCityFaqSchema(faqs) {
+  if (!faqs?.length) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+}
+
+function injectHtml({ template, route, title, description, ogType = 'website', jsonLd = [], body, hreflang = false }) {
   const canonical = fullUrl(route);
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
   let html = template;
@@ -167,11 +214,19 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
     `<meta name="twitter:title" content="${escapeHtml(fullTitle)}" />`,
     `<meta name="twitter:description" content="${escapeHtml(description)}" />`,
     `<meta name="twitter:image" content="${SITE_URL}/og-image-sv.jpg" />`,
+    ...(hreflang
+      ? [
+          `<link rel="alternate" hreflang="sv" href="${SITE_URL}/" />`,
+          `<link rel="alternate" hreflang="en" href="${SITE_URL}/en" />`,
+          `<link rel="alternate" hreflang="x-default" href="${SITE_URL}/" />`,
+        ]
+      : []),
     ...jsonLd.map((schema) => `<script type="application/ld+json">${escapeJsonLd(schema)}</script>`),
   ];
 
   html = html
     .replace(/<link\s+rel="canonical"[^>]*>\s*/g, '')
+    .replace(/<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*>\s*/g, '')
     .replace(/<meta\s+property="og:[^"]+"[^>]*>\s*/g, '')
     .replace(/<meta\s+name="twitter:[^"]+"[^>]*>\s*/g, '')
     .replace(/<meta\s+name="robots"[^>]*>\s*/g, '');
@@ -281,19 +336,103 @@ function buildArticleBody(article) {
   return `<article><h1>${escapeHtml(article.title)}</h1><p>${escapeHtml(article.intro)}</p>${sections}${faq}</article>`;
 }
 
+// ───── City extraction (parse src/lib/cityContent.ts) ─────
+function extractCities() {
+  const filePath = path.join(SRC_LIB_DIR, 'cityContent.ts');
+  if (!existsSync(filePath)) return [];
+  const text = readFileSync(filePath, 'utf8');
+
+  // Parse cities array
+  const citiesMatch = text.match(/export const cities[^=]*=\s*\[([\s\S]*?)\n\];/);
+  const citiesBlock = citiesMatch ? citiesMatch[1] : '';
+
+  const cities = [];
+  const cityRe = /\{\s*slug:\s*"([^"]+)",\s*city:\s*"([^"]+)",\s*region:\s*"([^"]+)",\s*intro:\s*"([\s\S]*?)",\s*localContext:\s*"([\s\S]*?)",\s*comparison:\s*"([\s\S]*?)",/g;
+  let m;
+  while ((m = cityRe.exec(citiesBlock))) {
+    // Find the matching block to extract faqs as well
+    const blockStart = m.index;
+    // crude: faqs are within this object until next `\n  {` or end
+    const restStart = m.index + m[0].length;
+    const restEnd = citiesBlock.indexOf('\n  },\n', restStart);
+    const fullBlock = citiesBlock.slice(blockStart, restEnd > 0 ? restEnd : undefined);
+    const faqs = extractFaq(fullBlock);
+    cities.push({
+      slug: m[1],
+      city: m[2],
+      region: m[3],
+      intro: m[4],
+      localContext: m[5],
+      comparison: m[6],
+      faqs,
+    });
+  }
+
+  // Parse citySeo object
+  const seoMatch = text.match(/export const citySeo[^=]*=\s*\{([\s\S]*?)\n\};/);
+  const seoBlock = seoMatch ? seoMatch[1] : '';
+
+  const seoMap = {};
+  // Split by top-level slug keys (one level of indent)
+  const seoEntryRe = /\n {2}(\w+):\s*\{([\s\S]*?)\n {2}\},/g;
+  while ((m = seoEntryRe.exec(seoBlock + '\n  };'))) {
+    const slug = m[1];
+    const entryText = m[2];
+    seoMap[slug] = {
+      metaTitleSaaS: extractString(entryText, 'metaTitleSaaS'),
+      metaDescSaaS: extractString(entryText, 'metaDescSaaS'),
+      metaTitleAI: extractString(entryText, 'metaTitleAI'),
+      metaDescAI: extractString(entryText, 'metaDescAI'),
+      h1Pre: extractString(entryText, 'h1Pre'),
+      h1Em: extractString(entryText, 'h1Em'),
+    };
+  }
+
+  return cities
+    .map((c) => ({ ...c, seo: seoMap[c.slug] }))
+    .filter((c) => c.seo && c.seo.metaTitleAI);
+}
+
+function buildCityBody({ city, intro, localContext, comparison, variantH1, variantSubtitle }) {
+  return `
+    <main>
+      <h1>${escapeHtml(variantH1)}</h1>
+      <p>${escapeHtml(variantSubtitle)}</p>
+      <p>${escapeHtml(intro)}</p>
+      <h2>Lokal kontext – ${escapeHtml(city)}</h2>
+      <p>${escapeHtml(localContext)}</p>
+      <h2>Så skiljer vi oss</h2>
+      <p>${escapeHtml(comparison)}</p>
+      <p><a href="/kontakt">Kontakta oss för en kostnadsfri rådgivning</a> eller läs mer om våra <a href="/priser">priser</a>.</p>
+    </main>
+  `;
+}
+
 async function main() {
   const templatePath = path.join(DIST_DIR, 'index.html');
   const template = await fs.readFile(templatePath, 'utf8');
 
   const organizationSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
+    '@type': 'ProfessionalService',
     '@id': `${SITE_URL}/#organization`,
     name: SITE_NAME,
     url: SITE_URL,
+    logo: `${SITE_URL}/og-image-sv.jpg`,
+    image: `${SITE_URL}/og-image-sv.jpg`,
     email: 'info@auroramedia.se',
-    address: { '@type': 'PostalAddress', addressLocality: 'Linköping', addressCountry: 'SE' },
-    sameAs: ['https://github.com/Ralibali'],
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Linköping',
+      addressRegion: 'Östergötlands län',
+      addressCountry: 'SE',
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: 58.4108, longitude: 15.6214 },
+    founder: { '@type': 'Person', name: 'Christoffer Holstensson' },
+    sameAs: [
+      'https://github.com/Ralibali',
+      'https://www.allabolag.se/5592720220/aurora-media-ab',
+    ],
   };
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -305,18 +444,99 @@ async function main() {
     inLanguage: 'sv-SE',
   };
 
+  // Static pages
   for (const page of STATIC_PAGES) {
+    const extraSchemas = page.cityName
+      ? [buildCityServiceSchema({ route: page.route, title: page.title, description: page.description, cityName: page.cityName })]
+      : [];
     const html = injectHtml({
       template,
       route: page.route,
       title: page.title,
       description: page.description,
-      jsonLd: [organizationSchema, websiteSchema, ...buildPageSchema(page)],
+      jsonLd: [organizationSchema, websiteSchema, ...buildPageSchema(page), ...extraSchemas],
       body: `<main><h1>${escapeHtml(page.title)}</h1><p>${escapeHtml(page.body)}</p></main>`,
+      hreflang: page.hreflang === true,
     });
     await writeRoute(page.route, html);
   }
 
+  // City pages (both /ai-byra-{slug} and /saas-utveckling-{slug}) — skip /ai-byra-linkoping (pillar)
+  const cities = extractCities();
+  const staticRoutes = new Set(STATIC_PAGES.map((p) => p.route));
+  let cityCount = 0;
+  for (const c of cities) {
+    const variants = [
+      {
+        route: `/ai-byra-${c.slug}`,
+        title: c.seo.metaTitleAI,
+        description: c.seo.metaDescAI,
+        h1: `AI-byrå i ${c.city}`,
+        subtitle: `${c.seo.h1Pre} ${c.seo.h1Em}`,
+      },
+      {
+        route: `/saas-utveckling-${c.slug}`,
+        title: c.seo.metaTitleSaaS,
+        description: c.seo.metaDescSaaS,
+        h1: `SaaS-utveckling i ${c.city}`,
+        subtitle: `${c.seo.h1Pre} ${c.seo.h1Em}`,
+      },
+    ];
+
+    for (const v of variants) {
+      if (staticRoutes.has(v.route)) continue; // pillar page handled in STATIC_PAGES
+
+      const breadcrumbName = v.route.startsWith('/ai-byra-')
+        ? `AI-byrå ${c.city}`
+        : `SaaS-utveckling ${c.city}`;
+
+      const pageSchemas = [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: v.title,
+          description: v.description,
+          url: fullUrl(v.route),
+          isPartOf: { '@id': `${SITE_URL}/#website` },
+          about: { '@id': `${SITE_URL}/#organization` },
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Hem', item: SITE_URL },
+            { '@type': 'ListItem', position: 2, name: breadcrumbName, item: fullUrl(v.route) },
+          ],
+        },
+        buildCityServiceSchema({ route: v.route, title: v.title, description: v.description, cityName: c.city }),
+      ];
+      const faqSchema = buildCityFaqSchema(c.faqs);
+      if (faqSchema) pageSchemas.push(faqSchema);
+
+      const body = buildCityBody({
+        city: c.city,
+        intro: c.intro,
+        localContext: c.localContext,
+        comparison: c.comparison,
+        variantH1: v.h1,
+        variantSubtitle: v.subtitle,
+      });
+
+      const html = injectHtml({
+        template,
+        route: v.route,
+        title: v.title,
+        description: v.description,
+        jsonLd: [organizationSchema, websiteSchema, ...pageSchemas],
+        body,
+      });
+      await writeRoute(v.route, html);
+      cityCount++;
+    }
+  }
+
+  // Blog articles
+  let articleCount = 0;
   for (const article of extractArticles()) {
     const route = `/blogg/${article.slug}`;
     const html = injectHtml({
@@ -329,9 +549,10 @@ async function main() {
       body: buildArticleBody(article),
     });
     await writeRoute(route, html);
+    articleCount++;
   }
 
-  console.log('Generated static SEO pages for Aurora Media.');
+  console.log(`Generated ${STATIC_PAGES.length} static pages, ${cityCount} city pages, ${articleCount} blog posts.`);
 }
 
 main().catch((err) => {
