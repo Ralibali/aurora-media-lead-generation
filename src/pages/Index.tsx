@@ -488,6 +488,34 @@ const Index = () => (
       <IntegrationsSection />
       <ProcessSection />
       <PackagesSection />
+
+      <section className="section" aria-labelledby="ai-linkoping-heading">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">AI-byrå Linköping</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 id="ai-linkoping-heading" className="h2">
+                Aurora Media – <span className="it">AI-byrå i Linköping.</span>
+              </h2>
+            </Reveal>
+          </div>
+          <Reveal>
+            <p className="lead" style={{ maxWidth: "60ch" }}>
+              Vi är baserade i Linköping och bygger AI-automationer, SaaS och interna verktyg åt
+              svenska företag. Lokala möten i Östergötland, video-möten med kunder i hela Sverige.
+            </p>
+          </Reveal>
+          <div style={{ marginTop: 24, display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <Link to="/ai-byra-linkoping" className="btn btn-ghost">
+              AI-byrå i Linköping <span className="a"><ArrowRight size={14} /></span>
+            </Link>
+            <Link to="/ai-konsult-sverige" className="btn btn-ghost">
+              AI-konsult i Sverige <span className="a"><ArrowRight size={14} /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <CTA />
     </NordicLayout>
   </>

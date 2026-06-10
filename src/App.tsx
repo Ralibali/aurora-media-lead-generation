@@ -100,6 +100,12 @@ const seoMap: Record<string, SEOConfig> = {
       "Aurora Media är AI-konsulten som bygger produkten: SaaS, interna appar och AI-automationer med fast pris, snabb leverans och kod du äger.",
     canonical: "https://auroramedia.se/ai-konsult-sverige",
   },
+  "/ai-byra-linkoping": {
+    title: "AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media",
+    description:
+      "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg. Fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
+    canonical: "https://auroramedia.se/ai-byra-linkoping",
+  },
   "/en": {
     title: "Aurora Media AB – We build AI-powered SaaS",
     description:
