@@ -29,4 +29,8 @@ export interface Article {
   sections: ArticleSection[];
   faq: ArticleFAQ[];
   relatedSlugs: string[];
+  ctaHref?: string;
+  ctaLabel?: string;
+  ctaTitle?: string;
+  ctaText?: string;
 }
