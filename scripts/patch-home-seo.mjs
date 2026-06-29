@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 
 const pages = [
   {
@@ -57,4 +58,20 @@ for (const page of pages) {
   await patchPage(page);
 }
 
-console.log("Patched generated metadata for the homepage and Linköping AI page.");
+const articleGenerator = path.resolve(
+  process.cwd(),
+  "scripts",
+  "generate-local-article-pages.mjs",
+);
+const articleResult = spawnSync(process.execPath, [articleGenerator], {
+  cwd: process.cwd(),
+  stdio: "inherit",
+});
+
+if (articleResult.status !== 0) {
+  throw new Error("Static generation of local AI article pages failed.");
+}
+
+console.log(
+  "Patched homepage and Linköping metadata and generated local AI article pages.",
+);
