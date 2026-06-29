@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const PUBLIC_DIR = resolve(ROOT, "public");
+const DIST_DIR = resolve(ROOT, "dist");
 const SITE_URL = "https://auroramedia.se";
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
 
@@ -57,10 +58,15 @@ function buildIndex(sitemaps) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemaps.map((sitemap) => `  <sitemap>\n    <loc>${escapeXml(`${SITE_URL}/${sitemap.file}`)}</loc>\n    <lastmod>${sitemap.lastmod}</lastmod>\n  </sitemap>`).join("\n")}\n</sitemapindex>\n`;
 }
 
-function write(file, content) {
-  const output = resolve(PUBLIC_DIR, file);
+function writeTo(directory, file, content) {
+  const output = resolve(directory, file);
   mkdirSync(dirname(output), { recursive: true });
   writeFileSync(output, content, "utf8");
+}
+
+function write(file, content) {
+  writeTo(PUBLIC_DIR, file, content);
+  if (existsSync(DIST_DIR)) writeTo(DIST_DIR, file, content);
 }
 
 function extractArticles() {
