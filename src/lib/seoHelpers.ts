@@ -18,23 +18,23 @@ const SITE_URL = "https://auroramedia.se";
 
 const setMeta = (name: string, content: string, attr: "name" | "property" = "name") => {
   if (!content) return;
-  let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
-  if (!el) {
-    el = document.createElement("meta");
-    el.setAttribute(attr, name);
-    document.head.appendChild(el);
+  let element = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${name}"]`);
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute(attr, name);
+    document.head.appendChild(element);
   }
-  el.setAttribute("content", content);
+  element.setAttribute("content", content);
 };
 
 const setLink = (rel: string, href: string) => {
-  let el = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
-  if (!el) {
-    el = document.createElement("link");
-    el.setAttribute("rel", rel);
-    document.head.appendChild(el);
+  let element = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", rel);
+    document.head.appendChild(element);
   }
-  el.setAttribute("href", href);
+  element.setAttribute("href", href);
 };
 
 export const setSEOMeta = ({
@@ -54,7 +54,9 @@ export const setSEOMeta = ({
   setMeta("robots", noindex ? "noindex, nofollow" : "index, follow");
   if (keywords) setMeta("keywords", keywords);
 
-  const fullCanonical = canonical?.startsWith("http") ? canonical : `${SITE_URL}${canonical ?? ""}`;
+  const fullCanonical = canonical?.startsWith("http")
+    ? canonical
+    : `${SITE_URL}${canonical ?? ""}`;
   setLink("canonical", fullCanonical);
 
   const fullOgImage = ogImage
@@ -84,8 +86,7 @@ export const setSEOMeta = ({
 };
 
 export const setJsonLd = (id: string, data: Record<string, unknown>) => {
-  const existing = document.getElementById(id);
-  if (existing) existing.remove();
+  document.getElementById(id)?.remove();
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.id = id;
@@ -101,9 +102,9 @@ export const setBreadcrumb = (items: { name: string; url: string }[]) => {
   setJsonLd("breadcrumb-jsonld", {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, idx) => ({
+    itemListElement: items.map((item, index) => ({
       "@type": "ListItem",
-      position: idx + 1,
+      position: index + 1,
       name: item.name,
       item: item.url.startsWith("http") ? item.url : `${SITE_URL}${item.url}`,
     })),
@@ -120,7 +121,7 @@ export const organizationSchema = {
   logo: `${SITE_URL}/og-image-sv.jpg`,
   image: `${SITE_URL}/og-image-sv.jpg`,
   description:
-    "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg åt svenska företag. Från 14 900 kr. Leverans på veckor.",
+    "AI-driven mjukvarupartner i Linköping som bygger AI-lösningar, interna system, appar, integrationer och SaaS för svenska företag.",
   email: "info@auroramedia.se",
   address: {
     "@type": "PostalAddress",
@@ -133,10 +134,14 @@ export const organizationSchema = {
     latitude: 58.4108,
     longitude: 15.6214,
   },
-  areaServed: { "@type": "Country", name: "Sweden" },
-  priceRange: "14900-89000 SEK",
+  areaServed: [
+    { "@type": "City", name: "Linköping" },
+    { "@type": "AdministrativeArea", name: "Östergötland" },
+    { "@type": "Country", name: "Sweden" },
+  ],
+  priceRange: "14900-89000+ SEK",
   foundingDate: "2020",
-  slogan: "AI-byrå i Linköping – SaaS, AI och interna verktyg på veckor.",
+  slogan: "Manuellt arbete in. Ett smartare system ut.",
   founder: {
     "@type": "Person",
     name: "Christoffer Holstensson",
@@ -146,17 +151,17 @@ export const organizationSchema = {
     "https://www.allabolag.se/5592720220/aurora-media-ab",
   ],
   serviceType: [
-    "SaaS-utveckling",
-    "AI-kodning",
+    "AI-konsulting",
     "AI-automation",
-    "Webbutveckling",
-    "MVP-utveckling",
-    "Intern verktygsutveckling",
+    "Interna verksamhetssystem",
+    "SaaS-utveckling",
+    "Apputveckling",
+    "API-integrationer",
   ],
   makesOffer: [
     { "@type": "Offer", name: "Prototyp", price: "14900", priceCurrency: "SEK" },
     { "@type": "Offer", name: "MVP", price: "34900", priceCurrency: "SEK" },
-    { "@type": "Offer", name: "Skalbar SaaS", price: "69000", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "Skalbar lösning", price: "89000", priceCurrency: "SEK" },
   ],
   identifier: {
     "@type": "PropertyValue",
@@ -178,13 +183,14 @@ export const websiteSchema = {
 export const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "SaaS-utveckling med AI",
+  name: "AI-lösningar och skräddarsydd mjukvara",
   provider: { "@id": `${SITE_URL}/#organization` },
-  description: "Bygger SaaS-produkter med AI-kodningsverktyg. Leverans 2-4 veckor.",
+  description:
+    "Aurora Media bygger AI-automation, interna system, appar och SaaS med tydligt scope, snabb återkoppling och kod kunden äger.",
   offers: [
     { "@type": "Offer", name: "Prototyp", price: "14900", priceCurrency: "SEK" },
     { "@type": "Offer", name: "MVP", price: "34900", priceCurrency: "SEK" },
-    { "@type": "Offer", name: "Skalbar SaaS", price: "69000", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "Skalbar lösning", price: "89000", priceCurrency: "SEK" },
   ],
   areaServed: "SE",
 };
@@ -199,7 +205,7 @@ export const organizationSchemaEn = {
   url: `${SITE_URL}/en`,
   logo: `${SITE_URL}/logo.png`,
   description:
-    "Sweden-based AI-augmented developer building SaaS products in 2-4 weeks with Lovable, Bolt and Claude. 7 products shipped. Fixed price from $1,400.",
+    "Sweden-based AI-augmented software partner building SaaS products, internal systems, apps and AI automations.",
   email: "info@auroramedia.se",
   address: {
     "@type": "PostalAddress",
@@ -208,49 +214,22 @@ export const organizationSchemaEn = {
     addressCountry: "SE",
   },
   areaServed: { "@type": "Place", name: "Worldwide" },
-  priceRange: "$1,400 - $8,500",
+  priceRange: "$1,400 - $8,500+",
   foundingDate: "2020",
-  slogan: "I ship SaaS in weeks. Not months.",
+  slogan: "Manual work in. A smarter system out.",
   serviceType: [
+    "AI consulting",
     "SaaS development",
     "MVP development",
-    "AI-augmented coding",
-    "Fractional CTO",
-    "Web development",
-  ],
-  makesOffer: [
-    { "@type": "Offer", name: "Prototype", price: "1400", priceCurrency: "USD" },
-    { "@type": "Offer", name: "MVP", price: "3300", priceCurrency: "USD" },
-    { "@type": "Offer", name: "Production SaaS", price: "6500", priceCurrency: "USD" },
-    { "@type": "Offer", name: "Custom", price: "8500", priceCurrency: "USD" },
+    "Internal software",
+    "App development",
+    "API integrations",
   ],
   identifier: {
     "@type": "PropertyValue",
     propertyID: "orgNr",
     value: "559272-0220",
   },
-};
-
-/** Set hreflang alternate links for sv/en pairs. */
-export const setHreflang = (svPath: string, enPath: string) => {
-  // Clean previous
-  document.head
-    .querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]')
-    .forEach((el) => el.remove());
-
-  const add = (lang: string, path: string) => {
-    const link = document.createElement("link");
-    link.setAttribute("rel", "alternate");
-    link.setAttribute("hreflang", lang);
-    link.setAttribute(
-      "href",
-      path.startsWith("http") ? path : `${SITE_URL}${path}`,
-    );
-    document.head.appendChild(link);
-  };
-  add("sv", svPath);
-  add("en", enPath);
-  add("x-default", svPath);
 };
 
 export { SITE_URL };
