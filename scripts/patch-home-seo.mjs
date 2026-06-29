@@ -22,16 +22,16 @@ const pages = [
   },
 ];
 
+const unsupportedCities = ["norrkoping", "stockholm", "goteborg", "malmo", "uppsala", "orebro", "jonkoping"];
+
 function escapeAttribute(value) {
   return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;");
 }
 
 function replaceMeta(html, attribute, key, value) {
   const pattern = new RegExp(`<meta\\s+${attribute}="${key}"[^>]*>`, "i");
-  return html.replace(
-    pattern,
-    `<meta ${attribute}="${key}" content="${escapeAttribute(value)}" />`,
-  );
+  const tag = `<meta ${attribute}="${key}" content="${escapeAttribute(value)}" />`;
+  return pattern.test(html) ? html.replace(pattern, tag) : html.replace("</head>", `    ${tag}\n  </head>`);
 }
 
 async function patchPage(page) {
@@ -49,6 +49,21 @@ async function patchPage(page) {
   await fs.writeFile(page.file, html, "utf8");
 }
 
+async function noindexUnsupportedCities() {
+  for (const city of unsupportedCities) {
+    for (const prefix of ["ai-byra", "saas-utveckling"]) {
+      const file = path.resolve(process.cwd(), "dist", `${prefix}-${city}`, "index.html");
+      try {
+        let html = await fs.readFile(file, "utf8");
+        html = replaceMeta(html, "name", "robots", "noindex, follow");
+        await fs.writeFile(file, html, "utf8");
+      } catch (error) {
+        if (error?.code !== "ENOENT") throw error;
+      }
+    }
+  }
+}
+
 function runGenerator(file, failureMessage) {
   const result = spawnSync(process.execPath, [path.resolve(process.cwd(), "scripts", file)], {
     cwd: process.cwd(),
@@ -58,7 +73,8 @@ function runGenerator(file, failureMessage) {
 }
 
 for (const page of pages) await patchPage(page);
+await noindexUnsupportedCities();
 runGenerator("generate-local-article-pages.mjs", "Static generation of local AI article pages failed.");
 runGenerator("generate-ai-map-page.mjs", "Static generation of the AI map page failed.");
 
-console.log("Patched primary metadata and generated article and AI map pages.");
+console.log("Patched primary metadata, city noindex directives and static AI pages.");
