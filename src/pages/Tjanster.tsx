@@ -1,38 +1,40 @@
 import { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
 import { useContactModal } from "@/components/ContactModal";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const SERVICES = [
   {
-    num: "01", name: "SaaS-produkt", price: "från 14 900 kr", time: "1–4 veckor",
-    desc: "Från MVP till lansering. Auth, betalning, e-post och admin från dag ett. Samma stack som vi använder på våra egna sex produkter.",
-    includes: ["Autentisering och användarhantering", "Betalningsflöde med Stripe", "Admin-panel och dashboards", "E-post och notifikationer", "Hosting och CI/CD-pipeline", "Dokumentation och kodöverlämning"],
+    num: "01", name: "Prototyp och MVP", price: "från 14 900 kr", time: "1–5 veckor",
+    desc: "Testa en idé eller lansera den viktigaste fungerande kärnan med riktiga användare, data och en tydlig väg vidare.",
+    includes: ["Klickbart huvudflöde", "Databas och användare vid behov", "Admin och kärnfunktion", "Viktigaste integrationen", "Driftsatt testversion", "Kodöverlämning"],
   },
   {
-    num: "02", name: "Hemsida", price: "pris på offert", time: "1–2 veckor",
-    desc: "Modern, snabb och SEO-optimerad. CMS ni faktiskt vill använda. Byggt på grund ni äger och kan bygga vidare på.",
-    includes: ["Modern React-arkitektur", "SEO-optimering från grunden", "CMS-integration om önskat", "Responsiv design", "Google Analytics och sökkonsol", "Domän och hosting"],
+    num: "02", name: "Internt system", price: "pris på offert", time: "2–8 veckor",
+    desc: "Ersätt kalkylblad, mejltrådar och dubbelregistrering med ett verktyg byggt efter den verkliga processen.",
+    includes: ["Processkartläggning", "Roller och behörigheter", "Databas och API", "Status och historik", "Rapporter och export", "Systemintegrationer"],
   },
   {
-    num: "03", name: "Internt system", price: "pris på offert", time: "2–6 veckor",
-    desc: "Admin-paneler, dashboards och flöden som ersätter era Excel-arkiv. Ni äger källkoden och kan bygga vidare.",
-    includes: ["Admin-paneler skräddarsydda för er", "Databasdesign och API-lager", "Rollbaserad åtkomst", "Rapporter och exportfunktioner", "Integration mot befintliga system", "Driftmiljö och backups"],
+    num: "03", name: "AI och automation", price: "pris på offert", time: "1–6 veckor",
+    desc: "Låt AI tolka information och låt automation flytta, kontrollera och följa upp data med mänsklig kontroll där den behövs.",
+    includes: ["AI-kartläggning", "Dokument- och mejltolkning", "Intern kunskapsassistent", "Regelstyrda flöden", "Loggning och felhantering", "Effektmätning"],
   },
   {
-    num: "04", name: "AI-integration", price: "pris på offert", time: "1–3 veckor",
-    desc: "Språkmodeller, agenter och automatiseringar in i era befintliga system. Byggda för att faktiskt fungera i produktion.",
-    includes: ["Språkmodell-integration (OpenAI, Anthropic m.fl.)", "Promptdesign och finjustering", "Agent-flöden och automatiseringar", "RAG och kunskapsbaser", "Säker hantering av API-nycklar", "Monitorering och loggning"],
+    num: "04", name: "App, SaaS och integrationer", price: "pris på offert", time: "3–10 veckor",
+    desc: "Bygg en ny digital produkt eller koppla ihop de system som verksamheten redan använder.",
+    includes: ["Webbapp eller React Native", "SaaS och betalningar", "Fortnox, Visma och API", "E-post och notifikationer", "Driftsättning", "Kod ni äger"],
   },
 ];
 
 const Tjanster = () => {
   const { open } = useContactModal();
+
   useEffect(() => {
     setSEOMeta({
-      title: "Tjänster — SaaS, hemsidor, interna system och AI | Aurora Media",
-      description: "Vi bygger fyra saker snabbt: SaaS-produkter, hemsidor, interna system och AI-integrationer. Fast pris, fast deadline, kod ni äger.",
+      title: "Tjänster – AI, interna system, SaaS och appar | Aurora Media",
+      description: "Aurora Media bygger AI-lösningar, interna verksamhetssystem, SaaS, appar och integrationer med tydligt scope och kod kunden äger.",
       canonical: "/tjanster",
     });
     setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Tjänster", url: "/tjanster" }]);
@@ -41,72 +43,36 @@ const Tjanster = () => {
 
   return (
     <NordicLayout>
-      <section className="page-hero">
-        <div className="wrap">
-          <Reveal><p className="mono">tjänster · fast scope · kod ni äger</p></Reveal>
-          <Reveal delay={0.1}>
-            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>
-              Vi bygger fyra saker. <span className="it">Snabbt.</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="lead" style={{ marginTop: 24 }}>
-              Moderna AI-verktyg, fast pris, fast deadline. Levereras på veckor — inte månader.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {SERVICES.map((s, idx) => (
-        <section key={s.num} className="section">
+      <div id="main">
+        <section className="page-hero">
           <div className="wrap">
-            <div className="sec-head">
-              <Reveal>
-                <div>
-                  <div className="meta-label">{s.num} · {s.price}</div>
-                  <h2 className="h2" style={{ marginTop: 18 }}>
-                    {s.name}<span className="it">.</span>
-                  </h2>
-                  <p className="body" style={{ marginTop: 18 }}>
-                    <span className="meta-label">Tidsplan</span><br />
-                    <span style={{ color: "var(--bone)" }}>{s.time}</span>
-                  </p>
-                  <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 24 }}>
-                    Begär offert <span className="a"><ArrowRight size={14} /></span>
-                  </button>
-                </div>
-              </Reveal>
-              <Reveal delay={0.1}>
-                <div>
-                  <p className="lead" style={{ marginBottom: 28 }}>{s.desc}</p>
-                  <div className="meta-label" style={{ marginBottom: 14 }}>Vad ingår</div>
-                  <div className="feat-list" style={{ marginTop: 0 }}>
-                    {s.includes.map((item, i) => (
-                      <div key={item} className="feat-row" style={{ gridTemplateColumns: "60px 1fr" }}>
-                        <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
-                        <span className="feat-body">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Reveal>
-            </div>
+            <Reveal><p className="mono">ai · interna system · saas · appar · integrationer</p></Reveal>
+            <Reveal delay={0.1}><h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>Vi bygger lösningen runt <span className="it">arbetsflödet.</span></h1></Reveal>
+            <Reveal delay={0.2}><p className="lead" style={{ marginTop: 24 }}>Börja med ett tydligt problem, testa tidigt och bygg vidare när lösningen visar verklig nytta.</p></Reveal>
+            <Reveal delay={0.3}><div style={{ marginTop: 28, display: "flex", gap: 10, flexWrap: "wrap" }}><Link to="/ai-karta" className="btn btn-moss">Gör kostnadsfri AI-karta <ArrowRight size={14} /></Link><button onClick={() => open()} className="btn btn-ghost">Boka rådgivning</button></div></Reveal>
           </div>
         </section>
-      ))}
 
-      <section className="cta-band">
-        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="meta-label">Nästa steg</div>
-          <h2 className="h2" style={{ marginTop: 18 }}>
-            Har ni en idé eller en process som <span className="it">suger?</span>
-          </h2>
-          <p className="lead" style={{ marginTop: 22 }}>Offert inom 24 timmar.</p>
-          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
-            Begär offert <span className="a"><ArrowRight size={14} /></span>
-          </button>
-        </div>
-      </section>
+        {SERVICES.map((service) => (
+          <section key={service.num} className="section">
+            <div className="wrap">
+              <div className="sec-head">
+                <Reveal><div><div className="meta-label">{service.num} · {service.price}</div><h2 className="h2" style={{ marginTop: 18 }}>{service.name}<span className="it">.</span></h2><p className="body" style={{ marginTop: 18 }}><span className="meta-label">Typisk tidsplan</span><br /><span style={{ color: "var(--bone)" }}>{service.time}</span></p><button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 24 }}>Diskutera behovet <ArrowRight size={14} /></button></div></Reveal>
+                <Reveal delay={0.1}><div><p className="lead" style={{ marginBottom: 28 }}>{service.desc}</p><div className="meta-label" style={{ marginBottom: 14 }}>Kan ingå</div><div className="feat-list" style={{ marginTop: 0 }}>{service.includes.map((item, index) => <div key={item} className="feat-row" style={{ gridTemplateColumns: "60px 1fr" }}><span className="feat-num">{String(index + 1).padStart(2, "0")}</span><span className="feat-body">{item}</span></div>)}</div></div></Reveal>
+              </div>
+            </div>
+          </section>
+        ))}
+
+        <section className="cta-band">
+          <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+            <div className="meta-label">Osäker på rätt lösning?</div>
+            <h2 className="h2" style={{ marginTop: 18 }}>Börja med processen som tar <span className="it">onödig tid.</span></h2>
+            <p className="lead" style={{ marginTop: 22 }}>AI-kartan hjälper er skilja mellan AI, automation, integration och ett nytt internt system.</p>
+            <div style={{ marginTop: 28, display: "flex", gap: 10, flexWrap: "wrap" }}><Link to="/ai-karta" className="btn btn-moss">Starta AI-kartan <ArrowRight size={14} /></Link><button onClick={() => open()} className="btn btn-ghost">Boka rådgivning</button></div>
+          </div>
+        </section>
+      </div>
     </NordicLayout>
   );
 };

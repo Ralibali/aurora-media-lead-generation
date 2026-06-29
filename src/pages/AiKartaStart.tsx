@@ -1,601 +1,197 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CircleCheck as CheckCircle2, Loader as Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
-import { z } from "zod";
+import { useEffect, useState } from "react";
+import { ArrowRight, Check, Loader2, Plus, Trash2 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import NordicLayout from "@/components/nordic/NordicLayout";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { setSEOMeta } from "@/lib/seoHelpers";
-import { getSupabase } from "@/lib/getSupabase";
+import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 import {
-  AiMapFormState,
-  EMPLOYEE_OPTIONS,
-  FREQ_LABELS,
-  PAIN_AREAS,
-  ProcessInput,
-  TIME_LABELS,
-  VALUE_LABELS,
-  YPN_LABELS,
-  emptyForm,
-  emptyProcess,
+  AiMapFormState, EMPLOYEE_OPTIONS, FREQ_LABELS, PAIN_AREAS, ProcessInput,
+  TIME_LABELS, VALUE_LABELS, YPN_LABELS, emptyForm, emptyProcess,
 } from "@/lib/aiMap";
+import { getSupabase } from "@/lib/getSupabase";
+import { setSEOMeta } from "@/lib/seoHelpers";
 
 const STORAGE_KEY = "ai_map_draft";
 const RESULT_KEY = "ai_map_result";
-
-const Step1Schema = z.object({
-  company_name: z.string().trim().min(1, "Ange företagsnamn").max(120),
-  industry: z.string().trim().min(1, "Ange bransch").max(80),
-  employee_count: z.string().min(1, "Välj antal anställda"),
-  contact_name: z.string().trim().min(1, "Ange ditt namn").max(80),
-  email: z.string().trim().email("Ogiltig e-postadress").max(160),
-});
-
-const STEPS = ["Tidstjuvar", "Processer", "Kontakt", "Klart"];
-
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
-
-const stepCardClass =
-  "rounded-3xl border border-white/10 bg-white/[0.04] p-6 sm:p-8 backdrop-blur-xl shadow-[0_30px_80px_-50px_rgba(0,0,0,0.6)]";
-
-const choicePillBase =
-  "inline-flex min-h-[44px] items-center rounded-full border px-4 py-2.5 text-sm font-medium leading-none transition-all cursor-pointer select-none active:scale-[0.97] touch-manipulation";
-
-function ChoicePill({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={`${choicePillBase} ${
-        active
-          ? "border-primary bg-primary text-primary-foreground shadow-[0_0_0_3px_hsl(var(--primary)/0.25)] ring-1 ring-primary/60"
-          : "border-white/15 bg-white/[0.04] text-foreground/80 hover:border-primary/60 hover:bg-white/[0.08]"
-      }`}
-    >
-      {active && <CheckCircle2 className="mr-1.5 inline h-3.5 w-3.5 -mt-0.5" />}
-      {children}
-    </button>
-  );
-}
+const STEP_LABELS = ["Fokus", "Process", "Leverans"];
 
 const AiKartaStart = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<AiMapFormState>(() => {
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (raw) return { ...emptyForm(), ...(JSON.parse(raw) as AiMapFormState) };
-    } catch {
-      /* ignore */
-    }
-    return emptyForm();
+      const saved = sessionStorage.getItem(STORAGE_KEY);
+      return saved ? { ...emptyForm(), ...(JSON.parse(saved) as AiMapFormState) } : emptyForm();
+    } catch { return emptyForm(); }
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [website, setWebsite] = useState(""); // honeypot
+  const [website, setWebsite] = useState("");
 
   useEffect(() => {
     setSEOMeta({
-      title: "Starta AI-kartan | Aurora Media",
-      description:
-        "Svara på några frågor och få en kostnadsfri AI-baserad mini-analys av era bästa möjligheter för automation, AI-assistenter och smartare system.",
-      canonical: "https://auroramedia.se/ai-karta/start",
-      noindex: true,
+      title: "Starta AI-kartan – kostnadsfri analys på 3–5 minuter | Aurora Media",
+      description: "Beskriv era största tidstjuvar och få en första bedömning av vilka processer som passar för AI, automation eller ett internt system.",
+      canonical: "/ai-karta/start", noindex: true,
     });
+    void trackAiKartaClick("funnel_view");
   }, []);
 
   useEffect(() => {
-    try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(form));
-    } catch {
-      /* ignore */
-    }
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(form)); } catch {}
   }, [form]);
 
   const update = <K extends keyof AiMapFormState>(key: K, value: AiMapFormState[K]) =>
-    setForm((f) => ({ ...f, [key]: value }));
+    setForm((current) => ({ ...current, [key]: value }));
+  const updateProcess = (index: number, patch: Partial<ProcessInput>) =>
+    setForm((current) => ({ ...current, processes: current.processes.map((p, i) => i === index ? { ...p, ...patch } : p) }));
+  const togglePain = (label: string) => update("pain_areas", form.pain_areas.includes(label) ? form.pain_areas.filter((x) => x !== label) : [...form.pain_areas, label]);
 
-  const updateProcess = (idx: number, patch: Partial<ProcessInput>) =>
-    setForm((f) => ({
-      ...f,
-      processes: f.processes.map((p, i) => (i === idx ? { ...p, ...patch } : p)),
-    }));
-
-  const addProcess = () =>
-    setForm((f) => (f.processes.length >= 5 ? f : { ...f, processes: [...f.processes, emptyProcess()] }));
-
-  const removeProcess = (idx: number) =>
-    setForm((f) => (f.processes.length <= 1 ? f : { ...f, processes: f.processes.filter((_, i) => i !== idx) }));
-
-  const togglePain = (label: string) =>
-    setForm((f) => ({
-      ...f,
-      pain_areas: f.pain_areas.includes(label)
-        ? f.pain_areas.filter((p) => p !== label)
-        : [...f.pain_areas, label],
-    }));
-
-  const validateStep = (current: number): boolean => {
-    setErrors({});
-    // 1: Tidstjuvar  2: Processer  3: Kontakt  4: Klart (consent)
-    if (current === 1 && form.pain_areas.length === 0) {
-      setErrors({ pain_areas: "Välj minst ett område." });
-      return false;
+  const validate = (target: number) => {
+    const next: Record<string, string> = {};
+    if (target === 1 && !form.pain_areas.length) next.pain = "Välj minst ett område.";
+    if (target === 2) form.processes.forEach((p, i) => {
+      if (!p.process_name.trim()) next[`name${i}`] = "Beskriv arbetsuppgiften.";
+      if (!p.frequency) next[`freq${i}`] = "Välj frekvens.";
+      if (!p.weekly_time) next[`time${i}`] = "Välj tidsåtgång.";
+    });
+    if (target === 3) {
+      if (!form.company_name.trim()) next.company = "Ange företagsnamn.";
+      if (!form.industry.trim()) next.industry = "Ange bransch.";
+      if (!form.employee_count) next.employees = "Välj antal anställda.";
+      if (form.contact_name.trim().length < 2) next.name = "Ange ditt namn.";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) next.email = "Ange en giltig e-postadress.";
+      if (!form.consent) next.consent = "Godkänn behandlingen för att skapa AI-kartan.";
     }
-    if (current === 2) {
-      const fe: Record<string, string> = {};
-      form.processes.forEach((p, i) => {
-        if (!p.process_name.trim()) fe[`p_${i}_name`] = "Ange processnamn";
-        if (!p.frequency) fe[`p_${i}_freq`] = "Välj frekvens";
-        if (!p.weekly_time) fe[`p_${i}_time`] = "Välj tid";
-        // rule_based, data_available och business_value är valfria – defaultas till "unknown" vid submit
-      });
-      if (Object.keys(fe).length) {
-        setErrors(fe);
-        toast.error("Fyll i alla fält för varje process.");
-        return false;
-      }
-    }
-    if (current === 3) {
-      const parsed = Step1Schema.safeParse(form);
-      if (!parsed.success) {
-        const fe: Record<string, string> = {};
-        for (const issue of parsed.error.issues) {
-          const k = issue.path[0]?.toString() ?? "form";
-          if (!fe[k]) fe[k] = issue.message;
-        }
-        setErrors(fe);
-        return false;
-      }
-    }
-    if (current === 4 && !form.consent) {
-      setErrors({ consent: "Du måste godkänna behandlingen av dina uppgifter." });
-      return false;
-    }
+    setErrors(next);
+    if (Object.keys(next).length) { toast.error("Kontrollera de markerade fälten."); return false; }
     return true;
   };
 
-  const next = () => {
-    if (!validateStep(step)) return;
-    setStep((s) => Math.min(STEPS.length, s + 1));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-  const prev = () => {
-    setStep((s) => Math.max(1, s - 1));
+  const goNext = () => {
+    if (!validate(step)) return;
+    void trackAiKartaClick(step === 1 ? "funnel_step_1_complete" : "funnel_step_2_complete");
+    setStep((x) => Math.min(3, x + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSubmit = async () => {
-    if (!validateStep(4)) return;
+  const submit = async () => {
+    if (!validate(3) || submitting) return;
     setSubmitting(true);
+    void trackAiKartaClick("funnel_submit");
     try {
-      const normalizedProcesses = form.processes.map((p) => ({
+      const processes = form.processes.map((p) => ({
         ...p,
         rule_based: p.rule_based || "unknown",
         data_available: p.data_available || "unknown",
         business_value: p.business_value || "unknown",
       }));
       const supabase = await getSupabase();
-      const { data, error } = await supabase.functions.invoke("submit-ai-map", {
-        body: { ...form, processes: normalizedProcesses, website },
-      });
+      const { data, error } = await supabase.functions.invoke("submit-ai-map", { body: { ...form, processes, website } });
       if (error) throw error;
-      if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
-      try {
-        sessionStorage.setItem(
-          RESULT_KEY,
-          JSON.stringify({
-            ...data,
-            meta: {
-              company_name: form.company_name,
-              contact_name: form.contact_name,
-              email: form.email,
-            },
-          })
-        );
-        sessionStorage.removeItem(STORAGE_KEY);
-      } catch {
-        /* ignore */
-      }
+      if (!data?.ok) throw new Error(data?.error || "Analysen kunde inte skapas just nu.");
+      sessionStorage.setItem(RESULT_KEY, JSON.stringify({
+        ...data,
+        meta: { company_name: form.company_name, contact_name: form.contact_name, email: form.email },
+      }));
+      sessionStorage.removeItem(STORAGE_KEY);
+      void trackAiKartaClick("funnel_success");
       navigate("/ai-karta/resultat");
-    } catch (err) {
-      console.error("[AiKartaStart] submit failed", err);
-      toast.error(err instanceof Error ? err.message : "Något gick fel. Försök igen.");
-    } finally {
-      setSubmitting(false);
-    }
+    } catch (error) {
+      console.error(error);
+      void trackAiKartaClick("funnel_error");
+      toast.error(error instanceof Error ? error.message : "Något gick fel. Försök igen.");
+    } finally { setSubmitting(false); }
   };
-
-  const progress = useMemo(() => Math.round(((step - 1) / (STEPS.length - 1)) * 100), [step]);
 
   return (
     <NordicLayout>
-      <main id="main">
-        <section style={{ paddingTop: "clamp(80px,10vw,140px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div className="wrap" style={{ maxWidth: 720 }}>
-            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 14 }}>AI-kartan · steg {step} av {STEPS.length} · ca 2 min</p>
-            <h1 style={{ fontFamily: F, fontSize: "clamp(28px,5vw,48px)", lineHeight: 1.05, letterSpacing: "-0.02em", color: C, fontWeight: 400, marginBottom: 12 }}>
-              {step === 1 && "Var sitter era största tidstjuvar?"}
-              {step === 2 && "Lägg till 1–5 processer"}
-              {step === 3 && "Vart ska vi skicka analysen?"}
-              {step === 4 && "Klart – kontrollera och skicka in"}
-            </h1>
-            <p style={{ fontFamily: I, fontSize: 14, lineHeight: 1.75, color: "rgba(237,233,220,0.55)", marginBottom: 24 }}>
-              {step === 1 && "Markera de områden där ni lägger mest manuell tid i dag. Klicka så många som passar."}
-              {step === 2 && "Beskriv minst en konkret arbetsuppgift (upp till fem) – vi räknar ut AI-potentialen för varje."}
-              {step === 3 && "Vi behöver bara veta vilka ni är så vi kan skicka resultatet. Ingen säljkampanj – ni får analysen direkt på skärmen."}
-              {step === 4 && "En snabb sammanfattning innan vi räknar fram er mini-analys."}
-            </p>
-            <p style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.30)", marginBottom: 24, letterSpacing: "0.06em" }}>
-              ✓ sparas automatiskt – kom tillbaka när ni vill
-            </p>
+      <div id="main" className="funnel-page">
+        <div className="wrap" style={{ maxWidth: 900 }}>
+          <p className="mono">ai-kartan · steg {step} av 3 · cirka 3–5 minuter</p>
+          <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5vw,3.9rem)", maxWidth: "18ch" }}>
+            {step === 1 && <>Var försvinner <span className="it">mest tid?</span></>}
+            {step === 2 && <>Vilken process vill ni <span className="it">börja med?</span></>}
+            {step === 3 && <>Vart ska vi leverera <span className="it">analysen?</span></>}
+          </h1>
+          <p className="lead" style={{ marginTop: 20 }}>
+            {step === 1 && "Markera områden med manuellt arbete, dubbelregistrering eller onödigt letande."}
+            {step === 2 && "Beskriv minst en återkommande arbetsuppgift. En tydlig process ger bäst analys."}
+            {step === 3 && "Kontaktuppgifterna används för att skapa resultatet och skicka en kopia via e-post."}
+          </p>
 
-            {/* Progress */}
-            <div style={{ marginBottom: 32 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 8 }}>
-                {STEPS.map((label, i) => {
-                  const reached = i + 1 <= step;
-                  const isCurrent = i + 1 === step;
-                  return (
-                    <span key={label} style={{ flex: 1, textAlign: "center", fontFamily: M, fontSize: 10, letterSpacing: "0.08em", color: reached ? C : "rgba(237,233,220,0.25)", fontWeight: isCurrent ? 600 : 400, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {i + 1}. {label}
-                    </span>
-                  );
-                })}
-              </div>
-              <div style={{ height: 2, width: "100%", background: "rgba(237,233,220,0.08)", borderRadius: 2, overflow: "hidden" }}>
-                <div style={{ height: "100%", background: C, borderRadius: 2, transition: "width 0.5s ease", width: `${progress + 25}%` }} />
-              </div>
+          <div style={{ marginTop: 30, marginBottom: 22 }}>
+            <div className="flex justify-between gap-2 mb-2">
+              {STEP_LABELS.map((label, i) => <span key={label} className="mono" style={{ color: i + 1 <= step ? "var(--moss)" : "var(--bone-mute)" }}>{i + 1}. {label}</span>)}
             </div>
-
-            <div className={stepCardClass}>
-                {/* Honeypot */}
-                <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
-                  <Label htmlFor="aimap-website">Webbplats</Label>
-                  <Input
-                    id="aimap-website"
-                    tabIndex={-1}
-                    autoComplete="off"
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                  />
-                </div>
-
-                {step === 3 && (
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <Field label="Företagsnamn" error={errors.company_name} required>
-                      <Input
-                        value={form.company_name}
-                        onChange={(e) => update("company_name", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                      />
-                    </Field>
-                    <Field label="Bransch" error={errors.industry} required>
-                      <Input
-                        value={form.industry}
-                        onChange={(e) => update("industry", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                        placeholder="t.ex. e-handel, bygg, konsult"
-                      />
-                    </Field>
-                    <Field label="Antal anställda" error={errors.employee_count} required full>
-                      <div className="flex flex-wrap gap-2.5">
-                        {EMPLOYEE_OPTIONS.map((opt) => (
-                          <ChoicePill
-                            key={opt}
-                            active={form.employee_count === opt}
-                            onClick={() => update("employee_count", opt)}
-                          >
-                            {opt}
-                          </ChoicePill>
-                        ))}
-                      </div>
-                    </Field>
-                    <Field label="Kontaktperson" error={errors.contact_name} required>
-                      <Input
-                        value={form.contact_name}
-                        onChange={(e) => update("contact_name", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                      />
-                    </Field>
-                    <Field label="E-post" error={errors.email} required>
-                      <Input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => update("email", e.target.value)}
-                        className="rounded-full h-12 text-base"
-                      />
-                    </Field>
-                  </div>
-                )}
-
-                {step === 1 && (
-                  <div
-                    className={
-                      errors.pain_areas
-                        ? "rounded-2xl border border-destructive/60 bg-destructive/[0.06] p-4"
-                        : ""
-                    }
-                  >
-                    <div className="flex flex-wrap gap-2.5">
-                      {PAIN_AREAS.map((label) => (
-                        <ChoicePill
-                          key={label}
-                          active={form.pain_areas.includes(label)}
-                          onClick={() => togglePain(label)}
-                        >
-                          {label}
-                        </ChoicePill>
-                      ))}
-                    </div>
-                    {errors.pain_areas && (
-                      <p className="mt-3 text-xs font-medium text-destructive">{errors.pain_areas}</p>
-                    )}
-                  </div>
-                )}
-
-                {step === 2 && (
-                  <div className="space-y-5">
-                    {form.processes.map((p, idx) => (
-                      <div
-                        key={idx}
-                        className="rounded-2xl border border-white/10 bg-background/40 p-4 sm:p-5"
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <p className="label-caps text-primary">Process {idx + 1}</p>
-                          {form.processes.length > 1 && (
-                            <button
-                              type="button"
-                              onClick={() => removeProcess(idx)}
-                              className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground hover:text-destructive active:scale-95"
-                            >
-                              <Trash2 className="h-4 w-4" /> Ta bort
-                            </button>
-                          )}
-                        </div>
-                        <div className="mt-4 grid gap-4">
-                          <Field label="Namn på arbetsuppgift" error={errors[`p_${idx}_name`]} required>
-                            <Input
-                              value={p.process_name}
-                              onChange={(e) => updateProcess(idx, { process_name: e.target.value })}
-                              className="rounded-full h-12 text-base"
-                              placeholder="t.ex. Skapa offerter manuellt i Word"
-                            />
-                          </Field>
-
-                          <PillRow
-                            label="Hur ofta?"
-                            error={errors[`p_${idx}_freq`]}
-                            options={Object.entries(FREQ_LABELS) as [string, string][]}
-                            value={p.frequency}
-                            onChange={(v) => updateProcess(idx, { frequency: v as ProcessInput["frequency"] })}
-                          />
-                          <PillRow
-                            label="Tid per vecka"
-                            error={errors[`p_${idx}_time`]}
-                            options={Object.entries(TIME_LABELS) as [string, string][]}
-                            value={p.weekly_time}
-                            onChange={(v) => updateProcess(idx, { weekly_time: v as ProcessInput["weekly_time"] })}
-                          />
-
-                          <Field label="Vilka system används? (valfritt)">
-                            <Input
-                              value={p.systems}
-                              onChange={(e) => updateProcess(idx, { systems: e.target.value })}
-                              className="rounded-full h-12 text-base"
-                              placeholder="t.ex. Fortnox, Excel, HubSpot"
-                            />
-                          </Field>
-
-                          <PillRow
-                            label="Är processen regelstyrd eller mallbaserad? (valfritt)"
-                            error={errors[`p_${idx}_rule`]}
-                            options={Object.entries(YPN_LABELS) as [string, string][]}
-                            value={p.rule_based}
-                            onChange={(v) => updateProcess(idx, { rule_based: v as ProcessInput["rule_based"] })}
-                          />
-                          <PillRow
-                            label="Finns data/system AI kan använda? (valfritt)"
-                            error={errors[`p_${idx}_data`]}
-                            options={Object.entries(YPN_LABELS) as [string, string][]}
-                            value={p.data_available}
-                            onChange={(v) => updateProcess(idx, { data_available: v as ProcessInput["data_available"] })}
-                          />
-                          <PillRow
-                            label="Affärsnytta att effektivisera detta? (valfritt)"
-                            error={errors[`p_${idx}_value`]}
-                            options={Object.entries(VALUE_LABELS) as [string, string][]}
-                            value={p.business_value}
-                            onChange={(v) => updateProcess(idx, { business_value: v as ProcessInput["business_value"] })}
-                          />
-                        </div>
-                      </div>
-                    ))}
-
-                    {form.processes.length < 5 && (
-                      <button
-                        type="button"
-                        onClick={addProcess}
-                        className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[0.02] py-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground active:scale-[0.99]"
-                      >
-                        <Plus className="h-4 w-4" /> Lägg till en process till
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {step === 4 && (
-                  <div className="space-y-5">
-                    <SummaryRow label="Företag" value={`${form.company_name} · ${form.industry} · ${form.employee_count} anställda`} />
-                    <SummaryRow label="Kontakt" value={`${form.contact_name} · ${form.email}`} />
-                    <SummaryRow label="Tidstjuvar" value={form.pain_areas.join(", ") || "—"} />
-                    <div>
-                      <p className="label-caps">Processer</p>
-                      <ul className="mt-3 space-y-2 text-sm">
-                        {form.processes.map((p, i) => (
-                          <li key={i} className="rounded-xl border border-white/10 bg-background/30 p-3">
-                            <span className="font-semibold text-foreground">{i + 1}. {p.process_name || "—"}</span>
-                            <br />
-                            <span className="text-xs text-muted-foreground">
-                              {p.frequency && FREQ_LABELS[p.frequency]} · {p.weekly_time && TIME_LABELS[p.weekly_time]} ·
-                              {" "}affärsnytta {p.business_value && VALUE_LABELS[p.business_value].toLowerCase()}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div
-                      className={`rounded-2xl border p-4 ${
-                        errors.consent
-                          ? "border-destructive/60 bg-destructive/[0.06]"
-                          : "border-white/10 bg-background/40"
-                      }`}
-                    >
-                      <label htmlFor="aimap-consent" className="flex cursor-pointer items-start gap-3 -m-1 p-1 rounded-xl">
-                        <Checkbox
-                          id="aimap-consent"
-                          checked={form.consent}
-                          onCheckedChange={(v) => update("consent", v === true)}
-                          className={`mt-0.5 h-5 w-5 ${errors.consent ? "border-destructive" : ""}`}
-                        />
-                        <span className="text-sm leading-relaxed text-foreground/80">
-                          Jag godkänner att Aurora Media AB sparar mina svar och kontaktar mig med anledning av min AI-karta.
-                        </span>
-                      </label>
-                      {errors.consent && (
-                        <p className="mt-2 text-xs font-medium text-destructive">{errors.consent}</p>
-                      )}
-                    </div>
-
-                    <p className="text-xs text-muted-foreground">
-                      Kostnadsfritt. Inga förpliktelser. Ni får en första AI-baserad bedömning direkt.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-            <div style={{ marginTop: 32, display: "flex", flexDirection: "row", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-              {step > 1 ? (
-                <button type="button" onClick={prev} disabled={submitting} className="btn-ghost" style={{ fontSize: 13 }}>
-                  ← Tillbaka
-                </button>
-              ) : (
-                <span />
-              )}
-              {step < STEPS.length ? (
-                <button type="button" onClick={next} className="btn-primary">
-                  Fortsätt →
-                </button>
-              ) : (
-                <button type="button" onClick={handleSubmit} disabled={submitting} className="btn-primary">
-                  {submitting ? "Beräknar..." : "Få min kostnadsfria mini-analys"}
-                </button>
-              )}
-            </div>
-
-            <p style={{ marginTop: 32, textAlign: "center", fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.30)", lineHeight: 1.6 }}>
-              Mini-analysen är automatiskt genererad och ska ses som en första indikation. För exakt scope krävs genomgång av processer, system och data.
-            </p>
+            <div className="funnel-progress"><span style={{ width: `${Math.round(step / 3 * 100)}%` }} /></div>
           </div>
-        </section>
-      </main>
-      </NordicLayout>
+
+          <section className="funnel-card">
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 overflow-hidden">
+              <Input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
+            </div>
+
+            {step === 1 && <div>
+              <p className="meta-label mb-4">Välj alla som passar</p>
+              <div className="flex flex-wrap gap-2.5">
+                {PAIN_AREAS.map((label) => <Pill key={label} active={form.pain_areas.includes(label)} onClick={() => togglePain(label)}>{label}</Pill>)}
+              </div>
+              {errors.pain && <ErrorText text={errors.pain} />}
+              <p className="body mt-5 text-xs">Beskriv processen övergripande och lämna inte känsliga uppgifter.</p>
+            </div>}
+
+            {step === 2 && <div className="space-y-5">
+              {form.processes.map((p, i) => <article key={i} className="rounded-2xl border border-white/10 p-4 sm:p-5">
+                <div className="flex justify-between gap-3"><p className="eyebrow">Process {i + 1}</p>{form.processes.length > 1 && <button type="button" onClick={() => update("processes", form.processes.filter((_, x) => x !== i))} className="flex items-center gap-1 text-xs text-muted-foreground"><Trash2 className="h-4 w-4" /> Ta bort</button>}</div>
+                <div className="mt-5 grid gap-5">
+                  <FormField label="Arbetsuppgift" error={errors[`name${i}`]}><Input value={p.process_name} onChange={(e) => updateProcess(i, { process_name: e.target.value })} className="h-12 rounded-full text-base" placeholder="Exempel: skapa offerter från kundmejl" /></FormField>
+                  <PillRow label="Hur ofta görs den?" error={errors[`freq${i}`]} options={FREQ_LABELS} value={p.frequency} onChange={(v) => updateProcess(i, { frequency: v as ProcessInput["frequency"] })} />
+                  <PillRow label="Ungefärlig tid per vecka" error={errors[`time${i}`]} options={TIME_LABELS} value={p.weekly_time} onChange={(v) => updateProcess(i, { weekly_time: v as ProcessInput["weekly_time"] })} />
+                  <details className="advanced-fields"><summary>Förfina analysen med frivilliga frågor</summary><div className="grid gap-5">
+                    <FormField label="System som används" optional><Input value={p.systems} onChange={(e) => updateProcess(i, { systems: e.target.value })} className="h-12 rounded-full text-base" placeholder="Fortnox, Excel, HubSpot…" /></FormField>
+                    <PillRow label="Regel- eller mallstyrt?" options={YPN_LABELS} value={p.rule_based} onChange={(v) => updateProcess(i, { rule_based: v as ProcessInput["rule_based"] })} />
+                    <PillRow label="Finns underlaget digitalt?" options={YPN_LABELS} value={p.data_available} onChange={(v) => updateProcess(i, { data_available: v as ProcessInput["data_available"] })} />
+                    <PillRow label="Affärsnytta" options={VALUE_LABELS} value={p.business_value} onChange={(v) => updateProcess(i, { business_value: v as ProcessInput["business_value"] })} />
+                  </div></details>
+                </div>
+              </article>)}
+              {form.processes.length < 3 && <button type="button" onClick={() => update("processes", [...form.processes, emptyProcess()])} className="flex min-h-[56px] w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 text-sm text-muted-foreground"><Plus className="h-4 w-4" /> Lägg till process</button>}
+            </div>}
+
+            {step === 3 && <div>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <FormField label="Företagsnamn" error={errors.company}><Input value={form.company_name} onChange={(e) => update("company_name", e.target.value)} className="h-12 rounded-full text-base" autoComplete="organization" /></FormField>
+                <FormField label="Bransch" error={errors.industry}><Input value={form.industry} onChange={(e) => update("industry", e.target.value)} className="h-12 rounded-full text-base" /></FormField>
+                <div className="sm:col-span-2"><FormField label="Antal anställda" error={errors.employees}><div className="flex flex-wrap gap-2.5">{EMPLOYEE_OPTIONS.map((x) => <Pill key={x} active={form.employee_count === x} onClick={() => update("employee_count", x)}>{x}</Pill>)}</div></FormField></div>
+                <FormField label="Ditt namn" error={errors.name}><Input value={form.contact_name} onChange={(e) => update("contact_name", e.target.value)} className="h-12 rounded-full text-base" autoComplete="name" /></FormField>
+                <FormField label="E-post" error={errors.email}><Input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} className="h-12 rounded-full text-base" autoComplete="email" placeholder="namn@foretag.se" /></FormField>
+              </div>
+              <div className={`mt-6 rounded-2xl border p-4 ${errors.consent ? "border-destructive/60" : "border-white/10"}`}>
+                <label className="flex cursor-pointer items-start gap-3"><Checkbox checked={form.consent} onCheckedChange={(v) => update("consent", v === true)} className="mt-0.5" /><span className="text-sm leading-relaxed text-foreground/80">Jag godkänner att Aurora Media AB behandlar mina svar för att skapa och leverera AI-kartan och skickar uppföljande råd via e-post. Jag kan avregistrera mig när som helst. Läs vår <Link to="/integritetspolicy" className="text-primary underline">integritetspolicy</Link>.</span></label>
+                {errors.consent && <ErrorText text={errors.consent} />}
+              </div>
+              <p className="body mt-5 text-sm">Resultatet visas direkt. PDF finns på resultatsidan och bokning är frivillig.</p>
+            </div>}
+          </section>
+
+          <div className="mt-6 flex justify-between gap-3">
+            {step > 1 ? <button type="button" onClick={() => { setErrors({}); setStep(step - 1); }} className="btn btn-ghost">← Tillbaka</button> : <Link to="/ai-karta" className="btn btn-ghost">← Om AI-kartan</Link>}
+            {step < 3 ? <button type="button" onClick={goNext} className="btn btn-moss">Fortsätt <ArrowRight size={14} /></button> : <button type="button" onClick={submit} disabled={submitting} className="btn btn-moss">{submitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Skapar…</> : <>Visa min AI-karta <ArrowRight size={14} /></>}</button>}
+          </div>
+          <p className="body mt-7 text-center text-xs">Analysen är en första indikation. Exakt scope, säkerhet och kostnad behöver bedömas mot era verkliga system.</p>
+        </div>
+      </div>
+    </NordicLayout>
   );
 };
 
-function Field({
-  label,
-  error,
-  children,
-  required,
-  full,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-  required?: boolean;
-  full?: boolean;
-}) {
-  return (
-    <div className={full ? "sm:col-span-2" : ""}>
-      <Label className={`text-xs uppercase tracking-wider ${error ? "text-destructive" : "text-muted-foreground"}`}>
-        {label} {required && <span className={error ? "text-destructive" : "text-primary"}>*</span>}
-      </Label>
-      <div
-        className={`mt-1.5 ${
-          error
-            ? "rounded-full ring-2 ring-destructive/70 ring-offset-2 ring-offset-background [&_input]:border-destructive"
-            : ""
-        }`}
-      >
-        {children}
-      </div>
-      {error && <p className="mt-1 text-xs font-medium text-destructive">{error}</p>}
-    </div>
-  );
-}
-
-function PillRow({
-  label,
-  error,
-  options,
-  value,
-  onChange,
-}: {
-  label: string;
-  error?: string;
-  options: [string, string][];
-  value: string;
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div
-      className={
-        error
-          ? "rounded-2xl border border-destructive/60 bg-destructive/[0.06] p-3 -m-3"
-          : ""
-      }
-    >
-      <Label className={`text-xs uppercase tracking-wider ${error ? "text-destructive" : "text-muted-foreground"}`}>
-        {label}
-      </Label>
-      <div className="mt-2 flex flex-wrap gap-2.5 sm:gap-2">
-        {options.map(([key, lbl]) => (
-          <ChoicePill key={key} active={value === key} onClick={() => onChange(key)}>
-            {lbl}
-          </ChoicePill>
-        ))}
-      </div>
-      {error && <p className="mt-2 text-xs font-medium text-destructive">{error}</p>}
-    </div>
-  );
-}
-
-function SummaryRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-start gap-3">
-      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-      <div>
-        <p className="text-[12px] uppercase tracking-wider text-muted-foreground">{label}</p>
-        <p className="text-sm text-foreground">{value}</p>
-      </div>
-    </div>
-  );
-}
+const Pill = ({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) => <button type="button" onClick={onClick} aria-pressed={active} className={`inline-flex min-h-[44px] items-center rounded-full border px-4 py-2.5 text-sm ${active ? "border-primary bg-primary text-primary-foreground" : "border-white/15 text-foreground/80"}`}>{active && <Check className="mr-1 h-3.5 w-3.5" />}{children}</button>;
+const ErrorText = ({ text }: { text: string }) => <p className="mt-2 text-sm text-destructive" role="alert">{text}</p>;
+const FormField = ({ label, error, optional, children }: { label: string; error?: string; optional?: boolean; children: React.ReactNode }) => <div><Label className={error ? "text-destructive" : "text-muted-foreground"}>{label}{!optional && " *"}</Label><div className="mt-1.5">{children}</div>{error && <ErrorText text={error} />}</div>;
+const PillRow = ({ label, error, options, value, onChange }: { label: string; error?: string; options: Record<string, string>; value: string; onChange: (value: string) => void }) => <div><Label className={error ? "text-destructive" : "text-muted-foreground"}>{label}</Label><div className="mt-2 flex flex-wrap gap-2">{Object.entries(options).map(([key, text]) => <Pill key={key} active={value === key} onClick={() => onChange(key)}>{text}</Pill>)}</div>{error && <ErrorText text={error} />}</div>;
 
 export default AiKartaStart;
