@@ -1,6 +1,6 @@
 import { useEffect } from "react";
+import { ArrowRight, Check, MapPin, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
 import { useContactModal } from "@/components/ContactModal";
 import {
@@ -12,137 +12,193 @@ import {
   SITE_URL,
 } from "@/lib/seoHelpers";
 
-const FAQS = [
+const PROBLEMS = [
   {
-    q: "Vad kostar en AI-byrå?",
-    a: "Hos Aurora Media är priserna fasta: prototyp 14 900 kr, MVP 34 900 kr och skalbar SaaS 89 000 kr. Större skräddarsydda projekt offereras separat men alltid med fast pris. Ingen timdebitering, inga överraskningar.",
+    n: "01",
+    title: "Samma information skrivs in flera gånger",
+    desc: "Kunduppgifter, order, dokument och fakturaunderlag flyttas manuellt mellan mejl, Excel och ekonomisystem.",
   },
   {
-    q: "Hur lång tid tar ett AI-projekt?",
-    a: "Prototyp: 3–5 dagar. MVP: 1–2 veckor. Skalbar SaaS: 3–4 veckor. AI-automationer för enskilda flöden kan vara live på under en vecka. Vi använder AI-kodning för att korta utvecklingstiden – inte för att kvaliteten ska sjunka.",
+    n: "02",
+    title: "Viktiga processer lever i kalkylblad",
+    desc: "Verksamheten har vuxit, men planering, uppföljning och ansvar ligger fortfarande i listor som få vågar ändra.",
   },
   {
-    q: "Äger jag koden?",
-    a: "Ja, alltid. Du får full källkod, GitHub-tillgång och dokumentation från dag ett. Inga konstiga licensavtal eller lock-ins. Du kan ta över utveckling internt eller byta partner när du vill.",
+    n: "03",
+    title: "Mejl och dokument tar för mycket tid",
+    desc: "Inkommande frågor, beställningar eller underlag behöver sorteras, sammanfattas och registreras för hand.",
   },
   {
-    q: "Vad är skillnaden mot en vanlig webbyrå?",
-    a: "En vanlig webbyrå bygger oftast WordPress-sajter på timdebitering. Vi bygger fullstack-produkter – SaaS, interna verktyg, AI-integrationer – med React, TypeScript och Supabase. Fast pris, modern stack, snabbare leverans.",
-  },
-  {
-    q: "Jobbar ni bara i Linköping?",
-    a: "Nej. Vi är baserade i Linköping och tar fysiska möten i Östergötland, men hälften av kunderna finns i Stockholm, Göteborg och övriga Sverige. Video-möten räcker för 90 procent av projekten.",
-  },
-  {
-    q: "Vilka AI-verktyg använder ni?",
-    a: "I utvecklingen: Lovable, Bolt, Cursor, Claude och GPT. I produkterna vi bygger: OpenAI, Anthropic, Gemini, Mistral och ElevenLabs beroende på behov. Vi är leverantörsoberoende och väljer rätt modell per use-case.",
+    n: "04",
+    title: "Färdiga system passar nästan",
+    desc: "Ni betalar för flera verktyg men behöver ändå bygga omvägar mellan dem för att få vardagen att fungera.",
   },
 ];
 
 const SERVICES = [
   {
-    title: "AI-automationer",
-    desc: "Vi ersätter manuella Excel-flöden, mejlhantering och dataregistrering med AI-drivna arbetsflöden. Spar 10–40 timmar i veckan per team.",
+    title: "AI-automation av administration",
+    desc: "Automatisera återkommande registrering, sammanställning, kategorisering och uppföljning utan att bygga bort den mänskliga kontrollen.",
   },
   {
-    title: "SaaS-utveckling",
-    desc: "Bygger SaaS-produkter med login, betalningar, multi-tenancy och allt däremellan. Lanseras på 2–4 veckor istället för 6 månader.",
+    title: "Interna verksamhetssystem",
+    desc: "Bygg ett eget arbetsverktyg för order, ärenden, planering, dokument eller uppföljning när standardprogrammen inte räcker.",
   },
   {
-    title: "MVP för startups",
-    desc: "Validera er idé snabbt och billigt. MVP med riktiga användare på två veckor för 34 900 kr fast pris.",
+    title: "Mejl-, lead- och dokumentflöden",
+    desc: "Låt AI tolka inkommande information, skapa utkast, föreslå nästa steg och skicka rätt underlag vidare till rätt person.",
   },
   {
-    title: "Interna verktyg",
-    desc: "Skräddarsydda dashboards, admin-paneler och CRUD-appar för era interna processer. Ersätter dyra SaaS-abonnemang.",
+    title: "Fortnox-, Visma- och API-integrationer",
+    desc: "Koppla ihop ekonomi, betalningar, CRM, formulär och befintliga system så att data följer processen automatiskt.",
   },
   {
-    title: "AI-integrationer",
-    desc: "Koppla OpenAI, Anthropic eller open-source-modeller till era befintliga system. Chatbottar, classifiers, content-generering, RAG.",
+    title: "AI-assistenter med er egen kunskap",
+    desc: "Bygg interna assistenter som söker i rutiner, dokument och produktinformation och ger spårbara svar till medarbetare.",
   },
   {
-    title: "Fortnox- och Visma-integrationer",
-    desc: "Vi har byggt API-integrationer mot alla större svenska ekonomisystem. Inga manuella export-importflöden längre.",
+    title: "MVP, app och SaaS",
+    desc: "Gå från idé till en första fungerande produkt med användare, databas, betalningar och AI där det faktiskt behövs.",
   },
 ];
 
 const CASES = [
   {
+    name: "Bergs Slussar Glamping",
+    meta: "Eget verksamhetsprojekt · Linköping",
+    desc: "Digital bokning, gästkommunikation och försäljning av tillval för en lokal besöksverksamhet vid Göta kanal.",
+    href: "/arbete/goglamping-sweden",
+  },
+  {
     name: "Aurora Transport",
-    desc: "Komplett dispatch- och fakturasystem för svenska åkerier. Schemaläggning, körorder, Fortnox-export, Stripe. Byggd från noll på under två veckor.",
+    meta: "Egen produkt · Transport",
+    desc: "Dispatch- och fakturasystem med schemaläggning, körorder och ekonomiflöden samlade i en plattform.",
     href: "/arbete/aurora-transport",
   },
   {
     name: "Hönsgården",
-    desc: "Freemium-app för svenska hönsägare. Webb plus Android-app via Capacitor. Lanserad på en vecka.",
+    meta: "Egen produkt · App och AI",
+    desc: "Freemium-app med statistik, abonnemang, hälsologg och AI-stöd för svenska hönsägare.",
     href: "/arbete/honsgarden",
-  },
-  {
-    name: "Viriditas",
-    desc: "Bokningssajt för massagemottagning i Linköping. Lokal kund, levererad på några dagar.",
-    href: "/arbete/viriditas",
   },
 ];
 
 const PROCESS = [
-  { n: "01", title: "Kostnadsfri rådgivning", desc: "30 min där vi går igenom affärsbehov, mål och teknisk situation. Du får konkret återkoppling – inte säljsnack." },
-  { n: "02", title: "Offert och scope", desc: "Inom 24 timmar får du fast pris, leveransplan och tydligt scope. Inga dolda kostnader." },
-  { n: "03", title: "Bygg med daglig avstämning", desc: "Vi bygger med dig i loopen – inte i månadslånga svarta lådor. Du ser progress dagligen i preview-länkar." },
-  { n: "04", title: "Lansering och överlämning", desc: "Du får produktion, källkod, dokumentation och 30 dagars buggfri-garanti. Sedan kan du köra själv eller teckna underhåll." },
+  {
+    n: "01",
+    title: "Kartlägg processen",
+    desc: "Vi börjar med arbetsmomentet, inte med ett AI-verktyg. Ni visar hur arbetet görs i dag och var tid eller kvalitet försvinner.",
+  },
+  {
+    n: "02",
+    title: "Välj minsta värdefulla lösning",
+    desc: "Ni får ett avgränsat förslag med scope, teknik, pris och vad som uttryckligen inte ingår i första versionen.",
+  },
+  {
+    n: "03",
+    title: "Testa tidigt",
+    desc: "En första version blir tillgänglig snabbt. Riktiga användare testar flödet innan vi lägger tid på detaljer som kanske inte behövs.",
+  },
+  {
+    n: "04",
+    title: "Lansera och mät",
+    desc: "Vi driftsätter, dokumenterar och följer upp om lösningen faktiskt minskar manuellt arbete eller förbättrar kundflödet.",
+  },
+];
+
+const FAQS = [
+  {
+    q: "Vad är skillnaden mellan en AI-konsult och en AI-byrå?",
+    a: "En AI-konsult hjälper ofta till med analys och strategi. Aurora Media kombinerar rådgivning med design, utveckling, integration och lansering. Målet är inte en presentation om AI, utan en fungerande lösning som går att använda i verksamheten.",
+  },
+  {
+    q: "Vad kostar ett AI-projekt för företag?",
+    a: "En avgränsad prototyp börjar från 14 900 kr, en MVP från 34 900 kr och en större skalbar lösning från 89 000 kr. Ni får alltid scope och fast pris innan arbetet startar. Större integrations- och verksamhetssystem offereras separat.",
+  },
+  {
+    q: "Måste vi veta vilken AI-teknik vi behöver?",
+    a: "Nej. Beskriv processen, problemet och resultatet ni vill nå. Vi bedömer om lösningen behöver generativ AI, vanlig automation, en integration eller ett nytt internt system. Ofta är rätt svar en kombination.",
+  },
+  {
+    q: "Kan ni träffa företag på plats i Linköping?",
+    a: "Ja. Aurora Media drivs från Linköping och fysiska möten kan bokas i Linköpingsområdet efter överenskommelse. Projektet kan därefter drivas effektivt med löpande digitala avstämningar och preview-länkar.",
+  },
+  {
+    q: "Hur hanterar ni GDPR och känslig företagsdata?",
+    a: "Datakällor, lagringsregion, behörigheter, loggning och vilka uppgifter som får skickas till en AI-modell bedöms i varje projekt. Vi bygger minsta nödvändiga dataflöde och använder inte känsliga uppgifter i externa modeller utan ett uttryckligt och genomtänkt upplägg.",
+  },
+  {
+    q: "Vem äger koden och lösningen?",
+    a: "Kunden får källkod, dokumentation och tillgång till relevanta projektkonton enligt avtalet. Lösningen byggs i standardteknik så att ni kan fortsätta med Aurora Media, ta över internt eller byta partner.",
+  },
 ];
 
 const AiByraLinkoping = () => {
   const { open } = useContactModal();
-  const PAGE_URL = `${SITE_URL}/ai-byra-linkoping`;
+  const pageUrl = `${SITE_URL}/ai-byra-linkoping`;
 
   useEffect(() => {
     setSEOMeta({
-      title: "AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media",
+      title: "AI-konsult & AI-byrå i Linköping | Aurora Media",
       description:
-        "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg. Fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
+        "Aurora Media hjälper företag i Linköping att automatisera administration, ersätta Excel och bygga AI-drivna interna system. Lokal kontakt och tydligt scope.",
       canonical: "/ai-byra-linkoping",
       keywords:
-        "AI-byrå Linköping, AI-byrå, AI-konsult Linköping, AI-automation Linköping, SaaS Linköping",
+        "AI-konsult Linköping, AI-byrå Linköping, AI-företag Linköping, AI-automation Linköping, AI-lösningar företag Linköping, interna system Linköping",
     });
+
     setBreadcrumb([
       { name: "Hem", url: "/" },
-      { name: "AI-byrå i Linköping", url: "/ai-byra-linkoping" },
+      { name: "AI-konsult och AI-byrå i Linköping", url: "/ai-byra-linkoping" },
     ]);
 
     setJsonLd("ai-byra-linkoping-org", organizationSchema);
-
     setJsonLd("ai-byra-linkoping-service", {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
-      "@id": `${PAGE_URL}#service`,
-      name: "Aurora Media – AI-byrå i Linköping",
+      "@id": `${pageUrl}#service`,
+      name: "Aurora Media – AI-konsult och AI-byrå i Linköping",
       description:
-        "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg åt svenska företag.",
-      url: PAGE_URL,
+        "AI-konsult i Linköping som hjälper företag med AI-automation, interna system, integrationer, appar och SaaS.",
+      url: pageUrl,
       image: `${SITE_URL}/og-image-sv.jpg`,
-      priceRange: "14900-89000 SEK",
+      email: "info@auroramedia.se",
+      priceRange: "14900-89000+ SEK",
+      founder: {
+        "@type": "Person",
+        name: "Christoffer Holstensson",
+      },
       address: {
         "@type": "PostalAddress",
         addressLocality: "Linköping",
         addressRegion: "Östergötlands län",
         addressCountry: "SE",
       },
-      geo: { "@type": "GeoCoordinates", latitude: 58.4108, longitude: 15.6214 },
-      areaServed: { "@type": "City", name: "Linköping" },
+      areaServed: [
+        { "@type": "City", name: "Linköping" },
+        { "@type": "AdministrativeArea", name: "Östergötland" },
+      ],
+      serviceType: [
+        "AI-konsulting",
+        "AI-automation",
+        "Systemutveckling",
+        "SaaS-utveckling",
+        "API-integrationer",
+      ],
       makesOffer: [
         { "@type": "Offer", name: "Prototyp", price: "14900", priceCurrency: "SEK" },
         { "@type": "Offer", name: "MVP", price: "34900", priceCurrency: "SEK" },
-        { "@type": "Offer", name: "Skalbar SaaS", price: "89000", priceCurrency: "SEK" },
+        { "@type": "Offer", name: "Skalbar lösning", price: "89000", priceCurrency: "SEK" },
       ],
     });
 
     setJsonLd("ai-byra-linkoping-faq", {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: FAQS.map((f) => ({
+      mainEntity: FAQS.map((item) => ({
         "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
       })),
     });
 
@@ -152,214 +208,184 @@ const AiByraLinkoping = () => {
       removeJsonLd("ai-byra-linkoping-faq");
       removeJsonLd("breadcrumb-jsonld");
     };
-  }, [PAGE_URL]);
+  }, [pageUrl]);
 
   return (
     <NordicLayout>
       <section className="page-hero">
         <div className="wrap">
-          <Reveal>
-            <p className="mono">ai-byrå · linköping · östergötland</p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h1
-              className="hero-line"
-              style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "20ch" }}
-            >
-              AI-byrå i Linköping – från idé till{" "}
-              <span className="it">färdig produkt.</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="lead" style={{ marginTop: 24 }}>
-              Vi bygger SaaS, AI-automationer och interna verktyg åt svenska företag. Fast pris från
-              14 900 kr. Leverans på veckor – inte månader. Baserade i Linköping, jobbar med kunder i
-              hela Sverige.
-            </p>
-          </Reveal>
-          <Reveal delay={0.3}>
-            <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <button onClick={() => open()} className="btn btn-moss">
-                Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
-              </button>
-              <Link to="/priser" className="btn btn-ghost">Se priser</Link>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "clamp(36px,7vw,96px)",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <Reveal>
+                <p className="mono">ai-konsult · ai-byrå · linköping · östergötland</p>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h1
+                  className="hero-line"
+                  style={{ marginTop: 18, fontSize: "clamp(2.3rem,5.6vw,4.8rem)", maxWidth: "17ch" }}
+                >
+                  AI-konsult i Linköping för <span className="it">verkliga arbetsflöden.</span>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="lead" style={{ marginTop: 24, maxWidth: "62ch" }}>
+                  Vi hjälper företag att automatisera administration, ersätta kalkylblad och bygga interna
+                  system som passar verksamheten. Lokal kontakt i Linköping, tydligt scope och en första version
+                  som går att testa tidigt.
+                </p>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  <button onClick={() => open()} className="btn btn-moss">
+                    Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
+                  </button>
+                  <Link to="/ai-karta" className="btn btn-ghost">
+                    Gör AI-kartläggningen
+                  </Link>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
-        </div>
-      </section>
 
-      {/* Vad gör en AI-byrå */}
-      <section className="section">
-        <div className="wrap">
-          <div className="sec-head">
-            <Reveal><div className="meta-label">Introduktion</div></Reveal>
-            <Reveal delay={0.1}>
-              <h2 className="h2">Vad en AI-byrå <span className="it">faktiskt</span> gör.</h2>
+            <Reveal delay={0.18}>
+              <aside
+                style={{
+                  border: "1px solid var(--hair)",
+                  borderRadius: 12,
+                  padding: "clamp(24px,4vw,42px)",
+                  background: "linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018))",
+                }}
+              >
+                <div className="meta-label">Lokal och direkt kontakt</div>
+                <h2 className="h3" style={{ marginTop: 18 }}>Aurora Media AB</h2>
+                <div style={{ display: "grid", gap: 16, marginTop: 24 }}>
+                  <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                    <MapPin size={18} style={{ flex: "0 0 auto", marginTop: 2 }} />
+                    <p className="body">Drivs från Linköping. Fysiska möten i Linköpingsområdet efter överenskommelse.</p>
+                  </div>
+                  <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                    <ShieldCheck size={18} style={{ flex: "0 0 auto", marginTop: 2 }} />
+                    <p className="body">Svenskt aktiebolag · Org.nr 559272-0220 · Kod och dokumentation enligt avtal.</p>
+                  </div>
+                </div>
+                <div style={{ marginTop: 28, paddingTop: 24, borderTop: "1px solid var(--hair)" }}>
+                  <a href="mailto:info@auroramedia.se" className="text-link">info@auroramedia.se →</a>
+                </div>
+              </aside>
             </Reveal>
-          </div>
-          <div style={{ display: "grid", gap: "clamp(18px,2.4vw,28px)", maxWidth: 800 }}>
-            <Reveal>
-              <p className="lead">
-                En AI-byrå hjälper företag att gå från "vi borde göra något med AI" till
-                fungerande produkter och processer. Inte powerpoints. Inte tre månader workshop.
-                Fungerande produkter.
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="body">
-                Aurora Media är en AI-driven mjukvarubyrå i Linköping. Vi bygger SaaS-produkter,
-                AI-automationer och interna verktyg åt svenska bolag. Skillnaden mot en traditionell
-                byrå är att vi använder AI-kodning som Lovable, Bolt, Cursor och Claude i själva
-                utvecklingen. Det betyder att en MVP som tidigare kostade 400 000 kr och tog sex
-                månader nu kan levereras för 34 900 kr på två veckor.
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <p className="body">
-                Vi har levererat sju egna SaaS-produkter och kundprojekt åt bolag i Östergötland,
-                Stockholm och Göteborg. Allt med fast pris, modern stack (React, TypeScript,
-                Supabase) och kod som du äger från dag ett.
-              </p>
-            </Reveal>
-          </div>
-          <div style={{ marginTop: 32 }}>
-            <button onClick={() => open()} className="btn btn-ghost">
-              Diskutera ert projekt <span className="a"><ArrowRight size={14} /></span>
-            </button>
           </div>
         </div>
       </section>
 
-      {/* Tjänster */}
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
-            <Reveal><div className="meta-label">Tjänster</div></Reveal>
+            <Reveal><div className="meta-label">Känner ni igen det här?</div></Reveal>
             <Reveal delay={0.1}>
-              <h2 className="h2">Det vi <span className="it">levererar</span> som AI-byrå.</h2>
+              <div>
+                <h2 className="h2">AI börjar sällan med AI. <span className="it">Det börjar med en dålig process.</span></h2>
+                <p className="lead" style={{ marginTop: 22, maxWidth: "64ch" }}>
+                  Vi letar efter momenten där personalen kopierar, sorterar, letar, sammanställer eller väntar.
+                  Där finns ofta den snabbaste vägen till konkret nytta.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+          <div className="work-grid">
+            {PROBLEMS.map((problem, index) => (
+              <Reveal key={problem.n} delay={index * 0.05}>
+                <article className="work-card" style={{ height: "100%" }}>
+                  <div className="meta-label">{problem.n}</div>
+                  <h3 style={{ marginTop: 18 }}>{problem.title}</h3>
+                  <p className="body" style={{ marginTop: 12 }}>{problem.desc}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">AI-tjänster för företag</div></Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="h2">Från manuell rutin till <span className="it">fungerande system.</span></h2>
+                <p className="lead" style={{ marginTop: 22, maxWidth: "64ch" }}>
+                  Ni behöver inte beställa en viss teknik. Beskriv vad som tar tid och vad resultatet ska bli, så
+                  väljer vi mellan AI, automation, integration och systemutveckling.
+                </p>
+              </div>
             </Reveal>
           </div>
           <div className="feat-list">
-            {SERVICES.map((s, i) => (
-              <Reveal key={s.title} delay={i * 0.04}>
+            {SERVICES.map((service, index) => (
+              <Reveal key={service.title} delay={index * 0.04}>
                 <div className="feat-row">
-                  <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="feat-title">{s.title}</span>
-                  <span className="feat-body">{s.desc}</span>
+                  <span className="feat-num">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="feat-title">{service.title}</span>
+                  <span className="feat-body">{service.desc}</span>
                 </div>
               </Reveal>
             ))}
           </div>
           <div style={{ marginTop: 32 }}>
             <button onClick={() => open()} className="btn btn-moss">
-              Boka rådgivning <span className="a"><ArrowRight size={14} /></span>
+              Beskriv er process <span className="a"><ArrowRight size={14} /></span>
             </button>
           </div>
         </div>
       </section>
 
-      {/* Lokalt */}
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
-            <Reveal><div className="meta-label">Lokal förankring</div></Reveal>
+            <Reveal><div className="meta-label">Så går det till</div></Reveal>
             <Reveal delay={0.1}>
-              <h2 className="h2">Baserade i <span className="it">Linköping.</span></h2>
+              <h2 className="h2">Mindre workshop. <span className="it">Mer fungerande produkt.</span></h2>
             </Reveal>
           </div>
-          <div style={{ display: "grid", gap: "clamp(18px,2.4vw,28px)", maxWidth: 800 }}>
-            <Reveal>
-              <p className="lead">
-                Aurora Media drivs från Linköping. Vi tar fysiska möten i centrala Linköping eller på
-                Mjärdevi Science Park. För bolag i Norrköping, Motala, Mjölby och övriga
-                Östergötland är vi 30–60 minuter bort.
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="body">
-                Linköpings tech-kluster runt Saab, Ericsson, Sectra, LiU och Mjärdevi gör staden till
-                en av Sveriges tätaste per capita. Många bolag här har dragits med dyra
-                konsultarvoden (1 500–2 000 kr/h) och långa projekt. Vi erbjuder ett rakare
-                alternativ: fast pris, snabb leverans, modern stack.
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <p className="body">
-                För kunder utanför Östergötland (Stockholm, Göteborg, Malmö) räcker video-möten i
-                90 procent av fallen. Geografin spelar mindre roll när hela arbetet sker i preview-länkar
-                och GitHub.
-              </p>
-            </Reveal>
-          </div>
-          <div style={{ marginTop: 32 }}>
-            <a href="mailto:info@auroramedia.se" className="btn btn-ghost">
-              Maila info@auroramedia.se <span className="a"><ArrowRight size={14} /></span>
-            </a>
+          <div className="proc-grid">
+            {PROCESS.map((step) => (
+              <div className="proc-step" key={step.n}>
+                <span className="proc-num">{step.n}</span>
+                <h3 className="proc-name">{step.title}</h3>
+                <p className="body">{step.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Priser */}
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
-            <Reveal><div className="meta-label">Priser</div></Reveal>
+            <Reveal><div className="meta-label">Erfarenhet från drift</div></Reveal>
             <Reveal delay={0.1}>
-              <h2 className="h2">Fast pris – <span className="it">ingen timdebitering.</span></h2>
-            </Reveal>
-          </div>
-          <div className="feat-list">
-            <Reveal>
-              <div className="feat-row">
-                <span className="feat-num">01</span>
-                <span className="feat-title">Prototyp – 14 900 kr</span>
-                <span className="feat-body">Klickbar prototyp på 3–5 dagar. För att testa konceptet innan större investering.</span>
-              </div>
-            </Reveal>
-            <Reveal delay={0.05}>
-              <div className="feat-row">
-                <span className="feat-num">02</span>
-                <span className="feat-title">MVP – 34 900 kr</span>
-                <span className="feat-body">Lanseringsklar produkt på 2 veckor. Login, databas, betalningar och en huvudintegration.</span>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="feat-row">
-                <span className="feat-num">03</span>
-                <span className="feat-title">Skalbar SaaS – 89 000 kr</span>
-                <span className="feat-body">Full SaaS på 3–4 veckor. Multi-tenant, roller, admin, AI-integrationer.</span>
+              <div>
+                <h2 className="h2">Vi bygger också våra <span className="it">egna verksamheter och produkter.</span></h2>
+                <p className="lead" style={{ marginTop: 22, maxWidth: "64ch" }}>
+                  Exemplen nedan är öppet märkta som egna projekt. Det innebär att vi själva hanterar användare,
+                  betalningar, drift, fel och förbättringar efter lansering.
+                </p>
               </div>
             </Reveal>
           </div>
-          <div style={{ marginTop: 32, display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link to="/priser" className="btn btn-ghost">Se alla paket</Link>
-            <button onClick={() => open()} className="btn btn-moss">
-              Begär offert <span className="a"><ArrowRight size={14} /></span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Case */}
-      <section className="section">
-        <div className="wrap">
-          <div className="sec-head">
-            <Reveal><div className="meta-label">Case</div></Reveal>
-            <Reveal delay={0.1}>
-              <h2 className="h2">Produkter vi <span className="it">byggt.</span></h2>
-            </Reveal>
-          </div>
-          <div className="feat-list">
-            {CASES.map((c, i) => (
-              <Reveal key={c.name} delay={i * 0.05}>
-                <div className="feat-row">
-                  <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="feat-title">{c.name}</span>
-                  <span className="feat-body">
-                    {c.desc} <Link to={c.href} className="text-link">Läs mer →</Link>
-                  </span>
-                </div>
-              </Reveal>
+          <div className="work-grid">
+            {CASES.map((item) => (
+              <Link to={item.href} key={item.name} className="work-card">
+                <div className="meta-label">{item.meta}</div>
+                <h3 style={{ marginTop: 18 }}>{item.name}</h3>
+                <p className="body" style={{ marginTop: 12 }}>{item.desc}</p>
+                <div className="url" style={{ marginTop: 18 }}>Se projektet →</div>
+              </Link>
             ))}
           </div>
           <div style={{ marginTop: 32 }}>
@@ -370,48 +396,54 @@ const AiByraLinkoping = () => {
         </div>
       </section>
 
-      {/* Process */}
       <section className="section">
         <div className="wrap">
-          <div className="sec-head">
-            <Reveal><div className="meta-label">Process</div></Reveal>
-            <Reveal delay={0.1}>
-              <h2 className="h2">Hur vi <span className="it">jobbar.</span></h2>
-            </Reveal>
-          </div>
-          <div className="proc-grid">
-            {PROCESS.map((p) => (
-              <div className="proc-step" key={p.n}>
-                <span className="proc-num">{p.n}</span>
-                <h3 className="proc-name">{p.title}</h3>
-                <p className="body">{p.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 32 }}>
-            <button onClick={() => open()} className="btn btn-moss">
-              Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
-            </button>
+          <div
+            style={{
+              border: "1px solid var(--hair)",
+              borderRadius: 12,
+              padding: "clamp(28px,5vw,60px)",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "clamp(28px,5vw,72px)",
+            }}
+          >
+            <div>
+              <div className="meta-label">Tryggare beställning</div>
+              <h2 className="h2" style={{ marginTop: 18 }}>Ni ska förstå <span className="it">vad ni köper.</span></h2>
+            </div>
+            <div style={{ display: "grid", gap: 16 }}>
+              {[
+                "Tydligt scope och pris innan start",
+                "Tidigt testbar version och löpande insyn",
+                "Standardteknik utan onödig leverantörslåsning",
+                "Behörighet, datalagring och GDPR bedöms per lösning",
+              ].map((item) => (
+                <div key={item} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                  <Check size={17} style={{ flex: "0 0 auto", marginTop: 2 }} />
+                  <p className="body">{item}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
             <Reveal><div className="meta-label">Vanliga frågor</div></Reveal>
             <Reveal delay={0.1}>
-              <h2 className="h2">AI-byrå i Linköping – <span className="it">FAQ.</span></h2>
+              <h2 className="h2">AI-konsult i Linköping – <span className="it">frågor och svar.</span></h2>
             </Reveal>
           </div>
           <div className="feat-list">
-            {FAQS.map((f, i) => (
-              <Reveal key={f.q} delay={i * 0.04}>
+            {FAQS.map((item, index) => (
+              <Reveal key={item.q} delay={index * 0.04}>
                 <div className="feat-row">
-                  <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="feat-title">{f.q}</span>
-                  <span className="feat-body">{f.a}</span>
+                  <span className="feat-num">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="feat-title">{item.q}</span>
+                  <span className="feat-body">{item.a}</span>
                 </div>
               </Reveal>
             ))}
@@ -419,26 +451,23 @@ const AiByraLinkoping = () => {
         </div>
       </section>
 
-      {/* Relaterat */}
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
-            <Reveal><div className="meta-label">Relaterade sidor</div></Reveal>
-            <Reveal delay={0.1}><h2 className="h2">Läs vidare.</h2></Reveal>
+            <Reveal><div className="meta-label">Fördjupa er</div></Reveal>
+            <Reveal delay={0.1}><h2 className="h2">Nästa relevanta sida.</h2></Reveal>
           </div>
           <nav style={{ display: "flex", flexWrap: "wrap", gap: 8 }} aria-label="Relaterade sidor">
             {[
-              { to: "/webbyra-linkoping", label: "Webbyrå Linköping" },
-              { to: "/ai-konsult-sverige", label: "AI-konsult Sverige" },
+              { to: "/ai-karta", label: "Kostnadsfri AI-kartläggning" },
               { to: "/ai-automation-foretag", label: "AI-automation för företag" },
+              { to: "/ai-konsult-sverige", label: "AI-konsult Sverige" },
               { to: "/saas-utveckling-linkoping", label: "SaaS-utveckling Linköping" },
-              { to: "/ai-byra-norrkoping", label: "AI-byrå Norrköping" },
-              { to: "/ai-byra-stockholm", label: "AI-byrå Stockholm" },
-              { to: "/priser", label: "Priser & paket" },
-              { to: "/arbete", label: "Vårt arbete" },
-              { to: "/blogg", label: "Blogg" },
-            ].map((r) => (
-              <Link key={r.to} to={r.to} className="pill">{r.label} →</Link>
+              { to: "/arbete", label: "Projekt och case" },
+              { to: "/priser", label: "Priser och upplägg" },
+              { to: "/blogg", label: "Guider om AI och automation" },
+            ].map((item) => (
+              <Link key={item.to} to={item.to} className="pill">{item.label} →</Link>
             ))}
           </nav>
         </div>
@@ -446,16 +475,20 @@ const AiByraLinkoping = () => {
 
       <section className="cta-band">
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="meta-label">Nästa steg</div>
-          <h2 className="h2" style={{ marginTop: 18 }}>
-            Redo att <span className="it">börja?</span>
+          <div className="meta-label">Kostnadsfri första bedömning</div>
+          <h2 className="h2" style={{ marginTop: 18, maxWidth: "20ch" }}>
+            Visa oss processen ni vill slippa göra <span className="it">manuellt.</span>
           </h2>
-          <p className="lead" style={{ marginTop: 22 }}>
-            Berätta vad du vill bygga. Offert med fast pris inom 24 timmar.
+          <p className="lead" style={{ marginTop: 22, maxWidth: "60ch" }}>
+            Ni får en rak återkoppling på vad som går att automatisera, vad som bör byggas som ett system och
+            vad som inte behöver AI alls.
           </p>
-          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
-            Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
-          </button>
+          <div style={{ marginTop: 30, display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
+            <button onClick={() => open()} className="btn btn-moss">
+              Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
+            </button>
+            <a href="mailto:info@auroramedia.se" className="cta-email">info@auroramedia.se →</a>
+          </div>
         </div>
       </section>
     </NordicLayout>
