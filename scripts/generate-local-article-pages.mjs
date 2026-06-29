@@ -46,11 +46,19 @@ function splitArticleBlocks(text) {
 }
 
 function extractSections(block) {
+  const sectionsStart = block.indexOf("sections:");
+  const faqStart = block.indexOf("faq:");
+  if (sectionsStart < 0) return [];
+
+  const sectionBlock = block.slice(
+    sectionsStart,
+    faqStart > sectionsStart ? faqStart : undefined,
+  );
   const sections = [];
   const regex = /heading:\s*"([\s\S]*?)"[\s\S]*?content:\s*"([\s\S]*?)"/g;
   let match;
 
-  while ((match = regex.exec(block))) {
+  while ((match = regex.exec(sectionBlock))) {
     const heading = decodeString(match[1]);
     const content = decodeString(match[2]);
     if (heading && content) sections.push({ heading, content });
@@ -61,9 +69,13 @@ function extractSections(block) {
 
 function extractFaq(block) {
   const faqStart = block.indexOf("faq:");
+  const relatedStart = block.indexOf("relatedSlugs:");
   if (faqStart < 0) return [];
 
-  const faqBlock = block.slice(faqStart);
+  const faqBlock = block.slice(
+    faqStart,
+    relatedStart > faqStart ? relatedStart : undefined,
+  );
   const faq = [];
   const regex = /q:\s*"([\s\S]*?)"[\s\S]*?a:\s*"([\s\S]*?)"/g;
   let match;
