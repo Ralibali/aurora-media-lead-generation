@@ -6,93 +6,170 @@ import { SEO } from "@/components/SEO";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
 import heroImg from "@/assets/aurora-hero-nordic.jpg";
 
-/* ─────────────────────────────────────────────────────────────────────────
-   AURORA MEDIA — AI-driven mjukvarubyrå (Linköping)
-   Nordic Noir shell levereras av <NordicLayout />.
-   ───────────────────────────────────────────────────────────────────────── */
-
 const useStockholmTime = () => {
-  const [t, setT] = useState(() => new Date());
+  const [time, setTime] = useState(() => new Date());
+
   useEffect(() => {
-    const id = setInterval(() => setT(new Date()), 1000);
-    return () => clearInterval(id);
+    const id = window.setInterval(() => setTime(new Date()), 1000);
+    return () => window.clearInterval(id);
   }, []);
-  return t.toLocaleTimeString("sv-SE", {
+
+  return time.toLocaleTimeString("sv-SE", {
     hour: "2-digit",
     minute: "2-digit",
     timeZone: "Europe/Stockholm",
   });
 };
 
-/* ───── Hero ───── */
 const TRUST = [
-  "SaaS, appar och digitala produkter",
-  "AI, automation och effektivisering",
-  "Byggt för affärsnytta och tillväxt",
+  "Interna system som ersätter manuellt arbete",
+  "AI och automation där det ger affärsnytta",
+  "Fast scope, snabb leverans och kod ni äger",
+];
+
+const OUTCOMES = [
+  {
+    n: "01",
+    title: "Mindre administration",
+    desc: "Koppla ihop mejl, formulär, dokument, kunddata och ekonomi så att informationen inte behöver registreras flera gånger.",
+  },
+  {
+    n: "02",
+    title: "Ett system som passar er",
+    desc: "Ersätt kalkylblad, lösa listor och omvägar med ett internt verktyg byggt efter hur verksamheten faktiskt arbetar.",
+  },
+  {
+    n: "03",
+    title: "Snabbare väg till marknaden",
+    desc: "Lansera en prototyp, MVP eller SaaS utan ett halvår av möten och dokument som aldrig blir en fungerande produkt.",
+  },
+  {
+    n: "04",
+    title: "Integrationer utan dubbelarbete",
+    desc: "Koppla exempelvis Fortnox, Visma, Stripe, Supabase och era befintliga API:er till ett sammanhängande flöde.",
+  },
+];
+
+const PROCESS = [
+  {
+    n: "01",
+    label: "Kartläggning",
+    title: "Vi hittar flaskhalsen",
+    desc: "Vi går igenom arbetsflödet, systemen och det manuella arbete som kostar mest tid eller skapar flest fel.",
+  },
+  {
+    n: "02",
+    label: "Första veckan",
+    title: "Ni får något att testa",
+    desc: "Vi bygger en klickbar eller fungerande första version tidigt, så att beslut tas utifrån produkten och inte en presentation.",
+  },
+  {
+    n: "03",
+    label: "Leverans",
+    title: "Systemet sätts i drift",
+    desc: "Vi testar, integrerar, dokumenterar och lämnar över koden. Ni kan fortsätta med oss eller driva lösningen vidare själva.",
+  },
+];
+
+const PROJECTS = [
+  {
+    title: "Aurora Transport",
+    desc: "Dispatch- och fakturasystem för åkerier med schemaläggning, körorder och ekonomiflöden.",
+    meta: "SaaS · Fortnox · Stripe",
+    href: "/arbete/aurora-transport",
+  },
+  {
+    title: "Hönsgården",
+    desc: "Freemium-app med statistik, abonnemang och AI-stöd för svenska hönsägare.",
+    meta: "App · AI · Supabase",
+    href: "/arbete/honsgarden",
+  },
+  {
+    title: "Bergs Slussar Glamping",
+    desc: "Digital bokning, gästkommunikation och försäljning av tillval för en lokal besöksverksamhet vid Göta kanal.",
+    meta: "Linköping · Bokningsflöde",
+    href: "/arbete/goglamping-sweden",
+  },
+];
+
+const PACKAGES = [
+  {
+    n: "01",
+    name: "Prototyp",
+    desc: "För att testa flödet, användarupplevelsen och affärsidén innan en större investering.",
+    items: ["Klickbar första version", "Tydligt avgränsat use case", "Leverans på några dagar"],
+  },
+  {
+    n: "02",
+    name: "MVP",
+    desc: "En första fungerande produkt med databas, användare och den viktigaste integrationen.",
+    items: ["Lanseringsklar kärnfunktion", "Auth och databas", "Kod ni äger"],
+    featured: true,
+  },
+  {
+    n: "03",
+    name: "Skräddarsytt system",
+    desc: "För företag som behöver automatisera processer eller bygga en intern plattform.",
+    items: ["Anpassad arkitektur", "Integrationer och rollstyrning", "Långsiktig utveckling"],
+  },
 ];
 
 const Hero = () => {
   const { open } = useContactModal();
   const time = useStockholmTime();
+
   return (
     <section id="top" className="hero lumina-hero">
       <div className="wrap hero-content">
         <div className="hero-text">
-        <Reveal>
-          <p className="mono">aurora media · ai-byrå i linköping · ai-driven mjukvara</p>
-        </Reveal>
-        <Reveal delay={0.05}>
-          <p className="mono" style={{ marginTop: 6, opacity: 0.75 }}>
-            AI-byrå i Linköping som bygger SaaS, automationer och interna verktyg.
-          </p>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <h1 className="hero-line" style={{ marginTop: 4 }}>Idén finns.</h1>
-        </Reveal>
-        <Reveal delay={0.2}>
-          <h1 className="hero-line" style={{ paddingLeft: "clamp(0px,4vw,56px)" }}>
-            Vi <span className="it">bygger</span> systemet.
-          </h1>
-        </Reveal>
-        <Reveal delay={0.35}>
-          <p className="lead" style={{ marginTop: 14 }}>
-            Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa
-            snabbare, effektivisera arbetet och ersätta manuella rutiner med smarta digitala flöden.
-          </p>
-        </Reveal>
-        <Reveal delay={0.45}>
-          <div className="hero-trust">
-            {TRUST.map((t) => (
-              <div key={t} className="trust-item">
-                <Check size={14} className="ic" strokeWidth={2.5} /> {t}
-              </div>
-            ))}
-          </div>
-        </Reveal>
-        <Reveal delay={0.55}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginTop: 18 }}>
-            <button onClick={() => open()} className="btn btn-moss">
-              Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
-            </button>
-            <Link to="/ai-automation-foretag" className="btn btn-ghost">
-              AI &amp; effektivisering <span className="a"><ArrowUpRight size={14} /></span>
-            </Link>
-            <span className="clock" style={{ marginLeft: 4 }}>Linköping · {time}</span>
-          </div>
-        </Reveal>
+          <Reveal>
+            <p className="mono">aurora media · ai-driven mjukvarupartner · linköping</p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="hero-line" style={{ marginTop: 18, maxWidth: "17ch" }}>
+              Manuellt arbete in. <span className="it">Ett smartare system ut.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="lead" style={{ marginTop: 24, maxWidth: "62ch" }}>
+              Vi bygger AI-lösningar, interna system, appar och SaaS för svenska företag som vill arbeta
+              snabbare utan att fastna i fler verktyg, fler kalkylblad och mer administration.
+            </p>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <div className="hero-trust">
+              {TRUST.map((item) => (
+                <div key={item} className="trust-item">
+                  <Check size={14} className="ic" strokeWidth={2.5} /> {item}
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal delay={0.4}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginTop: 24 }}>
+              <button onClick={() => open()} className="btn btn-moss">
+                Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
+              </button>
+              <Link to="/arbete" className="btn btn-ghost">
+                Se fungerande projekt <span className="a"><ArrowUpRight size={14} /></span>
+              </Link>
+              <span className="clock" style={{ marginLeft: 4 }}>Linköping · {time}</span>
+            </div>
+          </Reveal>
         </div>
+
         <div className="hero-figure-wrap">
           <Reveal delay={0.15}>
             <div className="hero-figure">
               <img
                 src={heroImg}
-                alt="Dimmig svensk sjö i gryningen med skog och berg"
+                alt="Svenskt landskap i gryning som symboliserar Aurora Media"
                 width={1024}
                 height={1280}
                 fetchPriority="high"
               />
               <div className="hero-figure-overlay" />
-              <span className="hero-figure-tag">Östergötland · Gryning</span>
+              <span className="hero-figure-tag">Östergötland · Byggt nära verksamheten</span>
             </div>
           </Reveal>
         </div>
@@ -101,336 +178,132 @@ const Hero = () => {
   );
 };
 
-/* ───── Aurora-metoden ───── */
-const TIMELINE = [
-  { n: "01", day: "Dag 1", title: "Kostnadsfri rådgivning", desc: "Vi kartlägger affärsmål, system och flaskhalsar." },
-  { n: "02", day: "Dag 2–7", title: "Prototyp & arkitektur", desc: "Du ser en klickbar version av lösningen." },
-  { n: "03", day: "Vecka 2–4", title: "Lansering", desc: "Vi bygger, integrerar och driftsätter." },
-];
-
-const MetodSection = () => (
-  <section className="section" id="metoden">
+const OutcomesSection = () => (
+  <section className="section" id="resultat">
     <div className="wrap">
       <div className="sec-head">
-        <Reveal><div className="meta-label">Aurora-metoden</div></Reveal>
-        <Reveal delay={0.1}>
-          <h2 className="h2"><span className="it">"Från idé</span> till lansering på under fyra veckor."</h2>
-        </Reveal>
-      </div>
-      <div className="timeline">
-        {TIMELINE.map((s, i) => (
-          <Reveal key={s.n} delay={i * 0.08}>
-            <div className="tl-step">
-              <span className="tl-num">{s.n}</span>
-              <span className="tl-day">{s.day}</span>
-              <h3 className="tl-title">{s.title}</h3>
-              <p className="body">{s.desc}</p>
-            </div>
-          </Reveal>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-/* ───── Tjänster ───── */
-const SERVICES = [
-  { n: "01", title: "System", tag: "Affärssystem som växer med er.", desc: "Robusta affärssystem som växer med er — byggda i modern stack." },
-  { n: "02", title: "Integrationer", tag: "Fortnox, Visma, Stripe & mer.", desc: "Sömlösa kopplingar mellan Fortnox, Visma, Stripe och era befintliga verktyg." },
-  { n: "03", title: "Appar", tag: "iOS, Android & PWA.", desc: "iOS, Android och progressiva webbappar som folk faktiskt vill använda." },
-  { n: "04", title: "Redesign", tag: "UI/UX som konverterar.", desc: "Modern UI/UX som lyfter varumärket och ökar konvertering." },
-  { n: "05", title: "Webb & plattformar", tag: "Från landningssida till SaaS.", desc: "Snabba, säkra och skalbara lösningar — från landningssida till SaaS." },
-  { n: "06", title: "Landningssidor", tag: "Sidor som säljer dygnet runt.", desc: "Konverterande sidor som driver leads och säljer hela dygnet." },
-  { n: "07", title: "Digital marknadsföring", tag: "Meta & Google Ads med ROAS.", desc: "Meta Ads och Google Ads — datadriven annonsering med tydlig ROAS." },
-  { n: "08", title: "SEO & innehåll", tag: "SEO som rankar & konverterar.", desc: "Programmatic SEO och innehåll som rankar — och konverterar." },
-  { n: "09", title: "AI-integration", tag: "GPT, chatbottar & automation.", desc: "GPT-driven automation, chatbottar och AI-coacher inbyggda i din produkt." },
-  { n: "10", title: "Strategi & rådgivning", tag: "Audits, MVP & strategi.", desc: "Tekniska audits, MVP-validering och digital strategi för bolag som vill växa rätt." },
-  { n: "11", title: "CRO & analys", tag: "GA4, Hotjar & A/B-tester.", desc: "Datadriven optimering med GA4, Hotjar och A/B-testning som höjer konvertering." },
-  { n: "12", title: "Underhåll & support", tag: "Drift, support & hosting.", desc: "Löpande utveckling, säkerhetsuppdateringar och hosting — vi sover så du slipper." },
-];
-
-const ServicesSection = () => (
-  <section className="section" id="tjanster">
-    <div className="wrap">
-      <div className="sec-head">
-        <Reveal><div className="meta-label">Tjänster</div></Reveal>
+        <Reveal><div className="meta-label">Vad vi förändrar</div></Reveal>
         <Reveal delay={0.1}>
           <div>
-            <h2 className="h2">Vi utvecklar mjukvara med <span className="it">intention.</span></h2>
-            <p className="lead" style={{ marginTop: 22 }}>
-              Varje system vi bygger är skräddarsytt efter er verksamhet — inte tvärtom. Snabb leverans,
-              transparent kommunikation och kod du äger från dag ett. Vi kombinerar utveckling, marknadsföring
-              och AI för att leverera något som faktiskt rör nålen.
+            <h2 className="h2">Tekniken är inte målet. <span className="it">Ett bättre arbetsflöde är.</span></h2>
+            <p className="lead" style={{ marginTop: 22, maxWidth: "64ch" }}>
+              Vi börjar i det som tar tid, skapar fel eller hindrar tillväxt. Därefter bygger vi den minsta
+              lösningen som ger verklig effekt.
             </p>
           </div>
         </Reveal>
       </div>
-
-      <div className="svc-grid">
-        {SERVICES.map((s) => (
-          <div key={s.n} className="svc-cell">
-            <span className="svc-num">→ {s.n}</span>
-            <h3 className="svc-title">{s.title}</h3>
-            <span className="svc-tag">{s.tag}</span>
-            <p className="body">{s.desc}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-/* ───── Arbeten ───── */
-const FLAGSHIP = {
-  title: "Aurora Transport",
-  desc: "Komplett dispatch- och fakturasystem för åkerier. Bygger schemaläggning, körorder, Fortnox-export och Stripe-fakturering på under två veckor.",
-  url: "auroratransport.se",
-  meta: "Live · Under 2 veckor",
-  tags: ["SaaS", "Lovable", "Supabase", "Stripe", "Fortnox API"],
-  href: "/arbete/aurora-transport",
-};
-
-const PROJECTS = [
-  { title: "Updro", desc: "Marknadsplats där företag jämför offerter från digitala byråer.", url: "updro.se", meta: "Live · 2 veckor", tags: ["SaaS", "Lovable", "Supabase"], href: "/arbete/updro" },
-  { title: "AgilityManager", desc: "Träningsapp för svenska agility-förare. iOS + Android planerade 2026.", url: "agilitymanager.se", meta: "Live · Under 2 veckor", tags: ["SaaS", "Lovable", "Supabase"], href: "/arbete/agilitymanager" },
-  { title: "Hönsgården", desc: "Freemium-app för svenska hönsägare. Webb + Google Play-app via Capacitor.", url: "honsgarden.se", meta: "Live · 1 vecka", tags: ["SaaS", "Lovable", "Supabase"], href: "/arbete/honsgarden" },
-  { title: "Odlingsdagboken", desc: "Svensk odlings-SaaS med AI-coach.", url: "odlingsdagboken.com", meta: "Live · Under 2 veckor", tags: ["SaaS", "Lovable", "Supabase"], href: "/arbete/odlingsdagboken" },
-  { title: "GoGlamping Sweden", desc: "Bokningssajt för glamping vid Göta kanal.", url: "goglampingsweden.se", meta: "Live · 1 vecka", tags: ["Utveckling", "React", "Vite"], href: "/arbete/goglamping-sweden" },
-  { title: "Viriditas", desc: "Bokningssajt för massagemottagning.", url: "viriditasmassage.se", meta: "Live · Några dagar", tags: ["Utveckling", "React", "Vite"], href: "/arbete/viriditas" },
-  { title: "Yachting Sweden", desc: "SEO och content för svensk båtbransch.", url: "yachtingsweden.se", meta: "Pågående", tags: ["SEO", "Technical SEO", "Content"], href: "/arbete/yachting-sweden" },
-  { title: "Solcellsofferter.se", desc: "SEO för svensk solcellsmarknadsplats.", url: "solcellsofferter.se", meta: "Live", tags: ["SEO", "Content"], href: "/arbete/solcellsofferter" },
-  { title: "Minandel.se", desc: "V85 travtips-sajt med custom tema.", url: "minandel.se", meta: "Live", tags: ["WordPress", "Custom theme"], href: "/arbete/minandel" },
-];
-
-const WorkSection = () => (
-  <section className="section" id="arbeten">
-    <div className="wrap">
-      <div className="sec-head">
-        <Reveal><div className="meta-label">Referenser · 10 projekt</div></Reveal>
-        <Reveal delay={0.1}>
-          <div>
-            <h2 className="h2">9 live just nu. <span className="it">Inga exempel</span> från praktiken.</h2>
-            <p className="lead" style={{ marginTop: 22 }}>
-              Aurora Media driver en egen portfölj av SaaS-produkter med riktiga kunder, prenumerationer och
-              MRR — plus utvecklings- och SEO-uppdrag åt svenska bolag. Klicka och se. Allt nedan är på riktigt.
-            </p>
-          </div>
-        </Reveal>
-      </div>
-
-      <Reveal>
-        <Link to={FLAGSHIP.href} className="work-feature" style={{ textDecoration: "none", color: "inherit" }}>
-          <span className="badge">Flaggskepp</span>
-          <div>
-            <h3>{FLAGSHIP.title}</h3>
-            <p className="body" style={{ marginBottom: 16, maxWidth: "60ch" }}>{FLAGSHIP.desc}</p>
-            <div>
-              {FLAGSHIP.tags.map((t) => <span key={t} className="pill">{t}</span>)}
-            </div>
-          </div>
-          <div style={{ textAlign: "right", whiteSpace: "nowrap" }}>
-            <div className="mono" style={{ marginBottom: 8 }}>{FLAGSHIP.url}</div>
-            <div className="meta-label">{FLAGSHIP.meta}</div>
-          </div>
-        </Link>
-      </Reveal>
 
       <div className="work-grid">
-        {PROJECTS.map((p) => (
-          <Link to={p.href} key={p.title} className="work-card">
-            <h4>{p.title}</h4>
-            <p className="body">{p.desc}</p>
-            <div className="url" style={{ marginTop: 14 }}>{p.url}</div>
-            <div className="meta">{p.meta}</div>
-            <div style={{ marginTop: 10 }}>
-              {p.tags.map((t) => <span key={t} className="pill">{t}</span>)}
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <div style={{ marginTop: 36, textAlign: "center" }}>
-        <Link to="/arbete" className="btn btn-ghost">
-          Se alla 10 projekt i detalj <span className="a"><ArrowUpRight size={14} /></span>
-        </Link>
-      </div>
-    </div>
-  </section>
-);
-
-/* ───── Branscher ───── */
-const INDUSTRIES = [
-  "Industri & Logistik", "Vård & Hälsa", "Fintech & Kassa", "Skönhet & Wellness",
-  "SaaS & Tech", "E-handel", "Bygg & Hantverk", "Lantbruk & Hippologi",
-];
-
-const IndustriesSection = () => (
-  <section className="section" id="branscher">
-    <div className="wrap">
-      <div className="sec-head">
-        <Reveal><div className="meta-label">Branscher</div></Reveal>
-        <Reveal delay={0.1}>
-          <div>
-            <h2 className="h2">Byggt för <span className="it">verkliga</span> verksamheter.</h2>
-            <p className="lead" style={{ marginTop: 22 }}>
-              Vi har levererat till svenska bolag i åtta olika branscher — från transportbolag och
-              massageföretag till barnpsykiatri och e-handel.
-            </p>
-          </div>
-        </Reveal>
-      </div>
-      <div className="ind-grid">
-        {INDUSTRIES.map((i) => (
-          <div key={i} className="ind-cell">{i}</div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-/* ───── Integrationer ───── */
-const INTEGRATIONS = [
-  { cat: "Ekonomi", list: "Fortnox, Visma, Bokio" },
-  { cat: "Betalning", list: "Stripe, Klarna, Swish, PayPal, Adyen" },
-  { cat: "Auth & ID", list: "BankID, Auth0, Clerk" },
-  { cat: "Kommunikation", list: "Slack, Microsoft 365, Teams, Google Workspace" },
-  { cat: "E-post & SMS", list: "Mailgun, Resend, Postmark, Twilio, 46elks" },
-  { cat: "Marknadsföring", list: "Meta Ads, Google Ads, Mailchimp, Klaviyo, HubSpot, ActiveCampaign" },
-  { cat: "E-handel & CMS", list: "Shopify, WooCommerce, WordPress, Webflow, Strapi" },
-  { cat: "AI", list: "OpenAI, Anthropic, Google Gemini, Mistral, ElevenLabs" },
-  { cat: "Backend & hosting", list: "Supabase, Vercel, Cloudflare, AWS, Firebase" },
-  { cat: "Automation", list: "Zapier, Make, n8n" },
-  { cat: "CRM", list: "Pipedrive, HubSpot, Salesforce" },
-  { cat: "Övrigt", list: "Google Maps, Calendly, Notion, Airtable, Linear, Sentry" },
-];
-
-const IntegrationsSection = () => {
-  const { open } = useContactModal();
-  return (
-    <section className="section" id="integrationer">
-      <div className="wrap">
-        <div className="sec-head">
-          <Reveal><div className="meta-label">Integrationer</div></Reveal>
-          <Reveal delay={0.1}>
-            <div>
-              <h2 className="h2">Sömlöst kopplat till <span className="it">din verksamhet.</span></h2>
-              <p className="lead" style={{ marginTop: 22 }}>
-                Vi bygger anpassade integrationer mot REST/GraphQL-API:er, OAuth 2.0-flöden och webhooks. Det
-                här är bara ett urval — kan ditt verktyg prata API, kan vi koppla det.
-              </p>
-            </div>
+        {OUTCOMES.map((item, index) => (
+          <Reveal key={item.n} delay={index * 0.05}>
+            <article className="work-card" style={{ height: "100%" }}>
+              <div className="meta-label">{item.n}</div>
+              <h3 style={{ marginTop: 18 }}>{item.title}</h3>
+              <p className="body" style={{ marginTop: 12 }}>{item.desc}</p>
+            </article>
           </Reveal>
-        </div>
-        <div className="int-grid">
-          {INTEGRATIONS.map((i) => (
-            <div key={i.cat} className="int-cell">
-              <h4>{i.cat}</h4>
-              <p>{i.list}</p>
-            </div>
-          ))}
-        </div>
-        <div style={{ marginTop: 40, padding: "clamp(28px,3vw,40px)", border: "1px solid var(--hair)", borderRadius: 10, display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ maxWidth: "52ch" }}>
-            <h3 className="h3" style={{ marginBottom: 10 }}>Alla verktyg du inte ser</h3>
-            <p className="body">
-              Om ditt system pratar API, kan vi koppla det. OAuth 2.0, REST, GraphQL, webhooks — vi bygger
-              anpassade integrationer på begäran.
-            </p>
-          </div>
-          <button onClick={() => open()} className="btn btn-ghost">
-            Diskutera din integration <span className="a"><ArrowRight size={14} /></span>
-          </button>
-        </div>
+        ))}
       </div>
-    </section>
-  );
-};
-
-/* ───── Process ───── */
-const PROCESS = [
-  { n: "i.", name: "Vi kartlägger behovet", desc: "Workshop där vi förstår er verksamhet och målbild." },
-  { n: "ii.", name: "Vi designar flödet", desc: "Wireframes, UX och tekniskt arkitekturförslag." },
-  { n: "iii.", name: "Vi bygger första versionen", desc: "MVP byggd i modern stack med daglig avstämning." },
-  { n: "iv.", name: "Vi testar med riktiga användare", desc: "Iterationer baserat på faktisk användning." },
-  { n: "v.", name: "Du lanserar och äger koden", desc: "Full överlämning — kod, dokumentation och support." },
-];
+    </div>
+  </section>
+);
 
 const ProcessSection = () => (
   <section className="section" id="process">
     <div className="wrap">
       <div className="sec-head">
-        <Reveal><div className="meta-label">Process</div></Reveal>
+        <Reveal><div className="meta-label">Arbetssätt</div></Reveal>
         <Reveal delay={0.1}>
-          <h2 className="h2">Från idé till lansering <span className="it">utan kaos.</span></h2>
+          <h2 className="h2">Från flaskhals till fungerande lösning <span className="it">utan onödiga omvägar.</span></h2>
         </Reveal>
       </div>
-      <div className="proc-grid">
-        {PROCESS.map((s) => (
-          <div className="proc-step" key={s.n}>
-            <span className="proc-num">{s.n}</span>
-            <h3 className="proc-name">{s.name}</h3>
-            <p className="body">{s.desc}</p>
-          </div>
+      <div className="timeline">
+        {PROCESS.map((step, index) => (
+          <Reveal key={step.n} delay={index * 0.08}>
+            <div className="tl-step">
+              <span className="tl-num">{step.n}</span>
+              <span className="tl-day">{step.label}</span>
+              <h3 className="tl-title">{step.title}</h3>
+              <p className="body">{step.desc}</p>
+            </div>
+          </Reveal>
         ))}
       </div>
     </div>
   </section>
 );
 
-/* ───── Paket ───── */
-const PACKAGES = [
-  {
-    n: "01", featured: false, name: "Prototyp",
-    desc: "För dig som vill testa en idé snabbt innan större investering.",
-    items: ["Klickbar prototyp", "1–2 användarflöden", "UX-genomgång", "Leverans på några dagar"],
-    cta: "Starta med prototyp",
-  },
-  {
-    n: "02", featured: true, name: "MVP",
-    desc: "För dig som vill lansera en första fungerande produkt med riktiga kunder.",
-    items: ["Fungerande webb-/mobilapp", "Auth, betalningar, databas", "Stripe + valfri integration", "Leverans 1–2 veckor", "Du äger koden"],
-    cta: "Bygg min MVP",
-  },
-  {
-    n: "03", featured: false, name: "Skräddarsytt system",
-    desc: "För bolag som behöver affärssystem, integrationer eller intern plattform.",
-    items: ["Anpassad arkitektur", "Fortnox/Visma-integration", "BankID & rollstyrning", "Multi-tenant SaaS", "Långsiktig utveckling"],
-    cta: "Boka rådgivning",
-  },
-];
+const WorkSection = () => (
+  <section className="section" id="arbete">
+    <div className="wrap">
+      <div className="sec-head">
+        <Reveal><div className="meta-label">Utvalda projekt</div></Reveal>
+        <Reveal delay={0.1}>
+          <div>
+            <h2 className="h2">Inte bara idéer. <span className="it">Produkter som går att använda.</span></h2>
+            <p className="lead" style={{ marginTop: 22, maxWidth: "62ch" }}>
+              Aurora Media bygger och driver egna produkter parallellt med kunduppdrag. Det gör att våra beslut
+              prövas mot riktiga användare, drift, betalningar och support.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+
+      <div className="work-grid">
+        {PROJECTS.map((project) => (
+          <Link to={project.href} key={project.title} className="work-card">
+            <h3>{project.title}</h3>
+            <p className="body">{project.desc}</p>
+            <div className="meta" style={{ marginTop: 18 }}>{project.meta}</div>
+            <div className="url" style={{ marginTop: 14 }}>Läs projektet →</div>
+          </Link>
+        ))}
+      </div>
+
+      <div style={{ marginTop: 36 }}>
+        <Link to="/arbete" className="btn btn-ghost">
+          Se alla projekt <span className="a"><ArrowRight size={14} /></span>
+        </Link>
+      </div>
+    </div>
+  </section>
+);
 
 const PackagesSection = () => {
   const { open } = useContactModal();
+
   return (
-    <section className="section" id="paket">
+    <section className="section" id="upplagg">
       <div className="wrap">
         <div className="sec-head">
-          <Reveal><div className="meta-label">Paket</div></Reveal>
+          <Reveal><div className="meta-label">Upplägg</div></Reveal>
           <Reveal delay={0.1}>
             <div>
-              <h2 className="h2">Välj hur snabbt du <span className="it">vill komma igång.</span></h2>
-              <p className="lead" style={{ marginTop: 22 }}>
-                Tre tydliga paketnivåer — från snabb prototyp till skräddarsytt affärssystem. Inga konstiga
-                tilläggsfakturor, ingen abonnemangsfälla. Tydlig leveranstid, helt utan överraskningar.
+              <h2 className="h2">Börja så litet som behövs. <span className="it">Bygg vidare när det fungerar.</span></h2>
+              <p className="lead" style={{ marginTop: 22, maxWidth: "62ch" }}>
+                Ni får ett tydligt scope, en konkret leverans och full insyn. Inga långa förstudier som slutar i
+                ännu ett dokument.
               </p>
             </div>
           </Reveal>
         </div>
+
         <div className="price-grid">
-          {PACKAGES.map((p) => (
-            <Reveal key={p.n}>
-              <div className={`price-card ${p.featured ? "featured" : ""}`}>
-                {p.featured && <span className="price-tag">Populär</span>}
-                <span className="price-num">{p.n}</span>
-                <h3>{p.name}</h3>
-                <p className="body">{p.desc}</p>
+          {PACKAGES.map((pack) => (
+            <Reveal key={pack.n}>
+              <div className={`price-card ${pack.featured ? "featured" : ""}`}>
+                {pack.featured && <span className="price-tag">Vanlig start</span>}
+                <span className="price-num">{pack.n}</span>
+                <h3>{pack.name}</h3>
+                <p className="body">{pack.desc}</p>
                 <ul className="price-list">
-                  {p.items.map((it) => (
-                    <li key={it}><Check size={14} strokeWidth={2.5} /> {it}</li>
+                  {pack.items.map((item) => (
+                    <li key={item}><Check size={14} strokeWidth={2.5} /> {item}</li>
                   ))}
                 </ul>
-                <button onClick={() => open()} className={`btn ${p.featured ? "btn-moss" : "btn-ghost"}`}>
-                  {p.cta} <span className="a"><ArrowRight size={14} /></span>
+                <button onClick={() => open()} className={`btn ${pack.featured ? "btn-moss" : "btn-ghost"}`}>
+                  Diskutera upplägget <span className="a"><ArrowRight size={14} /></span>
                 </button>
               </div>
             </Reveal>
@@ -441,26 +314,71 @@ const PackagesSection = () => {
   );
 };
 
-/* ───── CTA ───── */
+const LocalSection = () => (
+  <section className="section" aria-labelledby="local-ai-heading">
+    <div className="wrap">
+      <div
+        style={{
+          border: "1px solid var(--hair)",
+          borderRadius: 12,
+          padding: "clamp(28px,5vw,64px)",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+          gap: "clamp(28px,5vw,72px)",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <Reveal><div className="meta-label">Lokal AI-partner</div></Reveal>
+          <Reveal delay={0.1}>
+            <h2 id="local-ai-heading" className="h2" style={{ marginTop: 18 }}>
+              Söker ni en <span className="it">AI-konsult i Linköping?</span>
+            </h2>
+          </Reveal>
+        </div>
+        <div>
+          <Reveal delay={0.15}>
+            <p className="lead">
+              Vår lokala sida samlar konkreta exempel på AI-automation, interna system, integrationer och hur ett
+              samarbete med företag i Linköping går till.
+            </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div style={{ marginTop: 24, display: "flex", flexWrap: "wrap", gap: 10 }}>
+              <Link to="/ai-byra-linkoping" className="btn btn-moss">
+                AI-konsult i Linköping <span className="a"><ArrowRight size={14} /></span>
+              </Link>
+              <Link to="/ai-karta" className="btn btn-ghost">
+                Gör kostnadsfri AI-kartläggning
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 const CTA = () => {
   const { open } = useContactModal();
+
   return (
     <section id="kontakt" className="cta-band">
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         <Reveal><div className="meta-label">Nästa steg</div></Reveal>
         <Reveal delay={0.1}>
-          <h2 className="h2" style={{ marginTop: 18, maxWidth: "20ch" }}>
-            Din idé förtjänar mer än <span className="it">att ligga i anteckningar.</span>
+          <h2 className="h2" style={{ marginTop: 18, maxWidth: "21ch" }}>
+            Visa oss processen ni är trötta på att göra <span className="it">manuellt.</span>
           </h2>
         </Reveal>
         <Reveal delay={0.2}>
-          <p className="lead" style={{ marginTop: 22 }}>
-            Berätta vad du vill bygga. Vi återkommer inom 24 timmar med förslag, tidsplan och ungefärlig
-            budget — helt utan kostnad och bindning.
+          <p className="lead" style={{ marginTop: 22, maxWidth: "60ch" }}>
+            Ni får en rak bedömning av vad som går att förbättra, vad som inte behöver AI och vilket första steg
+            som är rimligt.
           </p>
         </Reveal>
         <Reveal delay={0.3}>
-          <div style={{ marginTop: 36, display: "flex", flexWrap: "wrap", gap: 24, alignItems: "center" }}>
+          <div style={{ marginTop: 34, display: "flex", flexWrap: "wrap", gap: 20, alignItems: "center" }}>
             <button onClick={() => open()} className="btn btn-moss">
               Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
             </button>
@@ -472,50 +390,20 @@ const CTA = () => {
   );
 };
 
-/* ───── Page ───── */
 const Index = () => (
   <>
     <SEO
-      title="Aurora Media – AI-byrå i Linköping | SaaS & AI från 14 900 kr"
-      description="AI-byrå i Linköping. Vi bygger SaaS, AI-automationer och interna verktyg med fast pris från 14 900 kr. Leverans på veckor, kod du äger."
+      title="Aurora Media AB | AI-driven mjukvarupartner för svenska företag"
+      description="Aurora Media bygger AI-lösningar, interna system, appar och SaaS för svenska företag. Snabb leverans, tydligt scope och kod ni äger."
+      canonical="/"
     />
     <NordicLayout>
       <Hero />
-      <MetodSection />
-      <ServicesSection />
-      <WorkSection />
-      <IndustriesSection />
-      <IntegrationsSection />
+      <OutcomesSection />
       <ProcessSection />
+      <WorkSection />
       <PackagesSection />
-
-      <section className="section" aria-labelledby="ai-linkoping-heading">
-        <div className="wrap">
-          <div className="sec-head">
-            <Reveal><div className="meta-label">AI-byrå Linköping</div></Reveal>
-            <Reveal delay={0.1}>
-              <h2 id="ai-linkoping-heading" className="h2">
-                Aurora Media – <span className="it">AI-byrå i Linköping.</span>
-              </h2>
-            </Reveal>
-          </div>
-          <Reveal>
-            <p className="lead" style={{ maxWidth: "60ch" }}>
-              Vi är baserade i Linköping och bygger AI-automationer, SaaS och interna verktyg åt
-              svenska företag. Lokala möten i Östergötland, video-möten med kunder i hela Sverige.
-            </p>
-          </Reveal>
-          <div style={{ marginTop: 24, display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link to="/ai-byra-linkoping" className="btn btn-ghost">
-              AI-byrå i Linköping <span className="a"><ArrowRight size={14} /></span>
-            </Link>
-            <Link to="/ai-konsult-sverige" className="btn btn-ghost">
-              AI-konsult i Sverige <span className="a"><ArrowRight size={14} /></span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
+      <LocalSection />
       <CTA />
     </NordicLayout>
   </>
