@@ -1,444 +1,408 @@
 import { useEffect } from "react";
+import { ArrowRight, Check, Clock3, FileText, ShieldCheck, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import NordicLayout from "@/components/nordic/NordicLayout";
-import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
+import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import { trackAiKartaClick } from "@/lib/aiKartaTracking";
+import {
+  removeJsonLd,
+  setBreadcrumb,
+  setJsonLd,
+  setSEOMeta,
+  SITE_URL,
+} from "@/lib/seoHelpers";
 
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
-
-const RULE = { height: "0.5px", background: "rgba(237,233,220,0.12)" } as const;
-
-const proofStats = [
-  { value: "5–15 h", label: "sparat per anställd och vecka", sub: "i typiska AI-piloter som vi byggt" },
-  { value: "Några min", label: "att fylla i online", sub: "klart innan ditt nästa möte" },
-  { value: "0 kr", label: "för analysen", sub: "och inget säljmöte krävs" },
+const BENEFITS = [
+  {
+    n: "01",
+    title: "Era tre bästa startområden",
+    body: "Processerna rangordnas efter frekvens, tidsåtgång, regelstyrning, tillgänglig data och affärsnytta.",
+  },
+  {
+    n: "02",
+    title: "Rimlig lösning per process",
+    body: "Ni ser om behovet främst är AI, vanlig automation, en integration eller ett internt system.",
+  },
+  {
+    n: "03",
+    title: "Uppskattad frigjord tid",
+    body: "Analysen räknar försiktigt på möjlig tidsbesparing och visar antagandena bakom uppskattningen.",
+  },
+  {
+    n: "04",
+    title: "Ett beslutsunderlag att spara",
+    body: "Resultatet visas direkt och kan laddas ner som PDF för att delas med kollegor, ledning eller styrelse.",
+  },
 ];
 
-const valueStack = [
-  { title: "Personlig topp-3-analys", body: "Vilka av era processer som ger störst effekt först – inte en generisk lista." },
-  { title: "Konkret tidsbesparing i timmar", body: "Beräknat per process, per vecka och per år. Lätt att räkna ROI på." },
-  { title: "Förslag på lösning per område", body: "AI-assistent, automation, dashboard, internt system eller integration – med motivering." },
-  { title: "Djupanalys av Aurora-analysen", body: "Snabba vinster, risker att hantera och en rekommenderad ordning på pilotprojekten." },
-  { title: "Innehållsrik PDF att dela internt", body: "Snyggt formaterad, byggd för att ta med till ledningsmöte eller workshop med personalen." },
-  { title: "Metodguide: Så automatiserar ni", body: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt AI-lösning på två till fyra veckor." },
+const STEPS = [
+  {
+    n: "01",
+    label: "Fokus",
+    title: "Markera var tiden försvinner",
+    body: "Välj områden som administration, offerter, rapportering, kundservice eller interna rutiner.",
+  },
+  {
+    n: "02",
+    label: "Process",
+    title: "Beskriv minst en arbetsuppgift",
+    body: "Ange hur ofta den görs och ungefär hur mycket tid den tar. Fler detaljer är frivilliga.",
+  },
+  {
+    n: "03",
+    label: "Resultat",
+    title: "Få analysen direkt",
+    body: "Fyll i vart kopian ska skickas. Ingen betalning och inget bokat säljmöte krävs.",
+  },
 ];
 
-const objections = [
-  { q: "Vi är inte tekniska – förstår vi ens svaren?", a: "Ja. Allt är på vanlig svenska, utan AI-jargong. Du svarar på frågor om hur ni jobbar idag – vi översätter till lösningar." },
-  { q: "Är det här bara ett sätt att fånga in leads för att ringa oss sen?", a: "Nej. Ni får hela analysen och PDF:en direkt på skärmen, utan säljmöte. Vill ni boka en genomlysning är det helt frivilligt – och alltid kostnadsfritt." },
-  { q: "Vi har redan testat ChatGPT, behöver vi det här?", a: "ChatGPT är ett verktyg. AI-kartan handlar om VAD i er verksamhet som faktiskt sparar tid och pengar att automatisera – och i vilken ordning." },
-  { q: "Hur vet ni vad som passar just oss?", a: "Analysen är byggd på era egna svar om frekvens, tidsåtgång, regelstyrning, datatillgång och affärsvärde – samma kriterier som vi använder med betalande kunder." },
+const FAQ = [
+  {
+    q: "Vad behöver vi förbereda?",
+    a: "Ingenting. Tänk bara på en eller flera återkommande arbetsuppgifter som tar onödigt mycket tid, skapar dubbelarbete eller lätt blir fel.",
+  },
+  {
+    q: "Är analysen verkligen personlig?",
+    a: "Ja. Rangordningen och rekommendationerna bygger på era egna processer, tidsuppskattningar, system och svar. Resultatet är ändå en första bedömning, inte en full teknisk förstudie.",
+  },
+  {
+    q: "Varför behöver ni vår e-postadress?",
+    a: "För att skapa leadposten, skicka en kopia av resultatet och göra det möjligt att återfå analysen. Ni väljer själva om ni vill boka en genomgång efteråt.",
+  },
+  {
+    q: "Måste vi prata med en säljare?",
+    a: "Nej. Resultatet och PDF:en är tillgängliga direkt. En kostnadsfri genomlysning är ett frivilligt nästa steg för företag som vill kontrollera scope, data och kostnad.",
+  },
+  {
+    q: "Kan vi skriva känslig information?",
+    a: "Undvik personuppgifter, kundhemligheter och känsliga dokument. Beskriv processen på en övergripande nivå, till exempel ‘skapa offert från kundmejl’ eller ‘sammanställa veckorapport från Excel’.",
+  },
 ];
-
-const steps = [
-  { num: "01", title: "Fyll i AI-kartan online", body: "Några minuter. Lista era vanligaste tidskrävande processer.", time: "Några min" },
-  { num: "02", title: "Få mini-analys direkt", body: "Topp-3 områden, tidsbesparing, lösningsförslag och AI-djupanalys – på skärmen, direkt.", time: "Direkt" },
-  { num: "03", title: "Ladda ner PDF:en", body: "Innehållsrikt underlag att dela med ledning, personal eller styrelse.", time: "1 klick" },
-  { num: "04", title: "(Valfritt) Boka genomlysning", body: "Vi går igenom era svar och pekar ut bästa första pilot. Helt kostnadsfritt.", time: "45 min" },
-];
-
-const examples = [
-  "kundfrågor som besvaras om och om igen",
-  "CRM-uppdateringar efter möten och säljsamtal",
-  "Excel-listor som uppdateras manuellt",
-  "rapporter som sammanställs från flera källor",
-  "offerter, avtal eller dokument som följer mallar",
-  "fakturor, kostnader eller ärenden som kontrolleras enligt regler",
-  "intern kunskap som personal behöver leta efter",
-  "uppföljningar till leads som lätt glöms bort",
-];
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "DigitalDocument",
-  name: "Aurora AI-karta",
-  description:
-    "Kostnadsfri AI-analys för svenska företag. Identifiera vilka processer som kan automatiseras med AI – på några minuter, utan säljmöte.",
-  provider: { "@type": "Organization", name: "Aurora Media AB", url: "https://auroramedia.se" },
-};
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: objections.map((o) => ({
-    "@type": "Question",
-    name: o.q,
-    acceptedAnswer: { "@type": "Answer", text: o.a },
-  })),
-};
 
 const AiKarta = () => {
   useEffect(() => {
     setSEOMeta({
-      title: "Kostnadsfri AI-analys för ditt företag | Aurora Media",
+      title: "AI-kartläggning för företag – kostnadsfri AI-analys | Aurora Media",
       description:
-        "Ta reda på exakt vilka processer i ditt företag som kan automatiseras med AI. Personlig analys + innehållsrik PDF – på några minuter, helt kostnadsfritt.",
+        "Kartlägg företagets bästa områden för AI, automation och interna system. Få prioriterad topp 3, tidsuppskattning och PDF på cirka 3–5 minuter.",
       canonical: "/ai-karta",
+      keywords:
+        "AI-kartläggning företag, AI-analys företag, AI för företag, automatisera arbetsuppgifter",
     });
+
     setBreadcrumb([
-      { name: "Start", url: "/" },
+      { name: "Hem", url: "/" },
       { name: "AI-kartan", url: "/ai-karta" },
     ]);
-    setJsonLd("ai-karta-jsonld", jsonLd);
-    setJsonLd("ai-karta-faq-jsonld", faqJsonLd);
+
+    setJsonLd("ai-karta-jsonld", {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "Aurora AI-karta",
+      url: `${SITE_URL}/ai-karta`,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+      inLanguage: "sv-SE",
+      description:
+        "Kostnadsfri AI-kartläggning som hjälper företag att prioritera processer för AI, automation, integrationer och interna system.",
+      provider: { "@id": `${SITE_URL}/#organization` },
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "SEK",
+      },
+      featureList: [
+        "Prioriterad topp 3",
+        "Uppskattad tidsbesparing",
+        "Lösningsförslag",
+        "PDF-underlag",
+      ],
+    });
+
+    setJsonLd("ai-karta-faq-jsonld", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQ.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    });
+
+    void trackAiKartaClick("landing_view");
+
+    return () => {
+      removeJsonLd("ai-karta-jsonld");
+      removeJsonLd("ai-karta-faq-jsonld");
+      removeJsonLd("breadcrumb-jsonld");
+    };
   }, []);
 
   return (
     <NordicLayout>
-      <main id="main">
-
-        {/* ============== HERO ============== */}
-        <section style={{ paddingTop: "clamp(80px,10vw,140px)", paddingBottom: "clamp(40px,6vw,80px)" }}>
+      <div id="main">
+        <section className="page-hero" aria-labelledby="ai-map-heading">
           <div className="wrap">
-            <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 14, textTransform: "lowercase" }}>
-              kostnadsfri ai-analys · 2 min
-            </p>
-            <h1 style={{
-              fontFamily: F,
-              fontSize: "clamp(32px,6vw,72px)",
-              lineHeight: 1.02,
-              letterSpacing: "-0.025em",
-              color: C,
-              fontWeight: 400,
-              maxWidth: 760,
-              marginBottom: 16,
-            }}>
-              Vad i ert företag kan AI sköta åt er?
-            </h1>
-            <p style={{
-              fontFamily: I,
-              fontSize: "clamp(15px,1.6vw,18px)",
-              lineHeight: 1.6,
-              color: "rgba(237,233,220,0.60)",
-              maxWidth: 520,
-              marginBottom: 24,
-            }}>
-              Få en personlig analys på <strong style={{ color: C, fontWeight: 500 }}>2 minuter</strong> – topp-3 processer som sparar mest tid hos er, helt kostnadsfritt och utan säljmöte.
-            </p>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link to="/ai-karta/start" className="btn-primary">Starta gratis (2 min) →</Link>
-              <Link to="/kontakt" className="btn-ghost">Hellre prata direkt?</Link>
-            </div>
-
-            {/* Proof stats */}
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px,1fr))",
-              gap: 1,
-              marginTop: 52,
-              border: "0.5px solid rgba(237,233,220,0.12)",
-              borderRadius: 8,
-              overflow: "hidden",
-            }}>
-              {proofStats.map((s, i) => (
-                <div key={s.label} style={{
-                  padding: "24px 24px",
-                  borderLeft: i > 0 ? "0.5px solid rgba(237,233,220,0.10)" : "none",
-                }}>
-                  <p style={{ fontFamily: F, fontSize: "clamp(26px,3vw,36px)", color: C, fontWeight: 400, lineHeight: 1, marginBottom: 8 }}>
-                    {s.value}
-                  </p>
-                  <p style={{ fontFamily: I, fontSize: 13, fontWeight: 500, color: "rgba(237,233,220,0.75)", marginBottom: 4 }}>
-                    {s.label}
-                  </p>
-                  <p style={{ fontFamily: I, fontSize: 12, color: "rgba(237,233,220,0.35)" }}>
-                    {s.sub}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ============== PROBLEM ============== */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={RULE} />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-            <h2 style={{
-              fontFamily: F,
-              fontSize: "clamp(24px,3.5vw,40px)",
-              color: C,
-              fontWeight: 400,
-              letterSpacing: "-0.02em",
-              maxWidth: 640,
-              marginBottom: 32,
-              lineHeight: 1.15,
-            }}>
-              Ni vet att AI borde fixa det här. Men vad ska ni börja med?
-            </h2>
-            <ol style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", gap: "0 32px" }}>
-              {examples.map((ex, i) => (
-                <li key={ex} style={{
-                  display: "flex",
-                  gap: 16,
-                  alignItems: "baseline",
-                  padding: "14px 0",
-                  borderBottom: "0.5px solid rgba(237,233,220,0.08)",
-                }}>
-                  <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.28)", flexShrink: 0, paddingTop: 2 }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span style={{ fontFamily: I, fontSize: 14, color: "rgba(237,233,220,0.65)", lineHeight: 1.55 }}>
-                    {ex}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        {/* ============== VALUE STACK ============== */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={RULE} />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 12 }}>
-              Vad ni får – allt kostnadsfritt
-            </p>
-            <h2 style={{
-              fontFamily: F,
-              fontSize: "clamp(24px,3.5vw,40px)",
-              color: C,
-              fontWeight: 400,
-              letterSpacing: "-0.02em",
-              maxWidth: 600,
-              marginBottom: 36,
-              lineHeight: 1.15,
-            }}>
-              Inte ännu en AI-rapport. <em>Ett färdigt beslutsunderlag.</em>
-            </h2>
-
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))",
-              gap: 10,
-            }}>
-              {valueStack.map((item, i) => (
-                <div
-                  key={item.title}
-                  style={{
-                    padding: "24px 24px",
-                    border: "0.5px solid rgba(237,233,220,0.10)",
-                    borderRadius: 8,
-                    transition: "background 0.15s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(237,233,220,0.025)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
-                >
-                  <p style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.28)", marginBottom: 12 }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <p style={{ fontFamily: F, fontSize: 18, color: C, marginBottom: 8, lineHeight: 1.2 }}>
-                    {item.title}
-                  </p>
-                  <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)", lineHeight: 1.65 }}>
-                    {item.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Mid-page CTA row */}
-            <div style={{
-              marginTop: 40,
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 20,
-              padding: "28px 28px",
-              border: "0.5px solid rgba(237,233,220,0.12)",
-              borderRadius: 8,
-            }}>
+            <div className="funnel-grid">
               <div>
-                <p style={{ fontFamily: F, fontSize: "clamp(18px,2vw,22px)", color: C, marginBottom: 4 }}>
-                  Redo att se vad AI kan göra för er?
-                </p>
-                <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.40)" }}>
-                  Några minuter. Direktanalys. Ingen kontaktinfo krävs förrän ni vill ha PDF:en.
-                </p>
+                <Reveal>
+                  <p className="mono">kostnadsfri ai-kartläggning · cirka 3–5 minuter</p>
+                </Reveal>
+                <Reveal delay={0.1}>
+                  <h1
+                    id="ai-map-heading"
+                    className="hero-line"
+                    style={{ marginTop: 18, fontSize: "clamp(2.2rem,5.8vw,4.9rem)", maxWidth: "17ch" }}
+                  >
+                    Se var AI kan spara <span className="it">mest tid i ert företag.</span>
+                  </h1>
+                </Reveal>
+                <Reveal delay={0.2}>
+                  <p className="lead" style={{ marginTop: 24, maxWidth: "62ch" }}>
+                    Beskriv era återkommande arbetsuppgifter och få en prioriterad topp 3 med
+                    lösningsförslag, försiktig tidsuppskattning och ett PDF-underlag att dela internt.
+                  </p>
+                </Reveal>
+                <Reveal delay={0.3}>
+                  <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 10 }}>
+                    <Link
+                      to="/ai-karta/start"
+                      className="btn btn-moss"
+                      onClick={() => void trackAiKartaClick("landing_primary_cta")}
+                    >
+                      Starta kostnadsfritt <span className="a"><ArrowRight size={14} /></span>
+                    </Link>
+                    <Link to="/kontakt" className="btn btn-ghost">
+                      Hellre prata direkt?
+                    </Link>
+                  </div>
+                </Reveal>
+                <Reveal delay={0.4}>
+                  <div className="hero-trust" style={{ marginTop: 24 }}>
+                    {[
+                      "Resultatet visas direkt",
+                      "Ingen betalning eller bokning",
+                      "Byggd av Aurora Media AB i Linköping",
+                    ].map((item) => (
+                      <div key={item} className="trust-item">
+                        <Check size={14} className="ic" strokeWidth={2.5} /> {item}
+                      </div>
+                    ))}
+                  </div>
+                </Reveal>
               </div>
-              <Link to="/ai-karta/start" className="btn-primary" style={{ flexShrink: 0 }}>
-                Starta nu →
-              </Link>
+
+              <Reveal delay={0.16}>
+                <aside className="result-preview" aria-label="Exempel på resultat från AI-kartan">
+                  <p className="eyebrow">exempel på resultat</p>
+                  <h2 className="h3" style={{ marginTop: 14, fontSize: "clamp(1.15rem,2vw,1.45rem)" }}>
+                    Företagets rekommenderade första pilot
+                  </h2>
+                  <p className="body" style={{ marginTop: 10 }}>
+                    Skapa offertutkast från inkommande kundmejl och låt en medarbetare godkänna innan utskick.
+                  </p>
+
+                  <div style={{ marginTop: 22 }}>
+                    {[
+                      { label: "Potential", value: "Hög" },
+                      { label: "Uppskattad effekt", value: "3–5 h/vecka" },
+                      { label: "Lämplig lösning", value: "AI + automation" },
+                    ].map((item, index) => (
+                      <div key={item.label} className="result-preview-row">
+                        <span className="mono" style={{ color: "var(--bone-mute)" }}>
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="body">{item.label}</span>
+                        <strong className="mono-md">{item.value}</strong>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="body" style={{ marginTop: 18, fontSize: 13 }}>
+                    Exemplet visar formatet. Er analys räknas fram från era egna svar och kan ge ett annat resultat.
+                  </p>
+                </aside>
+              </Reveal>
             </div>
+
+            <Reveal delay={0.45}>
+              <div className="trust-strip" style={{ marginTop: "clamp(36px,6vw,64px)" }}>
+                <div>
+                  <Clock3 size={18} color="var(--moss)" />
+                  <p className="h3" style={{ marginTop: 10 }}>3–5 minuter</p>
+                  <p className="body" style={{ marginTop: 4, fontSize: 13 }}>En process räcker för att börja.</p>
+                </div>
+                <div>
+                  <Sparkles size={18} color="var(--moss)" />
+                  <p className="h3" style={{ marginTop: 10 }}>Personligt resultat</p>
+                  <p className="body" style={{ marginTop: 4, fontSize: 13 }}>Byggt på era egna arbetsflöden.</p>
+                </div>
+                <div>
+                  <FileText size={18} color="var(--moss)" />
+                  <p className="h3" style={{ marginTop: 10 }}>PDF att dela</p>
+                  <p className="body" style={{ marginTop: 4, fontSize: 13 }}>Ta med underlaget till nästa möte.</p>
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
 
-        {/* ============== HOW IT WORKS ============== */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={RULE} />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>
-              Så fungerar det
-            </p>
-            <h2 style={{
-              fontFamily: F,
-              fontSize: "clamp(24px,3.5vw,40px)",
-              color: C,
-              fontWeight: 400,
-              letterSpacing: "-0.02em",
-              marginBottom: 36,
-              lineHeight: 1.15,
-            }}>
-              Från första klick till färdig AI-plan.
-            </h2>
-
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {steps.map((step, i) => (
-                <div
-                  key={step.num}
-                  style={{
-                    display: "grid",
-                    gap: "8px 40px",
-                    padding: "24px 0",
-                    borderBottom: i < steps.length - 1 ? "0.5px solid rgba(237,233,220,0.08)" : "none",
-                    alignItems: "baseline",
-                  }}
-                  className="sm:grid-cols-[40px_200px_1fr_80px]"
-                >
-                  <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)" }}>
-                    {step.num}
-                  </span>
-                  <span style={{ fontFamily: I, fontSize: 14, fontWeight: 500, color: C }}>
-                    {step.title}
-                  </span>
-                  <span style={{ fontFamily: I, fontSize: 13, lineHeight: 1.65, color: "rgba(237,233,220,0.50)" }}>
-                    {step.body}
-                  </span>
-                  <span style={{
-                    fontFamily: M,
-                    fontSize: 10,
-                    letterSpacing: "0.06em",
-                    color: "rgba(237,233,220,0.35)",
-                    border: "0.5px solid rgba(237,233,220,0.15)",
-                    borderRadius: 4,
-                    padding: "3px 8px",
-                    whiteSpace: "nowrap",
-                    justifySelf: "start",
-                  }}>
-                    {step.time}
-                  </span>
+        <section className="section" aria-labelledby="ai-map-value-heading">
+          <div className="wrap">
+            <div className="sec-head">
+              <Reveal><div className="meta-label">Det här får ni</div></Reveal>
+              <Reveal delay={0.1}>
+                <div>
+                  <h2 id="ai-map-value-heading" className="h2">
+                    Inte en lista över AI-verktyg. <span className="it">Ett prioriterat nästa steg.</span>
+                  </h2>
+                  <p className="lead" style={{ marginTop: 22 }}>
+                    Kartan skiljer mellan sådant som bör lösas med AI och sådant som blir bättre med
+                    vanlig automation, integration eller ett enklare internt system.
+                  </p>
                 </div>
+              </Reveal>
+            </div>
+
+            <div className="work-grid">
+              {BENEFITS.map((item, index) => (
+                <Reveal key={item.n} delay={index * 0.05}>
+                  <article className="work-card" style={{ height: "100%" }}>
+                    <span className="meta-label">{item.n}</span>
+                    <h3 style={{ marginTop: 18 }}>{item.title}</h3>
+                    <p className="body" style={{ marginTop: 12 }}>{item.body}</p>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal>
+              <div className="surface surface-pad" style={{ marginTop: 36, display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 20, alignItems: "center" }}>
+                <div>
+                  <p className="h3">Har ni en återkommande tidstjuv i åtanke?</p>
+                  <p className="body" style={{ marginTop: 6 }}>Det räcker. Ni behöver inte kunna beskriva tekniken.</p>
+                </div>
+                <Link
+                  to="/ai-karta/start"
+                  className="btn btn-moss"
+                  onClick={() => void trackAiKartaClick("landing_mid_cta")}
+                >
+                  Kartlägg den nu <span className="a"><ArrowRight size={14} /></span>
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="ai-map-process-heading">
+          <div className="wrap">
+            <div className="sec-head">
+              <Reveal><div className="meta-label">Så fungerar det</div></Reveal>
+              <Reveal delay={0.1}>
+                <h2 id="ai-map-process-heading" className="h2">
+                  Tre steg från tidstjuv till <span className="it">beslutsunderlag.</span>
+                </h2>
+              </Reveal>
+            </div>
+
+            <div className="timeline">
+              {STEPS.map((step, index) => (
+                <Reveal key={step.n} delay={index * 0.08}>
+                  <div className="tl-step">
+                    <span className="tl-num">{step.n}</span>
+                    <span className="tl-day">{step.label}</span>
+                    <h3 className="tl-title">{step.title}</h3>
+                    <p className="body">{step.body}</p>
+                  </div>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ============== FAQ / OBJECTIONS ============== */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={RULE} />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)", maxWidth: 760 }}>
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>
-              Vanliga frågor
-            </p>
-            <h2 style={{
-              fontFamily: F,
-              fontSize: "clamp(24px,3.5vw,40px)",
-              color: C,
-              fontWeight: 400,
-              letterSpacing: "-0.02em",
-              marginBottom: 32,
-              lineHeight: 1.15,
-            }}>
-              Innan ni klickar – det här undrar de flesta.
-            </h2>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              {objections.map((o, i) => (
-                <details
-                  key={o.q}
-                  style={{
-                    borderTop: "0.5px solid rgba(237,233,220,0.10)",
-                    borderBottom: i === objections.length - 1 ? "0.5px solid rgba(237,233,220,0.10)" : "none",
-                  }}
-                >
-                  <summary style={{
-                    fontFamily: F,
-                    fontSize: "clamp(16px,1.8vw,20px)",
-                    color: C,
-                    fontWeight: 400,
-                    padding: "18px 0",
-                    cursor: "pointer",
-                    listStyle: "none",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: 16,
-                  }}>
-                    {o.q}
-                    <span style={{ fontFamily: M, fontSize: 18, color: "rgba(237,233,220,0.30)", flexShrink: 0, lineHeight: 1 }}>+</span>
-                  </summary>
-                  <p style={{
-                    fontFamily: I,
-                    fontSize: 14,
-                    lineHeight: 1.7,
-                    color: "rgba(237,233,220,0.55)",
-                    paddingBottom: 20,
-                    marginTop: -4,
-                    maxWidth: 620,
-                  }}>
-                    {o.a}
+        <section className="section" aria-labelledby="ai-map-safe-heading">
+          <div className="wrap">
+            <div className="funnel-grid">
+              <Reveal>
+                <div>
+                  <p className="meta-label">Trygg användning</p>
+                  <h2 id="ai-map-safe-heading" className="h2" style={{ marginTop: 18 }}>
+                    Beskriv processen. <span className="it">Inte företagshemligheterna.</span>
+                  </h2>
+                </div>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <div className="surface surface-pad">
+                  <ShieldCheck size={22} color="var(--moss)" />
+                  <p className="lead" style={{ marginTop: 16 }}>
+                    Skriv exempelvis “registrera order från kundmejl” eller “sammanställa månadsrapport från tre system”.
+                    Lägg inte in personnummer, kundlistor, avtal eller andra känsliga uppgifter.
                   </p>
+                  <Link to="/integritetspolicy" className="text-link" style={{ marginTop: 18, display: "inline-block" }}>
+                    Läs integritetspolicyn
+                  </Link>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" aria-labelledby="ai-map-faq-heading">
+          <div className="wrap" style={{ maxWidth: 920 }}>
+            <div className="sec-head">
+              <Reveal><div className="meta-label">Vanliga frågor</div></Reveal>
+              <Reveal delay={0.1}>
+                <h2 id="ai-map-faq-heading" className="h2">
+                  Innan ni <span className="it">börjar.</span>
+                </h2>
+              </Reveal>
+            </div>
+
+            <div>
+              {FAQ.map((item) => (
+                <details key={item.q} className="faq-row">
+                  <summary>{item.q}</summary>
+                  <p>{item.a}</p>
                 </details>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ============== FINAL CTA ============== */}
-        <section style={{ paddingBottom: "clamp(56px,8vw,88px)" }}>
-          <div style={RULE} />
-          <div className="wrap" style={{ paddingTop: "clamp(40px,6vw,64px)" }}>
-            <h2 style={{
-              fontFamily: F,
-              fontStyle: "italic",
-              fontSize: "clamp(26px,4vw,52px)",
-              color: C,
-              fontWeight: 400,
-              letterSpacing: "-0.025em",
-              maxWidth: 720,
-              lineHeight: 1.1,
-              marginBottom: 16,
-            }}>
-              Några minuter nu kan spara er verksamhet hundratals timmar nästa år.
-            </h2>
-            <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.40)", marginBottom: 28 }}>
-              Helt kostnadsfritt. Inget säljmöte krävs.
-            </p>
-            <Link to="/ai-karta/start" className="btn-primary">Starta min AI-analys →</Link>
+        <section className="cta-band">
+          <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+            <Reveal><div className="meta-label">Kostnadsfri första kartläggning</div></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="h2" style={{ marginTop: 18, maxWidth: "22ch" }}>
+                Börja med processen som ni helst skulle slippa göra <span className="it">manuellt.</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="lead" style={{ marginTop: 22 }}>
+                Resultatet visas direkt. Ni bokar bara en genomgång om ni själva vill gå vidare.
+              </p>
+            </Reveal>
+            <Reveal delay={0.3}>
+              <Link
+                to="/ai-karta/start"
+                className="btn btn-moss"
+                style={{ marginTop: 28 }}
+                onClick={() => void trackAiKartaClick("landing_final_cta")}
+              >
+                Starta min AI-karta <span className="a"><ArrowRight size={14} /></span>
+              </Link>
+            </Reveal>
           </div>
         </section>
 
-        {/* Sticky mobil-CTA → direkt till formuläret (minskar bounce från sociala medier) */}
         <Link
           to="/ai-karta/start"
-          className="btn-primary"
-          style={{
-            position: "fixed",
-            left: 12,
-            right: 12,
-            bottom: 12,
-            zIndex: 40,
-            justifyContent: "center",
-            textAlign: "center",
-            boxShadow: "0 12px 32px rgba(0,0,0,0.45)",
-          }}
-          aria-label="Starta gratis AI-analys"
-          data-aikarta-sticky
+          className="btn btn-moss sticky-funnel-cta"
+          onClick={() => void trackAiKartaClick("landing_primary_cta")}
         >
-          Starta gratis AI-analys (2 min) →
+          Starta kostnadsfritt · 3–5 min <span className="a"><ArrowRight size={14} /></span>
         </Link>
-        <style>{`
-          [data-aikarta-sticky]{display:none !important}
-          @media (max-width: 760px){
-            [data-aikarta-sticky]{display:inline-flex !important}
-          }
-        `}</style>
-
-      </main>
-      </NordicLayout>
+      </div>
+    </NordicLayout>
   );
 };
 
