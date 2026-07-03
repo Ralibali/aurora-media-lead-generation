@@ -5,7 +5,7 @@ const LINKOPING_KW = "Linköping, Östergötland, AI-byrå Linköping";
 export const articles31to40: Article[] = [
   // ============ 1 ============
   {
-    slug: "ai-for-foretag-linkoping",
+    slug: "ai-for-foretag-linkoping-2026",
     keyword: `AI för företag Linköping, AI Östergötland, AI-implementation, ${LINKOPING_KW}`,
     category: "AI-byrå",
     title: "AI för företag i Linköping – konkret guide 2026",
@@ -142,7 +142,7 @@ export const articles31to40: Article[] = [
       { q: "Hur säkerställer ni att AI:n inte gör dyra fel?", a: "Alla ekonomiska händelser går genom manuell godkänningskö. AI föreslår, människa godkänner. Vi bygger inte helautomatiska fakturaflöden – för mycket risk för lite vinst." },
       { q: "Hur snabbt kan vi komma igång?", a: "Från första möte till första flöde i drift: 3–5 veckor är realistiskt." },
     ],
-    relatedSlugs: ["bygga-internt-system-istallet-for-excel", "ai-for-foretag-linkoping"],
+    relatedSlugs: ["bygga-internt-system-istallet-for-excel", "ai-for-foretag-linkoping-2026"],
   },
 
   // ============ 3 ============
@@ -208,7 +208,7 @@ export const articles31to40: Article[] = [
       { q: "Vad händer med jobben?", a: "Vår erfarenhet: byråer som implementerar AI väl växer utan att behöva anställa lika snabbt. Ingen har sagt upp personal – de har flyttat tid till högre värde." },
       { q: "Kan ni bygga något som funkar bara för vår byrå?", a: "Ja. Standardintegrationer + en tunn skräddarsydd lager mot era rutiner och kundmix. Det är hela vår modell." },
     ],
-    relatedSlugs: ["ai-chatbot-kundtjanst-smaforetag", "ai-for-foretag-linkoping"],
+    relatedSlugs: ["ai-chatbot-kundtjanst-smaforetag", "ai-for-foretag-linkoping-2026"],
   },
 
   // ============ 4 ============
@@ -274,7 +274,7 @@ export const articles31to40: Article[] = [
       { q: "Klarar systemet transport över gränsen?", a: "Ja. Vi hanterar tull, CMR, transportköpsledet och flera valutor. Fungerar för både inrikes och Europatrafik." },
       { q: "Vad händer om systemet går ner mitt i dagen?", a: "Vi kör med multi-region backup och SLA på 99,9 % för driftkritiska funktioner. Statusuppdateringar via egen status-sida." },
     ],
-    relatedSlugs: ["ai-automation-bygg-ostergotland", "ai-for-foretag-linkoping"],
+    relatedSlugs: ["ai-automation-bygg-ostergotland", "ai-for-foretag-linkoping-2026"],
   },
 
   // ============ 5 ============
@@ -340,7 +340,7 @@ export const articles31to40: Article[] = [
       { q: "GDPR för besöksnäringen?", a: "Personuppgifter (namn, mejl, telefon) hanteras enligt GDPR med tydlig samtyckesloop. Vi bygger detta ingropat från start." },
       { q: "Kan ni hjälpa säsongsbolag med bara 4 månaders drift?", a: "Ja. Setup görs off-season, drift-support kan pausas under stängningsperioden." },
     ],
-    relatedSlugs: ["ai-transportforetag-logistik", "ai-for-foretag-linkoping"],
+    relatedSlugs: ["ai-transportforetag-logistik", "ai-for-foretag-linkoping-2026"],
   },
 
   // ============ 6 ============
@@ -411,7 +411,7 @@ export const articles31to40: Article[] = [
       { q: "Är TikTok relevant för B2B i Östergötland?", a: "Sällan. Undantag: rekrytering av yngre målgrupper och vissa nischade tjänster. För de flesta B2B: LinkedIn > TikTok." },
       { q: "Hur mäter man om marknadsföringen fungerar?", a: "Leads och intäkter per kanal – inte klick och visningar. Kräver ordentlig konverteringsspårning från annons till affär i CRM." },
     ],
-    relatedSlugs: ["synas-pa-google-linkoping", "ai-for-foretag-linkoping"],
+    relatedSlugs: ["synas-pa-google-linkoping", "ai-for-foretag-linkoping-2026"],
   },
 
   // ============ 7 ============
@@ -548,7 +548,7 @@ export const articles31to40: Article[] = [
       { q: "Kan chatboten koppla till bokningssystem, CRM, order?", a: "Ja, via tool use / function calling. Vi bygger integrationer när det ger tydligt värde – annars håller vi den enkel." },
       { q: "Vad händer när LLM-priserna sänks?", a: "De blir ännu billigare att driva. Redan idag ligger typisk driftskostnad på 500–2 500 kr/mån för ett SMB-företag." },
     ],
-    relatedSlugs: ["bygga-internt-system-istallet-for-excel", "ai-for-foretag-linkoping"],
+    relatedSlugs: ["bygga-internt-system-istallet-for-excel", "ai-for-foretag-linkoping-2026"],
   },
 
   // ============ 9 ============
@@ -680,7 +680,7 @@ export const articles31to40: Article[] = [
       {
         heading: "Bonus: den enda frågan vi själva alltid ställer",
         content:
-          "‘Om vi bygger detta – vad slutar ni göra?’ En AI-lösning som bara läggs till som ännu ett verktyg utan att ersätta något annat är sällan värt det. Bra implementation dödar en gammal rutin, ett gammalt SaaS-abonnemang, eller en manuell process. Se hela vår [metodik](/metodik) för hur vi jobbar. Vill ni gå djupare – börja med vår [AI-guide för företag i Linköping](/blogg/ai-for-foretag-linkoping).",
+          "‘Om vi bygger detta – vad slutar ni göra?’ En AI-lösning som bara läggs till som ännu ett verktyg utan att ersätta något annat är sällan värt det. Bra implementation dödar en gammal rutin, ett gammalt SaaS-abonnemang, eller en manuell process. Se hela vår [metodik](/metodik) för hur vi jobbar. Vill ni gå djupare – börja med vår [AI-guide för företag i Linköping](/blogg/ai-for-foretag-linkoping-2026).",
       },
     ],
     faq: [
@@ -690,6 +690,6 @@ export const articles31to40: Article[] = [
       { q: "Hur långt bindningsavtal är rimligt?", a: "Bygget: fast leverans, inget bindningsavtal. Löpande drift: max 3 månaders uppsägning. Längre är ett tecken på lock-in-affärsmodell." },
       { q: "Vad kostar det att byta byrå senare?", a: "Med rätt setup: 20–40 timmar för överlämning. Med lock-in-byrå: 200+ timmar och risk för omskrivning. Se därför till att grunden är rätt från start." },
     ],
-    relatedSlugs: ["ai-for-foretag-linkoping", "bygga-internt-system-istallet-for-excel"],
+    relatedSlugs: ["ai-for-foretag-linkoping-2026", "bygga-internt-system-istallet-for-excel"],
   },
 ];
