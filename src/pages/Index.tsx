@@ -285,6 +285,10 @@ const WorkSection = () => (
       <div className="work-grid">
         {PROJECTS.map((project) => (
           <Link to={project.href} key={project.title} className="work-card">
+            <div className="work-thumb">
+              <span className="live-dot">{project.status}</span>
+              <img src={project.thumb} alt={`${project.title} – produktskärmdump`} loading="lazy" />
+            </div>
             <h3>{project.title}</h3>
             <p className="body">{project.desc}</p>
             <div className="meta" style={{ marginTop: 18 }}>{project.meta}</div>
