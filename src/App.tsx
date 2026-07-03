@@ -31,6 +31,12 @@ import Priser from "./pages/Priser";
 import RedaktionellPolicy from "./pages/RedaktionellPolicy";
 import Tjanster from "./pages/Tjanster";
 import WebbyraLinkoping from "./pages/WebbyraLinkoping";
+import DigitalMarknadsforingLinkoping from "./pages/DigitalMarknadsforingLinkoping";
+import SeoByraLinkoping from "./pages/SeoByraLinkoping";
+import AiAutomationLinkoping from "./pages/AiAutomationLinkoping";
+import AiKonsultLinkoping from "./pages/AiKonsultLinkoping";
+import GoogleAdsLinkoping from "./pages/GoogleAdsLinkoping";
+import ApputvecklingLinkoping from "./pages/ApputvecklingLinkoping";
 import FaqRapport from "./pages/admin/FaqRapport";
 import Leads from "./pages/admin/Leads";
 import TextGenerator from "./pages/admin/TextGenerator";
@@ -105,6 +111,36 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg. Fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
     canonical: "https://auroramedia.se/ai-byra-linkoping",
+  },
+  "/digital-marknadsforing-linkoping": {
+    title: "Digital marknadsföring i Linköping – SEO, Ads & AI | Aurora Media",
+    description: "Digital marknadsföring i Linköping: SEO, Google Ads, Meta Ads, content och AI-driven marknadsföring. Fast pris, lokal kontakt, mätbara resultat.",
+    canonical: "https://auroramedia.se/digital-marknadsforing-linkoping",
+  },
+  "/seo-byra-linkoping": {
+    title: "SEO-byrå i Linköping – teknisk SEO, content & lokal synlighet",
+    description: "SEO-byrå i Linköping som jobbar med teknisk SEO, content, lokal synlighet och länkbygge. Fast pris, mätbara resultat, ägarskap kvar hos er.",
+    canonical: "https://auroramedia.se/seo-byra-linkoping",
+  },
+  "/ai-automation-linkoping": {
+    title: "AI-automation för företag i Linköping – från 14 900 kr | Aurora Media",
+    description: "AI-automation i Linköping: mejl, dokument, offerthantering, Fortnox- och Visma-integrationer. Bygg bort manuellt Excel-arbete med lokal partner.",
+    canonical: "https://auroramedia.se/ai-automation-linkoping",
+  },
+  "/ai-konsult-linkoping": {
+    title: "AI-konsult i Linköping – strategi, implementation & utbildning",
+    description: "AI-konsult i Linköping. Vi hjälper er välja rätt AI-verktyg, bygga interna assistenter och utbilda teamet. Fast pris, GDPR, EU-datalagring.",
+    canonical: "https://auroramedia.se/ai-konsult-linkoping",
+  },
+  "/google-ads-linkoping": {
+    title: "Google Ads-byrå i Linköping – kampanjer som konverterar",
+    description: "Google Ads-byrå i Linköping. Sök, Performance Max, YouTube och Shopping med tydlig konverteringsspårning. Fast månadsarvode från 6 900 kr.",
+    canonical: "https://auroramedia.se/google-ads-linkoping",
+  },
+  "/apputveckling-linkoping": {
+    title: "Apputveckling i Linköping – iOS, Android & webbappar | Aurora Media",
+    description: "Apputveckling i Linköping. iOS, Android och webbappar byggda med React Native/Expo. Från MVP till skalbar produkt. Fast pris från 89 000 kr.",
+    canonical: "https://auroramedia.se/apputveckling-linkoping",
   },
   "/en": {
     title: "Aurora Media AB – We build AI-powered SaaS",
@@ -364,6 +400,12 @@ const App = () => (
               <Route path="/admin/text-generator" element={<TextGenerator />} />
               <Route path="/admin/faq-rapport" element={<FaqRapport />} />
               <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
+              <Route path="/digital-marknadsforing-linkoping" element={<DigitalMarknadsforingLinkoping />} />
+              <Route path="/seo-byra-linkoping" element={<SeoByraLinkoping />} />
+              <Route path="/ai-automation-linkoping" element={<AiAutomationLinkoping />} />
+              <Route path="/ai-konsult-linkoping" element={<AiKonsultLinkoping />} />
+              <Route path="/google-ads-linkoping" element={<GoogleAdsLinkoping />} />
+              <Route path="/apputveckling-linkoping" element={<ApputvecklingLinkoping />} />
               <Route path="/saas-utveckling-:city" element={<CityPage />} />
               <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
