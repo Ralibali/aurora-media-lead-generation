@@ -421,10 +421,38 @@ const CTA = () => {
             <a href="mailto:info@auroramedia.se" className="cta-email">info@auroramedia.se →</a>
           </div>
         </Reveal>
+        <Reveal delay={0.4}>
+          <div style={{ marginTop: 18 }}>
+            <span className="risk-note">Svar inom 24 h · Inget avtal krävs · GDPR & EU-datalagring</span>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 };
+
+const FounderSection = () => (
+  <section className="section" aria-labelledby="founder-heading">
+    <div className="wrap">
+      <div className="founder-card">
+        <div className="founder-mark" aria-hidden>A</div>
+        <div>
+          <div className="meta-label">Vem ni faktiskt pratar med</div>
+          <h2 id="founder-heading" className="h2" style={{ marginTop: 14, fontSize: "clamp(1.4rem,2.2vw,1.8rem)" }}>
+            En partner. <span className="it">Inget mellanled.</span>
+          </h2>
+          <p className="lead" style={{ marginTop: 18, maxWidth: "62ch" }}>
+            Aurora Media AB drivs från Linköping och bygger själva den kod, de integrationer och de
+            AI-flöden vi levererar. Ni får direkt kontakt med den som faktiskt bygger – inte en
+            projektledare som skickar vidare mejl till en underleverantör i ett annat land.
+          </p>
+          <p className="founder-sig">Aurora Media AB · Linköping, Sverige</p>
+          <p className="founder-meta">Org.nr 559272-0220 · info@auroramedia.se</p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 const Index = () => (
   <>
@@ -435,9 +463,11 @@ const Index = () => (
     />
     <NordicLayout>
       <Hero />
+      <StackStripSection />
       <OutcomesSection />
       <ProcessSection />
       <WorkSection />
+      <FounderSection />
       <PackagesSection />
       <LocalSection />
       <CTA />
