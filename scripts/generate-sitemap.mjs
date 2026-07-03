@@ -110,6 +110,7 @@ function extractArticles() {
     "articlesData4.ts",
     "articlesData5.ts",
     "articlesData6.ts",
+    "articlesData7.ts",
   ];
   const articles = [];
 
