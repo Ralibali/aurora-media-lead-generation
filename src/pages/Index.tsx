@@ -160,6 +160,11 @@ const Hero = () => {
               <span className="clock" style={{ marginLeft: 4 }}>Linköping · {time}</span>
             </div>
           </Reveal>
+          <Reveal delay={0.45}>
+            <div style={{ marginTop: 14 }}>
+              <span className="risk-note">30 min · Kostnadsfritt · Ingen säljpitch efteråt</span>
+            </div>
+          </Reveal>
         </div>
 
         <div className="hero-figure-wrap">
@@ -167,13 +172,13 @@ const Hero = () => {
             <div className="hero-figure">
               <img
                 src={heroImg}
-                alt="Svenskt landskap i gryning som symboliserar Aurora Media"
+                alt="Aurora Transport – dispatch- och fakturasystem byggt av Aurora Media"
                 width={1024}
                 height={1280}
                 fetchPriority="high"
               />
               <div className="hero-figure-overlay" />
-              <span className="hero-figure-tag">Östergötland · Byggt nära verksamheten</span>
+              <span className="hero-figure-tag">Aurora Transport · Live</span>
             </div>
           </Reveal>
         </div>
@@ -181,6 +186,23 @@ const Hero = () => {
     </section>
   );
 };
+
+const StackStripSection = () => (
+  <section className="section" style={{ paddingTop: "clamp(28px,4vw,48px)", paddingBottom: "clamp(28px,4vw,48px)" }}>
+    <div className="wrap" style={{ display: "grid", gap: "clamp(18px,2.4vw,28px)", gridTemplateColumns: "1fr", alignItems: "center" }}>
+      <Reveal>
+        <div className="meta-label">Byggd med verktyg som skalar</div>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <div className="stack-strip">
+          {STACK.map((s) => (
+            <span key={s} className="stack-chip"><span className="dot" /> {s}</span>
+          ))}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
 
 const OutcomesSection = () => (
   <section className="section" id="resultat">
