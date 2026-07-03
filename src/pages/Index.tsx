@@ -81,18 +81,24 @@ const PROJECTS = [
     desc: "Dispatch- och fakturasystem för åkerier med schemaläggning, körorder och ekonomiflöden.",
     meta: "SaaS · Fortnox · Stripe",
     href: "/arbete/aurora-transport",
+    thumb: "/portfolio/aurora-transport.webp",
+    status: "Live",
   },
   {
     title: "Hönsgården",
     desc: "Freemium-app med statistik, abonnemang och AI-stöd för svenska hönsägare.",
     meta: "App · AI · Supabase",
     href: "/arbete/honsgarden",
+    thumb: "/portfolio/honsgarden.webp",
+    status: "Live",
   },
   {
     title: "Bergs Slussar Glamping",
     desc: "Digital bokning, gästkommunikation och försäljning av tillval för en lokal besöksverksamhet vid Göta kanal.",
     meta: "Linköping · Bokningsflöde",
     href: "/arbete/goglamping-sweden",
+    thumb: "/portfolio/goglamping-sweden.webp",
+    status: "Live",
   },
 ];
 
