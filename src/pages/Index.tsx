@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { SEO } from "@/components/SEO";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
-import heroImg from "@/assets/aurora-hero-nordic.jpg";
+
+const heroImg = "/portfolio/aurora-transport.webp";
+const STACK = [
+  "React", "TypeScript", "Supabase", "Stripe", "Fortnox", "OpenAI", "Vercel", "PostgreSQL",
+];
 
 const useStockholmTime = () => {
   const [time, setTime] = useState(() => new Date());
