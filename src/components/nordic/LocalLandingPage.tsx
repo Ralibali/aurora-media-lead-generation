@@ -337,6 +337,11 @@ const LocalLandingPage = ({
               <Link to="/ai-karta" className="btn btn-ghost">Gör AI-kartläggningen</Link>
             </div>
           </Reveal>
+          <Reveal delay={0.4}>
+            <div style={{ marginTop: 14 }}>
+              <span className="risk-note">Svar inom 24 h · Inget avtal krävs · GDPR & EU-datalagring</span>
+            </div>
+          </Reveal>
         </div>
       </section>
     </NordicLayout>
