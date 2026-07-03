@@ -155,6 +155,18 @@ const LocalLandingPage = ({
                   </Link>
                 </div>
               </Reveal>
+              <Reveal delay={0.35}>
+                <div style={{ marginTop: 14 }}>
+                  <span className="risk-note">30 min · Kostnadsfritt · Ingen säljpitch efteråt</span>
+                </div>
+              </Reveal>
+              <Reveal delay={0.4}>
+                <div className="stack-strip" style={{ marginTop: 24 }}>
+                  {["React", "TypeScript", "Supabase", "Stripe", "OpenAI", "Vercel"].map((s) => (
+                    <span key={s} className="stack-chip"><span className="dot" /> {s}</span>
+                  ))}
+                </div>
+              </Reveal>
             </div>
 
             <Reveal delay={0.18}>
@@ -323,6 +335,11 @@ const LocalLandingPage = ({
                 Boka rådgivning <span className="a"><ArrowRight size={14} /></span>
               </button>
               <Link to="/ai-karta" className="btn btn-ghost">Gör AI-kartläggningen</Link>
+            </div>
+          </Reveal>
+          <Reveal delay={0.4}>
+            <div style={{ marginTop: 14 }}>
+              <span className="risk-note">Svar inom 24 h · Inget avtal krävs · GDPR & EU-datalagring</span>
             </div>
           </Reveal>
         </div>
