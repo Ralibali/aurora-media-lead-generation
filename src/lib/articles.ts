@@ -5,10 +5,12 @@ import { articles13to18 } from "./articlesData3";
 import { articles19to24 } from "./articlesData4";
 import { articles25to30 } from "./articlesData5";
 import { articles31to33 } from "./articlesData6";
+import { articles31to40 } from "./articlesData7";
 
 export type { Article } from "./articleTypes";
 
 export const articles: Article[] = [
+  ...articles31to40,
   ...articles31to33,
   ...articles25to30,
   ...articles19to24,
