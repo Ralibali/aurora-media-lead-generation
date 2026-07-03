@@ -181,6 +181,9 @@ const ServicePageTemplate = (props: ServicePageProps) => {
           <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
             Kontakta oss <span className="a"><ArrowRight size={14} /></span>
           </button>
+          <div style={{ marginTop: 18 }}>
+            <span className="risk-note">Svar inom 24 h · Inget avtal krävs · GDPR & EU-datalagring</span>
+          </div>
         </div>
       </section>
     </NordicLayout>
