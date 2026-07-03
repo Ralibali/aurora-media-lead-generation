@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { SEO } from "@/components/SEO";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
-import heroImg from "@/assets/aurora-hero-nordic.jpg";
+
+const heroImg = "/portfolio/aurora-transport.webp";
+const STACK = [
+  "React", "TypeScript", "Supabase", "Stripe", "Fortnox", "OpenAI", "Vercel", "PostgreSQL",
+];
 
 const useStockholmTime = () => {
   const [time, setTime] = useState(() => new Date());
@@ -77,18 +81,24 @@ const PROJECTS = [
     desc: "Dispatch- och fakturasystem för åkerier med schemaläggning, körorder och ekonomiflöden.",
     meta: "SaaS · Fortnox · Stripe",
     href: "/arbete/aurora-transport",
+    thumb: "/portfolio/aurora-transport.webp",
+    status: "Live",
   },
   {
     title: "Hönsgården",
     desc: "Freemium-app med statistik, abonnemang och AI-stöd för svenska hönsägare.",
     meta: "App · AI · Supabase",
     href: "/arbete/honsgarden",
+    thumb: "/portfolio/honsgarden.webp",
+    status: "Live",
   },
   {
     title: "Bergs Slussar Glamping",
     desc: "Digital bokning, gästkommunikation och försäljning av tillval för en lokal besöksverksamhet vid Göta kanal.",
     meta: "Linköping · Bokningsflöde",
     href: "/arbete/goglamping-sweden",
+    thumb: "/portfolio/goglamping-sweden.webp",
+    status: "Live",
   },
 ];
 
@@ -156,6 +166,11 @@ const Hero = () => {
               <span className="clock" style={{ marginLeft: 4 }}>Linköping · {time}</span>
             </div>
           </Reveal>
+          <Reveal delay={0.45}>
+            <div style={{ marginTop: 14 }}>
+              <span className="risk-note">30 min · Kostnadsfritt · Ingen säljpitch efteråt</span>
+            </div>
+          </Reveal>
         </div>
 
         <div className="hero-figure-wrap">
@@ -163,13 +178,13 @@ const Hero = () => {
             <div className="hero-figure">
               <img
                 src={heroImg}
-                alt="Svenskt landskap i gryning som symboliserar Aurora Media"
+                alt="Aurora Transport – dispatch- och fakturasystem byggt av Aurora Media"
                 width={1024}
                 height={1280}
                 fetchPriority="high"
               />
               <div className="hero-figure-overlay" />
-              <span className="hero-figure-tag">Östergötland · Byggt nära verksamheten</span>
+              <span className="hero-figure-tag">Aurora Transport · Live</span>
             </div>
           </Reveal>
         </div>
@@ -177,6 +192,23 @@ const Hero = () => {
     </section>
   );
 };
+
+const StackStripSection = () => (
+  <section className="section" style={{ paddingTop: "clamp(28px,4vw,48px)", paddingBottom: "clamp(28px,4vw,48px)" }}>
+    <div className="wrap" style={{ display: "grid", gap: "clamp(18px,2.4vw,28px)", gridTemplateColumns: "1fr", alignItems: "center" }}>
+      <Reveal>
+        <div className="meta-label">Byggd med verktyg som skalar</div>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <div className="stack-strip">
+          {STACK.map((s) => (
+            <span key={s} className="stack-chip"><span className="dot" /> {s}</span>
+          ))}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
 
 const OutcomesSection = () => (
   <section className="section" id="resultat">
@@ -253,6 +285,10 @@ const WorkSection = () => (
       <div className="work-grid">
         {PROJECTS.map((project) => (
           <Link to={project.href} key={project.title} className="work-card">
+            <div className="work-thumb">
+              <span className="live-dot">{project.status}</span>
+              <img src={project.thumb} alt={`${project.title} – produktskärmdump`} loading="lazy" />
+            </div>
             <h3>{project.title}</h3>
             <p className="body">{project.desc}</p>
             <div className="meta" style={{ marginTop: 18 }}>{project.meta}</div>
@@ -385,10 +421,38 @@ const CTA = () => {
             <a href="mailto:info@auroramedia.se" className="cta-email">info@auroramedia.se →</a>
           </div>
         </Reveal>
+        <Reveal delay={0.4}>
+          <div style={{ marginTop: 18 }}>
+            <span className="risk-note">Svar inom 24 h · Inget avtal krävs · GDPR & EU-datalagring</span>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 };
+
+const FounderSection = () => (
+  <section className="section" aria-labelledby="founder-heading">
+    <div className="wrap">
+      <div className="founder-card">
+        <div className="founder-mark" aria-hidden>A</div>
+        <div>
+          <div className="meta-label">Vem ni faktiskt pratar med</div>
+          <h2 id="founder-heading" className="h2" style={{ marginTop: 14, fontSize: "clamp(1.4rem,2.2vw,1.8rem)" }}>
+            En partner. <span className="it">Inget mellanled.</span>
+          </h2>
+          <p className="lead" style={{ marginTop: 18, maxWidth: "62ch" }}>
+            Aurora Media AB drivs från Linköping och bygger själva den kod, de integrationer och de
+            AI-flöden vi levererar. Ni får direkt kontakt med den som faktiskt bygger – inte en
+            projektledare som skickar vidare mejl till en underleverantör i ett annat land.
+          </p>
+          <p className="founder-sig">Aurora Media AB · Linköping, Sverige</p>
+          <p className="founder-meta">Org.nr 559272-0220 · info@auroramedia.se</p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 const Index = () => (
   <>
@@ -399,9 +463,11 @@ const Index = () => (
     />
     <NordicLayout>
       <Hero />
+      <StackStripSection />
       <OutcomesSection />
       <ProcessSection />
       <WorkSection />
+      <FounderSection />
       <PackagesSection />
       <LocalSection />
       <CTA />
