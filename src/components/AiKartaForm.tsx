@@ -98,6 +98,8 @@ const AiKartaForm = () => {
 
       if (error) throw error;
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
+      trackEvent("ai_karta_pdf", { company: parsed.data.company ?? "" });
+
 
       if (data.downloadUrl) setDownloadUrl(data.downloadUrl);
       try {
