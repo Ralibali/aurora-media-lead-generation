@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { setSEOMeta } from "@/lib/seoHelpers";
+import { trackEvent } from "@/lib/analytics";
 import { getSupabase } from "@/lib/getSupabase";
 import {
   AiMapFormState,
