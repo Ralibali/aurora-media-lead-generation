@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getSupabase } from "@/lib/getSupabase";
+import { trackEvent } from "@/lib/analytics";
 
 const Schema = z.object({
   name: z.string().min(2, "Ange ditt namn").max(80),
@@ -97,6 +98,8 @@ const AiKartaForm = () => {
 
       if (error) throw error;
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
+      trackEvent("ai_karta_pdf", { company: parsed.data.company ?? "" });
+
 
       if (data.downloadUrl) setDownloadUrl(data.downloadUrl);
       try {

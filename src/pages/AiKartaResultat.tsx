@@ -16,6 +16,7 @@ import { AiMapResult, FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
 import { downloadAiMapPdf } from "@/lib/aiMapPdf";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 import { getSupabase } from "@/lib/getSupabase";
+import { trackEvent } from "@/lib/analytics";
 
 const RESULT_KEY = "ai_map_result";
 const F = "'Fraunces',Georgia,serif";
@@ -238,6 +239,7 @@ const AiKartaResultat = () => {
         throw new Error((data as { error?: string })?.error || error?.message || "Okänt fel");
       }
       setBookingStatus("success");
+      trackEvent("genomlysning_bokad", { company: meta.company_name });
       toast.success("Bokningsförfrågan skickad", { description: "Du får en kalenderinbjudan inom kort." });
     } catch (err) {
       console.error("[book-ai-genomlysning]", err);

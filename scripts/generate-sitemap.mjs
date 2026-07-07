@@ -28,6 +28,7 @@ const STATIC_ROUTES = [
   { path: "/om", changefreq: "monthly", priority: "0.75" },
   { path: "/kontakt", changefreq: "monthly", priority: "0.8" },
   { path: "/blogg", changefreq: "weekly", priority: "0.9" },
+  { path: "/ai-karta", changefreq: "weekly", priority: "0.9" },
   { path: "/metodik", changefreq: "monthly", priority: "0.75" },
   { path: "/webbyra-linkoping", changefreq: "monthly", priority: "0.9" },
   { path: "/digital-marknadsforing-linkoping", changefreq: "weekly", priority: "0.9" },

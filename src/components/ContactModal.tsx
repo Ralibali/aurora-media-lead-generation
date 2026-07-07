@@ -10,6 +10,7 @@ import { CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { getSupabase } from "@/lib/getSupabase";
+import { trackEvent } from "@/lib/analytics";
 
 type OpenOptions = { paket?: string; internalNote?: string };
 type ContactModalCtx = {
@@ -275,6 +276,7 @@ const ContactDialog = ({
       setSubmittedLabel(leadLabel || (selectedOption ? selectedOption.label : paketValue));
       setSubmittedEmail(parsed.data.email);
       setDone(true);
+      trackEvent("kontakt_submit", { source: "ContactModal", paket: paketValue });
       toast.success(
         `Tack! Din förfrågan om "${selectedOption?.label ?? paketValue}" är mottagen. Jag svarar inom 24 timmar.`,
         { duration: 6000 }

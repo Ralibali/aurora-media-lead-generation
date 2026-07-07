@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getSupabase } from "@/lib/getSupabase";
+import { trackEvent } from "@/lib/analytics";
 
 const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
 
@@ -82,6 +83,7 @@ const AuroraContactForm = ({
       });
       if (error) throw error;
       setDone(true);
+      trackEvent("kontakt_submit", { source: "AuroraContactForm" });
       toast.success("Tack! Vi hör av oss inom 24 timmar.");
       form.reset();
       setConsent(false);
