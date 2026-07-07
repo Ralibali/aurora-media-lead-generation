@@ -276,6 +276,7 @@ const ContactDialog = ({
       setSubmittedLabel(leadLabel || (selectedOption ? selectedOption.label : paketValue));
       setSubmittedEmail(parsed.data.email);
       setDone(true);
+      trackEvent("kontakt_submit", { source: "ContactModal", paket: paketValue });
       toast.success(
         `Tack! Din förfrågan om "${selectedOption?.label ?? paketValue}" är mottagen. Jag svarar inom 24 timmar.`,
         { duration: 6000 }
