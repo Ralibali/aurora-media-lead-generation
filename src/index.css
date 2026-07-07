@@ -2,40 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── Fonts ──────────────────────────────────────────────────────────────── */
-/* Instrument Serif 400/400i, Inter 400/500, JetBrains Mono 400 loaded via index.html */
-
-/* ─── Root tokens ────────────────────────────────────────────────────────── */
+/* ─── Verkstad design tokens (GLOBAL) ────────────────────────────────────── */
 @layer base {
   :root {
-    --background: 30 8% 6%;
-    --foreground: 42 30% 90%;
-    --card: 30 6% 8%;
-    --card-foreground: 42 30% 90%;
-    --popover: 30 6% 8%;
-    --popover-foreground: 42 30% 90%;
-    --primary: 42 30% 90%;
-    --primary-foreground: 30 8% 6%;
-    --secondary: 30 6% 10%;
-    --secondary-foreground: 42 30% 90%;
-    --muted: 30 5% 12%;
-    --muted-foreground: 42 15% 55%;
-    --accent: 30 5% 12%;
-    --accent-foreground: 42 30% 90%;
-    --destructive: 0 60% 45%;
-    --destructive-foreground: 42 30% 90%;
-    --border: 42 15% 15%;
-    --input: 42 15% 15%;
-    --ring: 42 30% 90%;
+    /* Verkstad palette */
+    --bjork: #F6F5F1;
+    --bjork-djup: #EBE9E3;
+    --granbark: #14171A;
+    --granbark-mut: #4A5058;
+    --gran: #0F5132;
+    --gran-soft: #E4EEE8;
+    --varsel: #E8500A;
+    --varsel-hover: #C64308;
+    --linje: #D8D5CC;
+    --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "Spline Sans Mono", ui-monospace, monospace;
+
+    /* shadcn tokens (HSL) — ljusa "verkstad"-temat */
+    --background: 48 22% 95%;
+    --foreground: 210 13% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 13% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 13% 9%;
+    --primary: 152 69% 19%;
+    --primary-foreground: 48 22% 95%;
+    --secondary: 45 17% 91%;
+    --secondary-foreground: 210 13% 9%;
+    --muted: 45 17% 91%;
+    --muted-foreground: 215 9% 32%;
+    --accent: 152 30% 92%;
+    --accent-foreground: 152 69% 19%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 48 22% 95%;
+    --border: 45 13% 82%;
+    --input: 45 13% 82%;
+    --ring: 19 92% 47%;
     --radius: 0.5rem;
-    --sidebar-background: 30 8% 6%;
-    --sidebar-foreground: 42 30% 90%;
-    --sidebar-primary: 42 30% 90%;
-    --sidebar-primary-foreground: 30 8% 6%;
-    --sidebar-accent: 30 5% 12%;
-    --sidebar-accent-foreground: 42 30% 90%;
-    --sidebar-border: 42 15% 15%;
-    --sidebar-ring: 42 30% 90%;
+    --sidebar-background: 48 22% 95%;
+    --sidebar-foreground: 210 13% 9%;
+    --sidebar-primary: 152 69% 19%;
+    --sidebar-primary-foreground: 48 22% 95%;
+    --sidebar-accent: 45 17% 91%;
+    --sidebar-accent-foreground: 210 13% 9%;
+    --sidebar-border: 45 13% 82%;
+    --sidebar-ring: 19 92% 47%;
   }
 }
 
@@ -50,221 +61,215 @@
   }
 
   html, body {
-    background-color: #100F0D;
+    background-color: #F6F5F1;
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #EDE9DC;
-    background-color: #100F0D;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+    color: #14171A;
+    background-color: #F6F5F1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings: "kern" 1, "liga" 1, "ss01" 1;
   }
 
-  h1, h2, h3 {
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 400;
+  h1, h2, h3, h4 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #14171A;
     text-wrap: balance;
+    line-height: 1.1;
   }
+  h1 { font-weight: 800; letter-spacing: -0.028em; }
 
   p { text-wrap: pretty; }
 
   img { display: block; max-width: 100%; }
 
   ::selection {
-    background: rgba(237, 233, 220, 0.18);
-    color: #EDE9DC;
+    background: rgba(15, 81, 50, 0.18);
+    color: #14171A;
   }
 
   :focus-visible {
-    outline: 1px solid rgba(237, 233, 220, 0.6);
+    outline: 2px solid #E8500A;
     outline-offset: 3px;
     border-radius: 2px;
   }
+
+  /* SVG icons inherit color from parent (so pilen i orange knappen är vit) */
+  svg { color: currentColor; }
 }
 
-/* ─── Design tokens as utilities ─────────────────────────────────────────── */
+/* ─── Legacy utility shims (behåll bakåtkompatibilitet) ──────────────────── */
 @layer utilities {
+  .c-cream     { color: #14171A; }
+  .c-80        { color: rgba(20,23,26,.80); }
+  .c-65        { color: rgba(20,23,26,.70); }
+  .c-50        { color: rgba(20,23,26,.55); }
+  .c-40        { color: rgba(20,23,26,.45); }
+  .c-30        { color: rgba(20,23,26,.35); }
+  .bg-site     { background-color: #F6F5F1; }
+  .bg-soft     { background-color: #EBE9E3; }
 
-  /* Colours */
-  .c-cream     { color: #EDE9DC; }
-  .c-80        { color: rgba(237,233,220,.80); }
-  .c-65        { color: rgba(237,233,220,.65); }
-  .c-50        { color: rgba(237,233,220,.50); }
-  .c-40        { color: rgba(237,233,220,.40); }
-  .c-30        { color: rgba(237,233,220,.30); }
-  .bg-site     { background-color: #100F0D; }
-  .bg-soft     { background-color: #161513; }
+  .b-thin    { border-color: #D8D5CC; border-width: 1px; }
+  .b-soft    { border-color: rgba(20,23,26,.08); border-width: 1px; }
+  .rule      { height: 1px; background: #D8D5CC; }
 
-  /* Borders */
-  .b-thin    { border-color: rgba(237,233,220,.13); border-width: 0.5px; }
-  .b-soft    { border-color: rgba(237,233,220,.08); border-width: 0.5px; }
-  .rule      { height: 0.5px; background: rgba(237,233,220,.13); }
-
-  /* Layout */
   .wrap {
     max-width: 1080px;
     margin-inline: auto;
     padding-inline: clamp(20px, 4vw, 48px);
   }
 
-  .section-y {
-    padding-block: clamp(56px, 8vw, 88px);
-  }
+  .section-y { padding-block: clamp(56px, 8vw, 88px); }
 
-  /* Type scale */
+  /* Type scale — nu Schibsted Grotesk */
   .t-display {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-sans);
     font-size: clamp(42px, 7vw, 80px);
-    line-height: 1.01;
-    letter-spacing: -0.025em;
-    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+    font-weight: 800;
   }
-
   .t-h1 {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-sans);
     font-size: clamp(36px, 5.5vw, 56px);
-    line-height: 1.04;
-    letter-spacing: -0.02em;
-    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.024em;
+    font-weight: 800;
   }
-
   .t-h2 {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-sans);
     font-size: clamp(26px, 3.5vw, 36px);
     line-height: 1.1;
-    letter-spacing: -0.015em;
-    font-weight: 400;
+    letter-spacing: -0.02em;
+    font-weight: 700;
   }
-
   .t-h3 {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-sans);
     font-size: clamp(20px, 2.5vw, 26px);
     line-height: 1.2;
-    letter-spacing: -0.01em;
-    font-weight: 400;
+    letter-spacing: -0.015em;
+    font-weight: 700;
   }
-
   .t-body {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 14px;
-    line-height: 1.75;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
     font-weight: 400;
   }
-
   .t-small {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-sans);
     font-size: 13px;
     line-height: 1.6;
     font-weight: 400;
   }
-
   .t-label {
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    font-weight: 400;
-    color: rgba(237,233,220,.45);
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #3E444B;
   }
-
   .t-mono {
-    font-family: 'JetBrains Mono', ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 400;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 500;
     letter-spacing: 0.04em;
+    color: #3E444B;
   }
-
   .t-quote {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-sans);
     font-size: clamp(22px, 3vw, 30px);
     line-height: 1.4;
-    font-style: italic;
-    font-weight: 400;
+    font-weight: 500;
   }
-
   .t-stat {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-sans);
     font-size: clamp(32px, 4vw, 44px);
     line-height: 1;
-    font-weight: 400;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #0F5132;
   }
 
-  /* Wordmark */
   .wordmark {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--font-sans);
     font-size: 18px;
-    font-weight: 400;
-    letter-spacing: -0.02em;
-    color: #EDE9DC;
-    font-style: italic;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #14171A;
   }
 
   /* Buttons */
   .btn-primary {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 11px 22px;
-    background: #7FE3B0;
-    color: #0B0E0C;
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    border-radius: 6px;
+    padding: 12px 22px;
+    min-height: 44px;
+    background: #E8500A;
+    color: #FFFFFF;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: opacity 0.15s ease;
+    transition: background 0.15s ease;
     text-decoration: none;
     white-space: nowrap;
   }
-  .btn-primary:hover { background: #EDE9DC; color: #0B0E0C; opacity: 1; }
+  .btn-primary:hover { background: #C64308; color: #FFFFFF; }
+  .btn-primary svg { color: #FFFFFF; }
 
   .btn-ghost {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 10px 20px;
+    padding: 11px 20px;
+    min-height: 44px;
     background: transparent;
-    color: #EDE9DC;
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    border-radius: 6px;
-    border: 0.5px solid rgba(237,233,220,.25);
+    color: #14171A;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid #14171A;
     cursor: pointer;
-    transition: border-color 0.15s ease, background 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease;
     text-decoration: none;
     white-space: nowrap;
   }
-  .btn-ghost:hover {
-    border-color: rgba(237,233,220,.5);
-    background: rgba(237,233,220,.04);
-  }
+  .btn-ghost:hover { background: #14171A; color: #F6F5F1; }
+  .btn-ghost:hover svg { color: #F6F5F1; }
 
   .btn-nav {
     display: inline-flex;
     align-items: center;
-    padding: 6px 14px;
+    padding: 8px 14px;
+    min-height: 40px;
     background: transparent;
-    color: rgba(237,233,220,.75);
-    font-family: 'Inter', system-ui, sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    border-radius: 4px;
-    border: 0.5px solid rgba(237,233,220,.20);
+    color: #14171A;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid #D8D5CC;
     cursor: pointer;
     transition: all 0.15s ease;
     text-decoration: none;
     white-space: nowrap;
   }
-  .btn-nav:hover {
-    color: #EDE9DC;
-    border-color: rgba(237,233,220,.40);
-  }
+  .btn-nav:hover { color: #0F5132; border-color: #14171A; }
 
   /* Skip link */
   .skip-link {
@@ -272,30 +277,32 @@
     top: 0; left: 16px;
     z-index: 200;
     padding: 8px 16px;
-    background: #EDE9DC;
-    color: #100F0D;
+    background: #14171A;
+    color: #F6F5F1;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     border-radius: 0 0 6px 6px;
     transform: translateY(-150%);
     transition: transform 150ms ease;
   }
   .skip-link:focus { transform: translateY(0); }
 
-  /* Fade-up animation */
+  /* Mobil-CTA */
+  @media (max-width: 480px) {
+    .btn-primary.cta-full { width: 100%; }
+  }
+
+  /* Animations */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .anim-fade-up {
-    animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
+  .anim-fade-up { animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
   .anim-delay-1 { animation-delay: 0.1s; opacity: 0; }
   .anim-delay-2 { animation-delay: 0.2s; opacity: 0; }
   .anim-delay-3 { animation-delay: 0.3s; opacity: 0; }
   .anim-delay-4 { animation-delay: 0.4s; opacity: 0; }
 
-  /* Accordion */
   @keyframes accordion-down {
     from { height: 0; }
     to   { height: var(--radix-accordion-content-height); }

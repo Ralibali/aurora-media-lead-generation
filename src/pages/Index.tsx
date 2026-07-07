@@ -60,7 +60,7 @@ const CSS = `
 
 .vk-wrap { max-width: 1180px; margin-inline: auto; padding-inline: clamp(20px, 4vw, 40px); }
 .vk-section { padding-block: clamp(72px, 10vw, 128px); }
-.vk-mono { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--granbark-mut); }
+.vk-mono { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: #3E444B; font-weight: 500; }
 .vk-hair { height: 1px; background: var(--linje); border: 0; }
 
 /* ── Buttons ── */
@@ -88,12 +88,13 @@ const CSS = `
 /* ── Nav ── */
 .vk-nav {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(246,245,241,.85);
+  background: rgba(246,245,241,.92);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid transparent;
-  transition: border-color .2s ease;
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--linje);
+  transition: box-shadow .2s ease;
 }
-.vk-nav.scrolled { border-color: var(--linje); }
+.vk-nav.scrolled { box-shadow: 0 1px 0 var(--linje); }
 .vk-nav-inner {
   display: flex; align-items: center; justify-content: space-between;
   padding-block: 18px;
