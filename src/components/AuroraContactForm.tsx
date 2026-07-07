@@ -83,6 +83,7 @@ const AuroraContactForm = ({
       });
       if (error) throw error;
       setDone(true);
+      trackEvent("kontakt_submit", { source: "AuroraContactForm" });
       toast.success("Tack! Vi hör av oss inom 24 timmar.");
       form.reset();
       setConsent(false);
