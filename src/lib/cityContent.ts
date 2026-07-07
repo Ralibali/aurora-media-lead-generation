@@ -287,7 +287,118 @@ export const cities: CityContent[] = [
       },
     ],
   },
+  {
+    slug: "motala",
+    city: "Motala",
+    region: "Östergötlands län",
+    intro:
+      "Motala är Östergötlands tredje stad med industriarv från Motala Verkstad och ett näringsliv byggt på verkstad, tillverkning och besöksnäring kring Vättern och Göta kanal. Många mindre industribolag kör fortfarande produktionsplanering, underhåll och orderflöden i Excel och pärmar. AI-kodning gör det möjligt att ersätta det med skräddarsydda verktyg på veckor – till en kostnad även ett tiomannabolag klarar.",
+    localContext:
+      "Verkstadsindustri, tillverkning och en stark besöksnäring runt Göta kanal och Vätternrundan. Jag sitter 40 minuter bort i Linköping och driver själv verksamhet längs kanalen, så jag känner både industrin och besöksnäringen härifrån.",
+    comparison:
+      "En etablerad byrå i Östergötland tar ofta 800–1 500 kr/timmen med månaders ledtid. Jag jobbar med fast pris: prototyp 14 900 kr på tre till fem dagar, MVP 34 900 kr på två veckor, full SaaS från 69 000 kr. För ett verkstadsbolag i Motala betyder det att ett internt system kostar mindre än en månads konsulttimmar.",
+    caseNote:
+      "Aurora Transport – ett dispatchsystem för åkerier – byggdes på under två veckor och används skarpt idag. Samma upplägg passar produktionsplanering, underhåll eller orderflöden i Motalas industri.",
+    faqs: [
+      { q: "Bygger du system för tillverkande industri i Motala?", a: "Ja, det är en av de vanligaste projekttyperna: produktionsplanering, underhållsscheman, avvikelsehantering och orderflöden. Ofta med Fortnox-koppling så ekonomin hänger med automatiskt." },
+      { q: "Kan vi ses fysiskt i Motala?", a: "Absolut, jag är 40 minuter bort och tar gärna ett uppstartsmöte på plats. Under projektet räcker oftast korta videoavstämningar en till två gånger i veckan." },
+      { q: "Vi har ett gammalt Excel- eller Access-system – går det att modernisera?", a: "Det är mitt vanligaste projekt. Vi behåller logiken ni redan litar på, flyttar in datan i en riktig databas och bygger ett gränssnitt som funkar i mobilen ute i verkstaden." },
+      { q: "Vad kostar det och hur snabbt kan vi börja?", a: "Prototyp 14 900 kr på tre till fem dagar, MVP 34 900 kr på två veckor. Hör du av dig idag har vi ett samtal samma vecka och kan vara igång inom sju till tio dagar." },
+    ],
+  },
+  {
+    slug: "mjolby",
+    city: "Mjölby",
+    region: "Östergötlands län",
+    intro:
+      "Mjölby är ett av Sveriges starkaste kluster för lantbruks- och materialhanteringsteknik, med Väderstad och Toyota Material Handling som draglok och hundratals underleverantörer och lantbruksföretag runt omkring. Många av dem kör fortfarande manuella flöden för order, kvalitet och leveransplaner. AI-kodning gör skräddarsydda system tillgängliga även för bolag utan egen IT-avdelning.",
+    localContext:
+      "Lantbruksteknik, materialhantering, livsmedel och logistik längs E4:an och Södra stambanan. Jag sitter 20 minuter bort i Linköping och kan vara på plats samma dag.",
+    comparison:
+      "Att anlita en Stockholmsbyrå för ett internt system kostar lätt 300 000–500 000 kr. Jag levererar prototyp för 14 900 kr på dagar, MVP för 34 900 kr på två veckor och full SaaS från 69 000 kr – med fast pris och kod ni äger själva.",
+    caseNote:
+      "Odlingsdagboken och Hönsgården är två egna produkter jag byggt inom odling och djurhållning, och Aurora Transport täcker logistiksidan. Gröna näringen och flöden på hjul är hemmaplan.",
+    faqs: [
+      { q: "Vi är underleverantör till industrin i Mjölby – vad kan du bygga åt oss?", a: "Typiska projekt är leveransplanering, kvalitetsuppföljning, avvikelsehantering och kundportaler där era beställare ser status i realtid. Sådant som idag ligger i mejltrådar och Excel." },
+      { q: "Bygger du digitala verktyg för lantbruk?", a: "Ja, jag har byggt egna produkter inom odling och djurhållning och förstår vardagen: journalföring, planering, dokumentationskrav. En gårdsanpassad app är ofta ett MVP-projekt på 34 900 kr." },
+      { q: "Kan systemet kopplas mot Fortnox eller Visma?", a: "Ja, jag har byggt Fortnox-integrationer i flera skarpa produkter och Visma fungerar också bra. Fakturor, kunder och artiklar synkas automatiskt." },
+      { q: "Hur går ett projekt till rent praktiskt?", a: "Kort uppstartssamtal, fast offert dagen efter, sedan bygger jag med avstämningar en till två gånger i veckan. Prototyp inom en vecka, MVP inom två till tre." },
+    ],
+  },
+  {
+    slug: "finspang",
+    city: "Finspång",
+    region: "Östergötlands län",
+    intro:
+      "Finspång är en av Sveriges mest specialiserade industriorter – Siemens Energys gasturbiner och Gränges aluminium sätter tonen, med ett nät av underleverantörer runt omkring. Kraven på spårbarhet, dokumentation och kvalitet är höga, men hos många mindre bolag hanteras de fortfarande i Excel och pärmar. Skräddarsydda system behöver inte längre kosta en årslön.",
+    localContext:
+      "Avancerad tillverkning, energi och metall. En halvtimme från Linköping – nära nog för fysiska möten, med samma fasta priser som på hemmaplan.",
+    comparison:
+      "Specialiserade industrikonsulter ligger ofta på 1 200–1 800 kr/timmen. Jag bygger med fast pris: prototyp 14 900 kr, MVP 34 900 kr, full SaaS från 69 000 kr. Ett spårbarhets- eller egenkontrollsystem är oftast ett MVP-projekt – klart på två veckor.",
+    faqs: [
+      { q: "Kan du bygga system för spårbarhet och kvalitetsdokumentation?", a: "Ja, det är ett klassiskt fall: registrering vid varje steg, foton, signaturer och sökbar historik. Byggt för att klara kundrevisioner utan panikletande i pärmar." },
+      { q: "Kan ni integrera mot vårt affärssystem?", a: "Fortnox och Visma har jag byggt mot i skarpa produkter, och de flesta moderna affärssystem med API går att koppla. Vi reder ut det i uppstartssamtalet innan offert." },
+      { q: "Behöver vi träffas fysiskt eller sker allt på distans?", a: "Båda funkar. Jag tar gärna uppstarten på plats i Finspång, sedan brukar korta videomöten vara effektivast. Ni ser fungerande version redan efter första veckan." },
+      { q: "Vad kostar ett internt system som ersätter Excel?", a: "Oftast 34 900–69 000 kr beroende på komplexitet. Räkna på timmarna ni lägger på dubbelregistrering och letande idag – det betalar sig vanligen inom ett kvartal." },
+    ],
+  },
+  {
+    slug: "nykoping",
+    city: "Nyköping",
+    region: "Södermanlands län",
+    intro:
+      "Nyköping växer så det knakar – Ostlänken, Skavsta och närheten till Stockholm drar företag och inflyttare till Sörmlandskusten. Många växande bolag här hamnar i gapet: för stora för Excel, för små för tunga affärssystem med sexsiffriga licenser. Det är exakt där skräddarsydd SaaS till fast pris hör hemma.",
+    localContext:
+      "Besöksnäring, bygg, logistik och tjänsteföretag i Stockholms pendlingsskugga. Ostlänken-bygget lyfter hela stråket och skapar tillväxt som gamla system inte hänger med i.",
+    comparison:
+      "Stockholmsbyråer tar Stockholmspriser – ofta 1 500–2 500 kr/timmen. Jag levererar samma moderna stack (React, Supabase, AI) till Östgötapris: prototyp 14 900 kr, MVP 34 900 kr, full SaaS från 69 000 kr. Fast pris, ingen timdebitering.",
+    caseNote:
+      "Jag driver själv en boendeanläggning och har byggt gästkommunikation, bokningsflöden och merförsäljning till den – besöksnäringens behov kan jag inifrån, inte bara som konsult.",
+    faqs: [
+      { q: "Bygger du för besöksnäringen i Nyköping?", a: "Ja, och jag driver själv en anläggning. Gästkommunikation, digitala gästhubbar, bokningsflöden och merförsäljning är sådant jag byggt och kör skarpt i egen verksamhet." },
+      { q: "Vi är ett byggföretag – vad kan digitaliseras?", a: "ÄTA-hantering, egenkontroller, arbetsorder och tidrapportering är de vanligaste. Mobilanpassat för killarna på plats, med automatisk koppling till Fortnox för fakturering." },
+      { q: "Fungerar samarbete på distans från Nyköping?", a: "Ja, drygt en timme bort och hälften av mina kunder finns utanför Östergötland. Videomöten en till två gånger i veckan räcker – ni ser fungerande version tidigt istället för powerpoints." },
+      { q: "Hur snabbt kan vi ha något live?", a: "Prototyp på tre till fem dagar, MVP på två veckor. Hör du av dig idag tar vi ett samtal samma vecka och du har offert med fast pris dagen efter." },
+    ],
+  },
+  {
+    slug: "katrineholm",
+    city: "Katrineholm",
+    region: "Södermanlands län",
+    intro:
+      "Katrineholm byggdes där stambanorna korsas och lever fortfarande på sitt logistikläge – lager, transport och livsmedelsindustri dominerar, med anrika industribolag som SKF Mekan i ryggen. För logistik- och lagerbolag är manuella flöden dyra flaskhalsar: körningar i telefon, fraktsedlar på papper, fakturering dagar i efterskott. Det går att bygga bort på veckor.",
+    localContext:
+      "Järnvägsknut och logistikcentrum mitt i Sörmland, med livsmedel, gjuteri och lager som bas. Bolag i er storlek ska inte behöva välja mellan Excel och miljonsystem.",
+    comparison:
+      "Ett branschsystem för transport eller lager kostar ofta 5 000–15 000 kr i månaden i licenser – och passar ändå inte era flöden. Jag bygger ett som gör det, för fast pris: MVP 34 900 kr, full SaaS från 69 000 kr. Ni äger koden och slipper eviga licenser.",
+    caseNote:
+      "Aurora Transport – dispatch, körorder och fakturering för åkerier – byggdes på under två veckor och används skarpt. Perfekt utgångspunkt för transport- och logistikbolag i Katrineholm.",
+    faqs: [
+      { q: "Bygger du dispatchsystem för åkerier i Katrineholm?", a: "Ja, Aurora Transport är byggt exakt för det: order in, schemaläggning, körorder till chauffören i mobilen och automatisk fakturering via Fortnox. Det kan skräddarsys efter era flöden." },
+      { q: "Vi driver lager – vad kan du bygga?", a: "Inleverans, plock, saldokoll och enkel kundportal där era kunder ser lagerstatus själva. Oftast ett MVP-projekt på 34 900 kr, byggt mobilanpassat för truckhytten." },
+      { q: "Måste vi ha egen IT-kompetens?", a: "Nej. Jag levererar ett färdigt system, står för drift och underhåll om ni vill, och ni får kod och data i eget ägande. Ingen inlåsning." },
+      { q: "Vad händer efter lansering?", a: "30 dagars buggfri-garanti ingår. Därefter löpande underhåll från 1 990 kr/mån eller timmar vid behov – de flesta väljer en liten underhållsplan och sover gott." },
+    ],
+  },
+  {
+    slug: "eskilstuna",
+    city: "Eskilstuna",
+    region: "Södermanlands län",
+    intro:
+      "Eskilstuna har växlat upp från Smedstaden till ett av Sveriges hetaste logistiklägen – Amazon la sitt första svenska logistikcenter här, Volvo CE både utvecklar och tillverkar, och logistikparken drar ständigt nya etableringar. Med den tillväxten följer interna system som inte hänger med. AI-kodning bygger om dem på veckor istället för år.",
+    localContext:
+      "Logistik, tung industri, e-handel och Mälardalens universitet. En dryg timme från min bas i Linköping – samma stack, samma fasta priser, utan Mälardalspåslag.",
+    comparison:
+      "Byråer i Mälardalen ligger ofta på 1 200–2 000 kr/timmen med långa ledtider. Jag jobbar med fast pris: prototyp 14 900 kr på dagar, MVP 34 900 kr på två veckor, full SaaS från 69 000 kr. Ni vet totalkostnaden innan projektet startar.",
+    faqs: [
+      { q: "Bygger du system för logistik och e-handel i Eskilstuna?", a: "Ja – orderflöden, lagerstatus, fraktbokning, kundportaler och dispatch. Aurora Transport, mitt eget dispatchsystem för åkerier, visar nivån: byggt på under två veckor och i skarp drift." },
+      { q: "Vi är underleverantör till industrin – vad är typiska projekt?", a: "Leveransplaner, kvalitetsuppföljning, avvikelsehantering och portaler där era beställare följer status i realtid. Det som idag bor i mejltrådar och delade Excelfiler." },
+      { q: "Hur fungerar distanssamarbete från Eskilstuna?", a: "Smidigt – videomöten en till två gånger i veckan och fungerande version att klicka i redan efter första veckan. Fysiskt uppstartsmöte går att ordna vid behov." },
+      { q: "Varför inte en lokal byrå i Mälardalen?", a: "Gärna om de matchar priset och tempot. Min modell är fast pris, leverans på veckor och kod ni äger – jämför gärna offerter, det brukar räcka som argument." },
+    ],
+  },
 ];
+
 
 export const getCity = (slug: string): CityContent | undefined =>
   cities.find((c) => c.slug === slug);
