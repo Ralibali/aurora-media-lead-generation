@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getSupabase } from "@/lib/getSupabase";
+import { trackEvent } from "@/lib/analytics";
 
 const NAME_REGEX = /^[\p{L}][\p{L}\s'-]{1,}$/u;
 
