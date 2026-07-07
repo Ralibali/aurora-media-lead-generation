@@ -585,6 +585,127 @@ export const citySeo: Record<string, CitySeo> = {
     tjansterIntro:
       "För Örebros växande företag erbjuder vi handfasta digitala tjänster som ger resultat. Utforska hur vi kan hjälpa er med SaaS-utveckling och smarta AI-lösningar.",
   },
+  motala: {
+    metaTitleSaaS: "SaaS-utveckling i Motala – fast pris från 14 900 kr",
+    metaDescSaaS:
+      "Skräddarsydd SaaS och interna system för industri och besöksnäring i Motala. Prototyp på dagar, MVP på två veckor. Fast pris från 14 900 kr.",
+    metaTitleAI: "AI-byrå Motala – automation för industrin | Aurora Media",
+    metaDescAI:
+      "AI-byrå nära Motala. Vi automatiserar orderflöden, dokument och Excel-arbete för verkstad och besöksnäring. Lokal partner, fast pris, snabb leverans.",
+    h1Pre: "AI och SaaS för Motalas",
+    h1Em: "industri och besöksnäring",
+    keywords: [
+      "AI-byrå Motala",
+      "SaaS-utveckling Motala",
+      "systemutveckling Motala",
+      "webbyrå Motala",
+      "AI-automation Östergötland",
+      "digitalisera industri Motala",
+    ],
+    tjansterIntro:
+      "Vi hjälper företag i Motala att ersätta Excel och pärmar med skräddarsydda system. Se hur vi kan hjälpa er med SaaS-utveckling och AI-automation.",
+  },
+  mjolby: {
+    metaTitleSaaS: "SaaS i Mjölby för lantbruk & industri | från 14 900 kr",
+    metaDescSaaS:
+      "Digitala verktyg för Mjölbys lantbruk, industri och underleverantörer. Skräddarsydd SaaS med fast pris från 14 900 kr och leverans på veckor.",
+    metaTitleAI: "AI-byrå Mjölby – lantbruksteknik & industri | Aurora Media",
+    metaDescAI:
+      "AI-byrå nära Mjölby. Automation för lantbruk, materialhantering och underleverantörer – order, kvalitet och leveransplaner utan manuellt Excel-arbete.",
+    h1Pre: "Digitala verktyg för Mjölbys",
+    h1Em: "lantbruk och industri",
+    keywords: [
+      "AI-byrå Mjölby",
+      "SaaS Mjölby",
+      "systemutveckling Mjölby",
+      "digitalisering lantbruk",
+      "webbyrå Mjölby",
+      "app underleverantör industri",
+    ],
+    tjansterIntro:
+      "Mitt i ett av Sveriges starkaste kluster för lantbruks- och materialhanteringsteknik bygger vi system som får flödena att flyta. Utforska våra tjänster.",
+  },
+  finspang: {
+    metaTitleSaaS: "SaaS-utveckling i Finspång – system för industrin",
+    metaDescSaaS:
+      "Skräddarsydda system för Finspångs industri och underleverantörer: spårbarhet, kvalitet och orderflöden. Fast pris från 14 900 kr, MVP på två veckor.",
+    metaTitleAI: "AI-byrå Finspång – automation för industrin | Aurora Media",
+    metaDescAI:
+      "AI-byrå nära Finspång. Vi automatiserar dokumentation, spårbarhet och kvalitetsflöden för industri och underleverantörer. Fast pris, snabb leverans.",
+    h1Pre: "System och AI för Finspångs",
+    h1Em: "industri och underleverantörer",
+    keywords: [
+      "AI-byrå Finspång",
+      "SaaS-utveckling Finspång",
+      "systemutveckling Finspång",
+      "kvalitetssystem industri",
+      "spårbarhet tillverkning",
+      "webbyrå Finspång",
+    ],
+    tjansterIntro:
+      "Vi bygger system för industriorten Finspång: spårbarhet, kvalitetsdokumentation och orderflöden som klarar revision. Se våra tjänster.",
+  },
+  nykoping: {
+    metaTitleSaaS: "SaaS-utveckling Nyköping – fast pris från 14 900 kr",
+    metaDescSaaS:
+      "Modern SaaS för växande bolag i Nyköping – utan Stockholmspriser. Prototyp på dagar, MVP på två veckor, kod ni äger. Fast pris från 14 900 kr.",
+    metaTitleAI: "AI-byrå Nyköping – AI för bygg & besöksnäring | AM",
+    metaDescAI:
+      "AI-byrå för Nyköping. Automation för bygg, besöksnäring och tjänsteföretag i Ostlänkens tillväxtstråk. Fast pris och leverans på veckor.",
+    h1Pre: "SaaS och AI för Nyköpings",
+    h1Em: "växande företag",
+    keywords: [
+      "AI-byrå Nyköping",
+      "SaaS-utveckling Nyköping",
+      "webbyrå Nyköping",
+      "systemutveckling Sörmland",
+      "app byggföretag",
+      "digitalisering besöksnäring",
+    ],
+    tjansterIntro:
+      "Nyköping växer med Ostlänken – vi bygger systemen som håller jämna steg. Se hur vi hjälper bygg, besöksnäring och tjänsteföretag att digitalisera.",
+  },
+  katrineholm: {
+    metaTitleSaaS: "SaaS-utveckling Katrineholm – logistik & industri",
+    metaDescSaaS:
+      "Skräddarsydda system för logistik, lager och industri i Katrineholm. Dispatch, plock och fakturering utan miljonlicenser. Fast pris från 14 900 kr.",
+    metaTitleAI: "AI-byrå Katrineholm – automation för logistik | AM",
+    metaDescAI:
+      "AI-byrå för Katrineholm. Vi automatiserar transport-, lager- och orderflöden för bolag i Sörmlands logistiknav. Fast pris, kod ni äger själva.",
+    h1Pre: "Från Katrineholms järnvägsknut till",
+    h1Em: "digitala logistikflöden",
+    keywords: [
+      "AI-byrå Katrineholm",
+      "SaaS Katrineholm",
+      "dispatchsystem åkeri",
+      "lagersystem småföretag",
+      "systemutveckling Katrineholm",
+      "webbyrå Katrineholm",
+    ],
+    tjansterIntro:
+      "I Sörmlands logistiknav bygger vi system för transport, lager och industri. Utforska hur vi ersätter telefon och Excel med riktiga flöden.",
+  },
+  eskilstuna: {
+    metaTitleSaaS: "SaaS-utveckling Eskilstuna – fast pris från 14 900 kr",
+    metaDescSaaS:
+      "SaaS och interna system för Eskilstunas logistik, industri och e-handel. Prototyp på dagar, MVP på två veckor. Fast pris utan Mälardalspåslag.",
+    metaTitleAI: "AI-byrå Eskilstuna – logistik & industri | Aurora Media",
+    metaDescAI:
+      "AI-byrå för Eskilstuna. Automation för logistik, e-handel och tillverkning – från orderflöden till kundportaler. Fast pris och leverans på veckor.",
+    h1Pre: "AI och SaaS för Eskilstunas",
+    h1Em: "logistik och industri",
+    keywords: [
+      "AI-byrå Eskilstuna",
+      "SaaS-utveckling Eskilstuna",
+      "systemutveckling Eskilstuna",
+      "webbyrå Eskilstuna",
+      "AI-automation logistik",
+      "digitalisering e-handel",
+    ],
+    tjansterIntro:
+      "Från Smedstaden till logistiknav – vi bygger systemen som matchar Eskilstunas tempo. Se hur vi hjälper logistik, industri och e-handel.",
+  },
 };
+
 
 export const getCitySeo = (slug: string): CitySeo | undefined => citySeo[slug];
