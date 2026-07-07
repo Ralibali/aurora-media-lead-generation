@@ -10,6 +10,7 @@ import { CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { getSupabase } from "@/lib/getSupabase";
+import { trackEvent } from "@/lib/analytics";
 
 type OpenOptions = { paket?: string; internalNote?: string };
 type ContactModalCtx = {
