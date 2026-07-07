@@ -195,6 +195,8 @@ const AiKartaStart = () => {
       });
       if (error) throw error;
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
+      trackEvent("ai_karta_submit", { company: form.company_name });
+
       try {
         sessionStorage.setItem(
           RESULT_KEY,
