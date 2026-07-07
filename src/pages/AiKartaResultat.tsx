@@ -239,6 +239,7 @@ const AiKartaResultat = () => {
         throw new Error((data as { error?: string })?.error || error?.message || "Okänt fel");
       }
       setBookingStatus("success");
+      trackEvent("genomlysning_bokad", { company: meta.company_name });
       toast.success("Bokningsförfrågan skickad", { description: "Du får en kalenderinbjudan inom kort." });
     } catch (err) {
       console.error("[book-ai-genomlysning]", err);
