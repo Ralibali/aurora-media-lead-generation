@@ -305,7 +305,7 @@ const CSS = `
   font-family: var(--font-sans); font-size: 18px; font-weight: 600; color: var(--granbark);
 }
 .vk-faq-icon { flex-shrink: 0; color: var(--gran); transition: transform .3s ease; }
-.vk-faq-a { padding: 0 4px 24px; color: var(--granbark-mut); font-size: 16px; line-height: 1.65; }
+.vk-faq-a { padding: 0 4px 24px; color: #3E444B; font-size: 16px; line-height: 1.65; }
 
 /* ── Dark CTA ── */
 .vk-dark {
