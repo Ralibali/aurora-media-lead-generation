@@ -260,7 +260,8 @@ const HeroSection = () => (
           transition={{ duration: .8, delay: .3 }}
         >
           Jag bygger interna system, AI-automationer och SaaS åt svenska småföretag.
-          Fast pris från 14 900 kr. Kod ni äger själva.
+          Fast pris. Kod ni äger själva.
+
         </motion.p>
         <motion.div
           className="vk-hero-cta"
