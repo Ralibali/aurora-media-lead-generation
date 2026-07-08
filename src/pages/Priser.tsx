@@ -88,7 +88,7 @@ const Priser = () => {
     <>
       <SEO
         title="Priser – SaaS, MVP och AI-automation | Aurora Media"
-        description="Prototyp från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 89 000 kr. Fast pris, snabb leverans, kod ni äger."
+        description="Fast pris, snabb leverans, kod ni äger. Ni får en exakt offert inom 24 timmar — och priset kommer överraska positivt."
         canonical="/priser"
       />
       <div className="verkstad">
