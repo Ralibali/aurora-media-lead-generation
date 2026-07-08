@@ -61,7 +61,7 @@ const CITIES = [
 
 /* ────────── Small components ────────── */
 
-const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
+export const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   const reduce = useReducedMotion();
   const [forceShow, setForceShow] = useState(false);
   useEffect(() => {
@@ -105,7 +105,7 @@ const CountUp = ({ to, suffix = "", prefix = "" }: { to: number; suffix?: string
 
 /* ────────── Nav ────────── */
 
-const VkNav = () => {
+export const VkNav = () => {
   const [scrolled, setScrolled] = useState(false);
   const { open } = useContactModal();
   useEffect(() => {
@@ -578,7 +578,7 @@ const FinalCTA = () => {
   );
 };
 
-const VkFooter = () => (
+export const VkFooter = () => (
   <footer className="vk-footer">
     <div className="vk-wrap">
       <div className="vk-footer-grid">
