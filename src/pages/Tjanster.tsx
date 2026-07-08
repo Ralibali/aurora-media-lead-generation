@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { ArrowRight } from "lucide-react";
-import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import { ArrowRight, Check } from "lucide-react";
+import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
-import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
+import { Reveal, VkNav, VkFooter } from "@/pages/Index";
+import { setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
+import "@/styles/verkstad.css";
 
 const SERVICES = [
   {
@@ -30,84 +32,114 @@ const SERVICES = [
 const Tjanster = () => {
   const { open } = useContactModal();
   useEffect(() => {
-    setSEOMeta({
-      title: "Tjänster — SaaS, hemsidor, interna system och AI | Aurora Media",
-      description: "Vi bygger fyra saker snabbt: SaaS-produkter, hemsidor, interna system och AI-integrationer. Fast pris, fast deadline, kod ni äger.",
-      canonical: "/tjanster",
-    });
     setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Tjänster", url: "/tjanster" }]);
     return () => removeJsonLd("breadcrumb-jsonld");
   }, []);
 
   return (
-    <NordicLayout>
-      <section className="page-hero">
-        <div className="wrap">
-          <Reveal><p className="mono">tjänster · fast scope · kod ni äger</p></Reveal>
-          <Reveal delay={0.1}>
-            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>
-              Vi bygger fyra saker. <span className="it">Snabbt.</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="lead" style={{ marginTop: 24 }}>
-              Moderna AI-verktyg, fast pris, fast deadline. Levereras på veckor — inte månader.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {SERVICES.map((s, idx) => (
-        <section key={s.num} className="section">
-          <div className="wrap">
-            <div className="sec-head">
-              <Reveal>
-                <div>
-                  <div className="meta-label">{s.num} · {s.price}</div>
-                  <h2 className="h2" style={{ marginTop: 18 }}>
-                    {s.name}<span className="it">.</span>
-                  </h2>
-                  <p className="body" style={{ marginTop: 18 }}>
-                    <span className="meta-label">Tidsplan</span><br />
-                    <span style={{ color: "var(--bone)" }}>{s.time}</span>
-                  </p>
-                  <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 24 }}>
-                    Begär offert <span className="a"><ArrowRight size={14} /></span>
-                  </button>
-                </div>
-              </Reveal>
+    <>
+      <SEO
+        title="Tjänster — SaaS, hemsidor, interna system och AI | Aurora Media"
+        description="Vi bygger fyra saker snabbt: SaaS-produkter, hemsidor, interna system och AI-integrationer. Fast pris, fast deadline, kod ni äger."
+        canonical="/tjanster"
+      />
+      <div className="verkstad">
+        <VkNav />
+        <main>
+          {/* Hero */}
+          <section className="vk-section vk-hero">
+            <div className="vk-wrap">
+              <Reveal><p className="vk-mono">tjänster · fast scope · kod ni äger</p></Reveal>
               <Reveal delay={0.1}>
-                <div>
-                  <p className="lead" style={{ marginBottom: 28 }}>{s.desc}</p>
-                  <div className="meta-label" style={{ marginBottom: 14 }}>Vad ingår</div>
-                  <div className="feat-list" style={{ marginTop: 0 }}>
-                    {s.includes.map((item, i) => (
-                      <div key={item} className="feat-row" style={{ gridTemplateColumns: "60px 1fr" }}>
-                        <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>
-                        <span className="feat-body">{item}</span>
-                      </div>
-                    ))}
-                  </div>
+                <h1 style={{ marginTop: 18, maxWidth: "18ch" }}>
+                  Vi bygger fyra saker.{" "}
+                  <span className="accent" style={{ fontFamily: "'Fraunces', Georgia, serif", fontStyle: "italic", fontWeight: 500 }}>
+                    Snabbt.
+                  </span>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="vk-hero-sub">
+                  Moderna AI-verktyg, fast pris, fast deadline. Levereras på veckor — inte månader.
+                </p>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <div className="vk-hero-cta">
+                  <button onClick={() => open()} className="vk-btn vk-btn-primary">
+                    Begär offert <ArrowRight size={16} />
+                  </button>
+                  <a href="/priser" className="vk-btn vk-btn-ghost">Se priser</a>
                 </div>
               </Reveal>
             </div>
-          </div>
-        </section>
-      ))}
+          </section>
 
-      <section className="cta-band">
-        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="meta-label">Nästa steg</div>
-          <h2 className="h2" style={{ marginTop: 18 }}>
-            Har ni en idé eller en process som <span className="it">suger?</span>
-          </h2>
-          <p className="lead" style={{ marginTop: 22 }}>Offert inom 24 timmar.</p>
-          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
-            Begär offert <span className="a"><ArrowRight size={14} /></span>
-          </button>
-        </div>
-      </section>
-    </NordicLayout>
+          <hr className="vk-hair" />
+
+          {SERVICES.map((s) => (
+            <section key={s.num} className="vk-section">
+              <div className="vk-wrap">
+                <div style={{ display: "grid", gap: "clamp(32px, 5vw, 64px)", gridTemplateColumns: "1fr", alignItems: "start" }} className="tjanst-grid">
+                  <Reveal>
+                    <div>
+                      <p className="vk-mono">{s.num} · {s.price}</p>
+                      <h2 style={{ marginTop: 14 }}>
+                        {s.name}
+                        <span style={{ color: "var(--gran)", fontFamily: "'Fraunces', Georgia, serif", fontStyle: "italic", fontWeight: 500 }}>.</span>
+                      </h2>
+                      <p className="vk-mono" style={{ marginTop: 20, color: "var(--granbark-mut)" }}>Tidsplan</p>
+                      <p style={{ marginTop: 6, fontSize: 17, fontWeight: 600, color: "var(--granbark)" }}>{s.time}</p>
+                      <button onClick={() => open()} className="vk-btn vk-btn-primary" style={{ marginTop: 28 }}>
+                        Begär offert <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </Reveal>
+                  <Reveal delay={0.1}>
+                    <div>
+                      <p style={{ fontSize: 18, lineHeight: 1.65, color: "#3E444B", marginBottom: 28 }}>{s.desc}</p>
+                      <p className="vk-mono" style={{ marginBottom: 16 }}>Vad ingår</p>
+                      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 12 }}>
+                        {s.includes.map((item) => (
+                          <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 16, lineHeight: 1.55, color: "var(--granbark)" }}>
+                            <Check size={16} strokeWidth={2.5} style={{ color: "var(--gran)", flexShrink: 0, marginTop: 4 }} />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Reveal>
+                </div>
+              </div>
+            </section>
+          ))}
+
+          {/* CTA */}
+          <section className="vk-dark">
+            <div className="vk-wrap">
+              <Reveal><p className="vk-mono">Nästa steg</p></Reveal>
+              <Reveal delay={0.05}>
+                <h2 style={{ marginTop: 14 }}>
+                  Har ni en idé eller en process som{" "}
+                  <span style={{ color: "#F6F5F1", fontFamily: "'Fraunces', Georgia, serif", fontStyle: "italic", fontWeight: 500 }}>suger?</span>
+                </h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p style={{ marginTop: 20, fontSize: 18, maxWidth: "58ch" }}>Offert inom 24 timmar.</p>
+              </Reveal>
+              <Reveal delay={0.15}>
+                <div style={{ marginTop: 28 }}>
+                  <button onClick={() => open()} className="vk-btn vk-btn-primary">
+                    Begär offert <ArrowRight size={16} />
+                  </button>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+        </main>
+        <VkFooter />
+      </div>
+      <style>{`@media (min-width: 900px) { .tjanst-grid { grid-template-columns: 5fr 7fr !important; } }`}</style>
+    </>
   );
 };
 
