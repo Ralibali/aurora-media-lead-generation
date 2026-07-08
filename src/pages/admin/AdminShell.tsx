@@ -19,6 +19,7 @@ const VERIFY_URL = `https://${PROJECT_ID}.functions.supabase.co/list-leads`;
 
 export const adminFetch = async (path: string, init: RequestInit = {}) => {
   const pwd = sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
+  if (!pwd) throw new Error("Inte inloggad.");
   const url = `https://${PROJECT_ID}.functions.supabase.co/${path}`;
   const res = await fetch(url, {
     ...init,
@@ -98,7 +99,7 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
       }
       if (!res.ok) throw new Error(await res.text());
       sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
-      setAuthed(true);
+      window.location.reload();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Något gick fel");
     } finally {
