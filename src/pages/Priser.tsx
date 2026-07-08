@@ -10,7 +10,6 @@ const PACKAGES = [
   {
     num: "01",
     name: "Aurora Sprint",
-    price: "Från 14 900 kr",
     time: "1–2 veckor",
     desc: "Klickbar prototyp eller första fungerande version för att validera idén snabbt.",
     features: [
@@ -24,7 +23,6 @@ const PACKAGES = [
   {
     num: "02",
     name: "Aurora MVP",
-    price: "Från 34 900 kr",
     time: "3–5 veckor",
     featured: true,
     desc: "Lanseringsbar MVP med riktiga användare, data och kärnfunktioner.",
@@ -39,7 +37,6 @@ const PACKAGES = [
   {
     num: "03",
     name: "Aurora Scale",
-    price: "Från 89 000 kr",
     time: "6–10 veckor",
     desc: "Skalbar SaaS eller intern plattform med roller, integrationer och automation.",
     features: [
@@ -53,7 +50,6 @@ const PACKAGES = [
   {
     num: "04",
     name: "Aurora AI Ops",
-    price: "Fast offert",
     time: "Variabel",
     desc: "AI-automationer och interna verktyg för företag som vill kapa manuellt arbete.",
     features: [
@@ -65,6 +61,7 @@ const PACKAGES = [
     ],
   },
 ] as const;
+
 
 const COMPARE: readonly (readonly [string, boolean | string, boolean | string, boolean | string, boolean | string])[] = [
   ["Fast pris innan start", true, true, true, true],
