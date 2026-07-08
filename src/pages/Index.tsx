@@ -47,7 +47,7 @@ const CASES = [
 const FAQS = [
   { q: "Äger vi koden?", a: "Ja. Allt – kod, data, konton – står på er från dag ett. Ingen inlåsning." },
   { q: "Är fast pris på riktigt?", a: "Ja. Vill ni ändra scope skriver jag en ny fast offert. Ni får aldrig en överraskande faktura." },
-  { q: "Vad händer efter lansering?", a: "30 dagars buggfri-garanti ingår. Sedan underhåll från 1 990 kr/mån – eller sköt det själva, det är er kod." },
+  { q: "Vad händer efter lansering?", a: "30 dagars buggfri-garanti ingår. Sedan kan ni teckna underhåll till ett rimligt månadspris – eller sköt det själva, det är er kod." },
   { q: "Måste vi kunna teknik?", a: "Nej. Ni kan ert flöde, jag kan resten. Ni testar klickbara versioner, inte läser rapporter." },
   { q: "Fungerar det på distans?", a: "Ja – video 1–2 gånger i veckan. I Östergötland ses vi gärna fysiskt." },
 ];
