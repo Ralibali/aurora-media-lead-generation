@@ -142,5 +142,8 @@ export interface AiMapResult {
     company_name: string;
     contact_name: string;
     email: string;
+    industry?: string;
+    employee_count?: string;
   };
+  created_at?: string;
 }
