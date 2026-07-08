@@ -2,26 +2,11 @@
 
 Base: http://localhost:8080
 
-- **mobile** / — 3 avvikelser
-  - `span.vk-receipt-stamp` #e8500a (low-contrast(3.76)) – "Fast pris"
-  - `span.vk-receipt-stamp` #e8500a (low-contrast(3.76)) – "Fast pris"
-  - `span.vk-receipt-stamp` #e8500a (low-contrast(3.76)) – "Fast pris"
+- **mobile** / — ok
 - **mobile** /priser — ok
 - **mobile** /tjanster — ok
 - **mobile** /tjanster/webbdesign — ok
-- **mobile** /tjanster/seo — 12 avvikelser
-  - `span.` #8a8578 (low-contrast(3.37)) – "01"
-  - `span.` #8a8578 (low-contrast(3.37)) – "02"
-  - `span.` #8a8578 (low-contrast(3.37)) – "03"
-  - `span.` #8a8578 (low-contrast(3.37)) – "04"
-  - `span.` #8a8578 (low-contrast(3.37)) – "05"
-  - `span.` #8a8578 (low-contrast(3.37)) – "06"
-  - `span.` #8a8578 (low-contrast(3.37)) – "07"
-  - `span.` #8a8578 (low-contrast(3.37)) – "08"
-  - `span.` #8a8578 (low-contrast(3.37)) – "01"
-  - `span.` #8a8578 (low-contrast(3.37)) – "02"
-  - `span.` #8a8578 (low-contrast(3.37)) – "03"
-  - `span.` #8a8578 (low-contrast(3.37)) – "04"
+- **mobile** /tjanster/seo — ok
 - **mobile** /tjanster/ai-automation — ok
 - **mobile** /ai-karta — ok
 - **mobile** /arbete — ok
@@ -29,26 +14,11 @@ Base: http://localhost:8080
 - **mobile** /kontakt — ok
 - **mobile** /integritetspolicy — ok
 - **mobile** /redaktionell-policy — ok
-- **desktop** / — 3 avvikelser
-  - `span.vk-receipt-stamp` #e8500a (low-contrast(3.76)) – "Fast pris"
-  - `span.vk-receipt-stamp` #e8500a (low-contrast(3.76)) – "Fast pris"
-  - `span.vk-receipt-stamp` #e8500a (low-contrast(3.76)) – "Fast pris"
+- **desktop** / — ok
 - **desktop** /priser — ok
 - **desktop** /tjanster — ok
 - **desktop** /tjanster/webbdesign — ok
-- **desktop** /tjanster/seo — 12 avvikelser
-  - `span.` #8a8578 (low-contrast(3.37)) – "01"
-  - `span.` #8a8578 (low-contrast(3.37)) – "02"
-  - `span.` #8a8578 (low-contrast(3.37)) – "03"
-  - `span.` #8a8578 (low-contrast(3.37)) – "04"
-  - `span.` #8a8578 (low-contrast(3.37)) – "05"
-  - `span.` #8a8578 (low-contrast(3.37)) – "06"
-  - `span.` #8a8578 (low-contrast(3.37)) – "07"
-  - `span.` #8a8578 (low-contrast(3.37)) – "08"
-  - `span.` #8a8578 (low-contrast(3.37)) – "01"
-  - `span.` #8a8578 (low-contrast(3.37)) – "02"
-  - `span.` #8a8578 (low-contrast(3.37)) – "03"
-  - `span.` #8a8578 (low-contrast(3.37)) – "04"
+- **desktop** /tjanster/seo — ok
 - **desktop** /tjanster/ai-automation — ok
 - **desktop** /ai-karta — ok
 - **desktop** /arbete — ok
