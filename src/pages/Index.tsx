@@ -627,7 +627,7 @@ const Index = () => (
       description="Aurora Media bygger AI-lösningar, interna system, appar och SaaS för svenska företag. Snabb leverans, tydligt scope och kod ni äger."
       canonical="/"
     />
-    <style>{CSS}</style>
+    
     <div className="verkstad">
       <VkNav />
       <main>
