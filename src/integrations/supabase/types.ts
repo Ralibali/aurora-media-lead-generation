@@ -96,6 +96,7 @@ export type Database = {
       }
       ai_map_leads: {
         Row: {
+          ai_analysis: Json | null
           company_name: string
           consent: boolean
           contact_name: string
@@ -116,6 +117,7 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          ai_analysis?: Json | null
           company_name: string
           consent?: boolean
           contact_name: string
@@ -136,6 +138,7 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          ai_analysis?: Json | null
           company_name?: string
           consent?: boolean
           contact_name?: string
@@ -165,11 +168,13 @@ export type Database = {
           frequency: string
           id: string
           lead_id: string
+          next_step: string | null
           position: number
           potential: string
           process_name: string
           recommended_solution: string
           rule_based: string
+          saved_hours_per_week: number | null
           score: number
           systems: string | null
           weekly_time: string
@@ -181,11 +186,13 @@ export type Database = {
           frequency: string
           id?: string
           lead_id: string
+          next_step?: string | null
           position?: number
           potential: string
           process_name: string
           recommended_solution: string
           rule_based: string
+          saved_hours_per_week?: number | null
           score?: number
           systems?: string | null
           weekly_time: string
@@ -197,11 +204,13 @@ export type Database = {
           frequency?: string
           id?: string
           lead_id?: string
+          next_step?: string | null
           position?: number
           potential?: string
           process_name?: string
           recommended_solution?: string
           rule_based?: string
+          saved_hours_per_week?: number | null
           score?: number
           systems?: string | null
           weekly_time?: string
