@@ -401,10 +401,11 @@ Skriv också:
         pain_areas, consent,
         total_score: totalScore,
         total_potential,
+        ai_analysis: aiAnalysis ?? null,
         ip: getClientIp(req),
         user_agent: req.headers.get("user-agent")?.slice(0, 300) ?? null,
       })
-      .select("id")
+      .select("id, share_token")
       .single();
 
     if (leadErr || !lead) {
@@ -415,6 +416,7 @@ Skriv också:
     }
 
     const leadId = lead.id;
+    const shareToken = lead.share_token as string;
 
     const procRows = scored.map((s) => ({
       lead_id: leadId,
@@ -429,6 +431,8 @@ Skriv också:
       score: s.score,
       potential: s.potential,
       recommended_solution: s.recommended_solution,
+      next_step: s.next_step ?? null,
+      saved_hours_per_week: s.saved_hours_per_week ?? null,
     }));
     const { error: procErr } = await admin.from("ai_map_processes").insert(procRows);
     if (procErr) console.error("[submit-ai-map] process insert failed", procErr);
