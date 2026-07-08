@@ -117,6 +117,10 @@ const Leads = () => {
   const [sourceFilter, setSourceFilter] = useState<"all" | Source>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
   const [sort, setSort] = useState<"created_at" | "score" | "followup_at">("created_at");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
+  const [datePreset, setDatePreset] = useState<"all" | "today" | "7d" | "30d" | "custom">("all");
+
 
   const [openId, setOpenId] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ processes: Process[] } | null>(null);
@@ -237,11 +241,18 @@ const Leads = () => {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const fromTs = dateFrom ? new Date(dateFrom + "T00:00:00").getTime() : null;
+    const toTs = dateTo ? new Date(dateTo + "T23:59:59.999").getTime() : null;
     let list = leads.filter((l) => {
       if (sourceFilter !== "all" && l.source !== sourceFilter) return false;
       if (statusFilter !== "all" && l.status !== statusFilter) return false;
+      if (fromTs != null || toTs != null) {
+        const t = new Date(l.created_at).getTime();
+        if (fromTs != null && t < fromTs) return false;
+        if (toTs != null && t > toTs) return false;
+      }
       if (q) {
-        const hay = `${l.name ?? ""} ${l.company ?? ""} ${l.email ?? ""}`.toLowerCase();
+        const hay = `${l.name ?? ""} ${l.company ?? ""} ${l.email ?? ""} ${l.phone ?? ""} ${l.notes ?? ""}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -256,9 +267,31 @@ const Leads = () => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
     return list;
-  }, [leads, query, sourceFilter, statusFilter, sort]);
+  }, [leads, query, sourceFilter, statusFilter, sort, dateFrom, dateTo]);
+
+  const applyDatePreset = (preset: "all" | "today" | "7d" | "30d") => {
+    setDatePreset(preset);
+    const today = new Date();
+    const to = today.toISOString().slice(0, 10);
+    if (preset === "all") { setDateFrom(""); setDateTo(""); return; }
+    if (preset === "today") { setDateFrom(to); setDateTo(to); return; }
+    const days = preset === "7d" ? 6 : 29;
+    const from = new Date(today.getTime() - days * 86400000).toISOString().slice(0, 10);
+    setDateFrom(from);
+    setDateTo(to);
+  };
+
+  const clearFilters = () => {
+    setQuery(""); setSourceFilter("all"); setStatusFilter("all");
+    setDateFrom(""); setDateTo(""); setDatePreset("all");
+  };
+
+  const activeFilterCount =
+    (query ? 1 : 0) + (sourceFilter !== "all" ? 1 : 0) + (statusFilter !== "all" ? 1 : 0) + (dateFrom || dateTo ? 1 : 0);
 
   const openLead = leads.find((l) => l.id === openId) ?? null;
+
+
 
   const exportCsv = () => {
     const header = [
@@ -483,7 +516,78 @@ const Leads = () => {
                 ]}
               />
             </div>
+
+            {/* Date range + presets */}
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {([
+                  { key: "all", label: "Alla" },
+                  { key: "today", label: "Idag" },
+                  { key: "7d", label: "7 dagar" },
+                  { key: "30d", label: "30 dagar" },
+                ] as const).map((p) => {
+                  const active = datePreset === p.key;
+                  return (
+                    <button
+                      key={p.key}
+                      type="button"
+                      onClick={() => applyDatePreset(p.key)}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: 999,
+                        border: `1px solid ${active ? "var(--gran)" : "var(--linje)"}`,
+                        background: active ? "var(--gran)" : "#fff",
+                        color: active ? "#fff" : "var(--granbark)",
+                        fontSize: 13,
+                        fontFamily: "var(--font-mono)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", border: "1px solid var(--linje)", borderRadius: 10, padding: "6px 10px" }}>
+                <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>FRÅN</span>
+                <input
+                  type="date"
+                  value={dateFrom}
+                  max={dateTo || undefined}
+                  onChange={(e) => { setDateFrom(e.target.value); setDatePreset("custom"); }}
+                  style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--granbark)" }}
+                />
+                <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>TILL</span>
+                <input
+                  type="date"
+                  value={dateTo}
+                  min={dateFrom || undefined}
+                  onChange={(e) => { setDateTo(e.target.value); setDatePreset("custom"); }}
+                  style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--granbark)" }}
+                />
+                {(dateFrom || dateTo) && (
+                  <button
+                    onClick={() => { setDateFrom(""); setDateTo(""); setDatePreset("all"); }}
+                    aria-label="Rensa datum"
+                    style={{ border: 0, background: "transparent", cursor: "pointer", display: "flex" }}
+                  >
+                    <X size={13} color="var(--granbark-mut)" />
+                  </button>
+                )}
+              </div>
+              <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 13, color: "var(--granbark-mut)", fontFamily: "var(--font-mono)" }}>
+                  {filtered.length} av {leads.length}
+                </span>
+                {activeFilterCount > 0 && (
+                  <button className="vk-btn vk-btn-ghost" onClick={clearFilters} style={{ fontSize: 13 }}>
+                    <X size={13} /> Rensa filter ({activeFilterCount})
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
+
 
           {error && (
             <p style={{ color: "var(--varsel-hover)", marginTop: 20, fontSize: 14 }}>{error}</p>
