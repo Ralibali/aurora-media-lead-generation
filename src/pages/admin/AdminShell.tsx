@@ -223,24 +223,32 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
     e.preventDefault();
     setLoading(true);
     setError(null);
+    let res: Response;
     try {
-      const res = await fetch(VERIFY_URL, {
+      res = await fetch(VERIFY_URL, {
         method: "POST",
         headers: { Authorization: `Bearer ${pwd}`, "Content-Type": "application/json" },
         body: JSON.stringify({ action: "list" }),
       });
-      if (res.status === 401) {
-        setError("Fel lösenord.");
-        return;
-      }
-      if (!res.ok) throw new Error(await res.text());
-      sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
-      window.location.reload();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Något gick fel");
-    } finally {
       setLoading(false);
+      setError(
+        `Nätverksfel — kunde inte nå servern. (${err instanceof Error ? err.message : "okänt fel"})`
+      );
+      return;
     }
+    setLoading(false);
+    if (res.status === 401 || res.status === 403) {
+      setError("Fel lösenord. Kontrollera och försök igen.");
+      return;
+    }
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      setError(`Serverfel (HTTP ${res.status}) från list-leads.${body ? ` ${body.slice(0, 200)}` : ""}`);
+      return;
+    }
+    sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
+    window.location.reload();
   };
 
   const logout = () => {
