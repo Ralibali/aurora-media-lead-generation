@@ -15,13 +15,13 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
+import { getFunctionUrl } from "@/lib/functionUrl";
 import { toast } from "sonner";
 import "@/styles/verkstad.css";
 
 const STORAGE_KEY = "faq_analytics_pwd";
-const PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-const FUNCTION_URL = `https://${PROJECT_ID}.functions.supabase.co/list-leads`;
-const RESEND_URL = `https://${PROJECT_ID}.functions.supabase.co/resend-ai-map-email`;
+const FUNCTION_URL = getFunctionUrl("list-leads");
+const RESEND_URL = getFunctionUrl("resend-ai-map-email");
 
 type Source = "karta" | "kontakt" | "genomlysning";
 type Status = "ny" | "kontaktad" | "mote_bokat" | "offert_skickad" | "kund" | "forlorad";
