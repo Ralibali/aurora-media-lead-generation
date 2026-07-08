@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Loader2, ExternalLink, AlertCircle } from "lucide-react";
-import AdminShell, { adminFetch } from "./AdminShell";
+import { useCallback, useEffect, useState } from "react";
+import { ExternalLink } from "lucide-react";
+import AdminShell, { adminFetch, AdminStatus } from "./AdminShell";
 
 type GscRow = { keys?: string[]; clicks: number; impressions: number; ctr: number; position: number };
 type Data = {
