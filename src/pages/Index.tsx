@@ -115,7 +115,7 @@ const CSS = `
 .vk-hero-grid { display: grid; gap: clamp(40px, 6vw, 72px); grid-template-columns: 1fr; align-items: center; }
 @media (min-width: 980px) { .vk-hero-grid { grid-template-columns: 1.1fr .9fr; } }
 .vk-hero h1 .accent { color: var(--gran); }
-.vk-hero-sub { margin-top: 24px; max-width: 54ch; font-size: 18px; color: var(--granbark-mut); line-height: 1.6; }
+.vk-hero-sub { margin-top: 24px; max-width: 54ch; font-size: 18px; color: #3E444B; line-height: 1.6; }
 .vk-hero-cta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .vk-hero-micro { margin-top: 18px; }
 
@@ -197,7 +197,17 @@ const CSS = `
 .vk-cmp-check { color: var(--gran); flex-shrink: 0; }
 @media (max-width: 620px) {
   .vk-cmp-row { grid-template-columns: 1fr; }
-  .vk-cmp-left { border-right: 0; border-bottom: 1px solid var(--linje); }
+  .vk-cmp-left { border-right: 0; border-bottom: 1px solid var(--linje); padding-top: 34px; }
+  .vk-cmp-right { padding-top: 34px; }
+  .vk-cmp-left::before,
+  .vk-cmp-right::before {
+    content: "BYRÅN";
+    position: absolute; top: 12px; left: 24px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: #3E444B; font-weight: 500;
+  }
+  .vk-cmp-right::before { content: "JAG"; color: var(--gran); }
+  .vk-cmp-cell { position: relative; }
 }
 
 /* ── Process timeline ── */
@@ -295,7 +305,7 @@ const CSS = `
   font-family: var(--font-sans); font-size: 18px; font-weight: 600; color: var(--granbark);
 }
 .vk-faq-icon { flex-shrink: 0; color: var(--gran); transition: transform .3s ease; }
-.vk-faq-a { padding: 0 4px 24px; color: var(--granbark-mut); font-size: 16px; line-height: 1.65; }
+.vk-faq-a { padding: 0 4px 24px; color: #3E444B; font-size: 16px; line-height: 1.65; }
 
 /* ── Dark CTA ── */
 .vk-dark {
@@ -376,12 +386,18 @@ const CITIES = [
 
 const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   const reduce = useReducedMotion();
+  const [forceShow, setForceShow] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setForceShow(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
   if (reduce) return <>{children}</>;
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      animate={forceShow ? { opacity: 1, y: 0 } : undefined}
+      viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
     >{children}</motion.div>
   );
