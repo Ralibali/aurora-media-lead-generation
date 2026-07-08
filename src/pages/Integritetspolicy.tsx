@@ -1,12 +1,10 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import NordicLayout from "@/components/nordic/NordicLayout";
-import { setSEOMeta, setBreadcrumb, setJsonLd, SITE_URL } from "@/lib/seoHelpers";
+import { SEO } from "@/components/SEO";
+import { Reveal, VkNav, VkFooter } from "@/pages/Index";
+import { setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpers";
+import "@/styles/verkstad.css";
 
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
 const UPDATED = "27 april 2026";
 
 const SECTIONS = [
@@ -24,11 +22,6 @@ const SECTIONS = [
 
 const Integritetspolicy = () => {
   useEffect(() => {
-    setSEOMeta({
-      title: "Integritetspolicy – Aurora Media AB",
-      description: "Hur Aurora Media behandlar personuppgifter, cookies, analys och annonsering.",
-      canonical: "/integritetspolicy",
-    });
     setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Integritetspolicy", url: "/integritetspolicy" }]);
     setJsonLd("privacy-policy-webpage", {
       "@context": "https://schema.org", "@type": "WebPage",
@@ -37,74 +30,108 @@ const Integritetspolicy = () => {
       publisher: { "@id": `${SITE_URL}/#organization` },
       inLanguage: "sv-SE", dateModified: "2026-04-27",
     });
+    return () => { removeJsonLd("breadcrumb-jsonld"); removeJsonLd("privacy-policy-webpage"); };
   }, []);
 
   return (
-    <NordicLayout>
-      <main id="main" style={{ paddingTop: "clamp(88px,12vw,120px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
-        <div className="wrap" style={{ maxWidth: 720 }}>
+    <>
+      <SEO
+        title="Integritetspolicy – Aurora Media AB"
+        description="Hur Aurora Media behandlar personuppgifter, cookies, analys och annonsering."
+        canonical="/integritetspolicy"
+      />
+      <div className="verkstad">
+        <VkNav />
+        <main id="main">
+          <section className="vk-section vk-hero">
+            <div className="vk-wrap" style={{ maxWidth: 760 }}>
+              <Reveal>
+                <p className="vk-mono">juridik · integritet</p>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h1 style={{ marginTop: 18 }}>Integritetspolicy</h1>
+              </Reveal>
+              <Reveal delay={0.15}>
+                <p className="vk-mono" style={{ marginTop: 16, color: "var(--granbark-mut)" }}>
+                  Senast uppdaterad {UPDATED}
+                </p>
+              </Reveal>
 
-          <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20, textTransform: "lowercase" }}>juridik · integritet</p>
-          <h1 style={{ fontFamily: F, fontSize: "clamp(28px,5vw,48px)", color: C, lineHeight: 1.05, letterSpacing: "-0.02em", fontWeight: 400, marginBottom: 12 }}>
-            Integritetspolicy
-          </h1>
-          <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.45)", marginBottom: 40 }}>
-            Senast uppdaterad {UPDATED}.
-          </p>
+              <Reveal delay={0.2}>
+                <div
+                  style={{
+                    marginTop: 40,
+                    padding: "24px 28px",
+                    border: "1px solid var(--linje)",
+                    borderRadius: 14,
+                    background: "var(--bjork-djup)",
+                  }}
+                >
+                  <p className="vk-mono" style={{ color: "var(--gran)" }}>Kort sammanfattning</p>
+                  <p style={{ marginTop: 10, fontSize: 16, lineHeight: 1.7, color: "var(--granbark)" }}>
+                    Vi samlar in uppgifter ni själva lämnar vid kontakt, samt teknisk data om ni godkänner cookies. Uppgifterna används för att svara på förfrågningar, leverera tjänster och förbättra webbplatsen.
+                  </p>
+                </div>
+              </Reveal>
 
-          {/* Summary box */}
-          <div style={{ padding: "20px 24px", border: "0.5px solid rgba(237,233,220,0.12)", borderRadius: 6, background: "rgba(237,233,220,0.02)", marginBottom: 48 }}>
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.35)", marginBottom: 8 }}>kort sammanfattning</p>
-            <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.7, color: "rgba(237,233,220,0.65)" }}>
-              Vi samlar in uppgifter ni själva lämnar vid kontakt, samt teknisk data om ni godkänner cookies. Uppgifterna används för att svara på förfrågningar, leverera tjänster och förbättra webbplatsen.
-            </p>
-          </div>
+              <div style={{ marginTop: 48 }}>
+                {SECTIONS.map((s, i) => (
+                  <Reveal key={s.h} delay={Math.min(i * 0.03, 0.2)}>
+                    <div style={{ paddingBlock: 32, borderBottom: "1px solid var(--linje)" }}>
+                      <h2 style={{ fontSize: "clamp(20px, 2.4vw, 26px)", marginBottom: 14 }}>{s.h}</h2>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                        {s.content.map((p) => (
+                          <p key={p} style={{ fontSize: 16, lineHeight: 1.7, color: "#3E444B" }}>{p}</p>
+                        ))}
+                      </div>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
 
-          {/* Sections */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {SECTIONS.map((s) => (
-              <div key={s.h} style={{ paddingBlock: 28, borderBottom: "0.5px solid rgba(237,233,220,0.08)" }}>
-                <h2 style={{ fontFamily: F, fontSize: "clamp(17px,2.2vw,22px)", color: C, marginBottom: 12, fontWeight: 400 }}>{s.h}</h2>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  {s.content.map((p) => (
-                    <p key={p} style={{ fontFamily: I, fontSize: 13, lineHeight: 1.75, color: "rgba(237,233,220,0.65)" }}>{p}</p>
+              <Reveal delay={0.1}>
+                <div
+                  style={{
+                    marginTop: 48,
+                    padding: "24px 28px",
+                    border: "1px solid var(--linje)",
+                    borderRadius: 14,
+                    background: "#fff",
+                  }}
+                >
+                  <h2 style={{ fontSize: 22, marginBottom: 10 }}>Kontakt</h2>
+                  <p style={{ fontSize: 16, color: "#3E444B", lineHeight: 1.7 }}>
+                    Frågor om personuppgifter:{" "}
+                    <a href="mailto:info@auroramedia.se" style={{ color: "var(--gran)", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: 3 }}>
+                      info@auroramedia.se
+                    </a>
+                  </p>
+                </div>
+              </Reveal>
+
+              <div style={{ marginTop: 40, paddingTop: 28, borderTop: "1px solid var(--linje)" }}>
+                <p className="vk-mono" style={{ marginBottom: 16 }}>läs vidare</p>
+                <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                  {[
+                    { to: "/kontakt", label: "Kontakt" },
+                    { to: "/redaktionell-policy", label: "Redaktionell policy" },
+                  ].map((r) => (
+                    <Link
+                      key={r.to}
+                      to={r.to}
+                      style={{ fontSize: 15, color: "var(--granbark)", fontWeight: 500, textDecoration: "none", borderBottom: "1px solid var(--linje)", paddingBottom: 2 }}
+                    >
+                      {r.label} →
+                    </Link>
                   ))}
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Contact */}
-          <div style={{ marginTop: 48, padding: "20px 24px", border: "0.5px solid rgba(237,233,220,0.10)", borderRadius: 6 }}>
-            <h2 style={{ fontFamily: F, fontSize: 20, color: C, marginBottom: 8, fontWeight: 400 }}>Kontakt</h2>
-            <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.60)", lineHeight: 1.7 }}>
-              Frågor om personuppgifter:{" "}
-              <a href="mailto:info@auroramedia.se" style={{ color: C, textDecoration: "none", borderBottom: "0.5px solid rgba(237,233,220,0.30)" }}>
-                info@auroramedia.se
-              </a>
-            </p>
-          </div>
-
-          {/* Related */}
-          <div style={{ marginTop: 40, paddingTop: 28, borderTop: "0.5px solid rgba(237,233,220,0.08)" }}>
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 16 }}>läs vidare</p>
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              {[
-                { to: "/kontakt", label: "Kontakt" },
-                { to: "/redaktionell-policy", label: "Redaktionell policy" },
-              ].map((r) => (
-                <Link key={r.to} to={r.to}
-                  style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.40)", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = C)}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
-                  {r.label} →
-                </Link>
-              ))}
             </div>
-          </div>
-        </div>
-      </main>
-      </NordicLayout>
+          </section>
+        </main>
+        <VkFooter />
+      </div>
+    </>
   );
 };
 
