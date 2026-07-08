@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import SiteHeader from "@/components/layout/SiteHeader";
-import SiteFooter from "@/components/layout/SiteFooter";
+import { VkNav as SiteHeader, VkFooter as SiteFooter } from "@/pages/Index";
+import "@/styles/verkstad.css";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
 const F = "'Fraunces',Georgia,serif";
 const I = "'Inter',system-ui,sans-serif";
 const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
+const C = "#14171A";
 
 const RULE = {
   height: "0.5px",
-  background: "rgba(237,233,220,0.12)",
+  background: "#D8D5CC",
   marginBottom: "clamp(40px,6vw,64px)",
 } as const;
 
@@ -20,7 +20,7 @@ const eyebrow = {
   fontSize: 10,
   letterSpacing: "0.1em",
   textTransform: "uppercase" as const,
-  color: "rgba(237,233,220,0.35)",
+  color: "#4A5058",
   marginBottom: 16,
 };
 
@@ -72,7 +72,7 @@ const MetaAds = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#100F0D", minHeight: "100vh" }}>
+    <div className="verkstad" style={{ minHeight: "100vh" }}>
       <a
         href="#main"
         className="skip-link"
@@ -105,7 +105,7 @@ const MetaAds = () => {
             }}
           >
             Facebook och Instagram-annonser{" "}
-            <em style={{ fontStyle: "italic", color: "rgba(237,233,220,0.65)" }}>
+            <em style={{ fontStyle: "italic", color: "#3E444B" }}>
               som mäts rätt.
             </em>
           </h1>
@@ -113,7 +113,7 @@ const MetaAds = () => {
             style={{
               fontFamily: I,
               fontSize: "clamp(1rem,1.8vw,1.2rem)",
-              color: "rgba(237,233,220,0.60)",
+              color: "#3E444B",
               lineHeight: 1.7,
               maxWidth: 640,
               marginBottom: "clamp(32px,4vw,48px)",
@@ -134,7 +134,7 @@ const MetaAds = () => {
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
             {includes.map((item, i) => (
               <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: 20 }}>
-                <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)", letterSpacing: "0.05em", minWidth: 24, paddingTop: 3 }}>
+                <span style={{ fontFamily: M, fontSize: 10, color: "#8A8578", letterSpacing: "0.05em", minWidth: 24, paddingTop: 3 }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span style={{ fontFamily: I, fontSize: "clamp(0.9rem,1.4vw,1rem)", color: "rgba(237,233,220,0.72)", lineHeight: 1.6 }}>
@@ -162,13 +162,13 @@ const MetaAds = () => {
                   alignItems: "start",
                 }}
               >
-                <span style={{ fontFamily: M, fontSize: 10, color: "rgba(237,233,220,0.25)", letterSpacing: "0.05em", paddingTop: 3 }}>
+                <span style={{ fontFamily: M, fontSize: 10, color: "#8A8578", letterSpacing: "0.05em", paddingTop: 3 }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span style={{ fontFamily: F, fontSize: "clamp(1rem,1.6vw,1.15rem)", fontWeight: 400, color: C, letterSpacing: "-0.01em" }}>
                   {step.title}
                 </span>
-                <span style={{ fontFamily: I, fontSize: "clamp(0.875rem,1.3vw,0.95rem)", color: "rgba(237,233,220,0.55)", lineHeight: 1.65 }}>
+                <span style={{ fontFamily: I, fontSize: "clamp(0.875rem,1.3vw,0.95rem)", color: "#3E444B", lineHeight: 1.65 }}>
                   {step.body}
                 </span>
               </div>
@@ -195,7 +195,7 @@ const MetaAds = () => {
                 <p style={{ fontFamily: F, fontSize: "clamp(1rem,1.5vw,1.1rem)", fontWeight: 400, color: C, letterSpacing: "-0.01em", lineHeight: 1.4 }}>
                   {faq.q}
                 </p>
-                <p style={{ fontFamily: I, fontSize: "clamp(0.875rem,1.3vw,0.95rem)", color: "rgba(237,233,220,0.55)", lineHeight: 1.65 }}>
+                <p style={{ fontFamily: I, fontSize: "clamp(0.875rem,1.3vw,0.95rem)", color: "#3E444B", lineHeight: 1.65 }}>
                   {faq.a}
                 </p>
               </div>
@@ -215,7 +215,7 @@ const MetaAds = () => {
                 style={{
                   fontFamily: I,
                   fontSize: 13,
-                  color: "rgba(237,233,220,0.55)",
+                  color: "#3E444B",
                   textDecoration: "none",
                   border: "0.5px solid rgba(237,233,220,0.15)",
                   borderRadius: 6,
@@ -224,11 +224,11 @@ const MetaAds = () => {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = C;
-                  e.currentTarget.style.borderColor = "rgba(237,233,220,0.35)";
+                  e.currentTarget.style.borderColor = "#4A5058";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(237,233,220,0.55)";
-                  e.currentTarget.style.borderColor = "rgba(237,233,220,0.15)";
+                  e.currentTarget.style.color = "#3E444B";
+                  e.currentTarget.style.borderColor = "#D8D5CC";
                 }}
               >
                 {r.name} — {r.price}
@@ -259,7 +259,7 @@ const MetaAds = () => {
             style={{
               fontFamily: I,
               fontSize: "clamp(0.95rem,1.5vw,1.05rem)",
-              color: "rgba(237,233,220,0.55)",
+              color: "#3E444B",
               lineHeight: 1.7,
               maxWidth: 520,
               marginBottom: "clamp(24px,3vw,36px)",
