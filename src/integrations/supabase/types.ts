@@ -109,6 +109,7 @@ export type Database = {
           notes: string | null
           pain_areas: string[]
           phone: string | null
+          share_token: string
           status: string
           total_potential: string
           total_score: number
@@ -128,6 +129,7 @@ export type Database = {
           notes?: string | null
           pain_areas?: string[]
           phone?: string | null
+          share_token?: string
           status?: string
           total_potential?: string
           total_score?: number
@@ -147,6 +149,7 @@ export type Database = {
           notes?: string | null
           pain_areas?: string[]
           phone?: string | null
+          share_token?: string
           status?: string
           total_potential?: string
           total_score?: number
