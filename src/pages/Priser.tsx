@@ -141,88 +141,38 @@ const Priser = () => {
                 </h2>
               </Reveal>
 
-              <div
-                style={{
-                  marginTop: 48,
-                  display: "grid",
-                  gap: 20,
-                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                }}
-              >
+              <div className="vk-receipts" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>
                 {PACKAGES.map((p, i) => (
                   <Reveal key={p.num} delay={i * 0.06}>
                     <article
-                      style={{
-                        position: "relative",
-                        background: "#fff",
-                        border: "1px solid var(--linje)",
-                        borderRadius: 14,
-                        padding: "32px 26px 28px",
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 14,
-                        boxShadow: (p as any).featured
-                          ? "0 24px 40px -24px rgba(20,23,26,.18)"
-                          : "none",
-                        transform: (p as any).featured ? "translateY(-4px)" : "none",
-                      }}
+                      className="vk-receipt"
+                      style={{ display: "flex", flexDirection: "column", gap: 12, height: "100%" }}
                     >
-                      {(p as any).featured && (
-                        <span
-                          style={{
-                            position: "absolute",
-                            top: -1,
-                            left: -1,
-                            background: "var(--gran)",
-                            color: "#fff",
-                            fontFamily: "var(--font-sans)",
-                            fontSize: 11,
-                            fontWeight: 700,
-                            padding: "5px 12px",
-                            borderRadius: "6px 0 6px 0",
-                            letterSpacing: ".03em",
-                          }}
-                        >
-                          POPULÄRAST
-                        </span>
-                      )}
-                      <span className="vk-mono" style={{ color: "var(--granbark-mut)" }}>
-                        {p.num}
-                      </span>
-                      <h3 style={{ marginTop: 4 }}>{p.name}</h3>
-                      <p className="vk-mono" style={{ marginTop: -6 }}>
-                        {p.time}
-                      </p>
-                      <div style={{ marginTop: -2 }}>
-                        <div
-                          aria-label="Pris döljs – avslöjas i offerten"
-                          style={{
-                            display: "inline-block",
-                            padding: "8px 14px",
-                            borderRadius: 6,
-                            background: "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
-                            color: "transparent",
-                            fontFamily: "var(--font-mono)",
-                            fontSize: 22,
-                            fontWeight: 700,
-                            letterSpacing: "0.15em",
-                            userSelect: "none",
-                          }}
-                        >
-                          ██ ███ kr
-                        </div>
-                        <p
-                          className="vk-mono"
-                          style={{ marginTop: 8, color: "var(--gran)", fontSize: 11.5 }}
-                        >
-                          Häpnadsväckande bra — får ni i offerten
-                        </p>
+                      {(p as any).featured && <span className="vk-receipt-flag">POPULÄRAST</span>}
+                      <span className="vk-receipt-stamp">Fast pris</span>
+                      <div className="vk-receipt-tier">{p.num} · {p.time}</div>
+                      <h3 style={{ marginTop: 2 }}>{p.name}</h3>
+                      <div
+                        className="vk-receipt-price"
+                        aria-label="Pris döljs – avslöjas i offerten"
+                        style={{
+                          display: "inline-block",
+                          marginTop: 2,
+                          padding: "6px 12px",
+                          borderRadius: 6,
+                          background:
+                            "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
+                          color: "transparent",
+                          letterSpacing: "0.15em",
+                          userSelect: "none",
+                        }}
+                      >
+                        ██ ███:-
                       </div>
-
-                      <p style={{ fontSize: 14.5, lineHeight: 1.55, color: "var(--granbark)" }}>
-                        {p.desc}
+                      <p className="vk-mono" style={{ marginTop: 4, color: "var(--gran)", fontSize: 11 }}>
+                        Häpnadsväckande bra — får ni i offerten
                       </p>
+                      <p className="vk-receipt-desc">{p.desc}</p>
                       <ul
                         style={{
                           listStyle: "none",
@@ -240,6 +190,7 @@ const Priser = () => {
                               display: "flex",
                               alignItems: "flex-start",
                               gap: 10,
+                              fontFamily: "var(--font-sans)",
                               fontSize: 14,
                               color: "var(--granbark)",
                             }}
@@ -254,13 +205,13 @@ const Priser = () => {
                         ))}
                       </ul>
                       <button
+                        type="button"
                         onClick={() => open(p.name)}
-                        className={`vk-btn ${
-                          (p as any).featured ? "vk-btn-primary" : "vk-btn-ghost"
-                        }`}
-                        style={{ justifyContent: "center", marginTop: 8 }}
+                        className={`vk-btn ${(p as any).featured ? "vk-btn-primary" : "vk-btn-ghost"}`}
+                        style={{ justifyContent: "center", marginTop: 12, width: "100%" }}
+                        aria-label={`Få pris i offerten för ${p.name}`}
                       >
-                        Välj upplägg <ArrowRight size={14} />
+                        Få pris i offerten <ArrowRight size={14} />
                       </button>
                     </article>
                   </Reveal>
