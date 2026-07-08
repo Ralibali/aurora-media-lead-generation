@@ -115,7 +115,7 @@ const CSS = `
 .vk-hero-grid { display: grid; gap: clamp(40px, 6vw, 72px); grid-template-columns: 1fr; align-items: center; }
 @media (min-width: 980px) { .vk-hero-grid { grid-template-columns: 1.1fr .9fr; } }
 .vk-hero h1 .accent { color: var(--gran); }
-.vk-hero-sub { margin-top: 24px; max-width: 54ch; font-size: 18px; color: var(--granbark-mut); line-height: 1.6; }
+.vk-hero-sub { margin-top: 24px; max-width: 54ch; font-size: 18px; color: #3E444B; line-height: 1.6; }
 .vk-hero-cta { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .vk-hero-micro { margin-top: 18px; }
 
