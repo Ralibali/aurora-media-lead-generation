@@ -664,6 +664,7 @@ Skriv också:
       JSON.stringify({
         ok: true,
         leadId,
+        shareToken,
         totalScore,
         avg: Number(avg.toFixed(1)),
         total_potential,
