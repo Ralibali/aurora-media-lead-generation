@@ -194,18 +194,32 @@ const Priser = () => {
                       <p className="vk-mono" style={{ marginTop: -6 }}>
                         {p.time}
                       </p>
-                      <p
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: 22,
-                          fontWeight: 700,
-                          color: "var(--granbark)",
-                          letterSpacing: "-0.01em",
-                          marginTop: -4,
-                        }}
-                      >
-                        {p.price}
-                      </p>
+                      <div style={{ marginTop: -2 }}>
+                        <div
+                          aria-label="Pris döljs – avslöjas i offerten"
+                          style={{
+                            display: "inline-block",
+                            padding: "8px 14px",
+                            borderRadius: 6,
+                            background: "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
+                            color: "transparent",
+                            fontFamily: "var(--font-mono)",
+                            fontSize: 22,
+                            fontWeight: 700,
+                            letterSpacing: "0.15em",
+                            userSelect: "none",
+                          }}
+                        >
+                          ██ ███ kr
+                        </div>
+                        <p
+                          className="vk-mono"
+                          style={{ marginTop: 8, color: "var(--gran)", fontSize: 11.5 }}
+                        >
+                          Häpnadsväckande bra — får ni i offerten
+                        </p>
+                      </div>
+
                       <p style={{ fontSize: 14.5, lineHeight: 1.55, color: "var(--granbark)" }}>
                         {p.desc}
                       </p>
