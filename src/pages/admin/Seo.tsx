@@ -51,32 +51,33 @@ const Table = ({ title, rows, valueLabel = "sökord" }: { title: string; rows: G
 
 export default function AdminSeo() {
   const [data, setData] = useState<Data | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const [err, setErr] = useState<unknown>(null);
+  const [tick, setTick] = useState(0);
+  const retry = useCallback(() => { setErr(null); setData(null); setTick((t) => t + 1); }, []);
 
   useEffect(() => {
-    adminFetch("admin-seo", { method: "POST" }).then(setData).catch((e) => setErr(e.message));
-  }, []);
+    let cancelled = false;
+    adminFetch("admin-seo", { method: "POST" })
+      .then((d) => { if (!cancelled) setData(d); })
+      .catch((e) => { if (!cancelled) setErr(e); });
+    return () => { cancelled = true; };
+  }, [tick]);
+
+  const isEmpty = !!data && !data.totals && (!data.queries || data.queries.length === 0);
 
   return (
     <AdminShell title="SEO · Search Console" kicker="Admin · sökprestanda">
-      {!data && !err && <div style={{ display: "flex", gap: 10, color: "var(--granbark-mut)" }}><Loader2 size={16} className="animate-spin" /> Hämtar från Google…</div>}
-      {err && (
-        <div style={{ ...card, borderColor: "var(--varsel-hover)" }}>
-          <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <AlertCircle size={18} color="var(--varsel-hover)" />
-            <div>
-              <p style={{ margin: 0, fontWeight: 600 }}>Kunde inte hämta Search Console-data.</p>
-              <p style={{ fontSize: 13, color: "var(--granbark-mut)", marginTop: 6 }}>{err}</p>
-              <p style={{ fontSize: 13, marginTop: 10 }}>
-                Kontrollera att domänen <code>auroramedia.se</code> är verifierad i Search Console och att Google-connectorn är kopplad.
-              </p>
-              <a href="https://search.google.com/search-console" target="_blank" rel="noreferrer" className="vk-btn vk-btn-ghost" style={{ marginTop: 10, textDecoration: "none" }}>
-                Öppna Search Console <ExternalLink size={14} />
-              </a>
-            </div>
-          </div>
+      <AdminStatus loading={!data && !err} error={err} empty={isEmpty} onRetry={retry} loadingLabel="Hämtar från Google…" />
+      {err ? (
+        <div style={{ ...card, marginTop: 14 }}>
+          <p style={{ margin: 0, fontSize: 13, color: "var(--granbark-mut)" }}>
+            Kontrollera att domänen <code>auroramedia.se</code> är verifierad i Search Console och att Google-connectorn är kopplad.
+          </p>
+          <a href="https://search.google.com/search-console" target="_blank" rel="noreferrer" className="vk-btn vk-btn-ghost" style={{ marginTop: 10, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}>
+            Öppna Search Console <ExternalLink size={14} />
+          </a>
         </div>
-      )}
+      ) : null}
       {data && (
         <>
           <p className="vk-mono" style={{ color: "var(--granbark-mut)" }}>
