@@ -117,6 +117,10 @@ const Leads = () => {
   const [sourceFilter, setSourceFilter] = useState<"all" | Source>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | Status>("all");
   const [sort, setSort] = useState<"created_at" | "score" | "followup_at">("created_at");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
+  const [datePreset, setDatePreset] = useState<"all" | "today" | "7d" | "30d" | "custom">("all");
+
 
   const [openId, setOpenId] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ processes: Process[] } | null>(null);
