@@ -260,7 +260,8 @@ const HeroSection = () => (
           transition={{ duration: .8, delay: .3 }}
         >
           Jag bygger interna system, AI-automationer och SaaS åt svenska småföretag.
-          Fast pris från 14 900 kr. Kod ni äger själva.
+          Fast pris. Kod ni äger själva.
+
         </motion.p>
         <motion.div
           className="vk-hero-cta"
@@ -422,24 +423,44 @@ const ReceiptsSection = () => (
       </Reveal>
       <div className="vk-receipts">
         {[
-          { tier: "Prototyp", price: "14 900:-", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
-          { tier: "MVP", price: "34 900:-", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
-          { tier: "SaaS", price: "från 69 000:-", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
+          { tier: "Prototyp", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
+          { tier: "MVP", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
+          { tier: "SaaS", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
         ].map((r, i) => (
           <Reveal delay={i * 0.08} key={r.tier}>
             <div className="vk-receipt">
               {r.flag && <span className="vk-receipt-flag">{r.flag}</span>}
               <span className="vk-receipt-stamp">Fast pris</span>
               <div className="vk-receipt-tier">{r.tier}</div>
-              <div className="vk-receipt-price">{r.price}</div>
+              <div
+                className="vk-receipt-price"
+                aria-label="Pris döljs – avslöjas i offerten"
+                style={{
+                  display: "inline-block",
+                  marginTop: 6,
+                  padding: "6px 12px",
+                  borderRadius: 6,
+                  background:
+                    "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
+                  color: "transparent",
+                  letterSpacing: "0.15em",
+                  userSelect: "none",
+                }}
+              >
+                ██ ███:-
+              </div>
+              <p className="vk-mono" style={{ marginTop: 8, color: "var(--gran)", fontSize: 11 }}>
+                Häpnadsväckande bra
+              </p>
               <p className="vk-receipt-desc">{r.desc}</p>
             </div>
           </Reveal>
         ))}
       </div>
       <p className="vk-mono" style={{ marginTop: 32 }}>
-        Priser exkl. moms · Exakt offert inom 24 h · Inga timmar, aldrig löpande räkning
+        Exakt offert inom 24 h · Fast pris · Inga timmar, aldrig löpande räkning
       </p>
+
     </div>
   </section>
 );

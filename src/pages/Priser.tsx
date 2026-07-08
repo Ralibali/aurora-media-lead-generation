@@ -10,7 +10,6 @@ const PACKAGES = [
   {
     num: "01",
     name: "Aurora Sprint",
-    price: "Från 14 900 kr",
     time: "1–2 veckor",
     desc: "Klickbar prototyp eller första fungerande version för att validera idén snabbt.",
     features: [
@@ -24,7 +23,6 @@ const PACKAGES = [
   {
     num: "02",
     name: "Aurora MVP",
-    price: "Från 34 900 kr",
     time: "3–5 veckor",
     featured: true,
     desc: "Lanseringsbar MVP med riktiga användare, data och kärnfunktioner.",
@@ -39,7 +37,6 @@ const PACKAGES = [
   {
     num: "03",
     name: "Aurora Scale",
-    price: "Från 89 000 kr",
     time: "6–10 veckor",
     desc: "Skalbar SaaS eller intern plattform med roller, integrationer och automation.",
     features: [
@@ -53,7 +50,6 @@ const PACKAGES = [
   {
     num: "04",
     name: "Aurora AI Ops",
-    price: "Fast offert",
     time: "Variabel",
     desc: "AI-automationer och interna verktyg för företag som vill kapa manuellt arbete.",
     features: [
@@ -65,6 +61,7 @@ const PACKAGES = [
     ],
   },
 ] as const;
+
 
 const COMPARE: readonly (readonly [string, boolean | string, boolean | string, boolean | string, boolean | string])[] = [
   ["Fast pris innan start", true, true, true, true],
@@ -91,7 +88,7 @@ const Priser = () => {
     <>
       <SEO
         title="Priser – SaaS, MVP och AI-automation | Aurora Media"
-        description="Prototyp från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 89 000 kr. Fast pris, snabb leverans, kod ni äger."
+        description="Fast pris, snabb leverans, kod ni äger. Ni får en exakt offert inom 24 timmar — och priset kommer överraska positivt."
         canonical="/priser"
       />
       <div className="verkstad">
@@ -197,18 +194,32 @@ const Priser = () => {
                       <p className="vk-mono" style={{ marginTop: -6 }}>
                         {p.time}
                       </p>
-                      <p
-                        style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: 22,
-                          fontWeight: 700,
-                          color: "var(--granbark)",
-                          letterSpacing: "-0.01em",
-                          marginTop: -4,
-                        }}
-                      >
-                        {p.price}
-                      </p>
+                      <div style={{ marginTop: -2 }}>
+                        <div
+                          aria-label="Pris döljs – avslöjas i offerten"
+                          style={{
+                            display: "inline-block",
+                            padding: "8px 14px",
+                            borderRadius: 6,
+                            background: "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
+                            color: "transparent",
+                            fontFamily: "var(--font-mono)",
+                            fontSize: 22,
+                            fontWeight: 700,
+                            letterSpacing: "0.15em",
+                            userSelect: "none",
+                          }}
+                        >
+                          ██ ███ kr
+                        </div>
+                        <p
+                          className="vk-mono"
+                          style={{ marginTop: 8, color: "var(--gran)", fontSize: 11.5 }}
+                        >
+                          Häpnadsväckande bra — får ni i offerten
+                        </p>
+                      </div>
+
                       <p style={{ fontSize: 14.5, lineHeight: 1.55, color: "var(--granbark)" }}>
                         {p.desc}
                       </p>
