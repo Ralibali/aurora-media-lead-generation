@@ -412,58 +412,70 @@ const CasesSection = () => (
   </section>
 );
 
-const ReceiptsSection = () => (
-  <section className="vk-section" style={{ background: "var(--bjork-djup)" }}>
-    <div className="vk-wrap">
-      <Reveal>
-        <div className="vk-secheader">
-          <span className="vk-mono">Fast pris</span>
-          <h2>Tre paket. Inga överraskningar.</h2>
-        </div>
-      </Reveal>
-      <div className="vk-receipts">
-        {[
-          { tier: "Prototyp", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
-          { tier: "MVP", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
-          { tier: "SaaS", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
-        ].map((r, i) => (
-          <Reveal delay={i * 0.08} key={r.tier}>
-            <div className="vk-receipt">
-              {r.flag && <span className="vk-receipt-flag">{r.flag}</span>}
-              <span className="vk-receipt-stamp">Fast pris</span>
-              <div className="vk-receipt-tier">{r.tier}</div>
-              <div
-                className="vk-receipt-price"
-                aria-label="Pris döljs – avslöjas i offerten"
-                style={{
-                  display: "inline-block",
-                  marginTop: 6,
-                  padding: "6px 12px",
-                  borderRadius: 6,
-                  background:
-                    "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
-                  color: "transparent",
-                  letterSpacing: "0.15em",
-                  userSelect: "none",
-                }}
-              >
-                ██ ███:-
+const ReceiptsSection = () => {
+  const { open } = useContactModal();
+  return (
+    <section className="vk-section" style={{ background: "var(--bjork-djup)" }}>
+      <div className="vk-wrap">
+        <Reveal>
+          <div className="vk-secheader">
+            <span className="vk-mono">Fast pris</span>
+            <h2>Tre paket. Inga överraskningar.</h2>
+          </div>
+        </Reveal>
+        <div className="vk-receipts">
+          {[
+            { tier: "Prototyp", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
+            { tier: "MVP", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
+            { tier: "SaaS", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
+          ].map((r, i) => (
+            <Reveal delay={i * 0.08} key={r.tier}>
+              <div className="vk-receipt">
+                {r.flag && <span className="vk-receipt-flag">{r.flag}</span>}
+                <span className="vk-receipt-stamp">Fast pris</span>
+                <div className="vk-receipt-tier">{r.tier}</div>
+                <div
+                  className="vk-receipt-price"
+                  aria-label="Pris döljs – avslöjas i offerten"
+                  style={{
+                    display: "inline-block",
+                    marginTop: 6,
+                    padding: "6px 12px",
+                    borderRadius: 6,
+                    background:
+                      "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
+                    color: "transparent",
+                    letterSpacing: "0.15em",
+                    userSelect: "none",
+                  }}
+                >
+                  ██ ███:-
+                </div>
+                <p className="vk-mono" style={{ marginTop: 8, color: "var(--gran)", fontSize: 11 }}>
+                  Häpnadsväckande bra
+                </p>
+                <p className="vk-receipt-desc">{r.desc}</p>
+                <button
+                  type="button"
+                  onClick={() => open(r.tier)}
+                  className="vk-btn vk-btn-primary"
+                  style={{ marginTop: 16, justifyContent: "center", width: "100%" }}
+                  aria-label={`Få pris i offerten för ${r.tier}`}
+                >
+                  Få pris i offerten <ArrowRight size={14} />
+                </button>
               </div>
-              <p className="vk-mono" style={{ marginTop: 8, color: "var(--gran)", fontSize: 11 }}>
-                Häpnadsväckande bra
-              </p>
-              <p className="vk-receipt-desc">{r.desc}</p>
-            </div>
-          </Reveal>
-        ))}
+            </Reveal>
+          ))}
+        </div>
+        <p className="vk-mono" style={{ marginTop: 32 }}>
+          Exakt offert inom 24 h · Fast pris · Inga timmar, aldrig löpande räkning
+        </p>
       </div>
-      <p className="vk-mono" style={{ marginTop: 32 }}>
-        Exakt offert inom 24 h · Fast pris · Inga timmar, aldrig löpande räkning
-      </p>
+    </section>
+  );
+};
 
-    </div>
-  </section>
-);
 
 const AIKartaSection = () => (
   <section className="vk-section">
