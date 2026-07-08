@@ -128,6 +128,7 @@ export interface AiAnalysis {
 
 export interface AiMapResult {
   leadId: string;
+  shareToken?: string;
   totalScore: number;
   avg: number;
   total_potential: string;
