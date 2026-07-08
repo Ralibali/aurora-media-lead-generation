@@ -386,12 +386,18 @@ const CITIES = [
 
 const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
   const reduce = useReducedMotion();
+  const [forceShow, setForceShow] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setForceShow(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
   if (reduce) return <>{children}</>;
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      animate={forceShow ? { opacity: 1, y: 0 } : undefined}
+      viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
     >{children}</motion.div>
   );
