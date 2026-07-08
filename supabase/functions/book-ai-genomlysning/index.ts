@@ -1,6 +1,8 @@
 // Edge Function: book-ai-genomlysning
-// Skickar bokningsförfrågan till info@auroramedia.se när någon klickar
-// "Boka kostnadsfri genomlysning" på AI-karta-resultatsidan.
+// Sparar bokningen i genomlysning_leads och skickar mejl till info@auroramedia.se.
+// Mejlet skickas alltid – DB-insert är best effort så att inga bokningar tappas.
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
