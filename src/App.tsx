@@ -40,6 +40,10 @@ import ApputvecklingLinkoping from "./pages/ApputvecklingLinkoping";
 import FaqRapport from "./pages/admin/FaqRapport";
 import Leads from "./pages/admin/Leads";
 import TextGenerator from "./pages/admin/TextGenerator";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminContent from "./pages/admin/Content";
+import AdminSeo from "./pages/admin/Seo";
+import AdminEmail from "./pages/admin/Email";
 import EnIndex from "./pages/en/Index";
 import Content from "./pages/tjanster/Content";
 import Ehandel from "./pages/tjanster/Ehandel";
@@ -396,7 +400,11 @@ const App = () => (
               <Route path="/metodik" element={<Metodik />} />
               <Route path="/redaktionell-policy" element={<RedaktionellPolicy />} />
               <Route path="/integritetspolicy" element={<Integritetspolicy />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/leads" element={<Leads />} />
+              <Route path="/admin/content" element={<AdminContent />} />
+              <Route path="/admin/seo" element={<AdminSeo />} />
+              <Route path="/admin/email" element={<AdminEmail />} />
               <Route path="/admin/text-generator" element={<TextGenerator />} />
               <Route path="/admin/faq-rapport" element={<FaqRapport />} />
               <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
