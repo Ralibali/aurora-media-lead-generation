@@ -1,12 +1,9 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import NordicLayout from "@/components/nordic/NordicLayout";
-import { setSEOMeta, setBreadcrumb, setJsonLd, SITE_URL } from "@/lib/seoHelpers";
-
-const F = "'Fraunces',Georgia,serif";
-const I = "'Inter',system-ui,sans-serif";
-const M = "'JetBrains Mono',ui-monospace,monospace";
-const C = "#EDE9DC";
+import { SEO } from "@/components/SEO";
+import { Reveal, VkNav, VkFooter } from "@/pages/Index";
+import { setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpers";
+import "@/styles/verkstad.css";
 
 const SECTIONS = [
   { h: "Vem skriver innehållet?", p: "Allt innehåll på auroramedia.se skrivs av Christoffer Holstensson, grundare av Aurora Media AB. Inga ghostwriters, inga generiska SEO-texter köpta utomlands." },
@@ -20,11 +17,6 @@ const SECTIONS = [
 
 const RedaktionellPolicy = () => {
   useEffect(() => {
-    setSEOMeta({
-      title: "Redaktionell policy – Aurora Media",
-      description: "Hur Aurora Media arbetar med innehåll, AI, faktakontroll och rättelser.",
-      canonical: "/redaktionell-policy",
-    });
     setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Redaktionell policy", url: "/redaktionell-policy" }]);
     setJsonLd("policy-webpage", {
       "@context": "https://schema.org", "@type": "WebPage",
@@ -33,49 +25,69 @@ const RedaktionellPolicy = () => {
       publisher: { "@id": `${SITE_URL}/#organization` },
       inLanguage: "sv-SE",
     });
+    return () => { removeJsonLd("breadcrumb-jsonld"); removeJsonLd("policy-webpage"); };
   }, []);
 
   return (
-    <NordicLayout>
-      <main id="main" style={{ paddingTop: "clamp(88px,12vw,120px)", paddingBottom: "clamp(56px,8vw,88px)" }}>
-        <div className="wrap" style={{ maxWidth: 700 }}>
+    <>
+      <SEO
+        title="Redaktionell policy – Aurora Media"
+        description="Hur Aurora Media arbetar med innehåll, AI, faktakontroll och rättelser."
+        canonical="/redaktionell-policy"
+      />
+      <div className="verkstad">
+        <VkNav />
+        <main id="main">
+          <section className="vk-section vk-hero">
+            <div className="vk-wrap" style={{ maxWidth: 760 }}>
+              <Reveal>
+                <p className="vk-mono">transparens · redaktion</p>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h1 style={{ marginTop: 18 }}>Redaktionell policy</h1>
+              </Reveal>
+              <Reveal delay={0.15}>
+                <p style={{ marginTop: 20, fontSize: 18, lineHeight: 1.65, color: "#3E444B", maxWidth: "56ch" }}>
+                  Hur vi arbetar med innehåll, AI, fakta och rättelser. Senast uppdaterad{" "}
+                  {new Date().toLocaleDateString("sv-SE", { day: "numeric", month: "long", year: "numeric" })}.
+                </p>
+              </Reveal>
 
-          <p style={{ fontFamily: M, fontSize: 11, letterSpacing: "0.1em", color: "rgba(237,233,220,0.40)", marginBottom: 20 }}>transparens</p>
-          <h1 style={{ fontFamily: F, fontSize: "clamp(28px,5vw,48px)", color: C, lineHeight: 1.05, letterSpacing: "-0.02em", fontWeight: 400, marginBottom: 12 }}>
-            Redaktionell policy
-          </h1>
-          <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.45)", marginBottom: 48 }}>
-            Hur vi arbetar med innehåll, AI, fakta och rättelser.{" "}
-            Senast uppdaterad {new Date().toLocaleDateString("sv-SE", { day: "numeric", month: "long", year: "numeric" })}.
-          </p>
+              <div style={{ marginTop: 48 }}>
+                {SECTIONS.map((s, i) => (
+                  <Reveal key={s.h} delay={Math.min(i * 0.03, 0.2)}>
+                    <div style={{ paddingBlock: 32, borderBottom: "1px solid var(--linje)" }}>
+                      <h2 style={{ fontSize: "clamp(20px, 2.4vw, 26px)", marginBottom: 14 }}>{s.h}</h2>
+                      <p style={{ fontSize: 16, lineHeight: 1.7, color: "#3E444B" }}>{s.p}</p>
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
 
-          {SECTIONS.map((s) => (
-            <div key={s.h} style={{ paddingBlock: 28, borderBottom: "0.5px solid rgba(237,233,220,0.08)" }}>
-              <h2 style={{ fontFamily: F, fontSize: "clamp(17px,2.2vw,22px)", color: C, marginBottom: 10, fontWeight: 400 }}>{s.h}</h2>
-              <p style={{ fontFamily: I, fontSize: 13, lineHeight: 1.75, color: "rgba(237,233,220,0.65)" }}>{s.p}</p>
+              <div style={{ marginTop: 40, paddingTop: 28, borderTop: "1px solid var(--linje)" }}>
+                <p className="vk-mono" style={{ marginBottom: 16 }}>läs vidare</p>
+                <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                  {[
+                    { to: "/om", label: "Om Aurora" },
+                    { to: "/integritetspolicy", label: "Integritetspolicy" },
+                    { to: "/blog", label: "Alla artiklar" },
+                  ].map((r) => (
+                    <Link
+                      key={r.to}
+                      to={r.to}
+                      style={{ fontSize: 15, color: "var(--granbark)", fontWeight: 500, textDecoration: "none", borderBottom: "1px solid var(--linje)", paddingBottom: 2 }}
+                    >
+                      {r.label} →
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
-          ))}
-
-          <div style={{ marginTop: 40, paddingTop: 28, borderTop: "0.5px solid rgba(237,233,220,0.08)" }}>
-            <p style={{ fontFamily: M, fontSize: 10, letterSpacing: "0.1em", color: "rgba(237,233,220,0.30)", marginBottom: 16 }}>läs vidare</p>
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              {[
-                { to: "/om", label: "Om Aurora" },
-                { to: "/integritetspolicy", label: "Integritetspolicy" },
-                { to: "/blogg", label: "Alla artiklar" },
-              ].map((r) => (
-                <Link key={r.to} to={r.to}
-                  style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.40)", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = C)}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(237,233,220,0.40)")}>
-                  {r.label} →
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
-      </NordicLayout>
+          </section>
+        </main>
+        <VkFooter />
+      </div>
+    </>
   );
 };
 
