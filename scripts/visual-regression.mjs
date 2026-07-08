@@ -147,7 +147,9 @@ async function run() {
   if (existsSync(OUT)) await rm(OUT, { recursive: true, force: true });
   await mkdir(OUT, { recursive: true });
 
-  const browser = await chromium.launch();
+  const launchOpts = {};
+  if (process.env.CHROMIUM_PATH) launchOpts.executablePath = process.env.CHROMIUM_PATH;
+  const browser = await chromium.launch(launchOpts);
   const report = [];
   let totalFindings = 0;
 
