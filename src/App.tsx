@@ -400,7 +400,11 @@ const App = () => (
               <Route path="/metodik" element={<Metodik />} />
               <Route path="/redaktionell-policy" element={<RedaktionellPolicy />} />
               <Route path="/integritetspolicy" element={<Integritetspolicy />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/leads" element={<Leads />} />
+              <Route path="/admin/content" element={<AdminContent />} />
+              <Route path="/admin/seo" element={<AdminSeo />} />
+              <Route path="/admin/email" element={<AdminEmail />} />
               <Route path="/admin/text-generator" element={<TextGenerator />} />
               <Route path="/admin/faq-rapport" element={<FaqRapport />} />
               <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
