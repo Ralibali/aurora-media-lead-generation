@@ -134,7 +134,7 @@ const Fotografering = () => {
           <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
             {includes.map((item, i) => (
               <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: 20 }}>
-                <span style={{ fontFamily: M, fontSize: 10, color: "#8A8578", letterSpacing: "0.05em", minWidth: 24, paddingTop: 3 }}>
+                <span style={{ fontFamily: M, fontSize: 10, color: "#4A5058", letterSpacing: "0.05em", minWidth: 24, paddingTop: 3 }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span style={{ fontFamily: I, fontSize: "clamp(0.9rem,1.4vw,1rem)", color: "#3E444B", lineHeight: 1.6 }}>
@@ -162,7 +162,7 @@ const Fotografering = () => {
                   alignItems: "start",
                 }}
               >
-                <span style={{ fontFamily: M, fontSize: 10, color: "#8A8578", letterSpacing: "0.05em", paddingTop: 3 }}>
+                <span style={{ fontFamily: M, fontSize: 10, color: "#4A5058", letterSpacing: "0.05em", paddingTop: 3 }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span style={{ fontFamily: F, fontSize: "clamp(1rem,1.6vw,1.15rem)", fontWeight: 400, color: C, letterSpacing: "-0.01em" }}>
