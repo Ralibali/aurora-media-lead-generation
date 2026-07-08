@@ -208,10 +208,14 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
         if (res.ok) {
           setAuthed(true);
           sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
-        } else if (res.status === 401) {
+        } else if (res.status === 401 || res.status === 403) {
           sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-          setError("Fel lösenord.");
+          setError("Sparat lösenord fungerar inte längre — logga in på nytt.");
+        } else {
+          setError(`Serverfel (HTTP ${res.status}) vid verifiering.`);
         }
+      } catch (err) {
+        setError(`Nätverksfel — kunde inte nå servern. (${err instanceof Error ? err.message : "okänt fel"})`);
       } finally {
         setLoading(false);
       }
