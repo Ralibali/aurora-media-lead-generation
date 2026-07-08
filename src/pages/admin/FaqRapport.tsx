@@ -3,6 +3,7 @@ import { Loader2, Lock, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { setSEOMeta } from "@/lib/seoHelpers";
+import { getFunctionUrl } from "@/lib/functionUrl";
 
 type TopOpened = {
   question: string;
@@ -29,8 +30,7 @@ type Report = {
 };
 
 const STORAGE_KEY = "faq_analytics_pwd";
-const PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-const FUNCTION_URL = `https://${PROJECT_ID}.functions.supabase.co/faq-analytics`;
+const FUNCTION_URL = getFunctionUrl("faq-analytics");
 
 const ranges: { value: Report["range"]; label: string }[] = [
   { value: "7d", label: "7 dagar" },

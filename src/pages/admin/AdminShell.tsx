@@ -15,11 +15,11 @@ import {
   Inbox,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
+import { getFunctionUrl } from "@/lib/functionUrl";
 import "@/styles/verkstad.css";
 
 export const ADMIN_STORAGE_KEY = "faq_analytics_pwd";
-const PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
-const VERIFY_URL = `https://${PROJECT_ID}.functions.supabase.co/list-leads`;
+const VERIFY_URL = getFunctionUrl("list-leads");
 
 export type AdminErrorKind = "auth" | "network" | "server" | "notfound" | "parse" | "empty";
 
@@ -40,7 +40,7 @@ export class AdminError extends Error {
 export const adminFetch = async (path: string, init: RequestInit = {}) => {
   const pwd = sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
   if (!pwd) throw new AdminError("auth", "Inte inloggad.", { path });
-  const url = `https://${PROJECT_ID}.functions.supabase.co/${path}`;
+  const url = getFunctionUrl(path);
   let res: Response;
   try {
     res = await fetch(url, {
