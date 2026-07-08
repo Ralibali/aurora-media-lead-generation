@@ -65,6 +65,34 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    // Best-effort: spara bokningen i genomlysning_leads. Misslyckas den så mejlar vi ändå.
+    try {
+      const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+      const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (SUPABASE_URL && SERVICE_KEY) {
+        const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+        const composedMessage = [
+          preferred_time ? `Önskad tid: ${preferred_time}` : "",
+          total_potential ? `AI-potential: ${total_potential}` : "",
+          totalSavedPerYear ? `Uppskattad besparing: ~${totalSavedPerYear} h/år` : "",
+          topProcesses.length ? `Topp-processer: ${topProcesses.join(", ")}` : "",
+          message,
+        ].filter(Boolean).join("\n");
+        const { error: insErr } = await admin.from("genomlysning_leads").insert({
+          name: contact_name,
+          email,
+          phone: phone || null,
+          company: company_name || null,
+          message: composedMessage || null,
+        });
+        if (insErr) console.error("[book-ai-genomlysning] db insert failed", insErr);
+      } else {
+        console.warn("[book-ai-genomlysning] Supabase env missing – skipping DB insert");
+      }
+    } catch (e) {
+      console.error("[book-ai-genomlysning] db insert threw", e);
+    }
+
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!RESEND_API_KEY) {
       console.warn("[book-ai-genomlysning] RESEND_API_KEY not set – logging only", { contact_name, email });
