@@ -241,11 +241,18 @@ const Leads = () => {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const fromTs = dateFrom ? new Date(dateFrom + "T00:00:00").getTime() : null;
+    const toTs = dateTo ? new Date(dateTo + "T23:59:59.999").getTime() : null;
     let list = leads.filter((l) => {
       if (sourceFilter !== "all" && l.source !== sourceFilter) return false;
       if (statusFilter !== "all" && l.status !== statusFilter) return false;
+      if (fromTs != null || toTs != null) {
+        const t = new Date(l.created_at).getTime();
+        if (fromTs != null && t < fromTs) return false;
+        if (toTs != null && t > toTs) return false;
+      }
       if (q) {
-        const hay = `${l.name ?? ""} ${l.company ?? ""} ${l.email ?? ""}`.toLowerCase();
+        const hay = `${l.name ?? ""} ${l.company ?? ""} ${l.email ?? ""} ${l.phone ?? ""} ${l.notes ?? ""}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
@@ -260,9 +267,28 @@ const Leads = () => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
     return list;
-  }, [leads, query, sourceFilter, statusFilter, sort]);
+  }, [leads, query, sourceFilter, statusFilter, sort, dateFrom, dateTo]);
 
-  const openLead = leads.find((l) => l.id === openId) ?? null;
+  const applyDatePreset = (preset: "all" | "today" | "7d" | "30d") => {
+    setDatePreset(preset);
+    const today = new Date();
+    const to = today.toISOString().slice(0, 10);
+    if (preset === "all") { setDateFrom(""); setDateTo(""); return; }
+    if (preset === "today") { setDateFrom(to); setDateTo(to); return; }
+    const days = preset === "7d" ? 6 : 29;
+    const from = new Date(today.getTime() - days * 86400000).toISOString().slice(0, 10);
+    setDateFrom(from);
+    setDateTo(to);
+  };
+
+  const clearFilters = () => {
+    setQuery(""); setSourceFilter("all"); setStatusFilter("all");
+    setDateFrom(""); setDateTo(""); setDatePreset("all");
+  };
+
+  const activeFilterCount =
+    (query ? 1 : 0) + (sourceFilter !== "all" ? 1 : 0) + (statusFilter !== "all" ? 1 : 0) + (dateFrom || dateTo ? 1 : 0);
+
 
   const exportCsv = () => {
     const header = [
