@@ -233,7 +233,7 @@ const Seo = () => {
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
                       color: C,
-                      background: "#100F0D",
+                      background: "#14171A",
                       padding: "2px 8px",
                     }}
                   >
