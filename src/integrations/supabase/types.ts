@@ -102,11 +102,14 @@ export type Database = {
           created_at: string
           email: string
           employee_count: string
+          followup_at: string | null
           id: string
           industry: string
           ip: string | null
+          notes: string | null
           pain_areas: string[]
           phone: string | null
+          status: string
           total_potential: string
           total_score: number
           user_agent: string | null
@@ -118,11 +121,14 @@ export type Database = {
           created_at?: string
           email: string
           employee_count: string
+          followup_at?: string | null
           id?: string
           industry: string
           ip?: string | null
+          notes?: string | null
           pain_areas?: string[]
           phone?: string | null
+          status?: string
           total_potential?: string
           total_score?: number
           user_agent?: string | null
@@ -134,11 +140,14 @@ export type Database = {
           created_at?: string
           email?: string
           employee_count?: string
+          followup_at?: string | null
           id?: string
           industry?: string
           ip?: string | null
+          notes?: string | null
           pain_areas?: string[]
           phone?: string | null
+          status?: string
           total_potential?: string
           total_score?: number
           user_agent?: string | null
@@ -315,17 +324,58 @@ export type Database = {
         }
         Relationships: []
       }
+      genomlysning_leads: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          followup_at: string | null
+          id: string
+          message: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          status: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          followup_at?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          followup_at?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           company: string | null
           created_at: string
           email: string
+          followup_at: string | null
           id: string
           internal_note: string | null
           ip: string | null
           lead_label: string | null
           message: string
           name: string
+          notes: string | null
           paket: string
           platform: string | null
           status: string
@@ -336,12 +386,14 @@ export type Database = {
           company?: string | null
           created_at?: string
           email: string
+          followup_at?: string | null
           id?: string
           internal_note?: string | null
           ip?: string | null
           lead_label?: string | null
           message: string
           name: string
+          notes?: string | null
           paket: string
           platform?: string | null
           status?: string
@@ -352,12 +404,14 @@ export type Database = {
           company?: string | null
           created_at?: string
           email?: string
+          followup_at?: string | null
           id?: string
           internal_note?: string | null
           ip?: string | null
           lead_label?: string | null
           message?: string
           name?: string
+          notes?: string | null
           paket?: string
           platform?: string | null
           status?: string
