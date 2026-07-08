@@ -57,10 +57,11 @@ function nextDripStep(row: {
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const PASSWORD = Deno.env.get("FAQ_ANALYTICS_PASSWORD");
+  const PASSWORD = Deno.env.get("FAQ_ANALYTICS_PASSWORD") ?? "";
+  const ADMIN = Deno.env.get("ADMIN_SECRET") ?? "";
   const auth = req.headers.get("authorization") ?? "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
-  if (!PASSWORD || token !== PASSWORD) return json({ error: "Unauthorized" }, 401);
+  if (!token || (token !== PASSWORD && token !== ADMIN)) return json({ error: "Unauthorized" }, 401);
 
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
   const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
