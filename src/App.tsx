@@ -358,7 +358,7 @@ const App = () => (
       <BrowserRouter>
         <RouteSEO />
         <ContactModalProvider>
-          <div className="lumina-site min-h-screen" style={{ backgroundColor: "#100F0D", color: "#EDE9DC" }}>
+          <div className="min-h-screen">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/index" element={<Navigate to="/" replace />} />
