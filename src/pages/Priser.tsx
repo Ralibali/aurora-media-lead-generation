@@ -1,25 +1,72 @@
 import { useEffect } from "react";
 import { ArrowRight, Check } from "lucide-react";
-import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
-import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
+import { Reveal, VkNav, VkFooter } from "@/pages/Index";
+import { setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
+import "@/styles/verkstad.css";
 
 const PACKAGES = [
-  { num: "01", name: "Aurora Sprint", price: "Från 14 900 kr", time: "1–2 veckor",
+  {
+    num: "01",
+    name: "Aurora Sprint",
+    price: "Från 14 900 kr",
+    time: "1–2 veckor",
     desc: "Klickbar prototyp eller första fungerande version för att validera idén snabbt.",
-    features: ["Produktworkshop light", "Klickbart huvudflöde", "Modern design", "Demo-URL", "Nästa-steg-rekommendation"] },
-  { num: "02", name: "Aurora MVP", price: "Från 34 900 kr", time: "3–5 veckor", featured: true,
+    features: [
+      "Produktworkshop light",
+      "Klickbart huvudflöde",
+      "Modern design",
+      "Demo-URL",
+      "Nästa-steg-rekommendation",
+    ],
+  },
+  {
+    num: "02",
+    name: "Aurora MVP",
+    price: "Från 34 900 kr",
+    time: "3–5 veckor",
+    featured: true,
     desc: "Lanseringsbar MVP med riktiga användare, data och kärnfunktioner.",
-    features: ["Inloggning och autentisering", "Databas (Supabase/Postgres)", "Admin-panel", "Betalflöde med Stripe", "GitHub-repo och dokumentation"] },
-  { num: "03", name: "Aurora Scale", price: "Från 89 000 kr", time: "6–10 veckor",
+    features: [
+      "Inloggning och autentisering",
+      "Databas (Supabase/Postgres)",
+      "Admin-panel",
+      "Betalflöde med Stripe",
+      "GitHub-repo och dokumentation",
+    ],
+  },
+  {
+    num: "03",
+    name: "Aurora Scale",
+    price: "Från 89 000 kr",
+    time: "6–10 veckor",
     desc: "Skalbar SaaS eller intern plattform med roller, integrationer och automation.",
-    features: ["Multi-tenant-struktur", "Roller och behörigheter", "Tredjepartsintegrationer", "AI-flöden", "Teknisk överlämning"] },
-  { num: "04", name: "Aurora AI Ops", price: "Fast offert", time: "Variabel",
+    features: [
+      "Multi-tenant-struktur",
+      "Roller och behörigheter",
+      "Tredjepartsintegrationer",
+      "AI-flöden",
+      "Teknisk överlämning",
+    ],
+  },
+  {
+    num: "04",
+    name: "Aurora AI Ops",
+    price: "Fast offert",
+    time: "Variabel",
     desc: "AI-automationer och interna verktyg för företag som vill kapa manuellt arbete.",
-    features: ["Processkartläggning", "AI-agent-flöden", "API-kopplingar", "Behörighetshantering", "Driftbar lösning"] },
-];
+    features: [
+      "Processkartläggning",
+      "AI-agent-flöden",
+      "API-kopplingar",
+      "Behörighetshantering",
+      "Driftbar lösning",
+    ],
+  },
+] as const;
 
-const COMPARE = [
+const COMPARE: readonly (readonly [string, boolean | string, boolean | string, boolean | string, boolean | string])[] = [
   ["Fast pris innan start", true, true, true, true],
   ["Kod/repo ni äger", true, true, true, true],
   ["Klickbar produkt", true, true, true, false],
@@ -28,108 +75,320 @@ const COMPARE = [
   ["Roller och behörigheter", false, false, true, true],
   ["Integrationer", false, "Enkel", true, true],
   ["AI-automation", false, "Tillägg", true, true],
-] as const;
+];
 
 const Priser = () => {
   const { open } = useContactModal();
   useEffect(() => {
-    setSEOMeta({
-      title: "Priser – SaaS, MVP och AI-automation | Aurora Media",
-      description: "Prototyp från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 89 000 kr. Fast pris, snabb leverans, kod ni äger.",
-      canonical: "/priser",
-    });
-    setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Priser", url: "/priser" }]);
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Priser", url: "/priser" },
+    ]);
     return () => removeJsonLd("breadcrumb-jsonld");
   }, []);
 
   return (
-    <NordicLayout>
-      <section className="page-hero">
-        <div className="wrap">
-          <Reveal><p className="mono">priser · fast scope · ingen timrapport</p></Reveal>
-          <Reveal delay={0.1}>
-            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "16ch" }}>
-              Ni ska veta priset <span className="it">innan vi börjar.</span>
-            </h1>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <p className="lead" style={{ marginTop: 24 }}>
-              Inga diffusa timbanker. Vi ramar in scope, pris och leverans — sedan bygger vi en produkt som faktiskt används.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+    <>
+      <SEO
+        title="Priser – SaaS, MVP och AI-automation | Aurora Media"
+        description="Prototyp från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 89 000 kr. Fast pris, snabb leverans, kod ni äger."
+        canonical="/priser"
+      />
+      <div className="verkstad">
+        <VkNav />
+        <main>
+          {/* ── Hero ── */}
+          <section className="vk-section vk-hero">
+            <div className="vk-wrap">
+              <Reveal>
+                <p className="vk-mono">priser · fast scope · ingen timrapport</p>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h1 style={{ marginTop: 18, maxWidth: "16ch" }}>
+                  Ni ska veta priset{" "}
+                  <span className="accent" style={{ fontStyle: "italic" }}>
+                    innan vi börjar.
+                  </span>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="vk-hero-sub">
+                  Inga diffusa timbanker. Vi ramar in scope, pris och leverans — sedan bygger vi en produkt som faktiskt används.
+                </p>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <div className="vk-hero-cta">
+                  <button onClick={() => open()} className="vk-btn vk-btn-primary">
+                    Begär offert <ArrowRight size={16} />
+                  </button>
+                  <a href="#paket" className="vk-btn vk-btn-ghost">
+                    Se paket
+                  </a>
+                </div>
+              </Reveal>
+            </div>
+          </section>
 
-      <section className="section">
-        <div className="wrap">
-          <div className="meta-label">Paket</div>
-          <div className="price-grid" style={{ marginTop: 32, gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))" }}>
-            {PACKAGES.map((p) => (
-              <Reveal key={p.num}>
-                <div className={`price-card ${p.featured ? "featured" : ""}`}>
-                  {p.featured && <span className="price-tag">Populärast</span>}
-                  <span className="price-num">{p.num}</span>
-                  <h3>{p.name}</h3>
-                  <p className="mono" style={{ marginTop: 4 }}>{p.time}</p>
-                  <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "1.6rem", color: "var(--bone)", marginTop: 12 }}>{p.price}</p>
-                  <p className="body" style={{ marginTop: 14 }}>{p.desc}</p>
-                  <ul className="price-list">
-                    {p.features.map((f) => (<li key={f}><Check size={14} strokeWidth={2.5} /> {f}</li>))}
-                  </ul>
-                  <button onClick={() => open(p.name)} className={`btn ${p.featured ? "btn-moss" : "btn-ghost"}`}>
-                    Välj upplägg <span className="a"><ArrowRight size={14} /></span>
+          <hr className="vk-hair" />
+
+          {/* ── Paket ── */}
+          <section id="paket" className="vk-section">
+            <div className="vk-wrap">
+              <Reveal>
+                <p className="vk-mono">Paket</p>
+              </Reveal>
+              <Reveal delay={0.05}>
+                <h2 style={{ marginTop: 14, maxWidth: "18ch" }}>
+                  Fyra tydliga upplägg.{" "}
+                  <span style={{ color: "var(--gran)", fontStyle: "italic" }}>Fast pris.</span>
+                </h2>
+              </Reveal>
+
+              <div
+                style={{
+                  marginTop: 48,
+                  display: "grid",
+                  gap: 20,
+                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                }}
+              >
+                {PACKAGES.map((p, i) => (
+                  <Reveal key={p.num} delay={i * 0.06}>
+                    <article
+                      style={{
+                        position: "relative",
+                        background: "#fff",
+                        border: "1px solid var(--linje)",
+                        borderRadius: 14,
+                        padding: "32px 26px 28px",
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 14,
+                        boxShadow: (p as any).featured
+                          ? "0 24px 40px -24px rgba(20,23,26,.18)"
+                          : "none",
+                        transform: (p as any).featured ? "translateY(-4px)" : "none",
+                      }}
+                    >
+                      {(p as any).featured && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            top: -1,
+                            left: -1,
+                            background: "var(--gran)",
+                            color: "#fff",
+                            fontFamily: "var(--font-sans)",
+                            fontSize: 11,
+                            fontWeight: 700,
+                            padding: "5px 12px",
+                            borderRadius: "6px 0 6px 0",
+                            letterSpacing: ".03em",
+                          }}
+                        >
+                          POPULÄRAST
+                        </span>
+                      )}
+                      <span className="vk-mono" style={{ color: "var(--granbark-mut)" }}>
+                        {p.num}
+                      </span>
+                      <h3 style={{ marginTop: 4 }}>{p.name}</h3>
+                      <p className="vk-mono" style={{ marginTop: -6 }}>
+                        {p.time}
+                      </p>
+                      <p
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 22,
+                          fontWeight: 700,
+                          color: "var(--granbark)",
+                          letterSpacing: "-0.01em",
+                          marginTop: -4,
+                        }}
+                      >
+                        {p.price}
+                      </p>
+                      <p style={{ fontSize: 14.5, lineHeight: 1.55, color: "var(--granbark)" }}>
+                        {p.desc}
+                      </p>
+                      <ul
+                        style={{
+                          listStyle: "none",
+                          padding: 0,
+                          margin: "6px 0 0",
+                          display: "grid",
+                          gap: 8,
+                          flex: 1,
+                        }}
+                      >
+                        {p.features.map((f) => (
+                          <li
+                            key={f}
+                            style={{
+                              display: "flex",
+                              alignItems: "flex-start",
+                              gap: 10,
+                              fontSize: 14,
+                              color: "var(--granbark)",
+                            }}
+                          >
+                            <Check
+                              size={14}
+                              strokeWidth={2.5}
+                              style={{ color: "var(--gran)", flexShrink: 0, marginTop: 3 }}
+                            />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <button
+                        onClick={() => open(p.name)}
+                        className={`vk-btn ${
+                          (p as any).featured ? "vk-btn-primary" : "vk-btn-ghost"
+                        }`}
+                        style={{ justifyContent: "center", marginTop: 8 }}
+                      >
+                        Välj upplägg <ArrowRight size={14} />
+                      </button>
+                    </article>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <hr className="vk-hair" />
+
+          {/* ── Jämförelse ── */}
+          <section className="vk-section">
+            <div className="vk-wrap">
+              <Reveal>
+                <p className="vk-mono">Jämförelse</p>
+              </Reveal>
+              <Reveal delay={0.05}>
+                <h2 style={{ marginTop: 14 }}>
+                  Vad{" "}
+                  <span style={{ color: "var(--gran)", fontStyle: "italic" }}>ingår?</span>
+                </h2>
+              </Reveal>
+
+              <Reveal delay={0.1}>
+                <div
+                  style={{
+                    marginTop: 40,
+                    overflowX: "auto",
+                    border: "1px solid var(--linje)",
+                    borderRadius: 14,
+                    background: "#fff",
+                  }}
+                >
+                  <table
+                    style={{
+                      width: "100%",
+                      minWidth: 680,
+                      borderCollapse: "collapse",
+                      textAlign: "left",
+                    }}
+                  >
+                    <thead>
+                      <tr style={{ borderBottom: "1px solid var(--linje)" }}>
+                        <th style={{ padding: "16px 20px" }} />
+                        {PACKAGES.map((p) => (
+                          <th
+                            key={p.num}
+                            style={{
+                              padding: "16px 20px",
+                              fontFamily: "var(--font-mono)",
+                              fontSize: 12,
+                              color: "var(--granbark)",
+                              fontWeight: 600,
+                              whiteSpace: "nowrap",
+                              letterSpacing: ".06em",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {p.name}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {COMPARE.map((row) => (
+                        <tr
+                          key={row[0]}
+                          style={{ borderBottom: "1px solid var(--linje)" }}
+                        >
+                          <td
+                            style={{
+                              padding: "14px 20px",
+                              fontSize: 14,
+                              color: "var(--granbark)",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {row[0]}
+                          </td>
+                          {row.slice(1).map((v, i) => (
+                            <td
+                              key={i}
+                              style={{
+                                padding: "14px 20px",
+                                fontSize: 14,
+                                color: "var(--granbark)",
+                              }}
+                            >
+                              {typeof v === "boolean" ? (
+                                v ? (
+                                  <Check
+                                    size={16}
+                                    strokeWidth={2.5}
+                                    style={{ color: "var(--gran)" }}
+                                  />
+                                ) : (
+                                  <span style={{ color: "#B7B4A9" }}>—</span>
+                                )
+                              ) : (
+                                <span style={{ color: "var(--granbark-mut)" }}>{v}</span>
+                              )}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </Reveal>
+            </div>
+          </section>
+
+          {/* ── Dark CTA ── */}
+          <section className="vk-dark">
+            <div className="vk-wrap">
+              <Reveal>
+                <p className="vk-mono">Osäker på nivå?</p>
+              </Reveal>
+              <Reveal delay={0.05}>
+                <h2 style={{ marginTop: 14 }}>Boka 30 minuter.</h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p style={{ marginTop: 20, maxWidth: "58ch", fontSize: 18 }}>
+                  Ni får ett ärligt svar på om ni behöver prototyp, MVP, scale — eller om idén behöver tänkas om först.
+                </p>
+              </Reveal>
+              <Reveal delay={0.15}>
+                <div style={{ marginTop: 28 }}>
+                  <button onClick={() => open()} className="vk-btn vk-btn-primary">
+                    Begär offert <ArrowRight size={16} />
                   </button>
                 </div>
               </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="wrap">
-          <div className="meta-label">Jämförelse</div>
-          <h2 className="h2" style={{ marginTop: 18 }}>Vad <span className="it">ingår?</span></h2>
-          <div style={{ marginTop: 32, overflowX: "auto", border: "1px solid var(--hair)", borderRadius: 10 }}>
-            <table style={{ width: "100%", minWidth: 680, borderCollapse: "collapse", textAlign: "left" }}>
-              <thead>
-                <tr style={{ borderBottom: "1px solid var(--hair)" }}>
-                  <th style={{ padding: "14px 18px" }} />
-                  {PACKAGES.map((p) => (
-                    <th key={p.num} style={{ padding: "14px 18px", fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--bone)", whiteSpace: "nowrap", letterSpacing: "0.04em" }}>{p.name}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARE.map((row) => (
-                  <tr key={row[0] as string} style={{ borderBottom: "1px solid var(--hair)" }}>
-                    <td style={{ padding: "13px 18px", fontSize: 13, color: "var(--bone-soft)" }}>{row[0]}</td>
-                    {(row.slice(1) as (boolean | string)[]).map((v, i) => (
-                      <td key={i} style={{ padding: "13px 18px", fontSize: 13, color: "var(--bone-soft)" }}>
-                        {typeof v === "boolean" ? (v ? <span style={{ color: "var(--moss)" }}>✓</span> : <span style={{ color: "var(--bone-faint)" }}>—</span>) : v}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-band">
-        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="meta-label">Osäker på nivå?</div>
-          <h2 className="h2" style={{ marginTop: 18 }}>Boka 30 minuter.</h2>
-          <p className="lead" style={{ marginTop: 22 }}>
-            Ni får ett ärligt svar på om ni behöver prototyp, MVP, scale — eller om idén behöver tänkas om först.
-          </p>
-          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
-            Begär offert <span className="a"><ArrowRight size={14} /></span>
-          </button>
-        </div>
-      </section>
-    </NordicLayout>
+            </div>
+          </section>
+        </main>
+        <VkFooter />
+      </div>
+    </>
   );
 };
 
