@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Loader2, ArrowUpRight } from "lucide-react";
-import AdminShell, { adminFetch } from "./AdminShell";
+import { ArrowUpRight } from "lucide-react";
+import AdminShell, { adminFetch, AdminStatus } from "./AdminShell";
 
 type Data = {
   analytics: {
@@ -46,16 +46,23 @@ const Bars = ({ items }: { items: { label: string; count: number }[] }) => {
 
 export default function AdminContent() {
   const [data, setData] = useState<Data | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const [err, setErr] = useState<unknown>(null);
+  const [tick, setTick] = useState(0);
+  const retry = useCallback(() => { setErr(null); setData(null); setTick((t) => t + 1); }, []);
 
   useEffect(() => {
-    adminFetch("admin-overview", { method: "POST" }).then(setData).catch((e) => setErr(e.message));
-  }, []);
+    let cancelled = false;
+    adminFetch("admin-overview", { method: "POST" })
+      .then((d) => { if (!cancelled) setData(d); })
+      .catch((e) => { if (!cancelled) setErr(e); });
+    return () => { cancelled = true; };
+  }, [tick]);
+
+  const isEmpty = !!data && !data.analytics && (!data.text_library || data.text_library.length === 0);
 
   return (
     <AdminShell title="Innehåll & analytics" kicker="Admin · content">
-      {!data && !err && <div style={{ display: "flex", gap: 10, color: "var(--granbark-mut)" }}><Loader2 size={16} className="animate-spin" /> Laddar…</div>}
-      {err && <p style={{ color: "var(--varsel-hover)" }}>{err}</p>}
+      <AdminStatus loading={!data && !err} error={err} empty={isEmpty} onRetry={retry} />
       {data && (
         <>
           <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>

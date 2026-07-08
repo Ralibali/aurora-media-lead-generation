@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Loader2, Mail as MailIcon } from "lucide-react";
-import AdminShell, { adminFetch } from "./AdminShell";
+import { useCallback, useEffect, useState } from "react";
+import { Mail as MailIcon } from "lucide-react";
+import AdminShell, { adminFetch, AdminStatus } from "./AdminShell";
 
 type Data = {
   email: {
@@ -32,16 +32,23 @@ const Stat = ({ label, val }: { label: string; val: string | number }) => (
 
 export default function AdminEmail() {
   const [data, setData] = useState<Data | null>(null);
-  const [err, setErr] = useState<string | null>(null);
+  const [err, setErr] = useState<unknown>(null);
+  const [tick, setTick] = useState(0);
+  const retry = useCallback(() => { setErr(null); setData(null); setTick((t) => t + 1); }, []);
 
   useEffect(() => {
-    adminFetch("admin-overview", { method: "POST" }).then(setData).catch((e) => setErr(e.message));
-  }, []);
+    let cancelled = false;
+    adminFetch("admin-overview", { method: "POST" })
+      .then((d) => { if (!cancelled) setData(d); })
+      .catch((e) => { if (!cancelled) setErr(e); });
+    return () => { cancelled = true; };
+  }, [tick]);
+
+  const isEmpty = !!data && (!data.email || data.email.total_leads === 0);
 
   return (
     <AdminShell title="E-postsekvenser" kicker="Admin · drip">
-      {!data && !err && <div style={{ display: "flex", gap: 10, color: "var(--granbark-mut)" }}><Loader2 size={16} className="animate-spin" /> Laddar…</div>}
-      {err && <p style={{ color: "var(--varsel-hover)" }}>{err}</p>}
+      <AdminStatus loading={!data && !err} error={err} empty={isEmpty} onRetry={retry} />
       {data && (
         <>
           <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>

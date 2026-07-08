@@ -9,6 +9,10 @@ import {
   Lock,
   Loader2,
   LogOut,
+  AlertTriangle,
+  WifiOff,
+  ShieldAlert,
+  Inbox,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import "@/styles/verkstad.css";
@@ -17,26 +21,158 @@ export const ADMIN_STORAGE_KEY = "faq_analytics_pwd";
 const PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID;
 const VERIFY_URL = `https://${PROJECT_ID}.functions.supabase.co/list-leads`;
 
+export type AdminErrorKind = "auth" | "network" | "server" | "notfound" | "parse" | "empty";
+
+export class AdminError extends Error {
+  kind: AdminErrorKind;
+  status?: number;
+  path?: string;
+  detail?: string;
+  constructor(kind: AdminErrorKind, message: string, opts: { status?: number; path?: string; detail?: string } = {}) {
+    super(message);
+    this.kind = kind;
+    this.status = opts.status;
+    this.path = opts.path;
+    this.detail = opts.detail;
+  }
+}
+
 export const adminFetch = async (path: string, init: RequestInit = {}) => {
   const pwd = sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
-  if (!pwd) throw new Error("Inte inloggad.");
+  if (!pwd) throw new AdminError("auth", "Inte inloggad.", { path });
   const url = `https://${PROJECT_ID}.functions.supabase.co/${path}`;
-  const res = await fetch(url, {
-    ...init,
-    headers: {
-      Authorization: `Bearer ${pwd}`,
-      "Content-Type": "application/json",
-      ...(init.headers ?? {}),
-    },
-  });
-  if (res.status === 401) {
-    sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-    window.location.reload();
-    throw new Error("Unauthorized");
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      ...init,
+      headers: {
+        Authorization: `Bearer ${pwd}`,
+        "Content-Type": "application/json",
+        ...(init.headers ?? {}),
+      },
+    });
+  } catch (e) {
+    throw new AdminError("network", "Nätverksfel — kunde inte nå servern.", {
+      path,
+      detail: e instanceof Error ? e.message : String(e),
+    });
   }
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  if (res.status === 401 || res.status === 403) {
+    sessionStorage.removeItem(ADMIN_STORAGE_KEY);
+    throw new AdminError("auth", "Fel lösenord — logga in på nytt.", { status: res.status, path });
+  }
+  if (res.status === 404) {
+    throw new AdminError("notfound", `Endpoint saknas: ${path}`, { status: 404, path });
+  }
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new AdminError("server", `Serverfel (${res.status}) från ${path}`, { status: res.status, path, detail });
+  }
+  try {
+    return await res.json();
+  } catch (e) {
+    throw new AdminError("parse", "Kunde inte tolka svaret från servern.", {
+      path,
+      detail: e instanceof Error ? e.message : String(e),
+    });
+  }
 };
+
+const KIND_META: Record<AdminErrorKind, { label: string; Icon: typeof AlertTriangle; color: string }> = {
+  auth: { label: "Autentiseringsfel", Icon: ShieldAlert, color: "#B4531A" },
+  network: { label: "Nätverksfel", Icon: WifiOff, color: "#B4531A" },
+  server: { label: "Serverfel", Icon: AlertTriangle, color: "#B4531A" },
+  notfound: { label: "Saknad endpoint", Icon: AlertTriangle, color: "#B4531A" },
+  parse: { label: "Ogiltigt svar", Icon: AlertTriangle, color: "#B4531A" },
+  empty: { label: "Tom data", Icon: Inbox, color: "#6b6b6b" },
+};
+
+export function AdminStatus({
+  error,
+  loading,
+  empty,
+  onRetry,
+  loadingLabel = "Laddar…",
+}: {
+  error?: unknown;
+  loading?: boolean;
+  empty?: boolean;
+  onRetry?: () => void;
+  loadingLabel?: string;
+}) {
+  if (loading) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--granbark-mut)" }}>
+        <Loader2 size={16} className="animate-spin" /> {loadingLabel}
+      </div>
+    );
+  }
+  if (error) {
+    const e = error instanceof AdminError ? error : new AdminError("server", error instanceof Error ? error.message : String(error));
+    const meta = KIND_META[e.kind];
+    return (
+      <div
+        role="alert"
+        style={{
+          border: `1px solid ${meta.color}33`,
+          background: `${meta.color}0d`,
+          borderRadius: 12,
+          padding: 16,
+          display: "grid",
+          gap: 8,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10, color: meta.color, fontWeight: 600 }}>
+          <meta.Icon size={16} /> {meta.label}
+          {e.status ? <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, opacity: 0.7 }}>HTTP {e.status}</span> : null}
+        </div>
+        <p style={{ margin: 0, fontSize: 14 }}>{e.message}</p>
+        {e.path && (
+          <p style={{ margin: 0, fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--granbark-mut)" }}>
+            endpoint: /{e.path}
+          </p>
+        )}
+        {e.detail && (
+          <details style={{ fontSize: 12, color: "var(--granbark-mut)" }}>
+            <summary style={{ cursor: "pointer" }}>Teknisk detalj</summary>
+            <pre style={{ whiteSpace: "pre-wrap", margin: "6px 0 0", fontFamily: "var(--font-mono)" }}>{e.detail}</pre>
+          </details>
+        )}
+        <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+          {onRetry && (
+            <button className="vk-btn" onClick={onRetry} style={{ fontSize: 13 }}>Försök igen</button>
+          )}
+          {e.kind === "auth" && (
+            <button
+              className="vk-btn vk-btn-primary"
+              onClick={() => { sessionStorage.removeItem(ADMIN_STORAGE_KEY); window.location.reload(); }}
+              style={{ fontSize: 13 }}
+            >
+              Logga in igen
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (empty) {
+    const meta = KIND_META.empty;
+    return (
+      <div style={{
+        border: "1px dashed var(--linje)",
+        borderRadius: 12,
+        padding: 20,
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        color: meta.color,
+      }}>
+        <meta.Icon size={16} /> Ingen data att visa än.
+      </div>
+    );
+  }
+  return null;
+}
 
 const NAV = [
   { to: "/admin", label: "Översikt", icon: LayoutDashboard, end: true },
@@ -72,10 +208,14 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
         if (res.ok) {
           setAuthed(true);
           sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
-        } else if (res.status === 401) {
+        } else if (res.status === 401 || res.status === 403) {
           sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-          setError("Fel lösenord.");
+          setError("Sparat lösenord fungerar inte längre — logga in på nytt.");
+        } else {
+          setError(`Serverfel (HTTP ${res.status}) vid verifiering.`);
         }
+      } catch (err) {
+        setError(`Nätverksfel — kunde inte nå servern. (${err instanceof Error ? err.message : "okänt fel"})`);
       } finally {
         setLoading(false);
       }
@@ -87,24 +227,32 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
     e.preventDefault();
     setLoading(true);
     setError(null);
+    let res: Response;
     try {
-      const res = await fetch(VERIFY_URL, {
+      res = await fetch(VERIFY_URL, {
         method: "POST",
         headers: { Authorization: `Bearer ${pwd}`, "Content-Type": "application/json" },
         body: JSON.stringify({ action: "list" }),
       });
-      if (res.status === 401) {
-        setError("Fel lösenord.");
-        return;
-      }
-      if (!res.ok) throw new Error(await res.text());
-      sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
-      window.location.reload();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Något gick fel");
-    } finally {
       setLoading(false);
+      setError(
+        `Nätverksfel — kunde inte nå servern. (${err instanceof Error ? err.message : "okänt fel"})`
+      );
+      return;
     }
+    setLoading(false);
+    if (res.status === 401 || res.status === 403) {
+      setError("Fel lösenord. Kontrollera och försök igen.");
+      return;
+    }
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      setError(`Serverfel (HTTP ${res.status}) från list-leads.${body ? ` ${body.slice(0, 200)}` : ""}`);
+      return;
+    }
+    sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
+    window.location.reload();
   };
 
   const logout = () => {
