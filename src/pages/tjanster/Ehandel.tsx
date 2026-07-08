@@ -139,7 +139,7 @@ const Ehandel = () => {
                 <span style={{ fontFamily: M, fontSize: 10, color: "#8A8578", letterSpacing: "0.05em", minWidth: 24, paddingTop: 3 }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span style={{ fontFamily: I, fontSize: "clamp(0.9rem,1.4vw,1rem)", color: "rgba(237,233,220,0.72)", lineHeight: 1.6 }}>
+                <span style={{ fontFamily: I, fontSize: "clamp(0.9rem,1.4vw,1rem)", color: "#3E444B", lineHeight: 1.6 }}>
                   {item}
                 </span>
               </li>
@@ -151,7 +151,7 @@ const Ehandel = () => {
         <section className="wrap" style={{ paddingBottom: "clamp(64px,8vw,96px)" }}>
           <div style={RULE} />
           <p style={eyebrow}>så jobbar vi</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: "0.5px solid rgba(237,233,220,0.10)" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: "0.5px solid #EBE9E3" }}>
             {process.map((step, i) => (
               <div
                 key={step.title}
@@ -160,7 +160,7 @@ const Ehandel = () => {
                   gridTemplateColumns: "40px 1fr 2fr",
                   gap: "clamp(16px,2vw,32px)",
                   padding: "clamp(20px,3vw,28px) 0",
-                  borderBottom: "0.5px solid rgba(237,233,220,0.10)",
+                  borderBottom: "0.5px solid #EBE9E3",
                   alignItems: "start",
                 }}
               >
@@ -182,13 +182,13 @@ const Ehandel = () => {
         <section className="wrap" style={{ paddingBottom: "clamp(64px,8vw,96px)" }}>
           <div style={RULE} />
           <p style={eyebrow}>vanliga frågor</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: "0.5px solid rgba(237,233,220,0.10)" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: "0.5px solid #EBE9E3" }}>
             {faqs.map((faq) => (
               <div
                 key={faq.q}
                 style={{
                   padding: "clamp(20px,3vw,28px) 0",
-                  borderBottom: "0.5px solid rgba(237,233,220,0.10)",
+                  borderBottom: "0.5px solid #EBE9E3",
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
                   gap: "clamp(16px,2vw,48px)",
@@ -219,7 +219,7 @@ const Ehandel = () => {
                   fontSize: 13,
                   color: "#3E444B",
                   textDecoration: "none",
-                  border: "0.5px solid rgba(237,233,220,0.15)",
+                  border: "0.5px solid #D8D5CC",
                   borderRadius: 6,
                   padding: "8px 16px",
                   transition: "color 0.15s, border-color 0.15s",
