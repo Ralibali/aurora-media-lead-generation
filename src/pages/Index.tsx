@@ -197,7 +197,17 @@ const CSS = `
 .vk-cmp-check { color: var(--gran); flex-shrink: 0; }
 @media (max-width: 620px) {
   .vk-cmp-row { grid-template-columns: 1fr; }
-  .vk-cmp-left { border-right: 0; border-bottom: 1px solid var(--linje); }
+  .vk-cmp-left { border-right: 0; border-bottom: 1px solid var(--linje); padding-top: 34px; }
+  .vk-cmp-right { padding-top: 34px; }
+  .vk-cmp-left::before,
+  .vk-cmp-right::before {
+    content: "BYRÅN";
+    position: absolute; top: 12px; left: 24px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: #3E444B; font-weight: 500;
+  }
+  .vk-cmp-right::before { content: "JAG"; color: var(--gran); }
+  .vk-cmp-cell { position: relative; }
 }
 
 /* ── Process timeline ── */
