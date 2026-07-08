@@ -128,6 +128,7 @@ export interface AiAnalysis {
 
 export interface AiMapResult {
   leadId: string;
+  shareToken?: string;
   totalScore: number;
   avg: number;
   total_potential: string;
@@ -141,5 +142,8 @@ export interface AiMapResult {
     company_name: string;
     contact_name: string;
     email: string;
+    industry?: string;
+    employee_count?: string;
   };
+  created_at?: string;
 }

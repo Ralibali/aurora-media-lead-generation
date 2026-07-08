@@ -473,7 +473,13 @@ const AiKartaStart = () => {
       try {
         sessionStorage.setItem(RESULT_KEY, JSON.stringify({
           ...data,
-          meta: { company_name: form.company_name, contact_name: form.contact_name, email: form.email },
+          meta: {
+            company_name: form.company_name,
+            contact_name: form.contact_name,
+            email: form.email,
+            industry: form.industry,
+            employee_count: form.employee_count,
+          },
         }));
         localStorage.removeItem(DRAFT_KEY);
       } catch { /* ignore */ }
