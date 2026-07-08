@@ -289,6 +289,9 @@ const Leads = () => {
   const activeFilterCount =
     (query ? 1 : 0) + (sourceFilter !== "all" ? 1 : 0) + (statusFilter !== "all" ? 1 : 0) + (dateFrom || dateTo ? 1 : 0);
 
+  const openLead = leads.find((l) => l.id === openId) ?? null;
+
+
 
   const exportCsv = () => {
     const header = [
