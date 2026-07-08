@@ -516,7 +516,78 @@ const Leads = () => {
                 ]}
               />
             </div>
+
+            {/* Date range + presets */}
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {([
+                  { key: "all", label: "Alla" },
+                  { key: "today", label: "Idag" },
+                  { key: "7d", label: "7 dagar" },
+                  { key: "30d", label: "30 dagar" },
+                ] as const).map((p) => {
+                  const active = datePreset === p.key;
+                  return (
+                    <button
+                      key={p.key}
+                      type="button"
+                      onClick={() => applyDatePreset(p.key)}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: 999,
+                        border: `1px solid ${active ? "var(--gran)" : "var(--linje)"}`,
+                        background: active ? "var(--gran)" : "#fff",
+                        color: active ? "#fff" : "var(--granbark)",
+                        fontSize: 13,
+                        fontFamily: "var(--font-mono)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", border: "1px solid var(--linje)", borderRadius: 10, padding: "6px 10px" }}>
+                <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>FRÅN</span>
+                <input
+                  type="date"
+                  value={dateFrom}
+                  max={dateTo || undefined}
+                  onChange={(e) => { setDateFrom(e.target.value); setDatePreset("custom"); }}
+                  style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--granbark)" }}
+                />
+                <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>TILL</span>
+                <input
+                  type="date"
+                  value={dateTo}
+                  min={dateFrom || undefined}
+                  onChange={(e) => { setDateTo(e.target.value); setDatePreset("custom"); }}
+                  style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--granbark)" }}
+                />
+                {(dateFrom || dateTo) && (
+                  <button
+                    onClick={() => { setDateFrom(""); setDateTo(""); setDatePreset("all"); }}
+                    aria-label="Rensa datum"
+                    style={{ border: 0, background: "transparent", cursor: "pointer", display: "flex" }}
+                  >
+                    <X size={13} color="var(--granbark-mut)" />
+                  </button>
+                )}
+              </div>
+              <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 13, color: "var(--granbark-mut)", fontFamily: "var(--font-mono)" }}>
+                  {filtered.length} av {leads.length}
+                </span>
+                {activeFilterCount > 0 && (
+                  <button className="vk-btn vk-btn-ghost" onClick={clearFilters} style={{ fontSize: 13 }}>
+                    <X size={13} /> Rensa filter ({activeFilterCount})
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
+
 
           {error && (
             <p style={{ color: "var(--varsel-hover)", marginTop: 20, fontSize: 14 }}>{error}</p>
