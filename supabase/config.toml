@@ -11,3 +11,10 @@ verify_jwt = false
 
 [functions.ai-map-unsubscribe]
 verify_jwt = false
+
+[functions.list-leads]
+verify_jwt = false
+
+[functions.resend-ai-map-email]
+verify_jwt = false
+
