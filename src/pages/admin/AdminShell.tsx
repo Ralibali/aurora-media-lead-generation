@@ -13,10 +13,13 @@ import {
   WifiOff,
   ShieldAlert,
   Inbox,
+  Menu,
+  X,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { getFunctionUrl } from "@/lib/functionUrl";
 import "@/styles/verkstad.css";
+
 
 export const ADMIN_STORAGE_KEY = "faq_analytics_pwd";
 const VERIFY_URL = getFunctionUrl("list-leads");
@@ -305,6 +308,202 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
     );
   }
 
+  return <AdminLayout pathname={pathname} onLogout={logout} title={title} kicker={kicker}>{children}</AdminLayout>;
+}
+
+function useIsMobile(breakpoint = 900) {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < breakpoint : false
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    const handler = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile((e as MediaQueryList).matches);
+    handler(mq);
+    mq.addEventListener("change", handler as (e: MediaQueryListEvent) => void);
+    return () => mq.removeEventListener("change", handler as (e: MediaQueryListEvent) => void);
+  }, [breakpoint]);
+  return isMobile;
+}
+
+function AdminLayout({
+  children,
+  pathname,
+  onLogout,
+  title,
+  kicker,
+}: {
+  children: ReactNode;
+  pathname: string;
+  onLogout: () => void;
+  title: string;
+  kicker: string;
+}) {
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+
+  // Close drawer on route change
+  useEffect(() => { setOpen(false); }, [pathname]);
+  // Lock scroll while drawer is open
+  useEffect(() => {
+    if (!isMobile) return;
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open, isMobile]);
+
+  const NavItems = ({ compact = false }: { compact?: boolean }) => (
+    <>
+      {NAV.map((item) => {
+        const active = item.end ? pathname === item.to : pathname.startsWith(item.to);
+        return (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            onClick={() => setOpen(false)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              padding: compact ? "12px 14px" : "10px 12px",
+              borderRadius: 8,
+              fontSize: 14,
+              color: active ? "#fff" : "rgba(255,255,255,.65)",
+              background: active ? "rgba(255,255,255,.08)" : "transparent",
+              textDecoration: "none",
+              fontWeight: active ? 600 : 400,
+            }}
+          >
+            <item.icon size={16} />
+            {item.label}
+          </NavLink>
+        );
+      })}
+    </>
+  );
+
+  const Brand = () => (
+    <div style={{ padding: "0 8px 20px" }}>
+      <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", opacity: 0.55, margin: 0 }}>
+        AURORA MEDIA
+      </p>
+      <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", opacity: 0.55, margin: "4px 0 0" }}>
+        ADMIN
+      </p>
+    </div>
+  );
+
+  const LogoutBtn = () => (
+    <button
+      onClick={onLogout}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "10px 12px",
+        borderRadius: 8,
+        fontSize: 13,
+        color: "rgba(255,255,255,.5)",
+        background: "transparent",
+        border: 0,
+        cursor: "pointer",
+        textAlign: "left",
+      }}
+    >
+      <LogOut size={14} /> Logga ut
+    </button>
+  );
+
+  if (isMobile) {
+    return (
+      <div className="verkstad" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+        <header
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 30,
+            background: "#14171A",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px 16px",
+            borderBottom: "1px solid rgba(255,255,255,.08)",
+          }}
+        >
+          <div>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", opacity: 0.55, margin: 0 }}>
+              AURORA · ADMIN
+            </p>
+            <p style={{ margin: "2px 0 0", fontSize: 15, fontWeight: 600 }}>{title}</p>
+          </div>
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Öppna meny"
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: 40, height: 40, borderRadius: 8, border: 0,
+              background: "rgba(255,255,255,.08)", color: "#fff", cursor: "pointer",
+            }}
+          >
+            <Menu size={20} />
+          </button>
+        </header>
+
+        {open && (
+          <div
+            onClick={() => setOpen(false)}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 40 }}
+          />
+        )}
+        <aside
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            bottom: 0,
+            width: "min(280px, 80vw)",
+            background: "#14171A",
+            color: "#fff",
+            padding: "20px 16px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+            transform: open ? "translateX(0)" : "translateX(-100%)",
+            transition: "transform .25s ease",
+            zIndex: 50,
+            boxShadow: open ? "0 10px 40px rgba(0,0,0,.4)" : "none",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Brand />
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Stäng meny"
+              style={{
+                width: 36, height: 36, borderRadius: 8, border: 0,
+                background: "rgba(255,255,255,.08)", color: "#fff", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <NavItems compact />
+          <div style={{ flex: 1 }} />
+          <LogoutBtn />
+        </aside>
+
+        <main style={{ minWidth: 0, flex: 1 }}>
+          <div className="vk-wrap" style={{ paddingBlock: 24, paddingInline: 16 }}>
+            <p className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 12 }}>{kicker}</p>
+            <h1 style={{ marginTop: 6, fontSize: "clamp(24px, 6vw, 32px)", lineHeight: 1.15 }}>{title}</h1>
+            <div style={{ marginTop: 20 }}>{children}</div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="verkstad" style={{ minHeight: "100vh", display: "grid", gridTemplateColumns: "220px 1fr" }}>
       <aside
@@ -320,58 +519,10 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
           gap: 6,
         }}
       >
-        <div style={{ padding: "0 8px 20px" }}>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", opacity: 0.55, margin: 0 }}>
-            AURORA MEDIA
-          </p>
-          <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", opacity: 0.55, margin: "4px 0 0" }}>
-            ADMIN
-          </p>
-        </div>
-        {NAV.map((item) => {
-          const active = item.end ? pathname === item.to : pathname.startsWith(item.to);
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                padding: "10px 12px",
-                borderRadius: 8,
-                fontSize: 14,
-                color: active ? "#fff" : "rgba(255,255,255,.65)",
-                background: active ? "rgba(255,255,255,.08)" : "transparent",
-                textDecoration: "none",
-                fontWeight: active ? 600 : 400,
-              }}
-            >
-              <item.icon size={16} />
-              {item.label}
-            </NavLink>
-          );
-        })}
+        <Brand />
+        <NavItems />
         <div style={{ flex: 1 }} />
-        <button
-          onClick={logout}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            padding: "10px 12px",
-            borderRadius: 8,
-            fontSize: 13,
-            color: "rgba(255,255,255,.5)",
-            background: "transparent",
-            border: 0,
-            cursor: "pointer",
-            textAlign: "left",
-          }}
-        >
-          <LogOut size={14} /> Logga ut
-        </button>
+        <LogoutBtn />
       </aside>
       <main style={{ minWidth: 0 }}>
         <div className="vk-wrap" style={{ paddingBlock: 40 }}>
@@ -383,3 +534,4 @@ export default function AdminShell({ children, title, kicker = "Admin" }: Props)
     </div>
   );
 }
+
