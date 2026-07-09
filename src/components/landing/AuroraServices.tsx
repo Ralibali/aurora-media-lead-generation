@@ -33,16 +33,15 @@ const AuroraServices = () => (
         <div className="lg:col-span-5">
           <p className="au-eyebrow">TJÄNSTER</p>
           <h2 className="mt-5 font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1] tracking-[-0.035em]">
-            Vi utvecklar mjukvara med{" "}
-            <span style={{ color: "hsl(152 80% 60%)" }}>intention.</span>
+            AI-system för{" "}
+            <span style={{ color: "hsl(152 80% 60%)" }}>småföretag.</span>
           </h2>
         </div>
         <div className="lg:col-span-7 lg:pt-2">
           <p className="text-base leading-relaxed text-[hsl(var(--au-cream)/0.7)] md:text-lg">
-            Varje system vi bygger är skräddarsytt efter er verksamhet — inte
-            tvärtom. Snabb leverans, transparent kommunikation och kod du äger
-            från dag ett. Vi kombinerar utveckling, marknadsföring och AI för
-            att leverera något som faktiskt rör nålen.
+            Jag bygger interna system och automationer som ersätter manuella
+            rutiner — så ni kan fokusera på det ni är bäst på. Fast pris,
+            ingen bindningstid och kod ni äger från dag ett.
           </p>
         </div>
       </div>
