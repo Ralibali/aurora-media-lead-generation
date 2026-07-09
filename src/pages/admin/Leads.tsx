@@ -637,7 +637,10 @@ const Leads = () => {
             try {
               const res = await fetch(RESEND_URL, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${password}`,
+                },
                 body: JSON.stringify({
                   email: openLead.email,
                   contact_name: openLead.name,
