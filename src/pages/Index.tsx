@@ -136,32 +136,46 @@ export const VkNav = () => {
 
 /* ────────── Signature animation ────────── */
 
-const PROMPT = "Bygg ett dispatchsystem för vårt åkeri – körorder, schema, Fortnox-fakturering.";
+const PROMPTS = [
+  "Bygg ett dispatchsystem för vårt åkeri – körorder, schema, Fortnox-fakturering.",
+  "Automatisera vår offertprocess så att förfrågningar från mejl blir färdiga PDF-offerter.",
+  "Skapa en intern AI-assistent som svarar på frågor om våra produkter och priser.",
+  "Koppla ihop vår bokning med SMS-påminnelser och en enkel admin-panel.",
+  "Bygg ett lagerhanteringssystem som skannar inleveranser och varnar vid lågt saldo.",
+  "Gör en dashboard som hämtar data från Fortnox och visar lönsamhet per kund.",
+];
 
 const Signature = () => {
   const reduce = useReducedMotion();
-  const [text, setText] = useState(reduce ? PROMPT : "");
+  const [text, setText] = useState(reduce ? PROMPTS[0] : "");
   const [stage, setStage] = useState(reduce ? 4 : 0);
 
   useEffect(() => {
     if (reduce) return;
     let cancelled = false;
+    let idx = 0;
+    const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
     const run = async () => {
       while (!cancelled) {
-        setText(""); setStage(0);
-        for (let i = 0; i <= PROMPT.length; i++) {
+        const prompt = PROMPTS[idx];
+        setText("");
+        setStage(0);
+        for (let i = 0; i <= prompt.length; i++) {
           if (cancelled) return;
-          await new Promise((r) => setTimeout(r, 22));
-          setText(PROMPT.slice(0, i));
+          await sleep(22);
+          setText(prompt.slice(0, i));
         }
         for (let s = 1; s <= 4; s++) {
           if (cancelled) return;
-          await new Promise((r) => setTimeout(r, 550));
+          await sleep(550);
           setStage(s);
         }
-        await new Promise((r) => setTimeout(r, 4500));
+        await sleep(4200);
+        idx = (idx + 1) % PROMPTS.length;
       }
     };
+
     run();
     return () => { cancelled = true; };
   }, [reduce]);
