@@ -225,6 +225,17 @@ async function callGemini(messages: Array<{ role: string; content: string }>): P
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  const PASSWORD = Deno.env.get("FAQ_ANALYTICS_PASSWORD") ?? "";
+  const ADMIN = Deno.env.get("ADMIN_SECRET") ?? "";
+  const auth = req.headers.get("authorization") ?? "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!token || (token !== PASSWORD && token !== ADMIN)) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY saknas i miljön");
 

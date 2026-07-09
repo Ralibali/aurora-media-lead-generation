@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { getSupabase } from "@/lib/getSupabase";
 import {
   Select,
   SelectContent,
@@ -14,10 +13,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Copy, RotateCw, Save, Star, Trash2, Sparkles } from "lucide-react";
+import { getFunctionUrl } from "@/lib/functionUrl";
 
-// Byt detta lösenord till något eget. Det är en enkel grind, inte hård säkerhet.
-const AURORA_ADMIN_PASSWORD = "aurora-2026";
-const STORAGE_KEY = "aurora-admin-ok";
+// Delar samma admin-lösenord som resten av /admin (verifieras server-side via list-leads).
+const ADMIN_STORAGE_KEY = "faq_analytics_pwd";
+const VERIFY_URL = getFunctionUrl("list-leads");
+const LIB_URL = getFunctionUrl("admin-text-library");
+const GEN_URL = getFunctionUrl("generate-text");
 
 const TEXT_TYPES = [
   { value: "hero", label: "Hero" },
@@ -44,18 +46,56 @@ type LibraryRow = {
   used_on_page: string | null;
 };
 
+async function bearerFetch(url: string, body: unknown) {
+  const pwd = sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
+  if (!pwd) throw new Error("Inte inloggad");
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${pwd}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (res.status === 401 || res.status === 403) {
+    sessionStorage.removeItem(ADMIN_STORAGE_KEY);
+    throw new Error("Fel lösenord – logga in igen");
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error((data as any)?.error || `HTTP ${res.status}`);
+  return data as any;
+}
+
 const PasswordGate = ({ onUnlock }: { onUnlock: () => void }) => {
   const [pw, setPw] = useState("");
+  const [loading, setLoading] = useState(false);
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          if (pw === AURORA_ADMIN_PASSWORD) {
-            sessionStorage.setItem(STORAGE_KEY, "1");
+          if (!pw) return;
+          setLoading(true);
+          try {
+            const res = await fetch(VERIFY_URL, {
+              method: "POST",
+              headers: { Authorization: `Bearer ${pw}`, "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "list" }),
+            });
+            if (res.status === 401 || res.status === 403) {
+              toast.error("Fel lösenord");
+              return;
+            }
+            if (!res.ok) {
+              toast.error(`Serverfel (${res.status})`);
+              return;
+            }
+            sessionStorage.setItem(ADMIN_STORAGE_KEY, pw);
             onUnlock();
-          } else {
-            toast.error("Fel lösenord");
+          } catch (err) {
+            toast.error(err instanceof Error ? err.message : "Nätverksfel");
+          } finally {
+            setLoading(false);
           }
         }}
         className="w-full max-w-sm space-y-4 rounded-xl border border-border bg-card p-8"
@@ -69,8 +109,8 @@ const PasswordGate = ({ onUnlock }: { onUnlock: () => void }) => {
           placeholder="••••••"
           autoFocus
         />
-        <Button type="submit" className="w-full">
-          Lås upp
+        <Button type="submit" className="w-full" disabled={loading || !pw}>
+          {loading ? "Verifierar…" : "Lås upp"}
         </Button>
       </form>
     </div>
@@ -80,10 +120,9 @@ const PasswordGate = ({ onUnlock }: { onUnlock: () => void }) => {
 const TextGenerator = () => {
   const [unlocked, setUnlocked] = useState(false);
   useEffect(() => {
-    if (sessionStorage.getItem(STORAGE_KEY) === "1") setUnlocked(true);
+    if (sessionStorage.getItem(ADMIN_STORAGE_KEY)) setUnlocked(true);
   }, []);
 
-  // Form state
   const [textType, setTextType] = useState("hero");
   const [topic, setTopic] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -91,7 +130,6 @@ const TextGenerator = () => {
   const [minLength, setMinLength] = useState<string>("");
   const [maxLength, setMaxLength] = useState<string>("");
 
-  // Generation state
   const [loading, setLoading] = useState(false);
   const [output, setOutput] = useState<unknown>(null);
   const [meta, setMeta] = useState<{
@@ -101,25 +139,28 @@ const TextGenerator = () => {
     characterCount: number;
   } | null>(null);
 
-  // Library
   const [library, setLibrary] = useState<LibraryRow[]>([]);
   const [filterType, setFilterType] = useState<string>("all");
   const [search, setSearch] = useState("");
 
   const loadLibrary = async () => {
-    const supabase = await getSupabase();
-    const { data, error } = await supabase
-      .from("text_library")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(200);
-    if (error) toast.error(error.message);
-    else setLibrary((data as LibraryRow[]) ?? []);
+    try {
+      const data = await bearerFetch(LIB_URL, { action: "list" });
+      setLibrary((data.rows as LibraryRow[]) ?? []);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Kunde inte ladda bibliotek");
+    }
   };
 
   useEffect(() => {
     if (unlocked) loadLibrary();
   }, [unlocked]);
+
+  const runGenerate = async (payload: Record<string, unknown>) => {
+    const data = await bearerFetch(GEN_URL, payload);
+    if ((data as any)?.error) throw new Error((data as any).error);
+    return data as any;
+  };
 
   const generate = async () => {
     if (!topic.trim()) {
@@ -130,22 +171,17 @@ const TextGenerator = () => {
     setOutput(null);
     setMeta(null);
     try {
-      const supabase = await getSupabase();
-      const { data, error } = await supabase.functions.invoke("generate-text", {
-        body: {
-          textType,
-          topic,
-          targetKeyword: keyword || undefined,
-          context: context || undefined,
-          minLength: minLength ? Number(minLength) : undefined,
-          maxLength: maxLength ? Number(maxLength) : undefined,
-          outputFormat: "json",
-        },
+      const data = await runGenerate({
+        textType,
+        topic,
+        targetKeyword: keyword || undefined,
+        context: context || undefined,
+        minLength: minLength ? Number(minLength) : undefined,
+        maxLength: maxLength ? Number(maxLength) : undefined,
+        outputFormat: "json",
       });
-      if (error) throw error;
-      if ((data as any)?.error) throw new Error((data as any).error);
-      setOutput((data as any).content);
-      setMeta((data as any).metadata);
+      setOutput(data.content);
+      setMeta(data.metadata);
       toast.success("Text genererad");
     } catch (e: any) {
       toast.error(e.message || "Misslyckades");
@@ -156,23 +192,26 @@ const TextGenerator = () => {
 
   const saveToLibrary = async () => {
     if (!output) return;
-    const supabase = await getSupabase();
-    const { error } = await supabase.from("text_library").insert({
-      text_type: textType,
-      topic,
-      target_keyword: keyword || null,
-      context: context || null,
-      generated_content: output as any,
-      word_count: meta?.wordCount ?? null,
-      character_count: meta?.characterCount ?? null,
-      regeneration_count: meta?.regenerationCount ?? 0,
-      blocked_phrases_found: meta?.blockedPhrasesFound ?? [],
-      status: "draft",
-    });
-    if (error) toast.error(error.message);
-    else {
+    try {
+      await bearerFetch(LIB_URL, {
+        action: "insert",
+        row: {
+          text_type: textType,
+          topic,
+          target_keyword: keyword || null,
+          context: context || null,
+          generated_content: output,
+          word_count: meta?.wordCount ?? null,
+          character_count: meta?.characterCount ?? null,
+          regeneration_count: meta?.regenerationCount ?? 0,
+          blocked_phrases_found: meta?.blockedPhrasesFound ?? [],
+          status: "draft",
+        },
+      });
       toast.success("Sparad i biblioteket");
       loadLibrary();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Misslyckades");
     }
   };
 
@@ -183,31 +222,31 @@ const TextGenerator = () => {
   };
 
   const rate = async (id: string, rating: number) => {
-    const supabase = await getSupabase();
-    const { error } = await supabase
-      .from("text_library")
-      .update({ quality_rating: rating })
-      .eq("id", id);
-    if (error) toast.error(error.message);
-    else loadLibrary();
+    try {
+      await bearerFetch(LIB_URL, { action: "update", id, patch: { quality_rating: rating } });
+      loadLibrary();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Misslyckades");
+    }
   };
 
   const setStatus = async (id: string, status: string) => {
-    const supabase = await getSupabase();
-    const { error } = await supabase
-      .from("text_library")
-      .update({ status })
-      .eq("id", id);
-    if (error) toast.error(error.message);
-    else loadLibrary();
+    try {
+      await bearerFetch(LIB_URL, { action: "update", id, patch: { status } });
+      loadLibrary();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Misslyckades");
+    }
   };
 
   const remove = async (id: string) => {
     if (!confirm("Ta bort denna text?")) return;
-    const supabase = await getSupabase();
-    const { error } = await supabase.from("text_library").delete().eq("id", id);
-    if (error) toast.error(error.message);
-    else loadLibrary();
+    try {
+      await bearerFetch(LIB_URL, { action: "delete", id });
+      loadLibrary();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Misslyckades");
+    }
   };
 
   const filteredLibrary = useMemo(() => {
@@ -219,34 +258,29 @@ const TextGenerator = () => {
     });
   }, [library, filterType, search]);
 
-  // Quick actions
   const quickGenerate = async (jobs: Array<{ textType: string; topic: string; context?: string }>) => {
     setLoading(true);
     let success = 0;
-    const supabase = await getSupabase();
     for (const job of jobs) {
       try {
-        const { data, error } = await supabase.functions.invoke("generate-text", {
-          body: { ...job, outputFormat: "json" },
-        });
-        if (error) throw error;
-        if ((data as any)?.error) throw new Error((data as any).error);
-        const content = (data as any).content;
-        const m = (data as any).metadata;
-        await supabase.from("text_library").insert({
-          text_type: job.textType,
-          topic: job.topic,
-          context: job.context ?? null,
-          generated_content: content,
-          word_count: m?.wordCount ?? null,
-          character_count: m?.characterCount ?? null,
-          regeneration_count: m?.regenerationCount ?? 0,
-          blocked_phrases_found: m?.blockedPhrasesFound ?? [],
-          status: "draft",
+        const data = await runGenerate({ ...job, outputFormat: "json" });
+        await bearerFetch(LIB_URL, {
+          action: "insert",
+          row: {
+            text_type: job.textType,
+            topic: job.topic,
+            context: job.context ?? null,
+            generated_content: data.content,
+            word_count: data.metadata?.wordCount ?? null,
+            character_count: data.metadata?.characterCount ?? null,
+            regeneration_count: data.metadata?.regenerationCount ?? 0,
+            blocked_phrases_found: data.metadata?.blockedPhrasesFound ?? [],
+            status: "draft",
+          },
         });
         success++;
         toast.success(`(${success}/${jobs.length}) ${job.topic}`);
-      } catch (e: any) {
+      } catch {
         toast.error(`Misslyckades: ${job.topic}`);
       }
     }
@@ -283,39 +317,23 @@ const TextGenerator = () => {
   const generateMonthlyArticles = () => {
     const month = new Date().toLocaleDateString("sv-SE", { month: "long", year: "numeric" });
     return quickGenerate([
-      {
-        textType: "article",
-        topic: `Så väljer du rätt webbyrå i Linköping 2026`,
-        context: `Lokal SEO-artikel för ${month}. Keyword: webbbyrå linköping. Ska ranka lokalt och driva leads.`,
-      },
-      {
-        textType: "article",
-        topic: `AI-byggda hemsidor vs traditionell webbutveckling`,
-        context: `Jämförande artikel för ${month}. Förklara fördelar/nackdelar utan hype. Keyword: ai hemsida.`,
-      },
-      {
-        textType: "article",
-        topic: `SEO för småföretag: 5 saker som faktiskt funkar 2026`,
-        context: `Praktisk how-to för ${month}. Keyword: seo småföretag. Inga floskler, konkreta steg.`,
-      },
-      {
-        textType: "article",
-        topic: `Vad en hemsida bör kosta – ärlig prisguide`,
-        context: `Transparent prisartikel för ${month}. Visa Aurora Medias 15% admin-avgift och nämn intervall 4 900–50 000 kr.`,
-      },
+      { textType: "article", topic: `Så väljer du rätt webbyrå i Linköping 2026`, context: `Lokal SEO-artikel för ${month}. Keyword: webbbyrå linköping.` },
+      { textType: "article", topic: `AI-byggda hemsidor vs traditionell webbutveckling`, context: `Jämförande artikel för ${month}. Keyword: ai hemsida.` },
+      { textType: "article", topic: `SEO för småföretag: 5 saker som faktiskt funkar 2026`, context: `Praktisk how-to för ${month}. Keyword: seo småföretag.` },
+      { textType: "article", topic: `Vad en hemsida bör kosta – ärlig prisguide`, context: `Transparent prisartikel för ${month}. 15% admin-avgift, intervall 4 900–50 000 kr.` },
     ]);
   };
 
   const generateMobileAppArticles = () =>
     quickGenerate([
-      { textType: "article", topic: "Capacitor vs React Native 2026 – vilket ska jag välja?", context: "Jämförelse för utvecklare och produktägare. Keyword: capacitor vs react native." },
-      { textType: "article", topic: "Vad kostar det att göra en app för iOS och Android 2026?", context: "Transparent prisartikel. Aurora Media erbjuder Capacitor från 24 900 kr." },
-      { textType: "article", topic: "Från webb-SaaS till app – steg för steg-guide", context: "Praktisk guide. Hur man paketerar React-app som iOS/Android via Capacitor." },
-      { textType: "article", topic: "Apple Developer Program – så här sätter du upp det", context: "Praktisk how-to för svenska företag. 99 USD/år, betalningsdetaljer, certifikat." },
-      { textType: "article", topic: "Google Play Console vs App Store Connect – skillnader", context: "Jämförelse av butikernas inlämningsprocess." },
-      { textType: "article", topic: "Push-notiser i Capacitor-appar – praktisk guide", context: "OneSignal vs Firebase vs APN. För utvecklare." },
-      { textType: "article", topic: "In-app purchase eller Stripe? Så väljer du rätt betalningsmodell", context: "15-30% Apple/Google fee vs Stripe. När gäller vad?" },
-      { textType: "article", topic: "PWA eller native app – när räcker det med en PWA?", context: "Pragmatisk guide. När duger PWA, när behövs riktig app?" },
+      { textType: "article", topic: "Capacitor vs React Native 2026 – vilket ska jag välja?", context: "Jämförelse för utvecklare och produktägare." },
+      { textType: "article", topic: "Vad kostar det att göra en app för iOS och Android 2026?", context: "Transparent prisartikel. Capacitor från 24 900 kr." },
+      { textType: "article", topic: "Från webb-SaaS till app – steg för steg-guide", context: "Praktisk guide via Capacitor." },
+      { textType: "article", topic: "Apple Developer Program – så här sätter du upp det", context: "99 USD/år, certifikat." },
+      { textType: "article", topic: "Google Play Console vs App Store Connect – skillnader", context: "Jämförelse av inlämningsprocess." },
+      { textType: "article", topic: "Push-notiser i Capacitor-appar – praktisk guide", context: "OneSignal vs Firebase vs APN." },
+      { textType: "article", topic: "In-app purchase eller Stripe? Så väljer du rätt betalningsmodell", context: "15-30% Apple/Google fee vs Stripe." },
+      { textType: "article", topic: "PWA eller native app – när räcker det med en PWA?", context: "Pragmatisk guide." },
     ]);
 
   if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;
@@ -332,7 +350,7 @@ const TextGenerator = () => {
             variant="ghost"
             size="sm"
             onClick={() => {
-              sessionStorage.removeItem(STORAGE_KEY);
+              sessionStorage.removeItem(ADMIN_STORAGE_KEY);
               setUnlocked(false);
             }}
           >
@@ -342,7 +360,6 @@ const TextGenerator = () => {
       </header>
 
       <div className="container mx-auto px-6 py-8 space-y-8">
-        {/* Quick actions */}
         <section className="rounded-xl border border-border bg-card p-6">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-4 w-4 text-primary" />
@@ -365,21 +382,16 @@ const TextGenerator = () => {
         </section>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Input */}
           <section className="rounded-xl border border-border bg-card p-6 space-y-4">
             <h2 className="font-serif text-lg">Generera text</h2>
 
             <div className="space-y-2">
               <Label>Typ av text</Label>
               <Select value={textType} onValueChange={setTextType}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
+                <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {TEXT_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
-                      {t.label}
-                    </SelectItem>
+                    <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -397,32 +409,17 @@ const TextGenerator = () => {
 
             <div className="space-y-2">
               <Label>Extra kontext</Label>
-              <Textarea
-                value={context}
-                onChange={(e) => setContext(e.target.value)}
-                placeholder="Pris, tidslinje, specifik kund eller produkt..."
-                rows={3}
-              />
+              <Textarea value={context} onChange={(e) => setContext(e.target.value)} placeholder="Pris, tidslinje, specifik kund eller produkt..." rows={3} />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label>Min längd (tecken)</Label>
-                <Input
-                  type="number"
-                  value={minLength}
-                  onChange={(e) => setMinLength(e.target.value)}
-                  placeholder="valfritt"
-                />
+                <Input type="number" value={minLength} onChange={(e) => setMinLength(e.target.value)} placeholder="valfritt" />
               </div>
               <div className="space-y-2">
                 <Label>Max längd (tecken)</Label>
-                <Input
-                  type="number"
-                  value={maxLength}
-                  onChange={(e) => setMaxLength(e.target.value)}
-                  placeholder="valfritt"
-                />
+                <Input type="number" value={maxLength} onChange={(e) => setMaxLength(e.target.value)} placeholder="valfritt" />
               </div>
             </div>
 
@@ -431,7 +428,6 @@ const TextGenerator = () => {
             </Button>
           </section>
 
-          {/* Output */}
           <section className="rounded-xl border border-border bg-card p-6 space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="font-serif text-lg">Output</h2>
@@ -465,43 +461,30 @@ const TextGenerator = () => {
             {output && (
               <div className="flex flex-wrap gap-2">
                 <Button onClick={generate} disabled={loading} variant="outline" size="sm">
-                  <RotateCw className="mr-2 h-4 w-4" />
-                  Kör om
+                  <RotateCw className="mr-2 h-4 w-4" /> Kör om
                 </Button>
                 <Button onClick={copyOutput} variant="outline" size="sm">
-                  <Copy className="mr-2 h-4 w-4" />
-                  Kopiera
+                  <Copy className="mr-2 h-4 w-4" /> Kopiera
                 </Button>
                 <Button onClick={saveToLibrary} size="sm">
-                  <Save className="mr-2 h-4 w-4" />
-                  Spara i bibliotek
+                  <Save className="mr-2 h-4 w-4" /> Spara i bibliotek
                 </Button>
               </div>
             )}
           </section>
         </div>
 
-        {/* Library */}
         <section className="rounded-xl border border-border bg-card p-6 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <h2 className="font-serif text-lg">Textbibliotek ({library.length})</h2>
             <div className="flex gap-2 flex-wrap">
-              <Input
-                placeholder="Sök ämne..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-48"
-              />
+              <Input placeholder="Sök ämne..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-48" />
               <Select value={filterType} onValueChange={setFilterType}>
-                <SelectTrigger className="w-44">
-                  <SelectValue />
-                </SelectTrigger>
+                <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Alla typer</SelectItem>
                   {TEXT_TYPES.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>
-                      {t.label}
-                    </SelectItem>
+                    <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -565,8 +548,7 @@ const TextGenerator = () => {
                     variant="outline"
                     onClick={() => navigator.clipboard.writeText(JSON.stringify(row.generated_content, null, 2))}
                   >
-                    <Copy className="mr-2 h-3 w-3" />
-                    Kopiera
+                    <Copy className="mr-2 h-3 w-3" /> Kopiera
                   </Button>
                   {row.status !== "published" && (
                     <Button size="sm" variant="outline" onClick={() => setStatus(row.id, "published")}>
