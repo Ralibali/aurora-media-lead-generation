@@ -259,9 +259,8 @@ const HeroSection = () => (
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: .8, delay: .3 }}
         >
-          Jag bygger interna system, AI-automationer och SaaS åt svenska småföretag.
-          Fast pris. Kod ni äger själva.
-
+          Jag bygger interna AI-system och automatiseringar åt svenska småföretag.
+          Fast pris. Ingen bindningstid. Kod ni äger själva.
         </motion.p>
         <motion.div
           className="vk-hero-cta"

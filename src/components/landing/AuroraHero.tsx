@@ -96,17 +96,16 @@ const AuroraHero = () => {
           </span>
 
           <h1 className="mt-6 font-display text-[clamp(2.6rem,6vw,4.6rem)] font-bold leading-[1.02] tracking-tight text-foreground">
-            Idén finns.
+            Interna AI-system
             <br />
             <span className="italic font-medium text-primary" style={{ fontFamily: "'Instrument Serif', serif", fontWeight: 600 }}>
-              Vi bygger
-            </span>{" "}
-            systemet.
+              som gör jobbet.
+            </span>
           </h1>
 
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Aurora Media bygger SaaS, appar, AI-lösningar och skräddarsydda system för företag som vill växa snabbare,
-            effektivisera arbetet och ersätta manuella rutiner med smarta digitala flöden.
+            Jag bygger interna AI-system och automatiseringar åt svenska småföretag.
+            Fast pris, ingen bindningstid och kod ni äger själva.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
