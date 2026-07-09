@@ -136,43 +136,90 @@ export const VkNav = () => {
 
 /* ────────── Signature animation ────────── */
 
-const PROMPTS = [
-  "Bygg ett dispatchsystem för vårt åkeri – körorder, schema, Fortnox-fakturering.",
-  "Automatisera vår offertprocess så att förfrågningar från mejl blir färdiga PDF-offerter.",
-  "Skapa en intern AI-assistent som svarar på frågor om våra produkter och priser.",
-  "Koppla ihop vår bokning med SMS-påminnelser och en enkel admin-panel.",
-  "Bygg ett lagerhanteringssystem som skannar inleveranser och varnar vid lågt saldo.",
-  "Gör en dashboard som hämtar data från Fortnox och visar lönsamhet per kund.",
+type Scene = {
+  prompt: string;
+  card: { label: string; value: string; meta: string };
+  row1: { left: string; mid: string; right: string };
+  row2: { left: string; mid: string; right: string };
+  badge: string;
+};
+
+const SCENES: Scene[] = [
+  {
+    prompt: "Bygg ett dispatchsystem för vårt åkeri – körorder, schema, Fortnox-fakturering.",
+    card: { label: "Körorder #214", value: "Linköping → Jönköping", meta: "07:40" },
+    row1: { left: "Chaufför · A. Lund", mid: "18 t", right: "OK" },
+    row2: { left: "Faktura #F-2214", mid: "14 250 kr", right: "Skickad" },
+    badge: "Fakturerad via Fortnox",
+  },
+  {
+    prompt: "Automatisera vår offertprocess så att förfrågningar från mejl blir färdiga PDF-offerter.",
+    card: { label: "Förfrågan #892", value: "Nybygg villa · Berg AB", meta: "09:12" },
+    row1: { left: "Kalkyl · 42 poster", mid: "3 s", right: "Klar" },
+    row2: { left: "Offert #O-2214", mid: "186 400 kr", right: "PDF" },
+    badge: "Skickad till kund",
+  },
+  {
+    prompt: "Skapa en intern AI-assistent som svarar på frågor om våra produkter och priser.",
+    card: { label: "Fråga #1042", value: "Pris på pumpmodell X-200?", meta: "14:03" },
+    row1: { left: "Källa · Prislista v12", mid: "0,8 s", right: "Match" },
+    row2: { left: "Svar · 12 480 kr/st", mid: "lager 34", right: "OK" },
+    badge: "Besvarad av intern AI",
+  },
+  {
+    prompt: "Koppla ihop vår bokning med SMS-påminnelser och en enkel admin-panel.",
+    card: { label: "Bokning #558", value: "Klippning · M. Ek", meta: "16:30" },
+    row1: { left: "SMS · 24 h innan", mid: "queued", right: "OK" },
+    row2: { left: "SMS · 1 h innan", mid: "queued", right: "OK" },
+    badge: "Påminnelser aktiva",
+  },
+  {
+    prompt: "Bygg ett lagerhanteringssystem som skannar inleveranser och varnar vid lågt saldo.",
+    card: { label: "Inleverans #77", value: "Pall · 240 enheter", meta: "11:15" },
+    row1: { left: "Artikel · SKU-4410", mid: "+240", right: "Bokförd" },
+    row2: { left: "Saldo · SKU-1180", mid: "6 st", right: "Lågt" },
+    badge: "Beställning triggad",
+  },
+  {
+    prompt: "Gör en dashboard som hämtar data från Fortnox och visar lönsamhet per kund.",
+    card: { label: "Kund · Nord AB", value: "TB-marginal 34 %", meta: "Q3" },
+    row1: { left: "Intäkter", mid: "428 900 kr", right: "↑" },
+    row2: { left: "Kostnader", mid: "283 100 kr", right: "OK" },
+    badge: "Uppdaterad från Fortnox",
+  },
 ];
 
 const Signature = () => {
   const reduce = useReducedMotion();
-  const [text, setText] = useState(reduce ? PROMPTS[0] : "");
+  const [idx, setIdx] = useState(0);
+  const [text, setText] = useState(reduce ? SCENES[0].prompt : "");
   const [stage, setStage] = useState(reduce ? 4 : 0);
+  const scene = SCENES[idx];
 
   useEffect(() => {
     if (reduce) return;
     let cancelled = false;
-    let idx = 0;
+    let i = 0;
     const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
     const run = async () => {
       while (!cancelled) {
-        const prompt = PROMPTS[idx];
+        const s = SCENES[i];
+        setIdx(i);
         setText("");
         setStage(0);
-        for (let i = 0; i <= prompt.length; i++) {
+        for (let j = 0; j <= s.prompt.length; j++) {
           if (cancelled) return;
           await sleep(22);
-          setText(prompt.slice(0, i));
+          setText(s.prompt.slice(0, j));
         }
-        for (let s = 1; s <= 4; s++) {
+        for (let st = 1; st <= 4; st++) {
           if (cancelled) return;
           await sleep(550);
-          setStage(s);
+          setStage(st);
         }
         await sleep(4200);
-        idx = (idx + 1) % PROMPTS.length;
+        i = (i + 1) % SCENES.length;
       }
     };
 
@@ -186,58 +233,62 @@ const Signature = () => {
         {text}<span className="vk-sig-caret">&nbsp;</span>
       </div>
       <div className="vk-sig-ui">
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {stage >= 1 && (
             <motion.div
-              key="c1"
+              key={`c1-${idx}`}
               className="vk-sig-card"
               initial={{ opacity: 0, y: 12, scale: .96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
             >
               <div>
-                <div className="label">Körorder #214</div>
-                <div className="val" style={{ marginTop: 4 }}>Linköping → Jönköping</div>
+                <div className="label">{scene.card.label}</div>
+                <div className="val" style={{ marginTop: 4 }}>{scene.card.value}</div>
               </div>
-              <div className="vk-mono" style={{ fontSize: 12 }}>07:40</div>
+              <div className="vk-mono" style={{ fontSize: 12 }}>{scene.card.meta}</div>
             </motion.div>
           )}
           {stage >= 2 && (
             <motion.div
-              key="c2"
+              key={`c2-${idx}`}
               className="vk-sig-row"
               initial={{ opacity: 0, y: 12, scale: .96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
             >
-              <span>Chaufför · A. Lund</span>
-              <span className="vk-mono" style={{ fontSize: 11 }}>18 t</span>
-              <span className="vk-mono" style={{ fontSize: 11, color: "var(--gran)" }}>OK</span>
+              <span>{scene.row1.left}</span>
+              <span className="vk-mono" style={{ fontSize: 11 }}>{scene.row1.mid}</span>
+              <span className="vk-mono" style={{ fontSize: 11, color: "var(--gran)" }}>{scene.row1.right}</span>
             </motion.div>
           )}
           {stage >= 3 && (
             <motion.div
-              key="c3"
+              key={`c3-${idx}`}
               className="vk-sig-row"
               initial={{ opacity: 0, y: 12, scale: .96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
             >
-              <span>Faktura #F-2214</span>
-              <span className="vk-mono" style={{ fontSize: 11 }}>14 250 kr</span>
-              <span className="vk-mono" style={{ fontSize: 11, color: "var(--gran)" }}>Skickad</span>
+              <span>{scene.row2.left}</span>
+              <span className="vk-mono" style={{ fontSize: 11 }}>{scene.row2.mid}</span>
+              <span className="vk-mono" style={{ fontSize: 11, color: "var(--gran)" }}>{scene.row2.right}</span>
             </motion.div>
           )}
           {stage >= 4 && (
             <motion.div
-              key="badge"
+              key={`badge-${idx}`}
               initial={{ opacity: 0, scale: .8 }}
               animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ type: "spring", stiffness: 320, damping: 20 }}
               style={{ marginTop: 4 }}
             >
               <span className="vk-sig-badge">
-                <Check size={12} strokeWidth={3} /> Fakturerad via Fortnox
+                <Check size={12} strokeWidth={3} /> {scene.badge}
               </span>
             </motion.div>
           )}
@@ -246,6 +297,7 @@ const Signature = () => {
     </div>
   );
 };
+
 
 /* ────────── Sections ────────── */
 
