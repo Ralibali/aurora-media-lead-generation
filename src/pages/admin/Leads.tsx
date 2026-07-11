@@ -174,33 +174,48 @@ const Leads = () => {
 
   const fetchLeads = async (pwd?: string) => {
     const usePwd = pwd ?? password;
+    if (!usePwd) {
+      setError("Ange lösenord för att logga in.");
+      return;
+    }
     setLoading(true);
     setError(null);
+    let res: Response;
     try {
-      const res = await fetch(FUNCTION_URL, {
+      res = await fetch(FUNCTION_URL, {
         method: "POST",
         headers: { Authorization: `Bearer ${usePwd}`, "Content-Type": "application/json" },
         body: JSON.stringify({ action: "list" }),
       });
-      if (res.status === 401) {
-        sessionStorage.removeItem(STORAGE_KEY);
-        setAuthed(false);
-        setLeads([]);
-        setError("Fel lösenord.");
-        return;
-      }
-      if (!res.ok) throw new Error(await res.text());
+    } catch (e) {
+      setLoading(false);
+      setError(`Nätverksfel — kunde inte nå servern. (${e instanceof Error ? e.message : "okänt fel"})`);
+      return;
+    }
+    setLoading(false);
+    if (res.status === 401 || res.status === 403) {
+      sessionStorage.removeItem(STORAGE_KEY);
+      setAuthed(false);
+      setLeads([]);
+      setError("Fel lösenord. Kontrollera och försök igen.");
+      return;
+    }
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      setError(`Serverfel (HTTP ${res.status}).${body ? ` ${body.slice(0, 200)}` : ""}`);
+      return;
+    }
+    try {
       const json = await res.json();
       setLeads(json.leads ?? []);
       setStats(json.stats ?? null);
       setAuthed(true);
       sessionStorage.setItem(STORAGE_KEY, usePwd);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Något gick fel");
-    } finally {
-      setLoading(false);
+      setError(`Ogiltigt svar från servern. (${e instanceof Error ? e.message : "okänt"})`);
     }
   };
+
 
   useEffect(() => {
     if (password) fetchLeads(password);
