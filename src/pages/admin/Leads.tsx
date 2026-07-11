@@ -121,12 +121,14 @@ const csvEscape = (v: unknown) => {
 };
 
 const Leads = () => {
+  const isMobile = useIsMobile();
   const [password, setPassword] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? "");
   const [authed, setAuthed] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loginTouched, setLoginTouched] = useState(false);
 
   const [query, setQuery] = useState("");
   const [sourceFilter, setSourceFilter] = useState<"all" | Source>("all");
@@ -135,11 +137,13 @@ const Leads = () => {
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [datePreset, setDatePreset] = useState<"all" | "today" | "7d" | "30d" | "custom">("all");
+  const dateRangeInvalid = !!(dateFrom && dateTo && dateFrom > dateTo);
 
 
   const [openId, setOpenId] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ processes: Process[] } | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+
 
   useEffect(() => {
     setSEOMeta({
