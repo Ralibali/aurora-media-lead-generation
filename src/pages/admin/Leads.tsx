@@ -1045,12 +1045,12 @@ const DetailDrawer = ({
       <aside
         style={{
           position: "relative",
-          width: "min(560px, 100%)",
+          width: isMobile ? "100%" : "min(560px, 100%)",
           height: "100%",
           background: "var(--bjork)",
           borderLeft: "1px solid var(--linje)",
           overflowY: "auto",
-          padding: "28px 28px 60px",
+          padding: isMobile ? "20px 16px 60px" : "28px 28px 60px",
           fontFamily: "var(--font-sans)",
         }}
       >
@@ -1065,7 +1065,7 @@ const DetailDrawer = ({
           </button>
         </div>
 
-        <h2 style={{ marginTop: 16, fontSize: 28 }}>{lead.name}</h2>
+        <h2 style={{ marginTop: 16, fontSize: isMobile ? 22 : 28, lineHeight: 1.2, wordBreak: "break-word" }}>{lead.name}</h2>
         {lead.company && (
           <p style={{ margin: "4px 0 0", color: "var(--granbark-mut)" }}>{lead.company}</p>
         )}
@@ -1073,21 +1073,33 @@ const DetailDrawer = ({
           Registrerat {svDate(lead.created_at)}
         </p>
 
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 18 }}>
-          <a href={`mailto:${lead.email}`} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
-            <Mail size={14} /> {lead.email}
+        <div
+          style={{
+            display: isMobile ? "grid" : "flex",
+            gap: 8,
+            flexWrap: "wrap",
+            marginTop: 18,
+            gridTemplateColumns: isMobile ? "1fr" : undefined,
+          }}
+        >
+          <a
+            href={`mailto:${lead.email}`}
+            className="vk-btn vk-btn-ghost"
+            style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start", overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            <Mail size={14} /> <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{lead.email}</span>
           </a>
           {lead.phone && (
-            <a href={`tel:${lead.phone}`} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
+            <a href={`tel:${lead.phone}`} className="vk-btn vk-btn-ghost" style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start" }}>
               <Phone size={14} /> {lead.phone}
             </a>
           )}
           {lead.source === "karta" && (
             <>
-              <button onClick={copyShareLink} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
+              <button onClick={copyShareLink} className="vk-btn vk-btn-ghost" style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start" }}>
                 <Copy size={14} /> Kopiera kartlänk
               </button>
-              <button onClick={onResendMap} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
+              <button onClick={onResendMap} className="vk-btn vk-btn-ghost" style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start" }}>
                 <Send size={14} /> Skicka om kartmejlet
               </button>
             </>
@@ -1095,7 +1107,7 @@ const DetailDrawer = ({
         </div>
 
         {/* Status + followup */}
-        <div style={{ marginTop: 24, display: "grid", gap: 14, gridTemplateColumns: "1fr 1fr" }}>
+        <div style={{ marginTop: 24, display: "grid", gap: 14, gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
           <Field label="Status">
             <StatusSelect value={lead.status} onChange={(s) => onPatch({ status: s })} />
           </Field>
@@ -1104,19 +1116,27 @@ const DetailDrawer = ({
               type="date"
               value={followup}
               onChange={(e) => setFollowupAndSave(e.target.value)}
+              aria-describedby={followupPast ? "followup-warn" : undefined}
               style={{
                 width: "100%",
                 padding: "10px 12px",
                 background: "#fff",
-                border: "1px solid var(--linje)",
+                border: `1px solid ${followupPast ? "var(--varsel)" : "var(--linje)"}`,
                 borderRadius: 10,
                 fontFamily: "var(--font-sans)",
-                fontSize: 14,
+                fontSize: 16,
                 color: "var(--granbark)",
               }}
             />
+            {followupPast && (
+              <p id="followup-warn" style={{ margin: "6px 0 0", fontSize: 12, color: "var(--varsel-hover)", display: "flex", alignItems: "center", gap: 6 }}>
+                <AlertCircle size={12} /> Datumet ligger i det förflutna.
+              </p>
+            )}
           </Field>
         </div>
+
+
 
         {/* Fields */}
         <div style={{ marginTop: 24, display: "grid", gap: 12 }}>
