@@ -22,6 +22,21 @@ import "@/styles/verkstad.css";
 const STORAGE_KEY = "faq_analytics_pwd";
 const FUNCTION_URL = getFunctionUrl("list-leads");
 const RESEND_URL = getFunctionUrl("resend-ai-map-email");
+const NOTES_MAX = 2000;
+
+function useIsMobile(bp = 720) {
+  const [m, setM] = useState(() => (typeof window !== "undefined" ? window.innerWidth < bp : false));
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`);
+    const h = (e: MediaQueryListEvent | MediaQueryList) => setM((e as MediaQueryList).matches);
+    h(mq);
+    mq.addEventListener("change", h as (e: MediaQueryListEvent) => void);
+    return () => mq.removeEventListener("change", h as (e: MediaQueryListEvent) => void);
+  }, [bp]);
+  return m;
+}
+
+const isValidEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
 type Source = "karta" | "kontakt" | "genomlysning";
 type Status = "ny" | "kontaktad" | "mote_bokat" | "offert_skickad" | "kund" | "forlorad";
@@ -106,12 +121,14 @@ const csvEscape = (v: unknown) => {
 };
 
 const Leads = () => {
+  const isMobile = useIsMobile();
   const [password, setPassword] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? "");
   const [authed, setAuthed] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loginTouched, setLoginTouched] = useState(false);
 
   const [query, setQuery] = useState("");
   const [sourceFilter, setSourceFilter] = useState<"all" | Source>("all");
@@ -120,11 +137,13 @@ const Leads = () => {
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
   const [datePreset, setDatePreset] = useState<"all" | "today" | "7d" | "30d" | "custom">("all");
+  const dateRangeInvalid = !!(dateFrom && dateTo && dateFrom > dateTo);
 
 
   const [openId, setOpenId] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ processes: Process[] } | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+
 
   useEffect(() => {
     setSEOMeta({
@@ -155,33 +174,48 @@ const Leads = () => {
 
   const fetchLeads = async (pwd?: string) => {
     const usePwd = pwd ?? password;
+    if (!usePwd) {
+      setError("Ange lösenord för att logga in.");
+      return;
+    }
     setLoading(true);
     setError(null);
+    let res: Response;
     try {
-      const res = await fetch(FUNCTION_URL, {
+      res = await fetch(FUNCTION_URL, {
         method: "POST",
         headers: { Authorization: `Bearer ${usePwd}`, "Content-Type": "application/json" },
         body: JSON.stringify({ action: "list" }),
       });
-      if (res.status === 401) {
-        sessionStorage.removeItem(STORAGE_KEY);
-        setAuthed(false);
-        setLeads([]);
-        setError("Fel lösenord.");
-        return;
-      }
-      if (!res.ok) throw new Error(await res.text());
+    } catch (e) {
+      setLoading(false);
+      setError(`Nätverksfel — kunde inte nå servern. (${e instanceof Error ? e.message : "okänt fel"})`);
+      return;
+    }
+    setLoading(false);
+    if (res.status === 401 || res.status === 403) {
+      sessionStorage.removeItem(STORAGE_KEY);
+      setAuthed(false);
+      setLeads([]);
+      setError("Fel lösenord. Kontrollera och försök igen.");
+      return;
+    }
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      setError(`Serverfel (HTTP ${res.status}).${body ? ` ${body.slice(0, 200)}` : ""}`);
+      return;
+    }
+    try {
       const json = await res.json();
       setLeads(json.leads ?? []);
       setStats(json.stats ?? null);
       setAuthed(true);
       sessionStorage.setItem(STORAGE_KEY, usePwd);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Något gick fel");
-    } finally {
-      setLoading(false);
+      setError(`Ogiltigt svar från servern. (${e instanceof Error ? e.message : "okänt"})`);
     }
   };
+
 
   useEffect(() => {
     if (password) fetchLeads(password);
@@ -332,48 +366,67 @@ const Leads = () => {
   };
 
   if (!authed) {
+    const pwdEmpty = loginTouched && !password.trim();
     return (
       <div
         className="verkstad"
-        style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}
+        style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 16 }}
       >
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            fetchLeads(password);
+            setLoginTouched(true);
+            if (!password.trim()) return;
+            fetchLeads(password.trim());
           }}
+          noValidate
           style={{
             width: "100%",
             maxWidth: 380,
             background: "#fff",
             border: "1px solid var(--linje)",
             borderRadius: 14,
-            padding: 28,
+            padding: "24px clamp(20px, 5vw, 28px)",
             display: "grid",
-            gap: 16,
+            gap: 14,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <Lock size={18} color="var(--gran)" />
-            <h1 style={{ fontSize: 22, margin: 0 }}>Leads · inloggning</h1>
+            <h1 style={{ fontSize: 20, margin: 0 }}>Leads · inloggning</h1>
           </div>
-          <input
-            type="password"
-            placeholder="Lösenord"
-            autoFocus
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px 14px",
-              border: "1px solid var(--linje)",
-              borderRadius: 8,
-              fontFamily: "var(--font-sans)",
-              fontSize: 15,
-            }}
-          />
-          {error && <p style={{ color: "var(--varsel-hover)", fontSize: 13, margin: 0 }}>{error}</p>}
-          <button type="submit" className="vk-btn vk-btn-primary" disabled={loading || !password}>
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="vk-mono" style={{ fontSize: 11, color: "var(--granbark-mut)" }}>LÖSENORD</span>
+            <input
+              type="password"
+              placeholder="Ange lösenord"
+              autoFocus
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => setLoginTouched(true)}
+              aria-invalid={pwdEmpty || undefined}
+              aria-describedby={pwdEmpty ? "pwd-err" : error ? "pwd-srv-err" : undefined}
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                border: `1px solid ${pwdEmpty ? "var(--varsel)" : "var(--linje)"}`,
+                borderRadius: 8,
+                fontFamily: "var(--font-sans)",
+                fontSize: 16, /* prevents iOS zoom */
+              }}
+            />
+            {pwdEmpty && (
+              <span id="pwd-err" style={{ color: "var(--varsel-hover)", fontSize: 12 }}>
+                Fältet får inte vara tomt.
+              </span>
+            )}
+          </label>
+          {error && !pwdEmpty && (
+            <p id="pwd-srv-err" role="alert" style={{ color: "var(--varsel-hover)", fontSize: 13, margin: 0 }}>{error}</p>
+          )}
+          <button type="submit" className="vk-btn vk-btn-primary" disabled={loading}>
+
             {loading ? <Loader2 size={16} className="animate-spin" /> : "Logga in"}
           </button>
         </form>
@@ -453,7 +506,14 @@ const Leads = () => {
               gridTemplateColumns: "1fr",
             }}
           >
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+            <div
+              style={{
+                display: "grid",
+                gap: 10,
+                gridTemplateColumns: isMobile ? "1fr" : "minmax(260px, 2fr) repeat(3, minmax(140px, 1fr))",
+                alignItems: "center",
+              }}
+            >
               <div
                 style={{
                   display: "flex",
@@ -463,7 +523,7 @@ const Leads = () => {
                   border: "1px solid var(--linje)",
                   borderRadius: 10,
                   padding: "8px 12px",
-                  flex: "1 1 260px",
+                  minWidth: 0,
                 }}
               >
                 <Search size={15} color="var(--granbark-mut)" />
@@ -471,13 +531,15 @@ const Leads = () => {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Sök namn, företag eller mejl"
+                  aria-label="Sök leads"
                   style={{
                     border: 0,
                     outline: 0,
                     background: "transparent",
                     width: "100%",
+                    minWidth: 0,
                     fontFamily: "var(--font-sans)",
-                    fontSize: 14,
+                    fontSize: 16,
                     color: "var(--granbark)",
                   }}
                 />
@@ -517,76 +579,98 @@ const Leads = () => {
               />
             </div>
 
+
             {/* Date range + presets */}
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {([
-                  { key: "all", label: "Alla" },
-                  { key: "today", label: "Idag" },
-                  { key: "7d", label: "7 dagar" },
-                  { key: "30d", label: "30 dagar" },
-                ] as const).map((p) => {
-                  const active = datePreset === p.key;
-                  return (
+            <div style={{ display: "grid", gap: 10 }}>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {([
+                    { key: "all", label: "Alla" },
+                    { key: "today", label: "Idag" },
+                    { key: "7d", label: "7 dagar" },
+                    { key: "30d", label: "30 dagar" },
+                  ] as const).map((p) => {
+                    const active = datePreset === p.key;
+                    return (
+                      <button
+                        key={p.key}
+                        type="button"
+                        onClick={() => applyDatePreset(p.key)}
+                        style={{
+                          padding: "8px 14px",
+                          borderRadius: 999,
+                          border: `1px solid ${active ? "var(--gran)" : "var(--linje)"}`,
+                          background: active ? "var(--gran)" : "#fff",
+                          color: active ? "#fff" : "var(--granbark)",
+                          fontSize: 13,
+                          fontFamily: "var(--font-mono)",
+                          cursor: "pointer",
+                          minHeight: 36,
+                        }}
+                      >
+                        {p.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div
+                  style={{
+                    display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
+                    background: "#fff",
+                    border: `1px solid ${dateRangeInvalid ? "var(--varsel)" : "var(--linje)"}`,
+                    borderRadius: 10, padding: "8px 10px",
+                    width: isMobile ? "100%" : "auto",
+                  }}
+                >
+                  <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>FRÅN</span>
+                    <input
+                      type="date"
+                      value={dateFrom}
+                      max={dateTo || undefined}
+                      onChange={(e) => { setDateFrom(e.target.value); setDatePreset("custom"); }}
+                      style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 14, color: "var(--granbark)", minWidth: 120 }}
+                    />
+                  </label>
+                  <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>TILL</span>
+                    <input
+                      type="date"
+                      value={dateTo}
+                      min={dateFrom || undefined}
+                      onChange={(e) => { setDateTo(e.target.value); setDatePreset("custom"); }}
+                      style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 14, color: "var(--granbark)", minWidth: 120 }}
+                    />
+                  </label>
+                  {(dateFrom || dateTo) && (
                     <button
-                      key={p.key}
-                      type="button"
-                      onClick={() => applyDatePreset(p.key)}
-                      style={{
-                        padding: "6px 12px",
-                        borderRadius: 999,
-                        border: `1px solid ${active ? "var(--gran)" : "var(--linje)"}`,
-                        background: active ? "var(--gran)" : "#fff",
-                        color: active ? "#fff" : "var(--granbark)",
-                        fontSize: 13,
-                        fontFamily: "var(--font-mono)",
-                        cursor: "pointer",
-                      }}
+                      onClick={() => { setDateFrom(""); setDateTo(""); setDatePreset("all"); }}
+                      aria-label="Rensa datum"
+                      style={{ border: 0, background: "transparent", cursor: "pointer", display: "flex", padding: 4 }}
                     >
-                      {p.label}
+                      <X size={14} color="var(--granbark-mut)" />
                     </button>
-                  );
-                })}
+                  )}
+                </div>
+                <div style={{ marginLeft: isMobile ? 0 : "auto", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 13, color: "var(--granbark-mut)", fontFamily: "var(--font-mono)" }}>
+                    {filtered.length} av {leads.length}
+                  </span>
+                  {activeFilterCount > 0 && (
+                    <button className="vk-btn vk-btn-ghost" onClick={clearFilters} style={{ fontSize: 13 }}>
+                      <X size={13} /> Rensa filter ({activeFilterCount})
+                    </button>
+                  )}
+                </div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", border: "1px solid var(--linje)", borderRadius: 10, padding: "6px 10px" }}>
-                <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>FRÅN</span>
-                <input
-                  type="date"
-                  value={dateFrom}
-                  max={dateTo || undefined}
-                  onChange={(e) => { setDateFrom(e.target.value); setDatePreset("custom"); }}
-                  style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--granbark)" }}
-                />
-                <span className="vk-mono" style={{ color: "var(--granbark-mut)", fontSize: 11 }}>TILL</span>
-                <input
-                  type="date"
-                  value={dateTo}
-                  min={dateFrom || undefined}
-                  onChange={(e) => { setDateTo(e.target.value); setDatePreset("custom"); }}
-                  style={{ border: 0, outline: 0, background: "transparent", fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--granbark)" }}
-                />
-                {(dateFrom || dateTo) && (
-                  <button
-                    onClick={() => { setDateFrom(""); setDateTo(""); setDatePreset("all"); }}
-                    aria-label="Rensa datum"
-                    style={{ border: 0, background: "transparent", cursor: "pointer", display: "flex" }}
-                  >
-                    <X size={13} color="var(--granbark-mut)" />
-                  </button>
-                )}
-              </div>
-              <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 13, color: "var(--granbark-mut)", fontFamily: "var(--font-mono)" }}>
-                  {filtered.length} av {leads.length}
-                </span>
-                {activeFilterCount > 0 && (
-                  <button className="vk-btn vk-btn-ghost" onClick={clearFilters} style={{ fontSize: 13 }}>
-                    <X size={13} /> Rensa filter ({activeFilterCount})
-                  </button>
-                )}
-              </div>
+              {dateRangeInvalid && (
+                <p role="alert" style={{ margin: 0, color: "var(--varsel-hover)", fontSize: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                  <AlertCircle size={12} /> "Från"-datumet måste vara samma dag eller före "Till"-datumet.
+                </p>
+              )}
             </div>
           </div>
+
 
 
           {error && (
@@ -625,6 +709,10 @@ const Leads = () => {
           onDelete={() => deleteLead(openLead)}
           onResendMap={async () => {
             if (openLead.source !== "karta") return;
+            if (!openLead.email || !isValidEmail(openLead.email)) {
+              toast.error("Kan inte skicka: mottagarens mejladress är ogiltig.");
+              return;
+            }
             const top3 = (detail?.processes ?? [])
               .slice()
               .sort((a, b) => b.score - a.score)
@@ -634,8 +722,9 @@ const Leads = () => {
                 potential: p.potential,
                 recommended_solution: p.recommended_solution,
               }));
+            let res: Response;
             try {
-              const res = await fetch(RESEND_URL, {
+              res = await fetch(RESEND_URL, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -649,12 +738,22 @@ const Leads = () => {
                   top3,
                 }),
               });
-              if (!res.ok) throw new Error(await res.text());
-              toast.success("Kartmejlet skickat");
             } catch (e) {
-              toast.error(e instanceof Error ? e.message : "Kunde inte skicka");
+              toast.error(`Nätverksfel — kunde inte nå servern. (${e instanceof Error ? e.message : "okänt"})`);
+              return;
             }
+            if (res.status === 401 || res.status === 403) {
+              toast.error("Sessionen har gått ut — logga in igen.");
+              return;
+            }
+            if (!res.ok) {
+              const body = await res.text().catch(() => "");
+              toast.error(`Serverfel (HTTP ${res.status}). ${body.slice(0, 160)}`);
+              return;
+            }
+            toast.success("Kartmejlet skickat");
           }}
+
         />
       )}
     </div>
@@ -678,6 +777,7 @@ const Select = ({
       background: "#fff",
       border: "1px solid var(--linje)",
       borderRadius: 10,
+      width: "100%",
     }}
   >
     <select
@@ -690,15 +790,18 @@ const Select = ({
         background: "transparent",
         padding: "10px 34px 10px 14px",
         fontFamily: "var(--font-sans)",
-        fontSize: 14,
+        fontSize: 16,
         color: "var(--granbark)",
         cursor: "pointer",
+        width: "100%",
+        minHeight: 40,
       }}
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>{o.label}</option>
       ))}
     </select>
+
     <ChevronDown
       size={14}
       color="var(--granbark-mut)"
@@ -887,9 +990,14 @@ const DetailDrawer = ({
   onDelete: () => void;
   onResendMap: () => void;
 }) => {
+  const isMobile = useIsMobile();
   const [notes, setNotes] = useState(lead.notes ?? "");
   const [followup, setFollowup] = useState(lead.followup_at ?? "");
+  const [notesSaving, setNotesSaving] = useState(false);
   const notesTimer = useRef<number | null>(null);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const notesOver = notes.length > NOTES_MAX;
+  const followupPast = !!(followup && followup < todayStr);
 
   useEffect(() => {
     setNotes(lead.notes ?? "");
@@ -898,9 +1006,14 @@ const DetailDrawer = ({
 
   const scheduleNotesSave = (val: string) => {
     setNotes(val);
+    if (val.length > NOTES_MAX) return; // don't autosave over-limit content
     if (notesTimer.current) window.clearTimeout(notesTimer.current);
+    setNotesSaving(true);
     notesTimer.current = window.setTimeout(() => {
-      onPatch({ notes: val || null }).then(() => toast.success("Anteckning sparad", { duration: 1200 }));
+      onPatch({ notes: val || null })
+        .then(() => toast.success("Anteckning sparad", { duration: 1200 }))
+        .catch(() => {})
+        .finally(() => setNotesSaving(false));
     }, 800);
   };
 
@@ -908,6 +1021,7 @@ const DetailDrawer = ({
     setFollowup(val);
     onPatch({ followup_at: val || null });
   };
+
 
   const copyShareLink = () => {
     // Ingen share_token finns i schemat; kopiera lead-id istället som referens.
@@ -931,12 +1045,12 @@ const DetailDrawer = ({
       <aside
         style={{
           position: "relative",
-          width: "min(560px, 100%)",
+          width: isMobile ? "100%" : "min(560px, 100%)",
           height: "100%",
           background: "var(--bjork)",
           borderLeft: "1px solid var(--linje)",
           overflowY: "auto",
-          padding: "28px 28px 60px",
+          padding: isMobile ? "20px 16px 60px" : "28px 28px 60px",
           fontFamily: "var(--font-sans)",
         }}
       >
@@ -951,7 +1065,7 @@ const DetailDrawer = ({
           </button>
         </div>
 
-        <h2 style={{ marginTop: 16, fontSize: 28 }}>{lead.name}</h2>
+        <h2 style={{ marginTop: 16, fontSize: isMobile ? 22 : 28, lineHeight: 1.2, wordBreak: "break-word" }}>{lead.name}</h2>
         {lead.company && (
           <p style={{ margin: "4px 0 0", color: "var(--granbark-mut)" }}>{lead.company}</p>
         )}
@@ -959,21 +1073,33 @@ const DetailDrawer = ({
           Registrerat {svDate(lead.created_at)}
         </p>
 
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 18 }}>
-          <a href={`mailto:${lead.email}`} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
-            <Mail size={14} /> {lead.email}
+        <div
+          style={{
+            display: isMobile ? "grid" : "flex",
+            gap: 8,
+            flexWrap: "wrap",
+            marginTop: 18,
+            gridTemplateColumns: isMobile ? "1fr" : undefined,
+          }}
+        >
+          <a
+            href={`mailto:${lead.email}`}
+            className="vk-btn vk-btn-ghost"
+            style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start", overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            <Mail size={14} /> <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{lead.email}</span>
           </a>
           {lead.phone && (
-            <a href={`tel:${lead.phone}`} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
+            <a href={`tel:${lead.phone}`} className="vk-btn vk-btn-ghost" style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start" }}>
               <Phone size={14} /> {lead.phone}
             </a>
           )}
           {lead.source === "karta" && (
             <>
-              <button onClick={copyShareLink} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
+              <button onClick={copyShareLink} className="vk-btn vk-btn-ghost" style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start" }}>
                 <Copy size={14} /> Kopiera kartlänk
               </button>
-              <button onClick={onResendMap} className="vk-btn vk-btn-ghost" style={{ padding: "10px 14px", fontSize: 13 }}>
+              <button onClick={onResendMap} className="vk-btn vk-btn-ghost" style={{ padding: "12px 14px", fontSize: 13, justifyContent: "flex-start" }}>
                 <Send size={14} /> Skicka om kartmejlet
               </button>
             </>
@@ -981,7 +1107,7 @@ const DetailDrawer = ({
         </div>
 
         {/* Status + followup */}
-        <div style={{ marginTop: 24, display: "grid", gap: 14, gridTemplateColumns: "1fr 1fr" }}>
+        <div style={{ marginTop: 24, display: "grid", gap: 14, gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
           <Field label="Status">
             <StatusSelect value={lead.status} onChange={(s) => onPatch({ status: s })} />
           </Field>
@@ -990,19 +1116,27 @@ const DetailDrawer = ({
               type="date"
               value={followup}
               onChange={(e) => setFollowupAndSave(e.target.value)}
+              aria-describedby={followupPast ? "followup-warn" : undefined}
               style={{
                 width: "100%",
                 padding: "10px 12px",
                 background: "#fff",
-                border: "1px solid var(--linje)",
+                border: `1px solid ${followupPast ? "var(--varsel)" : "var(--linje)"}`,
                 borderRadius: 10,
                 fontFamily: "var(--font-sans)",
-                fontSize: 14,
+                fontSize: 16,
                 color: "var(--granbark)",
               }}
             />
+            {followupPast && (
+              <p id="followup-warn" style={{ margin: "6px 0 0", fontSize: 12, color: "var(--varsel-hover)", display: "flex", alignItems: "center", gap: 6 }}>
+                <AlertCircle size={12} /> Datumet ligger i det förflutna.
+              </p>
+            )}
           </Field>
         </div>
+
+
 
         {/* Fields */}
         <div style={{ marginTop: 24, display: "grid", gap: 12 }}>
@@ -1073,26 +1207,47 @@ const DetailDrawer = ({
 
         {/* Anteckningar */}
         <section style={{ marginTop: 28 }}>
-          <p className="vk-mono">Anteckningar</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+            <p className="vk-mono" style={{ margin: 0 }}>Anteckningar</p>
+            <span
+              className="vk-mono"
+              style={{
+                fontSize: 11,
+                color: notesOver ? "var(--varsel-hover)" : "var(--granbark-mut)",
+              }}
+              aria-live="polite"
+            >
+              {notesSaving ? "Sparar…" : `${notes.length}/${NOTES_MAX}`}
+            </span>
+          </div>
           <textarea
             value={notes}
             onChange={(e) => scheduleNotesSave(e.target.value)}
             placeholder="Sparas automatiskt…"
             rows={6}
+            maxLength={NOTES_MAX + 200}
+            aria-invalid={notesOver || undefined}
+            aria-describedby={notesOver ? "notes-err" : undefined}
             style={{
               marginTop: 8,
               width: "100%",
               padding: "12px 14px",
               background: "#fff",
-              border: "1px solid var(--linje)",
+              border: `1px solid ${notesOver ? "var(--varsel)" : "var(--linje)"}`,
               borderRadius: 10,
               fontFamily: "var(--font-sans)",
-              fontSize: 14,
+              fontSize: 16,
               color: "var(--granbark)",
               resize: "vertical",
             }}
           />
+          {notesOver && (
+            <p id="notes-err" role="alert" style={{ margin: "6px 0 0", fontSize: 12, color: "var(--varsel-hover)", display: "flex", alignItems: "center", gap: 6 }}>
+              <AlertCircle size={12} /> Max {NOTES_MAX} tecken — korta ner texten för att spara automatiskt.
+            </p>
+          )}
         </section>
+
 
         <div style={{ marginTop: 32, borderTop: "1px solid var(--linje)", paddingTop: 20 }}>
           <button
