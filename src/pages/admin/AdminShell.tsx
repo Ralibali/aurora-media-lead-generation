@@ -15,6 +15,8 @@ import {
   Inbox,
   Menu,
   X,
+  Sparkles,
+  BarChart3,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { getFunctionUrl } from "@/lib/functionUrl";
