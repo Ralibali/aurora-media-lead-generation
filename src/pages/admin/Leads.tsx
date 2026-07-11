@@ -506,7 +506,14 @@ const Leads = () => {
               gridTemplateColumns: "1fr",
             }}
           >
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+            <div
+              style={{
+                display: "grid",
+                gap: 10,
+                gridTemplateColumns: isMobile ? "1fr" : "minmax(260px, 2fr) repeat(3, minmax(140px, 1fr))",
+                alignItems: "center",
+              }}
+            >
               <div
                 style={{
                   display: "flex",
@@ -516,7 +523,7 @@ const Leads = () => {
                   border: "1px solid var(--linje)",
                   borderRadius: 10,
                   padding: "8px 12px",
-                  flex: "1 1 260px",
+                  minWidth: 0,
                 }}
               >
                 <Search size={15} color="var(--granbark-mut)" />
@@ -524,13 +531,15 @@ const Leads = () => {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Sök namn, företag eller mejl"
+                  aria-label="Sök leads"
                   style={{
                     border: 0,
                     outline: 0,
                     background: "transparent",
                     width: "100%",
+                    minWidth: 0,
                     fontFamily: "var(--font-sans)",
-                    fontSize: 14,
+                    fontSize: 16,
                     color: "var(--granbark)",
                   }}
                 />
@@ -569,6 +578,7 @@ const Leads = () => {
                 ]}
               />
             </div>
+
 
             {/* Date range + presets */}
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
