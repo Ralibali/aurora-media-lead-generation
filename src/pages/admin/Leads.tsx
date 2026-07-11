@@ -22,6 +22,21 @@ import "@/styles/verkstad.css";
 const STORAGE_KEY = "faq_analytics_pwd";
 const FUNCTION_URL = getFunctionUrl("list-leads");
 const RESEND_URL = getFunctionUrl("resend-ai-map-email");
+const NOTES_MAX = 2000;
+
+function useIsMobile(bp = 720) {
+  const [m, setM] = useState(() => (typeof window !== "undefined" ? window.innerWidth < bp : false));
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`);
+    const h = (e: MediaQueryListEvent | MediaQueryList) => setM((e as MediaQueryList).matches);
+    h(mq);
+    mq.addEventListener("change", h as (e: MediaQueryListEvent) => void);
+    return () => mq.removeEventListener("change", h as (e: MediaQueryListEvent) => void);
+  }, [bp]);
+  return m;
+}
+
+const isValidEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
 type Source = "karta" | "kontakt" | "genomlysning";
 type Status = "ny" | "kontaktad" | "mote_bokat" | "offert_skickad" | "kund" | "forlorad";
