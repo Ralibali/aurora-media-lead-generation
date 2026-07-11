@@ -366,48 +366,67 @@ const Leads = () => {
   };
 
   if (!authed) {
+    const pwdEmpty = loginTouched && !password.trim();
     return (
       <div
         className="verkstad"
-        style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}
+        style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 16 }}
       >
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            fetchLeads(password);
+            setLoginTouched(true);
+            if (!password.trim()) return;
+            fetchLeads(password.trim());
           }}
+          noValidate
           style={{
             width: "100%",
             maxWidth: 380,
             background: "#fff",
             border: "1px solid var(--linje)",
             borderRadius: 14,
-            padding: 28,
+            padding: "24px clamp(20px, 5vw, 28px)",
             display: "grid",
-            gap: 16,
+            gap: 14,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <Lock size={18} color="var(--gran)" />
-            <h1 style={{ fontSize: 22, margin: 0 }}>Leads · inloggning</h1>
+            <h1 style={{ fontSize: 20, margin: 0 }}>Leads · inloggning</h1>
           </div>
-          <input
-            type="password"
-            placeholder="Lösenord"
-            autoFocus
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px 14px",
-              border: "1px solid var(--linje)",
-              borderRadius: 8,
-              fontFamily: "var(--font-sans)",
-              fontSize: 15,
-            }}
-          />
-          {error && <p style={{ color: "var(--varsel-hover)", fontSize: 13, margin: 0 }}>{error}</p>}
-          <button type="submit" className="vk-btn vk-btn-primary" disabled={loading || !password}>
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="vk-mono" style={{ fontSize: 11, color: "var(--granbark-mut)" }}>LÖSENORD</span>
+            <input
+              type="password"
+              placeholder="Ange lösenord"
+              autoFocus
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => setLoginTouched(true)}
+              aria-invalid={pwdEmpty || undefined}
+              aria-describedby={pwdEmpty ? "pwd-err" : error ? "pwd-srv-err" : undefined}
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                border: `1px solid ${pwdEmpty ? "var(--varsel)" : "var(--linje)"}`,
+                borderRadius: 8,
+                fontFamily: "var(--font-sans)",
+                fontSize: 16, /* prevents iOS zoom */
+              }}
+            />
+            {pwdEmpty && (
+              <span id="pwd-err" style={{ color: "var(--varsel-hover)", fontSize: 12 }}>
+                Fältet får inte vara tomt.
+              </span>
+            )}
+          </label>
+          {error && !pwdEmpty && (
+            <p id="pwd-srv-err" role="alert" style={{ color: "var(--varsel-hover)", fontSize: 13, margin: 0 }}>{error}</p>
+          )}
+          <button type="submit" className="vk-btn vk-btn-primary" disabled={loading}>
+
             {loading ? <Loader2 size={16} className="animate-spin" /> : "Logga in"}
           </button>
         </form>
