@@ -474,17 +474,18 @@ function AdminLayout({
             top: 0,
             left: 0,
             bottom: 0,
-            width: "min(280px, 80vw)",
+            width: "min(320px, 88vw)",
             background: "#14171A",
             color: "#fff",
             padding: "20px 16px",
             display: "flex",
             flexDirection: "column",
-            gap: 6,
+            gap: 14,
             transform: open ? "translateX(0)" : "translateX(-100%)",
             transition: "transform .25s ease",
             zIndex: 50,
             boxShadow: open ? "0 10px 40px rgba(0,0,0,.4)" : "none",
+            overflowY: "auto",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -501,10 +502,72 @@ function AdminLayout({
               <X size={18} />
             </button>
           </div>
-          <NavItems compact />
+
+          {/* Snabbmeny */}
+          <div>
+            <p style={{
+              fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em",
+              opacity: 0.5, margin: "0 0 8px", padding: "0 4px",
+            }}>
+              SNABBÅTKOMST
+            </p>
+            <div
+              role="navigation"
+              aria-label="Snabbmeny"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: 8,
+              }}
+            >
+              {QUICK.map((q) => {
+                const active = pathname === q.to || (q.to !== "/admin" && pathname.startsWith(q.to));
+                return (
+                  <NavLink
+                    key={q.to}
+                    to={q.to}
+                    onClick={() => setOpen(false)}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      justifyContent: "space-between",
+                      gap: 10,
+                      minHeight: 72,
+                      padding: "12px 14px",
+                      borderRadius: 12,
+                      textDecoration: "none",
+                      color: "#fff",
+                      background: active
+                        ? "linear-gradient(135deg, rgba(120,200,170,.22), rgba(120,200,170,.08))"
+                        : "rgba(255,255,255,.06)",
+                      border: `1px solid ${active ? "rgba(120,200,170,.45)" : "rgba(255,255,255,.08)"}`,
+                    }}
+                  >
+                    <q.icon size={20} />
+                    <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: ".01em" }}>{q.label}</span>
+                  </NavLink>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Full nav */}
+          <div style={{ display: "grid", gap: 4 }}>
+            <p style={{
+              fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em",
+              opacity: 0.5, margin: "0 0 4px", padding: "0 4px",
+            }}>
+              ALLA SEKTIONER
+            </p>
+            <NavItems compact />
+          </div>
+
           <div style={{ flex: 1 }} />
           <LogoutBtn />
         </aside>
+
+
 
         <main style={{ minWidth: 0, flex: 1 }}>
           <div className="vk-wrap" style={{ paddingBlock: 24, paddingInline: 16 }}>
