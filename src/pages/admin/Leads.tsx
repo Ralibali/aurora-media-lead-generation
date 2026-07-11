@@ -990,9 +990,14 @@ const DetailDrawer = ({
   onDelete: () => void;
   onResendMap: () => void;
 }) => {
+  const isMobile = useIsMobile();
   const [notes, setNotes] = useState(lead.notes ?? "");
   const [followup, setFollowup] = useState(lead.followup_at ?? "");
+  const [notesSaving, setNotesSaving] = useState(false);
   const notesTimer = useRef<number | null>(null);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const notesOver = notes.length > NOTES_MAX;
+  const followupPast = !!(followup && followup < todayStr);
 
   useEffect(() => {
     setNotes(lead.notes ?? "");
@@ -1001,9 +1006,14 @@ const DetailDrawer = ({
 
   const scheduleNotesSave = (val: string) => {
     setNotes(val);
+    if (val.length > NOTES_MAX) return; // don't autosave over-limit content
     if (notesTimer.current) window.clearTimeout(notesTimer.current);
+    setNotesSaving(true);
     notesTimer.current = window.setTimeout(() => {
-      onPatch({ notes: val || null }).then(() => toast.success("Anteckning sparad", { duration: 1200 }));
+      onPatch({ notes: val || null })
+        .then(() => toast.success("Anteckning sparad", { duration: 1200 }))
+        .catch(() => {})
+        .finally(() => setNotesSaving(false));
     }, 800);
   };
 
@@ -1011,6 +1021,7 @@ const DetailDrawer = ({
     setFollowup(val);
     onPatch({ followup_at: val || null });
   };
+
 
   const copyShareLink = () => {
     // Ingen share_token finns i schemat; kopiera lead-id istället som referens.
