@@ -777,6 +777,7 @@ const Select = ({
       background: "#fff",
       border: "1px solid var(--linje)",
       borderRadius: 10,
+      width: "100%",
     }}
   >
     <select
@@ -789,15 +790,18 @@ const Select = ({
         background: "transparent",
         padding: "10px 34px 10px 14px",
         fontFamily: "var(--font-sans)",
-        fontSize: 14,
+        fontSize: 16,
         color: "var(--granbark)",
         cursor: "pointer",
+        width: "100%",
+        minHeight: 40,
       }}
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>{o.label}</option>
       ))}
     </select>
+
     <ChevronDown
       size={14}
       color="var(--granbark-mut)"
