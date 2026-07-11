@@ -1207,26 +1207,47 @@ const DetailDrawer = ({
 
         {/* Anteckningar */}
         <section style={{ marginTop: 28 }}>
-          <p className="vk-mono">Anteckningar</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+            <p className="vk-mono" style={{ margin: 0 }}>Anteckningar</p>
+            <span
+              className="vk-mono"
+              style={{
+                fontSize: 11,
+                color: notesOver ? "var(--varsel-hover)" : "var(--granbark-mut)",
+              }}
+              aria-live="polite"
+            >
+              {notesSaving ? "Sparar…" : `${notes.length}/${NOTES_MAX}`}
+            </span>
+          </div>
           <textarea
             value={notes}
             onChange={(e) => scheduleNotesSave(e.target.value)}
             placeholder="Sparas automatiskt…"
             rows={6}
+            maxLength={NOTES_MAX + 200}
+            aria-invalid={notesOver || undefined}
+            aria-describedby={notesOver ? "notes-err" : undefined}
             style={{
               marginTop: 8,
               width: "100%",
               padding: "12px 14px",
               background: "#fff",
-              border: "1px solid var(--linje)",
+              border: `1px solid ${notesOver ? "var(--varsel)" : "var(--linje)"}`,
               borderRadius: 10,
               fontFamily: "var(--font-sans)",
-              fontSize: 14,
+              fontSize: 16,
               color: "var(--granbark)",
               resize: "vertical",
             }}
           />
+          {notesOver && (
+            <p id="notes-err" role="alert" style={{ margin: "6px 0 0", fontSize: 12, color: "var(--varsel-hover)", display: "flex", alignItems: "center", gap: 6 }}>
+              <AlertCircle size={12} /> Max {NOTES_MAX} tecken — korta ner texten för att spara automatiskt.
+            </p>
+          )}
         </section>
+
 
         <div style={{ marginTop: 32, borderTop: "1px solid var(--linje)", paddingTop: 20 }}>
           <button
