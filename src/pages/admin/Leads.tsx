@@ -709,6 +709,10 @@ const Leads = () => {
           onDelete={() => deleteLead(openLead)}
           onResendMap={async () => {
             if (openLead.source !== "karta") return;
+            if (!openLead.email || !isValidEmail(openLead.email)) {
+              toast.error("Kan inte skicka: mottagarens mejladress är ogiltig.");
+              return;
+            }
             const top3 = (detail?.processes ?? [])
               .slice()
               .sort((a, b) => b.score - a.score)
@@ -718,8 +722,9 @@ const Leads = () => {
                 potential: p.potential,
                 recommended_solution: p.recommended_solution,
               }));
+            let res: Response;
             try {
-              const res = await fetch(RESEND_URL, {
+              res = await fetch(RESEND_URL, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -733,12 +738,22 @@ const Leads = () => {
                   top3,
                 }),
               });
-              if (!res.ok) throw new Error(await res.text());
-              toast.success("Kartmejlet skickat");
             } catch (e) {
-              toast.error(e instanceof Error ? e.message : "Kunde inte skicka");
+              toast.error(`Nätverksfel — kunde inte nå servern. (${e instanceof Error ? e.message : "okänt"})`);
+              return;
             }
+            if (res.status === 401 || res.status === 403) {
+              toast.error("Sessionen har gått ut — logga in igen.");
+              return;
+            }
+            if (!res.ok) {
+              const body = await res.text().catch(() => "");
+              toast.error(`Serverfel (HTTP ${res.status}). ${body.slice(0, 160)}`);
+              return;
+            }
+            toast.success("Kartmejlet skickat");
           }}
+
         />
       )}
     </div>
