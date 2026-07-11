@@ -182,10 +182,21 @@ export function AdminStatus({
 const NAV = [
   { to: "/admin", label: "Översikt", icon: LayoutDashboard, end: true },
   { to: "/admin/leads", label: "Leads", icon: Users },
+  { to: "/admin/text-generator", label: "Textgenerator", icon: Sparkles },
   { to: "/admin/content", label: "Innehåll", icon: FileText },
   { to: "/admin/seo", label: "SEO", icon: Search },
   { to: "/admin/email", label: "E-post", icon: Mail },
+  { to: "/admin/faq-rapport", label: "FAQ-rapport", icon: BarChart3 },
 ];
+
+// Snabbmeny — visas överst i mobil-drawern för åtkomst med få klick.
+const QUICK = [
+  { to: "/admin/leads", label: "Leads", icon: Users },
+  { to: "/admin/text-generator", label: "Text", icon: Sparkles },
+  { to: "/admin/content", label: "Innehåll", icon: FileText },
+  { to: "/admin/seo", label: "SEO", icon: Search },
+];
+
 
 type Props = { children: ReactNode; title: string; kicker?: string };
 
