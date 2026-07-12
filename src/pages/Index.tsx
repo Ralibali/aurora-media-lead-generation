@@ -650,7 +650,7 @@ const FinalCTA = () => {
         </Reveal>
         <Reveal delay={0.2}>
           <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
-            <button onClick={() => open()} className="vk-btn vk-btn-primary">
+            <button onClick={() => { trackEvent("home_final_cta_click"); open(); }} className="vk-btn vk-btn-primary">
               <span>Boka gratis genomlysning</span> <ArrowRight size={16} />
             </button>
             <a href="mailto:info@auroramedia.se" style={{ color: "var(--bjork)", opacity: .8, textDecoration: "none", fontFamily: "var(--font-mono)", fontSize: 13 }}>
