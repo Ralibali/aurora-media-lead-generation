@@ -1,39 +1,47 @@
 import { useMemo, useState } from "react";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
-import { VerktygShell, toolByslug } from "./VerktygShell";
+import { ToolShell, toolByslug, CopyButton, Metric } from "./VerktygShell";
 
-type Option = { value: string; label: string; add: number };
+type Option = { value: string; label: string; desc?: string; add: number };
 
 const TYPE: Option[] = [
-  { value: "landing", label: "Landningssida / mikrosajt", add: 14900 },
-  { value: "webapp", label: "Webbapp / intern portal", add: 34900 },
-  { value: "saas", label: "SaaS-produkt", add: 69000 },
-  { value: "mobil", label: "Mobilapp (iOS/Android)", add: 89000 },
+  { value: "landing", label: "Landningssida", desc: "Mikrosajt", add: 14900 },
+  { value: "webapp", label: "Webbapp", desc: "Intern portal", add: 34900 },
+  { value: "saas", label: "SaaS", desc: "Kundprodukt", add: 69000 },
+  { value: "mobil", label: "Mobilapp", desc: "iOS + Android", add: 89000 },
 ];
 
 const PLATFORM: Option[] = [
-  { value: "web", label: "Endast webb", add: 0 },
-  { value: "web-mobile", label: "Webb + responsiv mobil", add: 5000 },
-  { value: "native", label: "Native iOS + Android", add: 25000 },
-];
-
-const YESNO = (add: number) => [
-  { value: "nej", label: "Nej", add: 0 },
-  { value: "ja", label: "Ja", add },
+  { value: "web", label: "Endast webb", desc: "Responsiv", add: 0 },
+  { value: "web-mobile", label: "Webb + PWA", desc: "Installerbar", add: 5000 },
+  { value: "native", label: "Native", desc: "iOS + Android", add: 25000 },
 ];
 
 const DESIGN: Option[] = [
-  { value: "standard", label: "Standard – rent och funktionellt", add: 0 },
-  { value: "custom", label: "Custom – egen visuell identitet", add: 15000 },
-  { value: "premium", label: "Premium – anpassade illustrationer/animation", add: 35000 },
+  { value: "standard", label: "Standard", desc: "Rent & funktionellt", add: 0 },
+  { value: "custom", label: "Custom", desc: "Egen identitet", add: 15000 },
+  { value: "premium", label: "Premium", desc: "Illustrationer/motion", add: 35000 },
 ];
 
 const TIDSRAM: Option[] = [
-  { value: "flexibel", label: "Flexibel (6–10 v)", add: 0 },
-  { value: "normal", label: "Standard (4–6 v)", add: 5000 },
-  { value: "brådskande", label: "Brådskande (< 4 v)", add: 20000 },
+  { value: "flexibel", label: "Flexibel", desc: "6–10 v", add: 0 },
+  { value: "normal", label: "Standard", desc: "4–6 v", add: 5000 },
+  { value: "brådskande", label: "Brådskande", desc: "< 4 v", add: 20000 },
 ];
+
+const TOGGLES = [
+  { key: "login", label: "Inloggning & roller", add: 8000 },
+  { key: "payment", label: "Betalning / prenumeration", add: 12000 },
+  { key: "admin", label: "Admin-panel", add: 9000 },
+  { key: "integrations", label: "Integrationer (Fortnox, Stripe)", add: 15000 },
+  { key: "ai", label: "AI-funktioner", add: 18000 },
+  { key: "offline", label: "Offline-läge", add: 12000 },
+] as const;
+
+type ToggleKey = (typeof TOGGLES)[number]["key"];
+
+const fmt = (n: number) => new Intl.NumberFormat("sv-SE").format(Math.round(n));
 
 const AppPrisraknare = () => {
   const meta = toolByslug("app-prisraknare");
@@ -41,114 +49,163 @@ const AppPrisraknare = () => {
 
   const [type, setType] = useState(TYPE[1].value);
   const [platform, setPlatform] = useState(PLATFORM[0].value);
-  const [login, setLogin] = useState("ja");
-  const [payment, setPayment] = useState("nej");
-  const [admin, setAdmin] = useState("ja");
-  const [integrations, setIntegrations] = useState("nej");
-  const [ai, setAi] = useState("nej");
   const [design, setDesign] = useState(DESIGN[0].value);
   const [tidsram, setTidsram] = useState(TIDSRAM[1].value);
+  const [toggles, setToggles] = useState<Record<ToggleKey, boolean>>({
+    login: true, payment: false, admin: true, integrations: false, ai: false, offline: false,
+  });
 
-  const price = useMemo(() => {
-    const val = (opts: Option[], v: string) => opts.find((o) => o.value === v)?.add ?? 0;
-    const base =
-      val(TYPE, type) +
-      val(PLATFORM, platform) +
-      val(YESNO(8000), login) +
-      val(YESNO(12000), payment) +
-      val(YESNO(9000), admin) +
-      val(YESNO(15000), integrations) +
-      val(YESNO(18000), ai) +
-      val(DESIGN, design) +
-      val(TIDSRAM, tidsram);
-    return { low: Math.round(base * 0.9), high: Math.round(base * 1.15) };
-  }, [type, platform, login, payment, admin, integrations, ai, design, tidsram]);
+  const chosen = <T extends Option>(opts: T[], v: string) => opts.find((o) => o.value === v)!;
 
+  const drivers = useMemo(() => {
+    const list: { label: string; add: number }[] = [
+      { label: `Produkttyp: ${chosen(TYPE, type).label}`, add: chosen(TYPE, type).add },
+      { label: `Plattform: ${chosen(PLATFORM, platform).label}`, add: chosen(PLATFORM, platform).add },
+      { label: `Design: ${chosen(DESIGN, design).label}`, add: chosen(DESIGN, design).add },
+      { label: `Tidsram: ${chosen(TIDSRAM, tidsram).label}`, add: chosen(TIDSRAM, tidsram).add },
+    ];
+    TOGGLES.forEach((t) => {
+      if (toggles[t.key]) list.push({ label: t.label, add: t.add });
+    });
+    return list;
+  }, [type, platform, design, tidsram, toggles]);
+
+  const base = drivers.reduce((s, d) => s + d.add, 0);
+  const price = { low: Math.round(base * 0.9), high: Math.round(base * 1.15) };
   const paket =
-    price.high < 25000
-      ? "Prototyp"
-      : price.high < 60000
-        ? "MVP"
-        : price.high < 120000
-          ? "Skalbar SaaS"
-          : "Custom";
+    price.high < 25000 ? "Prototyp" : price.high < 60000 ? "MVP" : price.high < 120000 ? "SaaS" : "Custom";
+  const delivery =
+    tidsram === "brådskande" ? "< 4 veckor" : tidsram === "flexibel" ? "6–10 veckor" : "4–6 veckor";
 
-  const fmt = (n: number) => new Intl.NumberFormat("sv-SE").format(n);
+  const includes: Record<string, string[]> = {
+    Prototyp: ["Klickbar version", "Basdesign", "Deploy till preview"],
+    MVP: ["Lanseringsklar", "Inloggning + admin", "Deploy till er domän", "30 d buggfri-garanti"],
+    SaaS: ["Full produkt", "Integrationer", "Roller & rättigheter", "30 d buggfri-garanti"],
+    Custom: ["Skräddarsytt scope", "Egen arkitektur", "Löpande dialog under bygget"],
+  };
+
+  const summary = [
+    `App-prisräknare – Aurora Media`,
+    `Rekommenderat paket: ${paket}`,
+    `Prisintervall: ${fmt(price.low)}–${fmt(price.high)} kr`,
+    `Estimerad leveranstid: ${delivery}`,
+    ``,
+    `Val:`,
+    ...drivers.map((d) => `· ${d.label} (${fmt(d.add)} kr)`),
+  ].join("\n");
 
   return (
-    <VerktygShell meta={meta} ctaHref="/priser" ctaLabel="Se alla paket och priser">
-      <div className="grid gap-8 md:grid-cols-2">
-        <form
-          className="space-y-5 rounded-3xl border border-border bg-secondary/40 p-6"
-          onChange={() => trackEvent("verktyg_prisraknare_change")}
-        >
-          <Select label="Produkttyp" value={type} onChange={setType} options={TYPE} />
-          <Select label="Plattform" value={platform} onChange={setPlatform} options={PLATFORM} />
-          <Select label="Inloggning" value={login} onChange={setLogin} options={YESNO(8000)} />
-          <Select label="Betalning / prenumeration" value={payment} onChange={setPayment} options={YESNO(12000)} />
-          <Select label="Admin-panel" value={admin} onChange={setAdmin} options={YESNO(9000)} />
-          <Select label="Integrationer (Fortnox, Stripe, etc.)" value={integrations} onChange={setIntegrations} options={YESNO(15000)} />
-          <Select label="AI-funktioner" value={ai} onChange={setAi} options={YESNO(18000)} />
-          <Select label="Designnivå" value={design} onChange={setDesign} options={DESIGN} />
-          <Select label="Tidsram" value={tidsram} onChange={setTidsram} options={TIDSRAM} />
-        </form>
+    <ToolShell meta={meta} ctaHref="/priser" ctaLabel="Se alla paket och priser">
+      <div className="vk-tool-grid">
+        <div className="vk-panel-card">
+          <span className="vk-mono">Konfigurera</span>
 
-        <div className="rounded-3xl border border-border bg-background p-6" aria-live="polite">
-          <h2 className="text-lg font-semibold text-foreground">Uppskattat prisintervall</h2>
-          <p className="mt-4 text-3xl font-display font-bold text-primary">
-            {fmt(price.low)}–{fmt(price.high)} kr
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">Fast pris, exkl. moms.</p>
+          <div style={{ marginTop: 20 }}>
+            <div className="vk-field-label"><span>Produkttyp</span></div>
+            <ChoiceGrid options={TYPE} value={type} onChange={setType} track="verktyg_prisraknare_type" />
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <div className="vk-field-label"><span>Plattform</span></div>
+            <ChoiceGrid options={PLATFORM} value={platform} onChange={setPlatform} track="verktyg_prisraknare_platform" />
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <div className="vk-field-label"><span>Designnivå</span></div>
+            <ChoiceGrid options={DESIGN} value={design} onChange={setDesign} track="verktyg_prisraknare_design" />
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <div className="vk-field-label"><span>Tidsram</span></div>
+            <ChoiceGrid options={TIDSRAM} value={tidsram} onChange={setTidsram} track="verktyg_prisraknare_time" />
+          </div>
+          <div style={{ marginTop: 24 }}>
+            <div className="vk-field-label"><span>Funktioner</span></div>
+            <div className="vk-choice-grid">
+              {TOGGLES.map((t) => (
+                <button
+                  key={t.key}
+                  type="button"
+                  className="vk-choice"
+                  aria-pressed={toggles[t.key]}
+                  onClick={() => {
+                    setToggles((prev) => ({ ...prev, [t.key]: !prev[t.key] }));
+                    trackEvent("verktyg_prisraknare_toggle", { toggle: t.key });
+                  }}
+                >
+                  <span className="vk-choice-title">{t.label}</span>
+                  <span className="vk-choice-desc">+{fmt(t.add)} kr</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
 
-          <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/5 p-4">
-            <p className="text-xs uppercase tracking-widest text-muted-foreground">Rekommenderat paket</p>
-            <p className="mt-1 text-xl font-display font-bold text-foreground">{paket}</p>
+        <div className="vk-panel-card muted" aria-live="polite">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+            <span className="vk-mono">Uppskattning (live)</span>
+            <CopyButton text={summary} event="verktyg_prisraknare_copy" />
+          </div>
+
+          <div className="vk-metrics">
+            <Metric label="Prisintervall" value={`${fmt(price.low)}–${fmt(price.high)} kr`} hero span2 />
+            <Metric label="Rekommenderat paket" value={paket} />
+            <Metric label="Leveranstid" value={delivery} />
+          </div>
+
+          <div style={{ marginTop: 24 }}>
+            <span className="vk-mono">Ingår typiskt i {paket}</span>
+            <ul className="vk-summary-list" style={{ marginTop: 12 }}>
+              {includes[paket].map((i) => (
+                <li key={i}><span className="k">{i}</span><span className="v">✓</span></li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ marginTop: 24 }}>
+            <span className="vk-mono">Kostnadsdrivare</span>
+            <ul className="vk-summary-list" style={{ marginTop: 12 }}>
+              {drivers.map((d) => (
+                <li key={d.label}>
+                  <span className="k">{d.label}</span>
+                  <span className="v">{fmt(d.add)} kr</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <button
             type="button"
+            className="vk-btn vk-btn-primary"
+            style={{ marginTop: 28, width: "100%", justifyContent: "center" }}
             onClick={() => {
               trackEvent("verktyg_prisraknare_cta", { paket });
-              open(paket, { internalNote: `App-prisräknare uppskattning: ${fmt(price.low)}–${fmt(price.high)} kr` });
+              open(paket, { internalNote: summary });
             }}
-            className="mt-6 w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition"
           >
-            Diskutera {paket}
+            Diskutera {paket} →
           </button>
         </div>
       </div>
-    </VerktygShell>
+    </ToolShell>
   );
 };
 
-function Select({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: Option[];
-}) {
-  const id = label.replace(/\s+/g, "-").toLowerCase();
+function ChoiceGrid({
+  options, value, onChange, track,
+}: { options: Option[]; value: string; onChange: (v: string) => void; track: string }) {
   return (
-    <label htmlFor={id} className="block">
-      <span className="mb-1.5 block text-sm font-semibold text-foreground">{label}</span>
-      <select
-        id={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-base text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-      >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </label>
+    <div className="vk-choice-grid">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          className="vk-choice"
+          aria-pressed={value === o.value}
+          onClick={() => { onChange(o.value); trackEvent(track, { value: o.value }); }}
+        >
+          <span className="vk-choice-title">{o.label}</span>
+          {o.desc && <span className="vk-choice-desc">{o.desc}</span>}
+        </button>
+      ))}
+    </div>
   );
 }
 
