@@ -59,33 +59,8 @@ const FAQS = [
   { q: "Fungerar det på distans?", a: "Ja – video 1–2 gånger i veckan. I Östergötland ses vi gärna fysiskt." },
 ];
 
-const CITIES = [
-  ["Linköping", "/ai-byra-linkoping"], ["Norrköping", "/ai-byra-norrkoping"],
-  ["Stockholm", "/ai-byra-stockholm"], ["Göteborg", "/ai-byra-goteborg"],
-  ["Malmö", "/ai-byra-malmo"], ["Uppsala", "/ai-byra-uppsala"],
-  ["Motala", "/ai-byra-motala"], ["Nyköping", "/ai-byra-nykoping"],
-];
-
 /* ────────── Small components ────────── */
 
-export const Reveal = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
-  const reduce = useReducedMotion();
-  const [forceShow, setForceShow] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setForceShow(true), 1200);
-    return () => clearTimeout(t);
-  }, []);
-  if (reduce) return <>{children}</>;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      animate={forceShow ? { opacity: 1, y: 0 } : undefined}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
-    >{children}</motion.div>
-  );
-};
 
 const CountUp = ({ to, suffix = "", prefix = "" }: { to: number; suffix?: string; prefix?: string }) => {
   const ref = useRef<HTMLSpanElement>(null);
