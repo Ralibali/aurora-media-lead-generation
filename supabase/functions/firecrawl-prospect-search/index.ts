@@ -155,6 +155,7 @@ Deno.serve(async (req: Request) => {
     const { data: campaign, error: cErr } = await admin
       .from("prospecting_campaigns")
       .insert({
+        admin_id: "00000000-0000-0000-0000-000000000000", // delad admin-identitet (password-auth)
         name: campaignName,
         query: queryString,
         location,
