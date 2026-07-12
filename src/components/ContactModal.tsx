@@ -321,10 +321,13 @@ const ContactDialog = ({
         </DialogHeader>
 
         {done ? (
-          <div className="py-6 space-y-6">
+          <div className="py-6 space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
             <div className="text-center space-y-3">
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                <CheckCircle2 className="h-8 w-8 text-primary" strokeWidth={1.5} />
+              <div className="relative mx-auto flex h-16 w-16 items-center justify-center">
+                <span className="absolute inset-0 rounded-full bg-primary/15 animate-ping" aria-hidden="true" />
+                <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary/15">
+                  <CheckCircle2 className="h-9 w-9 text-primary" strokeWidth={1.5} />
+                </span>
               </div>
               <p className="font-serif text-3xl">Tack!</p>
               <p className="text-muted-foreground">
