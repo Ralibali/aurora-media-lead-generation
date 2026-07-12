@@ -1,7 +1,18 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
-import { VerktygShell, toolByslug } from "./VerktygShell";
+import {
+  ToolShell,
+  toolByslug,
+  NumberField,
+  Metric,
+  Bar,
+  ScenarioSwitcher,
+  CopyButton,
+  SCENARIO_FACTOR,
+  type Scenario,
+} from "./VerktygShell";
 
 const fmt = (n: number) =>
   new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(Math.round(n));
@@ -9,139 +20,135 @@ const fmt = (n: number) =>
 const RoiKalkylator = () => {
   const meta = toolByslug("ai-roi-kalkylator");
   const { open } = useContactModal();
-  const [employees, setEmployees] = useState(5);
-  const [hoursPerWeek, setHoursPerWeek] = useState(6);
-  const [hourlyCost, setHourlyCost] = useState(450);
-  const [automationPct, setAutomationPct] = useState(50);
-  const [projectCost, setProjectCost] = useState(60000);
-  const [calculated, setCalculated] = useState(false);
+  const [params, setParams] = useSearchParams();
+
+  const q = (k: string, d: number) => {
+    const v = Number(params.get(k));
+    return Number.isFinite(v) && v > 0 ? v : d;
+  };
+
+  const [employees, setEmployees] = useState(q("e", 5));
+  const [hoursPerWeek, setHoursPerWeek] = useState(q("h", 6));
+  const [hourlyCost, setHourlyCost] = useState(q("c", 450));
+  const [automationPct, setAutomationPct] = useState(q("a", 50));
+  const [projectCost, setProjectCost] = useState(q("p", 60000));
+  const [scenario, setScenario] = useState<Scenario>(
+    (params.get("s") as Scenario) || "realistisk"
+  );
+
+  // sync URL for share (debounced enough via React batching)
+  useEffect(() => {
+    const next = new URLSearchParams();
+    next.set("e", String(employees));
+    next.set("h", String(hoursPerWeek));
+    next.set("c", String(hourlyCost));
+    next.set("a", String(automationPct));
+    next.set("p", String(projectCost));
+    next.set("s", scenario);
+    setParams(next, { replace: true });
+  }, [employees, hoursPerWeek, hourlyCost, automationPct, projectCost, scenario, setParams]);
 
   const result = useMemo(() => {
+    const factor = SCENARIO_FACTOR[scenario];
+    const effectiveAuto = Math.min(100, automationPct * factor);
     const weeks = 46;
     const yearlyHours = employees * hoursPerWeek * weeks;
-    const savedHours = yearlyHours * (automationPct / 100);
+    const savedHours = yearlyHours * (effectiveAuto / 100);
     const yearlySaving = savedHours * hourlyCost;
     const monthlySaving = yearlySaving / 12;
     const paybackMonths = yearlySaving > 0 ? (projectCost / yearlySaving) * 12 : Infinity;
     const threeYearNet = yearlySaving * 3 - projectCost;
-    return { savedHours, yearlySaving, monthlySaving, paybackMonths, threeYearNet };
-  }, [employees, hoursPerWeek, hourlyCost, automationPct, projectCost]);
+    return { effectiveAuto, savedHours, yearlyHours, yearlySaving, monthlySaving, paybackMonths, threeYearNet };
+  }, [employees, hoursPerWeek, hourlyCost, automationPct, projectCost, scenario]);
 
-  const onCalc = () => {
-    setCalculated(true);
-    trackEvent("verktyg_roi_calculate", { employees, automationPct });
-  };
+  useEffect(() => {
+    trackEvent("verktyg_roi_live", { scenario, employees, automationPct });
+  }, [scenario, employees, automationPct]);
+
+  const summary = [
+    `AI ROI-kalkylator – Aurora Media`,
+    `Scenario: ${scenario} (auto. ${result.effectiveAuto.toFixed(0)} %)`,
+    `Anställda: ${employees} · Timmar/vecka: ${hoursPerWeek} · Timkostnad: ${fmt(hourlyCost)} kr`,
+    `Projektkostnad: ${fmt(projectCost)} kr`,
+    ``,
+    `Sparade timmar/år: ${fmt(result.savedHours)} h`,
+    `Månadsbesparing: ${fmt(result.monthlySaving)} kr`,
+    `Årsbesparing: ${fmt(result.yearlySaving)} kr`,
+    `Payback: ${isFinite(result.paybackMonths) ? result.paybackMonths.toFixed(1) + " mån" : "–"}`,
+    `3-års nettovärde: ${fmt(result.threeYearNet)} kr`,
+  ].join("\n");
 
   return (
-    <VerktygShell meta={meta} ctaHref="/kontakt" ctaLabel="Kontakta oss">
-      <div className="grid gap-8 md:grid-cols-2">
-        <form
-          className="space-y-5 rounded-3xl border border-border bg-secondary/40 p-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            onCalc();
-          }}
-        >
-          <Field label="Antal anställda som berörs" value={employees} min={1} max={5000} onChange={setEmployees} />
-          <Field label="Timmar per vecka på repetitivt arbete (per person)" value={hoursPerWeek} min={0} max={40} onChange={setHoursPerWeek} />
-          <Field label="Snitt-timkostnad (kr, inkl. sociala avgifter)" value={hourlyCost} min={0} max={5000} step={10} onChange={setHourlyCost} />
-          <Field label="Automatiseringsgrad (%)" value={automationPct} min={0} max={100} onChange={setAutomationPct} />
-          <Field label="Uppskattad projektkostnad (kr)" value={projectCost} min={0} max={5_000_000} step={1000} onChange={setProjectCost} />
-          <button
-            type="submit"
-            className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition"
-          >
-            Räkna ut ROI
-          </button>
-        </form>
+    <ToolShell meta={meta} ctaHref="/ai-automation-foretag" ctaLabel="Läs mer om AI-automation">
+      <div className="vk-tool-grid">
+        <div className="vk-panel-card">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 20 }}>
+            <span className="vk-mono">Antaganden</span>
+            <ScenarioSwitcher value={scenario} onChange={setScenario} event="verktyg_roi_scenario" />
+          </div>
+          <NumberField label="Antal anställda som berörs" value={employees} onChange={setEmployees} min={1} max={5000} />
+          <NumberField label="Timmar / vecka på repetitivt arbete (per person)" value={hoursPerWeek} onChange={setHoursPerWeek} min={0} max={40} />
+          <NumberField label="Snitt-timkostnad" suffix="kr" value={hourlyCost} onChange={setHourlyCost} min={0} max={5000} step={10} hint="inkl. sociala avgifter" />
+          <NumberField label="Automatiseringsgrad" suffix="%" value={automationPct} onChange={setAutomationPct} min={0} max={100} hint="justeras av scenariot" />
+          <NumberField label="Uppskattad projektkostnad" suffix="kr" value={projectCost} onChange={setProjectCost} min={0} max={5_000_000} step={1000} />
+        </div>
 
-        <div className="rounded-3xl border border-border bg-background p-6" aria-live="polite">
-          <h2 className="text-lg font-semibold text-foreground">Resultat</h2>
-          {!calculated ? (
-            <p className="mt-3 text-sm text-muted-foreground">Fyll i formuläret och klicka på Räkna ut ROI.</p>
-          ) : (
-            <ul className="mt-4 space-y-4 text-sm">
-              <Stat label="Sparade timmar per år" value={`${fmt(result.savedHours)} h`} />
-              <Stat label="Månadsbesparing" value={`${fmt(result.monthlySaving)} kr`} />
-              <Stat label="Årsbesparing" value={`${fmt(result.yearlySaving)} kr`} highlight />
-              <Stat
-                label="Återbetalningstid"
-                value={isFinite(result.paybackMonths) ? `${result.paybackMonths.toFixed(1)} mån` : "–"}
-              />
-              <Stat label="3-års nettovärde" value={`${fmt(result.threeYearNet)} kr`} highlight />
-            </ul>
-          )}
-          <button
-            type="button"
-            onClick={() => {
-              trackEvent("verktyg_roi_cta_click");
-              open("AI-automation", { internalNote: "ROI-kalkylator" });
-            }}
-            className="mt-6 w-full rounded-full border border-primary px-6 py-3 text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition"
-          >
-            Boka gratis genomgång
-          </button>
+        <div className="vk-panel-card muted" aria-live="polite">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+            <span className="vk-mono">Resultat (live)</span>
+            <CopyButton text={summary} event="verktyg_roi_copy" />
+          </div>
+
+          <div className="vk-metrics">
+            <Metric label="Årsbesparing" value={`${fmt(result.yearlySaving)} kr`} hero span2 />
+            <Metric label="Månadsbesparing" value={`${fmt(result.monthlySaving)} kr`} />
+            <Metric label="Sparade timmar / år" value={`${fmt(result.savedHours)} h`} />
+            <Metric
+              label="Payback"
+              value={isFinite(result.paybackMonths) ? `${result.paybackMonths.toFixed(1)} mån` : "–"}
+            />
+            <Metric label="3-års nettovärde" value={`${fmt(result.threeYearNet)} kr`} />
+          </div>
+
+          <div style={{ marginTop: 24 }}>
+            <div className="vk-mono" style={{ marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
+              <span>Andel automatiserad tid</span>
+              <span>{result.effectiveAuto.toFixed(0)} %</span>
+            </div>
+            <Bar value={result.effectiveAuto} max={100} />
+          </div>
+
+          <div style={{ marginTop: 16 }}>
+            <div className="vk-mono" style={{ marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
+              <span>Payback vs mål (24 mån)</span>
+              <span>
+                {isFinite(result.paybackMonths) ? `${result.paybackMonths.toFixed(1)} mån` : "–"}
+              </span>
+            </div>
+            <Bar value={Math.min(24, result.paybackMonths || 24)} max={24} warn={(result.paybackMonths || 0) > 18} />
+          </div>
+
+          <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <button
+              type="button"
+              className="vk-btn vk-btn-primary"
+              onClick={() => {
+                trackEvent("verktyg_roi_cta_click", { scenario });
+                open("AI-automation", { internalNote: summary });
+              }}
+            >
+              Boka genomgång →
+            </button>
+            <CopyButton
+              text={typeof window !== "undefined" ? window.location.href : ""}
+              label="Dela länk"
+              event="verktyg_roi_share"
+            />
+          </div>
         </div>
       </div>
-
-      <SeoBlurb>
-        AI ROI-kalkylatorn hjälper dig snabbt förstå vad automation kan vara värt för ert bolag.
-        Vi utgår från 46 arbetsveckor per år och en konservativ modell där sparade timmar värderas
-        till er interna timkostnad.
-      </SeoBlurb>
-    </VerktygShell>
+    </ToolShell>
   );
 };
-
-function Field({
-  label,
-  value,
-  onChange,
-  min,
-  max,
-  step = 1,
-}: {
-  label: string;
-  value: number;
-  onChange: (n: number) => void;
-  min: number;
-  max: number;
-  step?: number;
-}) {
-  const id = label.replace(/\s+/g, "-").toLowerCase();
-  return (
-    <label htmlFor={id} className="block">
-      <span className="mb-1.5 block text-sm font-semibold text-foreground">{label}</span>
-      <input
-        id={id}
-        type="number"
-        inputMode="numeric"
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        onChange={(e) => onChange(Number(e.target.value) || 0)}
-        className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-base text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-      />
-    </label>
-  );
-}
-
-function Stat({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
-  return (
-    <li className="flex items-baseline justify-between border-b border-border pb-2">
-      <span className="text-muted-foreground">{label}</span>
-      <span
-        className={`font-display font-bold ${highlight ? "text-primary text-xl" : "text-foreground text-base"}`}
-      >
-        {value}
-      </span>
-    </li>
-  );
-}
-
-function SeoBlurb({ children }: { children: React.ReactNode }) {
-  return <p className="mt-10 max-w-3xl text-sm text-muted-foreground leading-relaxed">{children}</p>;
-}
 
 export default RoiKalkylator;

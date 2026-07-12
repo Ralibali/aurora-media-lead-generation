@@ -1,21 +1,22 @@
 import { useMemo, useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight, RefreshCw } from "lucide-react";
+import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
-import { VerktygShell, toolByslug } from "./VerktygShell";
+import { ToolShell, toolByslug, CopyButton, Metric, Bar } from "./VerktygShell";
 
-type Q = { id: string; text: string };
+type Q = { id: string; text: string; topic: string };
 
 const QUESTIONS: Q[] = [
-  { id: "q1", text: "Har ni identifierat konkreta processer där AI skulle spara tid?" },
-  { id: "q2", text: "Har ni en policy för hur medarbetare får använda AI-verktyg?" },
-  { id: "q3", text: "Har ni koll på var era data ligger och vem som får åtkomst?" },
-  { id: "q4", text: "Använder någon i teamet AI-verktyg regelbundet i arbetet?" },
-  { id: "q5", text: "Har ni testat att bygga eller köpa in någon AI-lösning?" },
-  { id: "q6", text: "Har ledningen en tydlig ambition eller riktning för AI?" },
-  { id: "q7", text: "Har ni tid och budget avsatt för AI/automation i år?" },
-  { id: "q8", text: "Har ni någon som äger AI-frågorna internt?" },
-  { id: "q9", text: "Är era system integrerade så data kan flöda mellan dem?" },
-  { id: "q10", text: "Mäter ni utfall (tid, kvalitet, pengar) när ni testar nytt?" },
+  { id: "q1", topic: "Strategi", text: "Har ni identifierat konkreta processer där AI skulle spara tid?" },
+  { id: "q2", topic: "Styrning", text: "Har ni en policy för hur medarbetare får använda AI-verktyg?" },
+  { id: "q3", topic: "Data", text: "Har ni koll på var era data ligger och vem som har åtkomst?" },
+  { id: "q4", topic: "Kultur", text: "Använder någon i teamet AI-verktyg regelbundet i arbetet?" },
+  { id: "q5", topic: "Erfarenhet", text: "Har ni testat att bygga eller köpa in någon AI-lösning?" },
+  { id: "q6", topic: "Ledning", text: "Har ledningen en tydlig ambition eller riktning för AI?" },
+  { id: "q7", topic: "Resurser", text: "Har ni tid och budget avsatt för AI/automation i år?" },
+  { id: "q8", topic: "Ägarskap", text: "Har ni någon som äger AI-frågorna internt?" },
+  { id: "q9", topic: "Teknik", text: "Är era system integrerade så data kan flöda mellan dem?" },
+  { id: "q10", topic: "Mätning", text: "Mäter ni utfall (tid, kvalitet, pengar) när ni testar nytt?" },
 ];
 
 const CHOICES = [
@@ -32,184 +33,194 @@ const LEVELS = [
   { min: 18, level: 5, name: "AI-driven", desc: "AI är en del av verksamheten. Fokus på styrning, säkerhet och nya affärsmodeller." },
 ];
 
-const NEXT_STEPS: Record<number, string[]> = {
+const PLAN_30D: Record<number, { vecka: string; punkt: string }[]> = {
   1: [
-    "Kör en 30-minuters intern demo av ChatGPT/Claude.",
-    "Skriv ner de 3 mest tidskrävande manuella rutinerna.",
-    "Sätt en enkel AI-policy (vad ok / inte ok).",
+    { vecka: "Vecka 1", punkt: "Kör 30-min demo av ChatGPT/Claude med teamet." },
+    { vecka: "Vecka 2", punkt: "Lista tre mest tidskrävande manuella rutiner." },
+    { vecka: "Vecka 3", punkt: "Sätt enkel AI-policy (vad ok / inte ok)." },
+    { vecka: "Vecka 4", punkt: "Välj ett användningsområde att testa." },
   ],
   2: [
-    "Välj ett användningsområde och kör pilot i 4 veckor.",
-    "Utse en AI-ansvarig (behöver inte vara tekniker).",
-    "Kartlägg vilka system som innehåller mest data.",
+    { vecka: "Vecka 1", punkt: "Utse AI-ansvarig (behöver inte vara tekniker)." },
+    { vecka: "Vecka 2", punkt: "Välj område och definiera mål för pilot." },
+    { vecka: "Vecka 3", punkt: "Kartlägg system som innehåller mest relevant data." },
+    { vecka: "Vecka 4", punkt: "Kör pilot i skarp miljö med 1–2 användare." },
   ],
   3: [
-    "Bygg första interna AI-assistenten på egen data.",
-    "Integrera med ett affärssystem (Fortnox, HubSpot, etc.).",
-    "Sätt tydliga mål för tidsbesparing per process.",
+    { vecka: "Vecka 1", punkt: "Definiera KPI för tidsbesparing per process." },
+    { vecka: "Vecka 2", punkt: "Bygg första interna AI-assistenten på egen data." },
+    { vecka: "Vecka 3", punkt: "Integrera med ett affärssystem (Fortnox, HubSpot)." },
+    { vecka: "Vecka 4", punkt: "Följ upp mätvärden och besluta om skalning." },
   ],
   4: [
-    "Standardisera säkerhet, loggning och behörigheter.",
-    "Skala pilot till fler team.",
-    "Följ upp värde per lösning kvartalsvis.",
+    { vecka: "Vecka 1", punkt: "Standardisera säkerhet, loggning och behörigheter." },
+    { vecka: "Vecka 2", punkt: "Rulla ut pilot till ytterligare team." },
+    { vecka: "Vecka 3", punkt: "Bygg gemensam datamodell och åtkomstlager." },
+    { vecka: "Vecka 4", punkt: "Kvartalsuppföljning av värde per lösning." },
   ],
   5: [
-    "Utvärdera AI som del av produkter/affärsmodell.",
-    "Bygg intern AI-plattform med gemensam data.",
-    "Sätt AI-KPI:er på lednings- och styrelsenivå.",
+    { vecka: "Vecka 1", punkt: "Utvärdera AI som del av produkt/affärsmodell." },
+    { vecka: "Vecka 2", punkt: "Bygg intern AI-plattform med gemensam data." },
+    { vecka: "Vecka 3", punkt: "Sätt AI-KPI:er på lednings- och styrelsenivå." },
+    { vecka: "Vecka 4", punkt: "Etablera AI-governance och ansvarsfullhets-review." },
   ],
 };
 
 const AiMognadsanalys = () => {
   const meta = toolByslug("ai-mognadsanalys");
+  const { open } = useContactModal();
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [submitted, setSubmitted] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [step, setStep] = useState(0);
+  const [done, setDone] = useState(false);
 
+  const total = QUESTIONS.length;
+  const q = QUESTIONS[step];
   const score = useMemo(() => Object.values(answers).reduce((a, b) => a + b, 0), [answers]);
   const level = useMemo(() => [...LEVELS].reverse().find((l) => score >= l.min) ?? LEVELS[0], [score]);
-  const allAnswered = Object.keys(answers).length === QUESTIONS.length;
+  const strengths = QUESTIONS.filter((q) => answers[q.id] === 2).map((q) => `${q.topic}: ${q.text}`);
+  const risks = QUESTIONS.filter((q) => answers[q.id] === 0).map((q) => `${q.topic}: ${q.text}`);
 
-  const strengths = useMemo(
-    () => QUESTIONS.filter((q) => answers[q.id] === 2).map((q) => q.text),
-    [answers],
-  );
-  const risks = useMemo(
-    () => QUESTIONS.filter((q) => answers[q.id] === 0).map((q) => q.text),
-    [answers],
-  );
+  const summary = useMemo(() => [
+    `AI-mognadsanalys – Aurora Media`,
+    `Poäng: ${score} / 20 · Nivå ${level.level} – ${level.name}`,
+    ``,
+    `Beskrivning: ${level.desc}`,
+    ``,
+    `Styrkor:`,
+    ...(strengths.length ? strengths.map((s) => `• ${s}`) : ["• (inga starka områden ännu)"]),
+    ``,
+    `Risker / luckor:`,
+    ...(risks.length ? risks.map((s) => `• ${s}`) : ["• (inga tydliga risker)"]),
+    ``,
+    `30-dagars handlingsplan:`,
+    ...PLAN_30D[level.level].map((p) => `• ${p.vecka}: ${p.punkt}`),
+  ].join("\n"), [score, level, strengths, risks]);
 
-  const summary = useMemo(() => {
-    if (!submitted) return "";
-    const lines = [
-      `AI-mognadsanalys – Aurora Media`,
-      `Poäng: ${score} / 20`,
-      `Nivå ${level.level} – ${level.name}`,
-      ``,
-      `Beskrivning: ${level.desc}`,
-      ``,
-      `Styrkor:`,
-      ...(strengths.length ? strengths.map((s) => `• ${s}`) : ["• (inga starka områden ännu)"]),
-      ``,
-      `Risker / luckor:`,
-      ...(risks.length ? risks.map((s) => `• ${s}`) : ["• (inga tydliga risker)"]),
-      ``,
-      `Rekommenderade nästa steg:`,
-      ...NEXT_STEPS[level.level].map((s) => `1. ${s}`),
-    ];
-    return lines.join("\n");
-  }, [submitted, score, level, strengths, risks]);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(summary);
-      setCopied(true);
-      trackEvent("verktyg_mognad_copy");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* noop */
+  const pick = (val: number) => {
+    const next = { ...answers, [q.id]: val };
+    setAnswers(next);
+    trackEvent("verktyg_mognad_answer", { step: step + 1 });
+    if (step < total - 1) {
+      setTimeout(() => setStep(step + 1), 180);
+    } else {
+      setDone(true);
+      trackEvent("verktyg_mognad_complete", { score: Object.values(next).reduce((a, b) => a + b, 0) });
     }
   };
 
+  const reset = () => { setAnswers({}); setStep(0); setDone(false); };
+
+  if (!done) {
+    return (
+      <ToolShell meta={meta} ctaHref="/kontakt" ctaLabel="Boka AI-genomgång">
+        <div className="vk-panel-card" style={{ maxWidth: 720, margin: "0 auto" }}>
+          <div className="vk-wizard-progress" aria-hidden>
+            {QUESTIONS.map((_, i) => (
+              <span key={i} className={i < step ? "done" : i === step ? "current" : ""} />
+            ))}
+          </div>
+          <div className="vk-mono">{q.topic} · Fråga {step + 1} av {total}</div>
+          <h2 style={{ marginTop: 12, fontSize: 26, lineHeight: 1.2 }}>{q.text}</h2>
+          <div className="vk-choice-grid" style={{ marginTop: 28 }}>
+            {CHOICES.map((c) => (
+              <button
+                key={c.val}
+                type="button"
+                className="vk-choice"
+                aria-pressed={answers[q.id] === c.val}
+                onClick={() => pick(c.val)}
+              >
+                <span className="vk-choice-title">{c.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div style={{ marginTop: 32, display: "flex", justifyContent: "space-between", gap: 12 }}>
+            <button
+              type="button"
+              className="vk-btn vk-btn-ghost"
+              onClick={() => setStep(Math.max(0, step - 1))}
+              disabled={step === 0}
+              style={{ opacity: step === 0 ? 0.4 : 1 }}
+            >
+              <ArrowLeft size={14} /> Föregående
+            </button>
+            {answers[q.id] !== undefined && step < total - 1 && (
+              <button type="button" className="vk-btn vk-btn-primary" onClick={() => setStep(step + 1)}>
+                Nästa <ArrowRight size={14} />
+              </button>
+            )}
+          </div>
+        </div>
+      </ToolShell>
+    );
+  }
+
   return (
-    <VerktygShell meta={meta} ctaHref="/kontakt" ctaLabel="Boka AI-genomgång">
-      <form
-        className="space-y-4 rounded-3xl border border-border bg-secondary/40 p-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          setSubmitted(true);
-          trackEvent("verktyg_mognad_submit", { score });
-        }}
-      >
-        {QUESTIONS.map((q, i) => (
-          <fieldset key={q.id} className="border-b border-border pb-4 last:border-0">
-            <legend className="mb-3 text-sm font-semibold text-foreground">
-              {i + 1}. {q.text}
-            </legend>
-            <div className="flex flex-wrap gap-2">
-              {CHOICES.map((c) => {
-                const active = answers[q.id] === c.val;
-                return (
-                  <label
-                    key={c.val}
-                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm transition ${
-                      active
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-background text-foreground hover:border-primary"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name={q.id}
-                      className="sr-only"
-                      checked={active}
-                      onChange={() => setAnswers({ ...answers, [q.id]: c.val })}
-                    />
-                    {c.label}
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
-        ))}
+    <ToolShell meta={meta} ctaHref="/kontakt" ctaLabel="Boka AI-genomgång">
+      <div className="vk-panel-card muted" aria-live="polite">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 12 }}>
+          <span className="vk-mono">Er AI-mognad</span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <CopyButton text={summary} event="verktyg_mognad_copy" />
+            <button type="button" className="vk-copybtn" onClick={reset}>
+              <RefreshCw size={13} /> Börja om
+            </button>
+          </div>
+        </div>
+
+        <div className="vk-metrics" style={{ marginTop: 24 }}>
+          <Metric label={`Nivå ${level.level}`} value={level.name} hero />
+          <Metric label="Poäng" value={`${score} / 20`} />
+        </div>
+
+        <div style={{ marginTop: 16 }}>
+          <Bar value={score} max={20} />
+        </div>
+
+        <p style={{ marginTop: 24, fontSize: 17, color: "var(--granbark)", maxWidth: "62ch" }}>{level.desc}</p>
+
+        <div className="vk-tool-grid" style={{ marginTop: 32 }}>
+          <div>
+            <h3>Styrkor</h3>
+            <ul className="vk-summary-list" style={{ marginTop: 12 }}>
+              {(strengths.length ? strengths : ["Inga starka områden ännu."]).map((s) => (
+                <li key={s}><span className="k">{s}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3>Risker & luckor</h3>
+            <ul className="vk-summary-list" style={{ marginTop: 12 }}>
+              {(risks.length ? risks : ["Inga tydliga risker."]).map((s) => (
+                <li key={s}><span className="k">{s}</span></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div style={{ marginTop: 32 }}>
+          <h3>30-dagars handlingsplan</h3>
+          <ul className="vk-summary-list" style={{ marginTop: 12 }}>
+            {PLAN_30D[level.level].map((p) => (
+              <li key={p.vecka}>
+                <span className="k">{p.vecka}</span>
+                <span className="v" style={{ textAlign: "right", maxWidth: "60%" }}>{p.punkt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         <button
-          type="submit"
-          disabled={!allAnswered}
-          className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
+          type="button"
+          className="vk-btn vk-btn-primary"
+          style={{ marginTop: 28 }}
+          onClick={() => { trackEvent("verktyg_mognad_cta", { level: level.level }); open("AI-automation", { internalNote: summary }); }}
         >
-          {allAnswered ? "Visa resultat" : `Svara på alla frågor (${Object.keys(answers).length}/${QUESTIONS.length})`}
+          Boka AI-genomgång →
         </button>
-      </form>
-
-      {submitted && (
-        <div className="mt-8 rounded-3xl border border-primary/30 bg-primary/5 p-6" aria-live="polite">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">Er AI-mognad</p>
-          <p className="mt-2 text-3xl font-display font-bold text-foreground">
-            Nivå {level.level} · {level.name}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">Poäng {score} av 20</p>
-          <p className="mt-4 text-sm text-foreground/90 leading-relaxed">{level.desc}</p>
-
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Styrkor</h3>
-              <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                {(strengths.length ? strengths : ["Inga starka områden ännu."]).map((s) => (
-                  <li key={s}>• {s}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">Risker / luckor</h3>
-              <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-                {(risks.length ? risks : ["Inga tydliga risker."]).map((s) => (
-                  <li key={s}>• {s}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <h3 className="text-sm font-semibold text-foreground">Rekommenderade nästa steg</h3>
-            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm text-muted-foreground">
-              {NEXT_STEPS[level.level].map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ol>
-          </div>
-
-          <button
-            type="button"
-            onClick={copy}
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-primary px-5 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition"
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? "Kopierat" : "Kopiera resultatet"}
-          </button>
-        </div>
-      )}
-    </VerktygShell>
+      </div>
+    </ToolShell>
   );
 };
 
