@@ -203,7 +203,7 @@ Deno.serve(async (req: Request) => {
         body: JSON.stringify({
           query: queryString,
           limit,
-          location: { country: "se", languages: ["sv"] },
+          location: "Sweden",
           scrapeOptions: { formats: ["markdown", "links"], onlyMainContent: true },
         }),
       });
