@@ -337,7 +337,6 @@ const HeroSection = () => (
           <Link to="/ai-karta" className="vk-btn vk-btn-primary" onClick={() => trackEvent("home_hero_ai_karta_click")}>
             <span>Starta gratis AI-kartläggning</span> <ArrowRight size={16} />
           </Link>
-          </Link>
           <Link to="/arbete" className="vk-btn vk-btn-ghost">
             Se vad jag byggt <ArrowUpRight size={16} />
           </Link>
