@@ -18,7 +18,7 @@ type Campaign = {
   created_at: string;
 };
 
-type Signal = { code: string; label: string };
+type Signal = { signal: string; evidence: string; points: number };
 
 type Lead = {
   id: string;
@@ -407,8 +407,13 @@ export default function Prospektering() {
                         <td style={{ ...tdStyle, maxWidth: 260 }}>
                           {l.observed_signals?.length ? (
                             <ul style={{ margin: 0, padding: "0 0 0 16px", fontSize: 12 }}>
-                              {l.observed_signals.map((s) => (
-                                <li key={s.code}>{s.label}</li>
+                              {l.observed_signals.map((s, i) => (
+                                <li key={`${s.signal}-${i}`} title={s.evidence}>
+                                  {s.evidence}
+                                  <span style={{ color: "#6b6b6b", fontFamily: "var(--font-mono)", marginLeft: 6 }}>
+                                    +{s.points}
+                                  </span>
+                                </li>
                               ))}
                             </ul>
                           ) : "—"}

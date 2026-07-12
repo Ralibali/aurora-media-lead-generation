@@ -604,6 +604,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      try_prospecting_rate_limit: {
+        Args: { p_admin_id: string; p_max?: number; p_window_seconds?: number }
+        Returns: boolean
+      }
       upsert_vault_secret: {
         Args: { p_name: string; p_value: string }
         Returns: string
