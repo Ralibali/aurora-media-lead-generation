@@ -206,6 +206,31 @@ Deno.serve(async (req: Request) => {
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const admin = SUPABASE_URL && SERVICE_KEY ? createClient(SUPABASE_URL, SERVICE_KEY) : null;
 
+    // 5) Persistent DB-rate-limit — race-säker via advisory lock i SQL-funktion.
+    // Max 5 meddelanden/IP och 3/e-post per timme. Auktoritativ över in-memory.
+    if (admin) {
+      try {
+        const { data: allowed, error: rlErr } = await admin.rpc("try_contact_rate_limit", {
+          p_ip: ip,
+          p_email: email,
+          p_max_per_ip: 5,
+          p_max_per_email: 3,
+          p_window_seconds: 3600,
+        });
+        if (rlErr) {
+          console.error("[send-contact-email] rate-limit rpc failed", rlErr);
+        } else if (allowed === false) {
+          console.warn("[send-contact-email] rate limited (db)", { ip, email });
+          return new Response(
+            JSON.stringify({ error: "För många förfrågningar. Försök igen om en stund." }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          );
+        }
+      } catch (e) {
+        console.error("[send-contact-email] rate-limit rpc threw", e);
+      }
+    }
+
     // Deduplicering — samma namn+email+meddelande inom 10 min = duplikat
     if (admin) {
       try {
