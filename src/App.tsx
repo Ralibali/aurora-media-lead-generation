@@ -463,6 +463,13 @@ const App = () => (
               <Route path="/ai-konsult-linkoping" element={<AiKonsultLinkoping />} />
               <Route path="/google-ads-linkoping" element={<GoogleAdsLinkoping />} />
               <Route path="/apputveckling-linkoping" element={<ApputvecklingLinkoping />} />
+              <Route path="/verktyg" element={<VerktygIndex />} />
+              <Route path="/verktyg/ai-roi-kalkylator" element={<RoiKalkylator />} />
+              <Route path="/verktyg/app-prisraknare" element={<AppPrisraknare />} />
+              <Route path="/verktyg/seo-kalkylator" element={<SeoKalkylator />} />
+              <Route path="/verktyg/ai-mognadsanalys" element={<AiMognadsanalys />} />
+              <Route path="/verktyg/personalkostnad-vs-ai" element={<PersonalkostnadVsAi />} />
+              <Route path="/verktyg/prompt-generator" element={<PromptGenerator />} />
               <Route path="/saas-utveckling-:city" element={<CityPage />} />
               <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
