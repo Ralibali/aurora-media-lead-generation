@@ -754,7 +754,6 @@ export default function Prospektering() {
                             const isDnc = l.status === "do_not_contact";
                             const isOpen = !!expanded[l.id];
                             return (
-                              <>
                                 <tr
                                   key={l.id}
                                   className={cn(
@@ -762,6 +761,7 @@ export default function Prospektering() {
                                     isDnc && "bg-neutral-50",
                                   )}
                                 >
+
                                   <td className="px-3 py-3">
                                     <div className="flex flex-col gap-1">
                                       <div className="flex items-center gap-2">
