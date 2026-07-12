@@ -768,13 +768,60 @@ export const VkFooter = () => (
 
 /* ────────── Page ────────── */
 
+const SITE = "https://auroramedia.se";
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const casesSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Byggda case av Aurora Media",
+  itemListElement: CASES.map((c, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    url: `${SITE}${c.href}`,
+    name: c.title,
+  })),
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE}/#localbusiness`,
+  name: "Aurora Media AB",
+  url: SITE,
+  email: "info@auroramedia.se",
+  areaServed: [
+    { "@type": "Country", name: "Sverige" },
+    { "@type": "City", name: "Linköping" },
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Linköping",
+    addressRegion: "Östergötland",
+    addressCountry: "SE",
+  },
+  identifier: { "@type": "PropertyValue", propertyID: "orgNr", value: "559272-0220" },
+  founder: { "@type": "Person", name: "Christoffer Holstensson" },
+};
+
 const Index = () => (
   <>
     <SEO
       title="AI-system och automation för småföretag | Aurora Media"
       description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 14 900 kr, snabb leverans och kod ni äger själva."
       canonical="/"
+      jsonLd={[faqSchema, casesSchema, localBusinessSchema]}
     />
+    
     
     <div className="verkstad">
       <VkNav />
