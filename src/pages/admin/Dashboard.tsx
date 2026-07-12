@@ -7,6 +7,7 @@ type Overview = {
   overview: {
     leads_total: number; leads_karta: number; leads_kontakt: number; leads_genomlysning: number;
     leads_7d: number; leads_30d: number;
+    leads_kontakt_7d?: number; leads_kontakt_30d?: number;
     cta_clicks_30d: number; faq_searches_30d: number; faq_zero_results_30d: number; ai_karta_clicks_30d: number;
   };
   recent_leads: { id: string; name: string; company: string | null; email: string; source: string; created_at: string }[];
