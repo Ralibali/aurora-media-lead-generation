@@ -4,6 +4,7 @@ import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-mot
 import { ArrowRight, ArrowUpRight, Check, Plus, Minus } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
+import { trackEvent } from "@/lib/analytics";
 import "@/styles/verkstad.css";
 
 /* ─────────────────────────────────────────────────────────────
@@ -333,7 +334,7 @@ const HeroSection = () => (
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: .7, delay: .5 }}
         >
-          <Link to="/ai-karta" className="vk-btn vk-btn-primary">
+          <Link to="/ai-karta" className="vk-btn vk-btn-primary" onClick={() => trackEvent("home_hero_ai_karta_click")}>
             <span>Starta gratis AI-kartläggning</span> <ArrowRight size={16} />
           </Link>
           <Link to="/arbete" className="vk-btn vk-btn-ghost">
@@ -490,50 +491,41 @@ const ReceiptsSection = () => {
         </Reveal>
         <div className="vk-receipts">
           {[
-            { tier: "Prototyp", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
-            { tier: "MVP", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
-            { tier: "SaaS", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
+            { tier: "Prototyp", price: "Från 14 900 kr", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
+            { tier: "MVP", price: "Från 34 900 kr", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
+            { tier: "SaaS", price: "Från 69 000 kr", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
           ].map((r, i) => (
             <Reveal delay={i * 0.08} key={r.tier}>
               <div className="vk-receipt">
                 {r.flag && <span className="vk-receipt-flag">{r.flag}</span>}
                 <span className="vk-receipt-stamp">Fast pris</span>
                 <div className="vk-receipt-tier">{r.tier}</div>
-                <div
-                  className="vk-receipt-price"
-                  aria-label="Pris döljs – avslöjas i offerten"
-                  style={{
-                    display: "inline-block",
-                    marginTop: 6,
-                    padding: "6px 12px",
-                    borderRadius: 6,
-                    background:
-                      "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
-                    color: "transparent",
-                    letterSpacing: "0.15em",
-                    userSelect: "none",
-                  }}
-                >
-                  ██ ███:-
+                <div className="vk-receipt-price" style={{ marginTop: 6, fontSize: 22, fontWeight: 700 }}>
+                  {r.price}
                 </div>
-                <p className="vk-mono" style={{ marginTop: 8, color: "var(--gran)", fontSize: 11 }}>
-                  Häpnadsväckande bra
-                </p>
                 <p className="vk-receipt-desc">{r.desc}</p>
                 <button
                   type="button"
-                  onClick={() => open(r.tier)}
+                  onClick={() => {
+                    trackEvent("home_package_cta_click", { tier: r.tier });
+                    open(r.tier);
+                  }}
                   className="vk-btn vk-btn-primary"
                   style={{ marginTop: 16, justifyContent: "center", width: "100%" }}
-                  aria-label={`Få pris i offerten för ${r.tier}`}
+                  aria-label={`Diskutera ${r.tier}`}
                 >
-                  Få pris i offerten <ArrowRight size={14} />
+                  Diskutera {r.tier} <ArrowRight size={14} />
                 </button>
               </div>
             </Reveal>
           ))}
         </div>
-        <p className="vk-mono" style={{ marginTop: 32 }}>
+        <div style={{ marginTop: 24 }}>
+          <Link to="/priser" className="vk-btn vk-btn-ghost">
+            Se alla priser och vad som ingår <ArrowRight size={14} />
+          </Link>
+        </div>
+        <p className="vk-mono" style={{ marginTop: 20 }}>
           Exakt offert inom 24 h · Fast pris · Inga timmar, aldrig löpande räkning
         </p>
       </div>
@@ -658,7 +650,7 @@ const FinalCTA = () => {
         </Reveal>
         <Reveal delay={0.2}>
           <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
-            <button onClick={() => open()} className="vk-btn vk-btn-primary">
+            <button onClick={() => { trackEvent("home_final_cta_click"); open(); }} className="vk-btn vk-btn-primary">
               <span>Boka gratis genomlysning</span> <ArrowRight size={16} />
             </button>
             <a href="mailto:info@auroramedia.se" style={{ color: "var(--bjork)", opacity: .8, textDecoration: "none", fontFamily: "var(--font-mono)", fontSize: 13 }}>
@@ -721,8 +713,8 @@ export const VkFooter = () => (
 const Index = () => (
   <>
     <SEO
-      title="Aurora Media AB | AI-driven mjukvarupartner för svenska företag"
-      description="Aurora Media bygger AI-lösningar, interna system, appar och SaaS för svenska företag. Snabb leverans, tydligt scope och kod ni äger."
+      title="AI-system och automation för småföretag | Aurora Media"
+      description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 14 900 kr, snabb leverans och kod ni äger själva."
       canonical="/"
     />
     
