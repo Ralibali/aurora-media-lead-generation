@@ -18,7 +18,7 @@ type Campaign = {
   created_at: string;
 };
 
-type Signal = { code: string; label: string };
+type Signal = { signal: string; evidence: string; points: number };
 
 type Lead = {
   id: string;
