@@ -114,35 +114,55 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const body = (await req.json()) as Body;
-
-    // 1) Honeypot — bots fyller i dolda fält
-    if (typeof body.website === "string" && body.website.trim() !== "") {
-      console.warn("[send-contact-email] honeypot triggered", { ip: getClientIp(req) });
-      // Svara 200 så bot inte vet att den blev avvisad
+    // 0) Origin/Referer måste komma från en godkänd host.
+    if (!isAllowedOrigin(req)) {
+      console.warn("[send-contact-email] blocked origin", {
+        origin: req.headers.get("origin"),
+        referer: req.headers.get("referer"),
+        ip: getClientIp(req),
+      });
+      // Svara 200 så bot inte får feedback om varför den avvisas
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // 2) Min-fill-time — formulär submittade < 3s efter render = troligen bot
+    const body = (await req.json()) as Body;
+
+    // 1) Honeypot — bots fyller i dolda fält
+    if (typeof body.website === "string" && body.website.trim() !== "") {
+      console.warn("[send-contact-email] honeypot triggered", { ip: getClientIp(req) });
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // 2) Fill-time — < 4s = bot, > 2h = uppslagen sida/prerender-replay
     if (typeof body._renderedAt === "number" && body._renderedAt > 0) {
       const elapsed = Date.now() - body._renderedAt;
-      if (elapsed < 3000) {
-        console.warn("[send-contact-email] submitted too fast", { elapsed, ip: getClientIp(req) });
+      if (elapsed < 4000 || elapsed > 2 * 60 * 60 * 1000) {
+        console.warn("[send-contact-email] suspicious fill-time", { elapsed, ip: getClientIp(req) });
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+    } else {
+      // Saknar timestamp helt = manipulerad klient
+      console.warn("[send-contact-email] missing _renderedAt", { ip: getClientIp(req) });
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // 3) Rate limit per IP
+    // 3) In-memory rate limit (snabbfilter per pod)
     const ip = getClientIp(req);
     const rate = checkRateLimit(ip);
     if (!rate.ok) {
-      console.warn("[send-contact-email] rate limited", { ip, reason: rate.reason });
+      console.warn("[send-contact-email] rate limited (memory)", { ip, reason: rate.reason });
       return new Response(JSON.stringify({ error: rate.reason ?? "Rate limited" }), {
         status: 429,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -168,6 +188,16 @@ Deno.serve(async (req: Request) => {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return new Response(JSON.stringify({ error: "Invalid email" }), {
         status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // 4) Innehållsheuristik — plockar upp uppenbart spam
+    const spamHint = looksLikeSpam(name, message);
+    if (spamHint) {
+      console.warn("[send-contact-email] spam heuristic hit", { spamHint, ip, email });
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
