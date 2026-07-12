@@ -13,6 +13,8 @@ const STATIC_ROUTES = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/ai-byra-linkoping", changefreq: "weekly", priority: "0.95" },
   { path: "/ai-konsult-sverige", changefreq: "weekly", priority: "0.95" },
+  { path: "/ai-automation-foretag", changefreq: "weekly", priority: "0.95" },
+  { path: "/ai-karta", changefreq: "weekly", priority: "0.9" },
   { path: "/tjanster", changefreq: "weekly", priority: "0.9" },
   { path: "/tjanster/hemsidor", changefreq: "monthly", priority: "0.85" },
   { path: "/tjanster/ehandel", changefreq: "monthly", priority: "0.85" },
@@ -24,11 +26,12 @@ const STATIC_ROUTES = [
   { path: "/tjanster/grafisk-profil", changefreq: "monthly", priority: "0.75" },
   { path: "/tjanster/fotografering", changefreq: "monthly", priority: "0.75" },
   { path: "/arbete", changefreq: "monthly", priority: "0.85" },
+  { path: "/produkter", changefreq: "monthly", priority: "0.8" },
+  { path: "/process", changefreq: "monthly", priority: "0.8" },
   { path: "/priser", changefreq: "monthly", priority: "0.85" },
   { path: "/om", changefreq: "monthly", priority: "0.75" },
   { path: "/kontakt", changefreq: "monthly", priority: "0.8" },
   { path: "/blogg", changefreq: "weekly", priority: "0.9" },
-  { path: "/ai-karta", changefreq: "weekly", priority: "0.9" },
   { path: "/metodik", changefreq: "monthly", priority: "0.75" },
   { path: "/webbyra-linkoping", changefreq: "monthly", priority: "0.9" },
   { path: "/digital-marknadsforing-linkoping", changefreq: "weekly", priority: "0.9" },
@@ -37,36 +40,10 @@ const STATIC_ROUTES = [
   { path: "/ai-konsult-linkoping", changefreq: "weekly", priority: "0.9" },
   { path: "/google-ads-linkoping", changefreq: "weekly", priority: "0.9" },
   { path: "/apputveckling-linkoping", changefreq: "weekly", priority: "0.9" },
+  { path: "/en", changefreq: "monthly", priority: "0.65" },
   { path: "/redaktionell-policy", changefreq: "yearly", priority: "0.3" },
   { path: "/integritetspolicy", changefreq: "yearly", priority: "0.3" },
 ];
-
-const CITY_ROUTES = [
-  "linkoping",
-  "norrkoping",
-  "stockholm",
-  "goteborg",
-  "malmo",
-  "uppsala",
-  "orebro",
-  "jonkoping",
-];
-
-for (const slug of CITY_ROUTES) {
-  STATIC_ROUTES.push({
-    path: `/saas-utveckling-${slug}`,
-    changefreq: "monthly",
-    priority: "0.7",
-  });
-
-  if (slug !== "linkoping") {
-    STATIC_ROUTES.push({
-      path: `/ai-byra-${slug}`,
-      changefreq: "monthly",
-      priority: "0.7",
-    });
-  }
-}
 
 function escapeXml(value) {
   return String(value).replace(/[<>&'"]/g, (character) =>
@@ -81,7 +58,8 @@ function escapeXml(value) {
 }
 
 function urlBlock({ loc, lastmod, changefreq, priority }) {
-  return `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+  const modified = lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : "";
+  return `  <url>\n    <loc>${escapeXml(loc)}</loc>${modified}\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 }
 
 function buildUrlset(entries) {
@@ -103,6 +81,13 @@ function write(file, content) {
   writeFileSync(output, content, "utf8");
 }
 
+function extractObjectSlugs(relativeFile) {
+  const source = resolve(ROOT, relativeFile);
+  if (!existsSync(source)) return [];
+  const text = readFileSync(source, "utf8");
+  return [...text.matchAll(/\bslug:\s*"([^"]+)"/g)].map((match) => match[1]);
+}
+
 function extractArticles() {
   const files = [
     "articlesData1.ts",
@@ -120,35 +105,68 @@ function extractArticles() {
     if (!existsSync(source)) continue;
 
     const text = readFileSync(source, "utf8");
-    const blocks = text.matchAll(
-      /slug:\s*"([^"]+)"[\s\S]*?updatedDate:\s*"([^"]+)"/g,
-    );
+    const blocks = text.matchAll(/slug:\s*"([^"]+)"[\s\S]*?updatedDate:\s*"([^"]+)"/g);
 
     for (const match of blocks) {
       articles.push({
         loc: `${SITE_URL}/blogg/${match[1]}`,
-        lastmod: match[2] || BUILD_DATE,
+        lastmod: match[2],
         changefreq: "monthly",
         priority: "0.8",
       });
     }
   }
 
+  return dedupeByLocation(articles);
+}
+
+function dedupeByLocation(entries) {
   const seen = new Set();
-  return articles.filter((article) => {
-    if (seen.has(article.loc)) return false;
-    seen.add(article.loc);
+  return entries.filter((entry) => {
+    if (seen.has(entry.loc)) return false;
+    seen.add(entry.loc);
     return true;
   });
 }
 
-function main() {
-  const pages = STATIC_ROUTES.map((route) => ({
+function buildPageEntries() {
+  const entries = STATIC_ROUTES.map((route) => ({
     loc: `${SITE_URL}${route.path}`,
-    lastmod: BUILD_DATE,
     changefreq: route.changefreq,
     priority: route.priority,
   }));
+
+  const citySlugs = extractObjectSlugs("src/lib/cityContent.ts");
+  for (const slug of citySlugs) {
+    entries.push({
+      loc: `${SITE_URL}/saas-utveckling-${slug}`,
+      changefreq: "monthly",
+      priority: "0.7",
+    });
+
+    if (slug !== "linkoping") {
+      entries.push({
+        loc: `${SITE_URL}/ai-byra-${slug}`,
+        changefreq: "monthly",
+        priority: "0.7",
+      });
+    }
+  }
+
+  const portfolioSlugs = extractObjectSlugs("src/data/portfolio.ts");
+  for (const slug of portfolioSlugs) {
+    entries.push({
+      loc: `${SITE_URL}/arbete/${slug}`,
+      changefreq: "monthly",
+      priority: "0.75",
+    });
+  }
+
+  return dedupeByLocation(entries);
+}
+
+function main() {
+  const pages = buildPageEntries();
   const blog = extractArticles();
 
   write("sitemap-pages.xml", buildUrlset(pages));
@@ -161,9 +179,7 @@ function main() {
     ]),
   );
 
-  console.log(
-    `Generated sitemap index with ${pages.length} pages and ${blog.length} blog posts.`,
-  );
+  console.log(`Generated sitemap index with ${pages.length} pages and ${blog.length} blog posts.`);
 }
 
 main();

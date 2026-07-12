@@ -105,6 +105,7 @@ export const SEO = ({
       <meta property="og:url" content={url} />
       <meta property="og:type" content={ogType} />
       <meta property="og:image" content={fullOgImage} />
+      <meta property="og:image:type" content="image/jpeg" />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={ogImageAlt} />
@@ -132,8 +133,8 @@ export const SEO = ({
       <meta name="twitter:image" content={fullOgImage} />
       <meta name="twitter:image:alt" content={ogImageAlt} />
 
-      {jsonLdArray.map((schema, idx) => (
-        <script key={idx} type="application/ld+json">
+      {jsonLdArray.map((schema, index) => (
+        <script key={index} type="application/ld+json">
           {JSON.stringify(schema)}
         </script>
       ))}
@@ -177,7 +178,9 @@ export function buildArticleSchema(opts: {
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/favicon.svg`,
+        url: DEFAULT_OG,
+        width: 1200,
+        height: 630,
       },
     },
     mainEntityOfPage: {
@@ -197,9 +200,9 @@ export function buildBreadcrumbSchema(items: { name: string; url: string }[]): R
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, idx) => ({
+    itemListElement: items.map((item, index) => ({
       "@type": "ListItem",
-      position: idx + 1,
+      position: index + 1,
       name: item.name,
       item: item.url.startsWith("http") ? item.url : `${SITE_URL}${item.url}`,
     })),
