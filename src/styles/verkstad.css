@@ -421,7 +421,7 @@
 .vk-copybtn:hover { border-color: var(--gran); color: var(--gran); }
 .vk-copybtn.ok { border-color: var(--gran); color: var(--gran); background: var(--gran-soft); }
 
-.vk-hub-grid { display: grid; gap: 22px; grid-template-columns: repeat(3, 1fr); margin-top: 48px; }
+.vk-hub-grid { display: grid; gap: 22px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 48px; }
 @media (max-width: 900px) { .vk-hub-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .vk-hub-grid { grid-template-columns: 1fr; } }
 .vk-hub-card {
