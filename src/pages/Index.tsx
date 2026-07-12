@@ -5,14 +5,12 @@ import { ArrowRight, ArrowUpRight, Check, Plus, Minus } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
+import { Reveal, VkNav, VkFooter, CITIES } from "@/components/verkstad/VerkstadLayout";
 import "@/styles/verkstad.css";
 
-/* ─────────────────────────────────────────────────────────────
-   NORDISK VERKSTAD — startsidans nya designsystem
-   Presentation only. Rör inte scripts/, supabase-anrop eller routes.
-   ───────────────────────────────────────────────────────────── */
+// Re-export for backwards compatibility with pages that import from @/pages/Index
+export { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 
-/* Nordisk verkstad-designen lever i src/styles/verkstad.css */
 
 /* ────────── Data ────────── */
 
