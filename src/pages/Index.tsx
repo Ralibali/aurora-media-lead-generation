@@ -4,6 +4,7 @@ import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-mot
 import { ArrowRight, ArrowUpRight, Check, Plus, Minus } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
+import { trackEvent } from "@/lib/analytics";
 import "@/styles/verkstad.css";
 
 /* ─────────────────────────────────────────────────────────────
