@@ -824,7 +824,6 @@ export default function Prospektering() {
                                     />
                                   </td>
                                 </tr>
-                              </>
                             );
                           })}
                         </tbody>
