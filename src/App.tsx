@@ -45,7 +45,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminContent from "./pages/admin/Content";
 import AdminSeo from "./pages/admin/Seo";
 import AdminEmail from "./pages/admin/Email";
-import AdminProspektering from "./pages/admin/Prospektering";
+const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
 import EnIndex from "./pages/en/Index";
 import Content from "./pages/tjanster/Content";
 import Ehandel from "./pages/tjanster/Ehandel";
