@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Loader2, Search, RefreshCw, AlertTriangle } from "lucide-react";
-import AdminShell, { adminFetch, AdminError } from "@/pages/admin/AdminShell";
+import AdminShell, { ADMIN_STORAGE_KEY } from "@/pages/admin/AdminShell";
+import { supabase } from "@/integrations/supabase/client";
 
 type NeedType = "webb" | "ehandel" | "ai" | "valfritt";
 
