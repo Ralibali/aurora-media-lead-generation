@@ -608,6 +608,9 @@ const AIKartaSection = () => (
             <Link to="/ai-byra-linkoping" onClick={() => trackEvent("home_related_link_click", { target: "ai_byra_linkoping" })}>
               AI-byrå i Linköping →
             </Link>
+            <Link to="/verktyg" onClick={() => trackEvent("home_related_link_click", { target: "verktyg" })}>
+              Gratis verktyg →
+            </Link>
           </div>
         </div>
       </Reveal>

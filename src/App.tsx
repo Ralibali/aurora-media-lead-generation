@@ -54,6 +54,13 @@ import Hemsidor from "./pages/tjanster/Hemsidor";
 import MetaAds from "./pages/tjanster/MetaAds";
 import Mobilapp from "./pages/tjanster/Mobilapp";
 import Seo from "./pages/tjanster/Seo";
+import VerktygIndex from "./pages/verktyg/VerktygIndex";
+import RoiKalkylator from "./pages/verktyg/RoiKalkylator";
+import AppPrisraknare from "./pages/verktyg/AppPrisraknare";
+import SeoKalkylator from "./pages/verktyg/SeoKalkylator";
+import AiMognadsanalys from "./pages/verktyg/AiMognadsanalys";
+import PersonalkostnadVsAi from "./pages/verktyg/PersonalkostnadVsAi";
+import PromptGenerator from "./pages/verktyg/PromptGenerator";
 
 const queryClient = new QueryClient();
 
@@ -266,6 +273,48 @@ const seoMap: Record<string, SEOConfig> = {
       "Läs hur Aurora Media behandlar personuppgifter och arbetar för att skydda din integritet.",
     canonical: "https://auroramedia.se/integritetspolicy",
   },
+  "/verktyg": {
+    title: "Gratis verktyg – kalkylatorer, ROI och AI-mognad | Aurora Media",
+    description:
+      "Aurora Medias gratis verktyg: AI ROI-kalkylator, app-prisräknare, SEO-kalkylator, AI-mognadsanalys, personalkostnadsjämförelse och prompt-generator.",
+    canonical: "https://auroramedia.se/verktyg",
+  },
+  "/verktyg/ai-roi-kalkylator": {
+    title: "AI ROI-kalkylator – räkna ut besparing & återbetalning | Aurora Media",
+    description:
+      "Räkna ut hur mycket AI och automation kan spara ert företag per år, återbetalningstid och 3-års nettovärde. Gratis kalkylator utan inloggning.",
+    canonical: "https://auroramedia.se/verktyg/ai-roi-kalkylator",
+  },
+  "/verktyg/app-prisraknare": {
+    title: "App-prisräknare – vad kostar en app eller SaaS? | Aurora Media",
+    description:
+      "Uppskatta priset för app, SaaS eller intern plattform. Välj funktioner, integrationer och tidsram och få ett transparent prisintervall.",
+    canonical: "https://auroramedia.se/verktyg/app-prisraknare",
+  },
+  "/verktyg/seo-kalkylator": {
+    title: "SEO-kalkylator – räkna ut potentiell omsättning från SEO | Aurora Media",
+    description:
+      "Se hur mycket extra omsättning och bruttovinst SEO kan ge er per månad och år, baserat på trafik, konvertering och ordervärde.",
+    canonical: "https://auroramedia.se/verktyg/seo-kalkylator",
+  },
+  "/verktyg/ai-mognadsanalys": {
+    title: "AI-mognadsanalys – gratis test på 2 minuter | Aurora Media",
+    description:
+      "Testa er AI-mognad på 2 minuter. Få poäng, nivå 1–5 och tre konkreta nästa steg – helt gratis och utan inloggning.",
+    canonical: "https://auroramedia.se/verktyg/ai-mognadsanalys",
+  },
+  "/verktyg/personalkostnad-vs-ai": {
+    title: "Personalkostnad vs AI – jämför årskostnad | Aurora Media",
+    description:
+      "Jämför årlig personalkostnad med AI/automation baserat på lön, sociala avgifter och driftkostnad. Se potentialen utan att ersätta människor.",
+    canonical: "https://auroramedia.se/verktyg/personalkostnad-vs-ai",
+  },
+  "/verktyg/prompt-generator": {
+    title: "Prompt-generator – bygg strukturerade AI-prompts på svenska | Aurora Media",
+    description:
+      "Generera strukturerade svenska AI-prompts för ChatGPT, Claude och Gemini. Fyll i mål, roll, målgrupp och ton – kopiera resultatet med ett klick.",
+    canonical: "https://auroramedia.se/verktyg/prompt-generator",
+  },
 };
 
 function getDynamicSeo(pathname: string): SEOConfig {
@@ -414,6 +463,13 @@ const App = () => (
               <Route path="/ai-konsult-linkoping" element={<AiKonsultLinkoping />} />
               <Route path="/google-ads-linkoping" element={<GoogleAdsLinkoping />} />
               <Route path="/apputveckling-linkoping" element={<ApputvecklingLinkoping />} />
+              <Route path="/verktyg" element={<VerktygIndex />} />
+              <Route path="/verktyg/ai-roi-kalkylator" element={<RoiKalkylator />} />
+              <Route path="/verktyg/app-prisraknare" element={<AppPrisraknare />} />
+              <Route path="/verktyg/seo-kalkylator" element={<SeoKalkylator />} />
+              <Route path="/verktyg/ai-mognadsanalys" element={<AiMognadsanalys />} />
+              <Route path="/verktyg/personalkostnad-vs-ai" element={<PersonalkostnadVsAi />} />
+              <Route path="/verktyg/prompt-generator" element={<PromptGenerator />} />
               <Route path="/saas-utveckling-:city" element={<CityPage />} />
               <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
