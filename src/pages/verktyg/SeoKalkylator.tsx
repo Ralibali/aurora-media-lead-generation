@@ -1,128 +1,122 @@
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
-import { VerktygShell, toolByslug } from "./VerktygShell";
+import {
+  ToolShell, toolByslug, NumberField, Metric, Bar, ScenarioSwitcher, CopyButton,
+  SCENARIO_FACTOR, type Scenario,
+} from "./VerktygShell";
 
 const fmt = (n: number) => new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(Math.round(n));
 
 const SeoKalkylator = () => {
   const meta = toolByslug("seo-kalkylator");
   const { open } = useContactModal();
-  const [visits, setVisits] = useState(2000);
-  const [convPct, setConvPct] = useState(1.5);
-  const [aov, setAov] = useState(1200);
-  const [marginPct, setMarginPct] = useState(45);
-  const [increasePct, setIncreasePct] = useState(40);
-  const [calculated, setCalculated] = useState(false);
+  const [params, setParams] = useSearchParams();
+  const q = (k: string, d: number) => { const v = Number(params.get(k)); return Number.isFinite(v) && v > 0 ? v : d; };
+
+  const [visits, setVisits] = useState(q("v", 2000));
+  const [convPct, setConvPct] = useState(q("c", 1.5));
+  const [aov, setAov] = useState(q("a", 1200));
+  const [marginPct, setMarginPct] = useState(q("m", 45));
+  const [increasePct, setIncreasePct] = useState(q("i", 40));
+  const [scenario, setScenario] = useState<Scenario>((params.get("s") as Scenario) || "realistisk");
+
+  useEffect(() => {
+    const next = new URLSearchParams({
+      v: String(visits), c: String(convPct), a: String(aov), m: String(marginPct), i: String(increasePct), s: scenario,
+    });
+    setParams(next, { replace: true });
+  }, [visits, convPct, aov, marginPct, increasePct, scenario, setParams]);
 
   const result = useMemo(() => {
-    const extraVisits = visits * (increasePct / 100);
+    const factor = SCENARIO_FACTOR[scenario];
+    const effInc = increasePct * factor;
+    const currentOrders = visits * (convPct / 100);
+    const currentRev = currentOrders * aov;
+    const extraVisits = visits * (effInc / 100);
     const extraOrders = extraVisits * (convPct / 100);
     const extraRevMonth = extraOrders * aov;
     const extraProfitMonth = extraRevMonth * (marginPct / 100);
     return {
-      extraVisits,
-      extraOrders,
-      extraRevMonth,
+      effInc, currentOrders, currentRev,
+      extraVisits, extraOrders, extraRevMonth,
       extraRevYear: extraRevMonth * 12,
-      extraProfitMonth,
-      extraProfitYear: extraProfitMonth * 12,
+      extraProfitMonth, extraProfitYear: extraProfitMonth * 12,
+      newVisits: visits + extraVisits,
     };
-  }, [visits, convPct, aov, marginPct, increasePct]);
+  }, [visits, convPct, aov, marginPct, increasePct, scenario]);
+
+  const summary = [
+    `SEO-kalkylator – Aurora Media`,
+    `Scenario: ${scenario} (trafikökning ${result.effInc.toFixed(0)} %)`,
+    `Idag: ${fmt(visits)} besök/mån · ${convPct}% konv · ${fmt(aov)} kr AOV · ${marginPct}% marginal`,
+    ``,
+    `Extra besök/mån: ${fmt(result.extraVisits)}`,
+    `Extra order/mån: ${fmt(result.extraOrders)}`,
+    `Extra omsättning/mån: ${fmt(result.extraRevMonth)} kr`,
+    `Extra omsättning/år: ${fmt(result.extraRevYear)} kr`,
+    `Extra bruttovinst/mån: ${fmt(result.extraProfitMonth)} kr`,
+    `Extra bruttovinst/år: ${fmt(result.extraProfitYear)} kr`,
+  ].join("\n");
 
   return (
-    <VerktygShell meta={meta} ctaHref="/tjanster/seo" ctaLabel="Läs mer om vår SEO-tjänst">
-      <div className="grid gap-8 md:grid-cols-2">
-        <form
-          className="space-y-5 rounded-3xl border border-border bg-secondary/40 p-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setCalculated(true);
-            trackEvent("verktyg_seo_calculate");
-          }}
-        >
-          <Num label="Månadsbesök idag" value={visits} onChange={setVisits} min={0} step={50} />
-          <Num label="Konverteringsgrad (%)" value={convPct} onChange={setConvPct} min={0} max={100} step={0.1} />
-          <Num label="Snittordervärde / lead-värde (kr)" value={aov} onChange={setAov} min={0} step={50} />
-          <Num label="Bruttomarginal (%)" value={marginPct} onChange={setMarginPct} min={0} max={100} step={1} />
-          <Num label="Möjlig trafikökning (%)" value={increasePct} onChange={setIncreasePct} min={0} max={500} step={5} />
-          <button
-            type="submit"
-            className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition"
-          >
-            Räkna ut potential
-          </button>
-        </form>
+    <ToolShell meta={meta} ctaHref="/tjanster/seo" ctaLabel="Läs mer om SEO-tjänsten">
+      <div className="vk-tool-grid">
+        <div className="vk-panel-card">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 20 }}>
+            <span className="vk-mono">Antaganden</span>
+            <ScenarioSwitcher value={scenario} onChange={setScenario} event="verktyg_seo_scenario" />
+          </div>
+          <NumberField label="Månadsbesök idag" value={visits} onChange={setVisits} min={0} step={50} />
+          <NumberField label="Konverteringsgrad" suffix="%" value={convPct} onChange={setConvPct} min={0} max={100} step={0.1} hint="från GA" />
+          <NumberField label="Snittordervärde / lead-värde" suffix="kr" value={aov} onChange={setAov} min={0} step={50} />
+          <NumberField label="Bruttomarginal" suffix="%" value={marginPct} onChange={setMarginPct} min={0} max={100} />
+          <NumberField label="Möjlig trafikökning" suffix="%" value={increasePct} onChange={setIncreasePct} min={0} max={500} step={5} hint="justeras av scenariot" />
+          <p className="vk-mono" style={{ marginTop: 4 }}>Antagande: samma konvertering & AOV vid högre trafik.</p>
+        </div>
 
-        <div className="rounded-3xl border border-border bg-background p-6" aria-live="polite">
-          <h2 className="text-lg font-semibold text-foreground">Resultat</h2>
-          {!calculated ? (
-            <p className="mt-3 text-sm text-muted-foreground">Fyll i formuläret för att se potentialen.</p>
-          ) : (
-            <ul className="mt-4 space-y-3 text-sm">
-              <Row label="Extra besök / mån" v={`${fmt(result.extraVisits)}`} />
-              <Row label="Extra order / mån" v={`${fmt(result.extraOrders)}`} />
-              <Row label="Extra omsättning / mån" v={`${fmt(result.extraRevMonth)} kr`} />
-              <Row label="Extra omsättning / år" v={`${fmt(result.extraRevYear)} kr`} highlight />
-              <Row label="Extra bruttovinst / mån" v={`${fmt(result.extraProfitMonth)} kr`} />
-              <Row label="Extra bruttovinst / år" v={`${fmt(result.extraProfitYear)} kr`} highlight />
-            </ul>
-          )}
-          <div className="mt-6 flex flex-col gap-3">
+        <div className="vk-panel-card muted" aria-live="polite">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+            <span className="vk-mono">Resultat (live)</span>
+            <CopyButton text={summary} event="verktyg_seo_copy" />
+          </div>
+
+          <div className="vk-metrics">
+            <Metric label="Extra bruttovinst / år" value={`${fmt(result.extraProfitYear)} kr`} hero span2 />
+            <Metric label="Extra omsättning / mån" value={`${fmt(result.extraRevMonth)} kr`} />
+            <Metric label="Extra omsättning / år" value={`${fmt(result.extraRevYear)} kr`} />
+            <Metric label="Extra besök / mån" value={fmt(result.extraVisits)} />
+            <Metric label="Extra order / mån" value={fmt(result.extraOrders)} />
+          </div>
+
+          <div style={{ marginTop: 28 }}>
+            <div className="vk-mono" style={{ marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
+              <span>Trafik nu vs möjlig</span>
+              <span>{fmt(visits)} → {fmt(result.newVisits)}</span>
+            </div>
+            <Bar value={visits} max={result.newVisits || 1} />
+            <div className="vk-mono" style={{ marginTop: 16, marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
+              <span>Omsättning nu vs möjlig / år</span>
+              <span>{fmt(result.currentRev * 12)} → {fmt(result.currentRev * 12 + result.extraRevYear)} kr</span>
+            </div>
+            <Bar value={result.currentRev * 12} max={(result.currentRev * 12 + result.extraRevYear) || 1} />
+          </div>
+
+          <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 10 }}>
             <button
               type="button"
-              onClick={() => {
-                trackEvent("verktyg_seo_cta_kontakt");
-                open("SEO", { internalNote: "SEO-kalkylator" });
-              }}
-              className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition"
+              className="vk-btn vk-btn-primary"
+              onClick={() => { trackEvent("verktyg_seo_cta_kontakt", { scenario }); open("SEO", { internalNote: summary }); }}
             >
-              Diskutera SEO-arbete
+              Diskutera SEO-arbete →
             </button>
-            <Link
-              to="/tjanster/seo"
-              onClick={() => trackEvent("verktyg_seo_service_link")}
-              className="rounded-full border border-primary px-6 py-3 text-center text-sm font-semibold text-primary hover:bg-primary hover:text-primary-foreground transition"
-            >
-              Läs mer om SEO-tjänsten
-            </Link>
+            <CopyButton text={typeof window !== "undefined" ? window.location.href : ""} label="Dela länk" event="verktyg_seo_share" />
           </div>
         </div>
       </div>
-    </VerktygShell>
+    </ToolShell>
   );
 };
-
-function Num({
-  label, value, onChange, min = 0, max, step = 1,
-}: { label: string; value: number; onChange: (n: number) => void; min?: number; max?: number; step?: number }) {
-  const id = label.replace(/\s+/g, "-").toLowerCase();
-  return (
-    <label htmlFor={id} className="block">
-      <span className="mb-1.5 block text-sm font-semibold text-foreground">{label}</span>
-      <input
-        id={id}
-        type="number"
-        inputMode="decimal"
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        onChange={(e) => onChange(Number(e.target.value) || 0)}
-        className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-base text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-      />
-    </label>
-  );
-}
-
-function Row({ label, v, highlight }: { label: string; v: string; highlight?: boolean }) {
-  return (
-    <li className="flex items-baseline justify-between border-b border-border pb-2">
-      <span className="text-muted-foreground">{label}</span>
-      <span className={`font-display font-bold ${highlight ? "text-primary text-xl" : "text-foreground"}`}>{v}</span>
-    </li>
-  );
-}
 
 export default SeoKalkylator;
