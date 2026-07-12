@@ -85,36 +85,6 @@ const CountUp = ({ to, suffix = "", prefix = "" }: { to: number; suffix?: string
   return <span ref={ref}>{prefix}{n}{suffix}</span>;
 };
 
-/* ────────── Nav ────────── */
-
-export const VkNav = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const { open } = useContactModal();
-  useEffect(() => {
-    const on = () => setScrolled(window.scrollY > 20);
-    on(); window.addEventListener("scroll", on, { passive: true });
-    return () => window.removeEventListener("scroll", on);
-  }, []);
-  return (
-    <header className={`vk-nav ${scrolled ? "scrolled" : ""}`}>
-      <div className="vk-wrap vk-nav-inner">
-        <Link to="/" className="vk-brand">
-          <span className="vk-brand-dot" /> aurora media
-        </Link>
-        <nav className="vk-nav-links" aria-label="Huvudmeny">
-          <Link to="/arbete">Arbete</Link>
-          <Link to="/tjanster">Tjänster</Link>
-          <Link to="/priser">Priser</Link>
-          <Link to="/ai-karta">AI-kartan</Link>
-          <Link to="/om">Om</Link>
-        </nav>
-        <button onClick={() => open()} className="vk-btn vk-btn-ghost" style={{ padding: "10px 18px", fontSize: 13 }}>
-          Boka samtal <ArrowRight size={14} />
-        </button>
-      </div>
-    </header>
-  );
-};
 
 /* ────────── Signature animation ────────── */
 
