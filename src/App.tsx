@@ -458,14 +458,19 @@ const App = () => (
               <Route path="/metodik" element={<Metodik />} />
               <Route path="/redaktionell-policy" element={<RedaktionellPolicy />} />
               <Route path="/integritetspolicy" element={<Integritetspolicy />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/leads" element={<Leads />} />
-              <Route path="/admin/content" element={<AdminContent />} />
-              <Route path="/admin/seo" element={<AdminSeo />} />
-              <Route path="/admin/email" element={<AdminEmail />} />
-              <Route path="/admin/text-generator" element={<TextGenerator />} />
-              <Route path="/admin/faq-rapport" element={<FaqRapport />} />
-              <Route path="/admin/prospektering" element={<Suspense fallback={null}><AdminProspektering /></Suspense>} />
+              {/* Admin routes: wrapped in a single ErrorBoundary + Suspense so
+                  any broken chunk or module-init throw shows a readable error
+                  instead of a white screen, and never affects the public site. */}
+              <Route element={<AdminBoundary />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/leads" element={<Leads />} />
+                <Route path="/admin/content" element={<AdminContent />} />
+                <Route path="/admin/seo" element={<AdminSeo />} />
+                <Route path="/admin/email" element={<AdminEmail />} />
+                <Route path="/admin/text-generator" element={<TextGenerator />} />
+                <Route path="/admin/faq-rapport" element={<FaqRapport />} />
+                <Route path="/admin/prospektering" element={<AdminProspektering />} />
+              </Route>
               <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
               <Route path="/digital-marknadsforing-linkoping" element={<DigitalMarknadsforingLinkoping />} />
               <Route path="/seo-byra-linkoping" element={<SeoByraLinkoping />} />
