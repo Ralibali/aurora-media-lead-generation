@@ -7,6 +7,7 @@ type Overview = {
   overview: {
     leads_total: number; leads_karta: number; leads_kontakt: number; leads_genomlysning: number;
     leads_7d: number; leads_30d: number;
+    leads_kontakt_7d?: number; leads_kontakt_30d?: number;
     cta_clicks_30d: number; faq_searches_30d: number; faq_zero_results_30d: number; ai_karta_clicks_30d: number;
   };
   recent_leads: { id: string; name: string; company: string | null; email: string; source: string; created_at: string }[];
@@ -77,7 +78,15 @@ export default function AdminDashboard() {
           <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
             <Stat label="Leads totalt" val={data.overview.leads_total} sub={`${data.overview.leads_7d} senaste 7 d`} />
             <Stat label="AI-karta" val={data.overview.leads_karta} />
-            <Stat label="Kontakt" val={data.overview.leads_kontakt} />
+            <Stat
+              label="Kontakt (konverteringar)"
+              val={data.overview.leads_kontakt}
+              sub={
+                data.overview.leads_kontakt_7d !== undefined
+                  ? `${data.overview.leads_kontakt_7d} · 7 d  ·  ${data.overview.leads_kontakt_30d ?? 0} · 30 d`
+                  : undefined
+              }
+            />
             <Stat label="Genomlysning" val={data.overview.leads_genomlysning} />
             <Stat label="CTA-klick (30d)" val={data.overview.cta_clicks_30d} />
             <Stat label="FAQ-sökningar (30d)" val={data.overview.faq_searches_30d} sub={`${data.overview.faq_zero_results_30d} utan träff`} />
