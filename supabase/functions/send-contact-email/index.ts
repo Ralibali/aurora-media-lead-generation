@@ -23,8 +23,8 @@ interface Body {
   _renderedAt?: number; // klienttid när formuläret renderades (ms)
 }
 
-// Enkel in-memory rate limiter per IP. Återställs när funktionen kallstartar,
-// vilket räcker för att stoppa enkel skräp-trafik.
+// Enkel in-memory rate limiter per IP (snabbfilter). Persistent DB-limit görs
+// dessutom senare via RPC `try_contact_rate_limit` — den är den auktoritativa.
 type RateEntry = { count: number; windowStart: number; lastAt: number };
 const RATE_BUCKET = new Map<string, RateEntry>();
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 timme
@@ -53,6 +53,52 @@ function getClientIp(req: Request): string {
   const xff = req.headers.get("x-forwarded-for");
   if (xff) return xff.split(",")[0].trim();
   return req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip") || "unknown";
+}
+
+// Godkända origins för att stoppa cross-site postningar från bot-nät.
+const ALLOWED_ORIGIN_HOSTS = new Set([
+  "auroramedia.se",
+  "www.auroramedia.se",
+  "media-magic-leads.lovable.app",
+  "localhost",
+  "127.0.0.1",
+]);
+
+function isAllowedOrigin(req: Request): boolean {
+  const origin = req.headers.get("origin") || req.headers.get("referer") || "";
+  if (!origin) return false;
+  try {
+    const host = new URL(origin).hostname;
+    if (ALLOWED_ORIGIN_HOSTS.has(host)) return true;
+    // Tillåt Lovable preview-subdomäner (id-preview--*.lovable.app)
+    if (host.endsWith(".lovable.app")) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+// Innehållsheuristik — plockar upp uppenbara skräpmönster som slipper igenom Zod.
+function looksLikeSpam(name: string, message: string): string | null {
+  const combined = `${name}\n${message}`;
+  const urlMatches = combined.match(/(https?:\/\/|www\.)/gi) ?? [];
+  if (urlMatches.length > 3) return "too_many_links";
+
+  // Övervägande icke-latinska tecken (kyrilliska/CJK) i namn = ofta spam-bot
+  const nonLatin = (name.match(/[\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF]/g) ?? []).length;
+  if (name.length > 0 && nonLatin / name.length > 0.5) return "non_latin_name";
+
+  // Meddelande där > 70% är versaler och > 40 tecken långt
+  const letters = message.replace(/[^A-Za-zÅÄÖåäö]/g, "");
+  if (letters.length > 40) {
+    const upper = letters.replace(/[^A-ZÅÄÖ]/g, "").length;
+    if (upper / letters.length > 0.7) return "all_caps";
+  }
+
+  // BBCode / vanliga spam-triggers
+  if (/\[url=|\[link=|<a\s+href=/i.test(message)) return "bbcode_or_html_link";
+
+  return null;
 }
 
 const escape = (s: string) =>
