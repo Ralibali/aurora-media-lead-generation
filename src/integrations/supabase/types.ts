@@ -604,6 +604,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      try_contact_rate_limit: {
+        Args: {
+          p_email: string
+          p_ip: string
+          p_max_per_email?: number
+          p_max_per_ip?: number
+          p_window_seconds?: number
+        }
+        Returns: boolean
+      }
       try_prospecting_rate_limit: {
         Args: { p_admin_id: string; p_max?: number; p_window_seconds?: number }
         Returns: boolean
