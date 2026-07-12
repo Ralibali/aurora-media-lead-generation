@@ -16,9 +16,14 @@ import "@/styles/verkstad.css";
 
 /* ────────── Data ────────── */
 
-const PRODUCTS = [
-  "Aurora Transport", "Updro", "Hönsgården", "Odlingsdagboken",
-  "AgilityManager", "Viriditas", "Cykelhjälpen", "Bergs Slussar Glamping",
+const PRODUCTS: { name: string; url: string }[] = [
+  { name: "Aurora Transport", url: "https://auroratransport.se" },
+  { name: "Updro", url: "https://updro.se" },
+  { name: "Hönsgården", url: "https://honsgarden.se" },
+  { name: "Odlingsdagboken", url: "https://odlingsdagboken.com" },
+  { name: "AgilityManager", url: "https://agilitymanager.se" },
+  { name: "Viriditas", url: "https://viriditasmassage.se" },
+  { name: "Bergs Slussar Glamping", url: "https://goglampingsweden.se" },
 ];
 
 const CASES = [
@@ -26,13 +31,15 @@ const CASES = [
     title: "Aurora Transport",
     tagline: "Dispatch, körorder och Fortnox-fakturering för åkerier.",
     meta: "BYGGTID: <2 VECKOR · I DRIFT",
+    result: "Betalande kund dag 1",
     thumb: "/portfolio/aurora-transport.webp",
     href: "/arbete/aurora-transport",
   },
   {
     title: "Hönsgården",
     tagline: "Freemium-app med statistik och AI-stöd för hönsägare.",
-    meta: "BYGGTID: <3 VECKOR · BETALANDE KUND: DAG 1",
+    meta: "BYGGTID: <3 VECKOR · I DRIFT",
+    result: "67 % premium-konvertering bland aktiva",
     thumb: "/portfolio/honsgarden.webp",
     href: "/arbete/honsgarden",
   },
@@ -40,6 +47,7 @@ const CASES = [
     title: "Bergs Slussar Glamping",
     tagline: "Digital bokning och gästkommunikation vid Göta kanal.",
     meta: "BYGGTID: <2 VECKOR · I DRIFT",
+    result: "Lansering maj 2026",
     thumb: "/portfolio/goglamping-sweden.webp",
     href: "/arbete/goglamping-sweden",
   },
@@ -366,7 +374,18 @@ const ProofStrip = () => (
         <span className="vk-mono">I skarp drift just nu</span>
       </div>
       <div className="vk-marquee">
-        {[...PRODUCTS, ...PRODUCTS].map((p, i) => <span key={i}>{p}</span>)}
+        {[...PRODUCTS, ...PRODUCTS].map((p, i) => (
+          <a
+            key={`${p.url}-${i}`}
+            href={p.url}
+            target="_blank"
+            rel="noreferrer noopener"
+            onClick={() => trackEvent("home_product_link_click", { product: p.name })}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            {p.name}
+          </a>
+        ))}
       </div>
     </div>
     <div className="vk-wrap" style={{ paddingBlock: "clamp(40px, 6vw, 72px)" }}>
@@ -457,20 +476,37 @@ const CasesSection = () => (
       <div className="vk-cases">
         {CASES.map((c, i) => (
           <Reveal delay={i * 0.06} key={c.title}>
-            <Link to={c.href} className="vk-case">
+            <Link
+              to={c.href}
+              className="vk-case"
+              onClick={() => trackEvent("home_case_card_click", { case: c.title })}
+            >
               <div className="vk-case-browser">
                 <div className="vk-case-chrome"><i/><i/><i/></div>
                 <img src={c.thumb} alt={`${c.title} – produktskärmdump`} className="vk-case-img" loading="lazy" />
               </div>
               <h3>{c.title}</h3>
               <p>{c.tagline}</p>
-              <div className="vk-case-meta">{c.meta}</div>
+              <div
+                className="vk-mono"
+                style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--gran)" }}
+              >
+                <Check size={12} strokeWidth={3} /> {c.result}
+              </div>
+              <div className="vk-case-meta" style={{ marginTop: 8 }}>{c.meta}</div>
+              <div className="vk-mono" style={{ marginTop: 12, fontSize: 12, display: "inline-flex", alignItems: "center", gap: 4 }}>
+                Läs caset <ArrowRight size={12} />
+              </div>
             </Link>
           </Reveal>
         ))}
       </div>
-      <div style={{ marginTop: 32 }}>
-        <Link to="/arbete" className="vk-btn vk-btn-ghost">
+      <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", gap: 12 }}>
+        <Link
+          to="/arbete"
+          className="vk-btn vk-btn-ghost"
+          onClick={() => trackEvent("home_cases_all_click")}
+        >
           Alla case <ArrowRight size={14} />
         </Link>
       </div>
@@ -546,10 +582,32 @@ const AIKartaSection = () => (
             som går att automatisera och vad de kostar er idag. Gratis, fem minuter.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 8 }}>
-            <Link to="/ai-karta" className="vk-btn vk-btn-primary">
+            <Link
+              to="/ai-karta"
+              className="vk-btn vk-btn-primary"
+              onClick={() => trackEvent("home_ai_karta_section_click")}
+            >
               <span>Gör AI-kartan nu</span> <ArrowRight size={16} />
             </Link>
             <span className="vk-mono">Resultat direkt på skärmen · 4 uppföljande tips · Avsluta när ni vill</span>
+          </div>
+          <div
+            className="vk-mono"
+            style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 16, fontSize: 13 }}
+          >
+            <span style={{ color: "var(--granbark-mut)" }}>Läs mer:</span>
+            <Link to="/ai-automation-foretag" onClick={() => trackEvent("home_related_link_click", { target: "ai_automation" })}>
+              AI-automation för företag →
+            </Link>
+            <Link to="/tjanster" onClick={() => trackEvent("home_related_link_click", { target: "tjanster" })}>
+              Alla tjänster →
+            </Link>
+            <Link to="/priser" onClick={() => trackEvent("home_related_link_click", { target: "priser" })}>
+              Priser →
+            </Link>
+            <Link to="/ai-byra-linkoping" onClick={() => trackEvent("home_related_link_click", { target: "ai_byra_linkoping" })}>
+              AI-byrå i Linköping →
+            </Link>
           </div>
         </div>
       </Reveal>
@@ -710,13 +768,60 @@ export const VkFooter = () => (
 
 /* ────────── Page ────────── */
 
+const SITE = "https://auroramedia.se";
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const casesSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Byggda case av Aurora Media",
+  itemListElement: CASES.map((c, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    url: `${SITE}${c.href}`,
+    name: c.title,
+  })),
+};
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${SITE}/#localbusiness`,
+  name: "Aurora Media AB",
+  url: SITE,
+  email: "info@auroramedia.se",
+  areaServed: [
+    { "@type": "Country", name: "Sverige" },
+    { "@type": "City", name: "Linköping" },
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Linköping",
+    addressRegion: "Östergötland",
+    addressCountry: "SE",
+  },
+  identifier: { "@type": "PropertyValue", propertyID: "orgNr", value: "559272-0220" },
+  founder: { "@type": "Person", name: "Christoffer Holstensson" },
+};
+
 const Index = () => (
   <>
     <SEO
       title="AI-system och automation för småföretag | Aurora Media"
       description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 14 900 kr, snabb leverans och kod ni äger själva."
       canonical="/"
+      jsonLd={[faqSchema, casesSchema, localBusinessSchema]}
     />
+    
     
     <div className="verkstad">
       <VkNav />
