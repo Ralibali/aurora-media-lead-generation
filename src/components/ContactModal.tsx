@@ -380,6 +380,41 @@ const ContactDialog = ({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {Object.keys(fieldErrors).length > 0 && (
+              <div
+                role="alert"
+                aria-live="polite"
+                className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-sm"
+              >
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                  <div className="space-y-1">
+                    <p className="font-medium text-destructive">
+                      {Object.keys(fieldErrors).length === 1
+                        ? "Ett fält behöver rättas"
+                        : `${Object.keys(fieldErrors).length} fält behöver rättas`}
+                    </p>
+                    <ul className="list-disc space-y-0.5 pl-4 text-destructive/90">
+                      {Object.entries(fieldErrors).map(([field, msg]) => (
+                        <li key={field}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const el = document.querySelector<HTMLElement>(`[name="${field}"]`);
+                              el?.focus();
+                              el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                            }}
+                            className="underline-offset-2 hover:underline"
+                          >
+                            {msg}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
             {/* Honeypot — dolt fält. Riktiga användare ser inte detta. */}
             <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "-9999px", height: 0, overflow: "hidden" }}>
               <Label htmlFor="website">Webbplats (lämna tom)</Label>
