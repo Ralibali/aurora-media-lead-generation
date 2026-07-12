@@ -1,0 +1,2 @@
+REVOKE EXECUTE ON FUNCTION public.try_contact_rate_limit(text, text, integer, integer, integer) FROM anon, authenticated, PUBLIC;
+GRANT EXECUTE ON FUNCTION public.try_contact_rate_limit(text, text, integer, integer, integer) TO service_role;
