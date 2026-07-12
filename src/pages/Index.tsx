@@ -334,8 +334,9 @@ const HeroSection = () => (
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: .7, delay: .5 }}
         >
-          <Link to="/ai-karta" className="vk-btn vk-btn-primary">
+          <Link to="/ai-karta" className="vk-btn vk-btn-primary" onClick={() => trackEvent("home_hero_ai_karta_click")}>
             <span>Starta gratis AI-kartläggning</span> <ArrowRight size={16} />
+          </Link>
           </Link>
           <Link to="/arbete" className="vk-btn vk-btn-ghost">
             Se vad jag byggt <ArrowUpRight size={16} />
