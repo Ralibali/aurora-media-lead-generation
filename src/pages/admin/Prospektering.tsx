@@ -353,7 +353,7 @@ export default function Prospektering() {
 
   const selectedCampaign = campaigns.find((c) => c.id === selected) ?? null;
 
-  const isMobileTable = false; // handled via responsive css
+
 
   return (
     <AdminShell title="Prospektering" kicker="Admin · research">
