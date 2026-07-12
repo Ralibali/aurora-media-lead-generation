@@ -248,7 +248,7 @@ const ContactDialog = ({
       website: data.get("website") ?? "",
     });
     if (!parsed.success) {
-      // Sätt alla fältfel + visa första som toast
+      // Sätt alla fältfel + fokusera första felfält
       const newErrors: Record<string, string> = {};
       parsed.error.issues.forEach((issue) => {
         const path = issue.path[0];
@@ -257,7 +257,13 @@ const ContactDialog = ({
         }
       });
       setFieldErrors(newErrors);
-      toast.error(parsed.error.issues[0].message);
+      const firstField = parsed.error.issues[0]?.path[0];
+      if (typeof firstField === "string") {
+        const el = form.querySelector<HTMLElement>(`[name="${firstField}"]`);
+        el?.focus();
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      toast.error("Kontrollera fälten markerade i rött");
       return;
     }
     // Honeypot — om dolt fält är ifyllt: tysta avvisning
