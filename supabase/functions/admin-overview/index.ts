@@ -95,6 +95,8 @@ Deno.serve(async (req) => {
         leads_karta: leadsKarta.count ?? 0,
         leads_kontakt: leadsKontakt.count ?? 0,
         leads_genomlysning: leadsGen.count ?? 0,
+        leads_kontakt_7d: inWindow(leadsKontakt.data, 7),
+        leads_kontakt_30d: inWindow(leadsKontakt.data, 30),
         leads_7d: inWindow(leadsKarta.data, 7) + inWindow(leadsKontakt.data, 7) + inWindow(leadsGen.data, 7),
         leads_30d: inWindow(leadsKarta.data, 30) + inWindow(leadsKontakt.data, 30) + inWindow(leadsGen.data, 30),
         cta_clicks_30d: (ctaAll.data ?? []).length,
