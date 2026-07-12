@@ -672,45 +672,6 @@ const FinalCTA = () => {
   );
 };
 
-export const VkFooter = () => (
-  <footer className="vk-footer">
-    <div className="vk-wrap">
-      <div className="vk-footer-grid">
-        <div>
-          <h4>Tjänster</h4>
-          <Link to="/tjanster">Alla tjänster</Link>
-          <Link to="/tjanster/hemsidor">Hemsidor</Link>
-          <Link to="/tjanster/mobilapp">Mobilapp</Link>
-          <Link to="/ai-automation-foretag">AI-automation</Link>
-          <Link to="/tjanster/seo">SEO</Link>
-        </div>
-        <div>
-          <h4>Städer</h4>
-          {CITIES.map(([n, h]) => <Link key={h} to={h}>{n}</Link>)}
-        </div>
-        <div>
-          <h4>Case</h4>
-          <Link to="/arbete">Alla projekt</Link>
-          <Link to="/arbete/aurora-transport">Aurora Transport</Link>
-          <Link to="/arbete/honsgarden">Hönsgården</Link>
-          <Link to="/arbete/goglamping-sweden">Bergs Slussar Glamping</Link>
-        </div>
-        <div>
-          <h4>Bolag</h4>
-          <a href="mailto:info@auroramedia.se">info@auroramedia.se</a>
-          <Link to="/om">Om Aurora</Link>
-          <Link to="/kontakt">Kontakt</Link>
-          <Link to="/integritetspolicy">Integritetspolicy</Link>
-          <span style={{ display: "block", padding: "4px 0", opacity: .6 }}>Org.nr 559272-0220</span>
-        </div>
-      </div>
-      <div className="vk-footer-bottom">
-        <span>© {new Date().getFullYear()} Aurora Media AB · Linköping</span>
-        <span>Svarstid &lt; 24 h · GDPR & EU-datalagring</span>
-      </div>
-    </div>
-  </footer>
-);
 
 /* ────────── Page ────────── */
 
