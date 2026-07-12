@@ -434,7 +434,7 @@ export type Database = {
       }
       prospecting_campaigns: {
         Row: {
-          admin_id: string | null
+          admin_id: string
           created_at: string
           error_message: string | null
           id: string
@@ -448,7 +448,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          admin_id?: string | null
+          admin_id: string
           created_at?: string
           error_message?: string | null
           id?: string
@@ -462,7 +462,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          admin_id?: string | null
+          admin_id?: string
           created_at?: string
           error_message?: string | null
           id?: string
@@ -506,7 +506,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           domain: string
-          fit_score?: number
+          fit_score: number
           id?: string
           industry?: string | null
           observed_signals?: Json

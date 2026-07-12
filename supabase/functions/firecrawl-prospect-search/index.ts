@@ -16,7 +16,7 @@ import {
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-admin-token",
 };
 
 function json(body: unknown, status = 200) {
@@ -54,15 +54,20 @@ type FirecrawlSearchResult = {
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
+  // verify_jwt=true på plattformsnivå kräver redan giltig JWT (anon-nyckel).
+  // Verklig admin-check sker här via delad hemlighet i header x-admin-token
+  // (fallback: Authorization Bearer <password> för bakåtkompatibilitet).
   const PASSWORD = Deno.env.get("FAQ_ANALYTICS_PASSWORD") ?? "";
   const ADMIN = Deno.env.get("ADMIN_SECRET") ?? "";
-  const auth = req.headers.get("authorization") ?? "";
-  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  const adminHeader = req.headers.get("x-admin-token") ?? "";
+  const authHeader = req.headers.get("authorization") ?? "";
+  const bearer = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  const token = adminHeader || bearer;
   if (!token || (token !== PASSWORD && token !== ADMIN)) return json({ error: "Unauthorized" }, 401);
 
   const FIRECRAWL_API_KEY = Deno.env.get("FIRECRAWL_API_KEY") ?? "";
   if (!FIRECRAWL_API_KEY) {
-    return json({ error: "FIRECRAWL_API_KEY saknas i miljön. Länka Firecrawl-anslutningen i Lovable Connectors." }, 500);
+    return json({ error: "FIRECRAWL_API_KEY_MISSING", message: "FIRECRAWL_API_KEY saknas — länka Firecrawl-anslutningen i Lovable Connectors." }, 500);
   }
 
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -150,6 +155,7 @@ Deno.serve(async (req: Request) => {
     const { data: campaign, error: cErr } = await admin
       .from("prospecting_campaigns")
       .insert({
+        admin_id: "00000000-0000-0000-0000-000000000000", // delad admin-identitet (password-auth)
         name: campaignName,
         query: queryString,
         location,
