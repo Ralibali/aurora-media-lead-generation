@@ -44,6 +44,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminContent from "./pages/admin/Content";
 import AdminSeo from "./pages/admin/Seo";
 import AdminEmail from "./pages/admin/Email";
+import AdminProspektering from "./pages/admin/Prospektering";
 import EnIndex from "./pages/en/Index";
 import Content from "./pages/tjanster/Content";
 import Ehandel from "./pages/tjanster/Ehandel";
@@ -456,6 +457,7 @@ const App = () => (
               <Route path="/admin/email" element={<AdminEmail />} />
               <Route path="/admin/text-generator" element={<TextGenerator />} />
               <Route path="/admin/faq-rapport" element={<FaqRapport />} />
+              <Route path="/admin/prospektering" element={<AdminProspektering />} />
               <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
               <Route path="/digital-marknadsforing-linkoping" element={<DigitalMarknadsforingLinkoping />} />
               <Route path="/seo-byra-linkoping" element={<SeoByraLinkoping />} />

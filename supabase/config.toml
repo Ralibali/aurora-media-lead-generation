@@ -24,5 +24,13 @@ verify_jwt = false
 [functions.admin-text-library]
 verify_jwt = false
 
+# Admin auth i detta projekt går via delad Bearer-hemlighet (FAQ_ANALYTICS_PASSWORD/ADMIN_SECRET),
+# inte Supabase-JWT. Vi behåller därför verify_jwt=false och gör admin-kontrollen i funktionen.
+[functions.firecrawl-prospect-search]
+verify_jwt = false
+
+
+
+
 
 
