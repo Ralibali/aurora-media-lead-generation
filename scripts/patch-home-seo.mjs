@@ -20,6 +20,14 @@ const pages = [
     body:
       "Aurora Media är en AI-konsult och AI-byrå i Linköping som hjälper företag att automatisera administration, ersätta kalkylblad, koppla ihop system och bygga AI-drivna interna verktyg.",
   },
+  {
+    file: path.resolve(process.cwd(), "dist", "priser", "index.html"),
+    title: "Priser för AI-system, MVP och SaaS | Aurora Media",
+    description:
+      "Se riktpriser för prototyp, MVP, SaaS och AI-automation. Fast scope, tydlig offert och kod ni äger. Projekt från 14 900 kr.",
+    body:
+      "Aurora Media erbjuder prototyper från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 69 000 kr och AI-automation efter tydligt scope. Alla priser är riktpriser exklusive moms och exakt pris lämnas före projektstart.",
+  },
 ];
 
 function escapeAttribute(value) {
@@ -73,5 +81,5 @@ if (articleResult.status !== 0) {
 }
 
 console.log(
-  "Patched homepage and Linköping metadata and generated local AI article pages.",
+  "Patched homepage, Linköping and pricing metadata and generated local AI article pages.",
 );
