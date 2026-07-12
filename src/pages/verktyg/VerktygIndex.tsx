@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Calculator, Bot, TrendingUp, Sparkles, Users, MessageSquare } from "lucide-react";
-import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import { VerkstadLayout, Reveal } from "@/components/verkstad/VerkstadLayout";
 import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpers";
 import { trackEvent } from "@/lib/analytics";
 import { TOOLS } from "./VerktygShell";
@@ -15,12 +15,21 @@ const ICONS: Record<string, typeof Calculator> = {
   "prompt-generator": MessageSquare,
 };
 
+const OUTCOME: Record<string, string> = {
+  "ai-roi-kalkylator": "Årsbesparing, payback och 3-årsvärde.",
+  "app-prisraknare": "Prisintervall, rekommenderat paket och leveranstid.",
+  "seo-kalkylator": "Extra trafik, order, omsättning och bruttovinst.",
+  "ai-mognadsanalys": "Mognadsnivå, styrkor, risker och 30-dagarsplan.",
+  "personalkostnad-vs-ai": "Frigjord kapacitet och nettovärde år 1–2.",
+  "prompt-generator": "Färdig, strukturerad prompt på svenska.",
+};
+
 const VerktygIndex = () => {
   useEffect(() => {
     setSEOMeta({
       title: "Gratis verktyg – kalkylatorer, ROI och AI-mognad | Aurora Media",
       description:
-        "Aurora Medias gratis verktyg för svenska företag: AI ROI-kalkylator, app-prisräknare, SEO-kalkylator, AI-mognadsanalys, personalkostnadsjämförelse och prompt-generator.",
+        "Aurora Medias gratis verktyg för svenska företag: AI ROI-kalkylator, app-prisräknare, SEO-kalkylator, AI-mognadsanalys, personalkostnadsjämförelse och prompt-generator. Allt körs lokalt i webbläsaren.",
       canonical: "/verktyg",
     });
     setBreadcrumb([
@@ -42,62 +51,79 @@ const VerktygIndex = () => {
   }, []);
 
   return (
-    <NordicLayout>
-      <section className="section">
-        <div className="wrap max-w-6xl mx-auto px-6 pt-24 pb-12">
+    <VerkstadLayout>
+      <section className="vk-section vk-tool-hero">
+        <div className="vk-wrap">
           <Reveal>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
-              verktyg · gratis · ingen inloggning
-            </p>
+            <p className="vk-mono">Verktyg · gratis · ingen inloggning</p>
           </Reveal>
-          <Reveal delay={0.1}>
-            <h1 className="mt-4 text-4xl md:text-6xl font-display font-bold tracking-tight text-foreground max-w-3xl">
-              Gratis verktyg för <span className="text-primary">AI, SaaS och tillväxt.</span>
+          <Reveal delay={0.05}>
+            <h1 style={{ marginTop: 20, maxWidth: "16ch" }}>
+              Räkna, jämför, planera. <span className="accent" style={{ color: "var(--gran)" }}>På minuter.</span>
             </h1>
           </Reveal>
-          <Reveal delay={0.15}>
-            <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-              Kalkylatorer och mini-analyser byggda av Aurora Media. Allt fungerar lokalt i din
+          <Reveal delay={0.1}>
+            <p style={{ marginTop: 24, maxWidth: "60ch", fontSize: 18, color: "var(--granbark-mut)" }}>
+              Sex gratisverktyg byggda av Aurora Media. Allt körs lokalt i din
               webbläsare – inga konton, ingen data lämnar sidan.
             </p>
           </Reveal>
         </div>
       </section>
 
-      <section className="section">
-        <div className="wrap max-w-6xl mx-auto px-6 pb-24">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="vk-section" style={{ paddingTop: 0 }}>
+        <div className="vk-wrap">
+          <div className="vk-hub-grid">
             {TOOLS.map((t, i) => {
               const Icon = ICONS[t.slug] ?? Calculator;
               return (
                 <Reveal key={t.slug} delay={i * 0.05}>
                   <Link
                     to={`/verktyg/${t.slug}`}
-                    onClick={() =>
-                      trackEvent("verktyg_hub_click", { tool: t.slug })
-                    }
-                    className="group flex h-full flex-col justify-between rounded-3xl border border-border bg-secondary/40 p-6 transition hover:border-primary hover:bg-secondary/60"
+                    onClick={() => trackEvent("verktyg_hub_click", { tool: t.slug })}
+                    className="vk-hub-card"
                   >
                     <div>
-                      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <h2 className="text-xl font-display font-bold text-foreground">{t.title}</h2>
-                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                        {t.description}
-                      </p>
+                      <div className="vk-hub-icon"><Icon size={22} /></div>
+                      <h2 className="vk-hub-title">{t.title}</h2>
+                      <p className="vk-hub-desc">{OUTCOME[t.slug]}</p>
                     </div>
-                    <span className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                      Öppna verktyg <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                    </span>
+                    <div className="vk-hub-meta">
+                      <span className="time">{t.estimatedTime}</span>
+                      <span className="cta">Öppna <ArrowRight size={12} /></span>
+                    </div>
                   </Link>
                 </Reveal>
               );
             })}
           </div>
+
+          <div className="vk-trust" aria-label="Om verktygen">
+            <div className="vk-trust-item">
+              <span className="dot" />
+              <div>
+                <h5>Helt gratis</h5>
+                <p>Ingen inloggning, ingen prenumeration, inga dolda kostnader.</p>
+              </div>
+            </div>
+            <div className="vk-trust-item">
+              <span className="dot" />
+              <div>
+                <h5>Kör i webbläsaren</h5>
+                <p>All logik körs lokalt – ingen data lämnar din enhet.</p>
+              </div>
+            </div>
+            <div className="vk-trust-item">
+              <span className="dot" />
+              <div>
+                <h5>Byggt av Aurora Media</h5>
+                <p>Svenska verktyg för svenska småföretag. Uppdateras löpande.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-    </NordicLayout>
+    </VerkstadLayout>
   );
 };
 
