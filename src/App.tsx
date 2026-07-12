@@ -458,7 +458,7 @@ const App = () => (
               <Route path="/admin/email" element={<AdminEmail />} />
               <Route path="/admin/text-generator" element={<TextGenerator />} />
               <Route path="/admin/faq-rapport" element={<FaqRapport />} />
-              <Route path="/admin/prospektering" element={<AdminProspektering />} />
+              <Route path="/admin/prospektering" element={<Suspense fallback={null}><AdminProspektering /></Suspense>} />
               <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
               <Route path="/digital-marknadsforing-linkoping" element={<DigitalMarknadsforingLinkoping />} />
               <Route path="/seo-byra-linkoping" element={<SeoByraLinkoping />} />
