@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/lumina.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 
 import AiAutomationForetag from "./pages/AiAutomationForetag";
 import AiByraLinkoping from "./pages/AiByraLinkoping";
