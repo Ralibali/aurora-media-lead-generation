@@ -23,8 +23,8 @@ interface Body {
   _renderedAt?: number; // klienttid när formuläret renderades (ms)
 }
 
-// Enkel in-memory rate limiter per IP. Återställs när funktionen kallstartar,
-// vilket räcker för att stoppa enkel skräp-trafik.
+// Enkel in-memory rate limiter per IP (snabbfilter). Persistent DB-limit görs
+// dessutom senare via RPC `try_contact_rate_limit` — den är den auktoritativa.
 type RateEntry = { count: number; windowStart: number; lastAt: number };
 const RATE_BUCKET = new Map<string, RateEntry>();
 const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 timme
@@ -55,6 +55,52 @@ function getClientIp(req: Request): string {
   return req.headers.get("cf-connecting-ip") || req.headers.get("x-real-ip") || "unknown";
 }
 
+// Godkända origins för att stoppa cross-site postningar från bot-nät.
+const ALLOWED_ORIGIN_HOSTS = new Set([
+  "auroramedia.se",
+  "www.auroramedia.se",
+  "media-magic-leads.lovable.app",
+  "localhost",
+  "127.0.0.1",
+]);
+
+function isAllowedOrigin(req: Request): boolean {
+  const origin = req.headers.get("origin") || req.headers.get("referer") || "";
+  if (!origin) return false;
+  try {
+    const host = new URL(origin).hostname;
+    if (ALLOWED_ORIGIN_HOSTS.has(host)) return true;
+    // Tillåt Lovable preview-subdomäner (id-preview--*.lovable.app)
+    if (host.endsWith(".lovable.app")) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+// Innehållsheuristik — plockar upp uppenbara skräpmönster som slipper igenom Zod.
+function looksLikeSpam(name: string, message: string): string | null {
+  const combined = `${name}\n${message}`;
+  const urlMatches = combined.match(/(https?:\/\/|www\.)/gi) ?? [];
+  if (urlMatches.length > 3) return "too_many_links";
+
+  // Övervägande icke-latinska tecken (kyrilliska/CJK) i namn = ofta spam-bot
+  const nonLatin = (name.match(/[\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF]/g) ?? []).length;
+  if (name.length > 0 && nonLatin / name.length > 0.5) return "non_latin_name";
+
+  // Meddelande där > 70% är versaler och > 40 tecken långt
+  const letters = message.replace(/[^A-Za-zÅÄÖåäö]/g, "");
+  if (letters.length > 40) {
+    const upper = letters.replace(/[^A-ZÅÄÖ]/g, "").length;
+    if (upper / letters.length > 0.7) return "all_caps";
+  }
+
+  // BBCode / vanliga spam-triggers
+  if (/\[url=|\[link=|<a\s+href=/i.test(message)) return "bbcode_or_html_link";
+
+  return null;
+}
+
 const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
@@ -68,35 +114,55 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const body = (await req.json()) as Body;
-
-    // 1) Honeypot — bots fyller i dolda fält
-    if (typeof body.website === "string" && body.website.trim() !== "") {
-      console.warn("[send-contact-email] honeypot triggered", { ip: getClientIp(req) });
-      // Svara 200 så bot inte vet att den blev avvisad
+    // 0) Origin/Referer måste komma från en godkänd host.
+    if (!isAllowedOrigin(req)) {
+      console.warn("[send-contact-email] blocked origin", {
+        origin: req.headers.get("origin"),
+        referer: req.headers.get("referer"),
+        ip: getClientIp(req),
+      });
+      // Svara 200 så bot inte får feedback om varför den avvisas
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // 2) Min-fill-time — formulär submittade < 3s efter render = troligen bot
+    const body = (await req.json()) as Body;
+
+    // 1) Honeypot — bots fyller i dolda fält
+    if (typeof body.website === "string" && body.website.trim() !== "") {
+      console.warn("[send-contact-email] honeypot triggered", { ip: getClientIp(req) });
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // 2) Fill-time — < 4s = bot, > 2h = uppslagen sida/prerender-replay
     if (typeof body._renderedAt === "number" && body._renderedAt > 0) {
       const elapsed = Date.now() - body._renderedAt;
-      if (elapsed < 3000) {
-        console.warn("[send-contact-email] submitted too fast", { elapsed, ip: getClientIp(req) });
+      if (elapsed < 4000 || elapsed > 2 * 60 * 60 * 1000) {
+        console.warn("[send-contact-email] suspicious fill-time", { elapsed, ip: getClientIp(req) });
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+    } else {
+      // Saknar timestamp helt = manipulerad klient
+      console.warn("[send-contact-email] missing _renderedAt", { ip: getClientIp(req) });
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // 3) Rate limit per IP
+    // 3) In-memory rate limit (snabbfilter per pod)
     const ip = getClientIp(req);
     const rate = checkRateLimit(ip);
     if (!rate.ok) {
-      console.warn("[send-contact-email] rate limited", { ip, reason: rate.reason });
+      console.warn("[send-contact-email] rate limited (memory)", { ip, reason: rate.reason });
       return new Response(JSON.stringify({ error: rate.reason ?? "Rate limited" }), {
         status: 429,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -126,9 +192,44 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    // 4) Innehållsheuristik — plockar upp uppenbart spam
+    const spamHint = looksLikeSpam(name, message);
+    if (spamHint) {
+      console.warn("[send-contact-email] spam heuristic hit", { spamHint, ip, email });
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const admin = SUPABASE_URL && SERVICE_KEY ? createClient(SUPABASE_URL, SERVICE_KEY) : null;
+
+    // 5) Persistent DB-rate-limit — race-säker via advisory lock i SQL-funktion.
+    // Max 5 meddelanden/IP och 3/e-post per timme. Auktoritativ över in-memory.
+    if (admin) {
+      try {
+        const { data: allowed, error: rlErr } = await admin.rpc("try_contact_rate_limit", {
+          p_ip: ip,
+          p_email: email,
+          p_max_per_ip: 5,
+          p_max_per_email: 3,
+          p_window_seconds: 3600,
+        });
+        if (rlErr) {
+          console.error("[send-contact-email] rate-limit rpc failed", rlErr);
+        } else if (allowed === false) {
+          console.warn("[send-contact-email] rate limited (db)", { ip, email });
+          return new Response(
+            JSON.stringify({ error: "För många förfrågningar. Försök igen om en stund." }),
+            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+          );
+        }
+      } catch (e) {
+        console.error("[send-contact-email] rate-limit rpc threw", e);
+      }
+    }
 
     // Deduplicering — samma namn+email+meddelande inom 10 min = duplikat
     if (admin) {
