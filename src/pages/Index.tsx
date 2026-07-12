@@ -374,7 +374,18 @@ const ProofStrip = () => (
         <span className="vk-mono">I skarp drift just nu</span>
       </div>
       <div className="vk-marquee">
-        {[...PRODUCTS, ...PRODUCTS].map((p, i) => <span key={i}>{p}</span>)}
+        {[...PRODUCTS, ...PRODUCTS].map((p, i) => (
+          <a
+            key={`${p.url}-${i}`}
+            href={p.url}
+            target="_blank"
+            rel="noreferrer noopener"
+            onClick={() => trackEvent("home_product_link_click", { product: p.name })}
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            {p.name}
+          </a>
+        ))}
       </div>
     </div>
     <div className="vk-wrap" style={{ paddingBlock: "clamp(40px, 6vw, 72px)" }}>
