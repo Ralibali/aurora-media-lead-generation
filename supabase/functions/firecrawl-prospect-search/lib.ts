@@ -1,4 +1,5 @@
 // Pure helpers for firecrawl-prospect-search — extracted for unit tests.
+// Deterministic scoring, no PII extraction, all signals must have evidence.
 
 export const DIRECTORY_HOSTS = new Set<string>([
   "linkedin.com",
@@ -19,13 +20,14 @@ export const DIRECTORY_HOSTS = new Set<string>([
   "reco.se",
   "merinfo.se",
   "proff.se",
-  "google.com",
-  "google.se",
   "bing.com",
   "duckduckgo.com",
   "yelp.com",
   "trustpilot.com",
 ]);
+
+// Prefix labels that match any TLD/subdomain (e.g. google.*, yahoo.*).
+const DIRECTORY_LABEL_PREFIXES = ["google", "yahoo"];
 
 const NEED_TERMS: Record<string, string> = {
   webb: '("hemsida" OR "webbplats" OR "webbdesign")',
@@ -36,7 +38,7 @@ const NEED_TERMS: Record<string, string> = {
 
 export type NeedType = "webb" | "ehandel" | "ai" | "valfritt";
 
-export function buildQuery(input: {
+export function buildSearchQuery(input: {
   freeText: string;
   needType: NeedType;
   industry?: string | null;
@@ -51,131 +53,205 @@ export function buildQuery(input: {
   if (input.location && input.location.trim()) parts.push(input.location.trim());
   return parts.join(" ").replace(/\s+/g, " ").trim();
 }
+// Back-compat alias.
+export const buildQuery = buildSearchQuery;
 
 export function normalizeDomain(input: string): string | null {
   if (!input) return null;
+  const trimmed = String(input).trim();
+  if (!trimmed) return null;
+  // Reject obviously non-http schemes early.
+  if (/^(mailto:|tel:|javascript:|#)/i.test(trimmed)) return null;
   try {
-    const withProto = /^https?:\/\//i.test(input) ? input : `https://${input}`;
+    const withProto = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
     const u = new URL(withProto);
+    if (u.protocol !== "http:" && u.protocol !== "https:") return null;
     let host = u.hostname.toLowerCase();
     if (host.startsWith("www.")) host = host.slice(4);
     if (!host.includes(".")) return null;
+    if (/\s/.test(host)) return null;
     return host;
   } catch {
     return null;
   }
 }
 
-export function isDirectoryDomain(domain: string): boolean {
+export function isBlockedDomain(domain: string): boolean {
   if (!domain) return true;
   const d = domain.toLowerCase();
   for (const bad of DIRECTORY_HOSTS) {
     if (d === bad || d.endsWith(`.${bad}`)) return true;
   }
+  // Match google.*, www.google.*, yahoo.co.uk etc. dynamically.
+  const labels = d.split(".");
+  for (const prefix of DIRECTORY_LABEL_PREFIXES) {
+    const idx = labels.indexOf(prefix);
+    // must be a real label (not at end) and followed by at least one TLD label
+    if (idx !== -1 && idx < labels.length - 1) return true;
+  }
   return false;
 }
+// Back-compat alias.
+export const isDirectoryDomain = isBlockedDomain;
 
 export type FirecrawlLink = string | { url?: string; href?: string; text?: string };
 
-const CONTACT_HINTS = [
-  "kontakt",
-  "kontakta",
-  "contact",
-  "contact-us",
-  "kundtjanst",
-  "kundtjänst",
-  "support",
-  "om-oss",
-  "about",
+const CONTACT_HINTS: { hint: string; weight: number }[] = [
+  { hint: "kontakt", weight: 3 },
+  { hint: "kontakta", weight: 3 },
+  { hint: "contact", weight: 3 },
+  { hint: "contact-us", weight: 3 },
+  { hint: "kundtjanst", weight: 2 },
+  { hint: "kundtjänst", weight: 2 },
+  { hint: "support", weight: 2 },
+  { hint: "om-oss", weight: 2 },
+  { hint: "about", weight: 2 },
 ];
 
-export function pickContactPage(baseDomain: string, links: FirecrawlLink[] | undefined | null): string | null {
+export function chooseContactPage(
+  baseDomain: string,
+  links: FirecrawlLink[] | undefined | null,
+): string | null {
   if (!Array.isArray(links)) return null;
   const candidates: { url: string; score: number }[] = [];
   for (const raw of links) {
     const href = typeof raw === "string" ? raw : (raw?.url ?? raw?.href ?? "");
-    if (!href) continue;
-    const domain = normalizeDomain(href);
-    if (!domain || domain !== baseDomain) continue;
-    const lower = href.toLowerCase();
+    if (!href || typeof href !== "string") continue;
+    const trimmed = href.trim();
+    if (!trimmed) continue;
+    // Explicitly ignore non-navigational schemes and pure fragments.
+    if (/^(mailto:|tel:|javascript:|#)/i.test(trimmed)) continue;
+    const domain = normalizeDomain(trimmed);
+    if (!domain) continue;
+    // Reject external domains.
+    if (domain !== baseDomain) continue;
+    const lower = trimmed.toLowerCase();
     let score = 0;
-    for (const hint of CONTACT_HINTS) {
-      if (lower.includes(hint)) score += hint === "kontakt" || hint === "contact" ? 3 : 2;
+    for (const { hint, weight } of CONTACT_HINTS) {
+      if (lower.includes(hint)) score += weight;
     }
-    if (score > 0) candidates.push({ url: href.split("#")[0], score });
+    if (score > 0) candidates.push({ url: trimmed.split("#")[0], score });
   }
   if (!candidates.length) return null;
   candidates.sort((a, b) => b.score - a.score);
   return candidates[0].url;
 }
+// Back-compat alias.
+export const pickContactPage = chooseContactPage;
 
-export type Signal = { code: string; label: string };
+export type ObservedSignal = {
+  signal: string;
+  evidence: string;
+  points: number;
+};
 
-export function scoreFit(input: {
+function clamp(n: number, min: number, max: number): number {
+  if (!Number.isFinite(n)) return min;
+  return Math.max(min, Math.min(max, n));
+}
+
+/**
+ * Deterministic fit score. Score = clamp(sum(points), 0, 100).
+ * Every signal must carry concrete evidence observed in the scraped content.
+ * No signal expresses an assumed need as fact.
+ */
+export function calculateFitScore(input: {
   needType: NeedType;
   industry?: string | null;
   location?: string | null;
   markdown?: string | null;
   contactUrl?: string | null;
   domain: string;
-}): { score: number; signals: Signal[] } {
-  const signals: Signal[] = [];
-  const md = (input.markdown ?? "").toLowerCase();
-  let score = 40; // baseline for a real, non-directory hit
+}): { score: number; signals: ObservedSignal[] } {
+  const signals: ObservedSignal[] = [];
+  const md = (input.markdown ?? "").toString();
+  const mdLower = md.toLowerCase();
 
   if (input.contactUrl) {
-    score += 8;
-    signals.push({ code: "has_contact_page", label: "Har publik kontaktsida" });
-  } else {
-    signals.push({ code: "no_contact_page", label: "Ingen tydlig kontaktsida hittad" });
+    signals.push({
+      signal: "has_contact_page",
+      evidence: `Publik kontaktsida på samma domän: ${input.contactUrl}`,
+      points: 12,
+    });
   }
 
   if (input.industry && input.industry.trim()) {
-    const ind = input.industry.trim().toLowerCase();
-    if (md.includes(ind)) {
-      score += 10;
-      signals.push({ code: "industry_match", label: `Matchar bransch: ${input.industry}` });
-    }
-  }
-  if (input.location && input.location.trim()) {
-    const loc = input.location.trim().toLowerCase();
-    if (loc && md.includes(loc)) {
-      score += 8;
-      signals.push({ code: "location_match", label: `Matchar ort/region: ${input.location}` });
+    const ind = input.industry.trim();
+    if (mdLower.includes(ind.toLowerCase())) {
+      signals.push({
+        signal: "industry_match",
+        evidence: `Sidtexten nämner branschordet "${ind}"`,
+        points: 15,
+      });
     }
   }
 
-  // Old copyright year
-  const years = Array.from(md.matchAll(/©\s*(20\d{2})|copyright\s*(20\d{2})/g))
-    .map((m) => Number(m[1] ?? m[2]))
-    .filter((y) => Number.isFinite(y));
+  if (input.location && input.location.trim()) {
+    const loc = input.location.trim();
+    if (mdLower.includes(loc.toLowerCase())) {
+      signals.push({
+        signal: "location_match",
+        evidence: `Sidtexten nämner orten/regionen "${loc}"`,
+        points: 12,
+      });
+    }
+  }
+
+  // Old copyright year — must be at least 2 years behind current year.
+  const years: number[] = [];
+  const yearRe = /(?:©|copyright)\s*(20\d{2})/gi;
+  let m: RegExpExecArray | null;
+  while ((m = yearRe.exec(md)) !== null) {
+    const y = Number(m[1]);
+    if (Number.isFinite(y)) years.push(y);
+  }
   if (years.length) {
     const newest = Math.max(...years);
     const currentYear = new Date().getUTCFullYear();
     if (currentYear - newest >= 2) {
-      score += 10;
-      signals.push({ code: "old_copyright", label: `Gammalt copyright-år (${newest})` });
+      signals.push({
+        signal: "old_copyright",
+        evidence: `Copyright-år ${newest} hittat i sidtexten (aktuellt år ${currentYear})`,
+        points: 18,
+      });
     }
   }
 
-  if (/(under\s+ombyggnad|under\s+construction|coming\s+soon|tillfällig\s+sida|placeholder)/.test(md)) {
-    score += 15;
-    signals.push({ code: "placeholder_site", label: "Uttrycklig text om ombyggnad/tillfällig sida" });
+  if (/(under\s+ombyggnad|under\s+construction|coming\s+soon|tillfällig\s+sida|placeholder)/i.test(md)) {
+    signals.push({
+      signal: "placeholder_site",
+      evidence: 'Sidan innehåller uttrycklig text om "ombyggnad/tillfällig sida/placeholder"',
+      points: 25,
+    });
   }
 
-  const ctaWords = ["kontakta oss", "boka", "offert", "kom igång", "get started", "get a quote"];
-  const hasCta = ctaWords.some((w) => md.includes(w));
-  if (!hasCta && md.length > 200) {
-    score += 6;
-    signals.push({ code: "no_clear_cta", label: "Ingen tydlig CTA på skannad sida" });
+  if (md.length >= 200) {
+    const ctaWords = ["kontakta oss", "boka", "offert", "kom igång", "get started", "get a quote"];
+    const hasCta = ctaWords.some((w) => mdLower.includes(w));
+    if (!hasCta) {
+      signals.push({
+        signal: "no_clear_cta",
+        evidence: "Ingen tydlig CTA-fras (kontakta/boka/offert/kom igång) hittad i skannat huvudinnehåll",
+        points: 8,
+      });
+    }
   }
 
-  if (input.needType === "ehandel" && !/\b(kassa|varukorg|checkout|cart|köp\s+nu)\b/.test(md)) {
-    score += 4;
-    signals.push({ code: "no_shop_signal", label: "Ingen tydlig e-handelsindikator" });
+  if (input.needType === "ehandel" && md.length >= 200) {
+    if (!/\b(kassa|varukorg|checkout|cart|köp\s+nu)\b/i.test(md)) {
+      signals.push({
+        signal: "no_shop_signal",
+        evidence: "Ingen e-handelsindikator (kassa/varukorg/checkout) hittad i skannat innehåll",
+        points: 8,
+      });
+    }
   }
 
-  if (score > 100) score = 100;
-  if (score < 0) score = 0;
+  const rawScore = signals.reduce((sum, s) => sum + (Number.isFinite(s.points) ? s.points : 0), 0);
+  const score = clamp(rawScore, 0, 100);
   return { score, signals };
 }
+// Back-compat alias with old return signal shape adapted.
+export const scoreFit = calculateFitScore;
+
+export type Signal = ObservedSignal;
