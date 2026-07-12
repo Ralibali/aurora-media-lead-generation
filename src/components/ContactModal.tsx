@@ -523,11 +523,23 @@ const ContactDialog = ({
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-2">
-              <Checkbox id="consent" name="consent" required className="mt-1" />
-              <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.
-              </Label>
+            <div className="space-y-1.5">
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="consent"
+                  name="consent"
+                  required
+                  aria-invalid={!!fieldErrors.consent}
+                  className={`mt-1 ${fieldErrors.consent ? "border-destructive" : ""}`}
+                  onCheckedChange={() => fieldErrors.consent && setFieldError("consent", null)}
+                />
+                <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
+                  Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn. *
+                </Label>
+              </div>
+              {fieldErrors.consent && (
+                <p className="text-xs text-destructive pl-6" role="alert">{fieldErrors.consent}</p>
+              )}
             </div>
             <Button type="submit" disabled={submitting} className="w-full" size="lg">
               {submitting ? "Skickar…" : "Skicka"}
