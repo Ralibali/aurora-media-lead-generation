@@ -188,6 +188,7 @@ const NAV = [
   { to: "/admin/seo", label: "SEO", icon: Search },
   { to: "/admin/email", label: "E-post", icon: Mail },
   { to: "/admin/faq-rapport", label: "FAQ-rapport", icon: BarChart3 },
+  { to: "/admin/prospektering", label: "Prospektering", icon: Radar },
 ];
 
 // Snabbmeny — visas överst i mobil-drawern för åtkomst med få klick.
