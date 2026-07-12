@@ -491,50 +491,41 @@ const ReceiptsSection = () => {
         </Reveal>
         <div className="vk-receipts">
           {[
-            { tier: "Prototyp", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
-            { tier: "MVP", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
-            { tier: "SaaS", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
+            { tier: "Prototyp", price: "Från 14 900 kr", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
+            { tier: "MVP", price: "Från 34 900 kr", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
+            { tier: "SaaS", price: "Från 69 000 kr", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
           ].map((r, i) => (
             <Reveal delay={i * 0.08} key={r.tier}>
               <div className="vk-receipt">
                 {r.flag && <span className="vk-receipt-flag">{r.flag}</span>}
                 <span className="vk-receipt-stamp">Fast pris</span>
                 <div className="vk-receipt-tier">{r.tier}</div>
-                <div
-                  className="vk-receipt-price"
-                  aria-label="Pris döljs – avslöjas i offerten"
-                  style={{
-                    display: "inline-block",
-                    marginTop: 6,
-                    padding: "6px 12px",
-                    borderRadius: 6,
-                    background:
-                      "linear-gradient(90deg, var(--granbark) 0 40%, var(--granbark-mut) 40% 70%, var(--granbark) 70% 100%)",
-                    color: "transparent",
-                    letterSpacing: "0.15em",
-                    userSelect: "none",
-                  }}
-                >
-                  ██ ███:-
+                <div className="vk-receipt-price" style={{ marginTop: 6, fontSize: 22, fontWeight: 700 }}>
+                  {r.price}
                 </div>
-                <p className="vk-mono" style={{ marginTop: 8, color: "var(--gran)", fontSize: 11 }}>
-                  Häpnadsväckande bra
-                </p>
                 <p className="vk-receipt-desc">{r.desc}</p>
                 <button
                   type="button"
-                  onClick={() => open(r.tier)}
+                  onClick={() => {
+                    trackEvent("home_package_cta_click", { tier: r.tier });
+                    open(r.tier);
+                  }}
                   className="vk-btn vk-btn-primary"
                   style={{ marginTop: 16, justifyContent: "center", width: "100%" }}
-                  aria-label={`Få pris i offerten för ${r.tier}`}
+                  aria-label={`Diskutera ${r.tier}`}
                 >
-                  Få pris i offerten <ArrowRight size={14} />
+                  Diskutera {r.tier} <ArrowRight size={14} />
                 </button>
               </div>
             </Reveal>
           ))}
         </div>
-        <p className="vk-mono" style={{ marginTop: 32 }}>
+        <div style={{ marginTop: 24 }}>
+          <Link to="/priser" className="vk-btn vk-btn-ghost">
+            Se alla priser och vad som ingår <ArrowRight size={14} />
+          </Link>
+        </div>
+        <p className="vk-mono" style={{ marginTop: 20 }}>
           Exakt offert inom 24 h · Fast pris · Inga timmar, aldrig löpande räkning
         </p>
       </div>
