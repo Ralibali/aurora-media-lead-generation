@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2, Tag, Mail, Clock, Calendar } from "lucide-react";
+import { CheckCircle2, Tag, Mail, Clock, Calendar, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { getSupabase } from "@/lib/getSupabase";
@@ -248,7 +248,7 @@ const ContactDialog = ({
       website: data.get("website") ?? "",
     });
     if (!parsed.success) {
-      // Sätt alla fältfel + visa första som toast
+      // Sätt alla fältfel + fokusera första felfält
       const newErrors: Record<string, string> = {};
       parsed.error.issues.forEach((issue) => {
         const path = issue.path[0];
@@ -257,7 +257,13 @@ const ContactDialog = ({
         }
       });
       setFieldErrors(newErrors);
-      toast.error(parsed.error.issues[0].message);
+      const firstField = parsed.error.issues[0]?.path[0];
+      if (typeof firstField === "string") {
+        const el = form.querySelector<HTMLElement>(`[name="${firstField}"]`);
+        el?.focus();
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      toast.error("Kontrollera fälten markerade i rött");
       return;
     }
     // Honeypot — om dolt fält är ifyllt: tysta avvisning
@@ -374,6 +380,41 @@ const ContactDialog = ({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            {Object.keys(fieldErrors).length > 0 && (
+              <div
+                role="alert"
+                aria-live="polite"
+                className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-sm"
+              >
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                  <div className="space-y-1">
+                    <p className="font-medium text-destructive">
+                      {Object.keys(fieldErrors).length === 1
+                        ? "Ett fält behöver rättas"
+                        : `${Object.keys(fieldErrors).length} fält behöver rättas`}
+                    </p>
+                    <ul className="list-disc space-y-0.5 pl-4 text-destructive/90">
+                      {Object.entries(fieldErrors).map(([field, msg]) => (
+                        <li key={field}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const el = document.querySelector<HTMLElement>(`[name="${field}"]`);
+                              el?.focus();
+                              el?.scrollIntoView({ behavior: "smooth", block: "center" });
+                            }}
+                            className="underline-offset-2 hover:underline"
+                          >
+                            {msg}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
             {/* Honeypot — dolt fält. Riktiga användare ser inte detta. */}
             <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", top: "-9999px", height: 0, overflow: "hidden" }}>
               <Label htmlFor="website">Webbplats (lämna tom)</Label>
@@ -482,11 +523,23 @@ const ContactDialog = ({
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-2">
-              <Checkbox id="consent" name="consent" required className="mt-1" />
-              <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn.
-              </Label>
+            <div className="space-y-1.5">
+              <div className="flex items-start gap-2">
+                <Checkbox
+                  id="consent"
+                  name="consent"
+                  required
+                  aria-invalid={!!fieldErrors.consent}
+                  className={`mt-1 ${fieldErrors.consent ? "border-destructive" : ""}`}
+                  onCheckedChange={() => fieldErrors.consent && setFieldError("consent", null)}
+                />
+                <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
+                  Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn. *
+                </Label>
+              </div>
+              {fieldErrors.consent && (
+                <p className="text-xs text-destructive pl-6" role="alert">{fieldErrors.consent}</p>
+              )}
             </div>
             <Button type="submit" disabled={submitting} className="w-full" size="lg">
               {submitting ? "Skickar…" : "Skicka"}
