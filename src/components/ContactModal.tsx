@@ -293,7 +293,14 @@ const ContactDialog = ({
       setPlatformValue("");
     } catch (err) {
       console.error("[ContactModal] submit error", err);
-      toast.error("Något gick fel. Mejla istället info@auroramedia.se");
+      toast.error("Kunde inte skicka just nu", {
+        description: "Försök igen om en stund eller mejla info@auroramedia.se",
+        duration: 8000,
+        action: {
+          label: "Försök igen",
+          onClick: () => form.requestSubmit(),
+        },
+      });
     } finally {
       setSubmitting(false);
     }
