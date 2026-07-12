@@ -16,9 +16,14 @@ import "@/styles/verkstad.css";
 
 /* ────────── Data ────────── */
 
-const PRODUCTS = [
-  "Aurora Transport", "Updro", "Hönsgården", "Odlingsdagboken",
-  "AgilityManager", "Viriditas", "Cykelhjälpen", "Bergs Slussar Glamping",
+const PRODUCTS: { name: string; url: string }[] = [
+  { name: "Aurora Transport", url: "https://auroratransport.se" },
+  { name: "Updro", url: "https://updro.se" },
+  { name: "Hönsgården", url: "https://honsgarden.se" },
+  { name: "Odlingsdagboken", url: "https://odlingsdagboken.com" },
+  { name: "AgilityManager", url: "https://agilitymanager.se" },
+  { name: "Viriditas", url: "https://viriditasmassage.se" },
+  { name: "Bergs Slussar Glamping", url: "https://goglampingsweden.se" },
 ];
 
 const CASES = [
@@ -26,13 +31,15 @@ const CASES = [
     title: "Aurora Transport",
     tagline: "Dispatch, körorder och Fortnox-fakturering för åkerier.",
     meta: "BYGGTID: <2 VECKOR · I DRIFT",
+    result: "Betalande kund dag 1",
     thumb: "/portfolio/aurora-transport.webp",
     href: "/arbete/aurora-transport",
   },
   {
     title: "Hönsgården",
     tagline: "Freemium-app med statistik och AI-stöd för hönsägare.",
-    meta: "BYGGTID: <3 VECKOR · BETALANDE KUND: DAG 1",
+    meta: "BYGGTID: <3 VECKOR · I DRIFT",
+    result: "67 % premium-konvertering bland aktiva",
     thumb: "/portfolio/honsgarden.webp",
     href: "/arbete/honsgarden",
   },
@@ -40,6 +47,7 @@ const CASES = [
     title: "Bergs Slussar Glamping",
     tagline: "Digital bokning och gästkommunikation vid Göta kanal.",
     meta: "BYGGTID: <2 VECKOR · I DRIFT",
+    result: "Lansering maj 2026",
     thumb: "/portfolio/goglamping-sweden.webp",
     href: "/arbete/goglamping-sweden",
   },
