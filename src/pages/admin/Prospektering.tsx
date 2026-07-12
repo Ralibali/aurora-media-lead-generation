@@ -104,29 +104,47 @@ export default function Prospektering() {
     [freeText, needType, industry, location],
   );
 
+  const callFn = async <T,>(payload: Record<string, unknown>): Promise<T> => {
+    const pwd = sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
+    if (!pwd) throw new Error("Inte inloggad — logga in på nytt.");
+    const { data, error } = await supabase.functions.invoke("firecrawl-prospect-search", {
+      body: payload,
+      headers: { "x-admin-token": pwd },
+    });
+    if (error) {
+      let detail = error.message;
+      const ctx = (error as { context?: Response }).context;
+      if (ctx && typeof ctx.text === "function") {
+        try {
+          const body = await ctx.text();
+          if (body) detail = body;
+        } catch {
+          /* ignore */
+        }
+      }
+      throw new Error(detail);
+    }
+    return data as T;
+  };
+
   const loadCampaigns = async () => {
     try {
-      const r = await adminFetch("firecrawl-prospect-search", {
-        method: "POST",
-        body: JSON.stringify({ action: "list_campaigns" }),
-      });
-      setCampaigns((r?.campaigns ?? []) as Campaign[]);
-      if (!selected && r?.campaigns?.length) setSelected(r.campaigns[0].id);
+      const r = await callFn<{ campaigns?: Campaign[] }>({ action: "list_campaigns" });
+      const list = r?.campaigns ?? [];
+      setCampaigns(list);
+      if (!selected && list.length) setSelected(list[0].id);
     } catch (e) {
-      setErr(e instanceof AdminError ? e.message : String(e));
+      setErr(e instanceof Error ? e.message : String(e));
     }
   };
 
   const loadLeads = async (campaignId: string) => {
     setLeadsLoading(true);
     try {
-      const r = await adminFetch("firecrawl-prospect-search", {
-        method: "POST",
-        body: JSON.stringify({ action: "list_leads", campaignId }),
-      });
-      setLeads((r?.leads ?? []) as Lead[]);
+      const r = await callFn<{ leads?: Lead[] }>({ action: "list_leads", campaignId });
+      setLeads(r?.leads ?? []);
     } catch (e) {
-      setErr(e instanceof AdminError ? e.message : String(e));
+      setErr(e instanceof Error ? e.message : String(e));
     } finally {
       setLeadsLoading(false);
     }
@@ -148,22 +166,19 @@ export default function Prospektering() {
     }
     setRunning(true);
     try {
-      const r = await adminFetch("firecrawl-prospect-search", {
-        method: "POST",
-        body: JSON.stringify({
-          action: "search",
-          campaignName: name.trim(),
-          query: freeText.trim(),
-          location: location.trim() || "Sweden",
-          needType,
-          industry: industry.trim() || null,
-          limit,
-        }),
+      const r = await callFn<{ campaignId?: string }>({
+        action: "search",
+        campaignName: name.trim(),
+        query: freeText.trim(),
+        location: location.trim() || "Sweden",
+        needType,
+        industry: industry.trim() || null,
+        limit,
       });
       await loadCampaigns();
-      if (r?.campaignId) setSelected(r.campaignId as string);
+      if (r?.campaignId) setSelected(r.campaignId);
     } catch (e) {
-      setErr(e instanceof AdminError ? e.message : String(e));
+      setErr(e instanceof Error ? e.message : String(e));
     } finally {
       setRunning(false);
     }
@@ -172,12 +187,9 @@ export default function Prospektering() {
   const updateStatus = async (leadId: string, status: Lead["status"]) => {
     setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, status } : l)));
     try {
-      await adminFetch("firecrawl-prospect-search", {
-        method: "POST",
-        body: JSON.stringify({ action: "update_lead", leadId, status }),
-      });
+      await callFn({ action: "update_lead", leadId, status });
     } catch (e) {
-      setErr(e instanceof AdminError ? e.message : String(e));
+      setErr(e instanceof Error ? e.message : String(e));
       if (selected) await loadLeads(selected);
     }
   };
