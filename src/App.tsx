@@ -50,7 +50,9 @@ const AdminContent = lazy(() => import("./pages/admin/Content"));
 const AdminSeo = lazy(() => import("./pages/admin/Seo"));
 const AdminEmail = lazy(() => import("./pages/admin/Email"));
 const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
-const AdminBoundary = lazy(() => import("./pages/admin/AdminBoundary"));
+// AdminBoundary is intentionally eager: it must be available synchronously
+// to catch failures of the other lazy admin chunks.
+import AdminBoundary from "./pages/admin/AdminBoundary";
 import EnIndex from "./pages/en/Index";
 import Content from "./pages/tjanster/Content";
 import Ehandel from "./pages/tjanster/Ehandel";
