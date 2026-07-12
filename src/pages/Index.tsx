@@ -582,10 +582,32 @@ const AIKartaSection = () => (
             som går att automatisera och vad de kostar er idag. Gratis, fem minuter.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 8 }}>
-            <Link to="/ai-karta" className="vk-btn vk-btn-primary">
+            <Link
+              to="/ai-karta"
+              className="vk-btn vk-btn-primary"
+              onClick={() => trackEvent("home_ai_karta_section_click")}
+            >
               <span>Gör AI-kartan nu</span> <ArrowRight size={16} />
             </Link>
             <span className="vk-mono">Resultat direkt på skärmen · 4 uppföljande tips · Avsluta när ni vill</span>
+          </div>
+          <div
+            className="vk-mono"
+            style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 16, fontSize: 13 }}
+          >
+            <span style={{ color: "var(--granbark-mut)" }}>Läs mer:</span>
+            <Link to="/ai-automation-foretag" onClick={() => trackEvent("home_related_link_click", { target: "ai_automation" })}>
+              AI-automation för företag →
+            </Link>
+            <Link to="/tjanster" onClick={() => trackEvent("home_related_link_click", { target: "tjanster" })}>
+              Alla tjänster →
+            </Link>
+            <Link to="/priser" onClick={() => trackEvent("home_related_link_click", { target: "priser" })}>
+              Priser →
+            </Link>
+            <Link to="/ai-byra-linkoping" onClick={() => trackEvent("home_related_link_click", { target: "ai_byra_linkoping" })}>
+              AI-byrå i Linköping →
+            </Link>
           </div>
         </div>
       </Reveal>
