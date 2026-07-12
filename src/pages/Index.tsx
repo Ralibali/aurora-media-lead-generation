@@ -476,20 +476,37 @@ const CasesSection = () => (
       <div className="vk-cases">
         {CASES.map((c, i) => (
           <Reveal delay={i * 0.06} key={c.title}>
-            <Link to={c.href} className="vk-case">
+            <Link
+              to={c.href}
+              className="vk-case"
+              onClick={() => trackEvent("home_case_card_click", { case: c.title })}
+            >
               <div className="vk-case-browser">
                 <div className="vk-case-chrome"><i/><i/><i/></div>
                 <img src={c.thumb} alt={`${c.title} – produktskärmdump`} className="vk-case-img" loading="lazy" />
               </div>
               <h3>{c.title}</h3>
               <p>{c.tagline}</p>
-              <div className="vk-case-meta">{c.meta}</div>
+              <div
+                className="vk-mono"
+                style={{ marginTop: 10, display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, color: "var(--gran)" }}
+              >
+                <Check size={12} strokeWidth={3} /> {c.result}
+              </div>
+              <div className="vk-case-meta" style={{ marginTop: 8 }}>{c.meta}</div>
+              <div className="vk-mono" style={{ marginTop: 12, fontSize: 12, display: "inline-flex", alignItems: "center", gap: 4 }}>
+                Läs caset <ArrowRight size={12} />
+              </div>
             </Link>
           </Reveal>
         ))}
       </div>
-      <div style={{ marginTop: 32 }}>
-        <Link to="/arbete" className="vk-btn vk-btn-ghost">
+      <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", gap: 12 }}>
+        <Link
+          to="/arbete"
+          className="vk-btn vk-btn-ghost"
+          onClick={() => trackEvent("home_cases_all_click")}
+        >
           Alla case <ArrowRight size={14} />
         </Link>
       </div>
