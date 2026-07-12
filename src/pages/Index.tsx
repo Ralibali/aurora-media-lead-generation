@@ -713,8 +713,8 @@ export const VkFooter = () => (
 const Index = () => (
   <>
     <SEO
-      title="Aurora Media AB | AI-driven mjukvarupartner för svenska företag"
-      description="Aurora Media bygger AI-lösningar, interna system, appar och SaaS för svenska företag. Snabb leverans, tydligt scope och kod ni äger."
+      title="AI-system och automation för småföretag | Aurora Media"
+      description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 14 900 kr, snabb leverans och kod ni äger själva."
       canonical="/"
     />
     
