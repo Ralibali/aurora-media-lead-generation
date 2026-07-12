@@ -78,7 +78,15 @@ export default function AdminDashboard() {
           <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
             <Stat label="Leads totalt" val={data.overview.leads_total} sub={`${data.overview.leads_7d} senaste 7 d`} />
             <Stat label="AI-karta" val={data.overview.leads_karta} />
-            <Stat label="Kontakt" val={data.overview.leads_kontakt} />
+            <Stat
+              label="Kontakt (konverteringar)"
+              val={data.overview.leads_kontakt}
+              sub={
+                data.overview.leads_kontakt_7d !== undefined
+                  ? `${data.overview.leads_kontakt_7d} · 7 d  ·  ${data.overview.leads_kontakt_30d ?? 0} · 30 d`
+                  : undefined
+              }
+            />
             <Stat label="Genomlysning" val={data.overview.leads_genomlysning} />
             <Stat label="CTA-klick (30d)" val={data.overview.cta_clicks_30d} />
             <Stat label="FAQ-sökningar (30d)" val={data.overview.faq_searches_30d} sub={`${data.overview.faq_zero_results_30d} utan träff`} />
