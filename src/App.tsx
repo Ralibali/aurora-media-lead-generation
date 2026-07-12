@@ -38,14 +38,19 @@ import AiAutomationLinkoping from "./pages/AiAutomationLinkoping";
 import AiKonsultLinkoping from "./pages/AiKonsultLinkoping";
 import GoogleAdsLinkoping from "./pages/GoogleAdsLinkoping";
 import ApputvecklingLinkoping from "./pages/ApputvecklingLinkoping";
-import FaqRapport from "./pages/admin/FaqRapport";
-import Leads from "./pages/admin/Leads";
-import TextGenerator from "./pages/admin/TextGenerator";
-import AdminDashboard from "./pages/admin/Dashboard";
-import AdminContent from "./pages/admin/Content";
-import AdminSeo from "./pages/admin/Seo";
-import AdminEmail from "./pages/admin/Email";
+// Admin routes are all lazy-loaded so a failing chunk or a module-init throw
+// (e.g. Supabase client construction with missing env vars) can never bring
+// down the public site. The AdminBoundary component wraps them with a shared
+// error boundary + visible Suspense fallback.
+const FaqRapport = lazy(() => import("./pages/admin/FaqRapport"));
+const Leads = lazy(() => import("./pages/admin/Leads"));
+const TextGenerator = lazy(() => import("./pages/admin/TextGenerator"));
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminContent = lazy(() => import("./pages/admin/Content"));
+const AdminSeo = lazy(() => import("./pages/admin/Seo"));
+const AdminEmail = lazy(() => import("./pages/admin/Email"));
 const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
+const AdminBoundary = lazy(() => import("./pages/admin/AdminBoundary"));
 import EnIndex from "./pages/en/Index";
 import Content from "./pages/tjanster/Content";
 import Ehandel from "./pages/tjanster/Ehandel";
