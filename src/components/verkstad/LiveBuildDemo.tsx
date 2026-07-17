@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkles, RotateCcw } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
+import MiniPrototype, { slugify, protoDefaultName, type ProtoBranch } from "./MiniPrototype";
 
 type Branch = {
   key: string;
@@ -97,6 +98,7 @@ type Phase = "idle" | "typing" | "modules" | "wireframe" | "done";
 const LiveBuildDemo = () => {
   const { open } = useContactModal();
   const [idea, setIdea] = useState("");
+  const [name, setName] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [branch, setBranch] = useState<Branch>(DEFAULT_BRANCH);
   const [typedLines, setTypedLines] = useState<string[]>([]);
@@ -185,6 +187,17 @@ const LiveBuildDemo = () => {
               maxLength={200}
               disabled={building}
             />
+            <input
+              type="text"
+              className="vk-demo-input"
+              style={{ marginTop: 10, minHeight: 0 }}
+              placeholder="Företagsnamn (valfritt) – annars hittar vi på ett"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              maxLength={40}
+              disabled={building}
+              aria-label="Företagsnamn (valfritt)"
+            />
             <div style={{ display: "flex", gap: 10, marginTop: 14, flexWrap: "wrap" }}>
               <button type="submit" className="vk-btn vk-btn-primary vk-magnetic" disabled={building || !idea.trim()}>
                 {building ? "Bygger …" : <>Bygg min idé <Sparkles size={15} /></>}
@@ -241,30 +254,36 @@ const LiveBuildDemo = () => {
               <div className={`vk-demo-frame ${phase === "wireframe" || phase === "done" ? "live" : ""}`}>
                 <div className="vk-demo-framebar">
                   <i /><i /><i />
-                  <span>{branch.name.toLowerCase()}.se</span>
+                  <span>{slugify(name.trim() || protoDefaultName(branch.key as ProtoBranch))}.se</span>
                 </div>
-                <div className="vk-demo-body">
-                  <div className="vk-wf vk-wf-hero" style={{ animationDelay: "0.05s" }} />
-                  <div className="vk-wf-row">
-                    <div className="vk-wf vk-wf-side" style={{ animationDelay: "0.25s" }} />
-                    <div style={{ flex: 1, display: "grid", gap: 8 }}>
-                      <div className="vk-wf vk-wf-line" style={{ animationDelay: "0.4s" }} />
-                      <div className="vk-wf vk-wf-line w70" style={{ animationDelay: "0.55s" }} />
-                      <div className="vk-wf vk-wf-line w50" style={{ animationDelay: "0.7s" }} />
+                {phase === "done" ? (
+                  <div style={{ animation: "vkWfIn .6s cubic-bezier(.16,1,.3,1) both" }}>
+                    <MiniPrototype branch={branch.key as ProtoBranch} name={name} idea={idea} />
+                  </div>
+                ) : (
+                  <div className="vk-demo-body">
+                    <div className="vk-wf vk-wf-hero" style={{ animationDelay: "0.05s" }} />
+                    <div className="vk-wf-row">
+                      <div className="vk-wf vk-wf-side" style={{ animationDelay: "0.25s" }} />
+                      <div style={{ flex: 1, display: "grid", gap: 8 }}>
+                        <div className="vk-wf vk-wf-line" style={{ animationDelay: "0.4s" }} />
+                        <div className="vk-wf vk-wf-line w70" style={{ animationDelay: "0.55s" }} />
+                        <div className="vk-wf vk-wf-line w50" style={{ animationDelay: "0.7s" }} />
+                      </div>
+                    </div>
+                    <div className="vk-wf-row">
+                      <div className="vk-wf vk-wf-card" style={{ animationDelay: "0.85s" }} />
+                      <div className="vk-wf vk-wf-card" style={{ animationDelay: "1s" }} />
+                      <div className="vk-wf vk-wf-card" style={{ animationDelay: "1.15s" }} />
                     </div>
                   </div>
-                  <div className="vk-wf-row">
-                    <div className="vk-wf vk-wf-card" style={{ animationDelay: "0.85s" }} />
-                    <div className="vk-wf vk-wf-card" style={{ animationDelay: "1s" }} />
-                    <div className="vk-wf vk-wf-card" style={{ animationDelay: "1.15s" }} />
-                  </div>
-                </div>
+                )}
               </div>
 
               {phase === "done" && (
                 <div className="vk-demo-estimate">
                   <div className="vk-mono" style={{ display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
-                    <span>{branch.name}</span>
+                    <span>↑ Din prototyp: {name.trim() || protoDefaultName(branch.key as ProtoBranch)}</span>
                     <span style={{ color: "var(--gran)" }}>{branch.label}</span>
                   </div>
                   <div style={{ marginTop: 10, display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" }}>
