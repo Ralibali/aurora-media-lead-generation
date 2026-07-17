@@ -27,7 +27,7 @@ const AiKonsultLinkoping = () => (
       { title: "AI-CTO on demand", desc: "Löpande rådgivning som bollplank i ledningsgrupp, styrelse eller mot er utvecklingsavdelning." },
     ]}
     faqs={[
-      { q: "Vad kostar en AI-konsult i Linköping?", a: "Workshop och strategi: 24 900–49 900 kr som fast pris. Löpande rådgivning: från 12 000 kr/månad. Implementationsprojekt offereras separat." },
+      { q: "Vad kostar en AI-konsult i Linköping?", a: "Utvecklingskonsult: 895 kr/timme. Workshop och strategi: 24 900–49 900 kr som fast pris. Löpande rådgivning: från 12 000 kr/månad. Implementationsprojekt offereras till fast pris." },
       { q: "Jobbar ni bara med tekniska team?", a: "Nej. Merparten av våra uppdrag är mot ledning, ekonomi, sälj och HR. Vi översätter tekniken till affärsvärde – det är hela poängen." },
       { q: "Hur säkerställer ni GDPR?", a: "Vi använder EU-hostade modeller (Azure OpenAI EU, Mistral, AWS Bedrock EU), DPA på plats med alla leverantörer och hjälper er sätta interna riktlinjer för vad som får skickas till LLM." },
       { q: "Har ni koll på svensk kontext?", a: "Ja. Kollektivavtal, Fortnox, Skatteverket, Bolagsverket, svenska språknyanser – vi bygger inte generiska amerikanska demos." },

@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
 import { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
+import LiveBuildDemo from "@/components/verkstad/LiveBuildDemo";
 import "@/styles/verkstad.css";
 
 // Re-export for backwards compatibility with pages that import from @/pages/Index
@@ -379,6 +380,75 @@ const ProblemSection = () => (
   </section>
 );
 
+/* ── Live bygg-demo ── */
+const DemoSection = () => (
+  <section className="vk-section" id="demo">
+    <div className="vk-wrap">
+      <Reveal>
+        <div className="vk-secheader">
+          <span className="vk-mono">Testa själv · 20 sekunder</span>
+          <h2>Se din idé bli produkt. <span style={{ color: "var(--gran)" }}>Live.</span></h2>
+        </div>
+      </Reveal>
+      <Reveal delay={0.05}>
+        <p style={{ maxWidth: "60ch", fontSize: 18, color: "var(--granbark-mut)", marginTop: 8, marginBottom: 36 }}>
+          Det här är vad vi gör varje dag – fast på riktigt tar prototypen 3–5 dagar istället för 20 sekunder.
+        </p>
+      </Reveal>
+      <Reveal delay={0.1}>
+        <LiveBuildDemo />
+      </Reveal>
+    </div>
+  </section>
+);
+
+/* ── Scroll-progress ── */
+const ScrollProgress = () => {
+  useEffect(() => {
+    const bar = document.createElement("div");
+    bar.className = "vk-progress";
+    document.body.appendChild(bar);
+    const onScroll = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      bar.style.width = `${max > 0 ? (h.scrollTop / max) * 100 : 0}%`;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      bar.remove();
+    };
+  }, []);
+  return null;
+};
+
+/* ── Magnetiska knappar (subtil dragning mot markören) ── */
+const useMagnetic = () => {
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const handler = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest?.(".vk-magnetic") as HTMLElement | null;
+      document.querySelectorAll<HTMLElement>(".vk-magnetic").forEach((el) => {
+        if (el !== target) el.style.transform = "";
+      });
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+      const dist = Math.hypot(dx, dy);
+      if (dist < 120) {
+        const pull = (1 - dist / 120) * 8;
+        target.style.transform = `translate(${(dx / dist) * pull}px, ${(dy / dist) * pull}px)`;
+      } else {
+        target.style.transform = "";
+      }
+    };
+    window.addEventListener("mousemove", handler, { passive: true });
+    return () => window.removeEventListener("mousemove", handler);
+  }, []);
+};
+
 const ProcessSection = () => (
   <section className="vk-section" style={{ background: "var(--bjork-djup)" }}>
     <div className="vk-wrap">
@@ -464,20 +534,21 @@ const ReceiptsSection = () => {
       <div className="vk-wrap">
         <Reveal>
           <div className="vk-secheader">
-            <span className="vk-mono">Fast pris</span>
-            <h2>Tre paket. Inga överraskningar.</h2>
+            <span className="vk-mono">Fast pris · eller konsult</span>
+            <h2>Fyra upplägg. Inga överraskningar.</h2>
           </div>
         </Reveal>
-        <div className="vk-receipts">
+        <div className="vk-receipts" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))" }}>
           {[
-            { tier: "Prototyp", price: "Från 14 900 kr", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar." },
-            { tier: "MVP", price: "Från 34 900 kr", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna" },
-            { tier: "SaaS", price: "Från 69 000 kr", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift." },
+            { tier: "Prototyp", price: "Från 14 900 kr", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar.", stamp: "Fast pris" },
+            { tier: "MVP", price: "Från 34 900 kr", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna", stamp: "Fast pris" },
+            { tier: "SaaS", price: "Från 69 000 kr", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift.", stamp: "Fast pris" },
+            { tier: "Konsult", price: "895 kr/timme", desc: "AI-rådgivning eller utveckling i era team – timpris 895 kr eller från 12 000 kr/mån.", stamp: "Konsult" },
           ].map((r, i) => (
             <Reveal delay={i * 0.08} key={r.tier}>
               <div className="vk-receipt">
                 {r.flag && <span className="vk-receipt-flag">{r.flag}</span>}
-                <span className="vk-receipt-stamp">Fast pris</span>
+                <span className="vk-receipt-stamp">{r.stamp}</span>
                 <div className="vk-receipt-tier">{r.tier}</div>
                 <div className="vk-receipt-price" style={{ marginTop: 6, fontSize: 22, fontWeight: 700 }}>
                   {r.price}
@@ -551,10 +622,68 @@ const AIKartaSection = () => (
             <Link to="/ai-byra-linkoping" onClick={() => trackEvent("home_related_link_click", { target: "ai_byra_linkoping" })}>
               AI-byrå i Linköping →
             </Link>
+            <Link to="/ai-konsult-sverige" onClick={() => trackEvent("home_related_link_click", { target: "ai_konsult_sverige" })}>
+              Konsultuppdrag →
+            </Link>
             <Link to="/verktyg" onClick={() => trackEvent("home_related_link_click", { target: "verktyg" })}>
               Gratis verktyg →
             </Link>
           </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+const TOOLS_HOME = [
+  { slug: "ai-roi-kalkylator", name: "AI ROI-kalkylator", desc: "Årsbesparing, payback och kassaflödesgraf över 36 månader." },
+  { slug: "app-prisraknare", name: "App-prisräknare", desc: "Konfigurera scope och se prisintervall, paket och leveranstid direkt." },
+  { slug: "seo-kalkylator", name: "SEO-kalkylator", desc: "Räkna ut vad ökad organisk trafik är värd i omsättning och bruttovinst." },
+  { slug: "ai-mognadsanalys", name: "AI-mognadsanalys", desc: "Tio frågor ger nivå, radardiagram och en 30-dagars handlingsplan." },
+  { slug: "personalkostnad-vs-ai", name: "Personalkostnad vs AI", desc: "Jämför årskostnader och se frigjord kapacitet per år – i grafer." },
+  { slug: "prompt-generator", name: "Prompt-generator", desc: "Bygg strukturerade svenska prompts med nio färdiga mallar." },
+];
+
+const ToolsSection = () => (
+  <section className="vk-section" style={{ background: "var(--bjork-djup)" }}>
+    <div className="vk-wrap">
+      <Reveal>
+        <div className="vk-secheader">
+          <span className="vk-mono">Gratis verktyg · byggda av oss</span>
+          <h2>Sex verktyg. Noll kronor. <span style={{ color: "var(--gran)" }}>Räkna själv.</span></h2>
+        </div>
+      </Reveal>
+      <Reveal delay={0.05}>
+        <p style={{ maxWidth: "62ch", fontSize: 18, color: "var(--granbark-mut)", marginTop: 8 }}>
+          Samma verktyg vi använder i våra uppdrag – med grafer, scenarier och PDF-export.
+          Allt körs lokalt i din webbläsare, ingen data lämnar sidan.
+        </p>
+      </Reveal>
+      <div className="vk-hub-grid" style={{ marginTop: 36 }}>
+        {TOOLS_HOME.map((t, i) => (
+          <Reveal key={t.slug} delay={i * 0.04}>
+            <Link
+              to={`/verktyg/${t.slug}`}
+              className="vk-hub-card"
+              onClick={() => trackEvent("home_tool_click", { tool: t.slug })}
+            >
+              <div>
+                <h3 className="vk-hub-title" style={{ marginTop: 0 }}>{t.name}</h3>
+                <p className="vk-hub-desc">{t.desc}</p>
+              </div>
+              <div className="vk-hub-meta">
+                <span className="time">Gratis</span>
+                <span className="cta">Öppna <ArrowRight size={12} /></span>
+              </div>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+      <Reveal delay={0.15}>
+        <div style={{ marginTop: 28 }}>
+          <Link to="/verktyg" className="vk-btn vk-btn-ghost" onClick={() => trackEvent("home_verktyg_click")}>
+            Alla verktyg <ArrowRight size={16} />
+          </Link>
         </div>
       </Reveal>
     </div>
@@ -720,33 +849,38 @@ const localBusinessSchema = {
   founder: { "@type": "Person", name: "Christoffer Holstensson" },
 };
 
-const Index = () => (
-  <>
-    <SEO
-      title="AI-system och automation för småföretag | Aurora Media"
-      description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 14 900 kr, snabb leverans och kod ni äger själva."
-      canonical="/"
-      jsonLd={[faqSchema, casesSchema, localBusinessSchema]}
-    />
-    
-    
-    <div className="verkstad">
-      <VkNav />
-      <main>
-        <HeroSection />
-        <ProofStrip />
-        <ProblemSection />
-        <ProcessSection />
-        <CasesSection />
-        <ReceiptsSection />
-        <AIKartaSection />
-        <ManifestSection />
-        <FAQSection />
-        <FinalCTA />
-      </main>
-      <VkFooter />
-    </div>
-  </>
-);
+const Index = () => {
+  useMagnetic();
+  return (
+    <>
+      <SEO
+        title="AI-system och automation för småföretag | Aurora Media"
+        description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 14 900 kr, snabb leverans och kod ni äger själva."
+        canonical="/"
+        jsonLd={[faqSchema, casesSchema, localBusinessSchema]}
+      />
+      <ScrollProgress />
+
+      <div className="verkstad">
+        <VkNav />
+        <main>
+          <HeroSection />
+          <ProofStrip />
+          <ProblemSection />
+          <DemoSection />
+          <ProcessSection />
+          <CasesSection />
+          <ReceiptsSection />
+          <AIKartaSection />
+          <ToolsSection />
+          <ManifestSection />
+          <FAQSection />
+          <FinalCTA />
+        </main>
+        <VkFooter />
+      </div>
+    </>
+  );
+};
 
 export default Index;

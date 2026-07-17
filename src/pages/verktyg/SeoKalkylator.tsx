@@ -3,11 +3,19 @@ import { useSearchParams } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
 import {
-  ToolShell, toolByslug, NumberField, Metric, Bar, ScenarioSwitcher, CopyButton,
-  SCENARIO_FACTOR, type Scenario,
+  ToolShell, toolByslug, Metric, Bar, ScenarioSwitcher, CopyButton,
+  SliderField, PresetChips, PdfButton, AreaChartPanel, fmtKr,
+  SCENARIO_FACTOR, type Scenario, type ChartPoint,
 } from "./VerktygShell";
 
-const fmt = (n: number) => new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(Math.round(n));
+const fmt = fmtKr;
+
+const PRESETS = [
+  { label: "Lokal tjänst", values: { v: 800, c: 2.5, a: 3500, m: 60, i: 60 } },
+  { label: "E-handel", values: { v: 8000, c: 1.8, a: 950, m: 35, i: 40 } },
+  { label: "B2B-konsult", values: { v: 1500, c: 1.2, a: 15000, m: 70, i: 50 } },
+  { label: "SaaS", values: { v: 5000, c: 0.9, a: 2400, m: 85, i: 80 } },
+];
 
 const SeoKalkylator = () => {
   const meta = toolByslug("seo-kalkylator");
@@ -47,6 +55,22 @@ const SeoKalkylator = () => {
     };
   }, [visits, convPct, aov, marginPct, increasePct, scenario]);
 
+  // 12 månaders uppramp: trafik växer gradvis mot målet (SEO tar tid)
+  const ramp: ChartPoint[] = useMemo(() => {
+    const points: ChartPoint[] = [];
+    for (let m = 1; m <= 12; m++) {
+      const rampFactor = 1 - Math.exp(-m / 4); // långsam start, planar ut
+      const monthVisits = visits + result.extraVisits * rampFactor;
+      const monthRev = monthVisits * (convPct / 100) * aov;
+      points.push({
+        name: `M${m}`,
+        trafik: Math.round(monthVisits),
+        omsattning: Math.round(monthRev),
+      });
+    }
+    return points;
+  }, [visits, result.extraVisits, convPct, aov]);
+
   const summary = [
     `SEO-kalkylator – Aurora Media`,
     `Scenario: ${scenario} (trafikökning ${result.effInc.toFixed(0)} %)`,
@@ -68,18 +92,40 @@ const SeoKalkylator = () => {
             <span className="vk-mono">Antaganden</span>
             <ScenarioSwitcher value={scenario} onChange={setScenario} event="verktyg_seo_scenario" />
           </div>
-          <NumberField label="Månadsbesök idag" value={visits} onChange={setVisits} min={0} step={50} />
-          <NumberField label="Konverteringsgrad" suffix="%" value={convPct} onChange={setConvPct} min={0} max={100} step={0.1} hint="från GA" />
-          <NumberField label="Snittordervärde / lead-värde" suffix="kr" value={aov} onChange={setAov} min={0} step={50} />
-          <NumberField label="Bruttomarginal" suffix="%" value={marginPct} onChange={setMarginPct} min={0} max={100} />
-          <NumberField label="Möjlig trafikökning" suffix="%" value={increasePct} onChange={setIncreasePct} min={0} max={500} step={5} hint="justeras av scenariot" />
+
+          <PresetChips
+            presets={PRESETS}
+            event="verktyg_seo_preset"
+            onPick={(v) => {
+              setVisits(Number(v.v));
+              setConvPct(Number(v.c));
+              setAov(Number(v.a));
+              setMarginPct(Number(v.m));
+              setIncreasePct(Number(v.i));
+            }}
+          />
+
+          <SliderField label="Månadsbesök idag" value={visits} onChange={setVisits} min={100} max={50000} step={100} />
+          <SliderField label="Konverteringsgrad" value={convPct} onChange={setConvPct} min={0.1} max={10} step={0.1} suffix="%" hint="från GA" format={(n) => `${n.toLocaleString("sv-SE")} %`} />
+          <SliderField label="Snittordervärde / lead-värde" value={aov} onChange={setAov} min={100} max={25000} step={100} suffix="kr" />
+          <SliderField label="Bruttomarginal" value={marginPct} onChange={setMarginPct} min={5} max={95} suffix="%" />
+          <SliderField label="Möjlig trafikökning" value={increasePct} onChange={setIncreasePct} min={5} max={300} step={5} suffix="%" hint="justeras av scenariot" />
           <p className="vk-mono" style={{ marginTop: 4 }}>Antagande: samma konvertering & AOV vid högre trafik.</p>
         </div>
 
         <div className="vk-panel-card muted" aria-live="polite">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
             <span className="vk-mono">Resultat (live)</span>
-            <CopyButton text={summary} event="verktyg_seo_copy" />
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <CopyButton text={summary} event="verktyg_seo_copy" />
+              <PdfButton
+                title="SEO-potential"
+                subtitle={`${fmt(visits)} besök/mån idag · mål +${result.effInc.toFixed(0)} % trafik`}
+                lines={summary.split("\n").slice(3)}
+                filename="aurora-seo-kalkyl.pdf"
+                event="verktyg_seo_pdf"
+              />
+            </div>
           </div>
 
           <div className="vk-metrics">
@@ -89,6 +135,13 @@ const SeoKalkylator = () => {
             <Metric label="Extra besök / mån" value={fmt(result.extraVisits)} />
             <Metric label="Extra order / mån" value={fmt(result.extraOrders)} />
           </div>
+
+          <AreaChartPanel
+            title="Trafikuppramp, 12 månader"
+            data={ramp}
+            kr={false}
+            series={[{ key: "trafik", label: "Besök / månad", color: "#0F5132" }]}
+          />
 
           <div style={{ marginTop: 28 }}>
             <div className="vk-mono" style={{ marginBottom: 8, display: "flex", justifyContent: "space-between" }}>

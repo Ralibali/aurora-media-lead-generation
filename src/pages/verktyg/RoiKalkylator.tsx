@@ -5,17 +5,28 @@ import { trackEvent } from "@/lib/analytics";
 import {
   ToolShell,
   toolByslug,
-  NumberField,
   Metric,
   Bar,
   ScenarioSwitcher,
   CopyButton,
+  SliderField,
+  PresetChips,
+  PdfButton,
+  AreaChartPanel,
+  fmtKr,
   SCENARIO_FACTOR,
   type Scenario,
+  type ChartPoint,
 } from "./VerktygShell";
 
-const fmt = (n: number) =>
-  new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(Math.round(n));
+const fmt = fmtKr;
+
+const PRESETS = [
+  { label: "Litet kontor", values: { e: 5, h: 6, c: 450, a: 50, p: 60000 } },
+  { label: "E-handel", values: { e: 8, h: 10, c: 420, a: 60, p: 89000 } },
+  { label: "Tillverkning", values: { e: 20, h: 8, c: 480, a: 40, p: 120000 } },
+  { label: "Redovisning", values: { e: 12, h: 12, c: 520, a: 65, p: 89000 } },
+];
 
 const RoiKalkylator = () => {
   const meta = toolByslug("ai-roi-kalkylator");
@@ -61,6 +72,23 @@ const RoiKalkylator = () => {
     return { effectiveAuto, savedHours, yearlyHours, yearlySaving, monthlySaving, paybackMonths, threeYearNet };
   }, [employees, hoursPerWeek, hourlyCost, automationPct, projectCost, scenario]);
 
+  // Kumulativt kassaflöde, månad 0–36
+  const cashflow: ChartPoint[] = useMemo(() => {
+    const points: ChartPoint[] = [];
+    for (let m = 0; m <= 36; m += 3) {
+      points.push({
+        name: m === 0 ? "Start" : `Mån ${m}`,
+        netto: Math.round(result.monthlySaving * m - projectCost),
+        sparat: Math.round(result.monthlySaving * m),
+      });
+    }
+    return points;
+  }, [result.monthlySaving, projectCost]);
+
+  const breakEvenLabel = isFinite(result.paybackMonths)
+    ? `Break-even ≈ månad ${Math.max(1, Math.round(result.paybackMonths))}`
+    : undefined;
+
   useEffect(() => {
     trackEvent("verktyg_roi_live", { scenario, employees, automationPct });
   }, [scenario, employees, automationPct]);
@@ -86,17 +114,39 @@ const RoiKalkylator = () => {
             <span className="vk-mono">Antaganden</span>
             <ScenarioSwitcher value={scenario} onChange={setScenario} event="verktyg_roi_scenario" />
           </div>
-          <NumberField label="Antal anställda som berörs" value={employees} onChange={setEmployees} min={1} max={5000} />
-          <NumberField label="Timmar / vecka på repetitivt arbete (per person)" value={hoursPerWeek} onChange={setHoursPerWeek} min={0} max={40} />
-          <NumberField label="Snitt-timkostnad" suffix="kr" value={hourlyCost} onChange={setHourlyCost} min={0} max={5000} step={10} hint="inkl. sociala avgifter" />
-          <NumberField label="Automatiseringsgrad" suffix="%" value={automationPct} onChange={setAutomationPct} min={0} max={100} hint="justeras av scenariot" />
-          <NumberField label="Uppskattad projektkostnad" suffix="kr" value={projectCost} onChange={setProjectCost} min={0} max={5_000_000} step={1000} />
+
+          <PresetChips
+            presets={PRESETS}
+            event="verktyg_roi_preset"
+            onPick={(v) => {
+              setEmployees(Number(v.e));
+              setHoursPerWeek(Number(v.h));
+              setHourlyCost(Number(v.c));
+              setAutomationPct(Number(v.a));
+              setProjectCost(Number(v.p));
+            }}
+          />
+
+          <SliderField label="Anställda som berörs" value={employees} onChange={setEmployees} min={1} max={100} />
+          <SliderField label="Timmar / vecka på repetitivt arbete" value={hoursPerWeek} onChange={setHoursPerWeek} min={0} max={40} suffix="h" hint="per person" />
+          <SliderField label="Snitt-timkostnad" value={hourlyCost} onChange={setHourlyCost} min={200} max={1500} step={10} suffix="kr" hint="inkl. sociala avgifter" />
+          <SliderField label="Automatiseringsgrad" value={automationPct} onChange={setAutomationPct} min={0} max={100} suffix="%" hint="justeras av scenariot" />
+          <SliderField label="Uppskattad projektkostnad" value={projectCost} onChange={setProjectCost} min={10000} max={500000} step={5000} suffix="kr" />
         </div>
 
         <div className="vk-panel-card muted" aria-live="polite">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
             <span className="vk-mono">Resultat (live)</span>
-            <CopyButton text={summary} event="verktyg_roi_copy" />
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <CopyButton text={summary} event="verktyg_roi_copy" />
+              <PdfButton
+                title="AI ROI-kalkyl"
+                subtitle={`Scenario: ${scenario} · ${employees} anställda · ${hoursPerWeek} h/vecka repetitivt arbete`}
+                lines={summary.split("\n").slice(4)}
+                filename="aurora-roi-kalkyl.pdf"
+                event="verktyg_roi_pdf"
+              />
+            </div>
           </div>
 
           <div className="vk-metrics">
@@ -109,6 +159,16 @@ const RoiKalkylator = () => {
             />
             <Metric label="3-års nettovärde" value={`${fmt(result.threeYearNet)} kr`} />
           </div>
+
+          <AreaChartPanel
+            title="Kumulativt värde, 36 månader"
+            data={cashflow}
+            breakEvenLabel={breakEvenLabel}
+            series={[
+              { key: "sparat", label: "Sparat värde", color: "#0F5132" },
+              { key: "netto", label: "Netto efter investering", color: "#E8500A" },
+            ]}
+          />
 
           <div style={{ marginTop: 24 }}>
             <div className="vk-mono" style={{ marginBottom: 8, display: "flex", justifyContent: "space-between" }}>

@@ -190,6 +190,7 @@ export const NORDIC_TOKENS = `
   @media(min-width:1000px){ .aur .work-grid{ grid-template-columns:repeat(3,1fr); } }
   .aur .work-card{ background:var(--ink); padding:clamp(22px,2.2vw,28px); transition:background 200ms; display:block; text-decoration:none; color:inherit; }
   .aur .work-card:hover{ background:var(--ink-2); }
+  .aur .work-card h3{ font-family:var(--font-mono); font-weight:500; font-size:clamp(1.05rem,1.6vw,1.35rem); letter-spacing:-0.01em; color:var(--bone); margin:0; }
   .aur .work-card h4{ font-family:var(--font-mono); font-size:1.05rem; color:var(--bone); margin-bottom:8px; font-weight:500; }
   .aur .work-card .url{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; color:var(--moss); }
   .aur .work-card .meta{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--bone-mute); margin-top:14px; }

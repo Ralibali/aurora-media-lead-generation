@@ -26,6 +26,7 @@ const STATIC_ROUTES = [
   { path: "/tjanster/grafisk-profil", changefreq: "monthly", priority: "0.75" },
   { path: "/tjanster/fotografering", changefreq: "monthly", priority: "0.75" },
   { path: "/arbete", changefreq: "monthly", priority: "0.85" },
+  { path: "/oppna-siffror", changefreq: "monthly", priority: "0.7" },
   { path: "/produkter", changefreq: "monthly", priority: "0.8" },
   { path: "/process", changefreq: "monthly", priority: "0.8" },
   { path: "/priser", changefreq: "monthly", priority: "0.85" },

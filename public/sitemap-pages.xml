@@ -81,6 +81,11 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://auroramedia.se/oppna-siffror</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://auroramedia.se/produkter</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

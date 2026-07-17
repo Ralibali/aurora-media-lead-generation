@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
-import { ToolShell, toolByslug, CopyButton, Metric } from "./VerktygShell";
+import { ToolShell, toolByslug, CopyButton, Metric, PdfButton, DriverBars } from "./VerktygShell";
 
 type Option = { value: string; label: string; desc?: string; add: number };
 
@@ -139,9 +139,18 @@ const AppPrisraknare = () => {
         </div>
 
         <div className="vk-panel-card muted" aria-live="polite">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
             <span className="vk-mono">Uppskattning (live)</span>
-            <CopyButton text={summary} event="verktyg_prisraknare_copy" />
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <CopyButton text={summary} event="verktyg_prisraknare_copy" />
+              <PdfButton
+                title={`Prisuppskattning – ${paket}`}
+                subtitle={`Intervall ${fmt(price.low)}–${fmt(price.high)} kr · leverans ${delivery}`}
+                lines={summary.split("\n").slice(1)}
+                filename="aurora-prisuppskattning.pdf"
+                event="verktyg_prisraknare_pdf"
+              />
+            </div>
           </div>
 
           <div className="vk-metrics">
@@ -161,14 +170,7 @@ const AppPrisraknare = () => {
 
           <div style={{ marginTop: 24 }}>
             <span className="vk-mono">Kostnadsdrivare</span>
-            <ul className="vk-summary-list" style={{ marginTop: 12 }}>
-              {drivers.map((d) => (
-                <li key={d.label}>
-                  <span className="k">{d.label}</span>
-                  <span className="v">{fmt(d.add)} kr</span>
-                </li>
-              ))}
-            </ul>
+            <DriverBars items={drivers.map((d) => ({ label: d.label, value: d.add }))} />
           </div>
 
           <button

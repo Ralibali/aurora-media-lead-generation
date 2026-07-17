@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "@/styles/lumina.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 
 import AiAutomationForetag from "./pages/AiAutomationForetag";
 import AiByraLinkoping from "./pages/AiByraLinkoping";
@@ -31,6 +31,7 @@ import Om from "./pages/Om";
 import Priser from "./pages/Priser";
 import RedaktionellPolicy from "./pages/RedaktionellPolicy";
 import Tjanster from "./pages/Tjanster";
+import OppnaSiffror from "./pages/OppnaSiffror";
 import WebbyraLinkoping from "./pages/WebbyraLinkoping";
 import DigitalMarknadsforingLinkoping from "./pages/DigitalMarknadsforingLinkoping";
 import SeoByraLinkoping from "./pages/SeoByraLinkoping";
@@ -63,15 +64,38 @@ import Hemsidor from "./pages/tjanster/Hemsidor";
 import MetaAds from "./pages/tjanster/MetaAds";
 import Mobilapp from "./pages/tjanster/Mobilapp";
 import Seo from "./pages/tjanster/Seo";
-import VerktygIndex from "./pages/verktyg/VerktygIndex";
-import RoiKalkylator from "./pages/verktyg/RoiKalkylator";
-import AppPrisraknare from "./pages/verktyg/AppPrisraknare";
-import SeoKalkylator from "./pages/verktyg/SeoKalkylator";
-import AiMognadsanalys from "./pages/verktyg/AiMognadsanalys";
-import PersonalkostnadVsAi from "./pages/verktyg/PersonalkostnadVsAi";
-import PromptGenerator from "./pages/verktyg/PromptGenerator";
+// Verktyg-sidorna lazy-loadas: de drar med sig recharts/jspdf och ska inte
+// tynga huvudbundlen (Core Web Vitals).
+const VerktygIndex = lazy(() => import("./pages/verktyg/VerktygIndex"));
+const RoiKalkylator = lazy(() => import("./pages/verktyg/RoiKalkylator"));
+const AppPrisraknare = lazy(() => import("./pages/verktyg/AppPrisraknare"));
+const SeoKalkylator = lazy(() => import("./pages/verktyg/SeoKalkylator"));
+const AiMognadsanalys = lazy(() => import("./pages/verktyg/AiMognadsanalys"));
+const PersonalkostnadVsAi = lazy(() => import("./pages/verktyg/PersonalkostnadVsAi"));
+const PromptGenerator = lazy(() => import("./pages/verktyg/PromptGenerator"));
 
 const queryClient = new QueryClient();
+
+// Minimal laddningsindikator för lazy-loadade verktygssidor.
+const VerktygFallback = () => (
+  <div
+    role="status"
+    aria-label="Laddar verktyg"
+    style={{
+      minHeight: "60vh",
+      display: "grid",
+      placeItems: "center",
+      fontFamily: "'Spline Sans Mono', ui-monospace, monospace",
+      fontSize: 13,
+      letterSpacing: ".1em",
+      textTransform: "uppercase",
+      color: "#4A5058",
+      background: "#F6F5F1",
+    }}
+  >
+    Laddar verktyg …
+  </div>
+);
 
 type SEOConfig = {
   title: string;
@@ -121,9 +145,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/ai-automation-foretag",
   },
   "/ai-konsult-sverige": {
-    title: "AI-konsult Sverige – från strategi till färdig produkt | Aurora Media AB",
+    title: "AI-konsult i Sverige – rådgivning och bygge | Aurora Media AB",
     description:
-      "Aurora Media är AI-konsulten som bygger produkten: SaaS, interna appar och AI-automationer med fast pris, snabb leverans och kod du äger.",
+      "AI-konsult som både råder och bygger: strategi, utbildning och konsultuppdrag på timme – eller fastprisprojekt med kod ni äger.",
     canonical: "https://auroramedia.se/ai-konsult-sverige",
   },
   "/ai-byra-linkoping": {
@@ -197,6 +221,12 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Upptäck våra tjänster inom SaaS, AI, webbutveckling, annonsering, innehåll och digital tillväxt.",
     canonical: "https://auroramedia.se/tjanster",
+  },
+  "/oppna-siffror": {
+    title: "Öppna siffror – metrics i realtid | Aurora Media AB",
+    description:
+      "Aurora Media visar sina siffror öppet: produkter i drift, leveranstider, upptid och deploys. Ingen PowerPoint – facit.",
+    canonical: "https://auroramedia.se/oppna-siffror",
   },
   "/tjanster/hemsidor": {
     title: "Hemsidor | Aurora Media AB",
@@ -439,6 +469,7 @@ const App = () => (
               <Route path="/process" element={<Process />} />
               <Route path="/kontakt" element={<Kontakt />} />
               <Route path="/tjanster" element={<Tjanster />} />
+              <Route path="/oppna-siffror" element={<OppnaSiffror />} />
               <Route path="/tjanster/hemsidor" element={<Hemsidor />} />
               <Route path="/tjanster/ehandel" element={<Ehandel />} />
               <Route path="/tjanster/mobilapp" element={<Mobilapp />} />
@@ -478,13 +509,13 @@ const App = () => (
               <Route path="/ai-konsult-linkoping" element={<AiKonsultLinkoping />} />
               <Route path="/google-ads-linkoping" element={<GoogleAdsLinkoping />} />
               <Route path="/apputveckling-linkoping" element={<ApputvecklingLinkoping />} />
-              <Route path="/verktyg" element={<VerktygIndex />} />
-              <Route path="/verktyg/ai-roi-kalkylator" element={<RoiKalkylator />} />
-              <Route path="/verktyg/app-prisraknare" element={<AppPrisraknare />} />
-              <Route path="/verktyg/seo-kalkylator" element={<SeoKalkylator />} />
-              <Route path="/verktyg/ai-mognadsanalys" element={<AiMognadsanalys />} />
-              <Route path="/verktyg/personalkostnad-vs-ai" element={<PersonalkostnadVsAi />} />
-              <Route path="/verktyg/prompt-generator" element={<PromptGenerator />} />
+              <Route path="/verktyg" element={<Suspense fallback={<VerktygFallback />}><VerktygIndex /></Suspense>} />
+              <Route path="/verktyg/ai-roi-kalkylator" element={<Suspense fallback={<VerktygFallback />}><RoiKalkylator /></Suspense>} />
+              <Route path="/verktyg/app-prisraknare" element={<Suspense fallback={<VerktygFallback />}><AppPrisraknare /></Suspense>} />
+              <Route path="/verktyg/seo-kalkylator" element={<Suspense fallback={<VerktygFallback />}><SeoKalkylator /></Suspense>} />
+              <Route path="/verktyg/ai-mognadsanalys" element={<Suspense fallback={<VerktygFallback />}><AiMognadsanalys /></Suspense>} />
+              <Route path="/verktyg/personalkostnad-vs-ai" element={<Suspense fallback={<VerktygFallback />}><PersonalkostnadVsAi /></Suspense>} />
+              <Route path="/verktyg/prompt-generator" element={<Suspense fallback={<VerktygFallback />}><PromptGenerator /></Suspense>} />
               <Route path="/saas-utveckling-:city" element={<CityPage />} />
               <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />

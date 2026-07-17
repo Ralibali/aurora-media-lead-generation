@@ -1,6 +1,22 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, Check, Copy } from "lucide-react";
+import { ChevronRight, Check, Copy, FileDown } from "lucide-react";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
+  BarChart,
+  Bar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  Radar,
+} from "recharts";
 import {
   VerkstadLayout,
   Reveal,
@@ -265,6 +281,340 @@ export const Bar = ({
   return (
     <div className="vk-bar" role="progressbar" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
       <div className={`vk-bar-fill ${warn ? "warn" : ""}`} style={{ width: `${pct}%` }} />
+    </div>
+  );
+};
+
+/* ────────── Verktyg 2.0 – slider, presets, PDF, grafer ────────── */
+
+export const fmtKr = (n: number) =>
+  new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 }).format(Math.round(n));
+
+export const SliderField = ({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  step = 1,
+  suffix = "",
+  hint,
+  format,
+}: {
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+  min: number;
+  max: number;
+  step?: number;
+  suffix?: string;
+  hint?: string;
+  format?: (n: number) => string;
+}) => {
+  const id = label.replace(/\s+/g, "-").toLowerCase().replace(/[^a-z0-9-]/g, "");
+  const fill = max > min ? ((value - min) / (max - min)) * 100 : 0;
+  const display = format ? format(value) : `${new Intl.NumberFormat("sv-SE").format(value)}${suffix ? ` ${suffix}` : ""}`;
+  return (
+    <div className="vk-slider-field">
+      <div className="vk-slider-head">
+        <label htmlFor={id} className="vk-slider-label">{label}</label>
+        <span className="vk-slider-value">{display}</span>
+      </div>
+      <input
+        id={id}
+        type="range"
+        className="vk-slider"
+        style={{ ["--fill" as string]: `${Math.min(100, Math.max(0, fill))}%` }}
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        aria-valuetext={display}
+      />
+      {hint && <div className="vk-slider-hint">{hint}</div>}
+    </div>
+  );
+};
+
+export const PresetChips = ({
+  presets,
+  onPick,
+  event,
+}: {
+  presets: { label: string; values: Record<string, number | string> }[];
+  onPick: (values: Record<string, number | string>) => void;
+  event?: string;
+}) => (
+  <div className="vk-presets" role="group" aria-label="Färdiga exempel">
+    {presets.map((p) => (
+      <button
+        key={p.label}
+        type="button"
+        className="vk-preset"
+        onClick={() => {
+          onPick(p.values);
+          if (event) trackEvent(event, { preset: p.label });
+        }}
+      >
+        {p.label}
+      </button>
+    ))}
+  </div>
+);
+
+export const PdfButton = ({
+  title,
+  subtitle,
+  lines,
+  filename,
+  event,
+}: {
+  title: string;
+  subtitle?: string;
+  lines: string[];
+  filename: string;
+  event?: string;
+}) => {
+  const [busy, setBusy] = useState(false);
+  return (
+    <button
+      type="button"
+      className="vk-copybtn"
+      disabled={busy}
+      onClick={async () => {
+        setBusy(true);
+        try {
+          const { jsPDF } = await import("jspdf");
+          const doc = new jsPDF({ unit: "pt", format: "a4" });
+          const margin = 56;
+          const pageW = doc.internal.pageSize.getWidth();
+          let y = 64;
+
+          // Header
+          doc.setFillColor(15, 81, 50);
+          doc.rect(0, 0, pageW, 6, "F");
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(9);
+          doc.setTextColor(120, 128, 136);
+          doc.text("AURORA MEDIA AB · AURORAMEDIA.SE", margin, y);
+          y += 30;
+          doc.setFontSize(22);
+          doc.setTextColor(20, 23, 26);
+          doc.text(title, margin, y);
+          y += 24;
+          if (subtitle) {
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(11);
+            doc.setTextColor(74, 80, 88);
+            doc.text(doc.splitTextToSize(subtitle, pageW - margin * 2), margin, y);
+            y += 18 * (doc.splitTextToSize(subtitle, pageW - margin * 2).length) + 6;
+          }
+          doc.setDrawColor(226, 224, 218);
+          doc.line(margin, y, pageW - margin, y);
+          y += 24;
+
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(11);
+          for (const raw of lines) {
+            const wrapped: string[] = raw.trim()
+              ? doc.splitTextToSize(raw, pageW - margin * 2)
+              : [""];
+            for (const w of wrapped) {
+              if (y > 780) {
+                doc.addPage();
+                y = 64;
+              }
+              if (/^(Årsbesparing|Netto|Frigjord|Extra|Prisintervall|Rekommenderat|Poäng|Nivå)/.test(w)) {
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(15, 81, 50);
+              } else {
+                doc.setFont("helvetica", "normal");
+                doc.setTextColor(20, 23, 26);
+              }
+              doc.text(w, margin, y);
+              y += 18;
+            }
+          }
+
+          const pageH = doc.internal.pageSize.getHeight();
+          doc.setFontSize(9);
+          doc.setTextColor(140, 146, 152);
+          doc.text(
+            `Skapad ${new Date().toLocaleDateString("sv-SE")} · Förenklad uppskattning – inte en offert · info@auroramedia.se`,
+            margin,
+            pageH - 32,
+          );
+          doc.save(filename);
+          if (event) trackEvent(event);
+        } catch {
+          /* PDF blockerad */
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      <FileDown size={13} /> {busy ? "Skapar…" : "Spara PDF"}
+    </button>
+  );
+};
+
+/* ── Grafer (recharts) ── */
+
+const CHART_GRAN = "#0F5132";
+const CHART_VARSEL = "#E8500A";
+const CHART_MUT = "#9AA1A9";
+
+export type ChartPoint = { name: string; [key: string]: number | string };
+
+const ChartTooltip = ({ active, payload, label, kr }: {
+  active?: boolean;
+  payload?: { name: string; value: number; color?: string }[];
+  label?: string;
+  kr?: boolean;
+}) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div style={{
+      background: "#fff", border: "1px solid #E2E0DA", borderRadius: 10,
+      padding: "10px 14px", fontFamily: "var(--font-mono)", fontSize: 12, boxShadow: "0 8px 24px rgba(20,23,26,.12)",
+    }}>
+      {label !== undefined && <div style={{ marginBottom: 6, color: "#4A5058", textTransform: "uppercase", letterSpacing: ".06em" }}>{label}</div>}
+      {payload.map((p) => (
+        <div key={p.name} style={{ color: p.color || CHART_GRAN, fontWeight: 600 }}>
+          {p.name}: {kr ? `${fmtKr(Number(p.value))} kr` : new Intl.NumberFormat("sv-SE").format(Number(p.value))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export const AreaChartPanel = ({
+  title,
+  data,
+  series,
+  breakEvenLabel,
+  height = 240,
+  kr = true,
+}: {
+  title: string;
+  data: ChartPoint[];
+  series: { key: string; label: string; color?: string }[];
+  breakEvenLabel?: string;
+  height?: number;
+  kr?: boolean;
+}) => (
+  <div className="vk-chart">
+    <div className="vk-chart-title"><span>{title}</span>{breakEvenLabel && <span style={{ color: CHART_VARSEL }}>{breakEvenLabel}</span>}</div>
+    <ResponsiveContainer width="100%" height={height}>
+      <AreaChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
+        <CartesianGrid stroke="#E2E0DA" strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="name" tick={{ fontSize: 11, fill: CHART_MUT, fontFamily: "Spline Sans Mono" }} axisLine={false} tickLine={false} />
+        <YAxis
+          tick={{ fontSize: 11, fill: CHART_MUT, fontFamily: "Spline Sans Mono" }}
+          axisLine={false}
+          tickLine={false}
+          width={56}
+          tickFormatter={(v: number) => (kr ? `${Math.round(v / 1000)}k` : String(v))}
+        />
+        <Tooltip content={<ChartTooltip kr={kr} />} />
+        {breakEvenLabel && <ReferenceLine y={0} stroke={CHART_VARSEL} strokeDasharray="4 3" />}
+        {series.map((s) => (
+          <Area
+            key={s.key}
+            type="monotone"
+            dataKey={s.key}
+            name={s.label}
+            stroke={s.color || CHART_GRAN}
+            fill={s.color || CHART_GRAN}
+            fillOpacity={0.12}
+            strokeWidth={2.5}
+            dot={false}
+          />
+        ))}
+      </AreaChart>
+    </ResponsiveContainer>
+    <div className="vk-chart-legend">
+      {series.map((s) => (
+        <span key={s.key}><i style={{ background: s.color || CHART_GRAN }} />{s.label}</span>
+      ))}
+    </div>
+  </div>
+);
+
+export const BarComparePanel = ({
+  title,
+  data,
+  series,
+  height = 220,
+  kr = true,
+}: {
+  title: string;
+  data: ChartPoint[];
+  series: { key: string; label: string; color?: string }[];
+  height?: number;
+  kr?: boolean;
+}) => (
+  <div className="vk-chart">
+    <div className="vk-chart-title"><span>{title}</span></div>
+    <ResponsiveContainer width="100%" height={height}>
+      <BarChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: 0 }} barGap={6}>
+        <CartesianGrid stroke="#E2E0DA" strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="name" tick={{ fontSize: 11, fill: CHART_MUT, fontFamily: "Spline Sans Mono" }} axisLine={false} tickLine={false} />
+        <YAxis
+          tick={{ fontSize: 11, fill: CHART_MUT, fontFamily: "Spline Sans Mono" }}
+          axisLine={false}
+          tickLine={false}
+          width={56}
+          tickFormatter={(v: number) => (kr ? `${Math.round(v / 1000)}k` : String(v))}
+        />
+        <Tooltip content={<ChartTooltip kr={kr} />} cursor={{ fill: "rgba(15,81,50,.05)" }} />
+        {series.map((s) => (
+          <Bar key={s.key} dataKey={s.key} name={s.label} fill={s.color || CHART_GRAN} radius={[6, 6, 0, 0]} maxBarSize={42} />
+        ))}
+      </BarChart>
+    </ResponsiveContainer>
+    <div className="vk-chart-legend">
+      {series.map((s) => (
+        <span key={s.key}><i style={{ background: s.color || CHART_GRAN }} />{s.label}</span>
+      ))}
+    </div>
+  </div>
+);
+
+export const RadarPanel = ({
+  title,
+  data,
+  height = 300,
+}: {
+  title: string;
+  data: { topic: string; score: number }[];
+  height?: number;
+}) => (
+  <div className="vk-chart">
+    <div className="vk-chart-title"><span>{title}</span><span>0–2 per område</span></div>
+    <ResponsiveContainer width="100%" height={height}>
+      <RadarChart data={data} outerRadius="72%">
+        <PolarGrid stroke="#E2E0DA" />
+        <PolarAngleAxis dataKey="topic" tick={{ fontSize: 10.5, fill: "#4A5058", fontFamily: "Spline Sans Mono" }} />
+        <Radar dataKey="score" stroke={CHART_GRAN} fill={CHART_GRAN} fillOpacity={0.25} strokeWidth={2} />
+        <Tooltip content={<ChartTooltip kr={false} />} />
+      </RadarChart>
+    </ResponsiveContainer>
+  </div>
+);
+
+export const DriverBars = ({ items, kr = true }: { items: { label: string; value: number }[]; kr?: boolean }) => {
+  const max = Math.max(1, ...items.map((i) => i.value));
+  return (
+    <div className="vk-driver">
+      {items.map((i) => (
+        <div className="vk-driver-row" key={i.label}>
+          <span className="dl">{i.label}</span>
+          <span className="dv">{kr ? `${fmtKr(i.value)} kr` : i.value}</span>
+          <span className="vk-driver-bar"><i style={{ width: `${(i.value / max) * 100}%` }} /></span>
+        </div>
+      ))}
     </div>
   );
 };

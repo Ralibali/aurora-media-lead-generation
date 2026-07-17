@@ -14,19 +14,19 @@ const pages = [
   },
   {
     file: path.resolve(process.cwd(), "dist", "ai-byra-linkoping", "index.html"),
-    title: "AI-konsult & AI-byrå i Linköping | Aurora Media",
+    title: "AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media",
     description:
-      "Aurora Media hjälper företag i Linköping att automatisera administration, ersätta Excel och bygga AI-drivna interna system. Lokal kontakt och tydligt scope.",
+      "AI-byrå i Linköping som hjälper företag automatisera administration, ersätta Excel och bygga AI-drivna interna system. Fast pris, lokal kontakt, första versionen på veckor.",
     body:
-      "Aurora Media är en AI-konsult och AI-byrå i Linköping som hjälper företag att automatisera administration, ersätta kalkylblad, koppla ihop system och bygga AI-drivna interna verktyg.",
+      "Aurora Media är en AI-byrå i Linköping som hjälper företag att automatisera administration, ersätta kalkylblad, koppla ihop system och bygga AI-drivna interna verktyg. Fast pris från 14 900 kr, fysiska möten i Linköpingsområdet och en första testbar version inom några veckor.",
   },
   {
     file: path.resolve(process.cwd(), "dist", "priser", "index.html"),
-    title: "Priser för AI-system, MVP och SaaS | Aurora Media",
+    title: "Priser för AI-system, MVP, SaaS och konsult | Aurora Media",
     description:
-      "Se riktpriser för prototyp, MVP, SaaS och AI-automation. Fast scope, tydlig offert och kod ni äger. Projekt från 14 900 kr.",
+      "Se riktpriser för prototyp, MVP, SaaS, AI-automation och konsultuppdrag. Utvecklingskonsult 895 kr/timme, rådgivning från 12 000 kr/mån. Projekt från 14 900 kr.",
     body:
-      "Aurora Media erbjuder prototyper från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 69 000 kr och AI-automation efter tydligt scope. Alla priser är riktpriser exklusive moms och exakt pris lämnas före projektstart.",
+      "Aurora Media erbjuder prototyper från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 69 000 kr och AI-automation efter tydligt scope – samt konsultuppdrag inom AI-rådgivning och utveckling för 895 kr/timme eller från 12 000 kr/månad. Alla priser är riktpriser exklusive moms och exakt pris lämnas före projektstart.",
   },
 ];
 

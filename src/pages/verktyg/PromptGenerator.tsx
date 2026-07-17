@@ -94,6 +94,42 @@ const TEMPLATES: Template[] = [
     constraints: "Skilj på beslut, åtaganden och öppna frågor.",
     output: "Beslut · Åtaganden (vem/vad/när) · Öppna frågor · Nästa möte.",
   },
+  {
+    key: "seo",
+    name: "SEO-artikel",
+    goal: "Skriv ett SEO-optimerat artikelutkast som rankar på vald sökterm.",
+    role: "Senior SEO-skribent med förståelse för svensk sökintention",
+    audience: "Potentiella kunder som söker efter [sökterm] på Google",
+    tone: "Professionell",
+    format: "Utförlig text",
+    context: "Sökterm: [sökterm]. Företaget: [beskriv]. Målet är att läsaren ska [boka/köpa/kontakta].",
+    constraints: "H1 innehåller söktermen. 800–1200 ord. Naturligt språk – inget nyckelordsstopp. Inkludera 3–5 H2-rubriker.",
+    output: "Metatitel (max 60 tecken) · metabeskrivning (max 155 tecken) · H1 · brödtext med H2-struktur · avslutande CTA.",
+  },
+  {
+    key: "product",
+    name: "Produktbeskrivning",
+    goal: "Skriv en säljande men trovärdig produktbeskrivning.",
+    role: "Copywriter specialiserad på svensk e-handel",
+    audience: "Kund som står i begrepp att köpa [produkt]",
+    tone: "Peppig",
+    format: "Kort text",
+    context: "Produkt: [namn]. Nyttor: [lista]. Pris: [pris]. Differentiering: [vad som gör den unik].",
+    constraints: "Max 150 ord. Fokus på nytta före funktion. Ingen överdrift utan konkreta bevis.",
+    output: "Rubrik · ingress (2 meningar) · 3 nyttopunkter · kort CTA.",
+  },
+  {
+    key: "job",
+    name: "Jobbannons",
+    goal: "Skriv en jobbannons som attraherar rätt kandidater.",
+    role: "Rekryteringsspecialist med känsla för arbetsgivarvarumärke",
+    audience: "Kandidater inom [roll/yrkesområde]",
+    tone: "Personlig",
+    format: "Utförlig text",
+    context: "Roll: [titel]. Företaget: [beskriv kort]. Krav: [måsten]. Meriterande: [bonus].",
+    constraints: "Konkret om vardagen, inte bara kravlista. Inkluderande språk. Max 400 ord.",
+    output: "Rubrik · om företaget · om rollen · vi söker dig som · vi erbjuder · så ansöker du.",
+  },
 ];
 
 const PromptGenerator = () => {
@@ -213,9 +249,31 @@ const PromptGenerator = () => {
             ))}
           </ul>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", margin: "28px 0 12px" }}>
-            <span className="vk-mono">Din prompt</span>
-            <CopyButton text={prompt} label="Kopiera prompt" event="verktyg_prompt_copy" />
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", margin: "28px 0 12px", flexWrap: "wrap", gap: 8 }}>
+            <span className="vk-mono">
+              Din prompt{prompt ? ` · ${prompt.length} tecken · ${prompt.split(/\s+/).filter(Boolean).length} ord` : ""}
+            </span>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <CopyButton text={prompt} label="Kopiera prompt" event="verktyg_prompt_copy" />
+              {prompt && (
+                <button
+                  type="button"
+                  className="vk-copybtn"
+                  onClick={() => {
+                    const blob = new Blob([prompt], { type: "text/plain;charset=utf-8" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "prompt.txt";
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    trackEvent("verktyg_prompt_download");
+                  }}
+                >
+                  Ladda ner .txt
+                </button>
+              )}
+            </div>
           </div>
           <pre className="vk-prompt-out">
             {prompt || "Fyll i minst målet till vänster – prompten byggs här."}

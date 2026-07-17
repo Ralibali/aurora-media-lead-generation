@@ -64,8 +64,9 @@ const VerktygIndex = () => {
           </Reveal>
           <Reveal delay={0.1}>
             <p style={{ marginTop: 24, maxWidth: "60ch", fontSize: 18, color: "var(--granbark-mut)" }}>
-              Sex gratisverktyg byggda av Aurora Media. Allt körs lokalt i din
-              webbläsare – inga konton, ingen data lämnar sidan.
+              Sex gratisverktyg byggda av Aurora Media – med live-grafer, scenarier
+              och PDF-export. Allt körs lokalt i din webbläsare: inga konton,
+              ingen data lämnar sidan.
             </p>
           </Reveal>
         </div>

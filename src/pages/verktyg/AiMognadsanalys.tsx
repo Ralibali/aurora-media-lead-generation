@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, RefreshCw } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
-import { ToolShell, toolByslug, CopyButton, Metric, Bar } from "./VerktygShell";
+import { ToolShell, toolByslug, CopyButton, Metric, Bar, RadarPanel, PdfButton } from "./VerktygShell";
 
 type Q = { id: string; text: string; topic: string };
 
@@ -79,6 +79,7 @@ const AiMognadsanalys = () => {
   const level = useMemo(() => [...LEVELS].reverse().find((l) => score >= l.min) ?? LEVELS[0], [score]);
   const strengths = QUESTIONS.filter((q) => answers[q.id] === 2).map((q) => `${q.topic}: ${q.text}`);
   const risks = QUESTIONS.filter((q) => answers[q.id] === 0).map((q) => `${q.topic}: ${q.text}`);
+  const radarData = QUESTIONS.map((q) => ({ topic: q.topic, score: answers[q.id] ?? 0 }));
 
   const summary = useMemo(() => [
     `AI-mognadsanalys – Aurora Media`,
@@ -161,8 +162,15 @@ const AiMognadsanalys = () => {
       <div className="vk-panel-card muted" aria-live="polite">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 12 }}>
           <span className="vk-mono">Er AI-mognad</span>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <CopyButton text={summary} event="verktyg_mognad_copy" />
+            <PdfButton
+              title={`AI-mognad: Nivå ${level.level} – ${level.name}`}
+              subtitle={`Poäng ${score} av 20 · ${level.desc}`}
+              lines={summary.split("\n").slice(2)}
+              filename="aurora-ai-mognad.pdf"
+              event="verktyg_mognad_pdf"
+            />
             <button type="button" className="vk-copybtn" onClick={reset}>
               <RefreshCw size={13} /> Börja om
             </button>
@@ -177,6 +185,8 @@ const AiMognadsanalys = () => {
         <div style={{ marginTop: 16 }}>
           <Bar value={score} max={20} />
         </div>
+
+        <RadarPanel title="Mognad per område" data={radarData} />
 
         <p style={{ marginTop: 24, fontSize: 17, color: "var(--granbark)", maxWidth: "62ch" }}>{level.desc}</p>
 

@@ -116,6 +116,7 @@ export const VkFooter = () => (
           <h4>Bolag</h4>
           <a href="mailto:info@auroramedia.se">info@auroramedia.se</a>
           <Link to="/om">Om Aurora</Link>
+          <Link to="/oppna-siffror">Öppna siffror</Link>
           <Link to="/kontakt">Kontakt</Link>
           <Link to="/integritetspolicy">Integritetspolicy</Link>
           <span style={{ display: "block", padding: "4px 0", opacity: 0.6 }}>

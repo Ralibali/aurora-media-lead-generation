@@ -27,6 +27,11 @@ const SERVICES = [
     desc: "Språkmodeller, agenter och automatiseringar in i era befintliga system. Byggda för att faktiskt fungera i produktion.",
     includes: ["Språkmodell-integration (OpenAI, Anthropic m.fl.)", "Promptdesign och finjustering", "Agent-flöden och automatiseringar", "RAG och kunskapsbaser", "Säker hantering av API-nycklar", "Monitorering och loggning"],
   },
+  {
+    num: "05", name: "Konsultuppdrag", price: "895 kr/timme", time: "Löpande eller tidsbegränsat",
+    desc: "Vi tar även rena konsultuppdrag – AI-rådgivning, strategi, utbildning och utveckling i era befintliga team. 895 kr/timme, dagpris eller fast månadskostnad: ni väljer upplägget.",
+    includes: ["AI-rådgivning och strategiworkshops", "Utvecklingskonsult i era projekt och team", "AI-CTO on demand – bollplank för ledning", "Utbildning och prompt-rutiner för teamet", "Genomlysning av befintliga system och kod", "895 kr/timme, dagpris eller fast månad – utan bindning"],
+  },
 ];
 
 const Tjanster = () => {
@@ -39,8 +44,8 @@ const Tjanster = () => {
   return (
     <>
       <SEO
-        title="Tjänster — SaaS, hemsidor, interna system och AI | Aurora Media"
-        description="Vi bygger fyra saker snabbt: SaaS-produkter, hemsidor, interna system och AI-integrationer. Fast pris, fast deadline, kod ni äger."
+        title="Tjänster — SaaS, hemsidor, interna system, AI och konsult | Aurora Media"
+        description="Vi bygger SaaS-produkter, hemsidor, interna system och AI-integrationer – och tar konsultuppdrag inom AI-rådgivning och utveckling. Fast pris eller timpris, kod ni äger."
         canonical="/tjanster"
       />
       <div className="verkstad">
@@ -52,7 +57,7 @@ const Tjanster = () => {
               <Reveal><p className="vk-mono">tjänster · fast scope · kod ni äger</p></Reveal>
               <Reveal delay={0.1}>
                 <h1 style={{ marginTop: 18, maxWidth: "18ch" }}>
-                  Vi bygger fyra saker.{" "}
+                  Vi bygger. Vi konsultar.{" "}
                   <span className="accent" style={{ fontFamily: "'Fraunces', Georgia, serif", fontStyle: "italic", fontWeight: 500 }}>
                     Snabbt.
                   </span>
@@ -60,7 +65,7 @@ const Tjanster = () => {
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="vk-hero-sub">
-                  Moderna AI-verktyg, fast pris, fast deadline. Levereras på veckor — inte månader.
+                  Fasta byggpaket på veckor – eller konsultuppdrag i era team, på timme eller i månaden. Ni väljer upplägget.
                 </p>
               </Reveal>
               <Reveal delay={0.3}>

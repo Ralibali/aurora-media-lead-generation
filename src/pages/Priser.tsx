@@ -112,6 +112,10 @@ const FAQS = [
     a: "Ja. En sprint eller prototyp är ofta det bästa första steget när ni vill testa nyttan och minska risken innan en större investering.",
   },
   {
+    q: "Tar ni konsultuppdrag på timme?",
+    a: "Ja. Utöver de fasta paketen tar jag konsultuppdrag inom AI-rådgivning, strategi och utveckling. Utvecklingskonsult kostar 895 kr/timme, löpande rådgivning börjar från 12 000 kr/månad och strategiworkshops kostar 24 900–49 900 kr. Dagpris offereras vid större omfattning.",
+  },
+  {
     q: "Tillkommer drift och externa licenser?",
     a: "Eventuella kostnader för exempelvis hosting, AI-anrop, e-post, SMS eller tredjepartssystem specificeras separat i offerten. Kontona ska normalt stå i ert namn.",
   },
@@ -121,8 +125,8 @@ const pricingSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
   "@id": `${SITE_URL}/priser#service`,
-  name: "Skräddarsydda AI-system, MVP och SaaS",
-  description: "Fastprisupplägg för prototyper, MVP, SaaS och AI-automationer för svenska företag.",
+  name: "Skräddarsydda AI-system, MVP, SaaS och konsultuppdrag",
+  description: "Fastprisupplägg för prototyper, MVP, SaaS och AI-automationer samt konsultuppdrag inom AI-rådgivning och utveckling för svenska företag.",
   provider: { "@id": `${SITE_URL}/#organization` },
   areaServed: { "@type": "Country", name: "Sverige" },
   hasOfferCatalog: {
@@ -257,6 +261,69 @@ const Priser = () => {
               </div>
               <p className="vk-mono" style={{ marginTop: 28 }}>
                 Riktpriser exkl. moms. Exakt pris beror på funktioner, integrationer, datakrav och leveranstid.
+              </p>
+            </div>
+          </section>
+
+          <hr className="vk-hair" />
+
+          <section className="vk-section" style={{ background: "var(--bjork-djup)" }}>
+            <div className="vk-wrap">
+              <Reveal><p className="vk-mono">Konsultuppdrag</p></Reveal>
+              <Reveal delay={0.05}>
+                <h2 style={{ marginTop: 14, maxWidth: "20ch" }}>
+                  Vill ni hellre hyra mig <span style={{ color: "var(--gran)", fontStyle: "italic" }}>på timme eller i månaden?</span>
+                </h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p style={{ marginTop: 18, maxWidth: "62ch", fontSize: 17, color: "var(--granbark-mut)" }}>
+                  Utöver fasta paket tar jag rena konsultuppdrag – AI-rådgivning, utveckling i era team
+                  och strategiarbete. Timpris, dagpris eller fast månadskostnad utan bindningstid.
+                </p>
+              </Reveal>
+
+              <div className="vk-receipts" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", marginTop: 36 }}>
+                {[
+                  {
+                    num: "K1", name: "Strategiworkshop", price: "24 900–49 900 kr", time: "Halv–heldag",
+                    desc: "Prioriterade AI-use cases, quick wins och en 6-månadersplan – med ledning och operativt team i samma rum.",
+                    modal: "Konsult",
+                  },
+                  {
+                    num: "K2", name: "Löpande AI-rådgivning", price: "från 12 000 kr/mån", time: "Löpande",
+                    desc: "AI-CTO on demand: bollplank för ledning, styrelse eller dev-team. Avstämningar, prioritering och kvalitetskontroll.",
+                    modal: "Konsult",
+                  },
+                  {
+                    num: "K3", name: "Utvecklingskonsult", price: "895 kr/timme", time: "Efter behov",
+                    desc: "Jag kliver in i ert befintliga team och bygger – React, TypeScript, AI-integrationer, Supabase och automation. Dagpris vid större omfattning.",
+                    modal: "Konsult",
+                  },
+                ].map((item, index) => (
+                  <Reveal key={item.num} delay={index * 0.06}>
+                    <article className="vk-receipt" style={{ display: "flex", flexDirection: "column", gap: 12, height: "100%" }}>
+                      <span className="vk-receipt-stamp">Konsult</span>
+                      <div className="vk-receipt-tier">{item.num} · {item.time}</div>
+                      <h3 style={{ marginTop: 2 }}>{item.name}</h3>
+                      <div className="vk-receipt-price" style={{ marginTop: 4 }}>{item.price}</div>
+                      <p className="vk-receipt-desc" style={{ flex: 1 }}>{item.desc}</p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          trackEvent("pricing_consult_click", { offer: item.name });
+                          open({ paket: item.modal, internalNote: `Besökaren valde konsultuppdraget ${item.name} (${item.price}) på prissidan.` });
+                        }}
+                        className="vk-btn vk-btn-ghost"
+                        style={{ justifyContent: "center", marginTop: 12, width: "100%" }}
+                      >
+                        Hör av dig <ArrowRight size={14} />
+                      </button>
+                    </article>
+                  </Reveal>
+                ))}
+              </div>
+              <p className="vk-mono" style={{ marginTop: 28 }}>
+                Samma person hela vägen – du pratar direkt med den som råder och bygger. Inga mellanhänder.
               </p>
             </div>
           </section>

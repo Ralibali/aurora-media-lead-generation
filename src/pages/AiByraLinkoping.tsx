@@ -108,8 +108,16 @@ const PROCESS = [
 
 const FAQS = [
   {
+    q: "Vilken är den bästa AI-byrån i Linköping för små och medelstora företag?",
+    a: "Det beror på vad ni behöver. Vill ni ha både rådgivning och en färdigbyggd lösning till fast pris är en AI-byrå som Aurora Media rätt val: vi kartlägger processen, bygger systemet och står för driften – med fysisk närvaro i Linköping. Behöver ni bara en strategi räcker en ren AI-konsult, och behöver ni bara en hemsida räcker en webbyrå.",
+  },
+  {
     q: "Vad är skillnaden mellan en AI-konsult och en AI-byrå?",
     a: "En AI-konsult hjälper ofta till med analys och strategi. Aurora Media kombinerar rådgivning med design, utveckling, integration och lansering. Målet är inte en presentation om AI, utan en fungerande lösning som går att använda i verksamheten.",
+  },
+  {
+    q: "Hur väljer jag AI-byrå i Linköping?",
+    a: "Be om tre saker: konkreta exempel på lösningar i drift, ett fast pris med tydligt scope och svar på vem som äger koden. En seriös AI-byrå visar gärna fungerande produkter, skriver in GDPR- och datahantering i upplägget och låter er testa en tidig version innan ni betalar fullt.",
   },
   {
     q: "Vad kostar ett AI-projekt för företag?",
@@ -139,12 +147,12 @@ const AiByraLinkoping = () => {
 
   useEffect(() => {
     setSEOMeta({
-      title: "AI-konsult & AI-byrå i Linköping | Aurora Media",
+      title: "AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media",
       description:
-        "Aurora Media hjälper företag i Linköping att automatisera administration, ersätta Excel och bygga AI-drivna interna system. Lokal kontakt och tydligt scope.",
+        "AI-byrå i Linköping som hjälper företag automatisera administration, ersätta Excel och bygga AI-drivna interna system. Fast pris, lokal kontakt, första versionen på veckor.",
       canonical: "/ai-byra-linkoping",
       keywords:
-        "AI-konsult Linköping, AI-byrå Linköping, AI-företag Linköping, AI-automation Linköping, AI-lösningar företag Linköping, interna system Linköping",
+        "AI-byrå Linköping, AI-konsult Linköping, AI-företag Linköping, AI-automation Linköping, AI-lösningar företag Linköping, interna system Linköping, AI byrå i Linköping",
     });
 
     setBreadcrumb([
@@ -231,14 +239,14 @@ const AiByraLinkoping = () => {
                   className="hero-line"
                   style={{ marginTop: 18, fontSize: "clamp(2.3rem,5.6vw,4.8rem)", maxWidth: "17ch" }}
                 >
-                  AI-konsult i Linköping för <span className="it">verkliga arbetsflöden.</span>
+                  AI-byrå i Linköping för <span className="it">verkliga arbetsflöden.</span>
                 </h1>
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="lead" style={{ marginTop: 24, maxWidth: "62ch" }}>
-                  Vi hjälper företag att automatisera administration, ersätta kalkylblad och bygga interna
-                  system som passar verksamheten. Lokal kontakt i Linköping, tydligt scope och en första version
-                  som går att testa tidigt.
+                  Aurora Media är en AI-byrå i Linköping som hjälper företag att automatisera administration,
+                  ersätta kalkylblad och bygga interna system som passar verksamheten. Lokal kontakt, fast pris
+                  och en första version som går att testa inom några veckor.
                 </p>
               </Reveal>
               <Reveal delay={0.3}>
@@ -347,6 +355,128 @@ const AiByraLinkoping = () => {
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
+            <Reveal><div className="meta-label">Vad gör en AI-byrå?</div></Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="h2">En AI-byrå bygger lösningen. <span className="it">Inte bara strategin.</span></h2>
+                <p className="lead" style={{ marginTop: 22, maxWidth: "64ch" }}>
+                  Många som söker efter en AI-byrå i Linköping har redan pratat med konsulter som lämnat en
+                  presentation och en rekommendation. Skillnaden hos en byrå är att samma part också designar,
+                  programmerar, integrerar och driftsätter. Hos oss får ni båda delarna: rådgivningen om vad som
+                  är värt att bygga – och bygget av det.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+          <div className="work-grid">
+            {[
+              {
+                n: "AI-konsult",
+                title: "Analyserar och rekommenderar",
+                desc: "Kartlägger möjligheter, håller utbildningar och tar fram strategi. Leveransen är ofta ett underlag – ni står kvar med genomförandet själva.",
+              },
+              {
+                n: "Webbyrå",
+                title: "Bygger webben, sällan AI:n",
+                desc: "En traditionell webbyrå i Linköping bygger hemsidor och e-handel. När ni behöver automation, AI-assistenter och systemintegrationer räcker det sällan hela vägen.",
+              },
+              {
+                n: "AI-byrå",
+                title: "Rådgivning + bygge + drift",
+                desc: "En AI-byrå kombinerar konsultens analys med byråns leverans: identifiera processen, bygg lösningen, koppla ihop systemen och följ upp att den faktiskt används.",
+              },
+            ].map((item, index) => (
+              <Reveal key={item.n} delay={index * 0.05}>
+                <article className="work-card" style={{ height: "100%" }}>
+                  <div className="meta-label">{item.n}</div>
+                  <h3 style={{ marginTop: 18 }}>{item.title}</h3>
+                  <p className="body" style={{ marginTop: 12 }}>{item.desc}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Priser</div></Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="h2">Vad kostar en AI-byrå i Linköping? <span className="it">Fast pris – eller konsult på timme.</span></h2>
+                <p className="lead" style={{ marginTop: 22, maxWidth: "64ch" }}>
+                  Byggprojekt kör vi till fast pris: ni får ett avgränsat scope innan arbetet börjar och vet exakt
+                  vad AI-satsningen kostar. Behöver ni hellre en konsult i era egna team tar vi även uppdrag på
+                  timme, per dag eller mot fast månadskostnad.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+          <style>{`@media(min-width:1000px){ .aur .work-grid.price-four{ grid-template-columns:repeat(4,1fr); } }`}</style>
+          <div className="work-grid price-four">
+            {[
+              { name: "Prototyp", price: "från 14 900 kr", desc: "Klickbar version på 3–5 dagar. Testa idén skarpt innan ni satsar större.", href: "/priser" },
+              { name: "MVP", price: "från 34 900 kr", desc: "Lanseringsklar lösning på cirka två veckor. Inloggning, betalning och admin.", href: "/priser" },
+              { name: "Skalbar lösning", price: "från 89 000 kr", desc: "Full produkt eller internt system med integrationer, roller och drift.", href: "/priser" },
+              { name: "Konsultuppdrag", price: "895 kr/timme", desc: "AI-rådgivning, utveckling i era team eller AI-CTO on demand – timpris 895 kr eller från 12 000 kr/mån.", href: "/ai-konsult-linkoping" },
+            ].map((p, index) => (
+              <Reveal key={p.name} delay={index * 0.05}>
+                <Link to={p.href} className="work-card" style={{ height: "100%", display: "block" }}>
+                  <div className="meta-label">{p.name}</div>
+                  <h3 style={{ marginTop: 18 }}>{p.price}</h3>
+                  <p className="body" style={{ marginTop: 12 }}>{p.desc}</p>
+                  <div className="url" style={{ marginTop: 18 }}>Se paketet →</div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+          <div style={{ marginTop: 28 }}>
+            <Link to="/verktyg/app-prisraknare" className="btn btn-ghost">
+              Räkna på ert projekt i prisräknaren <span className="a"><ArrowRight size={14} /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
+            <Reveal><div className="meta-label">Lokalt i Östergötland</div></Reveal>
+            <Reveal delay={0.1}>
+              <div>
+                <h2 className="h2">En AI-byrå med rötter i <span className="it">Linköpings tekniktradition.</span></h2>
+                <p className="lead" style={{ marginTop: 22, maxWidth: "64ch" }}>
+                  Linköping är en av Sveriges starkaste teknikstäder – från Mjärdevi Science Park och
+                  Linköpings universitet till hundratals teknik- och industriföretag i regionen. Aurora Media
+                  drivs härifrån och hjälper företag i Linköping, Norrköping och resten av Östergötland att
+                  omsätta AI till konkret nytta. Fysiska möten bokas enkelt i Linköpingsområdet, och alla
+                  projekt drivs med löpande digitala avstämningar och testbara versioner.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+          <div className="work-grid">
+            {[
+              { n: "01", title: "Möten på plats i Linköping", desc: "Kickoff och viktiga avstämningar kan ske hos er eller oss – resten sköts effektivt digitalt." },
+              { n: "02", title: "Samma tid, samma språk", desc: "Ingen offshoremodell. Ni pratar direkt med den som bygger, på svenska, utan mellanhänder." },
+              { n: "03", title: "Svensk lagring och GDPR", desc: "Datalagring, behörigheter och AI-modeller väljs med svenska förhållanden och EU-regler i åtanke." },
+            ].map((item, index) => (
+              <Reveal key={item.n} delay={index * 0.05}>
+                <article className="work-card" style={{ height: "100%" }}>
+                  <div className="meta-label">{item.n}</div>
+                  <h3 style={{ marginTop: 18 }}>{item.title}</h3>
+                  <p className="body" style={{ marginTop: 12 }}>{item.desc}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
+          <div className="sec-head">
             <Reveal><div className="meta-label">Så går det till</div></Reveal>
             <Reveal delay={0.1}>
               <h2 className="h2">Mindre workshop. <span className="it">Mer fungerande produkt.</span></h2>
@@ -434,7 +564,7 @@ const AiByraLinkoping = () => {
           <div className="sec-head">
             <Reveal><div className="meta-label">Vanliga frågor</div></Reveal>
             <Reveal delay={0.1}>
-              <h2 className="h2">AI-konsult i Linköping – <span className="it">frågor och svar.</span></h2>
+              <h2 className="h2">AI-byrå i Linköping – <span className="it">frågor och svar.</span></h2>
             </Reveal>
           </div>
           <div className="feat-list">
@@ -461,8 +591,10 @@ const AiByraLinkoping = () => {
             {[
               { to: "/ai-karta", label: "Kostnadsfri AI-kartläggning" },
               { to: "/ai-automation-foretag", label: "AI-automation för företag" },
+              { to: "/ai-automation-linkoping", label: "AI-automation Linköping" },
               { to: "/ai-konsult-sverige", label: "AI-konsult Sverige" },
               { to: "/saas-utveckling-linkoping", label: "SaaS-utveckling Linköping" },
+              { to: "/verktyg", label: "Gratis AI-verktyg och kalkylatorer" },
               { to: "/arbete", label: "Projekt och case" },
               { to: "/priser", label: "Priser och upplägg" },
               { to: "/blogg", label: "Guider om AI och automation" },
