@@ -50,6 +50,13 @@ const CSS = `
 }
 .aik-cta-ghost:hover { background: #14171A; color: #F6F5F1; }
 .aik-micro { margin-top: 14px; font-size: 13px; color: #4A5058; }
+.aik-valuechips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.aik-valuechips .chip {
+  font-family: "Spline Sans Mono", ui-monospace, monospace; font-size: 11.5px; letter-spacing: .03em;
+  padding: 7px 13px; border-radius: 999px; border: 1px solid #E2E0DA; color: #4A5058; background: #fff;
+}
+.aik-valuechips .chip s { opacity: .75; }
+.aik-valuechips .chip.hot { background: #0F5132; border-color: #0F5132; color: #fff; font-weight: 700; }
 
 /* Exempelkarta – statisk mock */
 .aik-preview {
@@ -263,6 +270,13 @@ const AiKarta = () => {
             Inget säljsamtal · 4 uppföljande tips via mejl · Avsluta när ni vill
           </p>
 
+          {/* Värdeframgång */}
+          <div className="aik-valuechips">
+            <span className="chip"><s>Värde som konsult ~12 000 kr</s></span>
+            <span className="chip hot">0 kr för dig</span>
+            <span className="chip">Personligt svar inom 24 h</span>
+          </div>
+
           {/* Exempelkarta */}
           <div className="aik-preview" aria-label="Exempel på hur er AI-karta kommer se ut">
             <div className="aik-preview-header">
@@ -299,6 +313,29 @@ const AiKarta = () => {
                 <p>{v.b}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* WHY FREE */}
+      <section className="aik-section" style={{ background: "#14171A", color: "#F6F5F1" }}>
+        <div className="aik-wrap">
+          <span className="aik-mono" style={{ color: "rgba(246,245,241,0.55)" }}>Varför gratis?</span>
+          <h2 style={{ marginTop: 12, color: "#F6F5F1", maxWidth: "20ch" }}>
+            Ärligt svar: det är vår bästa försäljning.
+          </h2>
+          <p style={{ marginTop: 16, maxWidth: "62ch", color: "rgba(246,245,241,0.8)", fontSize: 17, lineHeight: 1.65 }}>
+            En konsult tar 12 000 kr för samma kartläggning. Vi ger den gratis — för ungefär
+            var femte kartläggning blir ett byggprojekt, och de kunderna stannar i flera år.
+            För er är det riskfritt: ni får ett beslutsunderlag oavsett om vi jobbar ihop eller inte.
+          </p>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 22 }}>
+            <Link to="/arbete" className="aik-cta-ghost" style={{ color: "#F6F5F1", borderColor: "rgba(246,245,241,0.35)" }}>
+              Se vad vi byggt tidigare →
+            </Link>
+            <Link to="/oppna-siffror" className="aik-cta-ghost" style={{ color: "#F6F5F1", borderColor: "rgba(246,245,241,0.35)" }}>
+              Våra öppna siffror →
+            </Link>
           </div>
         </div>
       </section>

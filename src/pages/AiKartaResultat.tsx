@@ -4,6 +4,7 @@ import { TriangleAlert as AlertTriangle, CalendarCheck, Copy, Download, Loader a
 import { toast } from "sonner";
 import { z } from "zod";
 import "@/styles/verkstad.css";
+import { VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -295,6 +296,7 @@ const AiKartaResultat = () => {
 
   return (
     <div className="verkstad">
+      <VkNav />
       <main id="main">
         <section className="vk-section" style={{ paddingTop: "clamp(96px,12vw,140px)" }}>
           <div className="vk-wrap">
@@ -418,6 +420,33 @@ const AiKartaResultat = () => {
           </div>
         </section>
       </main>
+      <VkFooter />
+      {bookingStatus !== "success" && <div style={{ height: 84 }} />}
+
+      {/* Sticky konverteringsbar */}
+      {bookingStatus !== "success" && (
+        <div style={{
+          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 40,
+          background: "rgba(20,23,26,0.94)", backdropFilter: "blur(10px)",
+          borderTop: "1px solid rgba(246,245,241,0.12)",
+          padding: "12px 20px",
+        }}>
+          <div style={{
+            maxWidth: 1080, margin: "0 auto", display: "flex", alignItems: "center",
+            justifyContent: "space-between", gap: 14, flexWrap: "wrap",
+          }}>
+            <p style={{ margin: 0, color: "#F6F5F1", fontSize: 14.5, fontWeight: 600 }}>
+              Gratis AI-genomlysning (20 min)
+              <span style={{ display: "block", fontSize: 12, fontWeight: 400, color: "rgba(246,245,241,0.6)" }}>
+                Vi går igenom kartan tillsammans – inga köpkrav.
+              </span>
+            </p>
+            <button type="button" onClick={openBooking} className="vk-btn vk-btn-primary" style={{ whiteSpace: "nowrap" }}>
+              Boka tid <CalendarCheck size={15} />
+            </button>
+          </div>
+        </div>
+      )}
 
       <Dialog open={bookingOpen} onOpenChange={(o) => { if (!o && bookingStatus === "submitting") return; setBookingOpen(o); }}>
         <DialogContent className="sm:max-w-lg">

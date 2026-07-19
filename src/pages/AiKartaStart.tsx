@@ -520,7 +520,10 @@ const AiKartaStart = () => {
                 </div>
               )}
 
-              <span className="aikw-mono">Steg {step} av 4 · sparas automatiskt</span>
+              <span className="aikw-mono">
+                Steg {step} av 4 · sparas automatiskt
+                {step < 4 && ` · ca ${step === 1 ? "60" : step === 2 ? "45" : "20"} sek kvar`}
+              </span>
               <h1 className="aikw-h1">
                 {step === 1 && "Vilken bransch är ni i?"}
                 {step === 2 && "Vad tar tid att göra manuellt?"}
@@ -530,7 +533,7 @@ const AiKartaStart = () => {
               <p className="aikw-sub">
                 {step === 1 && "Välj en bransch så förfyller vi de vanligaste tidstjuvarna. Ni kan markera fler eller ta bort."}
                 {step === 2 && "Beskriv 1–5 arbetsuppgifter som återkommer. Vi räknar ut AI-potentialen för varje."}
-                {step === 3 && "Er karta är klar att räknas fram. Vart skickar vi kopian?"}
+                {step === 3 && "Er karta är klar att räknas fram. Vart skickar vi kopian? En människa – inte en bot – granskar den sedan personligen."}
                 {step === 4 && "Sammanfattning innan vi räknar fram er AI-karta."}
               </p>
 
@@ -847,10 +850,16 @@ const AiKartaStart = () => {
                   <button type="button" onClick={next} className="aikw-btn-primary">Fortsätt →</button>
                 ) : (
                   <button type="button" onClick={handleSubmit} className="aikw-btn-primary" disabled={submitting}>
-                    {submitting ? "Beräknar..." : "Räkna fram min AI-karta →"}
+                    {submitting ? "Beräknar..." : "Visa min AI-karta direkt →"}
                   </button>
                 )}
               </div>
+
+              {step === 3 && (
+                <p style={{ marginTop: 18, textAlign: "center", fontSize: 13, color: "#4A5058" }}>
+                  🔒 Era svar delas aldrig. Kartan är gratis – oavsett om vi jobbar ihop sen eller inte.
+                </p>
+              )}
 
               <p style={{ marginTop: 24, textAlign: "center", fontSize: 12, color: "#A9A69C" }}>
                 Analysen är automatiskt genererad och ska ses som en första indikation. För exakt scope krävs genomgång av processer, system och data.
