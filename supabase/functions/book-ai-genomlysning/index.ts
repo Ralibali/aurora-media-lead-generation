@@ -106,7 +106,7 @@ Deno.serve(async (req: Request) => {
       <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:600px;color:#0f172a;">
         <h2 style="margin:0 0 12px;">Ny bokning av AI-genomlysning</h2>
         <p style="font-size:14px;padding:8px 12px;background:#f3f6f4;border-left:3px solid #1f7a5e;display:inline-block;border-radius:4px;">
-          Önskar bli kontaktad för att boka tid (45 min, kostnadsfri).
+          Önskar bli kontaktad för att boka tid (20 min, kostnadsfri).
         </p>
         <p><strong>Namn:</strong> ${escape(contact_name)}</p>
         <p><strong>E-post:</strong> <a href="mailto:${escape(email)}">${escape(email)}</a></p>
@@ -125,7 +125,7 @@ Deno.serve(async (req: Request) => {
     const customerHtml = `
       <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:600px;color:#0f172a;">
         <h2 style="margin:0 0 12px;">Tack ${escape(contact_name.split(" ")[0])}!</h2>
-        <p>Vi har tagit emot din bokningsförfrågan för en kostnadsfri AI-genomlysning (45 min).</p>
+        <p>Vi har tagit emot din bokningsförfrågan för en kostnadsfri AI-genomlysning (20 min).</p>
         <p>Du får en kalenderinbjudan inom kort – oftast samma arbetsdag. Hör gärna av dig till
           <a href="mailto:info@auroramedia.se">info@auroramedia.se</a> om du har frågor under tiden.</p>
         <p style="margin-top:24px;">Hälsningar,<br/>Aurora Media</p>

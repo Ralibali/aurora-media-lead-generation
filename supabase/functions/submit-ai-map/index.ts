@@ -621,7 +621,7 @@ Skriv också:
         <p style="font-size:14px;line-height:1.6;color:#334155;margin:0 0 18px;">
           Ni har två vägar framåt. Antingen tar ni resultatet internt och börjar testa själva – det är därför vi gjorde analysen synlig på er skärm direkt. Eller så bokar ni en kostnadsfri AI-genomlysning där vi går igenom era topp-områden tillsammans och jag ger en konkret uppskattning av tid och kostnad för det första bygget.
         </p>
-        <a href="https://auroramedia.se/kontakt" style="display:inline-block;background:#0f5132;color:#ffffff;text-decoration:none;padding:13px 24px;border-radius:999px;font-size:14px;font-weight:600;">Boka AI-genomlysning (45 min, gratis) →</a>
+        <a href="https://auroramedia.se/kontakt" style="display:inline-block;background:#0f5132;color:#ffffff;text-decoration:none;padding:13px 24px;border-radius:999px;font-size:14px;font-weight:600;">Boka AI-genomlysning (20 min, gratis) →</a>
       </div>
     </div>
 

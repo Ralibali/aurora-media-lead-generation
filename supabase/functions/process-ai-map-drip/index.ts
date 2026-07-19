@@ -35,6 +35,7 @@ interface Lead {
   email: string;
   pain_areas: string[];
   total_potential: string;
+  share_token: string | null;
 }
 
 interface Process {
@@ -125,6 +126,11 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
   const company = normalizeCompanyName(lead.company_name);
   const companyDisplay = escape(company);
   const top1 = top[0];
+  const resultUrl = lead.share_token
+    ? `${SITE_URL}/ai-karta/resultat?t=${encodeURIComponent(lead.share_token)}`
+    : `${SITE_URL}/ai-karta`;
+  const withRef = (ref: string) =>
+    resultUrl.includes("?") ? `${resultUrl}&ref=${ref}` : `${resultUrl}?ref=${ref}`;
   const unsubUrl = `${UNSUB_BASE}?token=${encodeURIComponent(token)}`;
   const unsubPauseUrl = `${unsubUrl}&pause=6m`;
   const unsubNotNowUrl = `${unsubUrl}&reason=not_now`;
@@ -135,7 +141,7 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
     const top1Name = top1 ? escape(top1.process_name) : "ert högst rankade område";
     const body = `
       <p style="margin:0 0 16px;">Jag tänkte höra hur du hunnit smälta resultatet från AI-kartan. Just nu sticker <strong>${top1Name}</strong> ut som det område där ni snabbast skulle se effekt – ${savedNote}</p>
-      <p style="margin:0 0 16px;">Det vanligaste jag hör i det här läget är "vi vet att vi borde göra något, men inte var vi ska börja". Det är precis därför jag erbjuder en kostnadsfri 45-minuters genomlysning där vi tittar på just ert första case och jag berättar konkret vad ett bygge skulle innebära – tid, pris och risker.</p>
+      <p style="margin:0 0 16px;">Det vanligaste jag hör i det här läget är "vi vet att vi borde göra något, men inte var vi ska börja". Det är precis därför jag erbjuder en kostnadsfri 20-minuters genomlysning där vi tittar på just ert första case och jag berättar konkret vad ett bygge skulle innebära – tid, pris och risker.</p>
       <p style="margin:0 0 8px;">Inga säljmöten, inga PDF:er som efterskott. Bara en arbetsgenomgång där du går från analys till beslutsunderlag.</p>
       <p style="margin:18px 0 0;font-size:13px;color:#64748b;"><em>P.S. Behöver du läsa analysen igen? Svara bara på det här mejlet så skickar jag tillbaka en sammanfattning.</em></p>`;
     return {
@@ -145,8 +151,8 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
         eyebrow: "Uppföljning · dag 2",
         title: `Hej igen ${firstName}`,
         bodyHtml: body,
-        ctaLabel: "Boka 45 min – kostnadsfritt",
-        ctaHref: `${SITE_URL}/kontakt?ref=drip-d2`,
+        ctaLabel: "Öppna er karta & boka 20 min",
+        ctaHref: withRef("drip-d2"),
         unsubUrl,
       }),
     };
@@ -169,7 +175,7 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
         title: "Konkret exempel: hur en lösning faktiskt skulle kännas",
         bodyHtml: body,
         ctaLabel: "Boka kort genomgång – jag visar live",
-        ctaHref: `${SITE_URL}/kontakt?ref=drip-d5`,
+        ctaHref: withRef("drip-d5"),
         unsubUrl,
       }),
     };
@@ -181,7 +187,7 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
       <p style="margin:0 0 16px;">Hej igen. Det här är inte ett standardiserat säljmejl – jag försöker förstå var ni står.</p>
       <p style="margin:0 0 16px;">När någon laddar ner AI-kartan brukar det landa i en av tre situationer:</p>
       <p style="margin:0 0 16px;"><strong style="color:#0f172a;">1. Ni testar själva.</strong> Helt ok – AI-verktygen är så pass bra nu att en kunnig person internt kan komma långt med ChatGPT, Claude och no-code-automation. Om ni vill ha tips på var jag skulle börja om jag var i ert ställe, <a href="${tipsMail}" style="color:#0f5132;">svara bara på det här mejlet</a>.</p>
-      <p style="margin:0 0 16px;"><strong style="color:#0f172a;">2. Ni har kört fast.</strong> Vanligast. Ni har testat ChatGPT, fått det att funka för enskilda fall, men inte fått det in i flödet på riktigt. Det är där en konsult med byggar-bakgrund (snarare än "AI-rådgivare som aldrig levererat") gör skillnad. <a href="${SITE_URL}/kontakt?ref=drip-d9" style="color:#0f5132;">Boka 45 min</a> så pekar jag ut blockaderna.</p>
+      <p style="margin:0 0 16px;"><strong style="color:#0f172a;">2. Ni har kört fast.</strong> Vanligast. Ni har testat ChatGPT, fått det att funka för enskilda fall, men inte fått det in i flödet på riktigt. Det är där en konsult med byggar-bakgrund (snarare än "AI-rådgivare som aldrig levererat") gör skillnad. <a href="${withRef("drip-d9")}" style="color:#0f5132;">Boka 20 min</a> så pekar jag ut blockaderna.</p>
       <p style="margin:0 0 16px;"><strong style="color:#0f172a;">3. Ni har lagt det på hyllan.</strong> Också ok – timing är allt. Säg gärna till om jag ska <a href="${unsubPauseUrl}" style="color:#0f5132;">höra av mig om ett halvår istället</a>, eller skippa uppföljning helt.</p>`;
     return {
       subject: "Hur långt kommer ni på egen hand?",
@@ -201,12 +207,12 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
     : "";
   const body = `
     <p style="margin:0 0 16px;">Det här är mitt sista uppföljningsmejl om AI-kartan ni gjorde för <strong>${companyDisplay}</strong>.</p>
-    <p style="margin:0 0 16px;">Antingen är det rätt timing och du vill boka 45 min – då finns länken nedan. Eller så är det inte rätt timing, och då är det inte värt att jag tröttar dig vidare.</p>
+    <p style="margin:0 0 16px;">Antingen är det rätt timing och du vill boka 20 min – då finns länken nedan. Eller så är det inte rätt timing, och då är det inte värt att jag tröttar dig vidare.</p>
     <p style="margin:0 0 12px;">Skulle uppskatta ett av två svar:</p>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 16px;">
       <tr>
         <td style="padding-right:10px;">
-          <a href="${SITE_URL}/kontakt?ref=drip-d14" style="display:inline-block;background:#0f5132;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:999px;font-size:14px;font-weight:600;">Boka genomlysning</a>
+          <a href="${withRef("drip-d14")}" style="display:inline-block;background:#0f5132;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:999px;font-size:14px;font-weight:600;">Boka genomlysning</a>
         </td>
         <td>
           <a href="${unsubNotNowUrl}" style="display:inline-block;background:#ffffff;color:#0f5132;text-decoration:none;padding:11px 19px;border:1px solid #0f5132;border-radius:999px;font-size:14px;font-weight:600;">Inte just nu</a>
@@ -299,7 +305,7 @@ Deno.serve(async (req: Request) => {
 
     const { data: lead } = await admin
       .from("ai_map_leads")
-      .select("id, company_name, contact_name, email, pain_areas, total_potential")
+      .select("id, company_name, contact_name, email, pain_areas, total_potential, share_token")
       .eq("id", s.lead_id)
       .maybeSingle();
 

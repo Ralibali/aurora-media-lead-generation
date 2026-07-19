@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { toast } from "sonner";
 import { setSEOMeta } from "@/lib/seoHelpers";
@@ -18,6 +18,7 @@ import {
   emptyForm,
   emptyProcess,
   WeeklyTime,
+  Frequency,
 } from "@/lib/aiMap";
 
 /* ─────────────────────────────────────────────────────────────
@@ -27,8 +28,8 @@ import {
 
 const DRAFT_KEY = "ai-karta-draft";
 const RESULT_KEY = "ai_map_result";
-const STEPS = ["Bransch", "Processer", "Kontakt", "Klart"];
-const HOURLY_RATE = 450; // schablon
+const STEPS = ["Bransch", "Processer", "Kontakt"];
+const HOURLY_RATE = 600; // schablon
 const WEEKS_PER_MONTH = 4.3;
 
 /* Mappning från bransch → föreslagna tidstjuvar och exempelprocesser */
@@ -86,6 +87,27 @@ const INDUSTRY_EXAMPLES: Record<IndustryKey, string[]> = {
     "Sammanställa månadsrapporter",
   ],
   annat: [],
+};
+
+// Rimliga standardvärden när ett exempel klickas in – besökaren behöver bara bekräfta.
+const EXAMPLE_DEFAULTS: Record<string, { frequency: Frequency; weekly_time: WeeklyTime }> = {
+  "Skapa körorder från mejl/telefon":        { frequency: "daily",   weekly_time: "3-5" },
+  "Fakturaunderlag efter körning":           { frequency: "weekly",  weekly_time: "3-5" },
+  "Svara på ETA-frågor från kunder":         { frequency: "daily",   weekly_time: "1-3" },
+  "Skapa offerter från ritningar/mail":      { frequency: "weekly",  weekly_time: "3-5" },
+  "Sammanställa tidsrapporter till lön":     { frequency: "monthly", weekly_time: "1-3" },
+  "Svara på återkommande kundfrågor":        { frequency: "daily",   weekly_time: "1-3" },
+  "Svara på bokningsfrågor via mail":        { frequency: "daily",   weekly_time: "3-5" },
+  "Onboarding-mail till nya gäster":         { frequency: "weekly",  weekly_time: "1-3" },
+  "Sammanställa recensioner till rapporter": { frequency: "monthly", weekly_time: "0-1" },
+  "Lagerplock och orderbekräftelser":        { frequency: "daily",   weekly_time: "3-5" },
+  "Produktionsrapporter från Excel":         { frequency: "weekly",  weekly_time: "1-3" },
+  "Reklamationer och ärenden":               { frequency: "weekly",  weekly_time: "1-3" },
+  "Uppdatera produkttexter i webbshop":      { frequency: "weekly",  weekly_time: "1-3" },
+  "Sammanställa försäljningsrapport":        { frequency: "weekly",  weekly_time: "1-3" },
+  "Skapa offerter i Word efter samtal":      { frequency: "weekly",  weekly_time: "3-5" },
+  "Uppdatera CRM efter kundmöten":           { frequency: "weekly",  weekly_time: "1-3" },
+  "Sammanställa månadsrapporter":            { frequency: "monthly", weekly_time: "1-3" },
 };
 
 /* ── Zod-schema (samma som tidigare för kontaktsteget) ── */
@@ -170,6 +192,14 @@ const CSS = `
 }
 .aikw-chip:hover { border-color: #14171A; }
 .aikw-chip.active { background: #14171A; color: #F6F5F1; border-color: #14171A; }
+.aikw-details { margin-top: 18px; border: 1px dashed #E2E0DA; border-radius: 10px; padding: 12px 14px 14px; background: #FCFCFA; }
+.aikw-details summary {
+  cursor: pointer; font-family: "Spline Sans Mono", ui-monospace, monospace; font-size: 12px;
+  letter-spacing: .04em; color: #4A5058; font-weight: 600; list-style: none; user-select: none;
+}
+.aikw-details summary::before { content: "+ "; color: #0F5132; font-weight: 700; }
+.aikw-details[open] summary::before { content: "– "; }
+.aikw-details summary:hover { color: #0F5132; }
 .aikw-chip.suggested { border-style: dashed; color: #4A5058; }
 .aikw-chip.suggested.active { color: #F6F5F1; border-style: solid; }
 
@@ -302,6 +332,7 @@ const CSS = `
 
 const AiKartaStart = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [industry, setIndustry] = useState<IndustryKey | "">("");
   const [showRestore, setShowRestore] = useState(false);
@@ -328,6 +359,41 @@ const AiKartaStart = () => {
         }
       }
     } catch { /* ignore */ }
+
+    // Förvald bransch via länk (?bransch=transport) – från hero-chips eller drip-mejl
+    const branschParam = searchParams.get("bransch");
+    const match = INDUSTRIES.find((i) => i.key === branschParam);
+    if (match) {
+      setIndustry((current) => {
+        if (current) return current;
+        trackEvent("ai_karta_bransch_preselect", { bransch: match.key });
+        return match.key;
+      });
+      setForm((f) => {
+        if (f.industry.trim()) return f;
+        return {
+          ...f,
+          industry: match.label,
+          pain_areas: Array.from(new Set([...f.pain_areas, ...INDUSTRY_PAINS[match.key]])),
+        };
+      });
+    }
+
+    // Förfyll kontaktuppgifter om vi sett besökaren förut
+    try {
+      const lead = JSON.parse(localStorage.getItem("aurora_lead") || "null") as
+        | { name?: string; email?: string; company?: string }
+        | null;
+      if (lead) {
+        setForm((prev) => ({
+          ...prev,
+          company_name: prev.company_name || lead.company || "",
+          contact_name: prev.contact_name || lead.name || "",
+          email: prev.email || lead.email || "",
+        }));
+      }
+    } catch { /* tom */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* Autospara */
@@ -341,7 +407,7 @@ const AiKartaStart = () => {
   useEffect(() => {
     if (!stepTracked.current.has(step)) {
       stepTracked.current.add(step);
-      const events: Record<number, string> = { 1: "ai_karta_start", 2: "ai_karta_step_2", 3: "ai_karta_step_3", 4: "ai_karta_step_4" };
+      const events: Record<number, string> = { 1: "ai_karta_start", 2: "ai_karta_step_2", 3: "ai_karta_step_3" };
       const ev = events[step];
       if (ev) trackEvent(ev);
     }
@@ -354,7 +420,7 @@ const AiKartaStart = () => {
         const parsed = JSON.parse(raw) as { form: AiMapFormState; industry: IndustryKey | ""; step: number };
         setForm({ ...emptyForm(), ...parsed.form });
         setIndustry(parsed.industry || "");
-        setStep(Math.min(4, Math.max(1, parsed.step || 1)));
+        setStep(Math.min(3, Math.max(1, parsed.step || 1)));
       }
     } catch { /* ignore */ }
     setShowRestore(false);
@@ -395,8 +461,10 @@ const AiKartaStart = () => {
     }));
   };
 
-  const applyExample = (idx: number, example: string) =>
-    updateProcess(idx, { process_name: example });
+  const applyExample = (idx: number, example: string) => {
+    const d = EXAMPLE_DEFAULTS[example];
+    updateProcess(idx, { process_name: example, ...(d ?? {}) });
+  };
 
   const validateStep = (current: number): boolean => {
     setErrors({});
@@ -444,7 +512,7 @@ const AiKartaStart = () => {
 
   const next = () => {
     if (!validateStep(step)) return;
-    setStep((s) => Math.min(4, s + 1));
+    setStep((s) => Math.min(3, s + 1));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const prev = () => {
@@ -469,6 +537,15 @@ const AiKartaStart = () => {
       if (error) throw error;
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
       trackEvent("ai_karta_submit", { company: form.company_name });
+
+      // Kom ihåg kontaktuppgifterna till nästa besök
+      try {
+        localStorage.setItem("aurora_lead", JSON.stringify({
+          name: form.contact_name,
+          email: form.email,
+          company: form.company_name,
+        }));
+      } catch { /* ignore */ }
 
       try {
         sessionStorage.setItem(RESULT_KEY, JSON.stringify({
@@ -501,7 +578,7 @@ const AiKartaStart = () => {
   const remainingPains = PAIN_AREAS.filter((p) => !suggestedPains.includes(p));
   const examples = industry ? INDUSTRY_EXAMPLES[industry] : [];
 
-  const progress = ((step - 1) / (STEPS.length - 1)) * 100;
+  const progress = (step / STEPS.length) * 100;
 
   return (
     <AiKartaShell>
@@ -521,20 +598,18 @@ const AiKartaStart = () => {
               )}
 
               <span className="aikw-mono">
-                Steg {step} av 4 · sparas automatiskt
-                {step < 4 && ` · ca ${step === 1 ? "60" : step === 2 ? "45" : "20"} sek kvar`}
+                Steg {step} av 3 · sparas automatiskt
+                {` · ca ${step === 1 ? "60" : step === 2 ? "45" : "15"} sek kvar`}
               </span>
               <h1 className="aikw-h1">
                 {step === 1 && "Vilken bransch är ni i?"}
                 {step === 2 && "Vad tar tid att göra manuellt?"}
                 {step === 3 && "Vart skickar vi kopian?"}
-                {step === 4 && "Klart – beräknar er karta"}
               </h1>
               <p className="aikw-sub">
                 {step === 1 && "Välj en bransch så förfyller vi de vanligaste tidstjuvarna. Ni kan markera fler eller ta bort."}
                 {step === 2 && "Beskriv 1–5 arbetsuppgifter som återkommer. Vi räknar ut AI-potentialen för varje."}
-                {step === 3 && "Er karta är klar att räknas fram. Vart skickar vi kopian? En människa – inte en bot – granskar den sedan personligen."}
-                {step === 4 && "Sammanfattning innan vi räknar fram er AI-karta."}
+                {step === 3 && "Er karta är klar att räknas fram direkt. Vi skickar också en kopia på mejlen."}
               </p>
 
               {/* Progress */}
@@ -551,7 +626,7 @@ const AiKartaStart = () => {
                   })}
                 </div>
                 <div className="aikw-progress-bar" aria-hidden>
-                  <i style={{ width: `${progress + 25}%` }} />
+                  <i style={{ width: `${progress}%` }} />
                 </div>
               </div>
 
@@ -559,7 +634,7 @@ const AiKartaStart = () => {
               {showMeter && (
                 <div className="aikw-meter-mobile" aria-live="polite">
                   <span><b>{hoursPerWeek.toFixed(1)} h/v</b> · ≈ <b>{monthlyCost.toLocaleString("sv-SE")} kr/mån</b></span>
-                  <span style={{ color: "#4A5058", fontSize: 11 }}>Schablon 450 kr/h</span>
+                  <span style={{ color: "#4A5058", fontSize: 11 }}>Schablon {HOURLY_RATE} kr/h</span>
                 </div>
               )}
 
@@ -694,51 +769,54 @@ const AiKartaStart = () => {
                           {errors[`p_${idx}_time`] && <p className="aikw-err">{errors[`p_${idx}_time`]}</p>}
                         </div>
 
-                        <div style={{ marginTop: 18 }}>
-                          <label className="aikw-label">Vilka system används? (valfritt)</label>
-                          <input
-                            className="aikw-input"
-                            value={p.systems}
-                            onChange={(e) => updateProcess(idx, { systems: e.target.value })}
-                            placeholder="t.ex. Fortnox, Excel, HubSpot"
-                          />
-                        </div>
-
-                        <div style={{ marginTop: 18 }}>
-                          <label className="aikw-label">Regelstyrd/mallbaserad? (valfritt)</label>
-                          <div className="aikw-chips">
-                            {Object.entries(YPN_LABELS).map(([k, v]) => (
-                              <button key={k} type="button"
-                                className={`aikw-chip ${p.rule_based === k ? "active" : ""}`}
-                                onClick={() => updateProcess(idx, { rule_based: k as ProcessInput["rule_based"] })}
-                              >{v}</button>
-                            ))}
+                        <details className="aikw-details">
+                          <summary>Öka precisionen (valfritt)</summary>
+                          <div style={{ marginTop: 6 }}>
+                            <label className="aikw-label">Vilka system används?</label>
+                            <input
+                              className="aikw-input"
+                              value={p.systems}
+                              onChange={(e) => updateProcess(idx, { systems: e.target.value })}
+                              placeholder="t.ex. Fortnox, Excel, HubSpot"
+                            />
                           </div>
-                        </div>
 
-                        <div style={{ marginTop: 18 }}>
-                          <label className="aikw-label">Finns data AI kan använda? (valfritt)</label>
-                          <div className="aikw-chips">
-                            {Object.entries(YPN_LABELS).map(([k, v]) => (
-                              <button key={k} type="button"
-                                className={`aikw-chip ${p.data_available === k ? "active" : ""}`}
-                                onClick={() => updateProcess(idx, { data_available: k as ProcessInput["data_available"] })}
-                              >{v}</button>
-                            ))}
+                          <div style={{ marginTop: 18 }}>
+                            <label className="aikw-label">Regelstyrd/mallbaserad?</label>
+                            <div className="aikw-chips">
+                              {Object.entries(YPN_LABELS).map(([k, v]) => (
+                                <button key={k} type="button"
+                                  className={`aikw-chip ${p.rule_based === k ? "active" : ""}`}
+                                  onClick={() => updateProcess(idx, { rule_based: k as ProcessInput["rule_based"] })}
+                                >{v}</button>
+                              ))}
+                            </div>
                           </div>
-                        </div>
 
-                        <div style={{ marginTop: 18 }}>
-                          <label className="aikw-label">Affärsnytta att effektivisera? (valfritt)</label>
-                          <div className="aikw-chips">
-                            {Object.entries(VALUE_LABELS).map(([k, v]) => (
-                              <button key={k} type="button"
-                                className={`aikw-chip ${p.business_value === k ? "active" : ""}`}
-                                onClick={() => updateProcess(idx, { business_value: k as ProcessInput["business_value"] })}
-                              >{v}</button>
-                            ))}
+                          <div style={{ marginTop: 18 }}>
+                            <label className="aikw-label">Finns data AI kan använda?</label>
+                            <div className="aikw-chips">
+                              {Object.entries(YPN_LABELS).map(([k, v]) => (
+                                <button key={k} type="button"
+                                  className={`aikw-chip ${p.data_available === k ? "active" : ""}`}
+                                  onClick={() => updateProcess(idx, { data_available: k as ProcessInput["data_available"] })}
+                                >{v}</button>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+
+                          <div style={{ marginTop: 18 }}>
+                            <label className="aikw-label">Affärsnytta att effektivisera?</label>
+                            <div className="aikw-chips">
+                              {Object.entries(VALUE_LABELS).map(([k, v]) => (
+                                <button key={k} type="button"
+                                  className={`aikw-chip ${p.business_value === k ? "active" : ""}`}
+                                  onClick={() => updateProcess(idx, { business_value: k as ProcessInput["business_value"] })}
+                                >{v}</button>
+                              ))}
+                            </div>
+                          </div>
+                        </details>
                       </div>
                     ))}
 
@@ -799,54 +877,31 @@ const AiKartaStart = () => {
                     <label className={`aikw-consent ${errors.consent ? "err" : ""}`}>
                       <input type="checkbox" checked={form.consent}
                         onChange={(e) => update("consent", e.target.checked)} />
-                      <span>Jag godkänner att Aurora Media AB sparar mina svar och kontaktar mig med anledning av min AI-karta.</span>
+                      <span>
+                        Jag godkänner{" "}
+                        <Link
+                          to="/villkor"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          style={{ color: "#0F5132", fontWeight: 700, textDecoration: "underline" }}
+                        >
+                          villkoren för AI-kartan
+                        </Link>
+                        {" "}– Aurora Media skickar kartan på mejl och kan höra av sig för uppföljning.
+                      </span>
                     </label>
                     {errors.consent && <p className="aikw-err">{errors.consent}</p>}
                   </>
                 )}
 
-                {/* STEG 4: Sammanfattning */}
-                {step === 4 && (
-                  <>
-                    <div className="aikw-summary-row">
-                      <span className="k">Företag</span>
-                      <span className="v">{form.company_name} · {form.industry} · {form.employee_count} anställda</span>
-                    </div>
-                    <div className="aikw-summary-row">
-                      <span className="k">Kontakt</span>
-                      <span className="v">{form.contact_name} · {form.email}</span>
-                    </div>
-                    <div className="aikw-summary-row">
-                      <span className="k">Tidstjuvar</span>
-                      <span className="v">{form.pain_areas.join(", ") || "—"}</span>
-                    </div>
-                    <div className="aikw-summary-row">
-                      <span className="k">Processer</span>
-                      <span className="v">
-                        <ul style={{ margin: 0, paddingLeft: 18 }}>
-                          {form.processes.map((p, i) => (
-                            <li key={i} style={{ marginBottom: 4 }}>
-                              <b>{p.process_name || "—"}</b>{" "}
-                              <small style={{ color: "#4A5058" }}>
-                                ({p.frequency && FREQ_LABELS[p.frequency]} · {p.weekly_time && TIME_LABELS[p.weekly_time]})
-                              </small>
-                            </li>
-                          ))}
-                        </ul>
-                      </span>
-                    </div>
-                    <div style={{ marginTop: 20, padding: 16, background: "#F6FBF8", border: "1px solid #B7D6C3", borderRadius: 10, fontSize: 14 }}>
-                      Klart att räknas fram — klicka nedan så får ni er AI-karta direkt på skärmen.
-                    </div>
-                  </>
-                )}
               </div>
 
               <div className="aikw-actions">
                 {step > 1 ? (
                   <button type="button" onClick={prev} className="aikw-btn-ghost" disabled={submitting}>← Tillbaka</button>
                 ) : <span />}
-                {step < 4 ? (
+                {step < 3 ? (
                   <button type="button" onClick={next} className="aikw-btn-primary">Fortsätt →</button>
                 ) : (
                   <button type="button" onClick={handleSubmit} className="aikw-btn-primary" disabled={submitting}>
@@ -868,7 +923,7 @@ const AiKartaStart = () => {
 
             {/* Desktop-värdemätare */}
             <aside className="aikw-meter-side">
-              <div className="aikw-meter-label">Så mycket kostar handpålägget idag<br />(schablon 450 kr/h)</div>
+              <div className="aikw-meter-label">Så mycket kostar handpålägget idag<br />(schablon 600 kr/h)</div>
               <div className="aikw-meter-h">
                 {hoursPerWeek > 0 ? hoursPerWeek.toFixed(1) : "0"}<span> h/vecka</span>
               </div>
@@ -876,7 +931,7 @@ const AiKartaStart = () => {
                 ≈ {monthlyCost.toLocaleString("sv-SE")} kr<span>per månad · {(monthlyCost * 12).toLocaleString("sv-SE")} kr/år</span>
               </div>
               <p className="aikw-meter-hint">
-                Räknat på {WEEKS_PER_MONTH} veckor/månad × 450 kr/timme. Uppdateras när ni lägger till processer.
+                Räknat på {WEEKS_PER_MONTH} veckor/månad × 600 kr/timme. Uppdateras när ni lägger till processer.
               </p>
             </aside>
           </div>

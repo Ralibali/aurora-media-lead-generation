@@ -1,7 +1,17 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { setSEOMeta, setJsonLd, setBreadcrumb } from "@/lib/seoHelpers";
+import { trackEvent } from "@/lib/analytics";
 import AiKartaShell from "@/components/aikarta/AiKartaShell";
+
+const BRANSCH_CHIPS = [
+  { key: "transport", label: "Transport & logistik" },
+  { key: "bygg", label: "Bygg & hantverk" },
+  { key: "besok", label: "Besöksnäring" },
+  { key: "tillverk", label: "Tillverkning & verkstad" },
+  { key: "handel", label: "Handel & e-handel" },
+  { key: "tjanste", label: "Tjänsteföretag" },
+] as const;
 
 /* ─────────────────────────────────────────────────────────────
    AI-kartan – landning (verkstad-tema)
@@ -50,6 +60,23 @@ const CSS = `
 }
 .aik-cta-ghost:hover { background: #14171A; color: #F6F5F1; }
 .aik-micro { margin-top: 14px; font-size: 13px; color: #4A5058; }
+.aik-bransch { margin-top: 26px; }
+.aik-bransch-label {
+  display: block;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: #3E444B; margin-bottom: 10px;
+}
+.aik-bransch-chips { display: flex; flex-wrap: wrap; gap: 8px; max-width: 640px; }
+.aik-bransch-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-sans); font-size: 13.5px; font-weight: 600;
+  padding: 9px 15px; border-radius: 999px;
+  border: 1px solid #14171A; color: #14171A; background: #fff;
+  text-decoration: none; transition: background .15s ease, color .15s ease;
+}
+.aik-bransch-chip:hover { background: #14171A; color: #F6F5F1; }
+.aik-bransch-chip .arr { transition: transform .15s ease; }
+.aik-bransch-chip:hover .arr { transform: translateX(3px); }
 .aik-valuechips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
 .aik-valuechips .chip {
   font-family: "Spline Sans Mono", ui-monospace, monospace; font-size: 11.5px; letter-spacing: .03em;
@@ -260,6 +287,24 @@ const AiKarta = () => {
             Svara på några frågor om era flöden. Ni får en konkret karta: vilka processer som går att
             automatisera, vad de kostar er idag och var ni ska börja.
           </p>
+
+          {/* Bransch-chips: direkt in i verktyget med rätt exempel ifyllda */}
+          <div className="aik-bransch">
+            <span className="aik-bransch-label">Starta direkt med er bransch:</span>
+            <div className="aik-bransch-chips">
+              {BRANSCH_CHIPS.map((c) => (
+                <Link
+                  key={c.key}
+                  to={`/ai-karta/start?bransch=${c.key}`}
+                  className="aik-bransch-chip"
+                  onClick={() => trackEvent("ai_karta_hero_bransch", { bransch: c.key })}
+                >
+                  {c.label} <span className="arr">→</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <div className="aik-cta-row">
             <Link to="/ai-karta/start" className="aik-cta-primary">
               Starta kartläggningen <span className="arr">→</span>

@@ -595,7 +595,7 @@ export function downloadAiMapPdf(result: AiMapResult) {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10.5);
   doc.setTextColor(220, 230, 245);
-  doc.text("Boka en kostnadsfri AI-genomlysning (45 min). Vi går igenom era svar och pekar ut bästa första pilot.", MARGIN + 6, cur.y + 20);
+  doc.text("Boka en kostnadsfri AI-genomlysning (20 min). Vi går igenom era svar och pekar ut bästa första pilot.", MARGIN + 6, cur.y + 20);
 
   // pill button
   const btnLabel = "Boka kostnadsfri AI-genomlysning  ->";

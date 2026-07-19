@@ -23,6 +23,8 @@ import { trackEvent } from "@/lib/analytics";
 const RESULT_KEY = "ai_map_result";
 const HOURLY_RATE = 600;   // kr/h intern arbetstid – från AI-kartans värdemätare
 const WEEKS_PER_MONTH = 4.33;
+// Klistra in din Cal.com/Calendly-länk här. Lämnas den tom används bokningsdialogen som idag.
+const BOOKING_URL = "";
 
 type LoadStatus = "loading" | "ready" | "missing" | "error";
 
@@ -231,6 +233,10 @@ const AiKartaResultat = () => {
 
   const openBooking = () => {
     void trackAiKartaClick("booking_open");
+    if (BOOKING_URL) {
+      window.open(BOOKING_URL, "_blank", "noopener,noreferrer");
+      return;
+    }
     setBookingErr(null); setBookingStatus("idle"); setBookFieldErrors({});
     const topName = topProcess?.process_name || "";
     setBookForm((f) => ({
@@ -319,6 +325,27 @@ const AiKartaResultat = () => {
                 paybackMonths={paybackMonths}
                 topName={topProcess?.process_name || null}
               />
+            </div>
+
+            {/* Inline-CTA direkt efter kvittot */}
+            <div style={{
+              marginTop: 16,
+              background: "var(--gran-soft)",
+              border: "1px solid var(--linje)",
+              borderRadius: 12,
+              padding: "16px 18px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 14,
+              flexWrap: "wrap",
+            }}>
+              <p style={{ fontSize: 14.5, color: "var(--granbark)", lineHeight: 1.5 }}>
+                Vill ni att jag pekar ut första bygget? 20 minuter, inga köpkrav.
+              </p>
+              <button type="button" onClick={openBooking} className="vk-btn vk-btn-primary" style={{ whiteSpace: "nowrap" }}>
+                Boka 20 min – gratis
+              </button>
             </div>
 
             {/* Personlig analys */}
@@ -561,6 +588,9 @@ function ProcessRow({ process, maxScore, isTop }: { process: ScoredProcess; maxS
   const pct = Math.max(6, Math.round((score / (maxScore || 16)) * 100));
   const saved = process.saved_hours_per_week ?? 0;
   const monthly = saved > 0 ? Math.round(saved * WEEKS_PER_MONTH * 10) / 10 : 0;
+  const payback = saved > 0
+    ? Math.max(1, Math.round(tierMeta.price / (saved * WEEKS_PER_MONTH * HOURLY_RATE)))
+    : null;
   const barGradient = process.potential === "Mycket hög" || process.potential === "Hög"
     ? "linear-gradient(90deg, #0F5132 0%, #4CAF80 100%)"
     : process.potential === "Medel"
@@ -598,6 +628,11 @@ function ProcessRow({ process, maxScore, isTop }: { process: ScoredProcess; maxS
           <p style={{ fontFamily: mono, fontSize: 11, color: "var(--granbark-mut)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
             {tierMeta.label} · {tierMeta.priceLabel}
           </p>
+          {payback && (
+            <p style={{ fontFamily: mono, fontSize: 11, color: "var(--gran)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 3 }}>
+              betalar sig på ~{payback} mån
+            </p>
+          )}
         </div>
       </div>
 

@@ -32,6 +32,7 @@ import Priser from "./pages/Priser";
 import RedaktionellPolicy from "./pages/RedaktionellPolicy";
 import Tjanster from "./pages/Tjanster";
 import OppnaSiffror from "./pages/OppnaSiffror";
+import Villkor from "./pages/Villkor";
 import WebbyraLinkoping from "./pages/WebbyraLinkoping";
 import DigitalMarknadsforingLinkoping from "./pages/DigitalMarknadsforingLinkoping";
 import SeoByraLinkoping from "./pages/SeoByraLinkoping";
@@ -227,6 +228,12 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Aurora Media visar sina siffror öppet: produkter i drift, leveranstider, upptid och deploys. Ingen PowerPoint – facit.",
     canonical: "https://auroramedia.se/oppna-siffror",
+  },
+  "/villkor": {
+    title: "Villkor för AI-kartan | Aurora Media AB",
+    description:
+      "Villkoren för AI-kartan: du får kartan på mejl, Aurora Media kan höra av sig för uppföljning, och du kan avsluta när du vill.",
+    canonical: "https://auroramedia.se/villkor",
   },
   "/tjanster/hemsidor": {
     title: "Hemsidor | Aurora Media AB",
@@ -470,6 +477,7 @@ const App = () => (
               <Route path="/kontakt" element={<Kontakt />} />
               <Route path="/tjanster" element={<Tjanster />} />
               <Route path="/oppna-siffror" element={<OppnaSiffror />} />
+              <Route path="/villkor" element={<Villkor />} />
               <Route path="/tjanster/hemsidor" element={<Hemsidor />} />
               <Route path="/tjanster/ehandel" element={<Ehandel />} />
               <Route path="/tjanster/mobilapp" element={<Mobilapp />} />
