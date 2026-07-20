@@ -2,6 +2,7 @@
 import fs from 'node:fs/promises';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { buildInstantPreview, setInstantPreview } from './instant-preview.mjs';
 
 const SITE_URL = 'https://auroramedia.se';
 const SITE_NAME = 'Aurora Media AB';
@@ -254,8 +255,26 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
 
   html = html.replace('</head>', `    ${headTags.join('\n    ')}\n  </head>`);
 
-  const seoBody = `\n    <div id="seo-content" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">\n      ${body}\n    </div>`;
-  html = html.replace('<div id="root"></div>', `${seoBody}\n    <div id="root"></div>`);
+  // Synlig statisk förhandsvisning i #root (ersätter den gamla dolda SEO-diven).
+  // Besökaren ser riktigt innehåll direkt – React byter ut det när appen bootar.
+  const preview = buildInstantPreview({
+    title,
+    body,
+    mono: route === '/ai-karta' ? 'Gratis · 2 min · Resultat direkt' : route === '/' ? 'Aurora Media · Linköping' : undefined,
+    ctas:
+      route === '/ai-karta'
+        ? [
+            { label: 'Starta kartläggningen', href: '/ai-karta/start' },
+            { label: 'Hellre prata direkt?', href: '/kontakt', ghost: true },
+          ]
+        : route === '/'
+          ? [
+              { label: 'Starta AI-kartan – gratis', href: '/ai-karta' },
+              { label: 'Boka samtal', href: '/kontakt', ghost: true },
+            ]
+          : [{ label: 'Boka samtal', href: '/kontakt' }],
+  });
+  html = setInstantPreview(html, preview);
 
   return html;
 }

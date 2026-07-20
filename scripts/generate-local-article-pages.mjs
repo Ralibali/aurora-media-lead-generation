@@ -2,6 +2,7 @@
 import fs from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { buildInstantPreview, setInstantPreview } from "./instant-preview.mjs";
 
 const SITE_URL = "https://auroramedia.se";
 const SITE_NAME = "Aurora Media AB";
@@ -212,10 +213,17 @@ function injectPage(template, article) {
 
   html = html.replace("</head>", `    ${headTags.join("\n    ")}\n  </head>`);
 
-  const staticBody = `\n    <div id="seo-content" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden">\n      ${buildBody(article)}\n    </div>`;
-
-  html = html.replace(/\s*<div id="seo-content"[\s\S]*?<\/div>\s*(?=<div id="root"><\/div>)/i, "");
-  html = html.replace('<div id="root"></div>', `${staticBody}\n    <div id="root"></div>`);
+  // Synlig statisk förhandsvisning (mallen = dist/index.html har redan en
+  // preview för startsidan – setInstantPreview ersätter hela det blocket).
+  html = setInstantPreview(
+    html,
+    buildInstantPreview({
+      title: article.title,
+      body: buildBody(article),
+      mono: "Aurora Media · Blogg",
+      ctas: [{ label: "Boka samtal", href: "/kontakt" }],
+    }),
+  );
 
   return html;
 }

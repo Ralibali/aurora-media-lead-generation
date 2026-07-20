@@ -2,6 +2,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { buildInstantPreview, setInstantPreview } from "./instant-preview.mjs";
 
 const pages = [
   {
@@ -11,6 +12,14 @@ const pages = [
       "Aurora Media bygger AI-lösningar, interna system, appar och SaaS för svenska företag. Snabb leverans, tydligt scope och kod ni äger.",
     body:
       "Aurora Media AB bygger AI-lösningar, interna system, appar, integrationer och SaaS för svenska företag. Företaget är baserat i Linköping och hjälper verksamheter att minska manuellt arbete och skapa bättre digitala flöden.",
+    preview: {
+      h1: "AI-driven mjukvarupartner för svenska företag",
+      mono: "Aurora Media · Linköping",
+      ctas: [
+        { label: "Starta AI-kartan – gratis", href: "/ai-karta" },
+        { label: "Boka samtal", href: "/kontakt", ghost: true },
+      ],
+    },
   },
   {
     file: path.resolve(process.cwd(), "dist", "ai-byra-linkoping", "index.html"),
@@ -19,6 +28,14 @@ const pages = [
       "AI-byrå i Linköping som hjälper företag automatisera administration, ersätta Excel och bygga AI-drivna interna system. Fast pris, lokal kontakt, första versionen på veckor.",
     body:
       "Aurora Media är en AI-byrå i Linköping som hjälper företag att automatisera administration, ersätta kalkylblad, koppla ihop system och bygga AI-drivna interna verktyg. Fast pris från 14 900 kr, fysiska möten i Linköpingsområdet och en första testbar version inom några veckor.",
+    preview: {
+      h1: "AI-byrå i Linköping",
+      mono: "Linköping · Fast pris från 14 900 kr",
+      ctas: [
+        { label: "Boka samtal", href: "/kontakt" },
+        { label: "Starta AI-kartan – gratis", href: "/ai-karta", ghost: true },
+      ],
+    },
   },
   {
     file: path.resolve(process.cwd(), "dist", "priser", "index.html"),
@@ -27,6 +44,14 @@ const pages = [
       "Se riktpriser för prototyp, MVP, SaaS, AI-automation och konsultuppdrag. Utvecklingskonsult 895 kr/timme, rådgivning från 12 000 kr/mån. Projekt från 14 900 kr.",
     body:
       "Aurora Media erbjuder prototyper från 14 900 kr, MVP från 34 900 kr, skalbar SaaS från 69 000 kr och AI-automation efter tydligt scope – samt konsultuppdrag inom AI-rådgivning och utveckling för 895 kr/timme eller från 12 000 kr/månad. Alla priser är riktpriser exklusive moms och exakt pris lämnas före projektstart.",
+    preview: {
+      h1: "Priser – fast pris, inga överraskningar",
+      mono: "Prototyp från 14 900 kr · Konsult 895 kr/h",
+      ctas: [
+        { label: "Boka samtal", href: "/kontakt" },
+        { label: "Starta AI-kartan – gratis", href: "/ai-karta", ghost: true },
+      ],
+    },
   },
 ];
 
@@ -54,9 +79,15 @@ async function patchPage(page) {
   html = replaceMeta(html, "property", "og:description", page.description);
   html = replaceMeta(html, "name", "twitter:title", page.title);
   html = replaceMeta(html, "name", "twitter:description", page.description);
-  html = html.replace(
-    /(<div id="seo-content"[\s\S]*?>)[\s\S]*?(<\/div>\s*<div id="root"><\/div>)/i,
-    `$1\n      ${page.body}\n    $2`,
+  // Ersätt förhandsvisningen med denna sidas skarpare titel/brödtext
+  html = setInstantPreview(
+    html,
+    buildInstantPreview({
+      title: page.preview.h1,
+      body: page.body,
+      mono: page.preview.mono,
+      ctas: page.preview.ctas,
+    }),
   );
 
   await fs.writeFile(page.file, html, "utf8");

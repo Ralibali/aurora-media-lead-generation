@@ -8,38 +8,42 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-import AiAutomationForetag from "./pages/AiAutomationForetag";
-import AiByraLinkoping from "./pages/AiByraLinkoping";
+// Konverteringskritiska sidor hålls i huvudbundlen så att den statiska
+// förhandsvisningen kan bytas mot riktig sida utan laddningssteg.
 import AiKarta from "./pages/AiKarta";
 import AiKartaStart from "./pages/AiKartaStart";
 import AiKartaResultat from "./pages/AiKartaResultat";
-import AiKonsultSverige from "./pages/AiKonsultSverige";
-import Produkter from "./pages/Produkter";
-import Process from "./pages/Process";
-import Arbete from "./pages/Arbete";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import CasePage from "./pages/CasePage";
-import CityPage from "./pages/CityPage";
-import Integritetspolicy from "./pages/Integritetspolicy";
 import Index from "./pages/Index";
-import IndexV5 from "./pages/_versions/IndexV5";
 import Kontakt from "./pages/Kontakt";
-import Metodik from "./pages/Metodik";
 import NotFound from "./pages/NotFound";
-import Om from "./pages/Om";
 import Priser from "./pages/Priser";
-import RedaktionellPolicy from "./pages/RedaktionellPolicy";
-import Tjanster from "./pages/Tjanster";
-import OppnaSiffror from "./pages/OppnaSiffror";
-import Villkor from "./pages/Villkor";
-import WebbyraLinkoping from "./pages/WebbyraLinkoping";
-import DigitalMarknadsforingLinkoping from "./pages/DigitalMarknadsforingLinkoping";
-import SeoByraLinkoping from "./pages/SeoByraLinkoping";
-import AiAutomationLinkoping from "./pages/AiAutomationLinkoping";
-import AiKonsultLinkoping from "./pages/AiKonsultLinkoping";
-import GoogleAdsLinkoping from "./pages/GoogleAdsLinkoping";
-import ApputvecklingLinkoping from "./pages/ApputvecklingLinkoping";
+// Övriga sidor lazy-loadas: huvudbundlen blir betydligt lättare att ladda
+// och parsa på mobil (Core Web Vitals / bounce rate).
+const AiAutomationForetag = lazy(() => import("./pages/AiAutomationForetag"));
+const AiByraLinkoping = lazy(() => import("./pages/AiByraLinkoping"));
+const AiKonsultSverige = lazy(() => import("./pages/AiKonsultSverige"));
+const Produkter = lazy(() => import("./pages/Produkter"));
+const Process = lazy(() => import("./pages/Process"));
+const Arbete = lazy(() => import("./pages/Arbete"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const CasePage = lazy(() => import("./pages/CasePage"));
+const CityPage = lazy(() => import("./pages/CityPage"));
+const Integritetspolicy = lazy(() => import("./pages/Integritetspolicy"));
+const IndexV5 = lazy(() => import("./pages/_versions/IndexV5"));
+const Metodik = lazy(() => import("./pages/Metodik"));
+const Om = lazy(() => import("./pages/Om"));
+const RedaktionellPolicy = lazy(() => import("./pages/RedaktionellPolicy"));
+const Tjanster = lazy(() => import("./pages/Tjanster"));
+const OppnaSiffror = lazy(() => import("./pages/OppnaSiffror"));
+const Villkor = lazy(() => import("./pages/Villkor"));
+const WebbyraLinkoping = lazy(() => import("./pages/WebbyraLinkoping"));
+const DigitalMarknadsforingLinkoping = lazy(() => import("./pages/DigitalMarknadsforingLinkoping"));
+const SeoByraLinkoping = lazy(() => import("./pages/SeoByraLinkoping"));
+const AiAutomationLinkoping = lazy(() => import("./pages/AiAutomationLinkoping"));
+const AiKonsultLinkoping = lazy(() => import("./pages/AiKonsultLinkoping"));
+const GoogleAdsLinkoping = lazy(() => import("./pages/GoogleAdsLinkoping"));
+const ApputvecklingLinkoping = lazy(() => import("./pages/ApputvecklingLinkoping"));
 // Admin routes are all lazy-loaded so a failing chunk or a module-init throw
 // (e.g. Supabase client construction with missing env vars) can never bring
 // down the public site. The AdminBoundary component wraps them with a shared
@@ -55,16 +59,16 @@ const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
 // AdminBoundary is intentionally eager: it must be available synchronously
 // to catch failures of the other lazy admin chunks.
 import AdminBoundary from "./pages/admin/AdminBoundary";
-import EnIndex from "./pages/en/Index";
-import Content from "./pages/tjanster/Content";
-import Ehandel from "./pages/tjanster/Ehandel";
-import Fotografering from "./pages/tjanster/Fotografering";
-import GoogleAds from "./pages/tjanster/GoogleAds";
-import GrafiskProfil from "./pages/tjanster/GrafiskProfil";
-import Hemsidor from "./pages/tjanster/Hemsidor";
-import MetaAds from "./pages/tjanster/MetaAds";
-import Mobilapp from "./pages/tjanster/Mobilapp";
-import Seo from "./pages/tjanster/Seo";
+const EnIndex = lazy(() => import("./pages/en/Index"));
+const Content = lazy(() => import("./pages/tjanster/Content"));
+const Ehandel = lazy(() => import("./pages/tjanster/Ehandel"));
+const Fotografering = lazy(() => import("./pages/tjanster/Fotografering"));
+const GoogleAds = lazy(() => import("./pages/tjanster/GoogleAds"));
+const GrafiskProfil = lazy(() => import("./pages/tjanster/GrafiskProfil"));
+const Hemsidor = lazy(() => import("./pages/tjanster/Hemsidor"));
+const MetaAds = lazy(() => import("./pages/tjanster/MetaAds"));
+const Mobilapp = lazy(() => import("./pages/tjanster/Mobilapp"));
+const Seo = lazy(() => import("./pages/tjanster/Seo"));
 // Verktyg-sidorna lazy-loadas: de drar med sig recharts/jspdf och ska inte
 // tynga huvudbundlen (Core Web Vitals).
 const VerktygIndex = lazy(() => import("./pages/verktyg/VerktygIndex"));
@@ -76,6 +80,30 @@ const PersonalkostnadVsAi = lazy(() => import("./pages/verktyg/PersonalkostnadVs
 const PromptGenerator = lazy(() => import("./pages/verktyg/PromptGenerator"));
 
 const queryClient = new QueryClient();
+
+// Lugnt, varumärkesburet laddningsläge vid byte mellan lazy-loadade sidor.
+// Matchar den statiska förhandsvisningen så övergången känns mjuk.
+const PageFallback = () => (
+  <div
+    role="status"
+    aria-label="Laddar sida"
+    style={{
+      minHeight: "100vh",
+      background: "#F6F5F1",
+      color: "#14171A",
+      display: "flex",
+      flexDirection: "column",
+    }}
+  >
+    <div style={{ padding: "18px clamp(20px,5vw,48px)", borderBottom: "1px solid #E2E0DA", display: "flex", alignItems: "center", gap: 9, fontWeight: 700, fontSize: 17, letterSpacing: "-.01em" }}>
+      <span style={{ width: 9, height: 9, background: "#E8500A", borderRadius: 2, display: "inline-block" }} />
+      aurora media
+    </div>
+    <div style={{ flex: 1, display: "grid", placeItems: "center", fontFamily: "'Spline Sans Mono', ui-monospace, monospace", fontSize: 12, letterSpacing: ".12em", textTransform: "uppercase", color: "#4A5058" }}>
+      Laddar …
+    </div>
+  </div>
+);
 
 // Minimal laddningsindikator för lazy-loadade verktygssidor.
 const VerktygFallback = () => (
@@ -458,6 +486,7 @@ const App = () => (
         <RouteSEO />
         <ContactModalProvider>
           <div className="min-h-screen">
+            <Suspense fallback={<PageFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/index" element={<Navigate to="/" replace />} />
@@ -528,6 +557,7 @@ const App = () => (
               <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
           </div>
         </ContactModalProvider>
       </BrowserRouter>
