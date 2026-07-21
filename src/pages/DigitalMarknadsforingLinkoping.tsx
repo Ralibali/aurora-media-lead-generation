@@ -27,7 +27,7 @@ const DigitalMarknadsforingLinkoping = () => (
       { title: "Mätning, GA4 och dashboards", desc: "Tydliga dashboards som visar leads och intäkter per kanal – inte bara trafik och klick." },
     ]}
     faqs={[
-      { q: "Vad kostar digital marknadsföring i Linköping?", a: "Vi jobbar med fast månadsarvode från cirka 8 900 kr/månad för en enskild kanal (t.ex. SEO eller Google Ads) och paket från 14 900 kr/månad när flera kanaler samverkar. Annonsbudget tillkommer och betalas direkt till Google/Meta." },
+      { q: "Vad kostar digital marknadsföring i Linköping?", a: "Vi jobbar med fast månadsarvode från cirka 8 900 kr/månad för en enskild kanal (t.ex. SEO eller Google Ads) och paket från 4 900 kr/månad när flera kanaler samverkar. Annonsbudget tillkommer och betalas direkt till Google/Meta." },
       { q: "Vilka branscher i Östergötland jobbar ni med?", a: "Vi har erfarenhet från bygg, transport, besöksnäring, e-handel och tjänsteföretag. Vi tar inte alla uppdrag – först ett kort samtal där vi säger till om vi är rätt matchning." },
       { q: "Hur skiljer ni er från andra marknadsföringsbyråer i Linköping?", a: "Vi är tekniska. Utvecklare och marknadsförare i samma team gör att vi kan bygga landningssidor, integrationer och automation direkt – inte bara skriva strategier och lämna över till någon annan." },
       { q: "Kan ni ta över befintliga Google Ads-konton?", a: "Ja. Vi gör en gratis granskning där ni får se vad som fungerar, vad som slösar budget och vad vi skulle göra annorlunda innan ni bestämmer er." },

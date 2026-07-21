@@ -111,12 +111,12 @@ export const articles31to33: Article[] = [
       {
         heading: "Exempel på prisnivåer hos Aurora Media",
         content:
-          "Aurora Media arbetar med fasta, avgränsade leveranser. En prototyp börjar från 14 900 kronor. En MVP börjar från 34 900 kronor. En större skalbar lösning börjar från 89 000 kronor. Mer omfattande verksamhetssystem och integrationsprojekt offereras separat.\n\nPriset är en startnivå, inte ett löfte om att varje projekt passar i ett standardpaket. Ett seriöst förslag ska beskriva funktioner, avgränsningar, ansvar, leveranstid och vilka externa kostnader som kan tillkomma.",
+          "Aurora Media arbetar med fasta, avgränsade leveranser. En prototyp börjar från 4 900 kronor. En MVP börjar från 11 900 kronor. En större skalbar lösning börjar från 89 000 kronor. Mer omfattande verksamhetssystem och integrationsprojekt offereras separat.\n\nPriset är en startnivå, inte ett löfte om att varje projekt passar i ett standardpaket. Ett seriöst förslag ska beskriva funktioner, avgränsningar, ansvar, leveranstid och vilka externa kostnader som kan tillkomma.",
         table: {
           headers: ["Leverans", "Syfte", "Frånpris hos Aurora Media"],
           rows: [
-            ["Prototyp", "Testa flöde och användarupplevelse", "14 900 kr"],
-            ["MVP", "Lansera den viktigaste fungerande kärnan", "34 900 kr"],
+            ["Prototyp", "Testa flöde och användarupplevelse", "4 900 kr"],
+            ["MVP", "Lansera den viktigaste fungerande kärnan", "11 900 kr"],
             ["Skalbar lösning", "Roller, integrationer och robustare drift", "89 000 kr"],
             ["Större verksamhetssystem", "Flera processer och specialkrav", "Separat offert"],
           ],
@@ -145,7 +145,7 @@ export const articles31to33: Article[] = [
       },
       {
         q: "Vad kostar en AI-prototyp?",
-        a: "Hos Aurora Media börjar en avgränsad prototyp från 14 900 kronor. Det slutliga priset beror på datakällor, integrationer och vad prototypen ska bevisa.",
+        a: "Hos Aurora Media börjar en avgränsad prototyp från 4 900 kronor. Det slutliga priset beror på datakällor, integrationer och vad prototypen ska bevisa.",
       },
       {
         q: "Tillkommer kostnader för AI-modeller och drift?",

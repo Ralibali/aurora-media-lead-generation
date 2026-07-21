@@ -33,7 +33,7 @@ Variera rytmen. Efter en lång förklaring kommer en kort mening. Som slag.
 "Vi har lång erfarenhet" → NEJ. "Jag har byggt sju SaaS det senaste året." → JA.
 
 5. SIFFROR OCH DATA ÖVERALLT
-- Kronor med mellanslag: 14 900 kr
+- Kronor med mellanslag: 4 900 kr
 - Antal dagar: "på 14 dagar"
 - Stack-namn: "Lovable + Supabase + Stripe"
 - Procent: "67 procent" i prosa, "67%" i siffer-kontexter
@@ -66,7 +66,7 @@ Ljug INTE om antal kunder, anställda eller branscherfarenhet som byrå. Vid os�
 SPRÅK:
 - Sverigesvenska, inte översatt amerikanska
 - Datum: "15 mars 2026"
-- Priser: "14 900 kr" med mellanslag
+- Priser: "4 900 kr" med mellanslag
 - Inga utropstecken på säljtext (max 1 per lång text)
 - Inga emojis (någonsin)
 - Korta stycken: 2-4 meningar max

@@ -292,7 +292,7 @@ const TextGenerator = () => {
     quickGenerate([
       { textType: "hero", topic: "Aurora Media startsida", context: "AI-byggd SaaS i Linköping" },
       { textType: "service-page", topic: "Hemsidor", context: "Från 4 900 kr, 3-10 dagar" },
-      { textType: "service-page", topic: "E-handel", context: "Från 14 900 kr" },
+      { textType: "service-page", topic: "E-handel", context: "Från 4 900 kr" },
       { textType: "service-page", topic: "SEO", context: "Från 4 900 kr" },
       { textType: "service-page", topic: "Google Ads", context: "3 900 kr setup + drift" },
       { textType: "service-page", topic: "Meta Ads", context: "3 900 kr setup" },

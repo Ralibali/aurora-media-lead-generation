@@ -6,9 +6,9 @@ import { ToolShell, toolByslug, CopyButton, Metric, PdfButton, DriverBars } from
 type Option = { value: string; label: string; desc?: string; add: number };
 
 const TYPE: Option[] = [
-  { value: "landing", label: "Landningssida", desc: "Mikrosajt", add: 14900 },
-  { value: "webapp", label: "Webbapp", desc: "Intern portal", add: 34900 },
-  { value: "saas", label: "SaaS", desc: "Kundprodukt", add: 69000 },
+  { value: "landing", label: "Landningssida", desc: "Mikrosajt", add: 4900 },
+  { value: "webapp", label: "Webbapp", desc: "Intern portal", add: 11900 },
+  { value: "saas", label: "SaaS", desc: "Kundprodukt", add: 24900 },
   { value: "mobil", label: "Mobilapp", desc: "iOS + Android", add: 89000 },
 ];
 

@@ -8,7 +8,7 @@ import "@/styles/verkstad.css";
 
 const SERVICES = [
   {
-    num: "01", name: "SaaS-produkt", price: "från 14 900 kr", time: "1–4 veckor",
+    num: "01", name: "SaaS-produkt", price: "från 4 900 kr", time: "1–4 veckor",
     desc: "Från MVP till lansering. Auth, betalning, e-post och admin från dag ett. Samma stack som vi använder på våra egna sex produkter.",
     includes: ["Autentisering och användarhantering", "Betalningsflöde med Stripe", "Admin-panel och dashboards", "E-post och notifikationer", "Hosting och CI/CD-pipeline", "Dokumentation och kodöverlämning"],
   },

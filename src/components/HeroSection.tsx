@@ -118,7 +118,7 @@ const HeroSection = () => {
             </h1>
 
             <p className="mt-9 max-w-xl text-lg leading-relaxed text-muted-foreground md:text-xl">
-              Fast pris från 14 900 kr. Du äger alltid källkoden. Sju egna
+              Fast pris från 4 900 kr. Du äger alltid källkoden. Sju egna
               SaaS-produkter live — jag bygger din näst.
             </p>
 
@@ -339,7 +339,7 @@ const HeroSection = () => {
                     Från
                   </p>
                   <p className="font-serif text-lg leading-none">
-                    14 900 kr
+                    4 900 kr
                   </p>
                 </div>
               </div>

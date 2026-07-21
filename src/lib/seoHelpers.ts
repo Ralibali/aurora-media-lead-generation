@@ -134,7 +134,7 @@ export const organizationSchema = {
     longitude: 15.6214,
   },
   areaServed: { "@type": "Country", name: "Sweden" },
-  priceRange: "14900-89000 SEK",
+  priceRange: "4900-89000 SEK",
   foundingDate: "2020",
   slogan: "AI-byrå i Linköping – SaaS, AI och interna verktyg på veckor.",
   founder: {
@@ -154,9 +154,9 @@ export const organizationSchema = {
     "Intern verktygsutveckling",
   ],
   makesOffer: [
-    { "@type": "Offer", name: "Prototyp", price: "14900", priceCurrency: "SEK" },
-    { "@type": "Offer", name: "MVP", price: "34900", priceCurrency: "SEK" },
-    { "@type": "Offer", name: "Skalbar SaaS", price: "69000", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "Prototyp", price: "4900", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "MVP", price: "11900", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "Skalbar SaaS", price: "24900", priceCurrency: "SEK" },
   ],
   identifier: {
     "@type": "PropertyValue",
@@ -182,9 +182,9 @@ export const serviceSchema = {
   provider: { "@id": `${SITE_URL}/#organization` },
   description: "Bygger SaaS-produkter med AI-kodningsverktyg. Leverans 2-4 veckor.",
   offers: [
-    { "@type": "Offer", name: "Prototyp", price: "14900", priceCurrency: "SEK" },
-    { "@type": "Offer", name: "MVP", price: "34900", priceCurrency: "SEK" },
-    { "@type": "Offer", name: "Skalbar SaaS", price: "69000", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "Prototyp", price: "4900", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "MVP", price: "11900", priceCurrency: "SEK" },
+    { "@type": "Offer", name: "Skalbar SaaS", price: "24900", priceCurrency: "SEK" },
   ],
   areaServed: "SE",
 };

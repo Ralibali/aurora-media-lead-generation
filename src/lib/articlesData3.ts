@@ -33,7 +33,7 @@ export const articles13to18: Article[] = [
       {
         heading: "Fast pris istället för skenande timrapporter",
         content:
-          "Du ska veta vad det kostar innan vi börjar. En klickbar prototyp börjar från 14 900 kr. En fungerande MVP börjar från 34 900 kr. En mer skalbar SaaS-lösning börjar från 89 000 kr. Det betyder inte att varje projekt är identiskt, men det betyder att vi ramar in omfattningen, priset och leveransen från start. Inga lösa timrapporter. Inga oväntade extrakostnader för varje liten ändring.",
+          "Du ska veta vad det kostar innan vi börjar. En klickbar prototyp börjar från 4 900 kr. En fungerande MVP börjar från 11 900 kr. En mer skalbar SaaS-lösning börjar från 89 000 kr. Det betyder inte att varje projekt är identiskt, men det betyder att vi ramar in omfattningen, priset och leveransen från start. Inga lösa timrapporter. Inga oväntade extrakostnader för varje liten ändring.",
       },
       {
         heading: "Produkt på veckor, inte månader",
@@ -56,12 +56,12 @@ export const articles13to18: Article[] = [
           "Typiska projekt byggs med React, TypeScript, Supabase, Stripe, Brevo och andra moderna verktyg beroende på behov. Det är en stack som fungerar för prototyper, MVP:er och riktiga SaaS-produkter. Målet är inte att bygga ett luftslott. Målet är att bygga en första version som går att sälja, mäta, förbättra och skala när marknaden visar att den vill ha produkten.",
       },
       {
-        heading: "Vad du får i en prototyp från 14 900 kr",
+        heading: "Vad du får i en prototyp från 4 900 kr",
         content:
           "En prototyp är rätt när du vill visa idén, pitcha internt, validera med kunder eller testa flödet innan du bygger hela produkten. Den kan innehålla riktig design, klickbara vyer, realistiska användarflöden och enkel data. Den är perfekt när du behöver något konkret att visa innan du investerar i en full MVP.",
       },
       {
-        heading: "Vad du får i en MVP från 34 900 kr",
+        heading: "Vad du får i en MVP från 11 900 kr",
         content:
           "En MVP är rätt när du vill kunna lansera. Här bygger vi det som behövs för att första kunden ska kunna använda och betala för produkten: inloggning, databas, betalning, adminpanel, e-postflöden och kärnfunktionalitet. Allt annat prioriteras bort tills marknaden visar vad som faktiskt behövs.",
       },
@@ -84,7 +84,7 @@ export const articles13to18: Article[] = [
     faq: [
       {
         q: "Vad kostar det att bygga en SaaS med AI?",
-        a: "Hos Aurora Media börjar en klickbar prototyp från 14 900 kr, en fungerande MVP från 34 900 kr och en mer skalbar SaaS-lösning från 89 000 kr. Exakt pris beror på omfattning, integrationer och komplexitet.",
+        a: "Hos Aurora Media börjar en klickbar prototyp från 4 900 kr, en fungerande MVP från 11 900 kr och en mer skalbar SaaS-lösning från 89 000 kr. Exakt pris beror på omfattning, integrationer och komplexitet.",
       },
       {
         q: "Hur snabbt kan jag få en SaaS-prototyp?",

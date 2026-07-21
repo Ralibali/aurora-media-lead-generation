@@ -43,7 +43,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Prisintervall för svenska MVP-projekt 2026",
         content:
-          "DIY (du bygger själv med AI-verktyg, har viss erfarenhet): 0 kr i pengar, 200-400 timmar av din tid. AI-konsult (jag eller liknande): 14 900 - 34 900 kr för MVP. Freelance-utvecklare: 80 000 - 200 000 kr. Byrå: 200 000 - 600 000 kr. Skillnaden är inte främst kvalitet – det är affärsmodell och verktygsval.",
+          "DIY (du bygger själv med AI-verktyg, har viss erfarenhet): 0 kr i pengar, 200-400 timmar av din tid. AI-konsult (jag eller liknande): 4 900 - 11 900 kr för MVP. Freelance-utvecklare: 80 000 - 200 000 kr. Byrå: 200 000 - 600 000 kr. Skillnaden är inte främst kvalitet – det är affärsmodell och verktygsval.",
       },
     ],
     faq: [
@@ -65,7 +65,7 @@ export const articles7to12: Article[] = [
       },
       {
         q: "Hur snabbt kan jag bygga MVP:n med er?",
-        a: "Två veckor från start till lansering med MVP-paketet på 34 900 kr.",
+        a: "Två veckor från start till lansering med MVP-paketet på 11 900 kr.",
       },
     ],
     relatedSlugs: [
@@ -102,7 +102,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Hur du räknar på ROI för en intern app",
         content:
-          "Räknet: hur många timmar i veckan lägger ni totalt på att underhålla nuvarande Excel-process? Multiplicera med er genomsnittliga timkostnad. En SMB med fem personer som lägger två timmar i veckan vardera på Excel-pyssel: tio timmar á 600 kr = 6 000 kr/vecka = 312 000 kr/år. En intern app för 69 000 kr som halverar det arbetet betalar sig på fem månader. Sen är det vinst hela vägen.",
+          "Räknet: hur många timmar i veckan lägger ni totalt på att underhålla nuvarande Excel-process? Multiplicera med er genomsnittliga timkostnad. En SMB med fem personer som lägger två timmar i veckan vardera på Excel-pyssel: tio timmar á 600 kr = 6 000 kr/vecka = 312 000 kr/år. En intern app för 24 900 kr som halverar det arbetet betalar sig på fem månader. Sen är det vinst hela vägen.",
       },
       {
         heading: "Byggmetodik med AI-verktyg",
@@ -339,7 +339,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Pris och tid för Fortnox-integration",
         content:
-          "Som tilläggsfeature i ett befintligt projekt: 12 000 - 25 000 kr beroende på komplexitet. Som del av ett nytt SaaS-projekt med Skalbar SaaS-paketet (69 000 kr): ingår om det är prioriterat. Tid: en till två veckor extra om allt annat är klart. Skapande av Fortnox API-konto är gratis men kräver att du eller kunden är godkänd som integrationspartner.",
+          "Som tilläggsfeature i ett befintligt projekt: 12 000 - 25 000 kr beroende på komplexitet. Som del av ett nytt SaaS-projekt med Skalbar SaaS-paketet (24 900 kr): ingår om det är prioriterat. Tid: en till två veckor extra om allt annat är klart. Skapande av Fortnox API-konto är gratis men kräver att du eller kunden är godkänd som integrationspartner.",
       },
       {
         heading: "Alternativ till Fortnox",
@@ -393,7 +393,7 @@ export const articles7to12: Article[] = [
       {
         heading: "Pris: 5-10 gånger billigare",
         content:
-          "En traditionell svensk webbyrå tar typiskt 1000-1500 kr/h. En enkel företagssite landar på 80 000-200 000 kr. En SaaS-MVP på 300 000-700 000 kr. AI-byggare som Aurora Media erbjuder fasta priser från 14 900 kr för en prototyp och 34 900 kr för en MVP. Skillnaden beror inte på lägre kvalitet – den beror på att produktionstiden är 5-10 gånger kortare med AI-verktyg.",
+          "En traditionell svensk webbyrå tar typiskt 1000-1500 kr/h. En enkel företagssite landar på 80 000-200 000 kr. En SaaS-MVP på 300 000-700 000 kr. AI-byggare som Aurora Media erbjuder fasta priser från 4 900 kr för en prototyp och 11 900 kr för en MVP. Skillnaden beror inte på lägre kvalitet – den beror på att produktionstiden är 5-10 gånger kortare med AI-verktyg.",
       },
       {
         heading: "Leveranstid: veckor istället för månader",

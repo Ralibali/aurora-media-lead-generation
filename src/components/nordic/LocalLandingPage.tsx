@@ -84,7 +84,7 @@ const LocalLandingPage = ({
       url: pageUrl,
       image: `${SITE_URL}/og-image-sv.jpg`,
       email: "info@auroramedia.se",
-      priceRange: "14900-89000+ SEK",
+      priceRange: "4900-89000+ SEK",
       address: {
         "@type": "PostalAddress",
         addressLocality: "Linköping",

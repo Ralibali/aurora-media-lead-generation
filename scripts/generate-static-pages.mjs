@@ -178,7 +178,7 @@ function buildCityServiceSchema({ route, title, description, cityName }) {
     description,
     url: fullUrl(route),
     image: `${SITE_URL}/og-image-sv.jpg`,
-    priceRange: '14900-89000 SEK',
+    priceRange: '4900-89000 SEK',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Linköping',
@@ -188,9 +188,9 @@ function buildCityServiceSchema({ route, title, description, cityName }) {
     geo: { '@type': 'GeoCoordinates', latitude: 58.4108, longitude: 15.6214 },
     areaServed: { '@type': 'City', name: cityName },
     makesOffer: [
-      { '@type': 'Offer', name: 'Prototyp', price: '14900', priceCurrency: 'SEK' },
-      { '@type': 'Offer', name: 'MVP', price: '34900', priceCurrency: 'SEK' },
-      { '@type': 'Offer', name: 'Skalbar SaaS', price: '89000', priceCurrency: 'SEK' },
+      { '@type': 'Offer', name: 'Prototyp', price: '4900', priceCurrency: 'SEK' },
+      { '@type': 'Offer', name: 'MVP', price: '11900', priceCurrency: 'SEK' },
+      { '@type': 'Offer', name: 'Skalbar SaaS', price: '24900', priceCurrency: 'SEK' },
     ],
   };
 }

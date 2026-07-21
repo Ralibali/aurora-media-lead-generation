@@ -29,7 +29,7 @@ export const articles25to30: Article[] = [
       {
         heading: "Vad det kostar – och varför fast pris vinner",
         content:
-          "Den största förändringen 2026 är att AI-kodning (Lovable, Bolt, Cursor, Claude) har kollapsat priset på utveckling. En MVP som kostade 400 000 kr och tog sex månader 2022 kan idag levereras för 30 000–50 000 kr på två veckor – med samma eller bättre kvalitet. Aurora Media erbjuder fast pris: Prototyp 14 900 kr, MVP 34 900 kr, Skalbar SaaS 89 000 kr. Du ser exakta paket på vår [prissida](/priser). Fast pris vinner över timdebitering av tre skäl: du vet exakt vad det kostar, byrån har incitament att leverera snabbt, och du undviker scope creep där en två-månaders konsultinsats blir åtta månader. En byrå som inte vågar sätta fast pris har antingen för dålig kontroll på sin egen process eller försöker maxa fakturering. Båda är dåliga tecken.",
+          "Den största förändringen 2026 är att AI-kodning (Lovable, Bolt, Cursor, Claude) har kollapsat priset på utveckling. En MVP som kostade 400 000 kr och tog sex månader 2022 kan idag levereras för 30 000–50 000 kr på två veckor – med samma eller bättre kvalitet. Aurora Media erbjuder fast pris: Prototyp 4 900 kr, MVP 11 900 kr, Skalbar SaaS 89 000 kr. Du ser exakta paket på vår [prissida](/priser). Fast pris vinner över timdebitering av tre skäl: du vet exakt vad det kostar, byrån har incitament att leverera snabbt, och du undviker scope creep där en två-månaders konsultinsats blir åtta månader. En byrå som inte vågar sätta fast pris har antingen för dålig kontroll på sin egen process eller försöker maxa fakturering. Båda är dåliga tecken.",
       },
       {
         heading: "AI-byrå vs webbyrå vs konsult – så skiljer de sig",
@@ -74,7 +74,7 @@ export const articles25to30: Article[] = [
       },
       {
         q: "Vad kostar en AI-byrå?",
-        a: "Hos Aurora Media: Prototyp 14 900 kr, MVP 34 900 kr, skalbar SaaS 89 000 kr – allt med fast pris. Större projekt offereras separat men alltid med fast pris.",
+        a: "Hos Aurora Media: Prototyp 4 900 kr, MVP 11 900 kr, skalbar SaaS 89 000 kr – allt med fast pris. Större projekt offereras separat men alltid med fast pris.",
       },
       {
         q: "Vad är skillnaden mellan en AI-byrå och en webbyrå?",
@@ -142,8 +142,8 @@ export const articles25to30: Article[] = [
             ["Leveranstid presentationssajt", "3–6 veckor", "1–2 veckor"],
             ["Leveranstid SaaS / MVP", "Ej i scope", "1–4 veckor"],
             ["Prismodell", "Timpris", "Oftast fast pris"],
-            ["Pris presentationssajt", "40 000–150 000 kr", "14 900–34 900 kr"],
-            ["Pris MVP / SaaS", "Ej i scope", "34 900–89 000 kr fast pris"],
+            ["Pris presentationssajt", "40 000–150 000 kr", "4 900–11 900 kr"],
+            ["Pris MVP / SaaS", "Ej i scope", "11 900–89 000 kr fast pris"],
             ["Underhåll", "Plugin- och temauppdateringar", "Kodbaserad CI/CD"],
             ["Äger du koden", "Oftast inte (CMS lock-in)", "Alltid (GitHub-tillgång)"],
           ],
@@ -152,7 +152,7 @@ export const articles25to30: Article[] = [
       {
         heading: "Pris: varför en AI-byrå ofta blir billigare 2026",
         content:
-          "Det överraskar många: en AI-byrå är ofta billigare än en webbyrå även för ”bara en hemsida”. Anledningen är AI-kodning. Där webbyrån fakturerar 1 200 kr/h × 60 timmar = 72 000 kr för en presentationssajt, levererar en AI-byrå samma sak till fast pris 14 900 kr på en vecka. Skillnaden är inte kvalitet – det är verktyg. När du dessutom slipper WordPress-plugin-helvetet (säkerhetspatchar varje månad, plugin-licenser, hosting-tillägg) blir TCO över 3 år dramatiskt lägre. För bygg-priser, se [vår prissida](/priser). Caveat: behöver du tunga visuella koncept, varumärkesutveckling från noll, eller storskalig content-produktion – då tjänar webbyrån fortfarande sin marginal. Det är ett annat hantverk.",
+          "Det överraskar många: en AI-byrå är ofta billigare än en webbyrå även för ”bara en hemsida”. Anledningen är AI-kodning. Där webbyrån fakturerar 1 200 kr/h × 60 timmar = 72 000 kr för en presentationssajt, levererar en AI-byrå samma sak till fast pris 4 900 kr på en vecka. Skillnaden är inte kvalitet – det är verktyg. När du dessutom slipper WordPress-plugin-helvetet (säkerhetspatchar varje månad, plugin-licenser, hosting-tillägg) blir TCO över 3 år dramatiskt lägre. För bygg-priser, se [vår prissida](/priser). Caveat: behöver du tunga visuella koncept, varumärkesutveckling från noll, eller storskalig content-produktion – då tjänar webbyrån fortfarande sin marginal. Det är ett annat hantverk.",
       },
       {
         heading: "Tid: två veckor vs två månader",
@@ -177,7 +177,7 @@ export const articles25to30: Article[] = [
       },
       {
         q: "Är en AI-byrå dyrare än en webbyrå?",
-        a: "Nej, oftast billigare 2026. En presentationssajt som kostar 72 000 kr på timpris hos en webbyrå levereras av en AI-byrå för 14 900 kr fast pris, tack vare AI-kodning som Lovable och Cursor.",
+        a: "Nej, oftast billigare 2026. En presentationssajt som kostar 72 000 kr på timpris hos en webbyrå levereras av en AI-byrå för 4 900 kr fast pris, tack vare AI-kodning som Lovable och Cursor.",
       },
       {
         q: "Kan en AI-byrå bygga en vanlig hemsida?",

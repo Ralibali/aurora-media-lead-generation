@@ -11,7 +11,7 @@ export const articles31to40: Article[] = [
     title: "AI för företag i Linköping – konkret guide 2026",
     metaTitle: "AI för företag i Linköping – konkret guide 2026 | Aurora Media",
     metaDesc:
-      "Vad AI faktiskt gör för företag i Linköping och Östergötland 2026: use cases, kostnadsnivåer (14 900 / 34 900 / 89 000 kr) och hur ni kommer igång.",
+      "Vad AI faktiskt gör för företag i Linköping och Östergötland 2026: use cases, kostnadsnivåer (4 900 / 11 900 / 89 000 kr) och hur ni kommer igång.",
     publishedDate: "2026-06-12",
     updatedDate: "2026-06-12",
     readMinutes: 12,
@@ -26,17 +26,17 @@ export const articles31to40: Article[] = [
       {
         heading: "Use case 1 – Administration och dokument",
         content:
-          "Det största och mest underskattade området. AI läser fakturor, kvitton, avtal, offertförfrågningar och tidrapporter, extraherar data och skickar vidare till Fortnox, Visma eller egna system. Ett byggföretag vi jobbar med i Åtvidaberg sparar ca 12 timmar/vecka bara på att slippa manuell registrering. Investering: 34 900 kr för en första integration, 3–6 månaders payback. Detta är sällan sexigt – men det är där ROI är högst och riskerna lägst.",
+          "Det största och mest underskattade området. AI läser fakturor, kvitton, avtal, offertförfrågningar och tidrapporter, extraherar data och skickar vidare till Fortnox, Visma eller egna system. Ett byggföretag vi jobbar med i Åtvidaberg sparar ca 12 timmar/vecka bara på att slippa manuell registrering. Investering: 11 900 kr för en första integration, 3–6 månaders payback. Detta är sällan sexigt – men det är där ROI är högst och riskerna lägst.",
       },
       {
         heading: "Use case 2 – Mejl och offerter",
         content:
-          "Inkommande mejl kategoriseras (offertförfrågan, support, fakturafråga, spam) och besvaras med utkast som en människa granskar. Offerter genereras från era prislistor och tidigare offerter i stället för att byggas från noll. För tjänsteföretag med 20+ förfrågningar/vecka blir det snabbt en heltidstjänst i sparad tid. Investering: 14 900–34 900 kr beroende på hur många integrationer.",
+          "Inkommande mejl kategoriseras (offertförfrågan, support, fakturafråga, spam) och besvaras med utkast som en människa granskar. Offerter genereras från era prislistor och tidigare offerter i stället för att byggas från noll. För tjänsteföretag med 20+ förfrågningar/vecka blir det snabbt en heltidstjänst i sparad tid. Investering: 4 900–11 900 kr beroende på hur många integrationer.",
       },
       {
         heading: "Use case 3 – Interna AI-assistenter (RAG)",
         content:
-          "En chatbot som söker i era rutiner, avtal, produktinformation och tidigare projekt. Nyanställda kommer igång på dagar i stället för veckor. Kundtjänst hittar rätt svar utan att fråga en senior kollega. Datan lämnar inte EU. Investering: 34 900 kr för en första version med er dokumentation som källa.",
+          "En chatbot som söker i era rutiner, avtal, produktinformation och tidigare projekt. Nyanställda kommer igång på dagar i stället för veckor. Kundtjänst hittar rätt svar utan att fråga en senior kollega. Datan lämnar inte EU. Investering: 11 900 kr för en första version med er dokumentation som källa.",
       },
       {
         heading: "Use case 4 – Interna verktyg som ersätter Excel",
@@ -46,12 +46,12 @@ export const articles31to40: Article[] = [
       {
         heading: "Use case 5 – Kunddialog och support",
         content:
-          "AI-driven kundsupport funkar – men bara med rätt förväntningar. Fungerar bra: FAQ, ordersstatus, standardärenden. Fungerar dåligt: komplexa reklamationer, känsliga case, allt som kräver ett omdöme. Bäst ROI får ni med en hybrid där AI hanterar 60–70 % av volymen och människan tar resten med bättre kontext. Investering: 34 900 kr för en första version kopplad till er hemsida och e-post.",
+          "AI-driven kundsupport funkar – men bara med rätt förväntningar. Fungerar bra: FAQ, ordersstatus, standardärenden. Fungerar dåligt: komplexa reklamationer, känsliga case, allt som kräver ett omdöme. Bäst ROI får ni med en hybrid där AI hanterar 60–70 % av volymen och människan tar resten med bättre kontext. Investering: 11 900 kr för en första version kopplad till er hemsida och e-post.",
       },
       {
         heading: "Kostnadsnivåer",
         content:
-          "Vi jobbar med tre tydliga nivåer. Prototyp / pilot: 14 900 kr, klar på 3–5 dagar, ett tydligt avgränsat flöde. MVP: 34 900 kr, klar på 1–2 veckor, körs i produktion med några användare. Skalbar lösning: 89 000 kr, klar på 3–4 veckor, drift-nivå med monitorering och SLA. Större system offereras separat men alltid med fast pris. Ingen timdebitering, ingen scope creep. Se hela [prislistan](/priser).",
+          "Vi jobbar med tre tydliga nivåer. Prototyp / pilot: 4 900 kr, klar på 3–5 dagar, ett tydligt avgränsat flöde. MVP: 11 900 kr, klar på 1–2 veckor, körs i produktion med några användare. Skalbar lösning: 89 000 kr, klar på 3–4 veckor, drift-nivå med monitorering och SLA. Större system offereras separat men alltid med fast pris. Ingen timdebitering, ingen scope creep. Se hela [prislistan](/priser).",
       },
       {
         heading: "Tre vanliga fällor i Östergötland",
@@ -66,7 +66,7 @@ export const articles31to40: Article[] = [
     ],
     faq: [
       { q: "Vad är den vanligaste AI-tillämpningen för företag i Linköping?", a: "Automation av administration och dokument (fakturor, offertunderlag, tidrapporter). Det är där ROI är högst och risken lägst för de flesta SMB-företag i Östergötland." },
-      { q: "Vad kostar det att komma igång med AI?", a: "En första pilot kostar 14 900 kr, en produktionsklar MVP 34 900 kr och en skalbar lösning 89 000 kr. Aurora Media jobbar med fast pris." },
+      { q: "Vad kostar det att komma igång med AI?", a: "En första pilot kostar 4 900 kr, en produktionsklar MVP 11 900 kr och en skalbar lösning 89 000 kr. Aurora Media jobbar med fast pris." },
       { q: "Hur lång tid tar det?", a: "Pilot: 3–5 dagar. MVP: 1–2 veckor. Skalbar lösning: 3–4 veckor. Kartläggningsworkshopen ligger på 2–3 timmar." },
       { q: "Är AI GDPR-säkert?", a: "Ja, om det byggs rätt. Vi använder EU-hostade modeller (Azure OpenAI EU, Mistral, AWS Bedrock EU) och tecknar DPA med alla leverantörer." },
       { q: "Måste vi ha en teknisk person internt?", a: "Nej. Vi driftar och underhåller lösningen. Om ni vill ta över internt lämnar vi över kod, dokumentation och konton." },
@@ -138,7 +138,7 @@ export const articles31to40: Article[] = [
     faq: [
       { q: "Vilka bygg-företag i Östergötland har ni jobbat med?", a: "Vi har referensuppdrag i Linköping, Norrköping, Åtvidaberg och Motala. Vi hänvisar er till referenser efter första samtalet om vi är rätt matchning." },
       { q: "Vi använder Bygglet / Entral / Next – funkar det?", a: "Ja. Vi integrerar mot alla de stora bygg-verktygen via API eller export/import. Vi kan även bygga direkt mot Fortnox och Visma." },
-      { q: "Vad kostar det?", a: "Enskilt flöde: 34 900 kr. Paket med 3 flöden: 89 000 kr fast pris. Löpande drift och support från 4 900 kr/mån." },
+      { q: "Vad kostar det?", a: "Enskilt flöde: 11 900 kr. Paket med 3 flöden: 89 000 kr fast pris. Löpande drift och support från 4 900 kr/mån." },
       { q: "Hur säkerställer ni att AI:n inte gör dyra fel?", a: "Alla ekonomiska händelser går genom manuell godkänningskö. AI föreslår, människa godkänner. Vi bygger inte helautomatiska fakturaflöden – för mycket risk för lite vinst." },
       { q: "Hur snabbt kan vi komma igång?", a: "Från första möte till första flöde i drift: 3–5 veckor är realistiskt." },
     ],
@@ -264,7 +264,7 @@ export const articles31to40: Article[] = [
       {
         heading: "Kostnad",
         content:
-          "Enkel automation (fakturering eller körorderintag): 34 900 kr. Full lösning med dispatch, mobilapp för chaufför och kundportal: från 149 000 kr fast pris. Vi kan också licensiera Aurora Transport direkt – kontakta oss för villkor.",
+          "Enkel automation (fakturering eller körorderintag): 11 900 kr. Full lösning med dispatch, mobilapp för chaufför och kundportal: från 149 000 kr fast pris. Vi kan också licensiera Aurora Transport direkt – kontakta oss för villkor.",
       },
     ],
     faq: [
@@ -330,7 +330,7 @@ export const articles31to40: Article[] = [
       {
         heading: "Kostnad",
         content:
-          "Enklare setup (bokning + gäst-SMS): 34 900 kr. Full lösning inkl. merförsäljning och recensionshantering: 89 000 kr. Löpande drift från 2 900 kr/mån. Se också vår artikel om [AI för transport- och logistikföretag](/blogg/ai-transportforetag-logistik) för närliggande logik kring kundflöden.",
+          "Enklare setup (bokning + gäst-SMS): 11 900 kr. Full lösning inkl. merförsäljning och recensionshantering: 89 000 kr. Löpande drift från 2 900 kr/mån. Se också vår artikel om [AI för transport- och logistikföretag](/blogg/ai-transportforetag-logistik) för närliggande logik kring kundflöden.",
       },
     ],
     faq: [
@@ -477,7 +477,7 @@ export const articles31to40: Article[] = [
     ],
     faq: [
       { q: "Hur lång tid tar lokal SEO?", a: "Meningsfull rörelse i map pack: 6–12 veckor med rätt insatser. Full effekt: 6+ månader. GBP-optimering kan ge synlighet redan inom 2 veckor." },
-      { q: "Vad kostar lokal SEO i Linköping?", a: "Engångsoptimering: 14 900–29 900 kr. Löpande arbete: från 6 900 kr/mån." },
+      { q: "Vad kostar lokal SEO i Linköping?", a: "Engångsoptimering: 4 900–29 900 kr. Löpande arbete: från 6 900 kr/mån." },
       { q: "Kan man göra det själv?", a: "Ja, till en punkt. GBP och grundläggande on-page klarar de flesta. Schema, teknisk SEO och länkbygge kräver oftast specialist." },
       { q: "Vi har inget fysiskt kontor – kan vi ändå ranka lokalt?", a: "Ja, med serviceområde i GBP i stället för adress. Fungerar för hantverkare, mobila tjänster och distansbaserade byråer." },
       { q: "Hur ber man om recensioner utan att verka desperat?", a: "Ett SMS/mejl efter avslutat uppdrag: ‘Om du är nöjd, betyder en Google-recension oerhört mycket för oss – här är direktlänk.’ 20–30 % konverterar. Automatisera efter avslutad faktura." },
@@ -523,7 +523,7 @@ export const articles31to40: Article[] = [
       {
         heading: "Vad det kostar 2026",
         content:
-          "Prototyp: 14 900 kr, klar på 3–5 dagar med 10–20 dokument som källa. Produktionsversion med spårbarhet, styrning och fallback till människa: 34 900 kr. Löpande drift (LLM-tokenkostnad + underhåll): 1 900–4 900 kr/mån beroende på volym. Se [AI-konsult i Linköping](/ai-konsult-linkoping) för konsultation kring valet.",
+          "Prototyp: 4 900 kr, klar på 3–5 dagar med 10–20 dokument som källa. Produktionsversion med spårbarhet, styrning och fallback till människa: 11 900 kr. Löpande drift (LLM-tokenkostnad + underhåll): 1 900–4 900 kr/mån beroende på volym. Se [AI-konsult i Linköping](/ai-konsult-linkoping) för konsultation kring valet.",
       },
       {
         heading: "Vanliga fel",
@@ -579,7 +579,7 @@ export const articles31to40: Article[] = [
       {
         heading: "Egen mjukvara – kostnadsbilden 2026",
         content:
-          "Prototyp för ett flöde: 14 900 kr, 3–5 dagar. Fullt internt verksamhetssystem: 89 000–249 000 kr, 3–6 veckor. Skalbar SaaS med multi-tenant och betalningar: 149 000–449 000 kr, 6–12 veckor. Detta är fasta priser – inte timmar × timmar × otur. Före AI-kodning hade samma projekt kostat 2–4x mer.",
+          "Prototyp för ett flöde: 4 900 kr, 3–5 dagar. Fullt internt verksamhetssystem: 89 000–249 000 kr, 3–6 veckor. Skalbar SaaS med multi-tenant och betalningar: 149 000–449 000 kr, 6–12 veckor. Detta är fasta priser – inte timmar × timmar × otur. Före AI-kodning hade samma projekt kostat 2–4x mer.",
       },
       {
         heading: "Kalkylen: när betalar det tillbaka sig?",
@@ -635,7 +635,7 @@ export const articles31to40: Article[] = [
       {
         heading: "1. ‘Vad är fast pris för första leveransen?’",
         content:
-          "En seriös AI-byrå har standardpaket med fasta priser (t.ex. Aurora Media: 14 900 / 34 900 / 89 000 kr). ‘Det beror på’-svar utan bindande offert inom 48 timmar = svag intern process. Timdebitering utan tak = ni bär all risk.",
+          "En seriös AI-byrå har standardpaket med fasta priser (t.ex. Aurora Media: 4 900 / 11 900 / 89 000 kr). ‘Det beror på’-svar utan bindande offert inom 48 timmar = svag intern process. Timdebitering utan tak = ni bär all risk.",
       },
       {
         heading: "2. ‘Vem äger koden och kontona?’",

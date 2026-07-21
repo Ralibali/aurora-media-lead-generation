@@ -188,7 +188,7 @@ Mock-data: använd hårdkodade arrayer i src/data/. Inga API-anrop.`,
       {
         heading: "Vad du gör nu",
         content:
-          "Om du har en idé du suttit på länge: sätt upp ett Lovable-konto, använd Free-planen för att utvärdera, skriv prompten ovan med din egen användarpersona och datamodell och bygg så långt dina daily credits räcker. Det är ofta minst en klickbar prototyp. Om du fastnar — eller om du vill ha det rätt från dag ett — boka 30 minuter med mig. Jag tar fast pris från 14 900 kr för en prototyp som faktiskt fungerar. Skillnaden är att jag har gjort många produkter med de här verktygen och därför undviker fällorna du hittar första gången.",
+          "Om du har en idé du suttit på länge: sätt upp ett Lovable-konto, använd Free-planen för att utvärdera, skriv prompten ovan med din egen användarpersona och datamodell och bygg så långt dina daily credits räcker. Det är ofta minst en klickbar prototyp. Om du fastnar — eller om du vill ha det rätt från dag ett — boka 30 minuter med mig. Jag tar fast pris från 4 900 kr för en prototyp som faktiskt fungerar. Skillnaden är att jag har gjort många produkter med de här verktygen och därför undviker fällorna du hittar första gången.",
       },
       {
         heading: "Källor och uppdateringar",

@@ -121,7 +121,7 @@ const FAQS = [
   },
   {
     q: "Vad kostar ett AI-projekt för företag?",
-    a: "En avgränsad prototyp börjar från 14 900 kr, en MVP från 34 900 kr och en större skalbar lösning från 89 000 kr. Ni får alltid scope och fast pris innan arbetet startar. Större integrations- och verksamhetssystem offereras separat.",
+    a: "En avgränsad prototyp börjar från 4 900 kr, en MVP från 11 900 kr och en skalbar SaaS från 24 900 kr. Ni får alltid scope och fast pris innan arbetet startar. Större integrations- och verksamhetssystem offereras separat.",
   },
   {
     q: "Måste vi veta vilken AI-teknik vi behöver?",
@@ -147,7 +147,7 @@ const AiByraLinkoping = () => {
 
   useEffect(() => {
     setSEOMeta({
-      title: "AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media",
+      title: "AI-byrå i Linköping | Fast pris från 4 900 kr – Aurora Media",
       description:
         "AI-byrå i Linköping som hjälper företag automatisera administration, ersätta Excel och bygga AI-drivna interna system. Fast pris, lokal kontakt, första versionen på veckor.",
       canonical: "/ai-byra-linkoping",
@@ -171,7 +171,7 @@ const AiByraLinkoping = () => {
       url: pageUrl,
       image: `${SITE_URL}/og-image-sv.jpg`,
       email: "info@auroramedia.se",
-      priceRange: "14900-89000+ SEK",
+      priceRange: "4900-89000+ SEK",
       founder: {
         "@type": "Person",
         name: "Christoffer Holstensson",
@@ -194,9 +194,9 @@ const AiByraLinkoping = () => {
         "API-integrationer",
       ],
       makesOffer: [
-        { "@type": "Offer", name: "Prototyp", price: "14900", priceCurrency: "SEK" },
-        { "@type": "Offer", name: "MVP", price: "34900", priceCurrency: "SEK" },
-        { "@type": "Offer", name: "Skalbar lösning", price: "89000", priceCurrency: "SEK" },
+        { "@type": "Offer", name: "Prototyp", price: "4900", priceCurrency: "SEK" },
+        { "@type": "Offer", name: "MVP", price: "11900", priceCurrency: "SEK" },
+        { "@type": "Offer", name: "Skalbar lösning", price: "24900", priceCurrency: "SEK" },
       ],
     });
 
@@ -416,9 +416,9 @@ const AiByraLinkoping = () => {
           <style>{`@media(min-width:1000px){ .aur .work-grid.price-four{ grid-template-columns:repeat(4,1fr); } }`}</style>
           <div className="work-grid price-four">
             {[
-              { name: "Prototyp", price: "från 14 900 kr", desc: "Klickbar version på 3–5 dagar. Testa idén skarpt innan ni satsar större.", href: "/priser" },
-              { name: "MVP", price: "från 34 900 kr", desc: "Lanseringsklar lösning på cirka två veckor. Inloggning, betalning och admin.", href: "/priser" },
-              { name: "Skalbar lösning", price: "från 89 000 kr", desc: "Full produkt eller internt system med integrationer, roller och drift.", href: "/priser" },
+              { name: "Prototyp", price: "från 4 900 kr", desc: "Klickbar version på 3–5 dagar. Testa idén skarpt innan ni satsar större.", href: "/priser" },
+              { name: "MVP", price: "från 11 900 kr", desc: "Lanseringsklar lösning på cirka två veckor. Inloggning, betalning och admin.", href: "/priser" },
+              { name: "Skalbar lösning", price: "från 24 900 kr", desc: "Full produkt eller internt system med integrationer, roller och drift.", href: "/priser" },
               { name: "Konsultuppdrag", price: "895 kr/timme", desc: "AI-rådgivning, utveckling i era team eller AI-CTO on demand – timpris 895 kr eller från 12 000 kr/mån.", href: "/ai-konsult-linkoping" },
             ].map((p, index) => (
               <Reveal key={p.name} delay={index * 0.05}>

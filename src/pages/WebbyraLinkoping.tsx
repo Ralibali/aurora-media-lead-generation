@@ -7,7 +7,7 @@ import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd } from "@/lib/seoHel
 
 const FAQS = [
   { q: "Är Aurora Media en webbyrå i Linköping?", a: "Ja, Aurora Media AB är baserat i Linköping men jobbar med kunder i hela Sverige. Fokus är inte bara hemsidor — vi bygger SaaS, AI-automationer, interna appar och moderna webbplattformar." },
-  { q: "Vad kostar en hemsida eller webbplattform?", a: "Det beror på omfattning. En landningssida är billigare än en plattform med databas, login och integrationer. SaaS och MVP börjar från 14 900 kr för prototyp och 34 900 kr för MVP." },
+  { q: "Vad kostar en hemsida eller webbplattform?", a: "Det beror på omfattning. En landningssida är billigare än en plattform med databas, login och integrationer. SaaS och MVP börjar från 4 900 kr för prototyp och 11 900 kr för MVP." },
   { q: "Hur skiljer ni er från en traditionell webbyrå?", a: "Aurora jobbar som AI-builder snarare än klassisk byrå. Mindre workshop, snabbare prototyp, fast pris, modern kodbas och direktkontakt med personen som bygger." },
   { q: "Bygger ni WordPress?", a: "Nej. Vi bygger med React, TypeScript, Supabase och modern hosting. Det ger bättre kontroll, prestanda och ägande." },
 ];

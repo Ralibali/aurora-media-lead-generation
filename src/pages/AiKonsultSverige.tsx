@@ -24,7 +24,7 @@ const TRACKS = [
   {
     n: "Spår 02",
     name: "Bygge",
-    price: "fast pris från 14 900 kr",
+    price: "fast pris från 4 900 kr",
     desc: "Avgränsat scope, fast pris och en produkt som går att använda på riktigt – på veckor, inte månader.",
     items: [
       "Prototyp på 3–5 dagar",

@@ -3,7 +3,7 @@ import LocalLandingPage from "@/components/nordic/LocalLandingPage";
 const AiAutomationLinkoping = () => (
   <LocalLandingPage
     slug="ai-automation-linkoping"
-    metaTitle="AI-automation för företag i Linköping – från 14 900 kr"
+    metaTitle="AI-automation för företag i Linköping – från 4 900 kr"
     metaDesc="AI-automation i Linköping: mejl, dokument, offerthantering, Fortnox- och Visma-integrationer. Bygg bort manuellt Excel-arbete med lokal partner."
     keywords="AI automation Linköping, processautomation Linköping, RPA Linköping, AI-integration Fortnox"
     crumbLabel="AI-automation i Linköping"
@@ -27,7 +27,7 @@ const AiAutomationLinkoping = () => (
       { title: "Monitorering och support", desc: "Vi övervakar körningen, larmar vid fel och står för underhåll. Ni får en driftpartner, inte bara en leverans." },
     ]}
     faqs={[
-      { q: "Vad kostar AI-automation för ett företag i Linköping?", a: "Enklare flöden (t.ex. mejl → CRM) från 14 900 kr. Medelstora projekt (offerthantering, integrationer) 34 900–89 000 kr. Riktigt komplexa system offereras separat efter kartläggning." },
+      { q: "Vad kostar AI-automation för ett företag i Linköping?", a: "Enklare flöden (t.ex. mejl → CRM) från 4 900 kr. Medelstora projekt (offerthantering, integrationer) 11 900–89 000 kr. Riktigt komplexa system offereras separat efter kartläggning." },
       { q: "Hur börjar vi?", a: "Med en kostnadsfri AI-kartläggning där vi identifierar 3–5 flöden med tydlig ROI. Sedan väljer ni ett att börja med. Ingen försäljningspress." },
       { q: "Var lagras vår data?", a: "Som standard i EU (Frankfurt/Stockholm). Vi använder europeiska LLM:er (Mistral, Azure OpenAI EU) när det är krav. GDPR-DPA på plats." },
       { q: "Vi använder Fortnox – funkar det?", a: "Ja. Vi integrerar mot Fortnox API dagligen: fakturor, kunder, artiklar, tidrapporter, projekt. Samma sak för Visma eBokföring, Visma.net och Björn Lundén." },

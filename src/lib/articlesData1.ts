@@ -28,7 +28,7 @@ export const articles1to6: Article[] = [
       {
         heading: "Vad kostar det att bygga en SaaS med AI jämfört med traditionell utveckling",
         content:
-          "En traditionell utvecklare på en svensk byrå tar 800-1200 kr i timmen och bygger en MVP på cirka 400-600 timmar. Räkna 400 000 till 700 000 kronor. Med AI-verktyg och en erfaren operatör tar samma MVP 60-100 timmar. Min prislapp för en MVP är 34 900 kr fast. En komplett betal-SaaS med dashboards och Stripe ligger på 69 000 kr fast. Skillnaden är inte att jag är billigare per timme – jag tar 895 kr/h på rena timjobb. Skillnaden är att jag bygger fem till tio gånger snabbare.",
+          "En traditionell utvecklare på en svensk byrå tar 800-1200 kr i timmen och bygger en MVP på cirka 400-600 timmar. Räkna 400 000 till 700 000 kronor. Med AI-verktyg och en erfaren operatör tar samma MVP 60-100 timmar. Min prislapp för en MVP är 11 900 kr fast. En komplett betal-SaaS med dashboards och Stripe ligger på 24 900 kr fast. Skillnaden är inte att jag är billigare per timme – jag tar 895 kr/h på rena timjobb. Skillnaden är att jag bygger fem till tio gånger snabbare.",
       },
       {
         heading: "Steg för steg: från idé till lansering på 2 veckor",
@@ -176,7 +176,7 @@ export const articles1to6: Article[] = [
       {
         heading: "AI-kodning med konsult: 30 000 - 150 000 kr",
         content:
-          "En operatör som bygger med AI-verktyg kan leverera samma MVP på 40-100 timmar. Mina priser ligger fast: prototyp 14 900 kr, MVP 34 900 kr, full SaaS 69 000 kr. Skräddarsydda projekt från 89 000 kr. Du betalar inte timpris, du betalar för leverans. Du får snabb leverans, fast pris och en utvecklare som faktiskt har byggt sju produkter och vet var fallgroparna sitter. Risken: erfarenheten varierar enormt mellan operatörer. Den som påstår sig kunna allt med AI har förmodligen byggt lite.",
+          "En operatör som bygger med AI-verktyg kan leverera samma MVP på 40-100 timmar. Mina priser ligger fast: prototyp 4 900 kr, MVP 11 900 kr, full SaaS 24 900 kr. Skräddarsydda projekt från 89 000 kr. Du betalar inte timpris, du betalar för leverans. Du får snabb leverans, fast pris och en utvecklare som faktiskt har byggt sju produkter och vet var fallgroparna sitter. Risken: erfarenheten varierar enormt mellan operatörer. Den som påstår sig kunna allt med AI har förmodligen byggt lite.",
       },
       {
         heading: "Bygga själv: tid vs pengar",
@@ -334,7 +334,7 @@ export const articles1to6: Article[] = [
       {
         heading: "Möjligheter för svenska entreprenörer",
         content:
-          "Aldrig tidigare har det varit så billigt att testa en idé. För 14 900 kr får du en klickbar prototyp och kan validera om någon vill betala för det. För 34 900 kr får du en MVP och kan ta dina första betalande kunder. Den entreprenör som tidigare hade behövt en investerare för att bygga en produkt kan nu bootstrappa sig själv. Marknaden för svenska SaaS-produkter inom nischade segment (transport, hälsa, utbildning, småföretagsverktyg) är öppen som aldrig förr.",
+          "Aldrig tidigare har det varit så billigt att testa en idé. För 4 900 kr får du en klickbar prototyp och kan validera om någon vill betala för det. För 11 900 kr får du en MVP och kan ta dina första betalande kunder. Den entreprenör som tidigare hade behövt en investerare för att bygga en produkt kan nu bootstrappa sig själv. Marknaden för svenska SaaS-produkter inom nischade segment (transport, hälsa, utbildning, småföretagsverktyg) är öppen som aldrig förr.",
       },
       {
         heading: "Prognosen för 2027",
@@ -403,7 +403,7 @@ export const articles1to6: Article[] = [
       {
         heading: "Prisintervall i Linköping 2026",
         content:
-          "Etablerade byråer i Linköping (Knightec, Cygni, Sigma): 1000-1500 kr/h. Frilanskonsulter: 600-1000 kr/h. Boutique-byråer (en till tre personer) som specialiserat sig: fast pris från 50 000 kr per projekt och uppåt. AI-byggare (som Aurora Media): fast pris från 14 900 kr för prototyp, 34 900 kr för MVP. Skillnaden är inte primärt geografisk – den ligger i affärsmodell och verktygsval.",
+          "Etablerade byråer i Linköping (Knightec, Cygni, Sigma): 1000-1500 kr/h. Frilanskonsulter: 600-1000 kr/h. Boutique-byråer (en till tre personer) som specialiserat sig: fast pris från 50 000 kr per projekt och uppåt. AI-byggare (som Aurora Media): fast pris från 4 900 kr för prototyp, 11 900 kr för MVP. Skillnaden är inte primärt geografisk – den ligger i affärsmodell och verktygsval.",
       },
       {
         heading: "Fördelar med lokal partner",
@@ -413,7 +413,7 @@ export const articles1to6: Article[] = [
       {
         heading: "Aurora Media AB – vår approach",
         content:
-          "Jag är ett enmans-konsultbolag i Linköping som bygger SaaS med AI-kodning. Sju egna live-produkter, fast pris från 14 900 kr, full källkodsöverlämning, support efter leverans. Vi kan ses fysiskt i Linköping om du vill, eller köra hela projektet remote. Om du vill diskutera ett projekt – mejla info@auroramedia.se så svarar jag inom 24 timmar.",
+          "Jag är ett enmans-konsultbolag i Linköping som bygger SaaS med AI-kodning. Sju egna live-produkter, fast pris från 4 900 kr, full källkodsöverlämning, support efter leverans. Vi kan ses fysiskt i Linköping om du vill, eller köra hela projektet remote. Om du vill diskutera ett projekt – mejla info@auroramedia.se så svarar jag inom 24 timmar.",
       },
     ],
     faq: [

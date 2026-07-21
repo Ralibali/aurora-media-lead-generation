@@ -111,7 +111,7 @@ const Blog = () => {
               Har ni en idé som <span className="it">behöver bli verklig?</span>
             </h2>
             <p className="lead" style={{ marginBottom: 28 }}>
-              Prototyp från 14 900 kr. Fast pris, kod ni äger.
+              Prototyp från 4 900 kr. Fast pris, kod ni äger.
             </p>
             <Link to="/kontakt" className="btn btn-moss">
               Begär offert <span className="a">→</span>
