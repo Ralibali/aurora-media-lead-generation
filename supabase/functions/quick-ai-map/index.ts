@@ -99,6 +99,158 @@ const VALID_TIME = new Set(["0-1", "1-3", "3-5", "5-10", "10+"]);
 const VALID_YPN = new Set(["yes", "partial", "no"]);
 const VALID_VALUE = new Set(["high", "medium", "low"]);
 
+// ---------- Nyckelords-fallback ----------
+// Om LLM-anropet fallerar byggs analysen ändå på det som skrivits – via
+// svenska nyckelordsmönster för vanliga manuella processer. Garanterar att
+// besökaren alltid får en analys grundad i sin egen text.
+const KEYWORD_PATTERNS: {
+  re: RegExp;
+  name: string;
+  frequency: string;
+  weekly_time: string;
+  rule_based: string;
+  data_available: string;
+  business_value: string;
+  solution: string;
+  step: string;
+  wins: string[];
+}[] = [
+  {
+    re: /offert|anbud|prisförfrågan/i,
+    name: "Skapa och skicka offerter",
+    frequency: "weekly", weekly_time: "3-5", rule_based: "yes", data_available: "yes", business_value: "high",
+    solution: "Offertgenerator: AI som bygger färdiga offertutkast från förfrågan – du granskar och skickar.",
+    step: "Samla 5–10 gamla offerter som kan bli mallar.",
+    wins: ["Mallar för de vanligaste jobbtyperna", "Fast prisstruktur i Excel som AI kan läsa"],
+  },
+  {
+    re: /faktur/i,
+    name: "Fakturering och fakturaunderlag",
+    frequency: "weekly", weekly_time: "3-5", rule_based: "yes", data_available: "partial", business_value: "high",
+    solution: "Automation som samlar underlag automatiskt och skapar fakturautkast i ert ekonomisystem.",
+    step: "Kartlägg var underlagen föds idag – mejl, app, papper?",
+    wins: ["Digitalt underlagsflöde direkt i mobilen", "Auto-matchning mot projekt/kund"],
+  },
+  {
+    re: /tidrapport|tidsredovis|tidrapporterna|stämpling/i,
+    name: "Samla in och sammanställa tidrapporter",
+    frequency: "weekly", weekly_time: "3-5", rule_based: "yes", data_available: "partial", business_value: "high",
+    solution: "Tidrapportering i mobilen med automatisk sammanställning till lön och fakturering.",
+    step: "Räkna hur många tidrapporter som hanteras per vecka.",
+    wins: ["En kanal för tider – inte SMS+Excel+papper", "Veckosammanställning automatiskt"],
+  },
+  {
+    re: /excel|kalkylblad|google sheets/i,
+    name: "Manuellt arbete i Excel/kalkylblad",
+    frequency: "weekly", weekly_time: "3-5", rule_based: "yes", data_available: "yes", business_value: "medium",
+    solution: "Ersätt kalkylbladet med ett enkelt internt system som validerar och räknar automatiskt.",
+    step: "Välj det ena blad som ändras oftast – börja där.",
+    wins: ["En sanning istället för filversioner", "Automatiska summeringar och larm"],
+  },
+  {
+    re: /mejl|mail|e-post|inkorg/i,
+    name: "Svara på och sortera mejl",
+    frequency: "daily", weekly_time: "3-5", rule_based: "partial", data_available: "yes", business_value: "medium",
+    solution: "AI-assistent som svarar på återkommande mejl och sorterar in resten rätt.",
+    step: "Lista de 5 vanligaste mejlfrågorna ni får.",
+    wins: ["Svarsmallar för topp-5 frågorna", "Auto-utkast du bara godkänner"],
+  },
+  {
+    re: /bokning|boka|bokningar|schema(?!t)|kalender/i,
+    name: "Hantera bokningar och schema",
+    frequency: "daily", weekly_time: "3-5", rule_based: "yes", data_available: "yes", business_value: "high",
+    solution: "Självbetjäningsbokning med automatiska påminnelser via SMS/mejl.",
+    step: "Mät antal no-shows senaste månaden – det är kostnaden.",
+    wins: ["SMS-påminnelse 24 h innan", "Ombokningslänk istället för telefon"],
+  },
+  {
+    re: /lager|inventer|inleverans|beställ/i,
+    name: "Lagerhantering och beställningar",
+    frequency: "daily", weekly_time: "3-5", rule_based: "yes", data_available: "partial", business_value: "high",
+    solution: "Digital lagerbok med automatlarm vid lågt saldo och beställningsförslag.",
+    step: "Börja med de 20 artiklar som omsätts snabbast.",
+    wins: ["Min/max-nivåer på toppartiklarna", "Skanning vid inleverans"],
+  },
+  {
+    re: /rapport|rapportera|sammanställ|statistik|uppfölj/i,
+    name: "Sammanställa rapporter och uppföljning",
+    frequency: "weekly", weekly_time: "1-3", rule_based: "yes", data_available: "partial", business_value: "medium",
+    solution: "Automatisk rapport som hämtar siffrorna och landar i inkorgen varje vecka/månad.",
+    step: "Bestäm de 3 siffror som faktiskt styr beslut.",
+    wins: ["En sida per vecka, automatiskt", "Inga fler copy-paste-sessioner"],
+  },
+  {
+    re: /kundfrågor|support|kundservice|kundärenden|reklamation/i,
+    name: "Svara på återkommande kundfrågor",
+    frequency: "daily", weekly_time: "3-5", rule_based: "partial", data_available: "partial", business_value: "medium",
+    solution: "AI-svarbot på er kunskapsbas som löser standardfrågorna direkt.",
+    step: "Skriv ner svaren på de 10 vanligaste frågorna – det är botens bas.",
+    wins: ["FAQ-sidan som svarar direkt", "Eskalering till människa vid svåra fall"],
+  },
+  {
+    re: /sociala medier|instagram|facebook|linkedin|tiktok|marknadsför|innehåll|poster/i,
+    name: "Producera innehåll för sociala medier",
+    frequency: "weekly", weekly_time: "3-5", rule_based: "partial", data_available: "yes", business_value: "medium",
+    solution: "AI som förvandlar ert material till färdiga inläggsutkast i er tonalitet.",
+    step: "Samla 10 gamla inlägg som visar er röst.",
+    wins: ["Veckoplan av utkast på måndagar", "Återbruk av befintligt material"],
+  },
+  {
+    re: /lön|löner|lönekörning|personaladmin/i,
+    name: "Löneunderlag och personaladministration",
+    frequency: "monthly", weekly_time: "3-5", rule_based: "yes", data_available: "partial", business_value: "high",
+    solution: "Automation som samlar löneunderlaget och flaggar avvikelser innan körning.",
+    step: "Lista allt som ska in i en lönekörning och var det bor idag.",
+    wins: ["Checklista som fylls i automatiskt", "Avvikelselarm före körning"],
+  },
+  {
+    re: /kvitto|kvitton|resa|reseavräkning|utlägg/i,
+    name: "Kvitton och reseavräkningar",
+    frequency: "weekly", weekly_time: "1-3", rule_based: "yes", data_available: "yes", business_value: "medium",
+    solution: "Fota kvittot – AI läser av och bokför direkt i ekonomisystemet.",
+    step: "Inför 'fota direkt'-regeln i stället för skopappar.",
+    wins: ["Mobilfoto → bokfört utkast", "Ingen månadsstack med kvitton"],
+  },
+  {
+    re: /planering|planera|rutt|körschema|dispatch|logistik|transport/i,
+    name: "Planering och koordinering av körningar/jobb",
+    frequency: "daily", weekly_time: "5-10", rule_based: "partial", data_available: "partial", business_value: "high",
+    solution: "Planeringsstöd som föreslår upplägg och uppdaterar alla automatiskt vid ändringar.",
+    step: "Skriv ner reglerna ni planerar efter – ofta kan 80 % automatiseras.",
+    wins: ["En tavla alla ser – inga dubbelbokningar", "Auto-besked vid ändring"],
+  },
+  {
+    re: /order|ordrar|beställning(ar)? från/i,
+    name: "Ta emot och registrera ordrar",
+    frequency: "daily", weekly_time: "3-5", rule_based: "yes", data_available: "yes", business_value: "high",
+    solution: "AI som läser inkomna ordrar (mejl/PDF) och registrerar dem direkt i systemet.",
+    step: "Samla 20 exempelordrar för att se mönstren.",
+    wins: ["Auto-utkast från mejl", "Bekräftelse till kund direkt"],
+  },
+];
+
+function keywordFallback(fritext: string): AiProcess[] {
+  const hits: AiProcess[] = [];
+  for (const k of KEYWORD_PATTERNS) {
+    if (k.re.test(fritext)) {
+      hits.push({
+        process_name: k.name,
+        frequency: k.frequency,
+        weekly_time: k.weekly_time,
+        systems: null,
+        rule_based: k.rule_based,
+        data_available: k.data_available,
+        business_value: k.business_value,
+        recommended_solution: k.solution,
+        next_step: k.step,
+        quick_wins: k.wins,
+      });
+    }
+    if (hits.length >= 3) break;
+  }
+  return hits;
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
@@ -127,22 +279,35 @@ Deno.serve(async (req: Request) => {
     // ---------- 1. Tolka fritexten med AI ----------
     const systemPrompt = `Du är en senior AI- och automationsrådgivare på Aurora Media (Linköping).
 Du analyserar en fri text där ett företag beskriver sin vardag, och identifierar vilka manuella processer som kan automatiseras.
-Du skriver på enkel, tydlig svenska för en VD som INTE är tekniker. Konkret, mänskligt, aldrig säljigt. Inga emojis.
-VIKTIGT:
-- Utgå bara från vad texten faktiskt säger. Hitta inte på processer som inte nämns eller tydligt antyds.
-- Uppskatta tider konservativt utifrån vad som är rimligt för den typen av företag.
-- recommended_solution: konkret och specifik för deras situation, inte generisk.
-- next_step: ett enkelt första steg de kan ta, även utan oss.
-- quick_wins: 2-3 korta saker de kan göra direkt.
-- Om företagsnamn framgår av texten, ange det i company_name – annars utelämna det.`;
+Du svarar ALLTID på svenska – även om texten är på engelska eller annat språk.
+Du skriver enkelt och tydligt för en VD som INTE är tekniker. Konkret, mänskligt, aldrig säljigt. Inga emojis.
 
-    const userPrompt = `Här är företagets egen beskrivning:
+STRIKTA REGLER:
+- Utgå ENBART från vad texten faktiskt säger. Ta bara med processer som nämns eller tydligt antyds i texten. Hitta aldrig på egna.
+- Nämn gärna deras egna ord/system i processnamn och lösningar (t.ex. "Word", "Fortnox", "SMS") så de känner igen sig.
+- Uppskatta tider KONSERVATIVT utifrån vad som är rimligt för den typen av företag och storlek. Bättre för lågt än för högt.
+- recommended_solution: konkret och specifik för Deras situation, inte generisk. Nämn vad som byggs och vad det gör.
+- next_step: ett enkelt första steg de kan ta själva, utan oss.
+- quick_wins: 2-3 korta konkreta saker de kan göra direkt.
+- Om företagsnamn framgår av texten, ange det i company_name – annars utelämna det helt.
+- Gissa industry utifrån texten (t.ex. "Bygg & hantverk", "Transport & logistik", "Ekonomi & redovisning").
+- Ge 1-3 processer – bara så många som texten faktiskt stödjer.`;
+
+    const userPrompt = `EXEMPEL på hur en bra analys ser ut:
+
+Text: "Vi är en städfirma med 6 anställda. Schemat lägger jag i Excel varje söndag och skickar på SMS. Kunderna ringer och ändrar hela tiden. Faktureringen gör jag i Fortnox en gång i månaden och letar underlag i min mail."
+Bra analys:
+- process_name: "Lägga schema och kommunicera ändringar", frequency: "weekly", weekly_time: "3-5", rule_based: "yes", data_available: "yes", business_value: "high", recommended_solution: "Digitalt schema i mobilen där ändringar når personalen direkt – ingen SMS-rond på söndagskvällen.", next_step: "Räkna hur många schemaändringar som sker per vecka.", quick_wins: ["Gemensam kanal för ändringar", "Auto-besked vid ändring"]
+- process_name: "Samla fakturaunderlag från mejlen", frequency: "monthly", weekly_time: "3-5", rule_based: "yes", data_available: "partial", business_value: "high", recommended_solution: "Automation som hämtar underlag ur mejlen och skapar fakturautkast i Fortnox löpande – inte allt sista veckan.", next_step: "Skapa en mapp/regel som samlar underlagsmejl automatiskt.", quick_wins: ["Underlag digitalt direkt", "Fast körning varje fredag"]
+- summary: "Ni lägger mest tid på schemaändringar och fakturaunderlag – två klassiska automationscase. Schemat påverkar vardagen mest och bör byggas först; underlagen frigör flera timmar i månads-slutet."
+
+FÖRETAGETS TEXT SOM DU SKA ANALYSERA:
 """
 ${fritext}
 """
 ${companyInput ? `De uppgav själva företagsnamnet: ${companyInput}` : ""}
 
-Identifiera 2-3 manuella processer i texten som bäst lämpar sig för automation, och bedöm varje process med samma fält som en strukturerad kartläggning. Skriv också en summary (3-4 meningar till VD:n: var den största hävstången finns).`;
+Gör motsvarande analys för just denna text. Kom ihåg: bara processer texten stödjer, deras egna ord i lösningarna, konservativa tider.`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -200,22 +365,38 @@ Identifiera 2-3 manuella processer i texten som bäst lämpar sig för automatio
       }),
     });
 
-    if (!aiResp.ok) {
+    let ai: AiQuickResult | null = null;
+    let analysisSource = "llm";
+    if (aiResp.ok) {
+      const aiJson = await aiResp.json();
+      const argsStr = aiJson?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
+      try {
+        ai = argsStr ? JSON.parse(argsStr) : null;
+      } catch (e) {
+        console.error("[quick-ai-map] parse failed", e);
+      }
+    } else {
       const txt = await aiResp.text();
       console.error("[quick-ai-map] AI error", aiResp.status, txt);
-      return json({ error: "Analysen misslyckades – försök igen, eller gör AI-kartan med tre snabba frågor istället." }, 502);
     }
 
-    const aiJson = await aiResp.json();
-    const argsStr = aiJson?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-    let ai: AiQuickResult | null = null;
-    try {
-      ai = argsStr ? JSON.parse(argsStr) : null;
-    } catch (e) {
-      console.error("[quick-ai-map] parse failed", e);
-    }
+    // Fallback: bygg analysen på nyckelord ur texten om LLM:n fallerar –
+    // besökaren ska alltid få något som speglar det hen faktiskt skrev.
     if (!ai || !Array.isArray(ai.processes) || ai.processes.length === 0) {
-      return json({ error: "Kunde inte tolka texten – försök beskriva lite mer konkret vad som tar tid i er vardag." }, 422);
+      const fb = keywordFallback(fritext);
+      if (fb.length > 0) {
+        analysisSource = "keywords";
+        ai = { summary: "", processes: fb };
+        console.log("[quick-ai-map] LLM misslyckades – keyword-fallback gav", fb.length, "processer");
+      } else {
+        return json({ error: "Kunde inte tolka texten – försök beskriva lite mer konkret vad som tar tid i er vardag (vilka uppgifter, vilka system, hur ofta)." }, 422);
+      }
+    }
+
+    // Fallback-summary om LLM:n inte levererade någon
+    if (!ai.summary || ai.summary.trim().length < 20) {
+      const first = ai.processes[0]?.process_name ?? "administrationen";
+      ai.summary = `Utifrån er beskrivning hittade vi ${ai.processes.length} ${ai.processes.length === 1 ? "process" : "processer"} med tydlig automationspotential. Största hävstången ligger i "${first}" – det är den vi rekommenderar att börja med. Siffrorna är en försiktig uppskattning baserad på det ni skrev; i ett kort samtal kan vi vässa dem exakt.`;
     }
 
     // ---------- 2. Scora deterministiskt (samma logik som wizarden) ----------
@@ -336,7 +517,7 @@ Identifiera 2-3 manuella processer i texten som bäst lämpar sig för automatio
           <h2 style="margin:0 0 12px;">Ny SNABBANALYS (fritext)</h2>
           <p><strong>Företag:</strong> ${escape(company_name || "–")} (${escape(industry)})</p>
           <p><strong>Kontakt:</strong> ${escape(contact_name || "–")} · ${escape(email)}</p>
-          <p><strong>Total potential:</strong> ${escape(total_potential)} · Sparad tid: ~${totalSavedPerWeek} h/vecka</p>
+          <p><strong>Total potential:</strong> ${escape(total_potential)} · Sparad tid: ~${totalSavedPerWeek} h/vecka · Källa: ${analysisSource}</p>
           <h3 style="margin-top:16px;">Fritexten:</h3>
           <p style="background:#f1f5f9;padding:12px;border-radius:8px;font-size:13px;line-height:1.6;">${escape(fritext.slice(0, 900))}</p>
           <h3>Topp-case</h3>

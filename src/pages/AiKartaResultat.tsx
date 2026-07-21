@@ -622,9 +622,9 @@ function ProcessRow({ process, maxScore, isTop }: { process: ScoredProcess; maxS
   const payback = saved > 0
     ? Math.max(1, Math.round(tierMeta.price / (saved * WEEKS_PER_MONTH * HOURLY_RATE)))
     : null;
-  const barGradient = process.potential === "Mycket hög" || process.potential === "Hög"
+  const barGradient = score >= 9 || process.potential === "Mycket hög" || process.potential === "Hög" || process.potential === "Direkt AI-case" || process.potential === "Hög potential"
     ? "linear-gradient(90deg, #0F5132 0%, #4CAF80 100%)"
-    : process.potential === "Medel"
+    : score >= 5 || process.potential === "Medel" || process.potential === "Medelpotential"
       ? "linear-gradient(90deg, #6B8F6B 0%, #A9CBB0 100%)"
       : "linear-gradient(90deg, #B6B6AE 0%, #D8D5CC 100%)";
 

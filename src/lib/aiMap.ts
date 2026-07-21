@@ -120,9 +120,12 @@ export const TIERS: Record<TierKey, { label: string; price: number; priceLabel: 
 };
 
 export function tierForProcess(p: ScoredProcess): TierKey {
+  // Score-baserade trösklar (robust mot etikett-varianter) + komplexitetsvikt.
   const complex = p.rule_based !== "yes" || p.data_available !== "yes";
-  if (p.potential === "Mycket hög" || (p.potential === "Hög" && complex)) return "saas";
-  if (p.potential === "Hög") return "mvp";
+  const isVeryHigh = p.score >= 13 || p.potential === "Mycket hög" || p.potential === "Direkt AI-case";
+  const isHigh = isVeryHigh || p.score >= 9 || p.potential === "Hög" || p.potential === "Hög potential";
+  if (isVeryHigh || (isHigh && complex)) return "saas";
+  if (isHigh) return "mvp";
   return "prototyp";
 }
 

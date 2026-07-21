@@ -7,6 +7,7 @@ import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
 import { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 import LiveBuildDemo from "@/components/verkstad/LiveBuildDemo";
+import SnabbanalysForm from "@/components/SnabbanalysForm";
 import "@/styles/verkstad.css";
 
 // Re-export for backwards compatibility with pages that import from @/pages/Index
@@ -286,8 +287,8 @@ const HeroSection = () => (
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: .7, delay: .5 }}
         >
-          <Link to="/ai-karta" className="vk-btn vk-btn-primary" onClick={() => trackEvent("home_hero_ai_karta_click")}>
-            <span>Starta gratis AI-kartläggning</span> <ArrowRight size={16} />
+          <Link to="/ai-karta" className="vk-btn vk-btn-ghost" onClick={() => trackEvent("home_hero_ai_karta_click")}>
+            <span>Eller gör fulla AI-kartan (3 frågor)</span> <ArrowRight size={16} />
           </Link>
           <Link to="/arbete" className="vk-btn vk-btn-ghost">
             Se vad jag byggt <ArrowUpRight size={16} />
@@ -298,14 +299,18 @@ const HeroSection = () => (
           initial={{ opacity: 0 }} animate={{ opacity: 1 }}
           transition={{ duration: .5, delay: .8 }}
         >
-          5 minuter · Inget säljsamtal · Svar inom 24 h
+          AI-plan som PDF · 0 kr · Svar inom 24 h
         </motion.p>
       </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: .9, delay: .4, ease: [0.16,1,0.3,1] }}
       >
-        <Signature />
+        <SnabbanalysForm
+          compact
+          idPrefix="hero"
+          heading="Testa gratis – få en AI-plan för ert företag"
+        />
       </motion.div>
     </div>
   </section>
