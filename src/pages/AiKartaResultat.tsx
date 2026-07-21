@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { TriangleAlert as AlertTriangle, CalendarCheck, Copy, Download, Loader as Loader2, Mail, RefreshCw, Share2, Sparkles } from "lucide-react";
+import { TriangleAlert as AlertTriangle, CalendarCheck, Check, Copy, Download, Loader as Loader2, Mail, RefreshCw, Share2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import "@/styles/verkstad.css";
@@ -13,9 +13,9 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { setSEOMeta } from "@/lib/seoHelpers";
-import type { AiMapResult, ScoredProcess } from "@/lib/aiMap";
-import { FREQ_LABELS, TIME_LABELS } from "@/lib/aiMap";
-import { downloadAiMapPdf } from "@/lib/aiMapPdf";
+import type { AiMapResult, ScoredProcess, TierKey } from "@/lib/aiMap";
+import { FREQ_LABELS, TIME_LABELS, TIERS, tierForProcess } from "@/lib/aiMap";
+import { downloadAiMapPdf, aiMapPdfBase64, aiMapPdfFilename } from "@/lib/aiMapPdf";
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 import { getSupabase } from "@/lib/getSupabase";
 import { trackEvent } from "@/lib/analytics";
@@ -27,21 +27,6 @@ const WEEKS_PER_MONTH = 4.33;
 const BOOKING_URL = "";
 
 type LoadStatus = "loading" | "ready" | "missing" | "error";
-
-type TierKey = "prototyp" | "mvp" | "saas";
-
-const TIERS: Record<TierKey, { label: string; price: number; priceLabel: string }> = {
-  prototyp: { label: "Prototyp", price: 14900, priceLabel: "14 900:-" },
-  mvp:      { label: "MVP",      price: 34900, priceLabel: "34 900:-" },
-  saas:     { label: "SaaS",     price: 69000, priceLabel: "från 69 000:-" },
-};
-
-function tierForProcess(p: ScoredProcess): TierKey {
-  const complex = p.rule_based !== "yes" || p.data_available !== "yes";
-  if (p.potential === "Mycket hög" || (p.potential === "Hög" && complex)) return "saas";
-  if (p.potential === "Hög") return "mvp";
-  return "prototyp";
-}
 
 function fmtKr(n: number): string {
   return `${Math.round(n).toLocaleString("sv-SE").replace(/,/g, " ")} kr`;
@@ -61,6 +46,7 @@ const AiKartaResultat = () => {
   const [status, setStatus] = useState<LoadStatus>("loading");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [pdfMailStatus, setPdfMailStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
 
   // Async personlig AI-analys (bara om ai_analysis saknas på leaden)
   const [liveAnalysis, setLiveAnalysis] = useState<{ heading: string; body: string } | null>(null);
@@ -154,6 +140,39 @@ const AiKartaResultat = () => {
     })();
   }, [result, liveAnalysis, liveAnalysisLoading]);
 
+  // Mejla PDF:en automatiskt direkt efter wizarden (färskt resultat, ej delningslänk).
+  // Körs en gång per lead – sker tyst i bakgrunden, status visas vid PDF-knappen.
+  useEffect(() => {
+    if (!result || token) return; // token i URL = delad länk, skicka inte igen
+    if (!result.shareToken || !result.meta?.email) return;
+    const guardKey = `aik_pdf_mail:${result.leadId || result.shareToken}`;
+    if (sessionStorage.getItem(guardKey)) {
+      setPdfMailStatus("sent");
+      return;
+    }
+    let cancelled = false;
+    setPdfMailStatus("sending");
+    (async () => {
+      try {
+        const share = `${window.location.origin}/ai-karta/resultat?t=${encodeURIComponent(result.shareToken!)}`;
+        const pdfBase64 = aiMapPdfBase64(result, { shareUrl: share });
+        const supabase = await getSupabase();
+        const { data, error } = await supabase.functions.invoke("send-ai-map-pdf", {
+          body: { token: result.shareToken, pdfBase64, filename: aiMapPdfFilename(result) },
+        });
+        if (cancelled) return;
+        if (error || (data as { error?: string })?.error) throw error ?? new Error((data as { error?: string }).error);
+        sessionStorage.setItem(guardKey, "1");
+        setPdfMailStatus("sent");
+        trackEvent("ai_karta_pdf_emailed", { company: result.meta.company_name });
+      } catch (err) {
+        console.warn("[AiKartaResultat] auto-PDF-mejl misslyckades", err);
+        if (!cancelled) setPdfMailStatus("failed");
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [result, token]);
+
   // Härledda värden
   const derived = useMemo(() => {
     if (!result) return null;
@@ -188,7 +207,7 @@ const AiKartaResultat = () => {
   const handlePrint = () => {
     void trackAiKartaClick("result_pdf_download");
     try {
-      downloadAiMapPdf(result);
+      downloadAiMapPdf(result, { shareUrl });
       toast.success("PDF skapad");
     } catch (err) {
       console.error("[AiKartaResultat] PDF-export misslyckades", err);
@@ -397,24 +416,36 @@ const AiKartaResultat = () => {
             </div>
 
             {/* Delbarhet & PDF */}
-            <div style={{ marginTop: 40, display: "flex", flexWrap: "wrap", gap: 12 }}>
-              {shareUrl && (
-                <>
-                  <button type="button" onClick={copyShare} className="vk-btn vk-btn-ghost">
-                    <Copy size={16} /> Kopiera länk till kartan
-                  </button>
-                  <a href={mailtoHref} className="vk-btn vk-btn-ghost" onClick={() => trackEvent("ai_karta_share_email", { company: meta.company_name })}>
-                    <Share2 size={16} /> Skicka till kollega
-                  </a>
-                </>
-              )}
-              <button type="button" onClick={handlePrint} className="vk-btn vk-btn-ghost">
-                <Download size={16} /> Ladda ner PDF
-              </button>
-              {meta.email && (
-                <button type="button" onClick={handleResend} disabled={sending} className="vk-btn vk-btn-ghost">
-                  {sending ? <><Loader2 size={16} className="animate-spin" /> Skickar…</> : <><Mail size={16} /> Mejla mig analysen</>}
+            <div style={{ marginTop: 40 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center" }}>
+                <button type="button" onClick={handlePrint} className="vk-btn vk-btn-primary">
+                  <Download size={16} /> Ladda ner AI-kartan som PDF
                 </button>
+                {shareUrl && (
+                  <>
+                    <button type="button" onClick={copyShare} className="vk-btn vk-btn-ghost">
+                      <Copy size={16} /> Kopiera länk
+                    </button>
+                    <a href={mailtoHref} className="vk-btn vk-btn-ghost" onClick={() => trackEvent("ai_karta_share_email", { company: meta.company_name })}>
+                      <Share2 size={16} /> Skicka till kollega
+                    </a>
+                  </>
+                )}
+                {meta.email && !result.shareToken && (
+                  <button type="button" onClick={handleResend} disabled={sending} className="vk-btn vk-btn-ghost">
+                    {sending ? <><Loader2 size={16} className="animate-spin" /> Skickar…</> : <><Mail size={16} /> Mejla mig analysen</>}
+                  </button>
+                )}
+              </div>
+              {meta.email && pdfMailStatus === "sending" && (
+                <p style={{ marginTop: 10, fontSize: 13.5, color: "var(--granbark-mut)", display: "flex", alignItems: "center", gap: 7 }}>
+                  <Loader2 size={14} className="animate-spin" /> Skickar PDF:en till {meta.email}…
+                </p>
+              )}
+              {meta.email && pdfMailStatus === "sent" && (
+                <p style={{ marginTop: 10, fontSize: 13.5, color: "var(--gran)", display: "flex", alignItems: "center", gap: 7 }}>
+                  <Check size={14} strokeWidth={3} /> PDF:en är skickad till {meta.email} – kolla skräpposten om den inte dyker upp.
+                </p>
               )}
             </div>
 

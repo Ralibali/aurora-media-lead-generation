@@ -110,6 +110,22 @@ export interface ScoredProcess {
   saved_hours_per_week?: number;
 }
 
+// Byggnivåer (fast pris) – delad sanning mellan resultatsidan och PDF-rapporten.
+export type TierKey = "prototyp" | "mvp" | "saas";
+
+export const TIERS: Record<TierKey, { label: string; price: number; priceLabel: string }> = {
+  prototyp: { label: "Prototyp", price: 14900, priceLabel: "14 900:-" },
+  mvp:      { label: "MVP",      price: 34900, priceLabel: "34 900:-" },
+  saas:     { label: "SaaS",     price: 69000, priceLabel: "från 69 000:-" },
+};
+
+export function tierForProcess(p: ScoredProcess): TierKey {
+  const complex = p.rule_based !== "yes" || p.data_available !== "yes";
+  if (p.potential === "Mycket hög" || (p.potential === "Hög" && complex)) return "saas";
+  if (p.potential === "Hög") return "mvp";
+  return "prototyp";
+}
+
 export interface AiAnalysisCase {
   process_name: string;
   why_it_matters: string;
