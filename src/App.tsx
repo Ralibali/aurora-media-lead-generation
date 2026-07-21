@@ -19,6 +19,7 @@ import NotFound from "./pages/NotFound";
 import Priser from "./pages/Priser";
 // Övriga sidor lazy-loadas: huvudbundlen blir betydligt lättare att ladda
 // och parsa på mobil (Core Web Vitals / bounce rate).
+const AiSnabbanalys = lazy(() => import("./pages/AiSnabbanalys"));
 const AiAutomationForetag = lazy(() => import("./pages/AiAutomationForetag"));
 const AiByraLinkoping = lazy(() => import("./pages/AiByraLinkoping"));
 const AiKonsultSverige = lazy(() => import("./pages/AiKonsultSverige"));
@@ -159,6 +160,12 @@ const seoMap: Record<string, SEOConfig> = {
       "Svara på några snabba frågor och få en kostnadsfri AI-baserad mini-analys av era största tidstjuvar och bästa möjligheter för automation och AI.",
     canonical: "https://auroramedia.se/ai-karta/start",
     noindex: true,
+  },
+  "/ai-snabbanalys": {
+    title: "AI-snabbanalys – beskriv er vardag, få en AI-plan som PDF | Aurora Media",
+    description:
+      "Skriv några meningar om vad som tar tid i er vardag. Vår AI tolkar texten och skickar en personlig AI-plan som PDF – gratis, på någon minut.",
+    canonical: "https://auroramedia.se/ai-snabbanalys",
   },
   "/ai-karta/resultat": {
     title: "AI-kartans resultat | Aurora Media",
@@ -494,6 +501,7 @@ const App = () => (
               <Route path="/ai-karta" element={<AiKarta />} />
               <Route path="/ai-karta/start" element={<AiKartaStart />} />
               <Route path="/ai-karta/resultat" element={<AiKartaResultat />} />
+              <Route path="/ai-snabbanalys" element={<AiSnabbanalys />} />
               <Route path="/ai-automation-foretag" element={<AiAutomationForetag />} />
               <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />

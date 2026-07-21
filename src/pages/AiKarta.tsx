@@ -77,6 +77,24 @@ const CSS = `
 .aik-bransch-chip:hover { background: #14171A; color: #F6F5F1; }
 .aik-bransch-chip .arr { transition: transform .15s ease; }
 .aik-bransch-chip:hover .arr { transform: translateX(3px); }
+.aik-altband-wrap { background: #F6F5F1; }
+.aik-altband {
+  display: flex; align-items: center; gap: 16px;
+  margin: -18px 0 8px; padding: 16px 20px;
+  background: #fff; border: 1px dashed #14171A; border-radius: 14px;
+  text-decoration: none; color: #14171A;
+  transition: background .15s ease, border-color .15s ease;
+}
+.aik-altband:hover { background: var(--gran-soft); border-color: var(--gran); }
+.aik-altband-badge {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase;
+  background: #E8500A; color: #fff; border-radius: 999px; padding: 5px 11px; white-space: nowrap;
+}
+.aik-altband-text { font-size: 14.5px; line-height: 1.5; color: #3E444B; }
+.aik-altband-text strong { color: #14171A; }
+.aik-altband-arr { font-size: 20px; margin-left: auto; transition: transform .15s ease; }
+.aik-altband:hover .aik-altband-arr { transform: translateX(4px); }
+@media (max-width: 640px) { .aik-altband { flex-wrap: wrap; gap: 10px; } .aik-altband-arr { margin-left: 0; } }
 .aik-valuechips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
 .aik-valuechips .chip {
   font-family: "Spline Sans Mono", ui-monospace, monospace; font-size: 11.5px; letter-spacing: .03em;
@@ -342,6 +360,19 @@ const AiKarta = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* SNABBVARIANT: fritext för den som inte vill svara på frågor */}
+      <section className="aik-altband-wrap">
+        <div className="aik-wrap">
+          <Link to="/ai-snabbanalys" className="aik-altband" onClick={() => trackEvent("ai_karta_to_snabbanalys")}>
+            <span className="aik-altband-badge">Snabbvariant</span>
+            <span className="aik-altband-text">
+              Vill du hellre bara <strong>beskriva er vardag i fritext</strong>? Vår AI hittar automationscasen åt dig – AI-planen kommer som PDF på mejlen.
+            </span>
+            <span className="aik-altband-arr" aria-hidden="true">→</span>
+          </Link>
         </div>
       </section>
 

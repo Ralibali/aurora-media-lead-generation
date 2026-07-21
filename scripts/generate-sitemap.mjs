@@ -15,6 +15,7 @@ const STATIC_ROUTES = [
   { path: "/ai-konsult-sverige", changefreq: "weekly", priority: "0.95" },
   { path: "/ai-automation-foretag", changefreq: "weekly", priority: "0.95" },
   { path: "/ai-karta", changefreq: "weekly", priority: "0.9" },
+  { path: "/ai-snabbanalys", changefreq: "monthly", priority: "0.7" },
   { path: "/tjanster", changefreq: "weekly", priority: "0.9" },
   { path: "/tjanster/hemsidor", changefreq: "monthly", priority: "0.85" },
   { path: "/tjanster/ehandel", changefreq: "monthly", priority: "0.85" },
