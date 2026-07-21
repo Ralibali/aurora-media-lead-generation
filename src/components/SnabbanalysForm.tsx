@@ -151,10 +151,14 @@ const SnabbanalysForm = ({
       }
     } catch (err) {
       console.error("[SnabbanalysForm] submit failed", err);
+      // Tekniska fel (nätverk, odeployerad funktion m.m.) ska aldrig visas råa –
+      // ge alltid en mänsklig svensk text med nästa steg.
+      const raw = err instanceof Error ? err.message : "";
+      const technical = /edge function|failed to fetch|networkerror|non-2xx|timeout/i.test(raw);
       setSubmitError(
-        err instanceof Error && err.message
-          ? err.message
-          : "Analysen misslyckades – försök igen om en stund."
+        technical || !raw
+          ? "Analysen kunde inte nås just nu – försök igen om en liten stund. Fungerar det fortfarande inte? Mejla christoffer@auroramedia.se så gör jag analysen manuellt åt dig."
+          : raw
       );
       setSubmitting(false);
       trackEvent("ai_snabbanalys_error", { compact });

@@ -563,7 +563,13 @@ const AiKartaStart = () => {
       navigate("/ai-karta/resultat");
     } catch (err) {
       console.error("[AiKartaStart] submit failed", err);
-      toast.error(err instanceof Error ? err.message : "Något gick fel. Försök igen.");
+      const raw = err instanceof Error ? err.message : "";
+      const technical = /edge function|failed to fetch|networkerror|non-2xx|timeout/i.test(raw);
+      toast.error(
+        technical || !raw
+          ? "Kartan kunde inte skapas just nu – försök igen om en liten stund. Fungerar det fortfarande inte? Mejla christoffer@auroramedia.se."
+          : raw
+      );
     } finally {
       setSubmitting(false);
     }
