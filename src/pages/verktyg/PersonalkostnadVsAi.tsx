@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
 import {
-  ToolShell, toolByslug, Metric, Bar, ScenarioSwitcher, CopyButton,
+  ToolShell, toolByslug, Metric, ProgressBar, ScenarioSwitcher, CopyButton,
   SliderField, PresetChips, PdfButton, BarComparePanel, fmtKr,
   SCENARIO_FACTOR, type Scenario, type ChartPoint,
 } from "./VerktygShell";
@@ -140,7 +140,7 @@ const PersonalkostnadVsAi = () => {
               <span>Frigjord andel av total kapacitet</span>
               <span>{r.effAuto.toFixed(0)} %</span>
             </div>
-            <Bar value={r.effAuto} max={100} />
+            <ProgressBar value={r.effAuto} max={100} />
           </div>
 
           <p className="vk-mono" style={{ marginTop: 20, maxWidth: "58ch" }}>

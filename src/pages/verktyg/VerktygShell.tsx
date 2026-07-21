@@ -268,7 +268,7 @@ export const Metric = ({
   </div>
 );
 
-export const Bar = ({
+export const ProgressBar = ({
   value,
   max,
   warn = false,

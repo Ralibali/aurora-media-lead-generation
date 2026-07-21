@@ -6,7 +6,7 @@ import {
   ToolShell,
   toolByslug,
   Metric,
-  Bar,
+  ProgressBar,
   ScenarioSwitcher,
   CopyButton,
   SliderField,
@@ -175,7 +175,7 @@ const RoiKalkylator = () => {
               <span>Andel automatiserad tid</span>
               <span>{result.effectiveAuto.toFixed(0)} %</span>
             </div>
-            <Bar value={result.effectiveAuto} max={100} />
+            <ProgressBar value={result.effectiveAuto} max={100} />
           </div>
 
           <div style={{ marginTop: 16 }}>
@@ -185,7 +185,7 @@ const RoiKalkylator = () => {
                 {isFinite(result.paybackMonths) ? `${result.paybackMonths.toFixed(1)} mån` : "–"}
               </span>
             </div>
-            <Bar value={Math.min(24, result.paybackMonths || 24)} max={24} warn={(result.paybackMonths || 0) > 18} />
+            <ProgressBar value={Math.min(24, result.paybackMonths || 24)} max={24} warn={(result.paybackMonths || 0) > 18} />
           </div>
 
           <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 10 }}>

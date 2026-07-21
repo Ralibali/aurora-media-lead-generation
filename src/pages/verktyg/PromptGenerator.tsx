@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
-import { ToolShell, toolByslug, CopyButton, Bar } from "./VerktygShell";
+import { ToolShell, toolByslug, CopyButton, ProgressBar } from "./VerktygShell";
 
 const FORMATS = ["Punktlista", "Kort text", "Utförlig text", "Tabell", "E-post", "Sociala inlägg"];
 const TONES = ["Saklig", "Professionell", "Personlig", "Peppig", "Formell", "Vardaglig"];
@@ -237,7 +237,7 @@ const PromptGenerator = () => {
             <span className="vk-mono">Prompt-kvalitet</span>
             <span className="vk-mono">{qualityScore} / {checklist.length}</span>
           </div>
-          <Bar value={qualityScore} max={checklist.length} warn={qualityScore < 3} />
+          <ProgressBar value={qualityScore} max={checklist.length} warn={qualityScore < 3} />
           <ul className="vk-summary-list" style={{ marginTop: 16 }}>
             {checklist.map((c) => (
               <li key={c.label}>
