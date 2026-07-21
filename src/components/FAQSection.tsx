@@ -31,7 +31,7 @@ export const faqs: FaqItem[] = [
   },
   {
     q: "Vad kostar det?",
-    a: "En prototyp börjar från 14 900 kr, en MVP från 34 900 kr och en mer skalbar SaaS från 89 000 kr. Exakt pris beror på omfattning, integrationer och komplexitet.",
+    a: "En prototyp börjar från 4 900 kr, en MVP från 11 900 kr och en mer skalbar SaaS från 24 900 kr. Exakt pris beror på omfattning, integrationer och komplexitet.",
     category: "Pris",
   },
   {

@@ -545,9 +545,9 @@ const ReceiptsSection = () => {
         </Reveal>
         <div className="vk-receipts" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))" }}>
           {[
-            { tier: "Prototyp", price: "Från 14 900 kr", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar.", stamp: "Fast pris" },
-            { tier: "MVP", price: "Från 34 900 kr", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna", stamp: "Fast pris" },
-            { tier: "SaaS", price: "Från 69 000 kr", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift.", stamp: "Fast pris" },
+            { tier: "Prototyp", price: "Från 4 900 kr", desc: "Klickbar produkt på 3–5 dagar. Testa idén skarpt innan ni satsar.", stamp: "Fast pris" },
+            { tier: "MVP", price: "Från 11 900 kr", desc: "Lanseringsklar på två veckor. Inloggning, betalning, admin.", flag: "Flest väljer denna", stamp: "Fast pris" },
+            { tier: "SaaS", price: "Från 24 900 kr", desc: "Full produkt: kundportal, integrationer (Fortnox, Stripe), drift.", stamp: "Fast pris" },
             { tier: "Konsult", price: "895 kr/timme", desc: "AI-rådgivning eller utveckling i era team – timpris 895 kr eller från 12 000 kr/mån.", stamp: "Konsult" },
           ].map((r, i) => (
             <Reveal delay={i * 0.08} key={r.tier}>
@@ -860,7 +860,7 @@ const Index = () => {
     <>
       <SEO
         title="AI-system och automation för småföretag | Aurora Media"
-        description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 14 900 kr, snabb leverans och kod ni äger själva."
+        description="Aurora Media bygger interna AI-system, automationer och SaaS för svenska småföretag. Fast pris från 4 900 kr, snabb leverans och kod ni äger själva."
         canonical="/"
         jsonLd={[faqSchema, casesSchema, localBusinessSchema]}
       />

@@ -120,7 +120,7 @@ export const organizationSchema = {
   logo: `${SITE_URL}/og-image-sv.jpg`,
   image: `${SITE_URL}/og-image-sv.jpg`,
   description:
-    "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg åt svenska företag. Från 14 900 kr. Leverans på veckor.",
+    "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg åt svenska företag. Från 4 900 kr. Leverans på veckor.",
   email: "info@auroramedia.se",
   address: {
     "@type": "PostalAddress",

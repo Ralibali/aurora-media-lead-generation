@@ -17,8 +17,8 @@ Aurora Media är en svensk AI-driven mjukvarubyrå som bygger SaaS, MVP:er, prot
 
 ## Primära erbjudanden
 
-- SaaS-prototyp från 14 900 kr
-- MVP från 34 900 kr
+- SaaS-prototyp från 4 900 kr
+- MVP från 11 900 kr
 - Skalbar SaaS från 89 000 kr
 - Fast pris, snabb leverans och kod kunden äger
 

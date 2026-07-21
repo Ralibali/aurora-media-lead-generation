@@ -91,9 +91,9 @@ const schema = z.object({
 });
 
 const PAKET_OPTIONS = [
-  { value: "Prototyp", label: "Prototyp – 14 900 kr" },
-  { value: "MVP", label: "MVP – 34 900 kr" },
-  { value: "SaaS", label: "Skalbar SaaS – 69 000 kr" },
+  { value: "Prototyp", label: "Prototyp – 4 900 kr" },
+  { value: "MVP", label: "MVP – 11 900 kr" },
+  { value: "SaaS", label: "Skalbar SaaS – 24 900 kr" },
   { value: "Skraddarsytt", label: "Skräddarsytt – från 89 000 kr" },
   { value: "Hemsida", label: "Hemsida – från 4 900 kr" },
   { value: "E-handel", label: "E-handel – från 19 900 kr" },

@@ -187,9 +187,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/ai-konsult-sverige",
   },
   "/ai-byra-linkoping": {
-    title: "AI-byrå i Linköping | Fast pris från 14 900 kr – Aurora Media",
+    title: "AI-byrå i Linköping | Fast pris från 4 900 kr – Aurora Media",
     description:
-      "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg. Fast pris från 14 900 kr. Leverans på veckor, kod du äger.",
+      "AI-byrå i Linköping som bygger SaaS, AI-automationer och interna verktyg. Fast pris från 4 900 kr. Leverans på veckor, kod du äger.",
     canonical: "https://auroramedia.se/ai-byra-linkoping",
   },
   "/digital-marknadsforing-linkoping": {
@@ -203,7 +203,7 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/seo-byra-linkoping",
   },
   "/ai-automation-linkoping": {
-    title: "AI-automation för företag i Linköping – från 14 900 kr | Aurora Media",
+    title: "AI-automation för företag i Linköping – från 4 900 kr | Aurora Media",
     description: "AI-automation i Linköping: mejl, dokument, offerthantering, Fortnox- och Visma-integrationer. Bygg bort manuellt Excel-arbete med lokal partner.",
     canonical: "https://auroramedia.se/ai-automation-linkoping",
   },
