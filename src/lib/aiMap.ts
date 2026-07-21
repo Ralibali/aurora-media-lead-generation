@@ -114,9 +114,9 @@ export interface ScoredProcess {
 export type TierKey = "prototyp" | "mvp" | "saas";
 
 export const TIERS: Record<TierKey, { label: string; price: number; priceLabel: string }> = {
-  prototyp: { label: "Prototyp", price: 14900, priceLabel: "14 900:-" },
-  mvp:      { label: "MVP",      price: 34900, priceLabel: "34 900:-" },
-  saas:     { label: "SaaS",     price: 69000, priceLabel: "från 69 000:-" },
+  prototyp: { label: "Prototyp", price: 4900, priceLabel: "4 900:-" },
+  mvp:      { label: "MVP",      price: 11900, priceLabel: "11 900:-" },
+  saas:     { label: "SaaS",     price: 24900, priceLabel: "från 24 900:-" },
 };
 
 export function tierForProcess(p: ScoredProcess): TierKey {

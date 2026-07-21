@@ -19,7 +19,7 @@ const BRANCHES: Branch[] = [
     label: "Transport & logistik",
     match: ["åkeri", "transport", "lastbil", "logistik", "frakt", "dispatch", "chaufför", "bud"],
     name: "FleetFlow",
-    pkg: { name: "Aurora Scale", price: "från 69 000 kr", time: "6–10 veckor" },
+    pkg: { name: "Aurora Scale", price: "från 24 900 kr", time: "6–10 veckor" },
     modules: ["Körorder & dispatch", "Chaufförsvy i mobilen", "Fortnox-fakturering", "Spårning & ETA", "Adminpanel"],
   },
   {
@@ -27,7 +27,7 @@ const BRANCHES: Branch[] = [
     label: "E-handel",
     match: ["e-handel", "webshop", "butik", "shop", "sälja", "produkter", "kläder", "webbshop"],
     name: "ButikOS",
-    pkg: { name: "Aurora MVP", price: "från 34 900 kr", time: "3–5 veckor" },
+    pkg: { name: "Aurora MVP", price: "från 11 900 kr", time: "3–5 veckor" },
     modules: ["Produktkatalog", "Kassa med Stripe/Klarna", "Order- & lagerflöde", "Kundkonto", "AI-produktbeskrivningar"],
   },
   {
@@ -35,7 +35,7 @@ const BRANCHES: Branch[] = [
     label: "Bokning & tjänster",
     match: ["boka", "bokning", "städ", "glamping", "tält", "frisör", "massage", "hotell", "camping", "biljett"],
     name: "BokaFlow",
-    pkg: { name: "Aurora MVP", price: "från 34 900 kr", time: "3–5 veckor" },
+    pkg: { name: "Aurora MVP", price: "från 11 900 kr", time: "3–5 veckor" },
     modules: ["Bokningskalender", "Onlinebetalning", "Automatiska gästmail & SMS", "Schema & tilldelning", "Adminpanel"],
   },
   {
@@ -43,7 +43,7 @@ const BRANCHES: Branch[] = [
     label: "Bygg & hantverk",
     match: ["bygg", "hantverk", "snickar", "vvs", "el", "målare", "renovering", "entreprenad"],
     name: "OffertOS",
-    pkg: { name: "Aurora MVP", price: "från 34 900 kr", time: "3–5 veckor" },
+    pkg: { name: "Aurora MVP", price: "från 11 900 kr", time: "3–5 veckor" },
     modules: ["Offertgenerator", "Projektschema", "ROT/RUT-underlag", "Fotodokumentation", "Fakturering"],
   },
   {
@@ -51,7 +51,7 @@ const BRANCHES: Branch[] = [
     label: "Restaurang & café",
     match: ["restaurang", "café", "kaffe", "mat", "pizzeria", "foodtruck", "bar"],
     name: "BordOS",
-    pkg: { name: "Aurora MVP", price: "från 34 900 kr", time: "3–5 veckor" },
+    pkg: { name: "Aurora MVP", price: "från 11 900 kr", time: "3–5 veckor" },
     modules: ["Meny & beställning", "Bordsbokning", "Betalning", "Dagens-schema", "Försäljningsrapporter"],
   },
   {
@@ -59,7 +59,7 @@ const BRANCHES: Branch[] = [
     label: "Ekonomi & administration",
     match: ["ekonomi", "redovisning", "bokföring", "faktura", "löner", "administration", "kvitton"],
     name: "KvittoFlow",
-    pkg: { name: "Aurora Scale", price: "från 69 000 kr", time: "6–10 veckor" },
+    pkg: { name: "Aurora Scale", price: "från 24 900 kr", time: "6–10 veckor" },
     modules: ["Kundportal", "Dokumentinsamling", "Fortnox-integration", "Påminnelseflöden", "Rapporter & export"],
   },
 ];
@@ -69,7 +69,7 @@ const DEFAULT_BRANCH: Branch = {
   label: "SaaS / digital produkt",
   match: [],
   name: "FlowOS",
-  pkg: { name: "Aurora MVP", price: "från 34 900 kr", time: "3–5 veckor" },
+  pkg: { name: "Aurora MVP", price: "från 11 900 kr", time: "3–5 veckor" },
   modules: ["Inloggning & roller", "Databas (Supabase)", "Betalning (Stripe)", "AI-automation", "Adminpanel"],
 };
 

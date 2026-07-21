@@ -25,8 +25,8 @@ const PACKAGES: readonly Package[] = [
     name: "Aurora Sprint",
     modalValue: "Prototyp",
     time: "1–2 veckor",
-    price: "från 14 900 kr",
-    priceFrom: 14900,
+    price: "från 4 900 kr",
+    priceFrom: 4900,
     desc: "Klickbar prototyp eller första fungerande version för att validera idén snabbt.",
     features: [
       "Avgränsning av kärnflödet",
@@ -41,8 +41,8 @@ const PACKAGES: readonly Package[] = [
     name: "Aurora MVP",
     modalValue: "MVP",
     time: "3–5 veckor",
-    price: "från 34 900 kr",
-    priceFrom: 34900,
+    price: "från 11 900 kr",
+    priceFrom: 11900,
     featured: true,
     desc: "Lanseringsbar MVP med riktiga användare, data och de viktigaste funktionerna.",
     features: [
@@ -58,8 +58,8 @@ const PACKAGES: readonly Package[] = [
     name: "Aurora Scale",
     modalValue: "SaaS",
     time: "6–10 veckor",
-    price: "från 69 000 kr",
-    priceFrom: 69000,
+    price: "från 24 900 kr",
+    priceFrom: 24900,
     desc: "Skalbar SaaS eller intern plattform med roller, integrationer och automation.",
     features: [
       "Skalbar systemstruktur",
@@ -74,8 +74,8 @@ const PACKAGES: readonly Package[] = [
     name: "Aurora AI Ops",
     modalValue: "Skraddarsytt",
     time: "Efter scope",
-    price: "från 14 900 kr",
-    priceFrom: 14900,
+    price: "från 4 900 kr",
+    priceFrom: 4900,
     desc: "AI-automationer och interna verktyg för företag som vill kapa manuellt arbete.",
     features: [
       "Processkartläggning",
@@ -184,7 +184,7 @@ const Priser = () => {
     <>
       <SEO
         title="Priser för AI-system, MVP och SaaS"
-        description="Se riktpriser för prototyp, MVP, SaaS och AI-automation. Fast scope, tydlig offert och kod ni äger. Projekt från 14 900 kr."
+        description="Se riktpriser för prototyp, MVP, SaaS och AI-automation. Fast scope, tydlig offert och kod ni äger. Projekt från 4 900 kr."
         canonical="/priser"
         jsonLd={[pricingSchema, faqSchema]}
       />
@@ -203,7 +203,7 @@ const Priser = () => {
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="vk-hero-sub">
-                  Börja från 14 900 kr. Vi ramar in scope, pris och leverans innan bygget startar – sedan får ni en produkt som går att använda på riktigt.
+                  Börja från 4 900 kr. Vi ramar in scope, pris och leverans innan bygget startar – sedan får ni en produkt som går att använda på riktigt.
                 </p>
               </Reveal>
               <Reveal delay={0.3}>

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, RefreshCw } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
-import { ToolShell, toolByslug, CopyButton, Metric, Bar, RadarPanel, PdfButton } from "./VerktygShell";
+import { ToolShell, toolByslug, CopyButton, Metric, ProgressBar, RadarPanel, PdfButton } from "./VerktygShell";
 
 type Q = { id: string; text: string; topic: string };
 
@@ -183,7 +183,7 @@ const AiMognadsanalys = () => {
         </div>
 
         <div style={{ marginTop: 16 }}>
-          <Bar value={score} max={20} />
+          <ProgressBar value={score} max={20} />
         </div>
 
         <RadarPanel title="Mognad per område" data={radarData} />

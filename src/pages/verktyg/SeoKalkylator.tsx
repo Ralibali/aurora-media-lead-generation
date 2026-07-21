@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
 import {
-  ToolShell, toolByslug, Metric, Bar, ScenarioSwitcher, CopyButton,
+  ToolShell, toolByslug, Metric, ProgressBar, ScenarioSwitcher, CopyButton,
   SliderField, PresetChips, PdfButton, AreaChartPanel, fmtKr,
   SCENARIO_FACTOR, type Scenario, type ChartPoint,
 } from "./VerktygShell";
@@ -148,12 +148,12 @@ const SeoKalkylator = () => {
               <span>Trafik nu vs möjlig</span>
               <span>{fmt(visits)} → {fmt(result.newVisits)}</span>
             </div>
-            <Bar value={visits} max={result.newVisits || 1} />
+            <ProgressBar value={visits} max={result.newVisits || 1} />
             <div className="vk-mono" style={{ marginTop: 16, marginBottom: 8, display: "flex", justifyContent: "space-between" }}>
               <span>Omsättning nu vs möjlig / år</span>
               <span>{fmt(result.currentRev * 12)} → {fmt(result.currentRev * 12 + result.extraRevYear)} kr</span>
             </div>
-            <Bar value={result.currentRev * 12} max={(result.currentRev * 12 + result.extraRevYear) || 1} />
+            <ProgressBar value={result.currentRev * 12} max={(result.currentRev * 12 + result.extraRevYear) || 1} />
           </div>
 
           <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 10 }}>
