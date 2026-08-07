@@ -28,6 +28,22 @@
       gtag('config', 'AW-10941540384');
     </script>
 
+    <!-- Google Ads conversion (klick) – AI-kartan -->
+    <script>
+      function gtag_report_conversion(url) {
+        var callback = function () {
+          if (typeof url !== 'undefined') { window.location = url; }
+        };
+        gtag('event', 'conversion', {
+          'send_to': 'AW-10941540384/J-6HCLb0q90cEKDQquEo',
+          'value': 1.0,
+          'currency': 'SEK',
+          'event_callback': callback
+        });
+        return false;
+      }
+    </script>
+
 
     <title>Aurora Media AB | AI-driven mjukvarupartner för svenska företag</title>
     <meta name="description" content="Aurora Media bygger AI-lösningar, interna system, appar och SaaS för svenska företag. Snabb leverans, tydligt scope och kod ni äger." />
