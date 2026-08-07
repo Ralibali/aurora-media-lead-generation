@@ -380,7 +380,7 @@ Deno.serve(async (req: Request) => {
   let processed = 0, sent = 0, skipped = 0, errors = 0;
 
 
-  for (const s of (sequences as Sequence[] | null) ?? []) {
+  for (const s of seqList) {
     if (sent >= MAX_PER_RUN) break;
     processed++;
     const age = daysSince(s.created_at);
