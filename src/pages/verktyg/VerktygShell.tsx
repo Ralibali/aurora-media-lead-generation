@@ -632,6 +632,8 @@ export const ToolShell = ({
   ctaHref?: string;
   ctaLabel?: string;
 }) => {
+  const { open: openContact } = useContactModal();
+
   useEffect(() => {
     setSEOMeta({
       title: meta.seoTitle,
