@@ -29,6 +29,8 @@ import {
   SITE_URL,
 } from "@/lib/seoHelpers";
 import { trackEvent } from "@/lib/analytics";
+import { useContactModal } from "@/components/ContactModal";
+
 
 /* ─────────────────────────────────────────────────────────────
    ToolShell – gemensam layout för alla /verktyg-sidor.
