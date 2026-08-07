@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
 import { useContactModal } from "@/components/ContactModal";
-import { setSEOMeta } from "@/lib/seoHelpers";
+import { trackEvent } from "@/lib/analytics";
+import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpers";
+
 
 const STEPS = [
   { num: "01", name: "Samtal", time: "30 min", desc: "Ni berättar om problemet eller idén. Vi ställer frågor. Vi säger ja eller nej och varför.", deliverable: "Tydlig bild av om vi ska jobba ihop." },
