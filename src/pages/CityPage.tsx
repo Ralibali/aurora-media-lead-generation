@@ -31,9 +31,9 @@ export default function CityPage() {
 
   useEffect(() => {
     if (!city || !seo || !slug) {
-      navigate("/404", { replace: true });
       return;
     }
+
 
     setSEOMeta({
       title: seoTitle,
