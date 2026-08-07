@@ -374,7 +374,11 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const seqList = ((sequences as Sequence[] | null) ?? []);
+  const pdf_fallbacks = await sendPdfFallbacks(admin, RESEND_API_KEY, seqList);
+
   let processed = 0, sent = 0, skipped = 0, errors = 0;
+
 
   for (const s of (sequences as Sequence[] | null) ?? []) {
     if (sent >= MAX_PER_RUN) break;
