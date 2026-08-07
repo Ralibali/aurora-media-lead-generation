@@ -7,6 +7,7 @@ import "@/styles/lumina.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { cities } from "@/lib/cityContent";
 
 // Konverteringskritiska sidor hålls i huvudbundlen så att den statiska
 // förhandsvisningen kan bytas mot riktig sida utan laddningssteg.
@@ -561,8 +562,12 @@ const App = () => (
               <Route path="/verktyg/ai-mognadsanalys" element={<Suspense fallback={<VerktygFallback />}><AiMognadsanalys /></Suspense>} />
               <Route path="/verktyg/personalkostnad-vs-ai" element={<Suspense fallback={<VerktygFallback />}><PersonalkostnadVsAi /></Suspense>} />
               <Route path="/verktyg/prompt-generator" element={<Suspense fallback={<VerktygFallback />}><PromptGenerator /></Suspense>} />
-              <Route path="/saas-utveckling-:city" element={<CityPage />} />
-              <Route path="/ai-byra-:city" element={<CityPage />} />
+              {cities.filter((c) => c.slug !== "linkoping").map((c) => (
+                <Route key={`ai-${c.slug}`} path={`/ai-byra-${c.slug}`} element={<CityPage />} />
+              ))}
+              {cities.map((c) => (
+                <Route key={`saas-${c.slug}`} path={`/saas-utveckling-${c.slug}`} element={<CityPage />} />
+              ))}
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
