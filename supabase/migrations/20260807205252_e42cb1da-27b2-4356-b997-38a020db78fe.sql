@@ -1,0 +1,1 @@
+ALTER TABLE public.ai_map_leads ADD COLUMN IF NOT EXISTS pdf_sent_at timestamptz;
