@@ -72,6 +72,12 @@ const AiKartaForm = () => {
       return;
     }
 
+    // Google Ads-konvertering (klick på Skicka, efter godkänd validering)
+    try {
+      (window as unknown as { gtag_report_conversion?: (url?: string) => boolean })
+        .gtag_report_conversion?.();
+    } catch { /* analytics får aldrig blockera flödet */ }
+
     setStatus("submitting");
 
     try {
