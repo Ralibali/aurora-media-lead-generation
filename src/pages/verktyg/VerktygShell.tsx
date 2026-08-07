@@ -722,19 +722,54 @@ export const ToolShell = ({
             Disclaimer: verktyget ger en förenklad uppskattning för planering.
             Resultaten är inte en garanti, prognos eller offert.
           </p>
-          {ctaHref && (
-            <div style={{ marginTop: 32 }}>
+          <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <button
+              type="button"
+              className="vk-btn vk-btn-primary"
+              onClick={() => {
+                trackEvent("verktyg_shell_book", { tool: meta.slug });
+                openContact("AI-automation", { internalNote: `Kom från verktyget: ${meta.title}` });
+              }}
+            >
+              Boka kostnadsfri genomgång →
+            </button>
+            {ctaHref && (
               <Link
                 to={ctaHref}
-                className="vk-btn vk-btn-primary"
+                className="vk-btn vk-btn-ghost"
                 onClick={() => trackEvent("verktyg_shell_cta", { tool: meta.slug, target: ctaHref })}
               >
                 {ctaLabel ?? "Läs mer"} →
               </Link>
+            )}
+          </div>
+
+          <div style={{ marginTop: 48 }}>
+            <span className="vk-mono">Fler gratisverktyg</span>
+            <div
+              style={{
+                marginTop: 16,
+                display: "grid",
+                gap: 10,
+                gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+              }}
+            >
+              {TOOLS.filter((t) => t.slug !== meta.slug).map((t) => (
+                <Link
+                  key={t.slug}
+                  to={`/verktyg/${t.slug}`}
+                  className="vk-mono"
+                  style={{ textDecoration: "none" }}
+                  onClick={() => trackEvent("verktyg_cross_link", { from: meta.slug, to: t.slug })}
+                >
+                  → {t.title}
+                </Link>
+              ))}
             </div>
-          )}
+          </div>
         </div>
       </section>
+
     </VerkstadLayout>
   );
 };
