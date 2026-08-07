@@ -1,8 +1,11 @@
 import { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
 import { useContactModal } from "@/components/ContactModal";
-import { setSEOMeta } from "@/lib/seoHelpers";
+import { trackEvent } from "@/lib/analytics";
+import { setSEOMeta, setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpers";
+
 
 const STEPS = [
   { num: "01", name: "Samtal", time: "30 min", desc: "Ni berättar om problemet eller idén. Vi ställer frågor. Vi säger ja eller nej och varför.", deliverable: "Tydlig bild av om vi ska jobba ihop." },
@@ -30,11 +33,43 @@ const Process = () => {
   const { open } = useContactModal();
   useEffect(() => {
     setSEOMeta({
-      title: "Process — från samtal till lansering på veckor | Aurora Media",
-      description: "Hur Aurora Media jobbar: samtal, fast offert, bygge med live-access, fullständig kodöverlämning.",
+      title: "Så jobbar vi — process från samtal till lansering | Aurora Media",
+      description:
+        "Fast pris, fast scope och fast deadline. Så jobbar Aurora Media: samtal, offert inom 24 h, bygge på 1–6 veckor och full kodöverlämning.",
       canonical: "/process", ogImage: "/og-image-sv.jpg",
     });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Process", url: "/process" },
+    ]);
+    setJsonLd("process-faq", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+    setJsonLd("process-howto", {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: "Så jobbar Aurora Media – från samtal till lansering",
+      url: `${SITE_URL}/process`,
+      inLanguage: "sv-SE",
+      step: STEPS.map((s, i) => ({
+        "@type": "HowToStep",
+        position: i + 1,
+        name: s.name,
+        text: s.desc,
+      })),
+    });
+    return () => {
+      removeJsonLd("process-faq");
+      removeJsonLd("process-howto");
+    };
   }, []);
+
 
   return (
     <NordicLayout>
@@ -48,9 +83,23 @@ const Process = () => {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="lead" style={{ marginTop: 24 }}>
-              Ni betalar för bygget — inte för att vi lär oss nya ramverk.
+              Fast pris, fast scope, fast deadline. Ni betalar för bygget — inte för att vi lär oss nya ramverk.
             </p>
           </Reveal>
+          <Reveal delay={0.3}>
+            <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <button
+                onClick={() => { trackEvent("process_cta_click", { placement: "hero" }); open(); }}
+                className="btn btn-moss"
+              >
+                Boka 30-min samtal <span className="a"><ArrowRight size={14} /></span>
+              </button>
+              <Link className="btn" to="/priser" onClick={() => trackEvent("process_tool_link", { tool: "priser_hero" })}>
+                Se priser
+              </Link>
+            </div>
+          </Reveal>
+
         </div>
       </section>
 
@@ -85,6 +134,21 @@ const Process = () => {
 
       <section className="section">
         <div className="wrap">
+          <div className="meta-label">Räkna innan ni bokar</div>
+          <p className="body" style={{ marginTop: 18, maxWidth: "62ch" }}>
+            Vill ni ha en siffra före samtalet? Använd våra gratisverktyg – inget konto, inga mejl.
+          </p>
+          <div className="ind-grid" style={{ marginTop: 20 }}>
+            <Link className="ind-cell" to="/verktyg/app-prisraknare" onClick={() => trackEvent("process_tool_link", { tool: "app-prisraknare" })}>→ App-prisräknare</Link>
+            <Link className="ind-cell" to="/verktyg/ai-roi-kalkylator" onClick={() => trackEvent("process_tool_link", { tool: "ai-roi-kalkylator" })}>→ AI ROI-kalkylator</Link>
+            <Link className="ind-cell" to="/verktyg/ai-mognadsanalys" onClick={() => trackEvent("process_tool_link", { tool: "ai-mognadsanalys" })}>→ AI-mognadsanalys</Link>
+            <Link className="ind-cell" to="/priser" onClick={() => trackEvent("process_tool_link", { tool: "priser" })}>→ Priser och paket</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
           <div className="meta-label">Vanliga frågor</div>
           <div className="feat-list" style={{ marginTop: 28 }}>
             {FAQS.map((f) => (
@@ -103,12 +167,17 @@ const Process = () => {
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
           <div className="meta-label">Redo?</div>
           <h2 className="h2" style={{ marginTop: 18 }}>Starta med <span className="it">ett samtal.</span></h2>
-          <p className="lead" style={{ marginTop: 22 }}>30 minuter. Ni berättar. Vi berättar om det är genomförbart och vad det kostar.</p>
-          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
+          <p className="lead" style={{ marginTop: 22 }}>30 minuter. Ni berättar. Vi berättar om det är genomförbart och vad det kostar. Svar på offert inom 24 timmar.</p>
+          <button
+            onClick={() => { trackEvent("process_cta_click", { placement: "cta_band" }); open(); }}
+            className="btn btn-moss"
+            style={{ marginTop: 28 }}
+          >
             Begär offert <span className="a"><ArrowRight size={14} /></span>
           </button>
         </div>
       </section>
+
     </NordicLayout>
   );
 };
