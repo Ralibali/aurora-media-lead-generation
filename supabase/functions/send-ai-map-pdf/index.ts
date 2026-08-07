@@ -13,6 +13,11 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+// Samma avsändare som uppföljningsmejlen – ett domänrykte, inte två.
+const FROM = "Christoffer på Aurora Media <christoffer@auroramedia.se>";
+const REPLY_TO = "christoffer@auroramedia.se";
+const UNSUB_BASE = "https://cyymcdqkpvcvwjoqxbco.functions.supabase.co/ai-map-unsubscribe";
+
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -48,7 +53,7 @@ Deno.serve(async (req: Request) => {
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
     const { data: lead, error } = await admin
       .from("ai_map_leads")
-      .select("email, contact_name, company_name, total_potential")
+      .select("id, email, contact_name, company_name, total_potential, pdf_sent_at")
       .eq("share_token", token)
       .maybeSingle();
 
@@ -58,12 +63,31 @@ Deno.serve(async (req: Request) => {
     }
     if (!lead?.email) return json({ error: "not_found" }, 404);
 
-    const firstName = escape((lead.contact_name || "").split(" ")[0] || "där");
-    const company = escape(lead.company_name || "ert företag");
+    // Idempotent: resultatsidan kan monteras om (reload, tillbaka-knapp).
+    if (lead.pdf_sent_at) {
+      return json({ ok: true, already_sent: true, sent_at: lead.pdf_sent_at });
+    }
+
+    // Avregistreringslänk – samma token som uppföljningssekvensen använder.
+    const { data: seq } = await admin
+      .from("ai_map_email_sequence")
+      .select("unsubscribe_token")
+      .eq("lead_id", lead.id)
+      .maybeSingle();
+    const unsubUrl = seq?.unsubscribe_token
+      ? `${UNSUB_BASE}?token=${encodeURIComponent(seq.unsubscribe_token)}`
+      : null;
+
+    const firstNameRaw = (lead.contact_name || "").split(" ")[0] || "där";
+    const firstName = escape(firstNameRaw);
+    const companyRaw = lead.company_name || "ert företag";
+    const company = escape(companyRaw);
     const resultUrl = `https://auroramedia.se/ai-karta/resultat?t=${encodeURIComponent(token)}&ref=email-pdf`;
+    const preheader = `Er AI-karta för ${companyRaw} – PDF bifogad.`;
 
     const html = `
       <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:600px;color:#14171A;line-height:1.55;">
+        <div style="display:none;max-height:0;overflow:hidden;color:#ffffff;">${escape(preheader)}</div>
         <h1 style="margin:0 0 14px;font-size:22px;letter-spacing:-0.01em;">Hej ${firstName}!</h1>
         <p style="margin:0 0 14px;">Här är er AI-karta för <strong>${company}</strong> – bifogad som PDF. Den visar vad era processer kostar idag, vilken som bör automatiseras först och vad ett första bygge kostar med återbetalningstid.</p>
         <p style="margin:0 0 18px;">Kartan finns också kvar online om du vill se den igen eller dela den med kollegor:</p>
@@ -71,27 +95,57 @@ Deno.serve(async (req: Request) => {
           <a href="${resultUrl}" style="display:inline-block;background:#E8500A;color:#ffffff;text-decoration:none;padding:13px 24px;border-radius:10px;font-size:15px;font-weight:600;">Öppna er AI-karta →</a>
         </p>
         <p style="margin:0 0 6px;">Vill du att jag pekar ut exakt vad första bygget blir för er? Svara direkt på det här mejlet, eller boka 20 minuter via knappen i kartan – kostnadsfritt och utan köpkrav.</p>
-        <p style="margin:22px 0 0;">/ Christoffer<br/><span style="color:#4A5058;font-size:13px;">Aurora Media AB · Linköping · christoffer@auroramedia.se</span></p>
+        <p style="margin:22px 0 0;">/ Christoffer<br/><span style="color:#4A5058;font-size:13px;">Aurora Media AB · Org.nr 559272-0220 · Linköping · christoffer@auroramedia.se</span></p>
+        ${unsubUrl ? `<p style="margin:18px 0 0;font-size:12px;color:#8A9099;">Du får det här mejlet eftersom du fyllde i AI-kartan på auroramedia.se. <a href="${unsubUrl}" style="color:#8A9099;">Avregistrera dig från uppföljningen</a>.</p>` : ""}
       </div>`;
+
+    const text = [
+      `Hej ${firstNameRaw}!`,
+      "",
+      `Här är er AI-karta för ${companyRaw} – bifogad som PDF. Den visar vad era processer kostar idag, vilken som bör automatiseras först och vad ett första bygge kostar med återbetalningstid.`,
+      "",
+      `Kartan finns också online: ${resultUrl}`,
+      "",
+      "Vill du att jag pekar ut exakt vad första bygget blir för er? Svara direkt på det här mejlet, eller boka 20 minuter via länken – kostnadsfritt och utan köpkrav.",
+      "",
+      "/ Christoffer",
+      "Aurora Media AB · Org.nr 559272-0220 · Linköping · christoffer@auroramedia.se",
+      unsubUrl ? `\nAvregistrera dig från uppföljningen: ${unsubUrl}` : "",
+    ].join("\n");
 
     const resp = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: "Aurora Media <noreply@auroramedia.se>",
+        from: FROM,
         to: [lead.email],
-        reply_to: "christoffer@auroramedia.se",
+        reply_to: REPLY_TO,
         subject: `Er AI-karta – ${lead.company_name || "personlig analys"}`,
         html,
+        text,
         attachments: [{ filename, content: pdfBase64 }],
+        ...(unsubUrl
+          ? {
+              headers: {
+                "List-Unsubscribe": `<${unsubUrl}>`,
+                "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+              },
+            }
+          : {}),
       }),
     });
 
     if (!resp.ok) {
       const txt = await resp.text();
       console.error("[send-ai-map-pdf] resend error", resp.status, txt);
-      return json({ error: "email_failed" }, 502);
+      return json({ error: "email_failed", status: resp.status, details: txt }, 502);
     }
+
+    const { error: markErr } = await admin
+      .from("ai_map_leads")
+      .update({ pdf_sent_at: new Date().toISOString() })
+      .eq("id", lead.id);
+    if (markErr) console.error("[send-ai-map-pdf] mark err", markErr);
 
     console.log("[send-ai-map-pdf] sent to", lead.email, "lead token", token.slice(0, 8));
     return json({ ok: true });
