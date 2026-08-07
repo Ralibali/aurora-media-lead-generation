@@ -561,8 +561,12 @@ const App = () => (
               <Route path="/verktyg/ai-mognadsanalys" element={<Suspense fallback={<VerktygFallback />}><AiMognadsanalys /></Suspense>} />
               <Route path="/verktyg/personalkostnad-vs-ai" element={<Suspense fallback={<VerktygFallback />}><PersonalkostnadVsAi /></Suspense>} />
               <Route path="/verktyg/prompt-generator" element={<Suspense fallback={<VerktygFallback />}><PromptGenerator /></Suspense>} />
-              <Route path="/saas-utveckling-:city" element={<CityPage />} />
-              <Route path="/ai-byra-:city" element={<CityPage />} />
+              {cities.filter((c) => c.slug !== "linkoping").map((c) => (
+                <Route key={`ai-${c.slug}`} path={`/ai-byra-${c.slug}`} element={<CityPage />} />
+              ))}
+              {cities.map((c) => (
+                <Route key={`saas-${c.slug}`} path={`/saas-utveckling-${c.slug}`} element={<CityPage />} />
+              ))}
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
