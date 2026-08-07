@@ -120,6 +120,21 @@ const Process = () => {
 
       <section className="section">
         <div className="wrap">
+          <div className="meta-label">Räkna innan ni bokar</div>
+          <p className="body" style={{ marginTop: 18, maxWidth: "62ch" }}>
+            Vill ni ha en siffra före samtalet? Använd våra gratisverktyg – inget konto, inga mejl.
+          </p>
+          <div className="ind-grid" style={{ marginTop: 20 }}>
+            <Link className="ind-cell" to="/verktyg/app-prisraknare" onClick={() => trackEvent("process_tool_link", { tool: "app-prisraknare" })}>→ App-prisräknare</Link>
+            <Link className="ind-cell" to="/verktyg/ai-roi-kalkylator" onClick={() => trackEvent("process_tool_link", { tool: "ai-roi-kalkylator" })}>→ AI ROI-kalkylator</Link>
+            <Link className="ind-cell" to="/verktyg/ai-mognadsanalys" onClick={() => trackEvent("process_tool_link", { tool: "ai-mognadsanalys" })}>→ AI-mognadsanalys</Link>
+            <Link className="ind-cell" to="/priser" onClick={() => trackEvent("process_tool_link", { tool: "priser" })}>→ Priser och paket</Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="wrap">
           <div className="meta-label">Vanliga frågor</div>
           <div className="feat-list" style={{ marginTop: 28 }}>
             {FAQS.map((f) => (
@@ -138,12 +153,17 @@ const Process = () => {
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
           <div className="meta-label">Redo?</div>
           <h2 className="h2" style={{ marginTop: 18 }}>Starta med <span className="it">ett samtal.</span></h2>
-          <p className="lead" style={{ marginTop: 22 }}>30 minuter. Ni berättar. Vi berättar om det är genomförbart och vad det kostar.</p>
-          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
+          <p className="lead" style={{ marginTop: 22 }}>30 minuter. Ni berättar. Vi berättar om det är genomförbart och vad det kostar. Svar på offert inom 24 timmar.</p>
+          <button
+            onClick={() => { trackEvent("process_cta_click", { placement: "cta_band" }); open(); }}
+            className="btn btn-moss"
+            style={{ marginTop: 28 }}
+          >
             Begär offert <span className="a"><ArrowRight size={14} /></span>
           </button>
         </div>
       </section>
+
     </NordicLayout>
   );
 };
