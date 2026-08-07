@@ -83,9 +83,23 @@ const Process = () => {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="lead" style={{ marginTop: 24 }}>
-              Ni betalar för bygget — inte för att vi lär oss nya ramverk.
+              Fast pris, fast scope, fast deadline. Ni betalar för bygget — inte för att vi lär oss nya ramverk.
             </p>
           </Reveal>
+          <Reveal delay={0.3}>
+            <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <button
+                onClick={() => { trackEvent("process_cta_click", { placement: "hero" }); open(); }}
+                className="btn btn-moss"
+              >
+                Boka 30-min samtal <span className="a"><ArrowRight size={14} /></span>
+              </button>
+              <Link className="btn" to="/priser" onClick={() => trackEvent("process_tool_link", { tool: "priser_hero" })}>
+                Se priser
+              </Link>
+            </div>
+          </Reveal>
+
         </div>
       </section>
 
