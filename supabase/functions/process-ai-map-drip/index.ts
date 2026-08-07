@@ -421,7 +421,7 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  return new Response(JSON.stringify({ ok: true, processed, sent, skipped, errors }), {
+  return new Response(JSON.stringify({ ok: true, processed, sent, skipped, errors, pdf_fallbacks }), {
     status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
