@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
+import NotFound from "@/pages/NotFound";
 import { useContactModal } from "@/components/ContactModal";
 import { getCity, getCitySeo, cities } from "@/lib/cityContent";
 import { paket } from "@/components/PaketSection";
@@ -15,13 +16,13 @@ import {
 } from "@/lib/seoHelpers";
 
 export default function CityPage() {
-  const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
   const navigate = useNavigate();
   const { open } = useContactModal();
 
   const isAiVariant = location.pathname.startsWith("/ai-byra-");
   const routeVariant = isAiVariant ? "ai-byra" : "saas-utveckling";
+  const slug = location.pathname.replace(/^\/(ai-byra|saas-utveckling)-/, "").replace(/\/+$/, "");
 
   const city = slug ? getCity(slug) : null;
   const seo = slug ? getCitySeo(slug) : null;
