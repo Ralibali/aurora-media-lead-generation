@@ -109,6 +109,7 @@ export type Database = {
           ip: string | null
           notes: string | null
           pain_areas: string[]
+          pdf_sent_at: string | null
           phone: string | null
           share_token: string
           status: string
@@ -130,6 +131,7 @@ export type Database = {
           ip?: string | null
           notes?: string | null
           pain_areas?: string[]
+          pdf_sent_at?: string | null
           phone?: string | null
           share_token?: string
           status?: string
@@ -151,6 +153,7 @@ export type Database = {
           ip?: string | null
           notes?: string | null
           pain_areas?: string[]
+          pdf_sent_at?: string | null
           phone?: string | null
           share_token?: string
           status?: string

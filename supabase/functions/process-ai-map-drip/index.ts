@@ -233,6 +233,25 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
   };
 }
 
+// Enkel HTML → plain text. Rena HTML-mejl utan text-del får högre spampoäng.
+function htmlToText(html: string): string {
+  return html
+    .replace(/<div[^>]*display:none[\s\S]*?<\/div>/gi, "")
+    .replace(/<a[^>]*href="([^"]*)"[^>]*>([\s\S]*?)<\/a>/gi, "$2 ($1)")
+    .replace(/<\/(p|div|tr|h1|h2|h3|li|table)>/gi, "\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 async function sendEmail(apiKey: string, to: string, subject: string, html: string, token: string): Promise<boolean> {
   const unsubUrl = `${UNSUB_BASE}?token=${encodeURIComponent(token)}`;
   const resp = await fetch("https://api.resend.com/emails", {
@@ -244,6 +263,7 @@ async function sendEmail(apiKey: string, to: string, subject: string, html: stri
       reply_to: REPLY_TO,
       subject,
       html,
+      text: htmlToText(html),
       headers: {
         "List-Unsubscribe": `<${unsubUrl}>, <mailto:unsubscribe@auroramedia.se?subject=unsubscribe-${token}>`,
         "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
@@ -256,6 +276,66 @@ async function sendEmail(apiKey: string, to: string, subject: string, html: stri
   }
   return true;
 }
+
+// Fallback: om resultatsidan aldrig hann rendera PDF:en (stängd flik, mobil som
+// somnar) har leadet ingen pdf_sent_at. Skicka då länk till kartan server-side.
+async function sendPdfFallbacks(
+  admin: ReturnType<typeof createClient>,
+  apiKey: string,
+  sequences: Sequence[],
+): Promise<number> {
+  const candidates = sequences.filter((s) => {
+    const age = daysSince(s.created_at);
+    return age >= 0.08 && age <= 20;
+  });
+  if (candidates.length === 0) return 0;
+
+  const { data: leads, error } = await admin
+    .from("ai_map_leads")
+    .select("id, company_name, contact_name, email, share_token")
+    .in("id", candidates.map((s) => s.lead_id))
+    .is("pdf_sent_at", null)
+    .limit(25);
+
+  if (error) {
+    console.error("[drip] pdf fallback query failed", error);
+    return 0;
+  }
+
+  let sent = 0;
+  for (const lead of (leads ?? []) as Lead[]) {
+    const seq = candidates.find((s) => s.lead_id === lead.id);
+    if (!seq || !lead.email || !lead.share_token) continue;
+
+    const firstName = escape((lead.contact_name || "").split(" ")[0] || "där");
+    const company = escape(normalizeCompanyName(lead.company_name));
+    const url = `${SITE_URL}/ai-karta/resultat?t=${encodeURIComponent(lead.share_token)}&ref=pdf-fallback`;
+    const unsubUrl = `${UNSUB_BASE}?token=${encodeURIComponent(seq.unsubscribe_token)}`;
+    const html = shellHtml({
+      preheader: `Er AI-karta för ${company} ligger kvar online`,
+      eyebrow: "Er analys",
+      title: `Hej ${firstName} – här är er AI-karta`,
+      bodyHtml: `
+        <p style="margin:0 0 16px;">Ni fyllde i AI-kartan för <strong>${company}</strong>. Här är länken till hela analysen – vad era processer kostar idag, vilken som bör automatiseras först och vad ett första bygge kostar med återbetalningstid.</p>
+        <p style="margin:0 0 16px;">Öppnar du länken kan du också ladda ner kartan som PDF och dela den med kollegor.</p>`,
+      ctaLabel: "Öppna er AI-karta",
+      ctaHref: url,
+      unsubUrl,
+    });
+
+    const ok = await sendEmail(apiKey, lead.email, `Er AI-karta – ${lead.company_name || "personlig analys"}`, html, seq.unsubscribe_token);
+    if (!ok) continue;
+
+    const { error: markErr } = await admin
+      .from("ai_map_leads")
+      .update({ pdf_sent_at: new Date().toISOString() })
+      .eq("id", lead.id);
+    if (markErr) console.error("[drip] pdf fallback mark failed", markErr);
+    else sent++;
+  }
+  return sent;
+}
+
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -294,9 +374,13 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const seqList = ((sequences as Sequence[] | null) ?? []);
+  const pdf_fallbacks = await sendPdfFallbacks(admin, RESEND_API_KEY, seqList);
+
   let processed = 0, sent = 0, skipped = 0, errors = 0;
 
-  for (const s of (sequences as Sequence[] | null) ?? []) {
+
+  for (const s of seqList) {
     if (sent >= MAX_PER_RUN) break;
     processed++;
     const age = daysSince(s.created_at);
@@ -337,7 +421,7 @@ Deno.serve(async (req: Request) => {
     }
   }
 
-  return new Response(JSON.stringify({ ok: true, processed, sent, skipped, errors }), {
+  return new Response(JSON.stringify({ ok: true, processed, sent, skipped, errors, pdf_fallbacks }), {
     status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
