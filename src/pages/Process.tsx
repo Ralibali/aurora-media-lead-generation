@@ -33,11 +33,43 @@ const Process = () => {
   const { open } = useContactModal();
   useEffect(() => {
     setSEOMeta({
-      title: "Process — från samtal till lansering på veckor | Aurora Media",
-      description: "Hur Aurora Media jobbar: samtal, fast offert, bygge med live-access, fullständig kodöverlämning.",
+      title: "Så jobbar vi — process från samtal till lansering | Aurora Media",
+      description:
+        "Fast pris, fast scope och fast deadline. Så jobbar Aurora Media: samtal, offert inom 24 h, bygge på 1–6 veckor och full kodöverlämning.",
       canonical: "/process", ogImage: "/og-image-sv.jpg",
     });
+    setBreadcrumb([
+      { name: "Hem", url: "/" },
+      { name: "Process", url: "/process" },
+    ]);
+    setJsonLd("process-faq", {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+    setJsonLd("process-howto", {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: "Så jobbar Aurora Media – från samtal till lansering",
+      url: `${SITE_URL}/process`,
+      inLanguage: "sv-SE",
+      step: STEPS.map((s, i) => ({
+        "@type": "HowToStep",
+        position: i + 1,
+        name: s.name,
+        text: s.desc,
+      })),
+    });
+    return () => {
+      removeJsonLd("process-faq");
+      removeJsonLd("process-howto");
+    };
   }, []);
+
 
   return (
     <NordicLayout>
