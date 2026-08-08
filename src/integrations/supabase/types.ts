@@ -264,6 +264,36 @@ export type Database = {
         }
         Relationships: []
       }
+      email_templates: {
+        Row: {
+          body_html: string
+          body_text: string
+          created_at: string
+          id: string
+          key: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body_html: string
+          body_text?: string
+          created_at?: string
+          id?: string
+          key: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          body_text?: string
+          created_at?: string
+          id?: string
+          key?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       faq_cta_clicks: {
         Row: {
           category: string | null
