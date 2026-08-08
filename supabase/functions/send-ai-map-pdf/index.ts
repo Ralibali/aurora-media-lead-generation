@@ -148,7 +148,7 @@ Deno.serve(async (req: Request) => {
         from: FROM,
         to: [lead.email],
         reply_to: REPLY_TO,
-        subject: `Er AI-karta – ${lead.company_name || "personlig analys"}`,
+        subject,
         html,
         text,
         attachments: [{ filename, content: pdfBase64 }],
