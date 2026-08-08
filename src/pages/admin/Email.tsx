@@ -1,6 +1,130 @@
 import { useCallback, useEffect, useState } from "react";
-import { Mail as MailIcon } from "lucide-react";
+import { Mail as MailIcon, Save } from "lucide-react";
+import { toast } from "sonner";
 import AdminShell, { adminFetch, AdminStatus } from "./AdminShell";
+
+type Template = { subject: string; body_html: string; body_text: string; updated_at?: string };
+
+const input: React.CSSProperties = {
+  width: "100%",
+  border: "1px solid var(--linje)",
+  borderRadius: 8,
+  padding: "10px 12px",
+  fontSize: 14,
+  fontFamily: "inherit",
+  background: "#fff",
+  color: "inherit",
+};
+
+function TemplateEditor() {
+  const [tpl, setTpl] = useState<Template>({ subject: "", body_html: "", body_text: "" });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    adminFetch("admin-email-template", { method: "POST", body: JSON.stringify({ action: "get", key: "ai_map_pdf" }) })
+      .then((d: { template?: Template }) => {
+        if (cancelled) return;
+        if (d?.template) setTpl({ ...d.template });
+        setLoading(false);
+      })
+      .catch((e: unknown) => {
+        if (cancelled) return;
+        setError(e instanceof Error ? e.message : "Kunde inte hämta mallen.");
+        setLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const save = async () => {
+    if (!tpl.subject.trim()) { setError("Ämnesrad krävs."); return; }
+    if (!tpl.body_html.trim()) { setError("Brödtext krävs."); return; }
+    setError(null);
+    setSaving(true);
+    try {
+      await adminFetch("admin-email-template", {
+        method: "POST",
+        body: JSON.stringify({ action: "save", key: "ai_map_pdf", ...tpl }),
+      });
+      toast.success("Mallen är sparad – används vid nästa PDF-utskick.");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Kunde inte spara mallen.";
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 22, ...card }}>
+      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <MailIcon size={16} color="var(--gran)" />
+        <p className="vk-mono" style={{ color: "var(--granbark-mut)", margin: 0 }}>
+          Mall: AI-karta PDF-utskick
+        </p>
+      </div>
+      <p style={{ fontSize: 12, color: "var(--granbark-mut)", margin: "8px 0 0" }}>
+        Variabler: <code>{"{{first_name}}"}</code>, <code>{"{{company}}"}</code>, <code>{"{{result_url}}"}</code>.
+        Hälsningsfras, knapp, signatur och avregistrering läggs till automatiskt.
+      </p>
+
+      {loading ? (
+        <p style={{ marginTop: 14, color: "var(--granbark-mut)" }}>Hämtar mall…</p>
+      ) : (
+        <div style={{ marginTop: 14, display: "grid", gap: 14 }}>
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="vk-mono" style={{ fontSize: 11, color: "var(--granbark-mut)" }}>ÄMNESRAD</span>
+            <input
+              style={input}
+              value={tpl.subject}
+              onChange={(e) => setTpl((t) => ({ ...t, subject: e.target.value }))}
+              placeholder="Er AI-karta – {{company}}"
+            />
+          </label>
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="vk-mono" style={{ fontSize: 11, color: "var(--granbark-mut)" }}>BRÖDTEXT (HTML)</span>
+            <textarea
+              style={{ ...input, minHeight: 180, lineHeight: 1.5 }}
+              value={tpl.body_html}
+              onChange={(e) => setTpl((t) => ({ ...t, body_html: e.target.value }))}
+            />
+          </label>
+          <label style={{ display: "grid", gap: 6 }}>
+            <span className="vk-mono" style={{ fontSize: 11, color: "var(--granbark-mut)" }}>
+              BRÖDTEXT (REN TEXT – valfri, autogenereras annars)
+            </span>
+            <textarea
+              style={{ ...input, minHeight: 110, lineHeight: 1.5 }}
+              value={tpl.body_text}
+              onChange={(e) => setTpl((t) => ({ ...t, body_text: e.target.value }))}
+            />
+          </label>
+          {error && (
+            <p style={{ color: "var(--varsel-hover, #E8500A)", fontSize: 13, margin: 0 }}>{error}</p>
+          )}
+          <div>
+            <button
+              type="button"
+              onClick={save}
+              disabled={saving}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "var(--gran)", color: "#fff", border: 0, borderRadius: 8,
+                padding: "10px 18px", fontWeight: 600, cursor: saving ? "wait" : "pointer",
+                opacity: saving ? 0.7 : 1,
+              }}
+            >
+              <Save size={15} /> {saving ? "Sparar…" : "Spara mall"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 type Data = {
   email: {
@@ -105,6 +229,7 @@ export default function AdminEmail() {
           </div>
         </>
       )}
+      <TemplateEditor />
     </AdminShell>
   );
 }

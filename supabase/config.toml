@@ -30,6 +30,9 @@ verify_jwt = false
 [functions.send-ai-map-pdf]
 verify_jwt = false
 
+[functions.admin-email-template]
+verify_jwt = false
+
 # verify_jwt=true: plattformen kräver JWT-formad Authorization (anon-nyckel via
 # supabase.functions.invoke). Verklig admin-auth kontrolleras i funktionen via
 # header x-admin-token (delad ADMIN_SECRET/FAQ_ANALYTICS_PASSWORD).
