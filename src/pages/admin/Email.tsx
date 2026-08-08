@@ -229,6 +229,7 @@ export default function AdminEmail() {
           </div>
         </>
       )}
+      <TemplateEditor />
     </AdminShell>
   );
 }
