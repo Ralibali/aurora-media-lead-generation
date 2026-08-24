@@ -1,0 +1,80 @@
+id: revenue-growth-loop
+version: 1.0
+owner: Aurora Media CEO
+purpose: "Continuously turn evidence-backed opportunities into qualified pipeline and paying client work."
+
+admission:
+  require_one_of:
+    - real lead/customer signal
+    - measurable funnel leak
+    - verified search opportunity
+    - verified competitor/customer pain
+    - approved outbound segment
+    - existing delivery process suitable for productization
+  reject:
+    - generic brainstorming without evidence
+    - cosmetic work while a revenue constraint is unresolved
+    - duplicate work already in progress
+
+loop:
+  - observe_real_data
+  - identify_single_highest_value_constraint
+  - create_work_packet
+  - choose_minimum_skill_and_worker
+  - execute_within_authority
+  - produce_durable_artifact
+  - verify_result
+  - measure_business_kpi
+  - record_learning
+  - double_down_iterate_or_stop
+
+priority_order:
+  - protect_existing_revenue
+  - close_qualified_pipeline
+  - create_new_qualified_pipeline
+  - improve_lead_to_meeting_conversion
+  - improve_offer_to_sale_conversion
+  - productize_repeatable_delivery
+  - improve_search_and_distribution
+  - automate_owner_work
+  - cosmetic_improvements
+
+primary_metrics:
+  - qualified_leads
+  - booked_meetings
+  - proposals_sent
+  - deals_won
+  - revenue
+  - lead_to_meeting_rate
+  - proposal_to_close_rate
+  - time_to_first_response
+  - owner_hours_saved
+
+work_packet_required_fields:
+  - id
+  - company
+  - objective
+  - why_now
+  - evidence
+  - owner
+  - skill
+  - skill_version
+  - authority
+  - usage_level
+  - definition_of_done
+  - expected_artifact
+
+stop_rules:
+  - stop if evidence contradicts the hypothesis
+  - stop if required authority is unavailable
+  - stop if expected value no longer justifies AI/implementation cost
+  - stop and ask owner for explicit owner-gate actions
+
+reporting:
+  silence_if_no_material_change: true
+  surface:
+    - material revenue/pipeline result
+    - experiment result
+    - verified production change
+    - blocker
+    - owner gate
