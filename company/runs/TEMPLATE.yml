@@ -1,0 +1,22 @@
+id: RUN-YYYYMMDD-001
+work_packet: ""
+company: Aurora Media AB
+objective: ""
+worker: ""
+model_or_runtime: ""
+skill: ""
+skill_version: ""
+authority: OBSERVE
+started_at: ""
+completed_at: ""
+artifact: ""
+verification: UNKNOWN
+business_result: WAITING
+usage:
+  level: low
+  approximate_cost: UNKNOWN
+route_receipt:
+  reason: ""
+  fallback: ""
+notes:
+  - "Record only material execution state; do not copy chat transcripts."
