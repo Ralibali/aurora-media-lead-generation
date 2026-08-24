@@ -1,0 +1,27 @@
+id: WP-YYYYMMDD-001
+company: Aurora Media AB
+objective: ""
+why_now: ""
+evidence:
+  - ""
+owner: ""
+skill: ""
+skill_version: ""
+authority: OBSERVE
+usage_level: low
+context:
+  include_only:
+    - ""
+constraints:
+  - ""
+definition_of_done:
+  - ""
+expected_artifact: "company/artifacts/..."
+measurement:
+  baseline: UNKNOWN
+  target: UNKNOWN
+  window: UNKNOWN
+stop_conditions:
+  - "Required authority unavailable"
+  - "Evidence invalidates the hypothesis"
+  - "Expected value no longer justifies cost"

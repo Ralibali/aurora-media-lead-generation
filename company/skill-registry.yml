@@ -1,0 +1,106 @@
+skills:
+  - id: lead-opportunity-scan
+    version: 1.0
+    owner: Aurora Media CEO
+    trigger: "Evidence-backed need for new qualified pipeline or a scheduled low-frequency pipeline review."
+    inputs:
+      - approved ICP/segment
+      - approved sources
+      - current pipeline state
+    outputs:
+      - ranked opportunity artifact
+    tools:
+      - web/search tools as approved
+      - CRM/lead data as approved
+    source_policy: "Current first-party and public evidence only; label estimates and unknowns."
+    authority: OBSERVE
+    artifacts:
+      - company/artifacts/opportunities/*.md
+    stop_rules:
+      - no deep research on low-signal candidates
+      - no invented demand or contact data
+    review_rule: "CEO selects opportunities before execution."
+    evaluation:
+      primary: "share of surfaced opportunities that become qualified actions"
+
+  - id: b2b-prospect-qualification
+    version: 1.0
+    owner: Aurora Media CEO
+    trigger: "Approved target segment or opportunity requires direct acquisition."
+    inputs:
+      - ICP criteria
+      - candidate companies
+      - offer
+    outputs:
+      - qualified prospect list
+      - personalized outreach drafts
+      - evidence per qualification
+    tools:
+      - public web research
+      - approved CRM/contact tools
+    source_policy: "Use verifiable business facts; do not infer sensitive personal traits."
+    authority: PREPARE
+    artifacts:
+      - company/artifacts/prospects/*.md
+    stop_rules:
+      - never send without EMIT authority
+      - deduplicate before research
+      - stop research when qualification is clearly low
+    review_rule: "Outbound send requires approved policy/EMIT gate."
+    evaluation:
+      primary: "qualified-to-meeting conversion"
+
+  - id: site-revenue-experiment
+    version: 1.0
+    owner: Aurora Media CEO
+    trigger: "A measurable site/funnel constraint is supported by evidence."
+    inputs:
+      - baseline KPI
+      - hypothesis
+      - target KPI
+      - relevant repository scope
+    outputs:
+      - scoped implementation artifact
+      - test evidence
+      - experiment record
+    tools:
+      - GitHub/repository tools
+      - test/build tools
+      - analytics as approved
+    source_policy: "Hypothesis must reference the measured funnel problem."
+    authority: PREPARE
+    artifacts:
+      - company/artifacts/experiments/*.md
+    stop_rules:
+      - no unrelated feature work
+      - no success claim before measurement
+      - deployment requires task-specific COMMIT authority
+    review_rule: "Production-impacting work follows existing deployment and QA rules."
+    evaluation:
+      primary: "measured improvement in the target business KPI"
+
+  - id: delivery-productization-scan
+    version: 1.0
+    owner: Aurora Media CEO
+    trigger: "Repeated client work or manual delivery pattern is observed."
+    inputs:
+      - delivery steps
+      - time/cost evidence
+      - repeated customer demand evidence
+    outputs:
+      - productization brief
+      - automation candidates
+      - pricing hypothesis
+      - validation plan
+    tools:
+      - approved delivery records
+      - customer evidence
+    source_policy: "Do not invent repeat demand; cite actual recurrence."
+    authority: OBSERVE
+    artifacts:
+      - company/artifacts/productization/*.md
+    stop_rules:
+      - no product build before validation criteria are defined
+    review_rule: "Major new business model/pricing remains owner gate."
+    evaluation:
+      primary: "owner/delivery time saved plus validated recurring revenue potential"

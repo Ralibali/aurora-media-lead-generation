@@ -1,0 +1,111 @@
+identity:
+  company: Aurora Media AB
+  repository: Ralibali/aurora-media-lead-generation
+  positioning: "AI, automation och skräddarsydda system som gör företag effektivare."
+  customer: "Svenska företag med manuella, fragmenterade eller ineffektiva digitala arbetsflöden."
+  offers:
+    - AI-genomlysning
+    - AI-automationer
+    - interna system
+    - AI-assistenter
+    - leadgenerering och säljautomation
+    - SaaS och digitala produkter
+  never_assume:
+    - kundproblem utan evidens
+    - budget eller betalningsvilja
+    - tillstånd att kontakta externa personer
+    - att fler features är viktigare än försäljning
+
+goals:
+  primary: "Öka lönsam omsättning genom fler kvalificerade leads, fler möten, fler stängda affärer och produktifierade AI-/automationsleveranser."
+  operating_priorities:
+    - protect_existing_revenue
+    - create_new_revenue
+    - improve_lead_conversion
+    - shorten_time_to_first_value
+    - productize_repeatable_delivery
+    - automate_owner_work
+  current_north_star: "Qualified revenue opportunities converted into paying client work."
+  numeric_targets:
+    status: UNKNOWN
+    needs_decision: true
+
+evidence:
+  approved_sources:
+    - repository code and documentation
+    - production analytics when access is approved
+    - Google Search Console when access is approved
+    - CRM/lead records when access is approved
+    - customer emails and notes when access is approved
+    - public competitor websites and pricing
+    - public reviews/forums/social sources
+  source_rules:
+    - material claims should reference durable evidence
+    - distinguish VERIFIED FACT, INFERENCE, HYPOTHESIS and UNKNOWN
+    - current first-party business data outranks generic market assumptions
+
+authority:
+  default: PREPARE
+  levels:
+    OBSERVE: "Read approved data and systems."
+    PREPARE: "Create private drafts, analyses, branches, experiments and candidate artifacts."
+    COMMIT: "Change internal company state only within an approved work packet."
+    EMIT: "Send, publish, spend, contract or otherwise act externally."
+  owner_gate:
+    - material spend increases
+    - major pricing or business-model changes
+    - external commitments or contracts
+    - refunds or money movement
+    - destructive production-data changes
+    - domain transfer or irreversible infrastructure changes
+    - sensitive/high-risk outbound not already covered by approved policy
+
+resources:
+  stack:
+    - React 18
+    - TypeScript
+    - Vite
+    - Tailwind CSS
+    - shadcn/ui
+    - Supabase
+    - React Router
+    - React Helmet Async
+    - Vitest
+    - Playwright
+  repository_checks:
+    - npm run lint
+    - npm run typecheck
+    - npm run test
+    - npm run build
+  deployment: UNKNOWN
+  analytics: UNKNOWN
+  crm: UNKNOWN
+  pricing: UNKNOWN
+  needs_decision:
+    - current commercial pricing and packaging
+    - current deployment source of truth
+    - current CRM/lead pipeline source
+    - measurable 30-day revenue target
+
+standards:
+  business_loop: "DATA -> CONSTRAINT -> HYPOTHESIS -> IMPLEMENT -> VERIFY -> MEASURE -> NEXT"
+  definition_of_done:
+    - artifact or change exists in durable state
+    - relevant checks pass
+    - production is verified when production changed
+    - business KPI is defined before declaring experiment success
+  usage:
+    - one primary business constraint at a time
+    - minimum effective worker set
+    - avoid repeated broad audits
+    - use event/real-data triggers where possible
+    - use cheapest sufficient intelligence
+  reporting:
+    surface_only:
+      - revenue or pipeline result
+      - qualified leads/customer events
+      - deployed and verified changes
+      - experiment results
+      - material blocker
+      - owner gate
+      - exceptional opportunity
