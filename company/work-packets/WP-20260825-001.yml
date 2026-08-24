@@ -1,0 +1,39 @@
+id: WP-20260825-001
+company: Aurora Media AB
+objective: "Book the first sales meeting with a paying-capable Östergötland lodging operator, using the live Bergs Slussar booking case as proof."
+why_now: "Inbound cannot be closed. The only external AI-karta lead is Demoskop (score 7, drip finished, marked lost). Traffic exists but converts to self-tests. A live booking product already exists near several operators."
+evidence:
+  - "VERIFIED FACT: ai_map_leads=9, contact leads=3, genomlysning_leads=0. All inbound except Morris at Demoskop are Aurora self-tests."
+  - "VERIFIED FACT: Demoskop process is 1-3 h/week CRM after meetings, score 7, status forlorad, drip 2/5/9/14 sent."
+  - "VERIFIED FACT: Lovable analytics 25 Jul-24 Aug: 159 visitors, 236 pageviews, /ai-karta 116, bounce 71%."
+  - "VERIFIED FACT: existing prospecting_leads are travel blogs, not operators."
+  - "VERIFIED FACT: live case Bergs Slussar Glamping booking is on auroramedia.se/arbete."
+  - "INFERENCE: first paying Media client comes from outbound in the already-delivered vertical."
+owner: Aurora Media CEO
+skill: b2b-prospect-qualification
+skill_version: "1.0"
+authority: PREPARE
+usage_level: low
+context:
+  include_only:
+    - company/company.yml
+    - company/workflows/revenue-growth.yml
+    - company/artifacts/prospects/2026-08-25-ostergotland-lodging.md
+constraints:
+  - "Do not EMIT. No send, publish, or spend."
+  - "Do not invent contact data."
+  - "Do not restart issue #2 pricing rewrite."
+  - "Skip operators that already bought a booking/AI stack."
+definition_of_done:
+  - "Work packet exists in company/work-packets."
+  - "At least 4 real operators scored with source URL, public contact, booking stack, fit."
+  - "Swedish meeting-ask draft exists per qualified prospect."
+  - "Growth & Sales has the packet."
+expected_artifact: company/artifacts/prospects/2026-08-25-ostergotland-lodging.md
+measurement:
+  baseline: "0 qualified external conversations, 0 booked Media meetings"
+  target: "4-5 qualified prospects + PREPARE drafts; next is 1 booked 20-min meeting"
+  window: "7 days from 2026-08-25"
+stop_conditions:
+  - "Required EMIT authority unavailable for send"
+  - "A real inbound qualified lead appears — close that first"
