@@ -60,7 +60,7 @@ export const PRICES = {
 
 // ── Stripe Payment Links ────────────────────────────────────────────────────
 // ÄGAREN: klistra in de riktiga länkarna här vid live. Lämna tomma i prelaunch.
-// Sätt success-URL i Stripe till STRIPE_SUCCESS_URL för spårning + leveransstart.
+// Sätt success-URL i Stripe till STRIPE_SUCCESS_URL (neutral retursida).
 export const STRIPE_LINKS = {
   guide: "", // t.ex. "https://buy.stripe.com/…" — Guide 199 kr
   vault: "", // Prompt Vault 199 kr (för befintliga guideägare)
@@ -69,7 +69,15 @@ export const STRIPE_LINKS = {
 
 export type AiKontoretProduct = keyof typeof STRIPE_LINKS;
 
-export const STRIPE_SUCCESS_URL = "https://auroramedia.se/grok-bot?kopt=tack";
+/**
+ * Neutral retur efter checkout. Query-parametern bevisar INTE att betalning
+ * skett – sidan får därför aldrig påstå att ordern är bekräftad, och
+ * grok_purchase får aldrig loggas från en URL-parameter. Klienten loggar
+ * som mest ett grok_checkout_return-event. Riktiga purchase-event ska komma
+ * från Stripe-webhook som verifierats server-side.
+ */
+export const STRIPE_SUCCESS_URL = "https://auroramedia.se/grok-bot?checkout=return";
+
 
 export const PRODUCT_SKUS: Record<AiKontoretProduct, string> = {
   guide: "ai-kontoret-guide",
