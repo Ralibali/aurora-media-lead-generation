@@ -45,3 +45,19 @@ verify_jwt = true
 
 
 
+
+# Stripe-webhook: Stripe skickar ingen JWT. Signaturen verifieras i koden.
+[functions.ai-kontoret-deliver]
+verify_jwt = false
+
+[functions.ai-kontoret-launch-status]
+verify_jwt = false
+
+[functions.ai-kontoret-create-checkout]
+verify_jwt = false
+
+[functions.ai-kontoret-verify-session]
+verify_jwt = false
+
+[functions.ai-kontoret-upload-asset]
+verify_jwt = false

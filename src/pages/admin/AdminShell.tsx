@@ -17,6 +17,7 @@ import {
   X,
   Sparkles,
   BarChart3,
+  PackageCheck,
   Radar,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
@@ -189,6 +190,7 @@ const NAV = [
   { to: "/admin/email", label: "E-post", icon: Mail },
   { to: "/admin/faq-rapport", label: "FAQ-rapport", icon: BarChart3 },
   { to: "/admin/prospektering", label: "Prospektering", icon: Radar },
+  { to: "/admin/ai-kontoret", label: "AI-KONTORET", icon: PackageCheck },
 ];
 
 // Snabbmeny — visas överst i mobil-drawern för åtkomst med få klick.

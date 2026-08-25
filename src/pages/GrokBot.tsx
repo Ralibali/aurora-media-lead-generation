@@ -12,7 +12,10 @@ import {
   PRODUCT_VERIFIED_ISO,
   PRODUCT_FRESHNESS,
   PRICES,
-  STRIPE_LINKS,
+  FN_LAUNCH_STATUS,
+  FN_VERIFY_SESSION,
+  FN_CREATE_CHECKOUT,
+  LEGAL_ACK_TEXT,
   WAITLIST_PAKET,
   LEGAL_LINKS,
   DIGITAL_DELIVERY_NOTE,
@@ -67,21 +70,83 @@ const GrokBot = () => {
   const [wlHp, setWlHp] = useState("");
   const [wlState, setWlState] = useState<"idle" | "sending" | "done" | "error">("idle");
 
-  // Neutral retur från checkout (success-URL: /grok-bot?checkout=return).
-  // OBS: en query-parameter bevisar INTE att betalning skett. Därför visas bara
-  // neutral text här, och inget grok_purchase-event får skapas från URL:en.
-  // Verifierade purchase-event ska komma från Stripe-webhook (server-side).
+  // Checkout-kassa (live-läge): produkt + e-post + uttryckligt samtycke.
+  const [coProduct, setCoProduct] = useState<AiKontoretProduct | null>(null);
+  const [coEmail, setCoEmail] = useState("");
+  const [coAck, setCoAck] = useState(false);
+  const [coState, setCoState] = useState<"idle" | "sending" | "error">("idle");
+  const [coError, setCoError] = useState<string | null>(null);
+
+  // Lanseringsspärr: köpknappar öppnas bara om servern säger ready.
+  const [launchReady, setLaunchReady] = useState(false);
+
+  // Neutral retur från checkout (success-URL: /grok-bot?checkout=return&session_id=…).
+  // OBS: en query-parameter bevisar INTE att betalning skett. Verifiering sker
+  // server-side via ai-kontoret-verify-session; först då får UI:t visa köp och
+  // först då loggas grok_purchase.
   const params = new URLSearchParams(location.search);
   const checkoutReturn = params.get("checkout") === "return";
+  const checkoutCancelled = params.get("checkout") === "cancel";
+  const returnedSessionId = params.get("session_id") ?? "";
+  const [verify, setVerify] = useState<
+    | { state: "idle" }
+    | { state: "checking" }
+    | { state: "paid"; product: string; delivered: boolean }
+    | { state: "unverified" }
+  >({ state: "idle" });
 
   useEffect(() => {
     trackEvent("grok_page_view", { status: PRODUCT_STATUS, version: PRODUCT_VERSION });
   }, []);
 
+  // Lanseringsspärr hämtas bara i live-läge – prelaunch rör aldrig checkout.
   useEffect(() => {
-    if (checkoutReturn) {
-      trackEvent("grok_checkout_return", { status: PRODUCT_STATUS });
+    if (!IS_LIVE) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = await getSupabase();
+        const { data, error } = await supabase.functions.invoke(FN_LAUNCH_STATUS, { body: {} });
+        if (!cancelled) setLaunchReady(!error && data?.ready === true);
+      } catch {
+        if (!cancelled) setLaunchReady(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Serververifiering av retursessionen.
+  useEffect(() => {
+    if (!checkoutReturn) return;
+    trackEvent("grok_checkout_return", { status: PRODUCT_STATUS });
+    if (!/^cs_[A-Za-z0-9_]{10,200}$/.test(returnedSessionId)) {
+      setVerify({ state: "unverified" });
+      return;
     }
+    let cancelled = false;
+    setVerify({ state: "checking" });
+    (async () => {
+      try {
+        const supabase = await getSupabase();
+        const { data, error } = await supabase.functions.invoke(FN_VERIFY_SESSION, {
+          body: { session_id: returnedSessionId },
+        });
+        if (cancelled) return;
+        if (!error && data?.paid === true) {
+          setVerify({ state: "paid", product: String(data.product), delivered: Boolean(data.delivered) });
+          trackEvent("grok_purchase", { product: String(data.product), verified: true });
+        } else {
+          setVerify({ state: "unverified" });
+        }
+      } catch {
+        if (!cancelled) setVerify({ state: "unverified" });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -112,23 +177,54 @@ const GrokBot = () => {
     vault: "grok_prompt_vault_click",
   };
 
-  /** Köpflöde: live → Stripe Payment Link. prelaunch → väntelistan. */
+  /** Köpbart endast när både koden och servern säger att allt är på plats. */
+  const canBuy = IS_LIVE && launchReady;
+
+  /** Köpflöde: canBuy → kassa (samtycke) → server-skapad Stripe-session. */
   const handleBuy = (product: AiKontoretProduct) => {
-    trackEvent(buyEvent[product], { status: PRODUCT_STATUS });
-    if (!IS_LIVE) {
+    trackEvent(buyEvent[product], { status: PRODUCT_STATUS, can_buy: canBuy });
+    if (!canBuy) {
+      // Prelaunch eller lanseringsspärr ej uppfylld → aldrig döda köpknappar.
       scrollToId("kop");
       return;
     }
-    const link = STRIPE_LINKS[product];
-    if (!link) {
-      // Live-läge men länk saknas – ska inte hända, men fall tillbaka mjukt.
-      console.warn(`[ai-kontoret] STRIPE_LINKS.${product} saknas – fyll i src/config/aiKontoret.ts`);
-      scrollToId("kop");
-      return;
-    }
-    trackEvent("grok_checkout_start", { product });
-    window.location.href = link;
+    setCoError(null);
+    setCoState("idle");
+    setCoAck(false);
+    setCoProduct(product);
   };
+
+  /** Skapar Stripe Checkout Session server-side. Belopp sätts aldrig i klienten. */
+  const startCheckout = async () => {
+    if (!coProduct) return;
+    if (!coAck) {
+      setCoError("Du behöver godkänna villkoren för digital leverans.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(coEmail.trim())) {
+      setCoError("Ange en giltig e-postadress – leveransen skickas dit.");
+      return;
+    }
+    setCoState("sending");
+    setCoError(null);
+    try {
+      const supabase = await getSupabase();
+      const { data, error } = await supabase.functions.invoke(FN_CREATE_CHECKOUT, {
+        body: { product: coProduct, email: coEmail.trim(), legal_ack: true },
+      });
+      if (error || !data?.url) {
+        setCoState("error");
+        setCoError("Kassan kunde inte öppnas just nu. Försök igen eller mejla info@auroramedia.se.");
+        return;
+      }
+      trackEvent("grok_checkout_start", { product: coProduct });
+      window.location.href = data.url as string;
+    } catch {
+      setCoState("error");
+      setCoError("Kassan kunde inte öppnas just nu. Försök igen eller mejla info@auroramedia.se.");
+    }
+  };
+
 
   const handlePreviewOpen = () => {
     if (previewTracked.current) return;
@@ -231,12 +327,32 @@ const GrokBot = () => {
           {/* ═══ 1. HERO ═══ */}
           <section className="vk-section gb-hero" aria-labelledby="gb-h1">
             <div className="vk-wrap">
-              {checkoutReturn && (
+              {checkoutCancelled && (
                 <div className="gb-thanks" role="status">
-                  <b>Tack.</b> Om betalningen gick igenom får du leverans via e-post. Kontakta
-                  info@auroramedia.se om något saknas.
+                  <b>Köpet avbröts.</b> Inget har debiterats. Du är välkommen tillbaka när du vill.
                 </div>
               )}
+              {checkoutReturn && (
+                <div className="gb-thanks" role="status">
+                  {verify.state === "checking" && <><b>Verifierar…</b> Vi kontrollerar betalningen mot betalleverantören.</>}
+                  {verify.state === "paid" && (
+                    <>
+                      <b>Betalning verifierad.</b>{" "}
+                      {verify.delivered
+                        ? "Leveransmejlet med dina nedladdningslänkar är skickat."
+                        : "Leveransmejlet med dina nedladdningslänkar är på väg."}{" "}
+                      Saknas något? Mejla info@auroramedia.se.
+                    </>
+                  )}
+                  {(verify.state === "unverified" || verify.state === "idle") && (
+                    <>
+                      <b>Tack.</b> Vi kan inte bekräfta någon betalning här – om den gick igenom får
+                      du leverans via e-post. Kontakta info@auroramedia.se om något saknas.
+                    </>
+                  )}
+                </div>
+              )}
+
 
               <Reveal>
                 <p className="gb-eyebrow">
@@ -260,9 +376,9 @@ const GrokBot = () => {
                   <button
                     type="button"
                     className="vk-btn vk-btn-primary"
-                    onClick={() => (IS_LIVE ? handleBuy("guide") : scrollToId("kop"))}
+                    onClick={() => (canBuy ? handleBuy("guide") : scrollToId("kop"))}
                   >
-                    <span>{IS_LIVE ? `Köp AI-KONTORET – ${PRICES.guide} kr` : "Få besked när AI-KONTORET släpps"}</span>
+                    <span>{canBuy ? `Köp AI-KONTORET – ${PRICES.guide} kr` : "Få besked när AI-KONTORET släpps"}</span>
                   </button>
                   <button type="button" className="vk-btn vk-btn-ghost" onClick={() => scrollToId("ingar")}>
                     <span>Se vad som ingår</span>
@@ -862,7 +978,7 @@ const GrokBot = () => {
                       onClick={() => handleBuy("bundle")}
                     >
                       <span>
-                        {IS_LIVE
+                        {canBuy
                           ? `Guiden + Vault – ${PRICES.bundle} kr`
                           : "Få besked när Vault släpps"}
                       </span>
@@ -915,7 +1031,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("guide")}
                     >
-                      <span>{IS_LIVE ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringsbesked"}</span>
+                      <span>{canBuy ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -946,7 +1062,7 @@ const GrokBot = () => {
                       onClick={() => handleBuy("bundle")}
                     >
                       <span>
-                        {IS_LIVE ? `Köp paketet – ${PRICES.bundle} kr` : "Få besked när AI-KONTORET släpps"}
+                        {canBuy ? `Köp paketet – ${PRICES.bundle} kr` : "Få besked när AI-KONTORET släpps"}
                       </span>
                     </button>
                   </article>
@@ -971,7 +1087,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("vault")}
                     >
-                      <span>{IS_LIVE ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringsbesked"}</span>
+                      <span>{canBuy ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -1104,12 +1220,12 @@ const GrokBot = () => {
                   <p className="gb-kicker">AI-KONTORET · {PRICES.guide} kr</p>
                   <h2 id="gb-final-h">Sluta chatta med din AI. Börja anställa den.</h2>
                   <p>
-                    {IS_LIVE
+                    {canBuy
                       ? "Guiden är klar. Tolv kapitel, alla ramverk och varje lärdom – redo att laddas ner direkt efter köpet."
                       : "Guiden färdigställs just nu. Ställ dig i väntelistan så får du besked först – och till lanseringspriset."}
                   </p>
 
-                  {IS_LIVE ? (
+                  {canBuy ? (
                     <div className="gb-final-ctas">
                       <button
                         type="button"
@@ -1227,6 +1343,78 @@ const GrokBot = () => {
             </div>
           </section>
         </main>
+
+        {/* ═══ KASSA (endast när lanseringsspärren är uppfylld) ═══ */}
+        {coProduct && (
+          <div
+            className="gb-checkout-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gb-co-h"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setCoProduct(null);
+            }}
+          >
+            <div className="gb-checkout">
+              <h3 id="gb-co-h">
+                {coProduct === "bundle"
+                  ? `Guiden + Prompt Vault – ${PRICES.bundle} kr`
+                  : coProduct === "vault"
+                  ? `Prompt Vault – ${PRICES.vault} kr`
+                  : `AI-KONTORET – guiden – ${PRICES.guide} kr`}
+              </h3>
+              <p className="gb-checkout-note">{DIGITAL_DELIVERY_NOTE}</p>
+
+              <label htmlFor="gb-co-email" className="vk-mono">
+                E-post för leverans
+              </label>
+              <input
+                id="gb-co-email"
+                type="email"
+                autoComplete="email"
+                value={coEmail}
+                onChange={(e) => setCoEmail(e.target.value)}
+                placeholder="du@företaget.se"
+              />
+
+              <label className="gb-checkout-ack">
+                <input
+                  type="checkbox"
+                  checked={coAck}
+                  onChange={(e) => setCoAck(e.target.checked)}
+                />
+                <span>{LEGAL_ACK_TEXT}</span>
+              </label>
+
+              <p className="gb-checkout-legal">
+                Genom att fortsätta godkänner du <a href={LEGAL_LINKS.villkor}>villkoren</a> och{" "}
+                <a href={LEGAL_LINKS.integritetspolicy}>integritetspolicyn</a>. Betalningen sker hos
+                Stripe – vi lagrar aldrig kortuppgifter.
+              </p>
+
+              {coError && (
+                <p className="gb-checkout-error" role="alert">
+                  {coError}
+                </p>
+              )}
+
+              <div className="gb-checkout-ctas">
+                <button
+                  type="button"
+                  className="vk-btn vk-btn-primary"
+                  disabled={coState === "sending"}
+                  onClick={startCheckout}
+                >
+                  <span>{coState === "sending" ? "Öppnar kassan…" : "Fortsätt till betalning"}</span>
+                </button>
+                <button type="button" className="vk-btn vk-btn-ghost" onClick={() => setCoProduct(null)}>
+                  <span>Avbryt</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <VkFooter />
       </div>
     </>

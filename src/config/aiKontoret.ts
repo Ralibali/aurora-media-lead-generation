@@ -3,40 +3,36 @@
  * AI-KONTORET — produktkonfiguration och innehåll (/grok-bot)
  * ============================================================================
  *
- * DETTA ÄR DEN ENDA FIL SOM BEHÖVER RÖRAS FÖR ATT DRIVA PRODUKTEN.
+ * ── ARKITEKTUR (server-side, inga klientlänkar) ─────────────────────────────
+ * Köpflödet går ALDRIG via statiska Payment Links. Kedjan är:
+ *   1. Klienten anropar edge-funktionen `ai-kontoret-create-checkout`
+ *      (produkt + e-post + uttryckligt samtycke) → Stripe Checkout Session
+ *      skapas server-side med belopp och SKU från serverns katalog.
+ *   2. Stripe → webhook `ai-kontoret-deliver` (signaturverifierad, idempotent)
+ *      → rad i `ai_kontoret_purchases` + signerade, tidsbegränsade
+ *        nedladdningslänkar från den PRIVATA bucketen `ai-kontoret-assets`
+ *      → leveransmejl via Resend.
+ *   3. Retursidan verifierar sessionen server-side via
+ *      `ai-kontoret-verify-session`. En query-parameter är aldrig köpbevis.
+ *   4. `ai-kontoret-launch-status` är lanseringsspärren: sidan visar aldrig
+ *      köpknappar om Stripe, webhook-secret, produktfiler, leverans eller
+ *      ägarens juridiska godkännande saknas.
  *
  * ── LANSERING (prelaunch → live) ────────────────────────────────────────────
- * 1. Sätt PRODUCT_STATUS = "live" nedan.
- * 2. Klistra in de tre Stripe Payment Link-url:erna i STRIPE_LINKS.
- *    (Stripe Dashboard → Payment Links. Inga nycklar i klientkoden —
- *     Payment Links är publika, säkra url:er. Hemligheter hör hemma i
- *     Supabase-secrets, aldrig här.)
- * 3. Sätt success-URL på alla tre länkarna till STRIPE_SUCCESS_URL
- *    (neutral retur – den bekräftar INTE betalning och loggar bara ett
- *     grok_checkout_return-event. Verifierade köp loggas server-side.)
-
- * 4. Deploy:a. Klart — samtliga CTA:er på sidan blir köpflöden automatiskt.
- *
- * ── LEVERANSARKITEKTUR (förberedd, ej aktiverad) ───────────────────────────
- * Planerat flöde när produkten går live:
- *   Stripe Payment Link → Stripe webhook (checkout.session.completed)
- *   → edge-funktion verifierar mot Stripe och skriver rad i
- *     `ai_kontoret_purchases` (se supabase/migrations/20260825_ai_kontoret.sql)
- *   → kunden får mejl med personlig, signerad och tidsbegränsad
- *     nedladdningslänk (Supabase Storage signed URL, kort TTL)
- *   → produktfilerna ligger i en PRIVAT storage-bucket — aldrig på
- *     gissningsbara publika url:er.
- * Saknas innan live (ägarens åtgärd):
- *   [ ] Stripe-konto + tre Payment Links (Guide 199 kr / Vault 199 kr / Bundle 349 kr)
- *   [ ] STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET som Supabase-secrets
- *   [ ] Edge-funktion `ai-kontoret-deliver` (webhook + signerad länk + mejl)
- *   [ ] Färdiga produktfiler (guide-PDF + Prompt Vault) i privat bucket
- *   [ ] Ägaren bekräftar villkor/ångerrättstexter (se LEGAL_DRAFT_NOTES)
+ *   [ ] STRIPE_SECRET_KEY som secret i projektet
+ *   [ ] STRIPE_WEBHOOK_SECRET som secret (webhook → /ai-kontoret-deliver,
+ *       event: checkout.session.completed)
+ *   [ ] De riktiga PDF:erna uppladdade via Admin → AI-KONTORET
+ *       (privat bucket ai-kontoret-assets, se ASSET_PATHS nedan)
+ *   [ ] Ägaren bekräftar juridiken (legal gate) i Admin → AI-KONTORET
+ *   [ ] Sätt PRODUCT_STATUS = "live" nedan
+ * Även med "live" öppnas köpflödet endast om launch-status svarar ready:true.
  * ============================================================================
  */
 
 // ── Lanseringsläge ──────────────────────────────────────────────────────────
-// "prelaunch" = väntelista (säljer inget ofärdigt). "live" = köp via Stripe.
+// "prelaunch" = väntelista (säljer inget ofärdigt). "live" = köp via Stripe
+// (men bara om lanseringsspärren `ai-kontoret-launch-status` svarar ready).
 export const PRODUCT_STATUS: "prelaunch" | "live" = "prelaunch";
 
 export const PRODUCT_NAME = "AI-KONTORET";
@@ -50,6 +46,8 @@ export const PRODUCT_FRESHNESS =
   "Fakta kontrollerade mot aktuella officiella källor";
 
 // ── Priser (SEK, konsumentpriser) ───────────────────────────────────────────
+// OBS: dessa värden är endast för visning. Beloppen som debiteras sätts
+// server-side i supabase/functions/_shared/aiKontoret.ts (CATALOG).
 export const PRICES = {
   guide: 199,
   vault: 199,
@@ -58,31 +56,35 @@ export const PRICES = {
   bundleReference: 398,
 } as const;
 
-// ── Stripe Payment Links ────────────────────────────────────────────────────
-// ÄGAREN: klistra in de riktiga länkarna här vid live. Lämna tomma i prelaunch.
-// Sätt success-URL i Stripe till STRIPE_SUCCESS_URL (neutral retursida).
-export const STRIPE_LINKS = {
-  guide: "", // t.ex. "https://buy.stripe.com/…" — Guide 199 kr
-  vault: "", // Prompt Vault 199 kr (för befintliga guideägare)
-  bundle: "", // Launch bundle 349 kr
-} as const;
+export type AiKontoretProduct = "guide" | "vault" | "bundle";
 
-export type AiKontoretProduct = keyof typeof STRIPE_LINKS;
+// ── Edge-funktioner (server-side köp, verifiering och lanseringsspärr) ──────
+export const FN_CREATE_CHECKOUT = "ai-kontoret-create-checkout";
+export const FN_VERIFY_SESSION = "ai-kontoret-verify-session";
+export const FN_LAUNCH_STATUS = "ai-kontoret-launch-status";
+export const FN_UPLOAD_ASSET = "ai-kontoret-upload-asset";
+export const FN_DELIVER = "ai-kontoret-deliver";
 
 /**
- * Neutral retur efter checkout. Query-parametern bevisar INTE att betalning
- * skett – sidan får därför aldrig påstå att ordern är bekräftad, och
- * grok_purchase får aldrig loggas från en URL-parameter. Klienten loggar
- * som mest ett grok_checkout_return-event. Riktiga purchase-event ska komma
- * från Stripe-webhook som verifierats server-side.
+ * Neutral retur efter checkout: /grok-bot?checkout=return&session_id=…
+ * session_id är INTE ett köpbevis – det används bara som nyckel för
+ * serververifiering. Cancel → /grok-bot?checkout=cancel.
  */
-export const STRIPE_SUCCESS_URL = "https://auroramedia.se/grok-bot?checkout=return";
-
+export const STRIPE_SUCCESS_URL =
+  "https://auroramedia.se/grok-bot?checkout=return&session_id={CHECKOUT_SESSION_ID}";
+export const STRIPE_CANCEL_URL = "https://auroramedia.se/grok-bot?checkout=cancel";
 
 export const PRODUCT_SKUS: Record<AiKontoretProduct, string> = {
   guide: "ai-kontoret-guide",
   vault: "ai-kontoret-prompt-vault",
   bundle: "ai-kontoret-bundle",
+};
+
+/** Filerna ligger i den PRIVATA bucketen `ai-kontoret-assets` – aldrig publikt. */
+export const ASSET_BUCKET = "ai-kontoret-assets";
+export const ASSET_PATHS: Record<"guide" | "vault", string> = {
+  guide: "ai-kontoret/v1.0/AI-KONTORET_Guide_v1.0.pdf",
+  vault: "ai-kontoret/v1.0/AI-KONTORET_Prompt_Vault_v1.0.pdf",
 };
 
 // ── Waitlist (prelaunch) ────────────────────────────────────────────────────
@@ -95,6 +97,15 @@ export const LEGAL_LINKS = {
   villkor: "/villkor",
   integritetspolicy: "/integritetspolicy",
 };
+
+/**
+ * UTKAST – KRÄVER ÄGARENS BEKRÄFTELSE (legal gate i Admin → AI-KONTORET).
+ * Detta är den text kunden aktivt måste kryssa i före betalning.
+ */
+export const LEGAL_ACK_TEXT =
+  "Jag förstår att detta är en digital produkt som levereras direkt efter köp, och att ångerrätten enligt distansavtalslagen inte gäller när leveransen av det digitala innehållet har påbörjats med mitt samtycke.";
+export const LEGAL_ACK_OWNER_CONFIRMATION_REQUIRED = true;
+
 
 // ============================================================================
 // INNEHÅLL — all copy på sidan hämtas härifrån (lätt att redigera)
