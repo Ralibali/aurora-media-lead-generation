@@ -376,9 +376,9 @@ const GrokBot = () => {
                   <button
                     type="button"
                     className="vk-btn vk-btn-primary"
-                    onClick={() => (IS_LIVE ? handleBuy("guide") : scrollToId("kop"))}
+                    onClick={() => (canBuy ? handleBuy("guide") : scrollToId("kop"))}
                   >
-                    <span>{IS_LIVE ? `Köp AI-KONTORET – ${PRICES.guide} kr` : "Få besked när AI-KONTORET släpps"}</span>
+                    <span>{canBuy ? `Köp AI-KONTORET – ${PRICES.guide} kr` : "Få besked när AI-KONTORET släpps"}</span>
                   </button>
                   <button type="button" className="vk-btn vk-btn-ghost" onClick={() => scrollToId("ingar")}>
                     <span>Se vad som ingår</span>
@@ -978,7 +978,7 @@ const GrokBot = () => {
                       onClick={() => handleBuy("bundle")}
                     >
                       <span>
-                        {IS_LIVE
+                        {canBuy
                           ? `Guiden + Vault – ${PRICES.bundle} kr`
                           : "Få besked när Vault släpps"}
                       </span>
@@ -1031,7 +1031,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("guide")}
                     >
-                      <span>{IS_LIVE ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringsbesked"}</span>
+                      <span>{canBuy ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -1062,7 +1062,7 @@ const GrokBot = () => {
                       onClick={() => handleBuy("bundle")}
                     >
                       <span>
-                        {IS_LIVE ? `Köp paketet – ${PRICES.bundle} kr` : "Få besked när AI-KONTORET släpps"}
+                        {canBuy ? `Köp paketet – ${PRICES.bundle} kr` : "Få besked när AI-KONTORET släpps"}
                       </span>
                     </button>
                   </article>
@@ -1087,7 +1087,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("vault")}
                     >
-                      <span>{IS_LIVE ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringsbesked"}</span>
+                      <span>{canBuy ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -1220,12 +1220,12 @@ const GrokBot = () => {
                   <p className="gb-kicker">AI-KONTORET · {PRICES.guide} kr</p>
                   <h2 id="gb-final-h">Sluta chatta med din AI. Börja anställa den.</h2>
                   <p>
-                    {IS_LIVE
+                    {canBuy
                       ? "Guiden är klar. Tolv kapitel, alla ramverk och varje lärdom – redo att laddas ner direkt efter köpet."
                       : "Guiden färdigställs just nu. Ställ dig i väntelistan så får du besked först – och till lanseringspriset."}
                   </p>
 
-                  {IS_LIVE ? (
+                  {canBuy ? (
                     <div className="gb-final-ctas">
                       <button
                         type="button"
