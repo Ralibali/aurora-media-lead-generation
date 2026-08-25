@@ -1343,6 +1343,78 @@ const GrokBot = () => {
             </div>
           </section>
         </main>
+
+        {/* ═══ KASSA (endast när lanseringsspärren är uppfylld) ═══ */}
+        {coProduct && (
+          <div
+            className="gb-checkout-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="gb-co-h"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setCoProduct(null);
+            }}
+          >
+            <div className="gb-checkout">
+              <h3 id="gb-co-h">
+                {coProduct === "bundle"
+                  ? `Guiden + Prompt Vault – ${PRICES.bundle} kr`
+                  : coProduct === "vault"
+                  ? `Prompt Vault – ${PRICES.vault} kr`
+                  : `AI-KONTORET – guiden – ${PRICES.guide} kr`}
+              </h3>
+              <p className="gb-checkout-note">{DIGITAL_DELIVERY_NOTE}</p>
+
+              <label htmlFor="gb-co-email" className="vk-mono">
+                E-post för leverans
+              </label>
+              <input
+                id="gb-co-email"
+                type="email"
+                autoComplete="email"
+                value={coEmail}
+                onChange={(e) => setCoEmail(e.target.value)}
+                placeholder="du@företaget.se"
+              />
+
+              <label className="gb-checkout-ack">
+                <input
+                  type="checkbox"
+                  checked={coAck}
+                  onChange={(e) => setCoAck(e.target.checked)}
+                />
+                <span>{LEGAL_ACK_TEXT}</span>
+              </label>
+
+              <p className="gb-checkout-legal">
+                Genom att fortsätta godkänner du <a href={LEGAL_LINKS.villkor}>villkoren</a> och{" "}
+                <a href={LEGAL_LINKS.integritetspolicy}>integritetspolicyn</a>. Betalningen sker hos
+                Stripe – vi lagrar aldrig kortuppgifter.
+              </p>
+
+              {coError && (
+                <p className="gb-checkout-error" role="alert">
+                  {coError}
+                </p>
+              )}
+
+              <div className="gb-checkout-ctas">
+                <button
+                  type="button"
+                  className="vk-btn vk-btn-primary"
+                  disabled={coState === "sending"}
+                  onClick={startCheckout}
+                >
+                  <span>{coState === "sending" ? "Öppnar kassan…" : "Fortsätt till betalning"}</span>
+                </button>
+                <button type="button" className="vk-btn vk-btn-ghost" onClick={() => setCoProduct(null)}>
+                  <span>Avbryt</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <VkFooter />
       </div>
     </>
