@@ -385,3 +385,72 @@
   margin: 18px 0 0; max-width: 720px; font-size: 14px; line-height: 1.65;
   color: rgba(246,245,241,.62); border-left: 3px solid var(--gran); padding-left: 16px;
 }
+
+/* ── Avancerad bonus: bygg din egen AI-medarbetare ───────────────────────── */
+.gb-bonus-compare {
+  display: grid;
+  gap: clamp(16px, 2.4vw, 28px);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 860px) {
+  .gb-bonus-compare { grid-template-columns: 1fr 1fr; }
+}
+.gb-bonus-col {
+  height: 100%;
+  padding: clamp(20px, 2.6vw, 30px);
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.gb-bonus-col.is-build {
+  background: #111;
+  border-color: rgba(246, 245, 241, 0.16);
+  color: rgba(246, 245, 241, 0.82);
+}
+.gb-bonus-label {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+.gb-bonus-flow {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.gb-bonus-flow li {
+  font-size: 13px;
+  line-height: 1.2;
+  padding: 7px 11px;
+  border-radius: 3px;
+  border: 1px solid rgba(17, 17, 17, 0.16);
+  background: #fff;
+}
+.gb-bonus-flow li + li::before {
+  content: "→";
+  margin-right: 9px;
+  opacity: 0.45;
+}
+.gb-bonus-col.is-build .gb-bonus-flow li {
+  border-color: rgba(246, 245, 241, 0.2);
+  background: rgba(246, 245, 241, 0.06);
+  color: #f6f5f1;
+}
+.gb-bonus-note {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.78;
+}
+.gb-chapter.is-bonus {
+  border-top: 1px solid rgba(17, 17, 17, 0.14);
+  margin-top: 8px;
+  padding-top: 20px;
+}
+.gb-chapter.is-bonus .no { opacity: 0.5; }
