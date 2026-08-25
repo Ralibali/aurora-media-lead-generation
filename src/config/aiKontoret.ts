@@ -292,7 +292,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Behöver jag vara programmerare?",
-    a: "Nej. Uplägget är skrivet för operatörer, inte utvecklare. Allt byggs i Grok Bots egna ytor med copy-paste-mallar. Kan du beskriva ett jobb på svenska kan du bygga en Bot.",
+    a: "Nej. Upplägget är skrivet för operatörer, inte utvecklare. Allt byggs i Grok Bots egna ytor med copy-paste-mallar. Kan du beskriva ett jobb på svenska kan du bygga en Bot.",
   },
   {
     q: "Är det bara prompts?",
@@ -300,7 +300,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Vad är skillnaden mellan Bot, Skill och Routine?",
-    a: "En Bot är en AI-medarbetare – en digital kollega med ett definierat jobb. En Skill är ett inlärbt, återkommande arbetsflöde som Boten kan. En Routine bestämmer när jobbet körs – schemalagt eller triggat av en händelse.",
+    a: "En Bot är en AI-medarbetare – en digital kollega med ett definierat jobb. En Skill är ett inlärt, återkommande arbetsflöde som Boten kan. En Routine bestämmer när jobbet körs – schemalagt eller triggat av en händelse.",
   },
   {
     q: "Kan jag använda detta i ett vanligt småföretag?",
@@ -312,7 +312,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Hur mycket kan Botarna göra helt själva?",
-    a: "Mer än du tror – men inte allt. Guiden bygger medvetet på owner gates: repetitive delar som research, utkast och sammanställningar kör autonomt, medan pengar, publicering och riskfyllda åtgärder alltid kräver ditt godkännande.",
+    a: "Mer än du tror – men inte allt. Guiden bygger medvetet på owner gates: repetitiva delar som research, utkast och sammanställningar kör autonomt, medan pengar, publicering och riskfyllda åtgärder alltid kräver ditt godkännande.",
   },
   {
     q: "Hur behåller jag kontrollen?",

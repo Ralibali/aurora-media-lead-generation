@@ -300,7 +300,7 @@ const GrokBot = () => {
                   <p className="gb-kicker">Varför den här guiden finns</p>
                 </Reveal>
                 <Reveal delay={0.08}>
-                  <h2 id="gb-varfor">Skriven av någon som kör AI-bottar i produktion. Varje dag.</h2>
+                  <h2 id="gb-varfor">Skriven av någon som kör AI-botar i produktion. Varje dag.</h2>
                 </Reveal>
                 <Reveal delay={0.16}>
                   <p className="gb-lead">
@@ -852,7 +852,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("guide")}
                     >
-                      <span>{IS_LIVE ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringbesked"}</span>
+                      <span>{IS_LIVE ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -908,7 +908,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("vault")}
                     >
-                      <span>{IS_LIVE ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringbesked"}</span>
+                      <span>{IS_LIVE ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -936,7 +936,7 @@ const GrokBot = () => {
                   <p className="gb-kicker">Passar det dig?</p>
                 </Reveal>
                 <Reveal delay={0.08}>
-                  <h2 id="gb-who-h">Rak besked om vem guiden är för.</h2>
+                  <h2 id="gb-who-h">Rakt besked om vem guiden är för.</h2>
                 </Reveal>
               </div>
               <div className="gb-who">
