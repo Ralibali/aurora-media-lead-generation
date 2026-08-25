@@ -12,7 +12,9 @@
  *     Payment Links är publika, säkra url:er. Hemligheter hör hemma i
  *     Supabase-secrets, aldrig här.)
  * 3. Sätt success-URL på alla tre länkarna till STRIPE_SUCCESS_URL
- *    (den skickar tillbaka kunden hit och loggar grok_purchase).
+ *    (neutral retur – den bekräftar INTE betalning och loggar bara ett
+ *     grok_checkout_return-event. Verifierade köp loggas server-side.)
+
  * 4. Deploy:a. Klart — samtliga CTA:er på sidan blir köpflöden automatiskt.
  *
  * ── LEVERANSARKITEKTUR (förberedd, ej aktiverad) ───────────────────────────
