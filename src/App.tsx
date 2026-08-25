@@ -57,6 +57,7 @@ const AdminContent = lazy(() => import("./pages/admin/Content"));
 const AdminSeo = lazy(() => import("./pages/admin/Seo"));
 const AdminEmail = lazy(() => import("./pages/admin/Email"));
 const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
+const AdminAiKontoret = lazy(() => import("./pages/admin/AiKontoret"));
 // AdminBoundary is intentionally eager: it must be available synchronously
 // to catch failures of the other lazy admin chunks.
 import AdminBoundary from "./pages/admin/AdminBoundary";
@@ -555,6 +556,7 @@ const App = () => (
                 <Route path="/admin/text-generator" element={<TextGenerator />} />
                 <Route path="/admin/faq-rapport" element={<FaqRapport />} />
                 <Route path="/admin/prospektering" element={<AdminProspektering />} />
+                <Route path="/admin/ai-kontoret" element={<AdminAiKontoret />} />
               </Route>
               <Route path="/ai-byra-linkoping" element={<AiByraLinkoping />} />
               <Route path="/digital-marknadsforing-linkoping" element={<DigitalMarknadsforingLinkoping />} />
