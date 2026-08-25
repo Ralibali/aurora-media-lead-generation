@@ -22,6 +22,8 @@ import {
   VAULT_METHOD_NOTE,
   VAULT_GROUPS,
   CHAPTERS,
+  BONUS_CHAPTER,
+  ADVANCED_BONUS,
   USE_CASES,
   WHO_FOR,
   WHO_NOT_FOR,
@@ -670,6 +672,57 @@ const GrokBot = () => {
 
           <hr className="vk-hair" />
 
+          {/* ═══ 8b. AVANCERAD BONUS — BYGG DIN EGEN AI-MEDARBETARE ═══ */}
+          <section className="vk-section" id="bonus" aria-labelledby="gb-bonus-h">
+            <div className="vk-wrap">
+              <div className="gb-head">
+                <Reveal>
+                  <p className="gb-kicker">{ADVANCED_BONUS.kicker}</p>
+                </Reveal>
+                <Reveal delay={0.08}>
+                  <h2 id="gb-bonus-h">{ADVANCED_BONUS.headline}</h2>
+                </Reveal>
+                <Reveal delay={0.16}>
+                  <p className="gb-lead">{ADVANCED_BONUS.lead}</p>
+                </Reveal>
+              </div>
+
+              <div className="gb-bonus-compare">
+                <Reveal>
+                  <div className="gb-bonus-col is-ready">
+                    <span className="gb-bonus-label vk-mono">{ADVANCED_BONUS.readyMade.label}</span>
+                    <ol className="gb-bonus-flow">
+                      {ADVANCED_BONUS.readyMade.steps.map((s) => (
+                        <li key={s}>{s}</li>
+                      ))}
+                    </ol>
+                    <p className="gb-bonus-note">{ADVANCED_BONUS.readyMade.note}</p>
+                  </div>
+                </Reveal>
+                <Reveal delay={0.1}>
+                  <div className="gb-bonus-col is-build">
+                    <span className="gb-bonus-label vk-mono">
+                      {ADVANCED_BONUS.buildYourOwn.label}
+                    </span>
+                    <ol className="gb-bonus-flow">
+                      {ADVANCED_BONUS.buildYourOwn.steps.map((s) => (
+                        <li key={s}>{s}</li>
+                      ))}
+                    </ol>
+                    <p className="gb-bonus-note">{ADVANCED_BONUS.buildYourOwn.note}</p>
+                  </div>
+                </Reveal>
+              </div>
+
+              <Reveal delay={0.16}>
+                <p className="gb-antihype vk-mono">{ADVANCED_BONUS.trustNote}</p>
+              </Reveal>
+            </div>
+          </section>
+
+          <hr className="vk-hair" />
+
+
           {/* ═══ 9. REAL USE CASES ═══ */}
           <section className="vk-section" aria-labelledby="gb-cases-h">
             <div className="vk-wrap">
@@ -758,7 +811,17 @@ const GrokBot = () => {
                     </div>
                   </div>
                 ))}
+                <div className="gb-chapter is-bonus">
+                  <span className="no" aria-hidden="true">
+                    +
+                  </span>
+                  <div>
+                    <h3>{BONUS_CHAPTER.title}</h3>
+                    <p>{BONUS_CHAPTER.desc}</p>
+                  </div>
+                </div>
               </div>
+
               <p className="gb-chapters-note">
                 Aktuell struktur · Version {PRODUCT_VERSION} · {PRODUCT_UPDATED}
               </p>

@@ -103,7 +103,8 @@ const GROK_BOT_FAQ = [
   ['Hur behåller jag kontrollen?', 'Genom tre mekanismer som genomsyrar guiden: owner gates (inga riskåtgärder utan ditt godkännande), evidence receipts (varje leverans ska kunna bevisas) och usage-styrning (du ser vad varje Bot kostar i kapacitet).'],
   ['Blir guiden gammal när Grok ändras?', 'Verktyg ändras – operativsystem består. Det mesta i guiden är plattformsoberoende: roller, Skills, handoffs och kontrollstrukturer. Guiden är dessutom versionerad och faktagranskad mot aktuella officiella källor; du ser alltid vilken version du har, när den uppdaterades och när fakta senast verifierades.'],
   ['Har varje Bot en egen dator?', 'Nej – det är en vanlig missuppfattning. Alla Botar delar en och samma beständiga molndator som är knuten till ditt konto, men varje Bot arbetar på sin egen arbetsyta. Guiden visar hur du organiserar dem så att de samarbetar istället för att krocka.'],
-  ['Vad får jag i Prompt Vault?', 'Ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget: roller som CEO/Chief of Staff, Growth, Sales, QA och Engineer, plus system som Opportunity Engine, AI Usage Governor, Work Packets, owner gates och weekly reviews – redo att kopiera rakt in. Guiden är fullständig utan Vault; det här är genvägen för dig som vill kopiera implementeringen direkt.'],
+  ['Kan jag bygga en egen AI-medarbetare utan Grok Bot?', 'Ja. Den avancerade bonusen förklarar arkitekturen bakom en egen vertikal AI-agent – roll, Skills, verktyg via MCP, permissions (allow/deny/ask), evidence och handoffs – och använder Kimi Code tillsammans med Kimi Agent SDK (Python, Node.js, Go) som ett aktuellt exempel. Det är ingen färdig hostad produkt: hosting, schemaläggning, integrationer och övervakning måste du fortfarande lösa själv för ett produktionsdugligt system. Sidans huvudspår är och förblir Grok Bot.'],
+  ['Vad får jag i Prompt Vault?', 'Ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget: roller som CEO/Chief of Staff, Growth, Sales, QA och Engineer, plus system som Opportunity Engine, AI Usage Governor, Work Packets, owner gates och weekly reviews – plus gruppen Bygg eget med SKILL.md-mall, permission matrix, MCP access matrix, agent architecture template, approval gates och Vertical AI Employee brief. Redo att kopiera rakt in. Guiden är fullständig utan Vault; det här är genvägen för dig som vill kopiera implementeringen direkt.'],
 ];
 
 const GROK_BOT_LEARN = [
@@ -160,6 +161,15 @@ ${GROK_BOT_LEARN.map(([t, d]) => `<li><strong>${escapeHtml(t)}</strong> – ${es
 <ol>
 ${GROK_BOT_CHAPTERS.map((c) => `<li>${escapeHtml(c)}</li>`).join('\n')}
 </ol>
+<p><strong>BONUS: Från Grok Bot till egen AI-medarbetare</strong> – hur samma principer (roll, skill, verktyg, permissions, evidence och handoffs) flyttas in i din egen agentiska mjukvara, med Kimi Code och Kimi Agent SDK som konkret exempel.</p>
+</section>
+<section>
+<h2>Avancerad bonus: bygg din egen AI-medarbetare</h2>
+<p>Grok Bot är den färdiga plattformen för AI-medarbetare i företag – det är där guiden bor. Men metoden är inte låst till ett verktyg: när du förstått den kan samma arkitektur byggas in i en egen vertikal AI-agent. Vill du bygga egen AI-agent istället för att bara använda en plattform visar bonusen vilka beslut som krävs, och vad ett Grok Bot alternativ faktiskt innebär i arbete.</p>
+<p><strong>Färdigt (Grok Bot):</strong> Botar → dator och verktyg → Skills → Routines → Groups och handoffs → godkännanden.</p>
+<p><strong>Bygg eget (exempelstack):</strong> Kimi K3 → Kimi Code → Skills → MCP → Agent SDK → subagenter/AgentSwarm → permissions → din egen vertikala AI-produkt.</p>
+<p>Kimi Agent SDK finns officiellt för Python, Node.js och Go och exponerar Kimi Code-agentens runtime programmatiskt. Den återanvänder din Kimi Code-konfiguration, verktyg, Skills och MCP-servrar och exponerar verktygsanrop och godkännanden, vilket gör den användbar i egna produkter och automationer. Kimi Code stödjer Skills, MCP, subagenter och AgentSwarm, och permission rules sätts som allow, deny eller ask.</p>
+<p>Ärligt besked: guiden lovar inte att ett SDK trollar fram en medarbetare som jobbar dygnet runt. Schemaläggning, hosting, integrationer, övervakning och produktionsstabilitet är fortfarande ingenjörsarbete – bonusen visar arkitekturen och besluten, inte en genväg runt driften.</p>
 </section>
 <section>
 <h2>Pris och paket</h2>
