@@ -195,7 +195,62 @@ export const VAULT_GROUPS: { title: string; items: string[] }[] = [
     title: "Kontroll & uppföljning",
     items: ["Email outbound", "Weekly reviews", "Evidence requirements", "Owner gates"],
   },
+  {
+    title: "Bygg eget",
+    items: [
+      "SKILL.md-mall",
+      "Permission matrix",
+      "MCP access matrix",
+      "Agent architecture template",
+      "Approval gates",
+      "Vertical AI Employee brief",
+    ],
+  },
 ];
+
+// ── Avancerad bonus: bygg din egen AI-medarbetare ───────────────────────────
+// Grok Bot är den färdiga plattformen. Kimi nämns som ETT aktuellt exempel på
+// stack för den som vill bygga samma arkitektur in i en egen vertikal produkt.
+// Endast verifierbara påståenden: Agent SDK finns för Python, Node.js och Go,
+// exponerar Kimi Code-runtimen programmatiskt och återanvänder konfiguration,
+// verktyg, Skills och MCP-servrar samt visar godkännanden/verktygsanrop.
+// Kimi Code stödjer Skills, MCP, subagenter och AgentSwarm. Permission rules
+// använder allow / deny / ask.
+export const ADVANCED_BONUS = {
+  kicker: "Avancerad bonus",
+  headline: "Bygg din egen AI-medarbetare.",
+  lead:
+    "Grok Bot ger dig den färdiga AI-medarbetarplattformen – det är där guiden bor. Men när du förstått metoden är den inte låst till ett verktyg: samma arkitektur kan byggas in i din egen vertikala produkt. Kimi Code och Kimi Agent SDK är ett aktuellt exempel på en sådan stack, inte ett krav.",
+  readyMade: {
+    label: "Färdigt · Grok Bot",
+    note: "Plattformen finns redan – du bygger kontoret ovanpå.",
+    steps: ["Botar", "Dator & verktyg", "Skills", "Routines", "Groups & handoffs", "Godkännanden"],
+  },
+  buildYourOwn: {
+    label: "Bygg eget · exempelstack",
+    note:
+      "Kimi Agent SDK finns officiellt för Python, Node.js och Go och exponerar Kimi Code-runtimen programmatiskt. Den återanvänder din Kimi Code-konfiguration, verktyg, Skills och MCP-servrar, och visar verktygsanrop och godkännanden – vilket gör den användbar i egna produkter och automationer. Kimi Code stödjer Skills, MCP, subagenter och AgentSwarm, och permission rules sätts som allow / deny / ask.",
+    steps: [
+      "Kimi K3",
+      "Kimi Code",
+      "Skills",
+      "MCP",
+      "Agent SDK",
+      "Subagenter / AgentSwarm",
+      "Permissions (allow/deny/ask)",
+      "Din egen vertikala AI-produkt",
+    ],
+  },
+  trustNote:
+    "Ärligt besked: guiden lovar inte att ett SDK trollar fram en medarbetare som jobbar dygnet runt. Schemaläggning, hosting, integrationer, övervakning och produktionsstabilitet är fortfarande ingenjörsarbete – bonusen visar arkitekturen och besluten, inte en genväg runt driften.",
+} as const;
+
+export const BONUS_CHAPTER = {
+  title: "BONUS: Från Grok Bot till egen AI-medarbetare",
+  desc:
+    "Hur samma principer – roll, skill, verktyg, permissions, evidence och handoffs – flyttas in i din egen agentiska mjukvara. Kimi Code och Kimi Agent SDK används som konkret exempel: Skills, MCP, subagenter/AgentSwarm och permission rules (allow/deny/ask). Ingen färdig hostad produkt – hosting, schemaläggning och integrationer är ditt arbete.",
+} as const;
+
 
 // ── Guidekapitel (aktuell struktur, Version 1.0 — redigera fritt här) ───────
 export const CHAPTERS: { title: string; desc: string }[] = [
