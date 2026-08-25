@@ -327,12 +327,32 @@ const GrokBot = () => {
           {/* ═══ 1. HERO ═══ */}
           <section className="vk-section gb-hero" aria-labelledby="gb-h1">
             <div className="vk-wrap">
-              {checkoutReturn && (
+              {checkoutCancelled && (
                 <div className="gb-thanks" role="status">
-                  <b>Tack.</b> Om betalningen gick igenom får du leverans via e-post. Kontakta
-                  info@auroramedia.se om något saknas.
+                  <b>Köpet avbröts.</b> Inget har debiterats. Du är välkommen tillbaka när du vill.
                 </div>
               )}
+              {checkoutReturn && (
+                <div className="gb-thanks" role="status">
+                  {verify.state === "checking" && <><b>Verifierar…</b> Vi kontrollerar betalningen mot betalleverantören.</>}
+                  {verify.state === "paid" && (
+                    <>
+                      <b>Betalning verifierad.</b>{" "}
+                      {verify.delivered
+                        ? "Leveransmejlet med dina nedladdningslänkar är skickat."
+                        : "Leveransmejlet med dina nedladdningslänkar är på väg."}{" "}
+                      Saknas något? Mejla info@auroramedia.se.
+                    </>
+                  )}
+                  {(verify.state === "unverified" || verify.state === "idle") && (
+                    <>
+                      <b>Tack.</b> Vi kan inte bekräfta någon betalning här – om den gick igenom får
+                      du leverans via e-post. Kontakta info@auroramedia.se om något saknas.
+                    </>
+                  )}
+                </div>
+              )}
+
 
               <Reveal>
                 <p className="gb-eyebrow">
