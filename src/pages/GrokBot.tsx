@@ -65,21 +65,24 @@ const GrokBot = () => {
   const [wlHp, setWlHp] = useState("");
   const [wlState, setWlState] = useState<"idle" | "sending" | "done" | "error">("idle");
 
-  // Köpåterkomst från Stripe (success-URL: /grok-bot?kopt=tack&p=bundle)
+  // Neutral retur från checkout (success-URL: /grok-bot?checkout=return).
+  // OBS: en query-parameter bevisar INTE att betalning skett. Därför visas bara
+  // neutral text här, och inget grok_purchase-event får skapas från URL:en.
+  // Verifierade purchase-event ska komma från Stripe-webhook (server-side).
   const params = new URLSearchParams(location.search);
-  const justPurchased = params.get("kopt") === "tack";
-  const purchasedProduct = params.get("p") ?? undefined;
+  const checkoutReturn = params.get("checkout") === "return";
 
   useEffect(() => {
     trackEvent("grok_page_view", { status: PRODUCT_STATUS, version: PRODUCT_VERSION });
   }, []);
 
   useEffect(() => {
-    if (justPurchased) {
-      trackEvent("grok_purchase", { product: purchasedProduct ?? "unknown" });
+    if (checkoutReturn) {
+      trackEvent("grok_checkout_return", { status: PRODUCT_STATUS });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   // Scroll-djup → grok_scroll_content (25/50/75/100 %)
   useEffect(() => {
