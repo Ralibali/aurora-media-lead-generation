@@ -17,6 +17,7 @@ import {
   X,
   Sparkles,
   BarChart3,
+  PackageCheck,
   Radar,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
