@@ -65,21 +65,24 @@ const GrokBot = () => {
   const [wlHp, setWlHp] = useState("");
   const [wlState, setWlState] = useState<"idle" | "sending" | "done" | "error">("idle");
 
-  // Köpåterkomst från Stripe (success-URL: /grok-bot?kopt=tack&p=bundle)
+  // Neutral retur från checkout (success-URL: /grok-bot?checkout=return).
+  // OBS: en query-parameter bevisar INTE att betalning skett. Därför visas bara
+  // neutral text här, och inget grok_purchase-event får skapas från URL:en.
+  // Verifierade purchase-event ska komma från Stripe-webhook (server-side).
   const params = new URLSearchParams(location.search);
-  const justPurchased = params.get("kopt") === "tack";
-  const purchasedProduct = params.get("p") ?? undefined;
+  const checkoutReturn = params.get("checkout") === "return";
 
   useEffect(() => {
     trackEvent("grok_page_view", { status: PRODUCT_STATUS, version: PRODUCT_VERSION });
   }, []);
 
   useEffect(() => {
-    if (justPurchased) {
-      trackEvent("grok_purchase", { product: purchasedProduct ?? "unknown" });
+    if (checkoutReturn) {
+      trackEvent("grok_checkout_return", { status: PRODUCT_STATUS });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   // Scroll-djup → grok_scroll_content (25/50/75/100 %)
   useEffect(() => {
@@ -226,13 +229,13 @@ const GrokBot = () => {
           {/* ═══ 1. HERO ═══ */}
           <section className="vk-section gb-hero" aria-labelledby="gb-h1">
             <div className="vk-wrap">
-              {justPurchased && (
+              {checkoutReturn && (
                 <div className="gb-thanks" role="status">
-                  <b>Tack för ditt köp av AI-KONTORET!</b> Din order är bekräftad. Leveransen sker
-                  digitalt – du får guiden via mejl och nedladdningslänk. Hör av dig till
-                  info@auroramedia.se om något krånglar.
+                  <b>Tack.</b> Om betalningen gick igenom får du leverans via e-post. Kontakta
+                  info@auroramedia.se om något saknas.
                 </div>
               )}
+
               <Reveal>
                 <p className="gb-eyebrow">
                   <i aria-hidden="true" /> AI-KONTORET
@@ -297,7 +300,7 @@ const GrokBot = () => {
                   <p className="gb-kicker">Varför den här guiden finns</p>
                 </Reveal>
                 <Reveal delay={0.08}>
-                  <h2 id="gb-varfor">Skriven av någon som kör AI-bottar i produktion. Varje dag.</h2>
+                  <h2 id="gb-varfor">Skriven av någon som kör AI-botar i produktion. Varje dag.</h2>
                 </Reveal>
                 <Reveal delay={0.16}>
                   <p className="gb-lead">
@@ -849,7 +852,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("guide")}
                     >
-                      <span>{IS_LIVE ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringbesked"}</span>
+                      <span>{IS_LIVE ? `Köp guiden – ${PRICES.guide} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -905,7 +908,7 @@ const GrokBot = () => {
                       className="vk-btn vk-btn-ghost"
                       onClick={() => handleBuy("vault")}
                     >
-                      <span>{IS_LIVE ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringbesked"}</span>
+                      <span>{IS_LIVE ? `Köp Vault – ${PRICES.vault} kr` : "Få lanseringsbesked"}</span>
                     </button>
                   </article>
                 </Reveal>
@@ -933,7 +936,7 @@ const GrokBot = () => {
                   <p className="gb-kicker">Passar det dig?</p>
                 </Reveal>
                 <Reveal delay={0.08}>
-                  <h2 id="gb-who-h">Rak besked om vem guiden är för.</h2>
+                  <h2 id="gb-who-h">Rakt besked om vem guiden är för.</h2>
                 </Reveal>
               </div>
               <div className="gb-who">

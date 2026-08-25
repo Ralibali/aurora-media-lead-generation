@@ -12,7 +12,9 @@
  *     Payment Links är publika, säkra url:er. Hemligheter hör hemma i
  *     Supabase-secrets, aldrig här.)
  * 3. Sätt success-URL på alla tre länkarna till STRIPE_SUCCESS_URL
- *    (den skickar tillbaka kunden hit och loggar grok_purchase).
+ *    (neutral retur – den bekräftar INTE betalning och loggar bara ett
+ *     grok_checkout_return-event. Verifierade köp loggas server-side.)
+
  * 4. Deploy:a. Klart — samtliga CTA:er på sidan blir köpflöden automatiskt.
  *
  * ── LEVERANSARKITEKTUR (förberedd, ej aktiverad) ───────────────────────────
@@ -58,7 +60,7 @@ export const PRICES = {
 
 // ── Stripe Payment Links ────────────────────────────────────────────────────
 // ÄGAREN: klistra in de riktiga länkarna här vid live. Lämna tomma i prelaunch.
-// Sätt success-URL i Stripe till STRIPE_SUCCESS_URL för spårning + leveransstart.
+// Sätt success-URL i Stripe till STRIPE_SUCCESS_URL (neutral retursida).
 export const STRIPE_LINKS = {
   guide: "", // t.ex. "https://buy.stripe.com/…" — Guide 199 kr
   vault: "", // Prompt Vault 199 kr (för befintliga guideägare)
@@ -67,7 +69,15 @@ export const STRIPE_LINKS = {
 
 export type AiKontoretProduct = keyof typeof STRIPE_LINKS;
 
-export const STRIPE_SUCCESS_URL = "https://auroramedia.se/grok-bot?kopt=tack";
+/**
+ * Neutral retur efter checkout. Query-parametern bevisar INTE att betalning
+ * skett – sidan får därför aldrig påstå att ordern är bekräftad, och
+ * grok_purchase får aldrig loggas från en URL-parameter. Klienten loggar
+ * som mest ett grok_checkout_return-event. Riktiga purchase-event ska komma
+ * från Stripe-webhook som verifierats server-side.
+ */
+export const STRIPE_SUCCESS_URL = "https://auroramedia.se/grok-bot?checkout=return";
+
 
 export const PRODUCT_SKUS: Record<AiKontoretProduct, string> = {
   guide: "ai-kontoret-guide",
@@ -292,7 +302,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Behöver jag vara programmerare?",
-    a: "Nej. Uplägget är skrivet för operatörer, inte utvecklare. Allt byggs i Grok Bots egna ytor med copy-paste-mallar. Kan du beskriva ett jobb på svenska kan du bygga en Bot.",
+    a: "Nej. Upplägget är skrivet för operatörer, inte utvecklare. Allt byggs i Grok Bots egna ytor med copy-paste-mallar. Kan du beskriva ett jobb på svenska kan du bygga en Bot.",
   },
   {
     q: "Är det bara prompts?",
@@ -300,7 +310,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Vad är skillnaden mellan Bot, Skill och Routine?",
-    a: "En Bot är en AI-medarbetare – en digital kollega med ett definierat jobb. En Skill är ett inlärbt, återkommande arbetsflöde som Boten kan. En Routine bestämmer när jobbet körs – schemalagt eller triggat av en händelse.",
+    a: "En Bot är en AI-medarbetare – en digital kollega med ett definierat jobb. En Skill är ett inlärt, återkommande arbetsflöde som Boten kan. En Routine bestämmer när jobbet körs – schemalagt eller triggat av en händelse.",
   },
   {
     q: "Kan jag använda detta i ett vanligt småföretag?",
@@ -312,7 +322,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Hur mycket kan Botarna göra helt själva?",
-    a: "Mer än du tror – men inte allt. Guiden bygger medvetet på owner gates: repetitive delar som research, utkast och sammanställningar kör autonomt, medan pengar, publicering och riskfyllda åtgärder alltid kräver ditt godkännande.",
+    a: "Mer än du tror – men inte allt. Guiden bygger medvetet på owner gates: repetitiva delar som research, utkast och sammanställningar kör autonomt, medan pengar, publicering och riskfyllda åtgärder alltid kräver ditt godkännande.",
   },
   {
     q: "Hur behåller jag kontrollen?",
