@@ -7,7 +7,6 @@ import "@/styles/lumina.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import { cities } from "@/lib/cityContent";
 
 // Konverteringskritiska sidor hålls i huvudbundlen så att den statiska
 // förhandsvisningen kan bytas mot riktig sida utan laddningssteg.
@@ -80,6 +79,7 @@ const SeoKalkylator = lazy(() => import("./pages/verktyg/SeoKalkylator"));
 const AiMognadsanalys = lazy(() => import("./pages/verktyg/AiMognadsanalys"));
 const PersonalkostnadVsAi = lazy(() => import("./pages/verktyg/PersonalkostnadVsAi"));
 const PromptGenerator = lazy(() => import("./pages/verktyg/PromptGenerator"));
+const GrokBot = lazy(() => import("./pages/GrokBot"));
 
 const queryClient = new QueryClient();
 
@@ -174,6 +174,13 @@ const seoMap: Record<string, SEOConfig> = {
       "Se sammanställningen från AI-kartan och vilka processer som har störst potential för AI och automation.",
     canonical: "https://auroramedia.se/ai-karta/resultat",
     noindex: true,
+  },
+  "/grok-bot": {
+    title: "AI-KONTORET – Bygg ett AI-drivet företag med Grok Bot | Guide 199 kr",
+    description:
+      "Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups och owner gates – ett AI-kontor som jobbar åt dig. 199 kr.",
+    canonical: "https://auroramedia.se/grok-bot",
+    ogImage: "https://auroramedia.se/og-grok-bot.jpg",
   },
   "/ai-automation-foretag": {
     title: "AI automation för företag | Automatisera Excel, leads och administration",
@@ -503,6 +510,7 @@ const App = () => (
               <Route path="/ai-karta/start" element={<AiKartaStart />} />
               <Route path="/ai-karta/resultat" element={<AiKartaResultat />} />
               <Route path="/ai-snabbanalys" element={<AiSnabbanalys />} />
+              <Route path="/grok-bot" element={<GrokBot />} />
               <Route path="/ai-automation-foretag" element={<AiAutomationForetag />} />
               <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />
@@ -562,12 +570,8 @@ const App = () => (
               <Route path="/verktyg/ai-mognadsanalys" element={<Suspense fallback={<VerktygFallback />}><AiMognadsanalys /></Suspense>} />
               <Route path="/verktyg/personalkostnad-vs-ai" element={<Suspense fallback={<VerktygFallback />}><PersonalkostnadVsAi /></Suspense>} />
               <Route path="/verktyg/prompt-generator" element={<Suspense fallback={<VerktygFallback />}><PromptGenerator /></Suspense>} />
-              {cities.filter((c) => c.slug !== "linkoping").map((c) => (
-                <Route key={`ai-${c.slug}`} path={`/ai-byra-${c.slug}`} element={<CityPage />} />
-              ))}
-              {cities.map((c) => (
-                <Route key={`saas-${c.slug}`} path={`/saas-utveckling-${c.slug}`} element={<CityPage />} />
-              ))}
+              <Route path="/saas-utveckling-:city" element={<CityPage />} />
+              <Route path="/ai-byra-:city" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>

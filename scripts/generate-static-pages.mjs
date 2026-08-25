@@ -75,6 +75,181 @@ const STATIC_PAGES = [
   { route: '/verktyg/prompt-generator', title: 'Prompt-generator – bygg strukturerade AI-prompts på svenska', description: 'Generera strukturerade svenska AI-prompts för ChatGPT, Claude och Gemini. Välj mall, roll, mål, ton, detaljnivå och outputstruktur. Kopiera på ett klick.', body: 'Välj bland nio mallar, justera parametrar och få en tydlig, strukturerad prompt på svenska som fungerar i ChatGPT, Claude, Gemini och Copilot – med kvalitetschecklista och nedladdning.' },
 ];
 
+// ============================================================================
+// AI-KONTORET (/grok-bot) — crawlbar statisk sida med riktigt innehåll
+// ----------------------------------------------------------------------------
+// FAQ och kapitel speglar src/config/aiKontoret.ts — håll i synk vid ändringar.
+// Lanseringsläget läses direkt ur konfigen så statisk copy följer PRODUCT_STATUS.
+// ============================================================================
+
+function readAiKontoretStatus() {
+  try {
+    const src = readFileSync(path.resolve(process.cwd(), 'src/config/aiKontoret.ts'), 'utf8');
+    const m = src.match(/PRODUCT_STATUS:\s*"prelaunch"\s*\|\s*"live"\s*=\s*"(prelaunch|live)"/);
+    return m ? m[1] : 'prelaunch';
+  } catch {
+    return 'prelaunch';
+  }
+}
+
+const GROK_BOT_FAQ = [
+  ['Jag är ny på Grok Bot – funkar guiden ändå?', 'Ja. Guiden börjar från noll: din första Bot byggs steg för steg i kapitel 2, innan vi går vidare till Skills, Routines och Groups. Du behöver inte ha använt Grok Bot tidigare.'],
+  ['Behöver jag vara programmerare?', 'Nej. Uplägget är skrivet för operatörer, inte utvecklare. Allt byggs i Grok Bots egna ytor med copy-paste-mallar. Kan du beskriva ett jobb på svenska kan du bygga en Bot.'],
+  ['Är det bara prompts?', 'Nej – det är hela poängen. En prompt säger "gör den här uppgiften". Guiden lär dig bygga Botar som äger ett jobb: roll, verktyg, Skills, Routines, evidence och handoffs. Promptar är bara ett av materialen.'],
+  ['Vad är skillnaden mellan Bot, Skill och Routine?', 'En Bot är en AI-medarbetare – en digital kollega med ett definierat jobb. En Skill är ett inlärbt, återkommande arbetsflöde som Boten kan. En Routine bestämmer när jobbet körs – schemalagt eller triggat av en händelse.'],
+  ['Kan jag använda detta i ett vanligt småföretag?', 'Ja. Exemplen kommer från verklig drift: research, innehåll, uppföljning, sales outreach och QA. Det är AI-automatisering anpassad för företag utan teknikavdelning – upplägget skalar ner till en enda Bot lika väl som det skalar upp till ett helt AI-kontor.'],
+  ['Fungerar det om jag använder Cursor?', 'Ja. Principerna – Bot Charter, Skills, Routines, handoffs, owner gates – är desamma. Guiden visar upplägget i Grok Bot, men strukturen följer med dig oavsett vilket AI-verktyg du kör.'],
+  ['Hur mycket kan Botarna göra helt själva?', 'Mer än du tror – men inte allt. Guiden bygger medvetet på owner gates: repetetiva delar som research, utkast och sammanställningar kör autonomt, medan pengar, publicering och riskfyllda åtgärder alltid kräver ditt godkännande.'],
+  ['Hur behåller jag kontrollen?', 'Genom tre mekanismer som genomsyrar guiden: owner gates (inga riskåtgärder utan ditt godkännande), evidence receipts (varje leverans ska kunna bevisas) och usage-styrning (du ser vad varje Bot kostar i kapacitet).'],
+  ['Blir guiden gammal när Grok ändras?', 'Verktyg ändras – operativsystem består. Det mesta i guiden är plattformsoberoende: roller, Skills, handoffs och kontrollstrukturer. Guiden är dessutom versionerad och faktagranskad mot aktuella officiella källor; du ser alltid vilken version du har, när den uppdaterades och när fakta senast verifierades.'],
+  ['Har varje Bot en egen dator?', 'Nej – det är en vanlig missuppfattning. Alla Botar delar en och samma beständiga molndator som är knuten till ditt konto, men varje Bot arbetar på sin egen arbetsyta. Guiden visar hur du organiserar dem så att de samarbetar istället för att krocka.'],
+  ['Vad får jag i Prompt Vault?', 'Ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget: roller som CEO/Chief of Staff, Growth, Sales, QA och Engineer, plus system som Opportunity Engine, AI Usage Governor, Work Packets, owner gates och weekly reviews – redo att kopiera rakt in. Guiden är fullständig utan Vault; det här är genvägen för dig som vill kopiera implementeringen direkt.'],
+];
+
+const GROK_BOT_LEARN = [
+  ['Botar', 'Så skriver du riktiga job descriptions istället för engångspromptar.'],
+  ['Skills', 'Så lär du Grok ett återkommande arbetsflöde.'],
+  ['Routines', 'Så får jobbet att köras automatiskt på rätt tid.'],
+  ['Groups & handoffs', 'Så låter du AI-medarbetare lämna över arbete utan att du blir mellanhand.'],
+  ['AI-usage', 'Så undviker du att flera Botar bränner kapacitet på samma problem.'],
+  ['Owner gates', 'Så låter du AI arbeta själv utan att ge bort kontroll över pengar, publicering eller riskfyllda åtgärder.'],
+  ['Evidence', 'Så kräver du bevis på att jobbet faktiskt blev gjort.'],
+  ['Growth', 'Så bygger du återkommande research-, content-, SEO- och sales-loopar.'],
+];
+
+const GROK_BOT_CHAPTERS = [
+  'Från chatbot till AI-medarbetare',
+  'Din första Bot',
+  'Så skriver du en Bot Charter',
+  'Skills',
+  'Routines',
+  'Groups & handoffs',
+  'Chief of Staff',
+  'AI-företaget',
+  'Säkerhet & owner gates',
+  'Usage och AI-kapital',
+  'Growth & sales automation',
+  'Så bygger du vidare',
+];
+
+function buildGrokBotBody(status) {
+  const live = status === 'live';
+  const ctaText = live
+    ? `Köp AI-KONTORET för 199 kr – eller lanseringspaketet med Prompt Vault för 349 kr (ord. 398 kr).`
+    : 'Guiden färdigställs just nu – ställ dig i väntelistan så får du besked först, till lanseringspriset.';
+  return `<main>
+<h1>AI-KONTORET – Bygg ett AI-team som faktiskt gör jobbet</h1>
+<p>Den praktiska svenska guiden till Grok Bot — från din första Bot till Skills, Routines, Groups, handoffs och ett AI-kontor som arbetar även när du inte sitter framför datorn. Praktiskt. Svenskt. Copy-paste-vänligt. Byggt från verklig användning. Version 1.0, augusti 2026. Senast uppdaterad och faktaverifierad 2026-08-25 mot aktuella officiella källor. ${ctaText}</p>
+<p>Det här är inte information om Grok Bot – den fria engelska dokumentationen täcker grundinställningarna. AI-KONTORET är det svenska operativsystemet ovanpå: så bygger du AI-medarbetare och digitala kollegor som äger riktiga jobb – AI-agenter med roller, inte engångspromptar – med AI-automatisering anpassad för företag och småföretag utan teknikavdelning. Ersätt inte hela teamet – ge EN uppgift till EN bot, och bygg det minsta AI-teamet som faktiskt kan slutföra jobbet.</p>
+<section>
+<h2>En Bot är inte en prompt</h2>
+<p>En prompt säger "gör den här uppgiften". En Bot äger jobbet och utför det varje gång det behövs: roll, verktyg, skill, routine, evidence, handoff, result. Guiden lär dig hela kedjan, kapitel för kapitel.</p>
+</section>
+<section>
+<h2>Vad du lär dig</h2>
+<ul>
+${GROK_BOT_LEARN.map(([t, d]) => `<li><strong>${escapeHtml(t)}</strong> – ${escapeHtml(d)}</li>`).join('\n')}
+</ul>
+</section>
+<section>
+<h2>Så ser ett riktigt AI-kontor ut</h2>
+<p>Ägare → HQ / Chief of Staff → Company CEO → specialister (Growth &amp; Sales, Engineering, QA, Research). Målet är inte flest Botar – målet är det minsta team som slutför ett riktigt uppdrag end-to-end. Tekniskt sett delar alla Botar en och samma beständiga molndator knuten till ditt konto, med separata arbetsytor per Bot – guiden visar hur du organiserar dem utan krockar.</p>
+</section>
+<section>
+<h2>Guideinnehåll – tolv kapitel</h2>
+<ol>
+${GROK_BOT_CHAPTERS.map((c) => `<li>${escapeHtml(c)}</li>`).join('\n')}
+</ol>
+</section>
+<section>
+<h2>Pris och paket</h2>
+<p>AI-KONTORET kostar 199 kr (engångspris, ingen prenumeration). Prompt Vault – ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget – säljs som tillägg för 199 kr. Lanseringspaketet med båda kostar 349 kr (199 + 199 = 398 kr, du sparar 49 kr). Digital leverans direkt efter köp.</p>
+</section>
+<section>
+<h2>Vanliga frågor om AI-KONTORET och Grok Bot</h2>
+${GROK_BOT_FAQ.map(([q, a]) => `<h3>${escapeHtml(q)}</h3><p>${escapeHtml(a)}</p>`).join('\n')}
+</section>
+</main>`;
+}
+
+function buildGrokBotSchemas(status) {
+  const availability = status === 'live' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder';
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      '@id': `${SITE_URL}/grok-bot#produkt`,
+      name: 'AI-KONTORET – Så bygger du ett AI-drivet företag med Grok Bot',
+      description:
+        'Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups, handoffs och owner gates – ett AI-kontor som jobbar åt dig.',
+      image: [`${SITE_URL}/og-grok-bot.jpg`],
+      brand: { '@type': 'Brand', name: 'Aurora Media' },
+      category: 'Digital guide',
+      inLanguage: 'sv-SE',
+      version: '1.0',
+      dateModified: '2026-08-25',
+      offers: [
+        {
+          '@type': 'Offer',
+          name: 'AI-KONTORET – guiden',
+          price: '199',
+          priceCurrency: 'SEK',
+          url: `${SITE_URL}/grok-bot#priser`,
+          availability,
+        },
+        {
+          '@type': 'Offer',
+          name: 'AI-KONTORET + Prompt Vault (lanseringspaket)',
+          price: '349',
+          priceCurrency: 'SEK',
+          url: `${SITE_URL}/grok-bot#priser`,
+          availability,
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: GROK_BOT_FAQ.map(([q, a]) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Hem', item: SITE_URL },
+        { '@type': 'ListItem', position: 2, name: 'AI-KONTORET', item: `${SITE_URL}/grok-bot` },
+      ],
+    },
+  ];
+}
+
+const aiKontoretStatus = readAiKontoretStatus();
+STATIC_PAGES.push({
+  route: '/grok-bot',
+  title: 'AI-KONTORET – Bygg ett AI-drivet företag med Grok Bot | Guide 199 kr',
+  description:
+    'Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups och owner gates – ett AI-kontor som jobbar åt dig. 199 kr.',
+  body: 'AI-KONTORET är Aurora Medias praktiska svenska guide till Grok Bot.',
+  htmlBody: buildGrokBotBody(aiKontoretStatus),
+  schemas: buildGrokBotSchemas(aiKontoretStatus),
+  ogImage: '/og-grok-bot.jpg',
+  mono: 'AI-KONTORET · GUIDE · VERSION 1.0',
+  ctas:
+    aiKontoretStatus === 'live'
+      ? [
+          { label: 'Köp AI-KONTORET – 199 kr', href: '/grok-bot#priser' },
+          { label: 'Se vad som ingår', href: '/grok-bot', ghost: true },
+        ]
+      : [
+          { label: 'Få besked när AI-KONTORET släpps', href: '/kontakt' },
+          { label: 'Testa AI-snabbanalysen gratis', href: '/ai-snabbanalys', ghost: true },
+        ],
+});
+
 function escapeHtml(s) {
   if (s == null) return '';
   return String(s)
@@ -208,9 +383,10 @@ function buildCityFaqSchema(faqs) {
   };
 }
 
-function injectHtml({ template, route, title, description, ogType = 'website', jsonLd = [], body, hreflang = false }) {
+function injectHtml({ template, route, title, description, ogType = 'website', jsonLd = [], body, hreflang = false, ogImage, mono, ctas }) {
   const canonical = fullUrl(route);
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const ogImageUrl = ogImage ? `${SITE_URL}${ogImage}` : `${SITE_URL}/og-image-sv.jpg`;
   let html = template;
 
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(fullTitle)}</title>`);
@@ -228,7 +404,7 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
     `<meta property="og:description" content="${escapeHtml(description)}" />`,
     `<meta property="og:url" content="${canonical}" />`,
     `<meta property="og:type" content="${ogType}" />`,
-    `<meta property="og:image" content="${SITE_URL}/og-image-sv.jpg" />`,
+    `<meta property="og:image" content="${ogImageUrl}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
     `<meta property="og:site_name" content="${SITE_NAME}" />`,
@@ -236,7 +412,7 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${escapeHtml(fullTitle)}" />`,
     `<meta name="twitter:description" content="${escapeHtml(description)}" />`,
-    `<meta name="twitter:image" content="${SITE_URL}/og-image-sv.jpg" />`,
+    `<meta name="twitter:image" content="${ogImageUrl}" />`,
     ...(hreflang
       ? [
           `<link rel="alternate" hreflang="sv" href="${SITE_URL}/" />`,
@@ -261,9 +437,12 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
   const preview = buildInstantPreview({
     title,
     body,
-    mono: route === '/ai-karta' ? 'Gratis · 2 min · Resultat direkt' : route === '/' ? 'Aurora Media · Linköping' : undefined,
+    mono:
+      mono ??
+      (route === '/ai-karta' ? 'Gratis · 2 min · Resultat direkt' : route === '/' ? 'Aurora Media · Linköping' : undefined),
     ctas:
-      route === '/ai-karta'
+      ctas ??
+      (route === '/ai-karta'
         ? [
             { label: 'Starta kartläggningen', href: '/ai-karta/start' },
             { label: 'Hellre prata direkt?', href: '/kontakt', ghost: true },
@@ -273,7 +452,7 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
               { label: 'Starta AI-kartan – gratis', href: '/ai-karta' },
               { label: 'Boka samtal', href: '/kontakt', ghost: true },
             ]
-          : [{ label: 'Boka samtal', href: '/kontakt' }],
+          : [{ label: 'Boka samtal', href: '/kontakt' }]),
   });
   html = setInstantPreview(html, preview);
 
@@ -495,9 +674,12 @@ async function main() {
       route: page.route,
       title: page.title,
       description: page.description,
-      jsonLd: [organizationSchema, websiteSchema, ...buildPageSchema(page), ...extraSchemas],
-      body: `<main><h1>${escapeHtml(page.title)}</h1><p>${escapeHtml(page.body)}</p></main>`,
+      jsonLd: [organizationSchema, websiteSchema, ...buildPageSchema(page), ...extraSchemas, ...(page.schemas ?? [])],
+      body: page.htmlBody ?? `<main><h1>${escapeHtml(page.title)}</h1><p>${escapeHtml(page.body)}</p></main>`,
       hreflang: page.hreflang === true,
+      ogImage: page.ogImage,
+      mono: page.mono,
+      ctas: page.ctas,
     });
     await writeRoute(page.route, html);
   }
