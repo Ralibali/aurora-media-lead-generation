@@ -454,3 +454,5 @@
   padding-top: 20px;
 }
 .gb-chapter.is-bonus .no { opacity: 0.5; }
+.gb-bonus-col.is-build .gb-bonus-note { color: rgba(246, 245, 241, 0.72); opacity: 1; }
+.gb-bonus-col.is-build .gb-bonus-label { color: rgba(246, 245, 241, 0.6); opacity: 1; }
