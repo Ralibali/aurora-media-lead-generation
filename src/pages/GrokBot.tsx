@@ -229,13 +229,13 @@ const GrokBot = () => {
           {/* ═══ 1. HERO ═══ */}
           <section className="vk-section gb-hero" aria-labelledby="gb-h1">
             <div className="vk-wrap">
-              {justPurchased && (
+              {checkoutReturn && (
                 <div className="gb-thanks" role="status">
-                  <b>Tack för ditt köp av AI-KONTORET!</b> Din order är bekräftad. Leveransen sker
-                  digitalt – du får guiden via mejl och nedladdningslänk. Hör av dig till
-                  info@auroramedia.se om något krånglar.
+                  <b>Tack.</b> Om betalningen gick igenom får du leverans via e-post. Kontakta
+                  info@auroramedia.se om något saknas.
                 </div>
               )}
+
               <Reveal>
                 <p className="gb-eyebrow">
                   <i aria-hidden="true" /> AI-KONTORET
