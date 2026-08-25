@@ -67,21 +67,83 @@ const GrokBot = () => {
   const [wlHp, setWlHp] = useState("");
   const [wlState, setWlState] = useState<"idle" | "sending" | "done" | "error">("idle");
 
-  // Neutral retur från checkout (success-URL: /grok-bot?checkout=return).
-  // OBS: en query-parameter bevisar INTE att betalning skett. Därför visas bara
-  // neutral text här, och inget grok_purchase-event får skapas från URL:en.
-  // Verifierade purchase-event ska komma från Stripe-webhook (server-side).
+  // Checkout-kassa (live-läge): produkt + e-post + uttryckligt samtycke.
+  const [coProduct, setCoProduct] = useState<AiKontoretProduct | null>(null);
+  const [coEmail, setCoEmail] = useState("");
+  const [coAck, setCoAck] = useState(false);
+  const [coState, setCoState] = useState<"idle" | "sending" | "error">("idle");
+  const [coError, setCoError] = useState<string | null>(null);
+
+  // Lanseringsspärr: köpknappar öppnas bara om servern säger ready.
+  const [launchReady, setLaunchReady] = useState(false);
+
+  // Neutral retur från checkout (success-URL: /grok-bot?checkout=return&session_id=…).
+  // OBS: en query-parameter bevisar INTE att betalning skett. Verifiering sker
+  // server-side via ai-kontoret-verify-session; först då får UI:t visa köp och
+  // först då loggas grok_purchase.
   const params = new URLSearchParams(location.search);
   const checkoutReturn = params.get("checkout") === "return";
+  const checkoutCancelled = params.get("checkout") === "cancel";
+  const returnedSessionId = params.get("session_id") ?? "";
+  const [verify, setVerify] = useState<
+    | { state: "idle" }
+    | { state: "checking" }
+    | { state: "paid"; product: string; delivered: boolean }
+    | { state: "unverified" }
+  >({ state: "idle" });
 
   useEffect(() => {
     trackEvent("grok_page_view", { status: PRODUCT_STATUS, version: PRODUCT_VERSION });
   }, []);
 
+  // Lanseringsspärr hämtas bara i live-läge – prelaunch rör aldrig checkout.
   useEffect(() => {
-    if (checkoutReturn) {
-      trackEvent("grok_checkout_return", { status: PRODUCT_STATUS });
+    if (!IS_LIVE) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const supabase = await getSupabase();
+        const { data, error } = await supabase.functions.invoke(FN_LAUNCH_STATUS, { body: {} });
+        if (!cancelled) setLaunchReady(!error && data?.ready === true);
+      } catch {
+        if (!cancelled) setLaunchReady(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Serververifiering av retursessionen.
+  useEffect(() => {
+    if (!checkoutReturn) return;
+    trackEvent("grok_checkout_return", { status: PRODUCT_STATUS });
+    if (!/^cs_[A-Za-z0-9_]{10,200}$/.test(returnedSessionId)) {
+      setVerify({ state: "unverified" });
+      return;
     }
+    let cancelled = false;
+    setVerify({ state: "checking" });
+    (async () => {
+      try {
+        const supabase = await getSupabase();
+        const { data, error } = await supabase.functions.invoke(FN_VERIFY_SESSION, {
+          body: { session_id: returnedSessionId },
+        });
+        if (cancelled) return;
+        if (!error && data?.paid === true) {
+          setVerify({ state: "paid", product: String(data.product), delivered: Boolean(data.delivered) });
+          trackEvent("grok_purchase", { product: String(data.product), verified: true });
+        } else {
+          setVerify({ state: "unverified" });
+        }
+      } catch {
+        if (!cancelled) setVerify({ state: "unverified" });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -112,23 +174,54 @@ const GrokBot = () => {
     vault: "grok_prompt_vault_click",
   };
 
-  /** Köpflöde: live → Stripe Payment Link. prelaunch → väntelistan. */
+  /** Köpbart endast när både koden och servern säger att allt är på plats. */
+  const canBuy = IS_LIVE && launchReady;
+
+  /** Köpflöde: canBuy → kassa (samtycke) → server-skapad Stripe-session. */
   const handleBuy = (product: AiKontoretProduct) => {
-    trackEvent(buyEvent[product], { status: PRODUCT_STATUS });
-    if (!IS_LIVE) {
+    trackEvent(buyEvent[product], { status: PRODUCT_STATUS, can_buy: canBuy });
+    if (!canBuy) {
+      // Prelaunch eller lanseringsspärr ej uppfylld → aldrig döda köpknappar.
       scrollToId("kop");
       return;
     }
-    const link = STRIPE_LINKS[product];
-    if (!link) {
-      // Live-läge men länk saknas – ska inte hända, men fall tillbaka mjukt.
-      console.warn(`[ai-kontoret] STRIPE_LINKS.${product} saknas – fyll i src/config/aiKontoret.ts`);
-      scrollToId("kop");
-      return;
-    }
-    trackEvent("grok_checkout_start", { product });
-    window.location.href = link;
+    setCoError(null);
+    setCoState("idle");
+    setCoAck(false);
+    setCoProduct(product);
   };
+
+  /** Skapar Stripe Checkout Session server-side. Belopp sätts aldrig i klienten. */
+  const startCheckout = async () => {
+    if (!coProduct) return;
+    if (!coAck) {
+      setCoError("Du behöver godkänna villkoren för digital leverans.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(coEmail.trim())) {
+      setCoError("Ange en giltig e-postadress – leveransen skickas dit.");
+      return;
+    }
+    setCoState("sending");
+    setCoError(null);
+    try {
+      const supabase = await getSupabase();
+      const { data, error } = await supabase.functions.invoke(FN_CREATE_CHECKOUT, {
+        body: { product: coProduct, email: coEmail.trim(), legal_ack: true },
+      });
+      if (error || !data?.url) {
+        setCoState("error");
+        setCoError("Kassan kunde inte öppnas just nu. Försök igen eller mejla info@auroramedia.se.");
+        return;
+      }
+      trackEvent("grok_checkout_start", { product: coProduct });
+      window.location.href = data.url as string;
+    } catch {
+      setCoState("error");
+      setCoError("Kassan kunde inte öppnas just nu. Försök igen eller mejla info@auroramedia.se.");
+    }
+  };
+
 
   const handlePreviewOpen = () => {
     if (previewTracked.current) return;
