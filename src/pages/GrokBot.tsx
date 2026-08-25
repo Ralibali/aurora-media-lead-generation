@@ -811,7 +811,17 @@ const GrokBot = () => {
                     </div>
                   </div>
                 ))}
+                <div className="gb-chapter is-bonus">
+                  <span className="no" aria-hidden="true">
+                    +
+                  </span>
+                  <div>
+                    <h3>{BONUS_CHAPTER.title}</h3>
+                    <p>{BONUS_CHAPTER.desc}</p>
+                  </div>
+                </div>
               </div>
+
               <p className="gb-chapters-note">
                 Aktuell struktur · Version {PRODUCT_VERSION} · {PRODUCT_UPDATED}
               </p>
