@@ -395,7 +395,12 @@ export const FAQ: { q: string; a: string }[] = [
     q: "Vad får jag i Prompt Vault?",
     a: "Ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget: roller som CEO/Chief of Staff, Growth, Sales, QA och Engineer, plus system som Opportunity Engine, AI Usage Governor, Work Packets, owner gates och weekly reviews – redo att kopiera rakt in. Guiden är fullständig utan Vault; det här är genvägen för dig som vill kopiera implementeringen direkt.",
   },
+  {
+    q: "Kan jag bygga en egen AI-medarbetare utan Grok Bot?",
+    a: "Ja. Den avancerade bonusen förklarar arkitekturen bakom en egen vertikal AI-medarbetare – roll, Skills, verktyg via MCP, permissions (allow/deny/ask), evidence och handoffs – och använder Kimi Code tillsammans med Kimi Agent SDK (Python, Node.js, Go) som ett aktuellt exempel. Men var beredd: det är ingen färdig hostad produkt. Hosting, schemaläggning, integrationer och övervakning måste du fortfarande lösa själv för att få ett produktionsdugligt system. Sidans huvudspår är och förblir Grok Bot – bonusen är för dig som vill vidare.",
+  },
 ];
+
 
 // ── Legal-utkast som syns i köpflödet (Bekräftas av ägaren före live) ───────
 export const LEGAL_DRAFT_NOTES = [
