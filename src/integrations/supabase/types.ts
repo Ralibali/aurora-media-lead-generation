@@ -44,6 +44,147 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_kontoret_assets: {
+        Row: {
+          active: boolean
+          created_at: string
+          file_bytes: number | null
+          id: string
+          label: string
+          product: string
+          storage_path: string
+          updated_at: string
+          uploaded_at: string | null
+          version: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          file_bytes?: number | null
+          id?: string
+          label: string
+          product: string
+          storage_path: string
+          updated_at?: string
+          uploaded_at?: string | null
+          version: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          file_bytes?: number | null
+          id?: string
+          label?: string
+          product?: string
+          storage_path?: string
+          updated_at?: string
+          uploaded_at?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
+      ai_kontoret_launch: {
+        Row: {
+          id: boolean
+          legal_confirmed: boolean
+          legal_confirmed_at: string | null
+          legal_confirmed_by: string | null
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: boolean
+          legal_confirmed?: boolean
+          legal_confirmed_at?: string | null
+          legal_confirmed_by?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: boolean
+          legal_confirmed?: boolean
+          legal_confirmed_at?: string | null
+          legal_confirmed_by?: string | null
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ai_kontoret_purchases: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          delivered_at: string | null
+          delivery_count: number
+          email: string
+          id: string
+          last_delivery_at: string | null
+          metadata: Json
+          product: string
+          stripe_customer_id: string | null
+          stripe_event_id: string | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          delivered_at?: string | null
+          delivery_count?: number
+          email: string
+          id?: string
+          last_delivery_at?: string | null
+          metadata?: Json
+          product: string
+          stripe_customer_id?: string | null
+          stripe_event_id?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          delivered_at?: string | null
+          delivery_count?: number
+          email?: string
+          id?: string
+          last_delivery_at?: string | null
+          metadata?: Json
+          product?: string
+          stripe_customer_id?: string | null
+          stripe_event_id?: string | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string
+        }
+        Relationships: []
+      }
+      ai_kontoret_webhook_events: {
+        Row: {
+          event_id: string
+          event_type: string
+          handled: boolean
+          note: string | null
+          received_at: string
+        }
+        Insert: {
+          event_id: string
+          event_type: string
+          handled?: boolean
+          note?: string | null
+          received_at?: string
+        }
+        Update: {
+          event_id?: string
+          event_type?: string
+          handled?: boolean
+          note?: string | null
+          received_at?: string
+        }
+        Relationships: []
+      }
       ai_map_email_sequence: {
         Row: {
           created_at: string
