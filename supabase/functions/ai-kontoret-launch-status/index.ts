@@ -7,6 +7,9 @@ import {
   launchReadiness,
   dbPatch,
   CATALOG,
+  activeAssets,
+  assetExists,
+  createSignedUrl,
 } from "../_shared/aiKontoret.ts";
 
 Deno.serve(async (req: Request) => {
@@ -28,6 +31,27 @@ Deno.serve(async (req: Request) => {
         });
       }
     }
+
+      // Förhandsgranskning: korta signerade länkar + filmetadata (endast ägare).
+      if (body?.action === "preview_assets") {
+        const assets = await activeAssets();
+        const items = await Promise.all(
+          assets.map(async (a) => {
+            const exists = await assetExists(a.storage_path);
+            return {
+              product: a.product,
+              label: a.label,
+              version: a.version,
+              storage_path: a.storage_path,
+              uploaded_at: a.uploaded_at,
+              file_bytes: a.file_bytes,
+              exists,
+              url: exists ? await createSignedUrl(a.storage_path, 600) : null,
+            };
+          }),
+        );
+        return json({ assets: items, ttl_seconds: 600 });
+      }
 
     const r = await launchReadiness();
     const body: Record<string, unknown> = {
