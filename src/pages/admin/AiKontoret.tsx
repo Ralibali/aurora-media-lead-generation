@@ -276,7 +276,15 @@ export default function AdminAiKontoret() {
                       disabled={s.action.disabled}
                       onClick={s.action.run}
                     >
-                      {s.action.disabled ? <Loader2 className="h-4 w-4 animate-spin" /> : <ClipboardCopy className="h-4 w-4" />}
+                      {s.action.disabled ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : s.key === "guide" || s.key === "vault" ? (
+                        <FileUp className="h-4 w-4" />
+                      ) : s.key === "legal" ? (
+                        <CheckCircle2 className="h-4 w-4" />
+                      ) : (
+                        <ClipboardCopy className="h-4 w-4" />
+                      )}
                       <span className="ml-2">{s.action.label}</span>
                     </Button>
                   )}
