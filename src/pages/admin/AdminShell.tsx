@@ -191,6 +191,7 @@ const NAV = [
   { to: "/admin/faq-rapport", label: "FAQ-rapport", icon: BarChart3 },
   { to: "/admin/prospektering", label: "Prospektering", icon: Radar },
   { to: "/admin/ai-kontoret", label: "AI-KONTORET", icon: PackageCheck },
+  { to: "/admin/ai-kontoret/forhandsgranskning", label: "Förhandsgranska PDF", icon: FileText },
 ];
 
 // Snabbmeny — visas överst i mobil-drawern för åtkomst med få klick.

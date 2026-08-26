@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { CheckCircle2, FileUp, Loader2, RefreshCw, ShieldAlert, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import AdminShell, { ADMIN_STORAGE_KEY } from "@/pages/admin/AdminShell";
@@ -263,6 +264,11 @@ export default function AdminAiKontoret() {
               Efter uppladdning: klicka “Uppdatera” ovan. Raderna “Guide-PDF uppladdad” och “Prompt
               Vault-PDF uppladdad” blir gröna först när filerna faktiskt finns på sökvägarna.
             </p>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin/ai-kontoret/forhandsgranskning">
+                Förhandsgranska PDF:erna (version & filstorlek)
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 
