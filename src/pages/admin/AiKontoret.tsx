@@ -238,6 +238,66 @@ export default function AdminAiKontoret() {
         <Card>
           <CardHeader className="flex-row items-center justify-between gap-3 space-y-0">
             <CardTitle className="text-base">
+              Ägar-checklista inför live{" "}
+              <Badge variant={missing.length === 0 ? "default" : "secondary"}>
+                {missing.length === 0 ? "Allt klart" : `${missing.length} kvar`}
+              </Badge>
+            </CardTitle>
+            <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}>
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              <span className="ml-2">Uppdatera</span>
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {loading && checklistSteps.every((s) => !s.ok) ? (
+              <p className="text-sm text-muted-foreground">Läser status…</p>
+            ) : (
+              checklistSteps.map((s) => (
+                <div
+                  key={s.key}
+                  className="flex flex-col gap-2 rounded-md border p-3 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex min-w-0 items-start gap-3">
+                    {s.ok ? (
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                    ) : (
+                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                    )}
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium">{s.title}</p>
+                      <p className="break-words text-xs text-muted-foreground">{s.detail}</p>
+                    </div>
+                  </div>
+                  {!s.ok && s.action && (
+                    <Button
+                      size="sm"
+                      variant={s.action.variant ?? "default"}
+                      className="shrink-0"
+                      disabled={s.action.disabled}
+                      onClick={s.action.run}
+                    >
+                      {s.action.disabled ? <Loader2 className="h-4 w-4 animate-spin" /> : <ClipboardCopy className="h-4 w-4" />}
+                      <span className="ml-2">{s.action.label}</span>
+                    </Button>
+                  )}
+                </div>
+              ))
+            )}
+            {missing.length === 0 && !loading && (
+              <Alert>
+                <CheckCircle2 className="h-4 w-4" />
+                <AlertDescription>
+                  Alla kontroller är gröna. Gör ett testköp i Stripe-läge och verifiera att mejlet
+                  med nedladdningslänkar kommer fram innan du ber mig sätta PRODUCT_STATUS till live.
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex-row items-center justify-between gap-3 space-y-0">
+            <CardTitle className="text-base">
               Lanseringsspärr{" "}
               <Badge variant={ready ? "default" : "secondary"}>{ready ? "Klar för live" : "Inte klar"}</Badge>
             </CardTitle>
