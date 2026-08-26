@@ -30,7 +30,6 @@ Deno.serve(async (req: Request) => {
           updated_at: new Date().toISOString(),
         });
       }
-    }
 
       // Förhandsgranskning: korta signerade länkar + filmetadata (endast ägare).
       if (body?.action === "preview_assets") {
@@ -52,6 +51,8 @@ Deno.serve(async (req: Request) => {
         );
         return json({ assets: items, ttl_seconds: 600 });
       }
+    }
+
 
     const r = await launchReadiness();
     const body: Record<string, unknown> = {
