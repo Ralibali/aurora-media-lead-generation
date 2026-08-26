@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, FileUp, Loader2, RefreshCw, ShieldAlert, XCircle } from "lucide-react";
+import { CheckCircle2, ClipboardCopy, FileUp, Loader2, RefreshCw, ShieldAlert, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import AdminShell, { ADMIN_STORAGE_KEY } from "@/pages/admin/AdminShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -128,6 +128,82 @@ export default function AdminAiKontoret() {
     }
   };
 
+  const copySecretName = async (name: string) => {
+    try {
+      await navigator.clipboard.writeText(name);
+      toast.success(`Kopierade "${name}". Be mig lägga till den som secret, eller gör det i backendinställningarna.`);
+    } catch {
+      toast.info(`Hemlighetens namn: ${name}`);
+    }
+  };
+
+  type Step = {
+    key: string;
+    ok: boolean;
+    title: string;
+    detail: string;
+    action?: { label: string; run: () => void; disabled?: boolean; variant?: "default" | "outline" };
+  };
+
+  const checklistSteps: Step[] = [
+    {
+      key: "stripe",
+      ok: Boolean(checks.stripe),
+      title: "Stripe-nyckel (STRIPE_SECRET_KEY)",
+      detail: "Betalning kan inte tas emot utan hemlig Stripe-nyckel i backenden.",
+      action: { label: "Kopiera hemlighetens namn", run: () => void copySecretName("STRIPE_SECRET_KEY"), variant: "outline" },
+    },
+    {
+      key: "webhook",
+      ok: Boolean(checks.webhook_secret),
+      title: "Webhook-secret (STRIPE_WEBHOOK_SECRET)",
+      detail: "Kopiera webhook-endpointen till ai-kontoret-deliver i Stripe och lägg in signaturhemligheten.",
+      action: { label: "Kopiera hemlighetens namn", run: () => void copySecretName("STRIPE_WEBHOOK_SECRET"), variant: "outline" },
+    },
+    {
+      key: "service_role",
+      ok: Boolean(checks.service_role),
+      title: "Serverbehörighet",
+      detail: "Backendens servicenyckel måste finnas för att leverans och lagring ska fungera.",
+    },
+    {
+      key: "email",
+      ok: Boolean(checks.email),
+      title: "E-postleverans (RESEND_API_KEY)",
+      detail: "Leveransmejlen med nedladdningslänkar kräver en Resend-nyckel.",
+      action: { label: "Kopiera hemlighetens namn", run: () => void copySecretName("RESEND_API_KEY"), variant: "outline" },
+    },
+    {
+      key: "guide",
+      ok: Boolean(checks.asset_guide),
+      title: "Guide-PDF uppladdad",
+      detail: `Filen måste ligga på ${ASSET_PATHS.guide} i privat lagring.`,
+      action: { label: "Ladda upp guide-PDF", run: () => guideRef.current?.click(), disabled: busy === "guide" },
+    },
+    {
+      key: "vault",
+      ok: Boolean(checks.asset_vault),
+      title: "Prompt Vault-PDF uppladdad",
+      detail: `Filen måste ligga på ${ASSET_PATHS.vault} i privat lagring.`,
+      action: { label: "Ladda upp Vault-PDF", run: () => vaultRef.current?.click(), disabled: busy === "vault" },
+    },
+    {
+      key: "legal",
+      ok: Boolean(checks.legal_confirmed),
+      title: "Juridiskt godkännande",
+      detail: "Läs villkorstexten längre ner och bekräfta att du står bakom den.",
+      action: { label: "Bekräfta juridiken", run: () => void setLegal(true), disabled: busy === "legal" },
+    },
+    {
+      key: "status",
+      ok: PRODUCT_STATUS === "live",
+      title: "PRODUCT_STATUS = \"live\"",
+      detail: "Sista spärren sitter i koden (src/config/aiKontoret.ts). Be mig slå om till live först när allt ovan är grönt och du testat ett köp.",
+    },
+  ];
+
+  const missing = checklistSteps.filter((s) => !s.ok);
+
   const reissue = async () => {
     const value = reissueKey.trim();
     if (!value) return;
@@ -158,6 +234,74 @@ export default function AdminAiKontoret() {
             {PRICES.guide}/{PRICES.vault}/{PRICES.bundle} kr.
           </AlertDescription>
         </Alert>
+
+        <Card>
+          <CardHeader className="flex-row items-center justify-between gap-3 space-y-0">
+            <CardTitle className="text-base">
+              Ägar-checklista inför live{" "}
+              <Badge variant={missing.length === 0 ? "default" : "secondary"}>
+                {missing.length === 0 ? "Allt klart" : `${missing.length} kvar`}
+              </Badge>
+            </CardTitle>
+            <Button variant="outline" size="sm" onClick={() => void load()} disabled={loading}>
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              <span className="ml-2">Uppdatera</span>
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {loading && checklistSteps.every((s) => !s.ok) ? (
+              <p className="text-sm text-muted-foreground">Läser status…</p>
+            ) : (
+              checklistSteps.map((s) => (
+                <div
+                  key={s.key}
+                  className="flex flex-col gap-2 rounded-md border p-3 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="flex min-w-0 items-start gap-3">
+                    {s.ok ? (
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                    ) : (
+                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-destructive" />
+                    )}
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium">{s.title}</p>
+                      <p className="break-words text-xs text-muted-foreground">{s.detail}</p>
+                    </div>
+                  </div>
+                  {!s.ok && s.action && (
+                    <Button
+                      size="sm"
+                      variant={s.action.variant ?? "default"}
+                      className="shrink-0"
+                      disabled={s.action.disabled}
+                      onClick={s.action.run}
+                    >
+                      {s.action.disabled ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : s.key === "guide" || s.key === "vault" ? (
+                        <FileUp className="h-4 w-4" />
+                      ) : s.key === "legal" ? (
+                        <CheckCircle2 className="h-4 w-4" />
+                      ) : (
+                        <ClipboardCopy className="h-4 w-4" />
+                      )}
+                      <span className="ml-2">{s.action.label}</span>
+                    </Button>
+                  )}
+                </div>
+              ))
+            )}
+            {missing.length === 0 && !loading && (
+              <Alert>
+                <CheckCircle2 className="h-4 w-4" />
+                <AlertDescription>
+                  Alla kontroller är gröna. Gör ett testköp i Stripe-läge och verifiera att mejlet
+                  med nedladdningslänkar kommer fram innan du ber mig sätta PRODUCT_STATUS till live.
+                </AlertDescription>
+              </Alert>
+            )}
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader className="flex-row items-center justify-between gap-3 space-y-0">
