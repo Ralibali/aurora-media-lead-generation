@@ -263,6 +263,11 @@ export default function AdminAiKontoret() {
               Efter uppladdning: klicka “Uppdatera” ovan. Raderna “Guide-PDF uppladdad” och “Prompt
               Vault-PDF uppladdad” blir gröna först när filerna faktiskt finns på sökvägarna.
             </p>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin/ai-kontoret/forhandsgranskning">
+                Förhandsgranska PDF:erna (version & filstorlek)
+              </Link>
+            </Button>
           </CardContent>
         </Card>
 
