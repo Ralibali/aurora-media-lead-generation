@@ -118,6 +118,8 @@ export const VkFooter = () => (
           <Link to="/om">Om Aurora</Link>
           <Link to="/oppna-siffror">Öppna siffror</Link>
           <Link to="/kontakt">Kontakt</Link>
+          <Link to="/villkor">Villkor</Link>
+          <Link to="/angra-kop">Ångra köp</Link>
           <Link to="/integritetspolicy">Integritetspolicy</Link>
           <span style={{ display: "block", padding: "4px 0", opacity: 0.6 }}>
             Org.nr 559272-0220

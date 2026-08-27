@@ -17,6 +17,8 @@ const col2 = [
 ];
 
 const col3 = [
+  { label: "Villkor", href: "/villkor" },
+  { label: "Ångra köp", href: "/angra-kop" },
   { label: "Integritetspolicy", href: "/integritetspolicy" },
   { label: "Redaktionell policy", href: "/redaktionell-policy" },
   { label: "Kontakt", href: "/kontakt" },
