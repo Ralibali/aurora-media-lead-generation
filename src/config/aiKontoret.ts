@@ -18,7 +18,7 @@
  *      köpknappar om Stripe, webhook-secret, produktfiler, leverans eller
  *      ägarens juridiska godkännande saknas.
  *
- * ── LANSERING (prelaunch → live) ────────────────────────────────────────────
+ * ── LANSERING (prelaunch → live) ────────────────────────────────────
  *   [ ] STRIPE_SECRET_KEY som secret i projektet
  *   [ ] STRIPE_WEBHOOK_SECRET som secret (webhook → /ai-kontoret-deliver,
  *       event: checkout.session.completed)
@@ -27,10 +27,12 @@
  *   [ ] Ägaren bekräftar juridiken (legal gate) i Admin → AI-KONTORET
  *   [ ] Sätt PRODUCT_STATUS = "live" nedan
  * Även med "live" öppnas köpflödet endast om launch-status svarar ready:true.
+ * LEGAL_OWNER_CONFIRMED och VAT_CLASSIFICATION_CONFIRMED är kodflaggor.
+ * Admin-krysset ensamt räcker inte. Ingen av dem är juridiskt godkännande.
  * ============================================================================
  */
 
-// ── Lanseringsläge ──────────────────────────────────────────────────────────
+// ── Lanseringsläge ──────────────────────────────────────────
 // "prelaunch" = väntelista (säljer inget ofärdigt). "live" = köp via Stripe
 // (men bara om lanseringsspärren `ai-kontoret-launch-status` svarar ready).
 export const PRODUCT_STATUS: "prelaunch" | "live" = "prelaunch";
@@ -45,7 +47,7 @@ export const PRODUCT_VERIFIED_ISO = "2026-08-25";
 export const PRODUCT_FRESHNESS =
   "Fakta kontrollerade mot aktuella officiella källor";
 
-// ── Priser (SEK, konsumentpriser) ───────────────────────────────────────────
+// ── Priser (SEK, konsumentpriser) ───────────────────────────────
 // OBS: dessa värden är endast för visning. Beloppen som debiteras sätts
 // server-side i supabase/functions/_shared/aiKontoret.ts (CATALOG).
 export const PRICES = {
@@ -87,7 +89,7 @@ export const ASSET_PATHS: Record<"guide" | "vault", string> = {
   vault: "ai-kontoret/v1.0/AI-KONTORET_Prompt_Vault_v1.0.pdf",
 };
 
-// ── Waitlist (prelaunch) ────────────────────────────────────────────────────
+// ── Waitlist (prelaunch) ──────────────────────────────────
 // Återanvänder befintliga edge-funktionen send-contact-email (rate limit,
 // honeypot, leads-tabell, Resend-mejl till info@auroramedia.se).
 export const WAITLIST_PAKET = "AI-KONTORET – väntelista";
@@ -99,19 +101,29 @@ export const LEGAL_LINKS = {
 };
 
 /**
- * UTKAST – KRÄVER ÄGARENS BEKRÄFTELSE (legal gate i Admin → AI-KONTORET).
- * Detta är den text kunden aktivt måste kryssa i före betalning.
+ * UTKAST – KRÄVER ÄGARENS BEKRÄFTELSE.
+ * Kunden måste aktivt kryssa i rutan. Rutan får inte vara förifylld.
+ * LEGAL_OWNER_CONFIRMED hålls false tills ägaren godkänt den slutliga formuleringen.
+ * Detta är inte ett juridiskt godkännande.
  */
 export const LEGAL_ACK_TEXT =
-  "Jag förstår att detta är en digital produkt som levereras direkt efter köp, och att ångerrätten enligt distansavtalslagen inte gäller när leveransen av det digitala innehållet har påbörjats med mitt samtycke.";
+  "Jag samtycker till att leveransen av det digitala innehållet påbörjas omedelbart. Jag förstår att jag då förlorar ångerrätten enligt distansavtalslagen för denna digitala produkt.";
 export const LEGAL_ACK_OWNER_CONFIRMATION_REQUIRED = true;
+export const LEGAL_OWNER_CONFIRMED = false;
+export const VAT_CLASSIFICATION_CONFIRMED = false;
+/** Speglar serverns klasser för adminvisning. Servern är sanningen. */
+export const VAT_CLASSES = {
+  guide: "electronic_publication_6",
+  vault: "ess_25",
+  bundle: "ess_25",
+} as const;
 
 
 // ============================================================================
 // INNEHÅLL — all copy på sidan hämtas härifrån (lätt att redigera)
 // ============================================================================
 
-// ── Vad du lär dig (8 kort) ─────────────────────────────────────────────────
+// ── Vad du lär dig (8 kort) ─────────────────────────────────
 export const LEARN_CARDS: { title: string; desc: string }[] = [
   {
     title: "Botar",
@@ -219,7 +231,7 @@ export const VAULT_GROUPS: { title: string; items: string[] }[] = [
   },
 ];
 
-// ── Avancerad bonus: bygg din egen AI-medarbetare ───────────────────────────
+// ── Avancerad bonus: bygg din egen AI-medarbetare ─────────────────────
 // Grok Bot är den färdiga plattformen. Kimi nämns som ETT aktuellt exempel på
 // stack för den som vill bygga samma arkitektur in i en egen vertikal produkt.
 // Endast verifierbara påståenden: Agent SDK finns för Python, Node.js och Go,
@@ -315,7 +327,7 @@ export const CHAPTERS: { title: string; desc: string }[] = [
   },
 ];
 
-// ── Use cases (flöden guiden lär ut) ────────────────────────────────────────
+// ── Use cases (flöden guiden lär ut) ────────────────────────────────
 export const USE_CASES: { title: string; mono: string; desc: string }[] = [
   {
     title: "Email-first sales automation",
@@ -344,7 +356,7 @@ export const USE_CASES: { title: string; mono: string; desc: string }[] = [
   },
 ];
 
-// ── Vem guiden är för / inte för ────────────────────────────────────────────
+// ── Vem guiden är för / inte för ──────────────────────────────
 export const WHO_FOR: string[] = [
   "Entreprenörer och soloprenörer som vill få mer gjort utan att anställa.",
   "Konsulter och byråer som vill paketera AI-arbete som återkommande system.",
@@ -360,7 +372,7 @@ export const WHO_NOT_FOR: string[] = [
   "Team som redan driver en mogen agentplattform med egna processer.",
 ];
 
-// ── FAQ / invändningar (CRO) — svarar på de tio vanligaste ──────────────────
+// ── FAQ / invändningar (CRO) — svarar på de tio vanligaste ──────────────
 export const FAQ: { q: string; a: string }[] = [
   {
     q: "Jag är ny på Grok Bot – funkar guiden ändå?",
@@ -396,7 +408,7 @@ export const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Blir guiden gammal när Grok ändras?",
-    a: "Verktyg ändras – operativsystem består. Det mesta i guiden är plattformsoberoende: roller, Skills, handoffs och kontrollstrukturer. Guiden är dessutom versionerad och faktagranskad mot aktuella officiella källor; du ser alltid vilken version du har, när den uppdaterades och när fakta senast verifierades.",
+    a: "Verktyg ändras – operativsystem består. Det mesta i guidn är plattformsoberoende: roller, Skills, handoffs och kontrollstrukturer. Guiden är dessutom versionerad och faktagranskad mot aktuella officiella källor; du ser alltid vilken version du har, när den uppdaterades och när fakta senast verifierades.",
   },
   {
     q: "Har varje Bot en egen dator?",
@@ -415,15 +427,16 @@ export const FAQ: { q: string; a: string }[] = [
 
 // ── Legal-utkast som syns i köpflödet (Bekräftas av ägaren före live) ───────
 export const LEGAL_DRAFT_NOTES = [
-  "Prisvisning: konsumentpriser ska anges inklusive moms – bekräfta momshantering för digitalt innehåll innan live.",
-  "Ångerrätt: distansavtalslagens 14-dagars ångerrätt med standardundantag för digitalt innehåll som levereras direkt med samtycke – texten nedan är ett utkast som ägaren ska godkänna.",
-  "Köpbekräftelse: Stripe-mejl + leveransmejl. Bekräfta att villkor + integritetspolicy täcker försäljning av digitala produkter.",
+  "Prisvisning: 199 / 199 / 349 kr är konsumentpriser inklusive moms. Lägg inte på moms ovanpå.",
+  "Moms: Guide är kandidat för 6 % endast om den klassas som elektronisk publikation. Prompt Vault antas inte kvalificera. Bundle ärver inte Guidens klass.",
+  "Ångerrätt: utkast. LEGAL_OWNER_CONFIRMED = false tills du godkänt formuleringen. Konsumentverket kräver aktiv handling.",
+  "Köpbekräftelse: Stripe-mejl + leveransmejl med kopia av samtyckestexten. /villkor har en AI-KONTORET-butikssektion.",
 ];
 
 export const DIGITAL_DELIVERY_NOTE =
   "Digital produkt – levereras direkt. Efter köpet får du guiden som nedladdning och på mejl. Vid köp samtycker du till att leveransen av det digitala innehållet påbörjas omedelbart, och du får information om vad det innebär för ångerrätten innan du betalar.";
 
-// ── Preview-utdrag (ur kapitel 3) ───────────────────────────────────────────
+// ── Preview-utdrag (ur kapitel 3) ───────────────────────────────
 export const PREVIEW_EXCERPT = `BOT CHARTER — urdrag ur kapitel 3
 
 Roll: Research-bot för din nisch
