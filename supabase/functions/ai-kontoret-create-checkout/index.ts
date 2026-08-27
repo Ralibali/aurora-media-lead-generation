@@ -9,6 +9,7 @@ import {
   stripeFetch,
   SITE_URL,
   PRODUCT_VERSION,
+  LEGAL_ACK_TEXT,
 } from "../_shared/aiKontoret.ts";
 
 Deno.serve(async (req: Request) => {
@@ -36,19 +37,25 @@ Deno.serve(async (req: Request) => {
     const item = CATALOG[product];
     const form: Record<string, string> = {
       mode: "payment",
-      "payment_method_types[0]": "card",
+      "automatic_tax[enabled]": "true",
+      billing_address_collection: "required",
       "line_items[0][quantity]": "1",
       "line_items[0][price_data][currency]": item.currency,
       "line_items[0][price_data][unit_amount]": String(item.amount),
+      "line_items[0][price_data][tax_behavior]": "inclusive",
+      "line_items[0][price_data][tax_code]": item.tax_code,
       "line_items[0][price_data][product_data][name]": item.name,
+      "line_items[0][price_data][product_data][tax_code]": item.tax_code,
       "line_items[0][price_data][product_data][description]":
-        `Digital produkt (PDF), version ${PRODUCT_VERSION}. Levereras direkt via e-post.`,
+        `Digital produkt (PDF), version ${PRODUCT_VERSION}. Pris ${item.amount / 100} kr inkl. moms. Levereras direkt via e-post.`,
       success_url: `${SITE_URL}/grok-bot?checkout=return&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/grok-bot?checkout=cancel`,
       "metadata[sku]": item.sku,
       "metadata[product]": product,
       "metadata[version]": PRODUCT_VERSION,
       "metadata[legal_ack]": "true",
+      "metadata[legal_ack_text]": LEGAL_ACK_TEXT.slice(0, 450),
+      "metadata[vat_class]": item.vat_class,
       "payment_intent_data[metadata][sku]": item.sku,
       "payment_intent_data[metadata][product]": product,
       allow_promotion_codes: "false",

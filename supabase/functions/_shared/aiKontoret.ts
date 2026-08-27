@@ -17,47 +17,43 @@ export function json(body: unknown, status = 200) {
   });
 }
 
-export type Product = "guide" | "vault" | "bundle";
-export type AssetKey = "guide" | "vault";
+export {
+  ASSET_BUCKET,
+  ASSET_PATHS,
+  CATALOG,
+  LEGAL_ACK_TEXT,
+  LEGAL_OWNER_CONFIRMED,
+  MIN_ASSET_BYTES,
+  PRODUCT_VERSION,
+  SIGNED_URL_TTL,
+  SITE_URL,
+  SUPPORT_EMAIL,
+  VAT_CLASSIFICATION_CONFIRMED,
+  assetReady,
+  assetsForProduct,
+  buildConsentRecord,
+  composeLaunchChecks,
+  isProduct,
+  legalGate,
+  validateSession,
+  vatGate,
+  type AssetKey,
+  type Product,
+} from "./aiKontoretPurchase.ts";
 
-/** Priser sätts SERVER-SIDE. Klienten får aldrig skicka belopp. */
-export const CATALOG: Record<
-  Product,
-  { sku: string; name: string; amount: number; currency: string; assets: AssetKey[] }
-> = {
-  guide: {
-    sku: "ai-kontoret-guide",
-    name: "AI-KONTORET – Guide v1.0 (PDF)",
-    amount: 19900, // 199,00 SEK i ören
-    currency: "sek",
-    assets: ["guide"],
-  },
-  vault: {
-    sku: "ai-kontoret-prompt-vault",
-    name: "AI-KONTORET – Prompt Vault v1.0 (PDF)",
-    amount: 19900,
-    currency: "sek",
-    assets: ["vault"],
-  },
-  bundle: {
-    sku: "ai-kontoret-bundle",
-    name: "AI-KONTORET – Guide + Prompt Vault v1.0 (PDF)",
-    amount: 34900,
-    currency: "sek",
-    assets: ["guide", "vault"],
-  },
-};
-
-export const PRODUCT_VERSION = "1.0";
-export const SUPPORT_EMAIL = "info@auroramedia.se";
-export const SITE_URL = "https://auroramedia.se";
-export const ASSET_BUCKET = "ai-kontoret-assets";
-/** Nedladdningslänkarnas livslängd (sekunder) – kort av säkerhetsskäl. */
-export const SIGNED_URL_TTL = 60 * 60 * 24 * 3; // 3 dygn
-
-export function isProduct(v: unknown): v is Product {
-  return v === "guide" || v === "vault" || v === "bundle";
-}
+import {
+  ASSET_BUCKET,
+  CATALOG,
+  LEGAL_OWNER_CONFIRMED,
+  PRODUCT_VERSION,
+  SIGNED_URL_TTL,
+  VAT_CLASSIFICATION_CONFIRMED,
+  assetReady,
+  composeLaunchChecks,
+  legalGate,
+  vatGate,
+  type AssetKey,
+} from "./aiKontoretPurchase.ts";
 
 export function stripeKey(): string | null {
   const k = Deno.env.get("STRIPE_SECRET_KEY");
@@ -134,7 +130,7 @@ export async function verifyStripeSignature(
   return signatures.some((s) => timingSafeEqual(s, expected));
 }
 
-// ── Supabase (service role) ─────────────────────────────────────────────────
+// ── Supabase (service role) ─────────────────────────────────────────
 export function serviceEnv() {
   const url = Deno.env.get("SUPABASE_URL") ?? "";
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
@@ -198,7 +194,7 @@ export async function activeAssets(): Promise<AssetRow[]> {
   )) as AssetRow[];
 }
 
-/** Filen räknas som klar först när den faktiskt finns i den privata bucketen. */
+/** Filen räknas som klar först när den faktiskt finns i den privata bucketen och inte är tom. */
 export async function assetExists(storagePath: string): Promise<boolean> {
   const { url, key } = serviceEnv();
   if (!url || !key) return false;
@@ -211,8 +207,11 @@ export async function assetExists(storagePath: string): Promise<boolean> {
     body: JSON.stringify({ prefix, limit: 100, search: name }),
   });
   if (!res.ok) return false;
-  const list = (await res.json().catch(() => [])) as { name: string }[];
-  return Array.isArray(list) && list.some((o) => o.name === name);
+  const list = (await res.json().catch(() => [])) as { name: string; metadata?: { size?: number } }[];
+  const hit = Array.isArray(list) ? list.find((o) => o.name === name) : undefined;
+  if (!hit) return false;
+  const size = Number(hit.metadata?.size ?? 0);
+  return assetReady({ exists: true, fileBytes: size > 0 ? size : null });
 }
 
 export async function createSignedUrl(storagePath: string, ttl = SIGNED_URL_TTL): Promise<string | null> {
@@ -231,7 +230,10 @@ export async function createSignedUrl(storagePath: string, ttl = SIGNED_URL_TTL)
 
 export async function legalConfirmed(): Promise<boolean> {
   const rows = await dbSelect("ai_kontoret_launch?select=legal_confirmed&limit=1");
-  return Boolean(rows[0]?.legal_confirmed);
+  return legalGate({
+    dbConfirmed: Boolean(rows[0]?.legal_confirmed),
+    ownerConfirmed: LEGAL_OWNER_CONFIRMED,
+  });
 }
 
 /** Sammanställer lanseringsspärren. Endast booleans – aldrig hemligheter. */
@@ -239,11 +241,20 @@ export async function launchReadiness() {
   const assets = await activeAssets();
   const guide = assets.find((a) => a.product === "guide");
   const vault = assets.find((a) => a.product === "vault");
-  const [guideOk, vaultOk, legal] = await Promise.all([
+  const [guideExists, vaultExists, legal] = await Promise.all([
     guide ? assetExists(guide.storage_path) : Promise.resolve(false),
     vault ? assetExists(vault.storage_path) : Promise.resolve(false),
     legalConfirmed(),
   ]);
+  const guideOk = assetReady({
+    exists: guideExists,
+    fileBytes: guide?.file_bytes ?? null,
+  });
+  const vaultOk = assetReady({
+    exists: vaultExists,
+    fileBytes: vault?.file_bytes ?? null,
+  });
+  const vat = vatGate({ catalog: CATALOG, confirmed: VAT_CLASSIFICATION_CONFIRMED });
   const checks = {
     stripe: Boolean(stripeKey()),
     webhook_secret: Boolean(webhookSecret()),
@@ -252,12 +263,14 @@ export async function launchReadiness() {
     asset_guide: guideOk,
     asset_vault: vaultOk,
     legal_confirmed: legal,
+    vat_classified: vat.ok,
   };
-  const ready = Object.values(checks).every(Boolean);
+  const { ready } = composeLaunchChecks(checks);
   return {
     ready,
     checks,
     version: PRODUCT_VERSION,
+    vat_reason: vat.ok ? null : vat.reason ?? null,
     asset_paths: {
       guide: guide?.storage_path ?? null,
       vault: vault?.storage_path ?? null,
