@@ -123,6 +123,8 @@ const AuroraFooter = () => {
         <div className="mt-14 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} Aurora Media AB. Alla rättigheter förbehållna.</p>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <Link to="/villkor" className="hover:text-primary">Villkor</Link>
+            <Link to="/angra-kop" className="hover:text-primary">Ångra köp</Link>
             <Link to="/integritetspolicy" className="hover:text-primary">Integritetspolicy</Link>
             <Link to="/redaktionell-policy" className="hover:text-primary">Redaktionell policy</Link>
             <Link to="/kontakt" className="hover:text-primary">Kontakt</Link>
