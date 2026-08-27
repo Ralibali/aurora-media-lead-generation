@@ -66,6 +66,7 @@ export const FN_VERIFY_SESSION = "ai-kontoret-verify-session";
 export const FN_LAUNCH_STATUS = "ai-kontoret-launch-status";
 export const FN_UPLOAD_ASSET = "ai-kontoret-upload-asset";
 export const FN_DELIVER = "ai-kontoret-deliver";
+export const FN_WITHDRAW = "ai-kontoret-withdraw";
 
 /**
  * Neutral retur efter checkout: /grok-bot?checkout=return&session_id=…
@@ -98,6 +99,7 @@ export const WAITLIST_PAKET = "AI-KONTORET – väntelista";
 export const LEGAL_LINKS = {
   villkor: "/villkor#ai-kontoret",
   integritetspolicy: "/integritetspolicy",
+  angra: "/angra-kop",
 };
 
 /**
@@ -107,7 +109,7 @@ export const LEGAL_LINKS = {
  * Detta är inte ett juridiskt godkännande.
  */
 export const LEGAL_ACK_TEXT =
-  "Jag samtycker till att leveransen av det digitala innehållet påbörjas omedelbart. Jag förstår att jag då förlorar ångerrätten enligt distansavtalslagen för denna digitala produkt.";
+  "Jag samtycker uttryckligen till att leveransen av det digitala innehållet påbörjas omedelbart och går med på att det därigenom inte finns någon ångerrätt när leveransen har påbörjats.";
 export const LEGAL_ACK_OWNER_CONFIRMATION_REQUIRED = true;
 export const LEGAL_OWNER_CONFIRMED = false;
 export const VAT_CLASSIFICATION_CONFIRMED = false;
@@ -115,7 +117,7 @@ export const VAT_CLASSIFICATION_CONFIRMED = false;
 export const VAT_CLASSES = {
   guide: "electronic_publication_6",
   vault: "ess_25",
-  bundle: "ess_25",
+  bundle: "split_two_supplies",
 } as const;
 
 
