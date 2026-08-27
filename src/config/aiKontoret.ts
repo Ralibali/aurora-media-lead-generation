@@ -96,7 +96,7 @@ export const WAITLIST_PAKET = "AI-KONTORET – väntelista";
 
 // ── Juridik (UTKAST — ska bekräftas av ägaren före live, se LEGAL_DRAFT_NOTES)
 export const LEGAL_LINKS = {
-  villkor: "/villkor",
+  villkor: "/villkor#ai-kontoret",
   integritetspolicy: "/integritetspolicy",
 };
 
@@ -150,304 +150,255 @@ export const LEARN_CARDS: { title: string; desc: string }[] = [
     desc: "Så låter du AI arbeta själv utan att ge bort kontroll över pengar, publicering eller riskfyllda åtgärder.",
   },
   {
-    title: "Evidence",
-    desc: "Så kräver du bevis på att jobbet faktiskt blev gjort.",
+    title: "Evidence receipts",
+    desc: "Så kräver du bevis på att jobbet är gjort – inte bara en rapport om att det är klart.",
   },
   {
-    title: "Growth",
-    desc: "Så bygger du återkommande research-, content-, SEO- och sales-loopar.",
+    title: "Egen AI-medarbetare",
+    desc: "Bonus: så tar du samma job description och bygger en egen agent med Kimi Code / Kimi Agent SDK när du behöver mer kontroll.",
   },
 ];
 
-// ── Äkta lärdomar (presenteras som praktiska erfarenheter, inte påståenden) ──
+// ── Verkliga lärdomar / misstag ─────────────────────────────────────────────
 export const LESSONS: { quote: string; takeaway: string }[] = [
   {
-    quote: "Jag lät för många Botar leta efter jobb.",
+    quote: "En Bot ska ha ett jobb – inte ett helt företag.",
     takeaway:
-      "Fem Botar som alla letar uppgifter bränner usage och producerar överlapp. En Bot som får ett tydligt uppdrag slår dem alla.",
+      "När flera Botar hade samma breda mandat började de göra samma research och bränna usage på varandras arbete. Smalare roller vann.",
   },
   {
-    quote: "QA behöver inte granska allt hela tiden.",
+    quote: "Automatisera först när det manuella flödet faktiskt fungerar.",
     takeaway:
-      "Fullständig granskning av varje steg blir själv en flaskhals. Guiden visar var QA faktiskt betalar sig – och var den inte gör det.",
+      "En dålig process blir inte bättre av att köras varje dag. Vi lär först upp uppgiften som Skill – sedan lägger vi en Routine ovanpå.",
   },
   {
-    quote: "En Engineer ska inte göra generiska dagliga audits.",
+    quote: "Bevis före aktivitet.",
     takeaway:
-      "Specialister tappar skärpa när de används som allmänna kontrollanter. Ge varje Bot ett jobb den kan bli bäst på.",
+      "Det räcker inte att Boten säger att den har granskat något. Vi kräver artifacts, länkar, tester eller andra kvitton på leveransen.",
   },
   {
-    quote: "Groups ska vara arbetsrum, inte AI-möten.",
+    quote: "Usage är ett kapital – inte en trofé.",
     takeaway:
-      "En Group som bara diskuterar producerar inget. Strukturen i guiden gör Groups till platser där arbete lämnas in och hämtas ut.",
+      "Fler parallella agenter är inte automatiskt bättre. Kör den minsta struktur som klarar uppgiften och lägg kapaciteten där den ger affärsvärde.",
   },
   {
-    quote: "En stabil Skill är bättre än samma gigantiska prompt varje dag.",
+    quote: "Owner gates ska sitta på konsekvens – inte på allt.",
     takeaway:
-      "Att klistra in monsterprompten igen och igen är skört och svårt att förbättra. En Skill är versionerbar, testbar och återanvändbar.",
+      "Research och förberedelser kan gå automatiskt. Pengar, extern publicering, radering och produktionsändringar behöver en tydlig knapp från ägaren.",
   },
   {
-    quote: "Agent activity är inte business value.",
+    quote: "Handoffs måste vara konkreta.",
     takeaway:
-      "Att Botarna varit aktiva säger inget om värdet. Därför bygger upplägget på evidence receipts: bevis på leverans, inte logg på aktivitet.",
+      "En bra överlämning säger vad som är gjort, vad nästa Bot ska göra, vilket underlag som finns och när jobbet räknas som klart.",
   },
 ];
 
-// ── Prompt Vault-innehåll (kategorier — ingen exakt räkning påstås) ─────────
+// ── Prompt Vault ─────────────────────────────────────────────────────────────
 export const VAULT_BLURB =
-  "Ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget.";
-
-/** Metod kontra copy-paste: guiden står på egna ben, Vault accelererar. */
+  "Ett separat copy-paste-bibliotek med färdiga prompts, templates och operating rules för roller, Growth & Sales, Engineering, Operations, Skills/Routines/Handoffs, kontroll/evidence och avancerat eget agentbygge.";
 export const VAULT_METHOD_NOTE =
-  "Guiden lär dig metoden – Vault är copy-paste-implementeringen. Guiden är fullständig utan Vault, och alla säkerhetskritiska regler (owner gates och evidence-krav) ligger alltid i huvudguiden, aldrig bakom tillägget.";
-
+  "Prompts i Vaulten använder samma kedja som guiden: roll → verktyg → Skill → Routine → evidence → handoff → resultat.";
 export const VAULT_GROUPS: { title: string; items: string[] }[] = [
-  {
-    title: "Roller & ledning",
-    items: ["CEO / Chief of Staff", "Growth", "Sales", "Research", "QA", "Engineer"],
-  },
-  {
-    title: "Operativa system",
-    items: ["Opportunity Engine", "Company Method", "MAX MODE", "AI Usage Governor", "Work Elimination"],
-  },
-  {
-    title: "Arbetsflöden",
-    items: ["Skills", "Routines", "Handoffs", "Work Packets", "Validation workflows"],
-  },
-  {
-    title: "Kontroll & uppföljning",
-    items: ["Email outbound", "Weekly reviews", "Evidence requirements", "Owner gates"],
-  },
-  {
-    title: "Bygg eget",
-    items: [
-      "SKILL.md-mall",
-      "Permission matrix",
-      "MCP access matrix",
-      "Agent architecture template",
-      "Approval gates",
-      "Vertical AI Employee brief",
-    ],
-  },
+  { title: "Roller & ledning", items: ["HQ Charter", "Company CEO", "Research", "Growth", "Revenue"] },
+  { title: "Growth & Sales", items: ["Sales Research Worker", "Email-first", "Reply classifier", "X engine", "SEO opportunity", "Launch command"] },
+  { title: "Engineering & QA", items: ["Engineer Work Packet", "Production QA", "Bug reproduction"] },
+  { title: "Operativa system", items: ["Opportunity Engine", "Work Elimination", "Usage Governor", "MAX MODE", "AI ROI"] },
+  { title: "Skills & Routines", items: ["Skill Builder", "Routine Builder", "Handoff formatter"] },
+  { title: "Kontroll & Evidence", items: ["Evidence Receipt", "Failure autopsy", "Owner Gate", "Permission matrix", "Claim classifier", "Safe external action", "Credential minimizer"] },
+  { title: "Bygg eget", items: ["SKILL.md", "Kimi permissions", "MCP access matrix", "Agent architecture", "Vertical AI Employee", "Agent SDK readiness"] },
+  { title: "Quick prompts", items: ["Visa tejpen", "Stoppa dubbelarbete", "En Bot = ett jobb", "Review-ready", "Minska owner actions", "Event före poll", "Kill rule", "Second-input test", "Owner inbox"] },
 ];
 
-// ── Avancerad bonus: bygg din egen AI-medarbetare ───────────────────────────
-// Grok Bot är den färdiga plattformen. Kimi nämns som ETT aktuellt exempel på
-// stack för den som vill bygga samma arkitektur in i en egen vertikal produkt.
-// Endast verifierbara påståenden: Agent SDK finns för Python, Node.js och Go,
-// exponerar Kimi Code-runtimen programmatiskt och återanvänder konfiguration,
-// verktyg, Skills och MCP-servrar samt visar godkännanden/verktygsanrop.
-// Kimi Code stödjer Skills, MCP, subagenter och AgentSwarm. Permission rules
-// använder allow / deny / ask.
-export const ADVANCED_BONUS = {
-  kicker: "Avancerad bonus",
-  headline: "Bygg din egen AI-medarbetare.",
-  lead:
-    "Grok Bot ger dig den färdiga AI-medarbetarplattformen – det är där guiden bor. Men när du förstått metoden är den inte låst till ett verktyg: samma arkitektur kan byggas in i din egen vertikala produkt. Kimi Code och Kimi Agent SDK är ett aktuellt exempel på en sådan stack, inte ett krav.",
-  readyMade: {
-    label: "Färdigt · Grok Bot",
-    note: "Plattformen finns redan – du bygger kontoret ovanpå.",
-    steps: ["Botar", "Dator & verktyg", "Skills", "Routines", "Groups & handoffs", "Godkännanden"],
-  },
-  buildYourOwn: {
-    label: "Bygg eget · exempelstack",
-    note:
-      "Kimi Agent SDK finns officiellt för Python, Node.js och Go och exponerar Kimi Code-runtimen programmatiskt. Den återanvänder din Kimi Code-konfiguration, verktyg, Skills och MCP-servrar, och visar verktygsanrop och godkännanden – vilket gör den användbar i egna produkter och automationer. Kimi Code stödjer Skills, MCP, subagenter och AgentSwarm, och permission rules sätts som allow / deny / ask.",
-    steps: [
-      "Kimi K3",
-      "Kimi Code",
-      "Skills",
-      "MCP",
-      "Agent SDK",
-      "Subagenter / AgentSwarm",
-      "Permissions (allow/deny/ask)",
-      "Din egen vertikala AI-produkt",
-    ],
-  },
-  trustNote:
-    "Ärligt besked: guiden lovar inte att ett SDK trollar fram en medarbetare som jobbar dygnet runt. Schemaläggning, hosting, integrationer, övervakning och produktionsstabilitet är fortfarande ingenjörsarbete – bonusen visar arkitekturen och besluten, inte en genväg runt driften.",
-} as const;
-
-export const BONUS_CHAPTER = {
-  title: "BONUS: Från Grok Bot till egen AI-medarbetare",
-  desc:
-    "Hur samma principer – roll, skill, verktyg, permissions, evidence och handoffs – flyttas in i din egen agentiska mjukvara. Kimi Code och Kimi Agent SDK används som konkret exempel: Skills, MCP, subagenter/AgentSwarm och permission rules (allow/deny/ask). Ingen färdig hostad produkt – hosting, schemaläggning och integrationer är ditt arbete.",
-} as const;
-
-
-// ── Guidekapitel (aktuell struktur, Version 1.0 — redigera fritt här) ───────
+// ── Guidekapitel – synkad med PDF v1.0 ───────────────────────────────────────
 export const CHAPTERS: { title: string; desc: string }[] = [
   {
     title: "Från chatbot till AI-medarbetare",
-    desc: "Skillnaden mellan att prata med Grok och att anställa den. Grunden för allt som följer.",
+    desc: "Vad som skiljer ett bra svar från ett faktiskt återkommande jobb – och kedjan roll → verktyg → Skill → Routine → evidence → handoff → resultat.",
   },
   {
     title: "Din första Bot",
-    desc: "Ett komplett bygge från tom chatt till en Bot med ett riktigt jobb – steg för steg.",
+    desc: "Hur du börjar med en enda konkret arbetsuppgift, sätter owner gates och kräver ett kvitto på att uppgiften är klar.",
   },
   {
-    title: "Så skriver du en Bot Charter",
-    desc: "Mallen som gör en Bot till en medarbetare: roll, verktyg, ansvar, gränser och definitionen av klart.",
+    title: "Bot Charter",
+    desc: "Mallen för roll, ansvar, verktyg, gränser, cadence, output, DoD och eskalering – plus ett ifyllt exempel.",
   },
   {
-    title: "Skills",
-    desc: "Teach a Task på riktigt: fånga ett återkommande arbetsflöde en gång och återanvänd det för alltid.",
+    title: "Skills – återanvändbart arbetssätt",
+    desc: "Så bygger du en Skill först efter att arbetsflödet fungerat manuellt och håller instruktionerna versionerbara.",
   },
   {
-    title: "Routines",
-    desc: "Schemalagt och eventdrivet arbete – så jobbet körs på rätt tid utan att du startar det.",
+    title: "Routines – när jobbet körs",
+    desc: "Schemalagda och eventdrivna Routines, run log, spamfällor och regeln: riktig uppgift → stabil Skill → Routine.",
   },
   {
     title: "Groups & handoffs",
-    desc: "Arbetsrum där Botar lämnar över till varandra – utan att du blir mellanhand.",
+    desc: "Hur Botar samarbetar utan att alla gör samma jobb – med en ansvarig, specialister och tydliga överlämningar.",
   },
   {
-    title: "Chief of Staff",
-    desc: "Boten som håller ihop kontoret: prioriterar, fördelar och eskalerar till dig när det behövs.",
+    title: "Chief of Staff – ett gränssnitt",
+    desc: "En front door som prioriterar, delegerar och sammanfattar beslut – istället för att du hoppar mellan tio trådar.",
   },
   {
-    title: "AI-företaget",
-    desc: "Ägare → HQ → CEO → specialister. Det minsta teamet som slutför ett riktigt uppdrag end-to-end.",
+    title: "AI-företaget – HQ, CEO och specialister",
+    desc: "Portföljnivån med HQ, Company CEO, Growth & Sales, Engineering, QA och Research – och vad varje nivå faktiskt ska äga.",
   },
   {
-    title: "Säkerhet & owner gates",
-    desc: "Låt AI arbeta fritt – men lås pengar, publicering och riskfyllda åtgärder bakom ditt godkännande.",
+    title: "Säkerhet, approvals och owner gates",
+    desc: "Konsekvensbaserade approvals för extern kommunikation, publicering, pengar, radering, permissions, produktion och juridiska commitments.",
   },
   {
     title: "Usage och AI-kapital",
-    desc: "AI usage är en budget. Fördela den där avkastningen är störst och stoppa dubbelarbete.",
+    desc: "Hur du styr usage mot affärsvärde, hittar dubbelarbete och sätter stoppregler innan automatisering blir dyr aktivitet.",
   },
   {
-    title: "Growth & sales automation",
-    desc: "Återkommande research-, content-, SEO- och sales-loopar – inklusive email-first-flöden med owner gate.",
+    title: "Growth & Sales automation",
+    desc: "Ett growth-system med research, kvalificering, drafts, reply-hantering, winner loop och tydliga gates för riktiga utskick.",
   },
   {
     title: "Så bygger du vidare",
-    desc: "Underhåll, nya versioner av Skills, och hur kontoret växer utan att växa sig ohållbart.",
+    desc: "60-minuters quickstart, veckovis ROI-review, kill rules och hur du växer från en fungerande Bot till ett litet AI-kontor.",
   },
 ];
 
-// ── Use cases (flöden guiden lär ut) ────────────────────────────────────────
-export const USE_CASES: { title: string; mono: string; desc: string }[] = [
+export const BONUS_CHAPTER = {
+  title: "BONUS — Från Grok Bot till egen AI-medarbetare",
+  desc: "När du behöver mer kontroll: samma charter byggd som egen agent med Kimi Code, Kimi Agent SDK, Skills, MCP och explicita permission-regler.",
+} as const;
+
+export const ADVANCED_BONUS = {
+  kicker: "Avancerad bonus · från Bot till egen agent",
+  headline: "När en färdig Bot inte längre räcker.",
+  lead:
+    "Grok Bot är det snabbaste sättet att få en digital kollega i arbete. Bonuskapitlet visar nästa nivå: hur samma job description kan bli en egen AI-medarbetare med Kimi Code, Kimi Agent SDK, Skills, MCP och explicita permission-regler – utan att blanda ihop prototyp med produktionssystem.",
+  readyMade: {
+    label: "Färdig AI-medarbetare",
+    steps: ["Bot Charter", "Skill", "Routine", "Evidence", "Owner gate"],
+    note: "Bäst när du vill få ett verkligt arbetsflöde i drift snabbt.",
+  },
+  buildYourOwn: {
+    label: "Bygg din egen",
+    steps: ["Job description", "Agent SDK", "Tools / MCP", "Permissions", "Logs / evidence", "Test / deploy"],
+    note: "Bäst när du behöver egen produkt, integrationslager eller mer kontroll över runtime och UX.",
+  },
+  trustNote:
+    "Bonuskapitlet är ett tekniskt nästa steg – inte ett löfte om en självkörande agent utan ansvar, tester eller approvals.",
+} as const;
+
+// ── Verkliga användningsfall ────────────────────────────────────────────────
+export const USE_CASES: { mono: string; title: string; desc: string }[] = [
   {
-    title: "Email-first sales automation",
-    mono: "sales",
-    desc: "Research-Boten hittar och kvalificerar bolag, Sales-Boten skriver utkasten – men inget skickas förrän du passerat owner gate. Varje utskick loggas som evidence.",
+    mono: "GROWTH LOOP",
+    title: "Från data till nästa tillväxtåtgärd",
+    desc: "Growth-boten läser utfallet, hittar största flaskhalsen, förbereder nästa experiment och lämnar ett mätbart work packet.",
   },
   {
-    title: "Veckovis research-loop",
-    mono: "research",
-    desc: "Varje måndag kör en Routine: Research sammanställer vad som rör sig i din nisch, Chief of Staff destillerar det till tre beslut du kan ta på kafferasten.",
+    mono: "SALES RESEARCH",
+    title: "Research → kvalificering → email draft",
+    desc: "Hitta bolag och beslutsfattare, samla evidens, kvalificera mot ICP och skriv personliga utkast – med mänsklig gate före extern sändning.",
   },
   {
-    title: "Content & SEO-loop",
-    mono: "growth",
-    desc: "Från ämnesresearch till utkast, QA och publiceringsklar text i ett Work Packet. Du godkänner, kontoret producerar, vecka efter vecka.",
+    mono: "ENGINEERING",
+    title: "Work Packet → kod → QA → evidence",
+    desc: "Company CEO definierar outcome, Engineer bygger, QA verifierar mot Definition of Done och returnerar tester/länkar istället för aktivitetsrapport.",
   },
   {
-    title: "QA med evidence receipts",
-    mono: "kvalitet",
-    desc: "QA-Boten granskar leveranserna mot checklistan och kvitterar med bevis: vad som testades, vad som hittades, vad som eskaleras.",
+    mono: "OPPORTUNITY ENGINE",
+    title: "Signaler → shortlist → billig validering",
+    desc: "Samla riktiga signaler, deduplicera, prioritera på sannolik affärsnytta och testa efterfrågan innan du bygger en ny produkt.",
   },
   {
-    title: "Owner gates för riskåtgärder",
-    mono: "kontroll",
-    desc: "Köp, publicering och kundkontakt stannar alltid bakom din knapp. Allt annat kan kontoret köra själv – och redovisa efteråt.",
+    mono: "OWNER INBOX",
+    title: "Ett ställe för riktiga beslut",
+    desc: "Chief of Staff visar bara beslut som kräver ägare: SEND, PUBLISH, SPEND, DELETE, PROD eller LEGAL – resten fortsätter i systemet.",
   },
 ];
 
-// ── Vem guiden är för / inte för ────────────────────────────────────────────
+// ── Vem guiden är / inte är för ─────────────────────────────────────────────
 export const WHO_FOR: string[] = [
-  "Entreprenörer och soloprenörer som vill få mer gjort utan att anställa.",
-  "Konsulter och byråer som vill paketera AI-arbete som återkommande system.",
-  "Utvecklare och AI power users som vill ha struktur, inte fler prompttrådar.",
-  "Dig som redan använder – eller funderar på – Cursor och Grok Bot i arbetet.",
-  "Småföretagare som drunknar i admin, research och uppföljning.",
+  "Driver företag eller bygger produkter och vill få verkligt arbete ur Grok Bot",
+  "Har börjat testa AI-agenter men saknar roller, handoffs och ett driftsäkert upplägg",
+  "Vill automatisera repetitiva uppgifter utan att ge AI fri tillgång till pengar eller produktion",
+  "Vill kunna starta med Grok Bot nu och förstå hur samma mönster kan bli en egen agent senare",
 ];
 
 export const WHO_NOT_FOR: string[] = [
-  "Dig som vill bli rik på AI över en natt – det här är ett operativsystem, inte ett lotteri.",
-  "Dig som vill ha en färdig verksamhet utan att lägga något arbete alls.",
-  "Dig som aldrig tänker öppna verktyget – guiden är praktisk, inte teoretisk underhållning.",
-  "Team som redan driver en mogen agentplattform med egna processer.",
+  "Vill ha en lista med 500 generiska ChatGPT-prompts",
+  "Söker ett löfte om helt självkörande företag utan mänskliga beslut",
+  "Behöver en teknisk API-referens för xAI – den officiella dokumentationen är bättre för det",
+  "Vill installera så många agenter som möjligt utan ett konkret jobb för varje agent",
 ];
 
-// ── FAQ / invändningar (CRO) — svarar på de tio vanligaste ──────────────────
+// ── FAQ ─────────────────────────────────────────────────────────────────────
 export const FAQ: { q: string; a: string }[] = [
   {
-    q: "Jag är ny på Grok Bot – funkar guiden ändå?",
-    a: "Ja. Guiden börjar från noll: din första Bot byggs steg för steg i kapitel 2, innan vi går vidare till Skills, Routines och Groups. Du behöver inte ha använt Grok Bot tidigare.",
+    q: "Vad är Grok Bot?",
+    a: "Grok Bot är xAI:s AI-agent/AI-teammate som kan arbeta via sin beständiga molndator, använda anslutna verktyg och köra Skills och Routines. AI-KONTORET handlar om hur du organiserar det som verkligt arbete – inte bara hur du startar Boten.",
   },
   {
-    q: "Behöver jag vara programmerare?",
-    a: "Nej. Upplägget är skrivet för operatörer, inte utvecklare. Allt byggs i Grok Bots egna ytor med copy-paste-mallar. Kan du beskriva ett jobb på svenska kan du bygga en Bot.",
+    q: "Är AI-KONTORET en officiell xAI-guide?",
+    a: "Nej. AI-KONTORET är en oberoende svensk guide från Aurora Media och är inte ansluten till, sponsrad av eller godkänd av xAI, Cursor eller Moonshot AI.",
   },
   {
-    q: "Är det bara prompts?",
-    a: "Nej – det är hela poängen. En prompt säger “gör den här uppgiften”. Guiden lär dig bygga Botar som äger ett jobb: roll, verktyg, Skills, Routines, evidence och handoffs. Promptar är bara ett av materialen.",
+    q: "Måste jag kunna programmera?",
+    a: "Nej för huvuddelen av guiden. Bot Charter, Skills, Routines, handoffs och owner gates kan byggas utan att du utvecklar en egen agent. Bonusdelen om Kimi Agent SDK är mer teknisk och är tydligt avskild.",
   },
   {
-    q: "Vad är skillnaden mellan Bot, Skill och Routine?",
-    a: "En Bot är en AI-medarbetare – en digital kollega med ett definierat jobb. En Skill är ett inlärt, återkommande arbetsflöde som Boten kan. En Routine bestämmer när jobbet körs – schemalagt eller triggat av en händelse.",
+    q: "Behöver jag ett särskilt abonnemang för Grok Bot?",
+    a: "Grok Bot är en separat tjänst med behörighet och planvillkor som kan förändras. Därför hårdkodar guiden inte gamla planpriser. Kontrollera aktuell tillgång i Grok Bot/xAI/Cursor innan köp av en extern plan.",
   },
   {
-    q: "Kan jag använda detta i ett vanligt småföretag?",
-    a: "Ja. Exemplen kommer från verklig drift: research, innehåll, uppföljning, sales outreach och QA. Det är AI-automatisering anpassad för företag utan teknikavdelning – upplägget skalar ner till en enda Bot lika väl som det skalar upp till ett helt AI-kontor.",
-  },
-  {
-    q: "Fungerar det om jag använder Cursor?",
-    a: "Ja. Principerna – Bot Charter, Skills, Routines, handoffs, owner gates – är desamma. Guiden visar upplägget i Grok Bot, men strukturen följer med dig oavsett vilket AI-verktyg du kör.",
-  },
-  {
-    q: "Hur mycket kan Botarna göra helt själva?",
-    a: "Mer än du tror – men inte allt. Guiden bygger medvetet på owner gates: repetitiva delar som research, utkast och sammanställningar kör autonomt, medan pengar, publicering och riskfyllda åtgärder alltid kräver ditt godkännande.",
-  },
-  {
-    q: "Hur behåller jag kontrollen?",
-    a: "Genom tre mekanismer som genomsyrar guiden: owner gates (inga riskåtgärder utan ditt godkännande), evidence receipts (varje leverans ska kunna bevisas) och usage-styrning (du ser vad varje Bot kostar i kapacitet).",
-  },
-  {
-    q: "Blir guiden gammal när Grok ändras?",
-    a: "Verktyg ändras – operativsystem består. Det mesta i guiden är plattformsoberoende: roller, Skills, handoffs och kontrollstrukturer. Guiden är dessutom versionerad och faktagranskad mot aktuella officiella källor; du ser alltid vilken version du har, när den uppdaterades och när fakta senast verifierades.",
+    q: "Arbetar Botar när datorn är stängd?",
+    a: "Bakgrundsarbete och Routines kan fortsätta på Grok Bots molndator även när din laptop är stängd, inom tjänstens aktuella usage- och planvillkor.",
   },
   {
     q: "Har varje Bot en egen dator?",
-    a: "Nej – det är en vanlig missuppfattning. Alla Botar delar en och samma beständiga molndator som är knuten till ditt konto, men varje Bot arbetar på sin egen arbetsyta. Guiden visar hur du organiserar dem så att de samarbetar istället för att krocka.",
+    a: "Nej – och det är en viktig detalj. Botarna har separata arbetsytor men delar användarens beständiga Grok Bot-dator, inklusive filer och browser sessions. Därför ska olika Botar inte behandlas som säkerhetsgränser.",
   },
   {
-    q: "Vad får jag i Prompt Vault?",
-    a: "Ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget: roller som CEO/Chief of Staff, Growth, Sales, QA och Engineer, plus system som Opportunity Engine, AI Usage Governor, Work Packets, owner gates och weekly reviews – redo att kopiera rakt in. Guiden är fullständig utan Vault; det här är genvägen för dig som vill kopiera implementeringen direkt.",
+    q: "Vad är Prompt Vault?",
+    a: "Prompt Vault är ett separat copy-paste-bibliotek med färdiga prompts och templates för roller, Growth & Sales, Engineering/QA, operativa system, Skills/Routines/Handoffs, evidence/owner gates och avancerat eget agentbygge. Guiden står på egna ben utan Vault.",
   },
   {
-    q: "Kan jag bygga en egen AI-medarbetare utan Grok Bot?",
-    a: "Ja. Den avancerade bonusen förklarar arkitekturen bakom en egen vertikal AI-medarbetare – roll, Skills, verktyg via MCP, permissions (allow/deny/ask), evidence och handoffs – och använder Kimi Code tillsammans med Kimi Agent SDK (Python, Node.js, Go) som ett aktuellt exempel. Men var beredd: det är ingen färdig hostad produkt. Hosting, schemaläggning, integrationer och övervakning måste du fortfarande lösa själv för att få ett produktionsdugligt system. Sidans huvudspår är och förblir Grok Bot – bonusen är för dig som vill vidare.",
+    q: "Ingår framtida uppdateringar?",
+    a: "Köpet avser den levererade versionen och de Version 1.x-uppdateringar som Aurora Media uttryckligen publicerar för produkten. Det är inte ett abonnemang och innebär inte ett löfte om obegränsade framtida versioner.",
+  },
+  {
+    q: "Bygger guiden ett helt autonomt företag åt mig?",
+    a: "Nej. Den visar hur du bygger ett AI-kontor som gör mer arbete med mindre handpåläggning. Pengar, extern publicering, känsliga produktionsändringar och juridiska commitments ska fortfarande ha tydliga owner gates.",
+  },
+  {
+    q: "Kan jag bygga en egen AI-medarbetare istället för Grok Bot?",
+    a: "Ja. Bonuskapitlet visar mönstret från en färdig Grok Bot till en egen agent med Kimi Code / Kimi Agent SDK, Skills, MCP och permission-regler. Det är ett avancerat nästa steg – inte huvudprodukten.",
   },
 ];
 
+// ── Preview-excerpt ─────────────────────────────────────────────────────────
+export const PREVIEW_EXCERPT = `BOT CHARTER — RESEARCH
 
-// ── Legal-utkast som syns i köpflödet (Bekräftas av ägaren före live) ───────
-export const LEGAL_DRAFT_NOTES = [
-  "Prisvisning: 199 / 199 / 349 kr är konsumentpriser inklusive moms. Lägg inte på moms ovanpå.",
-  "Moms: Guide är kandidat för 6 % endast om den klassas som elektronisk publikation. Prompt Vault antas inte kvalificera. Bundle ärver inte Guidens klass.",
-  "Ångerrätt: utkast. LEGAL_OWNER_CONFIRMED = false tills du godkänt formuleringen. Konsumentverket kräver aktiv handling.",
-  "Köpbekräftelse: Stripe-mejl + leveransmejl med kopia av samtyckestexten. /villkor har en AI-KONTORET-butikssektion.",
-];
+ROLL
+Du är Research för [företag]. Du levererar beslutsunderlag – inte beslut.
 
+UPPDRAG
+Samla verifierbara fakta, skilj fakta från tolkning och lämna ett kort underlag som nästa ägare kan använda direkt.
+
+VERKTYG
+Tillåtna: webbsökning, godkända datakällor, interna dokument med läsbehörighet.
+Inte tillåtna: extern publicering, köp, borttagning, ändrade permissions.
+
+EVIDENCE STANDARD
+• Länka källan till varje materiellt påstående.
+• Märk osäkra slutsatser som HYPOTES.
+• Skriv OKÄNT när det inte går att verifiera.
+
+DEFINITION OF DONE
+En färdig leverans innehåller:
+1. Slutsats i högst fem rader.
+2. Verifierade fakta med källor.
+3. Osäkerheter.
+4. Rekommenderad nästa ägare.
+5. Evidence Receipt.`;
+
+// ── Leveranscopy ─────────────────────────────────────────────────────────────
 export const DIGITAL_DELIVERY_NOTE =
-  "Digital produkt – levereras direkt. Efter köpet får du guiden som nedladdning och på mejl. Vid köp samtycker du till att leveransen av det digitala innehållet påbörjas omedelbart, och du får information om vad det innebär för ångerrätten innan du betalar.";
-
-// ── Preview-utdrag (ur kapitel 3) ───────────────────────────────────────────
-export const PREVIEW_EXCERPT = `BOT CHARTER — urdrag ur kapitel 3
-
-Roll: Research-bot för din nisch
-Primärt jobb: Leverera en kort lägesbild varje måndag kl 07:00.
-
-Verktyg: webbsökning, anteckningar i Group "Research".
-Gör: söker veckans rörelser, sparar källor, skriver max 12 rader.
-Gör inte: kontaktar aldrig kunder, publicerar aldrig.
-
-Klart när: lägesbilden ligger i Group "HQ" med källor listade.
-Evidence: länk till varje påstående + tidsstämpel.
-Handoff: Chief of Staff destillerar till tre beslut.
-
-Eskalera till ägaren om: något kräver köp, publicering eller kundkontakt.`;
+  "Digital leverans: länkarna skapas privat efter verifierad betalning, gäller under begränsad tid och skickas till e-postadressen du anger.";
