@@ -130,7 +130,7 @@ export async function verifyStripeSignature(
   return signatures.some((s) => timingSafeEqual(s, expected));
 }
 
-// ── Supabase (service role) ─────────────────────────────────────────
+// ── Supabase (service role) ─────────────────────────────────────────────────
 export function serviceEnv() {
   const url = Deno.env.get("SUPABASE_URL") ?? "";
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
