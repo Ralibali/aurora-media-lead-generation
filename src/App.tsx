@@ -275,9 +275,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/oppna-siffror",
   },
   "/villkor": {
-    title: "Villkor för AI-kartan | Aurora Media AB",
+    title: "Villkor | Aurora Media AB",
     description:
-      "Villkoren för AI-kartan: du får kartan på mejl, Aurora Media kan höra av sig för uppföljning, och du kan avsluta när du vill.",
+      "Villkor för AI-kartan och för köp av AI-KONTORET: vad du godkänner, hur digital leverans fungerar, och hur du avslutar.",
     canonical: "https://auroramedia.se/villkor",
   },
   "/tjanster/hemsidor": {
