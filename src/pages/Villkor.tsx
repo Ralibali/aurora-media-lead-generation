@@ -53,8 +53,8 @@ const Villkor = () => {
   return (
     <>
       <SEO
-        title="Villkor för AI-kartan | Aurora Media"
-        description="Villkoren för AI-kartan: du får kartan på mejl, Aurora Media kan höra av sig för uppföljning, och du kan avsluta när du vill. Kort och mänskligt."
+        title="Villkor | Aurora Media"
+        description="Villkor för AI-kartan och för köp av AI-KONTORET: vad du godkänner, hur digital leverans fungerar, och hur du avslutar."
         canonical="/villkor"
         noindex
       />
@@ -63,12 +63,12 @@ const Villkor = () => {
         <main id="main">
           <section className="vk-section" style={{ paddingTop: "clamp(110px,14vw,160px)" }}>
             <div className="vk-wrap" style={{ maxWidth: 720 }}>
-              <p className="vk-mono">Villkor · AI-kartan</p>
+              <p className="vk-mono">Villkor · AI-kartan och AI-KONTORET</p>
               <h1 style={{ marginTop: 14, marginBottom: 18 }}>
                 Det här godkänner du – kort version
               </h1>
               <p style={{ maxWidth: 620, color: "var(--granbark-mut)", fontSize: 17, lineHeight: 1.6 }}>
-                Inga dolda klausuler, ingen juristprosa. Så här funkar det när du fyller i AI-kartan på auroramedia.se.
+                Inga dolda klausuler, ingen juristprosa. Först AI-kartan. Längre ner: villkoren för köp av AI-KONTORET.
               </p>
 
               <div style={{ marginTop: 44, display: "grid", gap: 18 }}>
@@ -102,6 +102,74 @@ const Villkor = () => {
                 ))}
               </div>
 
+              <div id="ai-kontoret" style={{ marginTop: 56 }}>
+                <p className="vk-mono">Villkor · AI-KONTORET</p>
+                <h2 style={{ marginTop: 14, marginBottom: 18, fontSize: 28, letterSpacing: "-0.02em" }}>
+                  Köp av AI-KONTORET
+                </h2>
+                <p style={{ maxWidth: 620, color: "var(--granbark-mut)", fontSize: 17, lineHeight: 1.6 }}>
+                  Det här gäller när du köper Guiden, Prompt Vault eller bundlet på /grok-bot. Texten är ett utkast tills ägaren bekräftat den slutliga formuleringen.
+                </p>
+                <div style={{ marginTop: 28, display: "grid", gap: 18 }}>
+                  {[
+                    {
+                      title: "Vad du köper",
+                      body: [
+                        "AI-KONTORET är digitalt innehåll i PDF: Guiden, Prompt Vault, eller båda i bundlet. Leveransen skickas till den e-postadress du anger, med tidsbegränsade nedladdningslänkar.",
+                        "Konsumentpriserna är 199 kr för Guiden, 199 kr för Prompt Vault och 349 kr för bundlet. Priserna inkluderar moms. Vi lägger inte på moms ovanpå det du ser.",
+                      ],
+                    },
+                    {
+                      title: "Direkt leverans och ångerrätt",
+                      body: [
+                        "Filerna levereras direkt efter betald checkout. Enligt distansavtalslagen kan ångerrätten för digitalt innehåll upphöra när leveransen påbörjats, men bara om du först fått information om det och aktivt samtyckt.",
+                        "Därför måste du kryssa i en ruta som inte är förifylld innan betalningen. Utan det aktiva krysset öppnas inte kassan.",
+                      ],
+                    },
+                    {
+                      title: "Bekräftelse av avtalet",
+                      body: [
+                        "Efter köpet får du ett leveransmejl med nedladdningarna och en kopia av den samtyckestext du godkände, plus tidpunkt och belopp. Spara mejlet. Det är din bekräftelse av avtalet.",
+                        "Betalningen hanteras av Stripe. Aurora Media lagrar inte kortuppgifter. En länk i webbläsaren är aldrig ett köpbevis – bara den verifierade sessionen och mejlet.",
+                      ],
+                    },
+                    {
+                      title: "Support",
+                      body: [
+                        "Frågor om leverans, nya länkar eller köpet: info@auroramedia.se. Personuppgifter för köpet behandlas för att fullgöra avtalet och skicka filerna. Läs mer i integritetspolicyn.",
+                      ],
+                    },
+                  ].map((s) => (
+                    <div
+                      key={s.title}
+                      style={{
+                        border: "1px solid var(--linje)",
+                        borderRadius: 14,
+                        padding: "24px 26px",
+                        background: "#FDFCF8",
+                      }}
+                    >
+                      <h3 style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.015em", marginBottom: 10 }}>
+                        {s.title}
+                      </h3>
+                      {s.body.map((p, i) => (
+                        <p
+                          key={i}
+                          style={{
+                            color: "var(--granbark-mut)",
+                            fontSize: 15.5,
+                            lineHeight: 1.65,
+                            marginTop: i === 0 ? 0 : 10,
+                          }}
+                        >
+                          {p}
+                        </p>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <p style={{ marginTop: 32, fontSize: 14, color: "var(--granbark-mut)", lineHeight: 1.6 }}>
                 Frågor om villkoren eller dina uppgifter? Mejla{" "}
                 <a href="mailto:christoffer@auroramedia.se" style={{ color: "var(--gran)", fontWeight: 600 }}>
@@ -110,7 +178,7 @@ const Villkor = () => {
                 – jag svarar personligen inom 24 timmar.
               </p>
               <p style={{ marginTop: 10, fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--granbark-mut)", letterSpacing: "0.04em" }}>
-                Senast uppdaterad: juli 2026
+                Senast uppdaterad: augusti 2026
               </p>
             </div>
           </section>
