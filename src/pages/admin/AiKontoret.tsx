@@ -17,9 +17,12 @@ import {
   FN_UPLOAD_ASSET,
   FN_DELIVER,
   LEGAL_ACK_TEXT,
+  LEGAL_OWNER_CONFIRMED,
   PRICES,
   PRODUCT_STATUS,
   PRODUCT_VERSION,
+  VAT_CLASSIFICATION_CONFIRMED,
+  VAT_CLASSES,
 } from "@/config/aiKontoret";
 
 type Checks = {
@@ -30,6 +33,7 @@ type Checks = {
   asset_guide?: boolean;
   asset_vault?: boolean;
   legal_confirmed?: boolean;
+  vat_classified?: boolean;
 };
 
 const CHECK_LABELS: { key: keyof Checks; label: string; hint: string }[] = [
@@ -39,7 +43,8 @@ const CHECK_LABELS: { key: keyof Checks; label: string; hint: string }[] = [
   { key: "email", label: "E-postleverans", hint: "RESEND_API_KEY för leveransmejl." },
   { key: "asset_guide", label: "Guide-PDF uppladdad", hint: ASSET_PATHS.guide },
   { key: "asset_vault", label: "Prompt Vault-PDF uppladdad", hint: ASSET_PATHS.vault },
-  { key: "legal_confirmed", label: "Juridiskt godkännande", hint: "Ägaren har bekräftat texten nedan." },
+  { key: "legal_confirmed", label: "Juridiskt godkännande", hint: "Kräver adminbekräftelse OCH LEGAL_OWNER_CONFIRMED i koden." },
+  { key: "vat_classified", label: "Momsklasser bekräftade", hint: "VAT_CLASSIFICATION_CONFIRMED i koden. Bundle ärver inte Guidens 6 %." },
 ];
 
 function fileToBase64(file: File): Promise<string> {
@@ -191,8 +196,16 @@ export default function AdminAiKontoret() {
       key: "legal",
       ok: Boolean(checks.legal_confirmed),
       title: "Juridiskt godkännande",
-      detail: "Läs villkorstexten längre ner och bekräfta att du står bakom den.",
-      action: { label: "Bekräfta juridiken", run: () => void setLegal(true), disabled: busy === "legal" },
+      detail: LEGAL_OWNER_CONFIRMED
+        ? "Läs villkorstexten längre ner och bekräfta att du står bakom den."
+        : "Kodflaggan LEGAL_OWNER_CONFIRMED är fortfarande false. Adminbekräftelse ensamt öppnar inte kassan. Det är inte ett juridiskt godkännande.",
+      action: { label: "Bekräfta juridiken", run: () => void setLegal(true), disabled: busy === "legal" || !LEGAL_OWNER_CONFIRMED },
+    },
+    {
+      key: "vat",
+      ok: Boolean(checks.vat_classified),
+      title: "Momsklasser bekräftade",
+      detail: `Guide: ${VAT_CLASSES.guide}. Vault: ${VAT_CLASSES.vault}. Bundle: ${VAT_CLASSES.bundle}. Bekräftelseflagga: ${VAT_CLASSIFICATION_CONFIRMED ? "true" : "false"}.`,
     },
     {
       key: "status",
@@ -422,9 +435,10 @@ export default function AdminAiKontoret() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p className="text-muted-foreground">
-              Detta är texten kunden aktivt måste kryssa i före betalning. <b>Utkast</b> – den är inte
-              juridiskt granskad av oss. Bekräfta först när du står bakom formuleringen samt
-              villkoren och integritetspolicyn.
+              Detta är texten kunden aktivt måste kryssa i före betalning. <b>Utkast</b> – inte
+              juridiskt godkänd. Adminbekräftelsen räcker inte: LEGAL_OWNER_CONFIRMED i koden är{" "}
+              <b>{LEGAL_OWNER_CONFIRMED ? "true" : "false"}</b>. Säg till när du godkänt den slutliga
+              formuleringen. Ingen agent får påstå att texten är godkänd.
             </p>
             <blockquote className="rounded-md border-l-4 border-primary/60 bg-muted/40 p-3 text-sm">
               {LEGAL_ACK_TEXT}
