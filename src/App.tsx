@@ -38,6 +38,7 @@ const RedaktionellPolicy = lazy(() => import("./pages/RedaktionellPolicy"));
 const Tjanster = lazy(() => import("./pages/Tjanster"));
 const OppnaSiffror = lazy(() => import("./pages/OppnaSiffror"));
 const Villkor = lazy(() => import("./pages/Villkor"));
+const AngraKop = lazy(() => import("./pages/AngraKop"));
 const WebbyraLinkoping = lazy(() => import("./pages/WebbyraLinkoping"));
 const DigitalMarknadsforingLinkoping = lazy(() => import("./pages/DigitalMarknadsforingLinkoping"));
 const SeoByraLinkoping = lazy(() => import("./pages/SeoByraLinkoping"));
@@ -279,6 +280,12 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Villkor för AI-kartan och för köp av AI-KONTORET: vad du godkänner, hur digital leverans fungerar, och hur du avslutar.",
     canonical: "https://auroramedia.se/villkor",
+  },
+  "/angra-kop": {
+    title: "Ångra köp | Aurora Media AB",
+    description:
+      "Lämna en begäran om ångerrätt för AI-KONTORET. Du får ett mottagningsbevis med tidpunkt. Det är inte ett automatiskt beslut.",
+    canonical: "https://auroramedia.se/angra-kop",
   },
   "/tjanster/hemsidor": {
     title: "Hemsidor | Aurora Media AB",
@@ -526,6 +533,7 @@ const App = () => (
               <Route path="/tjanster" element={<Tjanster />} />
               <Route path="/oppna-siffror" element={<OppnaSiffror />} />
               <Route path="/villkor" element={<Villkor />} />
+              <Route path="/angra-kop" element={<AngraKop />} />
               <Route path="/tjanster/hemsidor" element={<Hemsidor />} />
               <Route path="/tjanster/ehandel" element={<Ehandel />} />
               <Route path="/tjanster/mobilapp" element={<Mobilapp />} />

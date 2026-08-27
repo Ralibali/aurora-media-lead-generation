@@ -44,7 +44,7 @@ const CHECK_LABELS: { key: keyof Checks; label: string; hint: string }[] = [
   { key: "asset_guide", label: "Guide-PDF uppladdad", hint: ASSET_PATHS.guide },
   { key: "asset_vault", label: "Prompt Vault-PDF uppladdad", hint: ASSET_PATHS.vault },
   { key: "legal_confirmed", label: "Juridiskt godkännande", hint: "Kräver adminbekräftelse OCH LEGAL_OWNER_CONFIRMED i koden." },
-  { key: "vat_classified", label: "Momsklasser bekräftade", hint: "VAT_CLASSIFICATION_CONFIRMED i koden. Bundle ärver inte Guidens 6 %." },
+  { key: "vat_classified", label: "Momsklasser bekräftade", hint: "VAT_CLASSIFICATION_CONFIRMED i koden. Bundle är två tillhandahållanden (174,50 + 174,50), inte hel-SKU 6 %." },
 ];
 
 function fileToBase64(file: File): Promise<string> {
@@ -205,7 +205,7 @@ export default function AdminAiKontoret() {
       key: "vat",
       ok: Boolean(checks.vat_classified),
       title: "Momsklasser bekräftade",
-      detail: `Guide: ${VAT_CLASSES.guide}. Vault: ${VAT_CLASSES.vault}. Bundle: ${VAT_CLASSES.bundle}. Bekräftelseflagga: ${VAT_CLASSIFICATION_CONFIRMED ? "true" : "false"}.`,
+      detail: `Guide: ${VAT_CLASSES.guide}. Vault: ${VAT_CLASSES.vault}. Bundle: ${VAT_CLASSES.bundle} (174,50 + 174,50). Bekräftelseflagga: ${VAT_CLASSIFICATION_CONFIRMED ? "true" : "false"}.`,
     },
     {
       key: "status",
