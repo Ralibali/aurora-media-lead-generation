@@ -197,7 +197,7 @@ export const LESSONS: { quote: string; takeaway: string }[] = [
 export const VAULT_BLURB =
   "Ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget.";
 
-/** Metod kontra copy-paste: guiden står på egna ben, Vault accelererar. */
+/** Metod kontra copy-paste: guidn står på egna ben, Vault accelererar. */
 export const VAULT_METHOD_NOTE =
   "Guiden lär dig metoden – Vault är copy-paste-implementeringen. Guiden är fullständig utan Vault, och alla säkerhetskritiska regler (owner gates och evidence-krav) ligger alltid i huvudguiden, aldrig bakom tillägget.";
 
@@ -265,7 +265,7 @@ export const ADVANCED_BONUS = {
     ],
   },
   trustNote:
-    "Ärligt besked: guiden lovar inte att ett SDK trollar fram en medarbetare som jobbar dygnet runt. Schemaläggning, hosting, integrationer, övervakning och produktionsstabilitet är fortfarande ingenjörsarbete – bonusen visar arkitekturen och besluten, inte en genväg runt driften.",
+    "Ärligt besked: guidn lovar inte att ett SDK trollar fram en medarbetare som jobbar dygnet runt. Schemaläggning, hosting, integrationer, övervakning och produktionsstabilitet är fortfarande ingenjörsarbete – bonusen visar arkitekturen och besluten, inte en genväg runt driften.",
 } as const;
 
 export const BONUS_CHAPTER = {
@@ -327,7 +327,7 @@ export const CHAPTERS: { title: string; desc: string }[] = [
   },
 ];
 
-// ── Use cases (flöden guidn lär ut) ────────────────────────────────────────
+// ── Use cases (flöden guiden lär ut) ────────────────────────────────────────
 export const USE_CASES: { title: string; mono: string; desc: string }[] = [
   {
     title: "Email-first sales automation",
@@ -407,7 +407,7 @@ export const FAQ: { q: string; a: string }[] = [
     a: "Genom tre mekanismer som genomsyrar guiden: owner gates (inga riskåtgärder utan ditt godkännande), evidence receipts (varje leverans ska kunna bevisas) och usage-styrning (du ser vad varje Bot kostar i kapacitet).",
   },
   {
-    q: "Blir guiden gammal när Grok ändras?",
+    q: "Blir guidn gammal när Grok ändras?",
     a: "Verktyg ändras – operativsystem består. Det mesta i guiden är plattformsoberoende: roller, Skills, handoffs och kontrollstrukturer. Guiden är dessutom versionerad och faktagranskad mot aktuella officiella källor; du ser alltid vilken version du har, när den uppdaterades och när fakta senast verifierades.",
   },
   {
