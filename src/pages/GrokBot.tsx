@@ -334,7 +334,7 @@ const GrokBot = () => {
               )}
               {checkoutReturn && (
                 <div className="gb-thanks" role="status">
-                  {verify.state === "checking" && <><b>Verifierar…</b> Vi kontrollerar kontobetalningen mot betalleverantören.</>}
+                  {verify.state === "checking" && <><b>Verifierar…</b> Vi kontrollerar betalningen mot betalleverantören.</>}
                   {verify.state === "paid" && (
                     <>
                       <b>Betalning verifierad.</b>{" "}
@@ -359,3 +359,53 @@ const GrokBot = () => {
                   <i aria-hidden="true" /> AI-KONTORET
                 </p>
               </Reveal>
+              <Reveal delay={0.08}>
+                <h1 id="gb-h1">
+                  Bygg ett <span className="accent">AI-team</span> som faktiskt gör jobbet.
+                </h1>
+              </Reveal>
+              <Reveal delay={0.16}>
+                <p className="gb-hero-sub">
+                  Den praktiska svenska guiden till Grok Bot — från din första Bot till Skills,
+                  Routines, Groups, handoffs och ett AI-kontor som arbetar även när du inte sitter
+                  framför datorn.
+                </p>
+              </Reveal>
+              <Reveal delay={0.24}>
+                <div className="gb-hero-ctas">
+                  <button
+                    type="button"
+                    className="vk-btn vk-btn-primary"
+                    onClick={() => (canBuy ? handleBuy("guide") : scrollToId("kop"))}
+                  >
+                    <span>{canBuy ? `Köp AI-KONTORET – ${PRICES.guide} kr` : "Få besked när AI-KONTORET släpps"}</span>
+                  </button>
+                  <button type="button" className="vk-btn vk-btn-ghost" onClick={() => scrollToId("ingar")}>
+                    <span>Se vad som ingår</span>
+                  </button>
+                  <span className="gb-price-inline">
+                    <strong>{PRICES.guide} kr</strong> engångspris
+                  </span>
+                </div>
+              </Reveal>
+              <Reveal delay={0.32}>
+                <ul className="gb-proofline" aria-label="Produktens kännetecken">
+                  <li>Praktiskt</li>
+                  <li>Svenskt</li>
+                  <li>Copy-paste-vänligt</li>
+                  <li>Byggt från verklig användning</li>
+                </ul>
+              </Reveal>
+              <Reveal delay={0.4}>
+                <p className="gb-versionchip">
+                  <b>Version {PRODUCT_VERSION}</b> · {PRODUCT_UPDATED} ·{" "}
+                  <time dateTime={PRODUCT_UPDATED_ISO}>Senast uppdaterad {PRODUCT_UPDATED_ISO}</time>
+                  {" · "}
+                  <time dateTime={PRODUCT_VERIFIED_ISO}>Verifierad {PRODUCT_VERIFIED_ISO}</time>
+                </p>
+                <p className="gb-freshness vk-mono">{PRODUCT_FRESHNESS}</p>
+              </Reveal>
+            </div>
+          </section>
+
+          <hr className="vk-hair" />
