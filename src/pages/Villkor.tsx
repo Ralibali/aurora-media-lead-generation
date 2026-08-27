@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { SEO } from "@/components/SEO";
 import { VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 import { setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
@@ -113,29 +114,46 @@ const Villkor = () => {
                 <div style={{ marginTop: 28, display: "grid", gap: 18 }}>
                   {[
                     {
-                      title: "Vad du köper",
+                      title: "Näringsidkare",
+                      body: [
+                        "Säljare: Aurora Media AB, organisationsnummer 559272-0220, Linköping, Sverige. Support och kontakt: info@auroramedia.se.",
+                        "Fullständig postadress saknas i de verifierade källorna i projektet och kompletteras av näringsidkaren innan live. Hitta oss tills dess via e-post och organisationsnummer.",
+                      ],
+                    },
+                    {
+                      title: "Vad du köper och pris",
                       body: [
                         "AI-KONTORET är digitalt innehåll i PDF: Guiden, Prompt Vault, eller båda i bundlet. Leveransen skickas till den e-postadress du anger, med tidsbegränsade nedladdningslänkar.",
-                        "Konsumentpriserna är 199 kr för Guiden, 199 kr för Prompt Vault och 349 kr för bundlet. Priserna inkluderar moms. Vi lägger inte på moms ovanpå det du ser.",
+                        "Konsumentpriserna är 199 kr för Guiden, 199 kr för Prompt Vault och 349 kr för bundlet. Alla priser inkluderar moms. Vi lägger inte på moms ovanpå det du ser.",
+                        "Bundlet är två tillhandahållanden. Bundlerabatten fördelas lika: Guide 174,50 kr och Prompt Vault 174,50 kr, totalt 349,00 kr. Guide behandlas som kandidat för 6 % elektronisk publikation. Vault behandlas som kandidat för 25 % elektroniskt tillhandahållen tjänst. Klasserna är inte ägargodkända.",
                       ],
                     },
                     {
                       title: "Direkt leverans och ångerrätt",
                       body: [
-                        "Filerna levereras direkt efter betald checkout. Enligt distansavtalslagen kan ångerrätten för digitalt innehåll upphöra när leveransen påbörjats, men bara om du först fått information om det och aktivt samtyckt.",
-                        "Därför måste du kryssa i en ruta som inte är förifylld innan betalningen. Utan det aktiva krysset öppnas inte kassan.",
+                        "Filerna levereras efter betald checkout. Enligt distansavtalslagen kan ångerrätten för digitalt innehåll upphöra när leveransen påbörjats, men bara om du först fått information om det och aktivt samtyckt.",
+                        "Samtyckestexten i kassan (utkast, inte ägargodkänd) är: Jag samtycker uttryckligen till att leveransen av det digitala innehållet påbörjas omedelbart och går med på att det därigenom inte finns någon ångerrätt när leveransen har påbörjats.",
+                        "Rutan är inte förifylld. Utan det aktiva krysset öppnas inte kassan. Ångerrätten kan fortfarande gälla om samtycket saknades eller leveransen inte startade.",
+                      ],
+                    },
+                    {
+                      title: "Så utövar du ångerrätt",
+                      body: [
+                        "Använd den elektroniska ångerfunktionen på /angra-kop. Där anger du namn, e-post, avtals- eller Stripe-id och skickar en uttrycklig begäran. Du får omedelbart ett mottagningsbevis med tidpunkt. Beviset bekräftar bara mottagandet – inte att ångerrätten är giltig.",
+                        "Du kan också mejla samma uppgifter till info@auroramedia.se. Standardinformation om ångerrätt finns hos Konsumentverket: https://www.konsumentverket.se/for-konsument/kopa-varor-och-tjanster/angerratt/",
                       ],
                     },
                     {
                       title: "Bekräftelse av avtalet",
                       body: [
-                        "Efter köpet får du ett leveransmejl med nedladdningarna och en kopia av den samtyckestext du godkände, plus tidpunkt och belopp. Spara mejlet. Det är din bekräftelse av avtalet.",
+                        "Efter köpet får du ett leveransmejl med nedladdningarna och en hållbar avtalsbekräftelse: näringsidkare, organisationsnummer, produkt, totalt pris inklusive moms, momsfördelning, samtyckestext, tidpunkt, leveransvillkor, reklamation, ångerinformation och länk till /angra-kop. Spara mejlet.",
                         "Betalningen hanteras av Stripe. Aurora Media lagrar inte kortuppgifter. En länk i webbläsaren är aldrig ett köpbevis – bara den verifierade sessionen och mejlet.",
                       ],
                     },
                     {
-                      title: "Support",
+                      title: "Reklamation och support",
                       body: [
+                        "Fel i den levererade filen anmäls till info@auroramedia.se. Konsumentköplagens reklamationsregler gäller för digitalt innehåll.",
                         "Frågor om leverans, nya länkar eller köpet: info@auroramedia.se. Personuppgifter för köpet behandlas för att fullgöra avtalet och skicka filerna. Läs mer i integritetspolicyn.",
                       ],
                     },
@@ -162,7 +180,17 @@ const Villkor = () => {
                             marginTop: i === 0 ? 0 : 10,
                           }}
                         >
-                          {p}
+                          {p.includes("/angra-kop") ? (
+                            <>
+                              {p.split("/angra-kop")[0]}
+                              <Link to="/angra-kop" style={{ fontWeight: 600 }}>
+                                /angra-kop
+                              </Link>
+                              {p.split("/angra-kop")[1]}
+                            </>
+                          ) : (
+                            p
+                          )}
                         </p>
                       ))}
                     </div>
