@@ -120,7 +120,7 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
-  // ── Ägarens reissue-flöde ────────────────────────────────────────
+  // ── Ägarens reissue-flöde ────────────────────────────────────────────────
   if (req.headers.get("x-admin-token")) {
     if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
     const body = await req.json().catch(() => ({}));
@@ -151,7 +151,7 @@ Deno.serve(async (req: Request) => {
     return json({ reissued: true, emailed: mail.ok, links: links.length });
   }
 
-  // ── Stripe webhook ───────────────────────────────────────────
+  // ── Stripe webhook ───────────────────────────────────────────────────────
   const secret = webhookSecret();
   if (!secret) return json({ error: "webhook_not_configured" }, 503);
 
