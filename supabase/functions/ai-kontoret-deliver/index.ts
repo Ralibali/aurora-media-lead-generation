@@ -14,7 +14,6 @@ import {
   corsHeaders,
   json,
   CATALOG,
-  isProduct,
   isAdmin,
   webhookSecret,
   verifyStripeSignature,
@@ -27,6 +26,10 @@ import {
   SIGNED_URL_TTL,
   SUPPORT_EMAIL,
   PRODUCT_VERSION,
+  LEGAL_ACK_TEXT,
+  SITE_URL,
+  validateSession,
+  buildConsentRecord,
   type Product,
 } from "../_shared/aiKontoret.ts";
 
@@ -49,10 +52,17 @@ async function buildLinks(product: Product) {
   return out;
 }
 
-async function sendDeliveryEmail(email: string, product: Product, links: { label: string; url: string }[]) {
+async function sendDeliveryEmail(
+  email: string,
+  product: Product,
+  links: { label: string; url: string }[],
+  consentAtIso?: string,
+) {
   const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
   if (!RESEND_API_KEY) return { ok: false, reason: "email_not_configured" };
   const days = Math.round(SIGNED_URL_TTL / 86400);
+  const item = CATALOG[product];
+  const consent = buildConsentRecord({ product, atIso: consentAtIso ?? new Date().toISOString() });
   const list = links
     .map((l) => `<li style="margin:8px 0"><a href="${l.url}">${esc(l.label)}</a></li>`)
     .join("");
@@ -62,6 +72,11 @@ async function sendDeliveryEmail(email: string, product: Product, links: { label
 <p>Här är dina nedladdningar:</p>
 <ul>${list}</ul>
 <p>Länkarna är personliga och gäller i ${days} dygn. Behöver du nya länkar – svara på detta mejl eller skriv till <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
+<p><strong>Bekräftelse av avtalet</strong></p>
+<p>Produkt: ${esc(item.name)}. Belopp: ${item.amount / 100} kr inklusive moms.</p>
+<p>Vid köpet samtyckte du aktivt till följande (kryssrutan var inte förifylld):</p>
+<blockquote style="margin:12px 0;padding:12px 14px;border-left:3px solid #11151a;background:#f6f5f1">${esc(LEGAL_ACK_TEXT)}</blockquote>
+<p>Tidpunkt: ${esc(consent.legal_ack_at)}. Villkor: <a href="${SITE_URL}/villkor#ai-kontoret">${SITE_URL}/villkor#ai-kontoret</a>.</p>
 <p>Lycka till med kontoret.<br/>Christoffer, Aurora Media AB</p>
 </body></html>`;
   const text = `Tack för ditt köp av AI-KONTORET (version ${PRODUCT_VERSION}).
@@ -70,6 +85,14 @@ Dina nedladdningar:
 ${textList}
 
 Länkarna gäller i ${days} dygn. Behöver du nya länkar, skriv till ${SUPPORT_EMAIL}.
+
+Bekräftelse av avtalet
+Produkt: ${item.name}
+Belopp: ${item.amount / 100} kr inklusive moms
+Vid köpet samtyckte du aktivt till följande (kryssrutan var inte förifylld):
+"${LEGAL_ACK_TEXT}"
+Tidpunkt: ${consent.legal_ack_at}
+Villkor: ${SITE_URL}/villkor#ai-kontoret
 
 Christoffer, Aurora Media AB`;
 
@@ -92,25 +115,12 @@ Christoffer, Aurora Media AB`;
   return { ok: true };
 }
 
-/** Kontrollerar Stripe-sessionen mot katalogen. Fel data → ingen leverans. */
-function validateSession(session: any): { ok: true; product: Product } | { ok: false; reason: string } {
-  const product = session?.metadata?.product;
-  if (!isProduct(product)) return { ok: false, reason: "unknown_product" };
-  const item = CATALOG[product];
-  if (session?.metadata?.sku !== item.sku) return { ok: false, reason: "sku_mismatch" };
-  if (session?.payment_status !== "paid") return { ok: false, reason: "not_paid" };
-  if (Number(session?.amount_total) !== item.amount) return { ok: false, reason: "amount_mismatch" };
-  if (String(session?.currency ?? "").toLowerCase() !== item.currency) {
-    return { ok: false, reason: "currency_mismatch" };
-  }
-  return { ok: true, product };
-}
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
 
-  // ── Ägarens reissue-flöde ────────────────────────────────────────────────
+  // ── Ägarens reissue-flöde ────────────────────────────────────────
   if (req.headers.get("x-admin-token")) {
     if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
     const body = await req.json().catch(() => ({}));
@@ -127,7 +137,12 @@ Deno.serve(async (req: Request) => {
     if (!purchase) return json({ error: "purchase_not_found" }, 404);
     const links = await buildLinks(purchase.product as Product);
     if (links.length === 0) return json({ error: "assets_missing" }, 409);
-    const mail = await sendDeliveryEmail(purchase.email, purchase.product as Product, links);
+    const mail = await sendDeliveryEmail(
+      purchase.email,
+      purchase.product as Product,
+      links,
+      purchase.metadata?.legal_ack_at,
+    );
     await dbPatch(`ai_kontoret_purchases`, `id=eq.${purchase.id}`, {
       last_delivery_at: new Date().toISOString(),
       delivery_count: (purchase.delivery_count ?? 0) + 1,
@@ -136,7 +151,7 @@ Deno.serve(async (req: Request) => {
     return json({ reissued: true, emailed: mail.ok, links: links.length });
   }
 
-  // ── Stripe webhook ───────────────────────────────────────────────────────
+  // ── Stripe webhook ───────────────────────────────────────────
   const secret = webhookSecret();
   if (!secret) return json({ error: "webhook_not_configured" }, 503);
 
@@ -200,6 +215,7 @@ Deno.serve(async (req: Request) => {
 
     let purchaseId = existing[0]?.id as string | undefined;
     if (!purchaseId) {
+      const consent = buildConsentRecord({ product: check.product, atIso: new Date().toISOString() });
       const ins = await dbInsert("ai_kontoret_purchases", {
         email,
         product: check.product,
@@ -209,7 +225,12 @@ Deno.serve(async (req: Request) => {
         stripe_payment_intent_id: session.payment_intent ?? null,
         stripe_customer_id: typeof session.customer === "string" ? session.customer : null,
         stripe_event_id: eventId,
-        metadata: { sku: session?.metadata?.sku ?? null, version: session?.metadata?.version ?? null },
+        metadata: {
+          sku: session?.metadata?.sku ?? null,
+          version: session?.metadata?.version ?? null,
+          vat_class: session?.metadata?.vat_class ?? CATALOG[check.product].vat_class,
+          ...consent,
+        },
       });
       if (!ins.ok) {
         // Race: en parallell webhook hann före → hämta raden.
@@ -228,7 +249,7 @@ Deno.serve(async (req: Request) => {
       console.error("[ai-kontoret-deliver] assets missing for", check.product);
       return json({ received: true, delivered: false, reason: "assets_missing" });
     }
-    const mail = await sendDeliveryEmail(email, check.product, links);
+    const mail = await sendDeliveryEmail(email, check.product, links, new Date().toISOString());
     const now = new Date().toISOString();
     if (purchaseId) {
       await dbPatch("ai_kontoret_purchases", `id=eq.${purchaseId}`, {
