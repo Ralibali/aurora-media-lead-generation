@@ -1,7 +1,12 @@
 # AI-KONTORET – lanseringshandbok (ägare)
 
 Status i koden: `PRODUCT_STATUS = "prelaunch"` i `src/config/aiKontoret.ts`.
-Priser (får inte ändras): Guide 199 kr · Prompt Vault 199 kr · Bundle 349 kr.
+Priser (får inte ändras, inklusive moms): Guide 199 kr · Prompt Vault 199 kr · Bundle 349 kr.
+
+Kodflaggor som också måste vara true innan kassan kan bli `ready`:
+
+- `LEGAL_OWNER_CONFIRMED` – false tills du godkänt den slutliga samtyckestexten. Admin-krysset räcker inte. Ingen agent får påstå att texten är juridiskt godkänd.
+- `VAT_CLASSIFICATION_CONFIRMED` – false tills du godkänt momsklasserna.
 
 Köpknapparna på `/grok-bot` öppnas **bara** när båda gäller:
 
@@ -19,56 +24,67 @@ Gå till **Admin → AI-KONTORET** (`/admin/ai-kontoret`) och ladda upp:
 | `AI-KONTORET_Guide_v1.0.pdf` | `ai-kontoret/v1.0/AI-KONTORET_Guide_v1.0.pdf` |
 | `AI-KONTORET_Prompt_Vault_v1.0.pdf` | `ai-kontoret/v1.0/AI-KONTORET_Prompt_Vault_v1.0.pdf` |
 
-Bucketen är **privat**. Ingen publik läsning, inga gissningsbara url:er.
-Kunden får korta signerade länkar (3 dygn) efter verifierad betalning; nya länkar
-kan alltid skickas om från samma adminsida.
+Bucketen skapas av migrationen `20260827121000_ai_kontoret_private_assets.sql`. Den är **privat**. Ingen publik läsning, inga gissningsbara url:er.
+Kunden får korta signerade länkar (3 dygn) efter verifierad betalning.
 
-Verifiering: klicka **Uppdatera** i lanseringsspärren. Raderna
+En tom fil eller placeholder räknas inte. Verifiering: klicka **Uppdatera**. Raderna
 “Guide-PDF uppladdad” och “Prompt Vault-PDF uppladdad” blir gröna först när
 filerna faktiskt ligger på sökvägarna ovan.
 
-## 2. Betalning (kräver ägarens åtgärd)
+## 2. Betalning
 
 Lägg in i Project Settings → Secrets:
 
-- `STRIPE_SECRET_KEY` – Stripes hemliga nyckel (live eller test).
-- `STRIPE_WEBHOOK_SECRET` – signeringshemligheten för webhooken.
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
 
-Skapa webhooken i Stripe mot edge-funktionen `ai-kontoret-deliver`
-(`<projekt-url>/functions/v1/ai-kontoret-deliver`) med enbart eventet
-`checkout.session.completed`.
+Webhook: `ai-kontoret-deliver`, event `checkout.session.completed`.
 
-Inga Payment Links behövs: sessionerna skapas server-side i
-`ai-kontoret-create-checkout` med belopp och SKU från serverns katalog
-(`supabase/functions/_shared/aiKontoret.ts`). Klienten kan bara välja produkt.
+Sessioner skapas server-side. Klienten kan bara välja produkt. `payment_method_types` sätts inte.
+Priset är inklusive moms (`tax_behavior=inclusive`). Stripe Tax ska vara påslaget för Sverige.
 
-## 3. Juridiskt godkännande (owner gate)
+## 3. Moms (per SKU)
 
-I Admin → AI-KONTORET finns kryssrutetexten som kunden måste godkänna före
-betalning. Den är ett **utkast** och inte juridiskt granskad. Bekräfta först när
-du står bakom formuleringen samt `/villkor` och `/integritetspolicy`
-(momshantering för digitalt innehåll, ångerrätt och köpbekräftelse).
+| SKU | Klass | Stripe tax code (orientering) |
+| --- | --- | --- |
+| Guide | `electronic_publication_6` (kandidat för 6 %) | `txcd_10301100` |
+| Prompt Vault | `ess_25` (antas inte vara publikation) | `txcd_10701800` |
+| Bundle | `ess_25` (ärver inte Guiden) | `txcd_10701800` |
 
-## 4. Gå live
+Bekräfta klasserna och sätt `VAT_CLASSIFICATION_CONFIRMED = true` i
+`src/config/aiKontoret.ts` och `supabase/functions/_shared/aiKontoretPurchase.ts`.
+Displaypriserna förblir 199 / 199 / 349.
 
-När alla sju kontroller är gröna: sätt `PRODUCT_STATUS = "live"` i
-`src/config/aiKontoret.ts` och publicera. Kör ett riktigt testköp först
-(Stripe test-läge) och kontrollera att leveransmejlet med båda filerna kommer
-fram för bundle.
+## 4. Juridik
 
-## Flöde i korthet
+Kryssrutetexten på `/grok-bot` är ett **utkast**. Kunden måste kryssa i den själv.
+Efter köp skickas samma text i leveransmejlet tillsammans med belopp och länk till
+`/villkor#ai-kontoret`.
+
+Sätt `LEGAL_OWNER_CONFIRMED = true` först när du står bakom formuleringen.
+Det är inte ett juridiskt godkännande från någon agent.
+
+## 5. Gå live
+
+1. Alla launch-checks gröna, inklusive `vat_classified` och dual legal gate.
+2. Ett dokumenterat Stripe testläge-köp enligt `docs/ai-kontoret-e2e-test-mode.md`.
+3. Först därefter: `PRODUCT_STATUS = "live"`.
+
+Om någon spärr faller: lämna eller återställ `prelaunch`.
+
+## Flöde
 
 ```text
 /grok-bot köpknapp
-  -> kassa med e-post + uttryckligt samtycke
-  -> ai-kontoret-create-checkout (server sätter pris + SKU)
+  -> kassa med e-post + uttryckligt samtycke (inte förifyllt)
+  -> ai-kontoret-create-checkout (server sätter pris, SKU, tax code)
   -> Stripe Checkout
   -> success: /grok-bot?checkout=return&session_id=cs_...
        -> ai-kontoret-verify-session (server avgör om betalt)
   -> Stripe webhook checkout.session.completed
-       -> ai-kontoret-deliver: signaturkontroll, idempotens,
-          belopp/valuta/SKU-kontroll, rad i ai_kontoret_purchases,
-          signerade länkar, leveransmejl (Resend)
+       -> ai-kontoret-deliver: signatur, idempotens,
+          belopp/valuta/SKU, rad i ai_kontoret_purchases,
+          signerade länkar, leveransmejl med avtalskopia
 ```
 
-Support i mejlen: `info@auroramedia.se`.
+Support: `info@auroramedia.se`.
