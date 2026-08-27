@@ -43,23 +43,31 @@ Webhook: `ai-kontoret-deliver`, event `checkout.session.completed`.
 Sessioner skapas server-side. Klienten kan bara välja produkt. `payment_method_types` sätts inte.
 Priset är inklusive moms (`tax_behavior=inclusive`). Stripe Tax ska vara påslaget för Sverige.
 
-## 3. Moms (per SKU)
+## 3. Moms (två tillhandahållanden i bundlet)
 
-| SKU | Klass | Stripe tax code (orientering) |
-| --- | --- | --- |
-| Guide | `electronic_publication_6` (kandidat för 6 %) | `txcd_10301100` |
-| Prompt Vault | `ess_25` (antas inte vara publikation) | `txcd_10701800` |
-| Bundle | `ess_25` (ärver inte Guiden) | `txcd_10701800` |
+| SKU / rad | Klass | Stripe tax code (orientering) | Belopp inkl. moms |
+| --- | --- | --- | --- |
+| Guide ensam | `electronic_publication_6` (kandidat för 6 %) | `txcd_10301100` | 199,00 kr |
+| Prompt Vault ensam | `ess_25` (kandidat 25 %) | `txcd_10701800` | 199,00 kr |
+| Bundle rad 1: AI-KONTORET Guide | `electronic_publication_6` | `txcd_10301100` | 174,50 kr |
+| Bundle rad 2: Prompt Vault | `ess_25` | `txcd_10701800` | 174,50 kr |
+| Bundle totalt | `split_two_supplies` | två koder, ingen tredje rad | **349,00 kr** |
 
-Bekräfta klasserna och sätt `VAT_CLASSIFICATION_CONFIRMED = true` i
+Bundlerabatten 49 kr fördelas lika mot fristående 199+199. Hela bundlet klassas **inte** som 6 %.
+`VAT_CLASSIFICATION_CONFIRMED` förblir false tills du godkänt klasserna.
+
+Bekräfta och sätt `VAT_CLASSIFICATION_CONFIRMED = true` i
 `src/config/aiKontoret.ts` och `supabase/functions/_shared/aiKontoretPurchase.ts`.
 Displaypriserna förblir 199 / 199 / 349.
 
 ## 4. Juridik
 
 Kryssrutetexten på `/grok-bot` är ett **utkast**. Kunden måste kryssa i den själv.
-Efter köp skickas samma text i leveransmejlet tillsammans med belopp och länk till
-`/villkor#ai-kontoret`.
+Efter köp skickas samma text i leveransmejlet tillsammans med belopp, momsfördelning
+och länk till `/villkor#ai-kontoret` samt `/angra-kop`.
+
+Elektronisk ångerfunktion (DAL 2 kap. 10 a §): `/angra-kop`. Den sparar begäran och
+skickar ett mottagningsbevis. Inget automatiskt juridiskt beslut.
 
 Sätt `LEGAL_OWNER_CONFIRMED = true` först när du står bakom formuleringen.
 Det är inte ett juridiskt godkännande från någon agent.
