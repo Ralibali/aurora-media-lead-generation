@@ -3,13 +3,12 @@
 import {
   corsHeaders,
   json,
-  CATALOG,
   isProduct,
   launchReadiness,
   stripeFetch,
   SITE_URL,
-  PRODUCT_VERSION,
-  LEGAL_ACK_TEXT,
+  buildStripeCheckoutForm,
+  checkoutRequestGuard,
 } from "../_shared/aiKontoret.ts";
 
 Deno.serve(async (req: Request) => {
@@ -22,8 +21,9 @@ Deno.serve(async (req: Request) => {
     const email = typeof body?.email === "string" ? body.email.trim().slice(0, 200) : "";
     const legalAck = body?.legal_ack === true;
 
+    const guard = checkoutRequestGuard({ product, legal_ack: legalAck });
+    if (!guard.ok) return json({ error: guard.error }, 400);
     if (!isProduct(product)) return json({ error: "invalid_product" }, 400);
-    if (!legalAck) return json({ error: "legal_ack_required" }, 400);
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
       return json({ error: "invalid_email" }, 400);
     }
@@ -34,37 +34,11 @@ Deno.serve(async (req: Request) => {
       return json({ error: "not_ready", checks: readiness.checks }, 409);
     }
 
-    const item = CATALOG[product];
-    const form: Record<string, string> = {
-      mode: "payment",
-      "automatic_tax[enabled]": "true",
-      billing_address_collection: "required",
-      "line_items[0][quantity]": "1",
-      "line_items[0][price_data][currency]": item.currency,
-      "line_items[0][price_data][unit_amount]": String(item.amount),
-      "line_items[0][price_data][tax_behavior]": "inclusive",
-      "line_items[0][price_data][tax_code]": item.tax_code,
-      "line_items[0][price_data][product_data][name]": item.name,
-      "line_items[0][price_data][product_data][tax_code]": item.tax_code,
-      "line_items[0][price_data][product_data][description]":
-        `Digital produkt (PDF), version ${PRODUCT_VERSION}. Pris ${item.amount / 100} kr inkl. moms. Levereras direkt via e-post.`,
-      success_url: `${SITE_URL}/grok-bot?checkout=return&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE_URL}/grok-bot?checkout=cancel`,
-      "metadata[sku]": item.sku,
-      "metadata[product]": product,
-      "metadata[version]": PRODUCT_VERSION,
-      "metadata[legal_ack]": "true",
-      "metadata[legal_ack_text]": LEGAL_ACK_TEXT.slice(0, 450),
-      "metadata[vat_class]": item.vat_class,
-      "payment_intent_data[metadata][sku]": item.sku,
-      "payment_intent_data[metadata][product]": product,
-      allow_promotion_codes: "false",
-      locale: "sv",
-    };
-    if (email) {
-      form.customer_email = email;
-      form["metadata[email]"] = email;
-    }
+    const form = buildStripeCheckoutForm(product, {
+      email: email || undefined,
+      successUrl: `${SITE_URL}/grok-bot?checkout=return&session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${SITE_URL}/grok-bot?checkout=cancel`,
+    });
 
     const res = await stripeFetch("checkout/sessions", { method: "POST", body: form });
     if (!res.ok || !res.data?.url) {

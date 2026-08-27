@@ -61,3 +61,6 @@ verify_jwt = false
 
 [functions.ai-kontoret-upload-asset]
 verify_jwt = false
+
+[functions.ai-kontoret-withdraw]
+verify_jwt = false
