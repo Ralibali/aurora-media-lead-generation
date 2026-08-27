@@ -20,6 +20,7 @@ export function json(body: unknown, status = 200) {
 export {
   ASSET_BUCKET,
   ASSET_PATHS,
+  BUNDLE_SPLIT,
   CATALOG,
   LEGAL_ACK_TEXT,
   LEGAL_OWNER_CONFIRMED,
@@ -27,16 +28,34 @@ export {
   PRODUCT_VERSION,
   SIGNED_URL_TTL,
   SITE_URL,
+  STANDARD_WITHDRAWAL_INFO_URL,
   SUPPORT_EMAIL,
+  TRADER,
   VAT_CLASSIFICATION_CONFIRMED,
+  WITHDRAWAL_PATH,
   assetReady,
   assetsForProduct,
+  buildAgreementCopy,
+  buildCheckoutLinePayload,
   buildConsentRecord,
+  buildStripeCheckoutForm,
+  buildWithdrawalReceiptCopy,
+  checkoutLines,
+  checkoutRequestGuard,
   composeLaunchChecks,
+  confirmationMayStateWithdrawalCeased,
+  deliveryOutcome,
   isProduct,
+  legalAckRequired,
   legalGate,
+  purchaseDeliveryPatch,
   validateSession,
+  validateWithdrawalRequest,
+  vatAllocation,
   vatGate,
+  webhookIdempotencyDecision,
+  withdrawalInsertRow,
+  withdrawalReceiptIsReceiptOnly,
   type AssetKey,
   type Product,
 } from "./aiKontoretPurchase.ts";
@@ -130,7 +149,7 @@ export async function verifyStripeSignature(
   return signatures.some((s) => timingSafeEqual(s, expected));
 }
 
-// ── Supabase (service role) ─────────────────────────────────────────────────
+// ── Supabase (service role) ─────────────────────────────────────────────
 export function serviceEnv() {
   const url = Deno.env.get("SUPABASE_URL") ?? "";
   const key = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
