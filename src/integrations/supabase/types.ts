@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.17"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -117,10 +117,12 @@ export type Database = {
           currency: string
           delivered_at: string | null
           delivery_count: number
+          delivery_status: string
           email: string
           id: string
           last_delivery_at: string | null
           metadata: Json
+          payment_status: string
           product: string
           stripe_customer_id: string | null
           stripe_event_id: string | null
@@ -133,10 +135,12 @@ export type Database = {
           currency?: string
           delivered_at?: string | null
           delivery_count?: number
+          delivery_status?: string
           email: string
           id?: string
           last_delivery_at?: string | null
           metadata?: Json
+          payment_status?: string
           product: string
           stripe_customer_id?: string | null
           stripe_event_id?: string | null
@@ -149,10 +153,12 @@ export type Database = {
           currency?: string
           delivered_at?: string | null
           delivery_count?: number
+          delivery_status?: string
           email?: string
           id?: string
           last_delivery_at?: string | null
           metadata?: Json
+          payment_status?: string
           product?: string
           stripe_customer_id?: string | null
           stripe_event_id?: string | null
@@ -182,6 +188,48 @@ export type Database = {
           handled?: boolean
           note?: string | null
           received_at?: string
+        }
+        Relationships: []
+      }
+      ai_kontoret_withdrawals: {
+        Row: {
+          created_at: string
+          description: string | null
+          email: string
+          id: string
+          metadata: Json
+          name: string
+          product: string | null
+          receipt_emailed: boolean
+          session_id: string | null
+          status: string
+          submitted_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          email: string
+          id?: string
+          metadata?: Json
+          name: string
+          product?: string | null
+          receipt_emailed?: boolean
+          session_id?: string | null
+          status?: string
+          submitted_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          email?: string
+          id?: string
+          metadata?: Json
+          name?: string
+          product?: string | null
+          receipt_emailed?: boolean
+          session_id?: string | null
+          status?: string
+          submitted_at?: string
         }
         Relationships: []
       }
