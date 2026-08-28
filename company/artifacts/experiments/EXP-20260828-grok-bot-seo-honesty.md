@@ -35,3 +35,4 @@ Live-mode copy is retained behind `PRODUCT_STATUS === "live"` only.
 - VERIFIED FACT: first-byte Product Offer is unpriced waitlist (`Väntelista – lanseringsbesked`, no `price`, no `199`/`349`).
 - VERIFIED FACT: first-byte HTML contains zero `199`, zero `Köp`, and waitlist CTAs only.
 - VERIFIED FACT: `npm test` (5 passed), `npm run typecheck`, eslint on touched files, and `npm run build` succeeded.
+- VERIFIED FACT: GitHub `CI / quality` failed on this branch for the same pre-existing eslint errors as `main` (none in this PR’s files).
