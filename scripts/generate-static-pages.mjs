@@ -82,13 +82,31 @@ const STATIC_PAGES = [
 // Lanseringsläget läses direkt ur konfigen så statisk copy följer PRODUCT_STATUS.
 // ============================================================================
 
-function readAiKontoretStatus() {
+function readQuotedConst(src, name) {
+  const m = src.match(new RegExp(`export const ${name}\\s*=\\s*"([^"]+)"`));
+  return m ? m[1] : null;
+}
+
+function readAiKontoretSeo() {
+  const fallback = {
+    status: 'prelaunch',
+    title: 'AI-KONTORET – Svensk Grok Bot-guide | Väntelista',
+    description:
+      'Svensk guide till Grok Bot: bygg AI-medarbetare med Skills, Routines, Groups och owner gates. Väntelista – få besked när AI-KONTORET släpps.',
+  };
   try {
     const src = readFileSync(path.resolve(process.cwd(), 'src/config/aiKontoret.ts'), 'utf8');
-    const m = src.match(/PRODUCT_STATUS:\s*"prelaunch"\s*\|\s*"live"\s*=\s*"(prelaunch|live)"/);
-    return m ? m[1] : 'prelaunch';
+    const statusMatch = src.match(/PRODUCT_STATUS:\s*"prelaunch"\s*\|\s*"live"\s*=\s*"(prelaunch|live)"/);
+    const status = statusMatch ? statusMatch[1] : 'prelaunch';
+    const title =
+      (status === 'live' ? readQuotedConst(src, 'SEO_TITLE_LIVE') : readQuotedConst(src, 'SEO_TITLE_WAITLIST'))
+      ?? fallback.title;
+    const description =
+      (status === 'live' ? readQuotedConst(src, 'SEO_DESC_LIVE') : readQuotedConst(src, 'SEO_DESC_WAITLIST'))
+      ?? fallback.description;
+    return { status, title, description };
   } catch {
-    return 'prelaunch';
+    return fallback;
   }
 }
 
@@ -137,7 +155,7 @@ function buildGrokBotBody(status) {
   const live = status === 'live';
   const ctaText = live
     ? `Köp AI-KONTORET för 199 kr – eller lanseringspaketet med Prompt Vault för 349 kr (ord. 398 kr).`
-    : 'Guiden färdigställs just nu – ställ dig i väntelistan så får du besked först, till lanseringspriset.';
+    : 'Guiden färdigställs just nu. Ställ dig i väntelistan så får du besked när AI-KONTORET släpps. Inte till försäljning ännu.';
   return `<main>
 <h1>AI-KONTORET – Bygg ett AI-team som faktiskt gör jobbet</h1>
 <p>Den praktiska svenska guiden till Grok Bot — från din första Bot till Skills, Routines, Groups, handoffs och ett AI-kontor som arbetar även när du inte sitter framför datorn. Praktiskt. Svenskt. Copy-paste-vänligt. Byggt från verklig användning. Version 1.0, augusti 2026. Senast uppdaterad och faktaverifierad 2026-08-25 mot aktuella officiella källor. ${ctaText}</p>
@@ -172,8 +190,10 @@ ${GROK_BOT_CHAPTERS.map((c) => `<li>${escapeHtml(c)}</li>`).join('\n')}
 <p>Ärligt besked: guiden lovar inte att ett SDK trollar fram en medarbetare som jobbar dygnet runt. Schemaläggning, hosting, integrationer, övervakning och produktionsstabilitet är fortfarande ingenjörsarbete – bonusen visar arkitekturen och besluten, inte en genväg runt driften.</p>
 </section>
 <section>
-<h2>Pris och paket</h2>
-<p>AI-KONTORET kostar 199 kr (engångspris, ingen prenumeration). Prompt Vault – ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget – säljs som tillägg för 199 kr. Lanseringspaketet med båda kostar 349 kr (199 + 199 = 398 kr, du sparar 49 kr). Digital leverans direkt efter köp.</p>
+<h2>${live ? 'Pris och paket' : 'Väntelista'}</h2>
+<p>${live
+    ? 'AI-KONTORET kostar 199 kr (engångspris, ingen prenumeration). Prompt Vault – ett växande bibliotek av de färdiga prompts, templates och operating rules som används i upplägget – säljs som tillägg för 199 kr. Lanseringspaketet med båda kostar 349 kr (199 + 199 = 398 kr, du sparar 49 kr). Digital leverans direkt efter köp.'
+    : 'AI-KONTORET är inte till försäljning ännu. Ställ dig i väntelistan så får du besked när guiden släpps. Ingen kassa är öppen.'}</p>
 </section>
 <section>
 <h2>Vanliga frågor om AI-KONTORET och Grok Bot</h2>
@@ -182,8 +202,35 @@ ${GROK_BOT_FAQ.map(([q, a]) => `<h3>${escapeHtml(q)}</h3><p>${escapeHtml(a)}</p>
 </main>`;
 }
 
-function buildGrokBotSchemas(status) {
-  const availability = status === 'live' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder';
+function buildGrokBotSchemas(status, description) {
+  const offers =
+    status === 'live'
+      ? [
+          {
+            '@type': 'Offer',
+            name: 'AI-KONTORET – guiden',
+            price: '199',
+            priceCurrency: 'SEK',
+            url: `${SITE_URL}/grok-bot#priser`,
+            availability: 'https://schema.org/InStock',
+          },
+          {
+            '@type': 'Offer',
+            name: 'AI-KONTORET + Prompt Vault (lanseringspaket)',
+            price: '349',
+            priceCurrency: 'SEK',
+            url: `${SITE_URL}/grok-bot#priser`,
+            availability: 'https://schema.org/InStock',
+          },
+        ]
+      : [
+          {
+            '@type': 'Offer',
+            name: 'Väntelista – lanseringsbesked',
+            url: `${SITE_URL}/grok-bot#kop`,
+            availability: 'https://schema.org/PreOrder',
+          },
+        ];
   return [
     {
       '@context': 'https://schema.org',
@@ -191,31 +238,15 @@ function buildGrokBotSchemas(status) {
       '@id': `${SITE_URL}/grok-bot#produkt`,
       name: 'AI-KONTORET – Så bygger du ett AI-drivet företag med Grok Bot',
       description:
-        'Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups, handoffs och owner gates – ett AI-kontor som jobbar åt dig.',
+        description
+        ?? 'Svensk guide till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups, handoffs och owner gates. Väntelista – få besked när AI-KONTORET släpps.',
       image: [`${SITE_URL}/og-grok-bot.jpg`],
       brand: { '@type': 'Brand', name: 'Aurora Media' },
       category: 'Digital guide',
       inLanguage: 'sv-SE',
       version: '1.0',
       dateModified: '2026-08-25',
-      offers: [
-        {
-          '@type': 'Offer',
-          name: 'AI-KONTORET – guiden',
-          price: '199',
-          priceCurrency: 'SEK',
-          url: `${SITE_URL}/grok-bot#priser`,
-          availability,
-        },
-        {
-          '@type': 'Offer',
-          name: 'AI-KONTORET + Prompt Vault (lanseringspaket)',
-          price: '349',
-          priceCurrency: 'SEK',
-          url: `${SITE_URL}/grok-bot#priser`,
-          availability,
-        },
-      ],
+      offers,
     },
     {
       '@context': 'https://schema.org',
@@ -237,25 +268,24 @@ function buildGrokBotSchemas(status) {
   ];
 }
 
-const aiKontoretStatus = readAiKontoretStatus();
+const aiKontoretSeo = readAiKontoretSeo();
 STATIC_PAGES.push({
   route: '/grok-bot',
-  title: 'AI-KONTORET – Bygg ett AI-drivet företag med Grok Bot | Guide 199 kr',
-  description:
-    'Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups och owner gates – ett AI-kontor som jobbar åt dig. 199 kr.',
+  title: aiKontoretSeo.title,
+  description: aiKontoretSeo.description,
   body: 'AI-KONTORET är Aurora Medias praktiska svenska guide till Grok Bot.',
-  htmlBody: buildGrokBotBody(aiKontoretStatus),
-  schemas: buildGrokBotSchemas(aiKontoretStatus),
+  htmlBody: buildGrokBotBody(aiKontoretSeo.status),
+  schemas: buildGrokBotSchemas(aiKontoretSeo.status, aiKontoretSeo.description),
   ogImage: '/og-grok-bot.jpg',
   mono: 'AI-KONTORET · GUIDE · VERSION 1.0',
   ctas:
-    aiKontoretStatus === 'live'
+    aiKontoretSeo.status === 'live'
       ? [
           { label: 'Köp AI-KONTORET – 199 kr', href: '/grok-bot#priser' },
           { label: 'Se vad som ingår', href: '/grok-bot', ghost: true },
         ]
       : [
-          { label: 'Få besked när AI-KONTORET släpps', href: '/kontakt' },
+          { label: 'Få besked när AI-KONTORET släpps', href: '/grok-bot#kop' },
           { label: 'Testa AI-snabbanalysen gratis', href: '/ai-snabbanalys', ghost: true },
         ],
 });
