@@ -215,6 +215,75 @@ export default function AdminAiKontoretPreview() {
 
         <Card>
           <CardHeader>
+            <CardTitle className="text-base">Versionshistorik</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {(["guide", "vault"] as const).map((product) => {
+              const list = revisions
+                .filter((r) => r.product === product)
+                .sort((a, b) => b.revision - a.revision);
+              return (
+                <div key={product} className="space-y-2">
+                  <h3 className="text-sm font-semibold">{TITLES[product]}</h3>
+                  {list.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      Inga revisioner ännu – nästa uppladdning sparas automatiskt som revision 1.
+                    </p>
+                  ) : (
+                    list.map((r) => (
+                      <div
+                        key={r.id}
+                        className="flex flex-col gap-2 rounded-md border p-3 text-sm sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-medium">Revision {r.revision}</span>
+                            <Badge variant={r.is_current ? "default" : "secondary"}>
+                              {r.is_current ? "Live" : `v${r.version}`}
+                            </Badge>
+                            {r.restored_at ? <Badge variant="outline">Återställd</Badge> : null}
+                          </div>
+                          <p className="text-muted-foreground">
+                            {formatDate(r.created_at)} · {formatBytes(r.file_bytes)}
+                            {r.original_filename ? ` · ${r.original_filename}` : ""}
+                          </p>
+                          {r.note ? <p className="text-muted-foreground">{r.note}</p> : null}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {r.url ? (
+                            <Button asChild size="sm" variant="outline">
+                              <a href={r.url} target="_blank" rel="noreferrer">
+                                <ExternalLink className="h-4 w-4" />
+                                <span className="ml-2">Visa</span>
+                              </a>
+                            </Button>
+                          ) : null}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={r.is_current || restoring === r.id}
+                            onClick={() => void restore(r)}
+                          >
+                            {restoring === r.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <History className="h-4 w-4" />
+                            )}
+                            <span className="ml-2">{r.is_current ? "Aktiv version" : "Återställ"}</span>
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+
+
+        <Card>
+          <CardHeader>
             <CardTitle className="text-base">
               Förhandsgranskning{current ? ` – ${TITLES[current.product]}` : ""}
             </CardTitle>
