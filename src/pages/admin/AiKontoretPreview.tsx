@@ -44,23 +44,49 @@ function formatDate(iso: string | null): string {
   });
 }
 
+type Revision = {
+  id: string;
+  product: AssetPreview["product"];
+  revision: number;
+  version: string;
+  archive_path: string;
+  original_filename: string | null;
+  file_bytes: number | null;
+  note: string | null;
+  is_current: boolean;
+  created_at: string;
+  restored_at: string | null;
+  url: string | null;
+};
+
 export default function AdminAiKontoretPreview() {
   const [assets, setAssets] = useState<AssetPreview[]>([]);
+  const [revisions, setRevisions] = useState<Revision[]>([]);
   const [loading, setLoading] = useState(true);
+  const [restoring, setRestoring] = useState<string | null>(null);
   const [active, setActive] = useState<AssetPreview["product"] | null>(null);
+
+  const adminToken = () => sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke(FN_LAUNCH_STATUS, {
-        body: { action: "preview_assets" },
-        headers: { "x-admin-token": sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "" },
-      });
-      if (error) throw error;
-      const list = ((data?.assets ?? []) as AssetPreview[]).sort((a) =>
+      const [assetRes, revRes] = await Promise.all([
+        supabase.functions.invoke(FN_LAUNCH_STATUS, {
+          body: { action: "preview_assets" },
+          headers: { "x-admin-token": adminToken() },
+        }),
+        supabase.functions.invoke(FN_LAUNCH_STATUS, {
+          body: { action: "list_revisions" },
+          headers: { "x-admin-token": adminToken() },
+        }),
+      ]);
+      if (assetRes.error) throw assetRes.error;
+      const list = ((assetRes.data?.assets ?? []) as AssetPreview[]).sort((a) =>
         a.product === "guide" ? -1 : 1,
       );
       setAssets(list);
+      setRevisions((revRes.data?.revisions ?? []) as Revision[]);
       setActive((prev) => prev ?? list.find((a) => a.exists)?.product ?? null);
     } catch {
       toast.error("Kunde inte hämta förhandsgranskningen.");
@@ -73,7 +99,31 @@ export default function AdminAiKontoretPreview() {
     void load();
   }, [load]);
 
+  const restore = async (rev: Revision) => {
+    if (
+      !window.confirm(
+        `Återställa ${TITLES[rev.product]} till revision ${rev.revision}? Den nuvarande filen finns kvar i historiken.`,
+      )
+    )
+      return;
+    setRestoring(rev.id);
+    try {
+      const { data, error } = await supabase.functions.invoke(FN_LAUNCH_STATUS, {
+        body: { action: "restore_revision", product: rev.product, revision: rev.revision },
+        headers: { "x-admin-token": adminToken() },
+      });
+      if (error || data?.error) throw new Error(data?.error ?? "restore_failed");
+      toast.success(`Revision ${rev.revision} är nu den fil som levereras.`);
+      await load();
+    } catch (err) {
+      toast.error(`Kunde inte återställa: ${(err as Error).message}`);
+    } finally {
+      setRestoring(null);
+    }
+  };
+
   const current = assets.find((a) => a.product === active) ?? null;
+
 
   return (
     <AdminShell title="Förhandsgranska PDF:er" kicker="AI-KONTORET">
