@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Download, ExternalLink, Loader2, RefreshCw } from "lucide-react";
+import { ArrowLeft, Download, ExternalLink, History, Loader2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import AdminShell, { ADMIN_STORAGE_KEY } from "@/pages/admin/AdminShell";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,23 +44,49 @@ function formatDate(iso: string | null): string {
   });
 }
 
+type Revision = {
+  id: string;
+  product: AssetPreview["product"];
+  revision: number;
+  version: string;
+  archive_path: string;
+  original_filename: string | null;
+  file_bytes: number | null;
+  note: string | null;
+  is_current: boolean;
+  created_at: string;
+  restored_at: string | null;
+  url: string | null;
+};
+
 export default function AdminAiKontoretPreview() {
   const [assets, setAssets] = useState<AssetPreview[]>([]);
+  const [revisions, setRevisions] = useState<Revision[]>([]);
   const [loading, setLoading] = useState(true);
+  const [restoring, setRestoring] = useState<string | null>(null);
   const [active, setActive] = useState<AssetPreview["product"] | null>(null);
+
+  const adminToken = () => sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke(FN_LAUNCH_STATUS, {
-        body: { action: "preview_assets" },
-        headers: { "x-admin-token": sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "" },
-      });
-      if (error) throw error;
-      const list = ((data?.assets ?? []) as AssetPreview[]).sort((a) =>
+      const [assetRes, revRes] = await Promise.all([
+        supabase.functions.invoke(FN_LAUNCH_STATUS, {
+          body: { action: "preview_assets" },
+          headers: { "x-admin-token": adminToken() },
+        }),
+        supabase.functions.invoke(FN_LAUNCH_STATUS, {
+          body: { action: "list_revisions" },
+          headers: { "x-admin-token": adminToken() },
+        }),
+      ]);
+      if (assetRes.error) throw assetRes.error;
+      const list = ((assetRes.data?.assets ?? []) as AssetPreview[]).sort((a) =>
         a.product === "guide" ? -1 : 1,
       );
       setAssets(list);
+      setRevisions((revRes.data?.revisions ?? []) as Revision[]);
       setActive((prev) => prev ?? list.find((a) => a.exists)?.product ?? null);
     } catch {
       toast.error("Kunde inte hämta förhandsgranskningen.");
@@ -73,7 +99,31 @@ export default function AdminAiKontoretPreview() {
     void load();
   }, [load]);
 
+  const restore = async (rev: Revision) => {
+    if (
+      !window.confirm(
+        `Återställa ${TITLES[rev.product]} till revision ${rev.revision}? Den nuvarande filen finns kvar i historiken.`,
+      )
+    )
+      return;
+    setRestoring(rev.id);
+    try {
+      const { data, error } = await supabase.functions.invoke(FN_LAUNCH_STATUS, {
+        body: { action: "restore_revision", product: rev.product, revision: rev.revision },
+        headers: { "x-admin-token": adminToken() },
+      });
+      if (error || data?.error) throw new Error(data?.error ?? "restore_failed");
+      toast.success(`Revision ${rev.revision} är nu den fil som levereras.`);
+      await load();
+    } catch (err) {
+      toast.error(`Kunde inte återställa: ${(err as Error).message}`);
+    } finally {
+      setRestoring(null);
+    }
+  };
+
   const current = assets.find((a) => a.product === active) ?? null;
+
 
   return (
     <AdminShell title="Förhandsgranska PDF:er" kicker="AI-KONTORET">
@@ -162,6 +212,75 @@ export default function AdminAiKontoretPreview() {
             </p>
           ) : null}
         </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Versionshistorik</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {(["guide", "vault"] as const).map((product) => {
+              const list = revisions
+                .filter((r) => r.product === product)
+                .sort((a, b) => b.revision - a.revision);
+              return (
+                <div key={product} className="space-y-2">
+                  <h3 className="text-sm font-semibold">{TITLES[product]}</h3>
+                  {list.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      Inga revisioner ännu – nästa uppladdning sparas automatiskt som revision 1.
+                    </p>
+                  ) : (
+                    list.map((r) => (
+                      <div
+                        key={r.id}
+                        className="flex flex-col gap-2 rounded-md border p-3 text-sm sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-medium">Revision {r.revision}</span>
+                            <Badge variant={r.is_current ? "default" : "secondary"}>
+                              {r.is_current ? "Live" : `v${r.version}`}
+                            </Badge>
+                            {r.restored_at ? <Badge variant="outline">Återställd</Badge> : null}
+                          </div>
+                          <p className="text-muted-foreground">
+                            {formatDate(r.created_at)} · {formatBytes(r.file_bytes)}
+                            {r.original_filename ? ` · ${r.original_filename}` : ""}
+                          </p>
+                          {r.note ? <p className="text-muted-foreground">{r.note}</p> : null}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {r.url ? (
+                            <Button asChild size="sm" variant="outline">
+                              <a href={r.url} target="_blank" rel="noreferrer">
+                                <ExternalLink className="h-4 w-4" />
+                                <span className="ml-2">Visa</span>
+                              </a>
+                            </Button>
+                          ) : null}
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={r.is_current || restoring === r.id}
+                            onClick={() => void restore(r)}
+                          >
+                            {restoring === r.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <History className="h-4 w-4" />
+                            )}
+                            <span className="ml-2">{r.is_current ? "Aktiv version" : "Återställ"}</span>
+                          </Button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+
 
         <Card>
           <CardHeader>

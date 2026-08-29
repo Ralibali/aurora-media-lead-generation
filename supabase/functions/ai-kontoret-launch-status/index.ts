@@ -6,10 +6,16 @@ import {
   isAdmin,
   launchReadiness,
   dbPatch,
+  dbInsert,
   CATALOG,
   activeAssets,
   assetExists,
   createSignedUrl,
+  listRevisions,
+  nextRevision,
+  archivePath,
+  copyObject,
+  markCurrentRevision,
 } from "../_shared/aiKontoret.ts";
 
 Deno.serve(async (req: Request) => {
@@ -51,7 +57,74 @@ Deno.serve(async (req: Request) => {
         );
         return json({ assets: items, ttl_seconds: 600 });
       }
+
+      // Versionshistorik: alla revisioner med signerade förhandsvisningslänkar.
+      if (body?.action === "list_revisions") {
+        const product = body?.product === "guide" || body?.product === "vault" ? body.product : undefined;
+        const rows = await listRevisions(product);
+        const items = await Promise.all(
+          rows.map(async (r) => ({
+            id: r.id,
+            product: r.product,
+            revision: r.revision,
+            version: r.version,
+            archive_path: r.archive_path,
+            original_filename: r.original_filename,
+            file_bytes: r.file_bytes,
+            note: r.note,
+            is_current: r.is_current,
+            created_at: r.created_at,
+            restored_at: r.restored_at,
+            url: await createSignedUrl(r.archive_path, 600),
+          })),
+        );
+        return json({ revisions: items, ttl_seconds: 600 });
+      }
+
+      // Återställ en tidigare revision till live-sökvägen (skapar en ny revision).
+      if (body?.action === "restore_revision") {
+        const product = body?.product;
+        const revision = Number(body?.revision);
+        if (product !== "guide" && product !== "vault") return json({ error: "invalid_product" }, 400);
+        if (!Number.isFinite(revision)) return json({ error: "invalid_revision" }, 400);
+
+        const rows = await listRevisions(product);
+        const target = rows.find((r) => r.revision === revision);
+        if (!target) return json({ error: "revision_not_found" }, 404);
+
+        const assets = await activeAssets();
+        const asset = assets.find((a) => a.product === product);
+        if (!asset) return json({ error: "asset_row_missing" }, 409);
+
+        const newRevision = await nextRevision(product);
+        const newPath = archivePath(product, newRevision);
+        const okLive = await copyObject(target.archive_path, asset.storage_path);
+        if (!okLive) return json({ error: "restore_failed" }, 502);
+        await copyObject(target.archive_path, newPath);
+
+        await dbInsert("ai_kontoret_asset_revisions", {
+          product,
+          revision: newRevision,
+          version: target.version,
+          archive_path: newPath,
+          original_filename: target.original_filename,
+          file_bytes: target.file_bytes,
+          note: `Återställd från revision ${target.revision}`,
+          uploaded_by: "owner",
+          is_current: true,
+          restored_at: new Date().toISOString(),
+        });
+        await markCurrentRevision(product, newRevision);
+        await dbPatch("ai_kontoret_assets", `product=eq.${product}&version=eq.${asset.version}`, {
+          file_bytes: target.file_bytes,
+          uploaded_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+
+        return json({ restored: true, product, from_revision: target.revision, revision: newRevision });
+      }
     }
+
 
 
     const r = await launchReadiness();

@@ -272,3 +272,58 @@ export function isAdmin(req: Request): boolean {
   if (!token) return false;
   return (admin.length > 0 && token === admin) || (fallback.length > 0 && token === fallback);
 }
+
+// ── Versionshantering av produktfiler ───────────────────────────────────────
+export type RevisionRow = {
+  id: string;
+  created_at: string;
+  product: AssetKey;
+  revision: number;
+  version: string;
+  archive_path: string;
+  original_filename: string | null;
+  file_bytes: number | null;
+  note: string | null;
+  is_current: boolean;
+  restored_at: string | null;
+};
+
+export async function listRevisions(product?: AssetKey): Promise<RevisionRow[]> {
+  const filter = product ? `product=eq.${product}&` : "";
+  return (await dbSelect(
+    `ai_kontoret_asset_revisions?${filter}select=*&order=product.asc,revision.desc`,
+  )) as RevisionRow[];
+}
+
+export async function nextRevision(product: AssetKey): Promise<number> {
+  const rows = await dbSelect(
+    `ai_kontoret_asset_revisions?product=eq.${product}&select=revision&order=revision.desc&limit=1`,
+  );
+  return Number(rows[0]?.revision ?? 0) + 1;
+}
+
+/** Kopierar en fil inuti den privata bucketen (används för arkiv och återställning). */
+export async function copyObject(from: string, to: string): Promise<boolean> {
+  const { url, key, ok } = serviceEnv();
+  if (!ok) return false;
+  const res = await fetch(`${url}/storage/v1/object/copy`, {
+    method: "POST",
+    headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ bucketId: ASSET_BUCKET, sourceKey: from, destinationKey: to }),
+  });
+  return res.ok;
+}
+
+export function archivePath(product: AssetKey, revision: number): string {
+  return `ai-kontoret/revisions/${product}/r${String(revision).padStart(3, "0")}.pdf`;
+}
+
+/** Markerar exakt en revision som den som ligger live. */
+export async function markCurrentRevision(product: AssetKey, revision: number) {
+  await dbPatch("ai_kontoret_asset_revisions", `product=eq.${product}`, { is_current: false });
+  await dbPatch(
+    "ai_kontoret_asset_revisions",
+    `product=eq.${product}&revision=eq.${revision}`,
+    { is_current: true },
+  );
+}
