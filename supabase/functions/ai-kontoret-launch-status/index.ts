@@ -6,10 +6,16 @@ import {
   isAdmin,
   launchReadiness,
   dbPatch,
+  dbInsert,
   CATALOG,
   activeAssets,
   assetExists,
   createSignedUrl,
+  listRevisions,
+  nextRevision,
+  archivePath,
+  copyObject,
+  markCurrentRevision,
 } from "../_shared/aiKontoret.ts";
 
 Deno.serve(async (req: Request) => {
