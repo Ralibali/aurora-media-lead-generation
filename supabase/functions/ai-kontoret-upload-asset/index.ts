@@ -7,9 +7,16 @@ import {
   isAdmin,
   activeAssets,
   dbPatch,
+  dbInsert,
   serviceEnv,
   ASSET_BUCKET,
   launchReadiness,
+  listRevisions,
+  nextRevision,
+  archivePath,
+  copyObject,
+  markCurrentRevision,
+  assetExists,
 } from "../_shared/aiKontoret.ts";
 
 const MAX_BYTES = 40 * 1024 * 1024;
