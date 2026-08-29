@@ -52,20 +52,57 @@ Deno.serve(async (req: Request) => {
     const { url, key, ok } = serviceEnv();
     if (!ok) return json({ error: "service_role_missing" }, 500);
 
-    const up = await fetch(`${url}/storage/v1/object/${ASSET_BUCKET}/${asset.storage_path}`, {
-      method: "POST",
-      headers: {
-        apikey: key,
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/pdf",
-        "x-upsert": "true",
-      },
-      body: bytes,
-    });
-    if (!up.ok) {
-      console.error("[ai-kontoret-upload-asset] storage error", up.status);
-      return json({ error: "upload_failed" }, 502);
+    // 1) Arkivera den fil som redan ligger live (om den saknar revision).
+    const existing = await listRevisions(product);
+    if (existing.length === 0 && (await assetExists(asset.storage_path))) {
+      const path = archivePath(product, 1);
+      if (await copyObject(asset.storage_path, path)) {
+        await dbInsert("ai_kontoret_asset_revisions", {
+          product,
+          revision: 1,
+          version: asset.version,
+          archive_path: path,
+          original_filename: asset.storage_path.split("/").pop(),
+          file_bytes: asset.file_bytes,
+          note: "Ursprunglig fil (arkiverad automatiskt)",
+          uploaded_by: "owner",
+          is_current: true,
+        });
+      }
     }
+
+    // 2) Ladda upp den nya filen både till live-sökvägen och till arkivet.
+    const revision = await nextRevision(product);
+    const revPath = archivePath(product, revision);
+    for (const target of [asset.storage_path, revPath]) {
+      const up = await fetch(`${url}/storage/v1/object/${ASSET_BUCKET}/${target}`, {
+        method: "POST",
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/pdf",
+          "x-upsert": "true",
+        },
+        body: bytes,
+      });
+      if (!up.ok) {
+        console.error("[ai-kontoret-upload-asset] storage error", target, up.status);
+        return json({ error: "upload_failed" }, 502);
+      }
+    }
+
+    await dbInsert("ai_kontoret_asset_revisions", {
+      product,
+      revision,
+      version: asset.version,
+      archive_path: revPath,
+      original_filename: typeof body?.filename === "string" ? body.filename.slice(0, 200) : null,
+      file_bytes: bytes.length,
+      note: typeof body?.note === "string" ? body.note.slice(0, 300) : null,
+      uploaded_by: "owner",
+      is_current: true,
+    });
+    await markCurrentRevision(product, revision);
 
     await dbPatch("ai_kontoret_assets", `product=eq.${product}&version=eq.${asset.version}`, {
       file_bytes: bytes.length,
@@ -77,10 +114,12 @@ Deno.serve(async (req: Request) => {
     return json({
       uploaded: true,
       product,
+      revision,
       storage_path: asset.storage_path,
       file_bytes: bytes.length,
       readiness,
     });
+
   } catch (err) {
     console.error("[ai-kontoret-upload-asset]", err);
     return json({ error: "unexpected_error" }, 500);
