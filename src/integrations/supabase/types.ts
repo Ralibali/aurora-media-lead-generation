@@ -44,6 +44,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_kontoret_asset_revisions: {
+        Row: {
+          archive_path: string
+          created_at: string
+          file_bytes: number | null
+          id: string
+          is_current: boolean
+          note: string | null
+          original_filename: string | null
+          product: string
+          restored_at: string | null
+          revision: number
+          updated_at: string
+          uploaded_by: string | null
+          version: string
+        }
+        Insert: {
+          archive_path: string
+          created_at?: string
+          file_bytes?: number | null
+          id?: string
+          is_current?: boolean
+          note?: string | null
+          original_filename?: string | null
+          product: string
+          restored_at?: string | null
+          revision: number
+          updated_at?: string
+          uploaded_by?: string | null
+          version?: string
+        }
+        Update: {
+          archive_path?: string
+          created_at?: string
+          file_bytes?: number | null
+          id?: string
+          is_current?: boolean
+          note?: string | null
+          original_filename?: string | null
+          product?: string
+          restored_at?: string | null
+          revision?: number
+          updated_at?: string
+          uploaded_by?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
       ai_kontoret_assets: {
         Row: {
           active: boolean
