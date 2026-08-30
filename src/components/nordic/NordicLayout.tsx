@@ -4,6 +4,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowRight } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 import { NORDIC_TOKENS } from "@/styles/nordic-tokens";
+import { VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 
 /* ─────────────────────────────────────────────────────────────────────────
    NordicLayout — delar Nordic Noir-shell (tokens + nav + footer) över alla sidor.
@@ -264,10 +265,12 @@ const NordicLayout = ({
 }) => (
   <>
     <style>{NORDIC_TOKENS}</style>
-    <div className="aur">
-      {!hideNav && <NordicNav />}
-      <main>{children}</main>
-      {!hideFooter && <NordicFooter />}
+    <div className="verkstad">
+      {!hideNav && <VkNav />}
+      <div className="aur">
+        <main>{children}</main>
+      </div>
+      {!hideFooter && <VkFooter />}
     </div>
   </>
 );
