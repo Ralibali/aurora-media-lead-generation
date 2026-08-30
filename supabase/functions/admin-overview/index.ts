@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
       ctaAll, faqSearch, faqCta, aiClicks,
       dripAll, textLib,
     ] = await Promise.all([
-      supabase.from("ai_map_leads").select("id, created_at, name, company, email, total_potential, total_score", { count: "exact" }).order("created_at", { ascending: false }).limit(200),
+      supabase.from("ai_map_leads").select("id, created_at, name:contact_name, company:company_name, email, total_potential, total_score", { count: "exact" }).order("created_at", { ascending: false }).limit(200),
       supabase.from("leads").select("id, created_at, name, company, email", { count: "exact" }).order("created_at", { ascending: false }).limit(200),
       supabase.from("genomlysning_leads").select("id, created_at, name, company, email", { count: "exact" }).order("created_at", { ascending: false }).limit(200),
       supabase.from("cta_clicks").select("created_at, button, page_path, lead_label").gte("created_at", day(30)).order("created_at", { ascending: false }).limit(1000),
