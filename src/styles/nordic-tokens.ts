@@ -112,7 +112,7 @@ export const NORDIC_TOKENS = `
       radial-gradient(60% 50% at 85% 15%, rgba(15,81,50,0.08), transparent 70%),
       radial-gradient(50% 60% at 5% 90%, rgba(15,81,50,0.05), transparent 70%);
   }
-  .aur .hero-content{ position:relative; padding-bottom:clamp(18px, 3vh, 32px); padding-top:calc(var(--nav-h) + clamp(8px, 1.5vh, 20px)); display:grid; grid-template-columns:1fr; gap:clamp(10px, 1.5vw, 16px); align-items:center; }
+  .aur .hero-content{ position:relative; padding-bottom:clamp(18px, 3vh, 32px); padding-top:clamp(16px, 2.5vh, 32px); display:grid; grid-template-columns:1fr; gap:clamp(10px, 1.5vw, 16px); align-items:center; }
   @media(min-width:980px){ .aur .hero-content{ grid-template-columns: minmax(0, 1fr) auto; } }
   .aur .hero-text{ display:flex; flex-direction:column; justify-content:center; }
   .aur .hero-figure-wrap{ display:flex; justify-content:center; align-items:center; order:-1; }
@@ -133,7 +133,7 @@ export const NORDIC_TOKENS = `
   .aur .trust-item .ic{ color:var(--moss); margin-top:2px; flex-shrink:0; }
 
   /* Page hero (no bg image) used by inner pages */
-  .aur .page-hero{ padding-top:clamp(140px,16vw,200px); padding-bottom:clamp(48px,7vw,88px); position:relative; }
+  .aur .page-hero{ padding-top:clamp(56px,7vw,104px); padding-bottom:clamp(48px,7vw,88px); position:relative; }
   .aur .page-hero::before{
     content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
     background:
