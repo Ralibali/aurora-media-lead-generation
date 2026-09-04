@@ -16,17 +16,17 @@ const FORBIDDEN = [
   "stayboost.se",
 ];
 
-describe("bergs-slussar-stayboost draft case", () => {
+describe("bergs-slussar-stayboost public case", () => {
   const item = getPortfolioBySlug(SLUG);
 
-  it("exists as a beta draft with noindex", () => {
+  it("exists as a live public case", () => {
     expect(item).toBeDefined();
-    expect(item?.status).toBe("beta");
-    expect(item?.draft).toBe(true);
-    expect(item?.noindex).toBe(true);
+    expect(item?.status).toBe("live");
+    expect(item?.draft).toBeFalsy();
+    expect(item?.noindex).toBeFalsy();
     expect(item?.featured).toBe(true);
     expect(item?.order).toBe(0);
-    expect(isPortfolioDraft(item!)).toBe(true);
+    expect(isPortfolioDraft(item!)).toBe(false);
   });
 
   it("uses only the verified stayboost-stats result rows", () => {
@@ -63,9 +63,8 @@ describe("bergs-slussar-stayboost draft case", () => {
     }
   });
 
-  it("stays off public listings and related rails", () => {
-    expect(getPublicPortfolio().some((p) => p.slug === SLUG)).toBe(false);
-    expect(getRelatedPortfolio("aurora-transport").some((p) => p.slug === SLUG)).toBe(false);
+  it("is on the public listing", () => {
+    expect(getPublicPortfolio().some((p) => p.slug === SLUG)).toBe(true);
   });
 
   it("cross-links the existing booking-site case", () => {

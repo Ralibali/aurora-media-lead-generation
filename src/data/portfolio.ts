@@ -49,7 +49,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     domain: "goglampingsweden.se",
     category: "saas",
     type: "Byggd SaaS",
-    status: "beta",
+    status: "live",
     tagline:
       "Stayboost-automation på vår egen glamping. Digital incheckning, SMS, guest hub och betalda tillägg.",
     taglineEn:
@@ -62,9 +62,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     url: "https://goglampingsweden.se",
     featured: true,
     order: 0,
-    draft: true,
-    noindex: true,
-    shortLabel: "UTKAST · STAYBOOST",
+    shortLabel: "STAYBOOST · DOGFOOD",
     problem:
       "Bergs Slussar Glamping är vår egen anläggning. Bokning går via Sirvoy på goglampingsweden.se. Det som saknades var flödet efter bokning: incheckning, pre-arrival-info, guest hub och merförsäljning av tillägg. Det sköttes manuellt.",
     solution:
@@ -239,7 +237,7 @@ export const PORTFOLIO: PortfolioItem[] = [
     solution:
       "Byggde React-sajt med Sirvoy-bokning, SEO-optimerad för 'glamping Göta kanal' och relaterade söktermer. Live i tid till säsongen.",
     lessons:
-      "Bokningssajten är separat från Stayboost-gästflödet. Utkast: /arbete/bergs-slussar-stayboost.",
+      "Bokningssajten är separat från Stayboost-gästflödet. Stayboost-caset: /arbete/bergs-slussar-stayboost.",
     results: [{ label: "Lansering", labelEn: "Launch", value: "Maj 2026" }],
   },
   {
