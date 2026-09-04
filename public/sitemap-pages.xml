@@ -361,6 +361,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://auroramedia.se/arbete/bergs-slussar-stayboost</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://auroramedia.se/arbete/aurora-transport</loc>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>

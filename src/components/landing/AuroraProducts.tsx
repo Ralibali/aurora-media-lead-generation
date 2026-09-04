@@ -29,6 +29,7 @@ const ICON_BY_SLUG: Record<string, LucideIcon> = {
   agilitymanager: Dog,
   honsgarden: Egg,
   odlingsdagboken: Sprout,
+  "bergs-slussar-stayboost": Tent,
   "goglamping-sweden": Tent,
   viriditas: HeartPulse,
   "yachting-sweden": Sailboat,

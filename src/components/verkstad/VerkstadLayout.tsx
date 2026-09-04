@@ -110,7 +110,7 @@ export const VkFooter = () => (
           <Link to="/arbete">Alla projekt</Link>
           <Link to="/arbete/aurora-transport">Aurora Transport</Link>
           <Link to="/arbete/honsgarden">Hönsgården</Link>
-          <Link to="/arbete/goglamping-sweden">Bergs Slussar Glamping</Link>
+          <Link to="/arbete/bergs-slussar-stayboost">Bergs Slussar Glamping</Link>
         </div>
         <div>
           <h4>Bolag</h4>

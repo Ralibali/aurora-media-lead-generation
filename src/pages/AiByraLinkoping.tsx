@@ -67,7 +67,7 @@ const CASES = [
     name: "Bergs Slussar Glamping",
     meta: "Eget verksamhetsprojekt · Linköping",
     desc: "Digital bokning, gästkommunikation och försäljning av tillval för en lokal besöksverksamhet vid Göta kanal.",
-    href: "/arbete/goglamping-sweden",
+    href: "/arbete/bergs-slussar-stayboost",
   },
   {
     name: "Aurora Transport",

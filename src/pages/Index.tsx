@@ -49,7 +49,7 @@ const CASES = [
     meta: "BYGGTID: <2 VECKOR · I DRIFT",
     result: "Lansering maj 2026",
     thumb: "/portfolio/goglamping-sweden.webp",
-    href: "/arbete/goglamping-sweden",
+    href: "/arbete/bergs-slussar-stayboost",
   },
 ];
 

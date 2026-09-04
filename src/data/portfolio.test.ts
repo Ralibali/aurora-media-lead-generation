@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   PORTFOLIO,
@@ -71,5 +73,44 @@ describe("bergs-slussar-stayboost public case", () => {
     const related = getRelatedPortfolio(SLUG);
     expect(related[0]?.slug).toBe("goglamping-sweden");
     expect(PORTFOLIO.find((p) => p.slug === "goglamping-sweden")?.lessons).toContain(SLUG);
+  });
+});
+
+describe("bergs-slussar-stayboost dependents", () => {
+  it("homepage featured rail links Bergs Slussar Glamping to the Stayboost case", () => {
+    const src = readFileSync(resolve(__dirname, "../pages/Index.tsx"), "utf8");
+    const casesBlock = src.slice(src.indexOf("const CASES"), src.indexOf("const FAQS"));
+    expect(casesBlock).toContain('title: "Bergs Slussar Glamping"');
+    expect(casesBlock).toMatch(
+      /title:\s*"Bergs Slussar Glamping"[\s\S]*?href:\s*"\/arbete\/bergs-slussar-stayboost"/,
+    );
+    expect(casesBlock).not.toMatch(
+      /title:\s*"Bergs Slussar Glamping"[\s\S]*?href:\s*"\/arbete\/goglamping-sweden"/,
+    );
+  });
+
+  it("other Bergs Slussar Glamping labels point at Stayboost, not the booking slug", () => {
+    const landing = readFileSync(resolve(__dirname, "../pages/AiByraLinkoping.tsx"), "utf8");
+    const landingCases = landing.slice(landing.indexOf("const CASES"), landing.indexOf("const PROCESS"));
+    expect(landingCases).toMatch(
+      /name:\s*"Bergs Slussar Glamping"[\s\S]*?href:\s*"\/arbete\/bergs-slussar-stayboost"/,
+    );
+    expect(landingCases).not.toContain("/arbete/goglamping-sweden");
+
+    const footer = readFileSync(
+      resolve(__dirname, "../components/verkstad/VerkstadLayout.tsx"),
+      "utf8",
+    );
+    expect(footer).toContain('to="/arbete/bergs-slussar-stayboost">Bergs Slussar Glamping<');
+    expect(footer).not.toContain('to="/arbete/goglamping-sweden">Bergs Slussar Glamping<');
+  });
+
+  it("sitemap includes the Stayboost case and keeps the booking case", () => {
+    const xml = readFileSync(resolve(__dirname, "../../public/sitemap-pages.xml"), "utf8");
+    for (const item of getPublicPortfolio()) {
+      expect(xml).toContain(`https://auroramedia.se/arbete/${item.slug}`);
+    }
+    expect(xml).toContain("https://auroramedia.se/arbete/bergs-slussar-stayboost");
+    expect(xml).toContain("https://auroramedia.se/arbete/goglamping-sweden");
   });
 });
