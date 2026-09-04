@@ -4,11 +4,8 @@ import { Link } from "react-router-dom";
 import NordicLayout from "@/components/nordic/NordicLayout";
 import PortfolioPlaceholder from "@/components/PortfolioPlaceholder";
 import {
-  PORTFOLIO,
+  getPublicPortfolio,
   CATEGORY_LABEL,
-  CATEGORY_BADGE,
-  STATUS_LABEL,
-  STATUS_DOT,
   getLocalizedTagline,
   type PortfolioCategory,
 } from "@/data/portfolio";
@@ -140,7 +137,7 @@ const EnIndex = () => {
       "@context": "https://schema.org",
       "@type": "ItemList",
       name: "Aurora Media – Portfolio",
-      itemListElement: PORTFOLIO.map((p, i) => ({
+      itemListElement: getPublicPortfolio().map((p, i) => ({
         "@type": "ListItem",
         position: i + 1,
         url: `${SITE_URL}/arbete/${p.slug}`,
@@ -154,15 +151,16 @@ const EnIndex = () => {
     };
   }, []);
 
+  const publicItems = useMemo(() => getPublicPortfolio(), []);
   const filtered = useMemo(() => {
     const base =
-      active === "all" ? PORTFOLIO : PORTFOLIO.filter((p) => p.category === active);
+      active === "all" ? publicItems : publicItems.filter((p) => p.category === active);
     return [...base].sort(
       (a, b) => Number(b.featured) - Number(a.featured) || a.order - b.order,
     );
-  }, [active]);
+  }, [active, publicItems]);
 
-  const saasCount = PORTFOLIO.filter((p) => p.category === "saas").length;
+  const saasCount = publicItems.filter((p) => p.category === "saas").length;
 
   return (
     <NordicLayout>
@@ -225,7 +223,7 @@ const EnIndex = () => {
               {saasCount} SaaS, <em>live right now.</em>
             </h2>
             <p style={{ fontFamily: I, fontSize: 13, color: "rgba(237,233,220,0.50)", marginBottom: 28 }}>
-              Plus {PORTFOLIO.length - saasCount} development and SEO engagements. All real. All clickable.
+              Plus {publicItems.length - saasCount} development and SEO engagements. All real. All clickable.
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>

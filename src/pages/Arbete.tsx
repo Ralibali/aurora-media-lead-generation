@@ -5,6 +5,8 @@ import NordicLayout from "@/components/nordic/NordicLayout";
 import { setSEOMeta, setBreadcrumb, removeJsonLd, setJsonLd, SITE_URL } from "@/lib/seoHelpers";
 import {
   PORTFOLIO,
+  getPublicPortfolio,
+  isPortfolioDraft,
   CATEGORY_LABEL,
   STATUS_LABEL,
   type PortfolioCategory,
@@ -47,7 +49,7 @@ const Arbete = () => {
       "@context": "https://schema.org",
       "@type": "ItemList",
       name: "Aurora Media – Portfolio",
-      itemListElement: PORTFOLIO.map((p, i) => ({
+      itemListElement: getPublicPortfolio().map((p, i) => ({
         "@type": "ListItem",
         position: i + 1,
         url: `${SITE_URL}/arbete/${p.slug}`,
@@ -158,9 +160,11 @@ const ProjectCard = ({ item, index }: { item: PortfolioItem; index: number }) =>
       className={`surface surface-pad ${item.featured ? "featured" : ""}`}
       style={{ display: "flex", flexDirection: "column", minHeight: 220, height: "100%" }}
     >
-      {item.featured && (
+      {isPortfolioDraft(item) ? (
+        <p className="eyebrow" style={{ marginBottom: 14, color: "var(--moss)" }}>UTKAST</p>
+      ) : item.featured ? (
         <p className="eyebrow" style={{ marginBottom: 14 }}>★ flaggskepp</p>
-      )}
+      ) : null}
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: "auto" }}>
         <div>
@@ -184,6 +188,9 @@ const ProjectCard = ({ item, index }: { item: PortfolioItem; index: number }) =>
       </div>
 
       <div style={{ marginTop: 12, display: "flex", gap: 6, flexWrap: "wrap" }}>
+        {isPortfolioDraft(item) && (
+          <span className="chip" style={{ color: "var(--moss)", borderColor: "var(--moss)" }}>UTKAST</span>
+        )}
         <span className="chip">{CATEGORY_LABEL[item.category]}</span>
         {item.stack.slice(0, 3).map((t) => (
           <span key={t} className="chip chip-mute">{t}</span>

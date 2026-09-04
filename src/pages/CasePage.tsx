@@ -5,7 +5,7 @@ import {
   setSEOMeta, setBreadcrumb, removeJsonLd, setJsonLd, SITE_URL,
 } from "@/lib/seoHelpers";
 import {
-  getPortfolioBySlug, getRelatedPortfolio,
+  getPortfolioBySlug, getRelatedPortfolio, isPortfolioDraft,
   CATEGORY_LABEL, STATUS_LABEL,
 } from "@/data/portfolio";
 
@@ -15,12 +15,20 @@ const CasePage = () => {
 
   useEffect(() => {
     if (!project) return;
+    const unpublished = isPortfolioDraft(project);
     setSEOMeta({
       title: `${project.name} – Case | Aurora Media`,
       description: project.description,
       canonical: `/arbete/${project.slug}`,
       ogType: "article",
+      noindex: unpublished,
     });
+    if (unpublished) {
+      return () => {
+        removeJsonLd("breadcrumb-jsonld");
+        removeJsonLd("case-creativework");
+      };
+    }
     setBreadcrumb([
       { name: "Hem", url: "/" },
       { name: "Arbete", url: "/arbete" },
@@ -58,12 +66,20 @@ const CasePage = () => {
         {/* Hero */}
         <section className="wrap section-pad-sm" style={{ paddingTop: 0 }}>
           <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 22, flexWrap: "wrap" }}>
+            {isPortfolioDraft(project) && (
+              <span className="chip" style={{ color: "var(--moss)", borderColor: "var(--moss)" }}>UTKAST</span>
+            )}
             <span className="chip">{CATEGORY_LABEL[project.category]}</span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
               <span className={`dot ${project.status === "live" ? "live" : ""}`} />
               <span className="mono" style={{ color: "var(--bone-mute)" }}>{STATUS_LABEL[project.status]}</span>
             </span>
           </div>
+          {isPortfolioDraft(project) && (
+            <p className="mono" style={{ marginBottom: 18, color: "var(--moss)" }}>
+              Utkast. Inte indexerat. Inte publicerat. Timmar sparade är inte mätta.
+            </p>
+          )}
 
           <h1 className="hero-line" style={{ maxWidth: 820, marginBottom: 18 }}>{project.name}</h1>
           <p className="lead" style={{ marginBottom: 28 }}>{project.tagline}</p>
