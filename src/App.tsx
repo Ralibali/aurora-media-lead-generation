@@ -1,5 +1,6 @@
 import { ContactModalProvider } from "@/components/ContactModal";
 import { SEO } from "@/components/SEO";
+import { getPortfolioBySlug, isPortfolioDraft } from "@/data/portfolio";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -410,11 +411,15 @@ const seoMap: Record<string, SEOConfig> = {
 
 function getDynamicSeo(pathname: string): SEOConfig {
   if (pathname.startsWith("/arbete/")) {
+    const slug = pathname.replace(/^\/arbete\//, "").replace(/\/+$/, "");
+    const item = getPortfolioBySlug(slug);
     return {
-      title: "Projekt | Aurora Media AB",
+      title: item ? `${item.name} – Case | Aurora Media` : "Projekt | Aurora Media AB",
       description:
+        item?.description ??
         "Läs mer om vårt arbete, processen bakom lösningen och resultatet i det här caset.",
       canonical: `https://auroramedia.se${pathname}`,
+      noindex: item ? isPortfolioDraft(item) : false,
     };
   }
 
