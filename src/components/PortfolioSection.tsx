@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import PortfolioPlaceholder from "@/components/PortfolioPlaceholder";
 import {
   PORTFOLIO,
+  getPublicPortfolio,
   CATEGORY_LABEL,
   CATEGORY_BADGE,
   STATUS_LABEL,
@@ -28,12 +29,13 @@ const bentoLayout = [
 ];
 
 const PortfolioSection = () => {
-  // Sort by `order`, featured first.
-  const sorted = [...PORTFOLIO].sort((a, b) => a.order - b.order);
+  // Public list only — draft/noindex cases stay off startsidan.
+  const publicItems = getPublicPortfolio();
+  const sorted = [...publicItems].sort((a, b) => a.order - b.order);
   const featured = sorted.find((p) => p.featured) ?? sorted[0];
   const rest = sorted.filter((p) => p.slug !== featured.slug).slice(0, 6);
-  const totalCount = PORTFOLIO.length;
-  const saasCount = PORTFOLIO.filter((p) => p.category === "saas").length;
+  const totalCount = publicItems.length;
+  const saasCount = publicItems.filter((p) => p.category === "saas").length;
 
   return (
     <section id="portfolj" className="border-t border-border py-24 md:py-36">

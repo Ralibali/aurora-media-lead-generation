@@ -98,6 +98,17 @@ function extractObjectSlugs(relativeFile) {
   return [...text.matchAll(/\bslug:\s*"([^"]+)"/g)].map((match) => match[1]);
 }
 
+/** Skip draft/noindex portfolio objects so unpublished cases stay out of sitemap. */
+function extractPublicPortfolioSlugs(relativeFile) {
+  const source = resolve(ROOT, relativeFile);
+  if (!existsSync(source)) return [];
+  const text = readFileSync(source, "utf8");
+  return text
+    .split(/\n  \{/)
+    .filter((block) => !/\bdraft:\s*true\b/.test(block) && !/\bnoindex:\s*true\b/.test(block))
+    .flatMap((block) => [...block.matchAll(/\bslug:\s*"([^"]+)"/g)].map((match) => match[1]));
+}
+
 function extractArticles() {
   const files = [
     "articlesData1.ts",
@@ -163,7 +174,7 @@ function buildPageEntries() {
     }
   }
 
-  const portfolioSlugs = extractObjectSlugs("src/data/portfolio.ts");
+  const portfolioSlugs = extractPublicPortfolioSlugs("src/data/portfolio.ts");
   for (const slug of portfolioSlugs) {
     entries.push({
       loc: `${SITE_URL}/arbete/${slug}`,

@@ -16,7 +16,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import {
-  PORTFOLIO,
+  getPublicPortfolio,
   CATEGORY_LABEL,
   STATUS_LABEL,
   type PortfolioItem,
@@ -173,7 +173,8 @@ const ProductCard = ({ item, large = false }: CardProps) => {
 };
 
 const AuroraProducts = () => {
-  const sorted = [...PORTFOLIO].sort((a, b) => a.order - b.order);
+  const publicItems = getPublicPortfolio();
+  const sorted = [...publicItems].sort((a, b) => a.order - b.order);
   const flagship = sorted.find((p) => p.featured) ?? sorted[0];
   const rest = sorted.filter((p) => p.slug !== flagship.slug);
   const liveCount = sorted.filter((p) => p.status === "live").length;

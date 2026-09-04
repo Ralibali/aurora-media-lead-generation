@@ -1,5 +1,5 @@
 // Single source of truth för portfolio. Christoffer kan editera direkt här
-// utan AI-kodning. Lägg till nya case längst ner och bumpa `order`.
+// utan AI-kodning. Nya publika case: bumpa `order`. Utkast: draft+noindex true.
 
 export type PortfolioCategory = "saas" | "seo" | "development" | "marketing";
 export type PortfolioStatus = "live" | "pågående" | "beta" | "planerad";
@@ -36,9 +36,54 @@ export interface PortfolioItem {
   solution?: string;
   lessons?: string;
   results?: PortfolioResult[];
+  /** Utkast för owner-review. Synligt på /arbete med UTKAST-chip. Default false. */
+  draft?: boolean;
+  /** SEO noindex/nofollow. Default false. Sätt true på utkast. */
+  noindex?: boolean;
 }
 
 export const PORTFOLIO: PortfolioItem[] = [
+  {
+    slug: "bergs-slussar-stayboost",
+    name: "Bergs Slussar Glamping",
+    domain: "goglampingsweden.se",
+    category: "saas",
+    type: "Byggd SaaS",
+    status: "beta",
+    tagline:
+      "Stayboost-automation på vår egen glamping. Digital incheckning, SMS, guest hub och betalda tillägg.",
+    taglineEn:
+      "Stayboost automation at our own glamping. Digital check-in, SMS, guest hub and paid add-ons.",
+    description:
+      "Stayboost körs på Bergs Slussar Glamping (dogfood). Verifierat 2026-09-03: 156 bokningar, 13 904 kr betalda tillägg (frukost 10 430 kr = 75,0 %), 138 digitala incheckningar, 111/156 pre-arrival SMS, 22 307 guest hub-pageviews. Timmar sparade är inte mätta.",
+    descriptionEn:
+      "Stayboost runs at Bergs Slussar Glamping (dogfood). Verified 2026-09-03: 156 bookings, 13 904 SEK paid add-ons (breakfast 10 430 SEK = 75.0%), 138 digital check-ins, 111/156 pre-arrival SMS, 22 307 guest hub pageviews. Hours saved are not measured.",
+    stack: ["Stayboost", "Sirvoy", "React"],
+    url: "https://goglampingsweden.se",
+    featured: true,
+    order: 0,
+    draft: true,
+    noindex: true,
+    shortLabel: "UTKAST · STAYBOOST",
+    problem:
+      "Bergs Slussar Glamping är vår egen anläggning. Bokning går via Sirvoy på goglampingsweden.se. Det som saknades var flödet efter bokning: incheckning, pre-arrival-info, guest hub och merförsäljning av tillägg. Det sköttes manuellt.",
+    solution:
+      "Stayboost automatiserar det flödet på samma anläggning: digital incheckning, pre-arrival SMS, guest hub och betalda tillägg. Frukost är den stora tilläggsposten. Siffrorna i sidokolumnen är first-party från stayboost-stats, verifierade 2026-09-03. Timmar sparade är inte mätta.",
+    lessons:
+      "Timmar sparade är inte mätta. Skriv inte in någon tidsvinst. Frukostandel är 75,0 % av betalda tillägg (10 430 kr av 13 904 kr). Bokningssajten är ett separat case: GoGlamping Sweden (/arbete/goglamping-sweden). Övrig Stayboost-stack bortom Stayboost, Sirvoy och React är UNKNOWN.",
+    results: [
+      { label: "bokningar", labelEn: "bookings", value: "156" },
+      { label: "betalda tillägg", labelEn: "paid add-ons", value: "13 904 kr" },
+      {
+        label: "frukostandel av tillägg (10 430 kr)",
+        labelEn: "breakfast share of add-ons (10 430 SEK)",
+        value: "75,0 %",
+      },
+      { label: "digitala incheckningar", labelEn: "digital check-ins", value: "138" },
+      { label: "pre-arrival SMS", labelEn: "pre-arrival SMS", value: "111/156" },
+      { label: "guest hub pageviews", labelEn: "guest hub pageviews", value: "22 307" },
+    ],
+  },
   {
     slug: "aurora-transport",
     name: "Aurora Transport",
@@ -193,6 +238,8 @@ export const PORTFOLIO: PortfolioItem[] = [
       "Ny glamping-anläggning behövde bokningssajt med direktintegration mot Sirvoy och stark lokal SEO inför säsongsöppning.",
     solution:
       "Byggde React-sajt med Sirvoy-bokning, SEO-optimerad för 'glamping Göta kanal' och relaterade söktermer. Live i tid till säsongen.",
+    lessons:
+      "Bokningssajten är separat från Stayboost-gästflödet. Utkast: /arbete/bergs-slussar-stayboost.",
     results: [{ label: "Lansering", labelEn: "Launch", value: "Maj 2026" }],
   },
   {
@@ -320,6 +367,11 @@ export const STATUS_DOT: Record<PortfolioStatus, string> = {
   planerad: "bg-muted-foreground/50",
 };
 
+export const isPortfolioDraft = (item: PortfolioItem) =>
+  Boolean(item.draft || item.noindex);
+
+export const getPublicPortfolio = () => PORTFOLIO.filter((p) => !isPortfolioDraft(p));
+
 export const getPortfolioBySlug = (slug: string) =>
   PORTFOLIO.find((p) => p.slug === slug);
 
@@ -332,8 +384,17 @@ export const getLocalizedDescription = (item: PortfolioItem, lang: "sv" | "en") 
 export const getRelatedPortfolio = (slug: string, count = 3) => {
   const current = getPortfolioBySlug(slug);
   if (!current) return [];
-  // Same-category first, then fall back to others.
-  const sameCat = PORTFOLIO.filter((p) => p.slug !== slug && p.category === current.category);
-  const others = PORTFOLIO.filter((p) => p.slug !== slug && p.category !== current.category);
-  return [...sameCat, ...others].slice(0, count);
+  // Draft/noindex cases stay off related rails on public pages.
+  const pool = PORTFOLIO.filter((p) => p.slug !== slug && !isPortfolioDraft(p));
+  const preferred =
+    slug === "bergs-slussar-stayboost"
+      ? pool.filter((p) => p.slug === "goglamping-sweden")
+      : [];
+  const sameCat = pool.filter(
+    (p) => p.category === current.category && !preferred.includes(p),
+  );
+  const others = pool.filter(
+    (p) => p.category !== current.category && !preferred.includes(p),
+  );
+  return [...preferred, ...sameCat, ...others].slice(0, count);
 };
