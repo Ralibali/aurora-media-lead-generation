@@ -73,7 +73,7 @@ export function webhookSecret(): string | null {
 export async function stripeFetch(
   path: string,
   init: { method?: string; body?: Record<string, string> } = {},
-): Promise<{ ok: boolean; status: number; data: any }> {
+) {
   const key = stripeKey();
   if (!key) return { ok: false, status: 503, data: { error: "stripe_not_configured" } };
   const res = await fetch(`https://api.stripe.com/v1/${path}`, {
@@ -154,10 +154,10 @@ async function restFetch(path: string, init: RequestInit = {}) {
   });
 }
 
-export async function dbSelect(path: string): Promise<any[]> {
+export async function dbSelect<T = Record<string, unknown>>(path: string): Promise<T[]> {
   const res = await restFetch(path);
   if (!res.ok) return [];
-  return (await res.json().catch(() => [])) as any[];
+  return (await res.json().catch(() => [])) as T[];
 }
 
 export async function dbInsert(table: string, row: Record<string, unknown>, upsert = false) {
@@ -193,7 +193,7 @@ export type AssetRow = {
 };
 
 export async function activeAssets(): Promise<AssetRow[]> {
-  return (await dbSelect(
+  return (await dbSelect<AssetRow>(
     "ai_kontoret_assets?active=eq.true&select=product,version,storage_path,label,uploaded_at,file_bytes,active",
   )) as AssetRow[];
 }
@@ -290,7 +290,7 @@ export type RevisionRow = {
 
 export async function listRevisions(product?: AssetKey): Promise<RevisionRow[]> {
   const filter = product ? `product=eq.${product}&` : "";
-  return (await dbSelect(
+  return (await dbSelect<RevisionRow>(
     `ai_kontoret_asset_revisions?${filter}select=*&order=product.asc,revision.desc`,
   )) as RevisionRow[];
 }

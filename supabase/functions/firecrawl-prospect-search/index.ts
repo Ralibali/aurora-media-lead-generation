@@ -192,7 +192,8 @@ Deno.serve(async (req: Request) => {
     if (cErr) throw cErr;
     const campaignRow = campaign as { id: string };
 
-    let firecrawlBody: any = {};
+    type SearchEnvelope = { web?: FirecrawlSearchResult[]; data?: SearchEnvelope | FirecrawlSearchResult[]; results?: SearchEnvelope | FirecrawlSearchResult[] };
+    let firecrawlBody: SearchEnvelope = {};
     try {
       const fcRes = await fetch("https://api.firecrawl.dev/v2/search", {
         method: "POST",
@@ -224,9 +225,9 @@ Deno.serve(async (req: Request) => {
       throw e;
     }
 
-    const extractResults = (body: any): FirecrawlSearchResult[] => {
+    const extractResults = (body: SearchEnvelope): FirecrawlSearchResult[] => {
       if (!body) return [];
-      const candidates = [body.web, body.data?.web, body.data, body.results?.web, body.results];
+      const candidates = [body.web, Array.isArray(body.data) ? undefined : body.data?.web, body.data, Array.isArray(body.results) ? undefined : body.results?.web, body.results];
       for (const c of candidates) {
         if (Array.isArray(c)) return c as FirecrawlSearchResult[];
       }

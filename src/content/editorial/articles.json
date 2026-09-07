@@ -1,0 +1,61 @@
+[
+  {
+    "slug": "utvardera-ai-pilot-arbetsmall",
+    "title": "Utvärdera en AI-pilot: en arbetsmall före nästa beslut",
+    "metaTitle": "Utvärdera en AI-pilot – mät nytta, fel och efterarbete",
+    "metaDesc": "Jämför AI-flödet med dagens arbetssätt. En konkret mall för testfall, kvalitet, mänsklig granskning, kostnader och beslut om nästa steg.",
+    "category": "AI & automation",
+    "publishedDate": "2026-09-07",
+    "updatedDate": "2026-09-07",
+    "readMinutes": 5,
+    "keyword": "utvärdera AI-pilot, mäta AI-automation",
+    "intro": "En lyckad demonstration visar att ett AI-flöde kan fungera i ett valt exempel. Inför nästa investering behöver ni veta hur det fungerar på de uppgifter ni faktiskt vill hantera. Den här arbetsmallen hjälper ett mindre företag att jämföra resultat, efterarbete och kostnader innan piloten får större omfattning.",
+    "sections": [
+      {
+        "heading": "Välj ett enda avgränsat arbetsflöde",
+        "content": "Beskriv vad som kommer in, vad som ska lämnas vidare och vem som använder resultatet. Ett exempel är att förbereda ett utkast från ett inkommande formulär. Blanda inte den uppgiften med att samtidigt omforma hela försäljningsprocessen.\n\nSkriv också vad piloten inte får göra på egen hand. Ett utkast kan exempelvis behöva granskas innan det används. Ge granskaren tillgång till underlaget, så att bedömningen bygger på mer än att texten låter övertygande. Bestäm vem som fattar beslut om en körning ska avbrytas eller göras om."
+      },
+      {
+        "heading": "Beskriv vad dagens arbetssätt faktiskt kräver",
+        "content": "Följ några relevanta uppgifter genom den nuvarande processen. Notera handläggningstid, väntan, korrigeringar och sådant som behöver förtydligas. Använd samma definitioner genom hela försöket. Skilj aktiv arbetstid från den tid ett ärende ligger och väntar.\n\nVälj material som får användas i testet och som representerar uppgiften. Om ni använder konstruerade exempel ska de märkas som exempel. Dokumentera vilka delar av verksamheten som inte täcks, så att ett bra resultat i ett litet urval inte framställs som ett resultat för alla ärenden."
+      },
+      {
+        "heading": "Skapa testfall innan ni granskar svaren",
+        "content": "Beskriv ett godtagbart resultat för varje typ av uppgift innan ni bedömer AI-versionen. Ta med vanliga fall, ofullständigt underlag och ett fall där systemet borde be om mer information. Ett svar som saknar nödvändigt underlag ska inte få godkänt bara för att det är välformulerat.\n\nKopiera följande fält till er testlogg:\n\n- Test-ID och typ av uppgift.\n- Godkänt underlag och förväntat resultat.\n- Systemversion och datum för körningen.\n- Resultat: godkänt, behöver rättas eller kan inte användas.\n- Granskningstid och konkret korrigering.\n- Ansvarig och beslut om nästa steg."
+      },
+      {
+        "heading": "Räkna med granskningen och felhanteringen",
+        "content": "Jämför den totala arbetsinsatsen för samma uppgift. Om AI-utkastet går snabbt att skapa men kräver mycket kontroll kan den mänskliga insatsen ändå vara stor. Räkna därför separat på förberedelse, granskning, rättning och hantering av misslyckade körningar.\n\nNotera även verktygsavgifter och andra kostnader som faktiskt hör till försöket. Håll uppskattningar åtskilda från uppmätta värden. Ett lägre tidsvärde i testloggen visar inte automatiskt en realiserad ekonomisk besparing; ni behöver också bedöma vad den frigjorda tiden kan användas till."
+      },
+      {
+        "heading": "Bestäm stopp och nästa steg i förväg",
+        "content": "Skriv ned vilka fel som gör att försöket ska pausas, vem som får ändra inställningar och hur ni återgår till det tidigare arbetssättet. Om underlaget eller systemversionen förändras ska det framgå i loggen. Då går det att förstå varför resultaten före och efter förändringen skiljer sig.\n\nVälj sedan mellan ett begränsat nästa test, en förbättring av piloten eller att avsluta försöket. NIST:s AI Risk Management Framework är ett vidare stöd för systematiskt arbete med AI-risker. Arbetsmallen här är ett avgränsat testunderlag och innebär ingen certifiering eller efterlevnadsbedömning."
+      },
+      {
+        "heading": "Lämna efter er ett beslut som går att förstå",
+        "content": "Avsluta med en kort anteckning: vad testades, vilket material användes, vilka resultat observerades, vad saknas och vilket nästa steg valdes? Bifoga de testfall som förklarar beslutet. Skriv också när beslutet ska omprövas.\n\nEtt bra underlag kan visa att en idé behöver ändras. Det är ett användbart resultat även om piloten inte ska byggas ut. Om ni vill börja med att avgränsa ett arbetsflöde kan ni använda Aurora Medias AI-karta och ta med era nuvarande rutiner och exempel till ett samtal."
+      },
+      {
+        "heading": "Om underlaget",
+        "content": "AI-assisterad originalguide med en redaktionellt framtagen arbetsmall. Inga siffror i texten beskriver kundresultat eller garanterad avkastning. För vidare läsning: [NIST – AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework). Källan kontrollerades den 7 september 2026."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Starta AI-kartan",
+    "ctaTitle": "Avgränsa ert första arbetsflöde",
+    "ctaText": "Utgå från en konkret uppgift och det underlag ni redan använder.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "sourceCheckedAt": "2026-09-07T00:04:51.556128+00:00",
+      "publishedAt": "2026-09-07T00:04:51.556128+00:00",
+      "searchIntent": "Företag som behöver ett praktiskt beslutsunderlag efter en AI-pilot",
+      "sourceUrls": [
+        "https://www.nist.gov/itl/ai-risk-management-framework",
+        "https://auroramedia.se/"
+      ]
+    }
+  }
+]

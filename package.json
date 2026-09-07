@@ -13,7 +13,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:visual": "node scripts/visual-regression.mjs"
+    "check:visual": "node scripts/visual-regression.mjs",
+    "editorial:check": "node scripts/editorial-check.mjs",
+    "prebuild": "npm run editorial:check"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

@@ -1,0 +1,25 @@
+id: WP-20260907-editorial
+company: Aurora Media AB
+objective: "Publicera egna nischartiklar i befintlig blogg och anslut löpande redaktion."
+why_now: "Ägaren har uttryckligen begärt implementering av artiklar som blogginlägg på auroramedia.se."
+evidence:
+  - "VERIFIED FACT: Ägarmandat i Codex-uppgift 01a07855-4957-73c2-85a1-3c1980378daf den 7 september 2026."
+  - "VERIFIED FACT: Befintlig blogg, artikeldata och publicering via Lovable är identifierade."
+  - "HYPOTHESIS: En konkret arbetsmall kan hjälpa relevanta besökare att avgränsa en AI-pilot."
+  - "UNKNOWN: Efterföljande kontakt- och intäktseffekt."
+owner: Christoffer
+skill: editorial-native-publishing
+skill_version: "1.0"
+authority: EMIT
+usage_level: bounded
+constraints:
+  - "Endast artikelinnehåll, dess visning, metadata, webbplatskarta och redaktionsanvisningar."
+  - "Inga kundresultat, priser eller rättsliga garantier får fabriceras."
+definition_of_done:
+  - "Ny originalartikel syns i bloggen och med full text på egen URL."
+  - "Tester, typkontroll och bygge passerar; live HTML och sitemap kontrolleras."
+expected_artifact: content/editorial/README.md
+measurement:
+  baseline: UNKNOWN
+  target: "Kvalificerade förfrågningar via artikelns AI-karta/kontaktväg."
+  window: "28 dagar efter publicering när tillförlitliga data finns."

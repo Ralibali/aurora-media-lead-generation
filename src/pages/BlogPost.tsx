@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { EditorialContent } from "@/components/EditorialContent";
 import { Link, useParams, Navigate } from "react-router-dom";
 import NordicLayout from "@/components/nordic/NordicLayout";
 import { getArticle, getRelatedArticles } from "@/lib/articles";
@@ -46,7 +47,7 @@ const BlogPost = () => {
       description: article.metaDesc,
       datePublished: article.publishedDate,
       dateModified: article.updatedDate,
-      author: {
+      author: article.editorial?.aiAssisted ? { "@type": "Organization", name: "Aurora Media AB", url: SITE_URL } : {
         "@type": "Person",
         name: "Christoffer Holstensson",
         url: `${SITE_URL}/om`,
@@ -169,7 +170,7 @@ const BlogPost = () => {
                 {article.sections.map((section, index) => (
                   <section key={section.heading} className="prose-section">
                     <h2>{section.heading}</h2>
-                    <p style={{ whiteSpace: "pre-line" }}>{section.content}</p>
+                    <EditorialContent content={section.content} />
 
                     {section.code && (
                       <pre className="pre-block">

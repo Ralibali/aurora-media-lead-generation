@@ -1,3 +1,4 @@
+import editorialArticles from '../content/editorial/articles.json';
 import type { Article } from "./articleTypes";
 import { articles1to6 } from "./articlesData1";
 import { articles7to12 } from "./articlesData2";
@@ -10,6 +11,7 @@ import { articles31to40 } from "./articlesData7";
 export type { Article } from "./articleTypes";
 
 export const articles: Article[] = [
+  ...editorialArticles,
   ...articles31to40,
   ...articles31to33,
   ...articles25to30,

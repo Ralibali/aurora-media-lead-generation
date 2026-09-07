@@ -37,7 +37,7 @@ Deno.serve(async (req: Request) => {
     const body = await req.json().catch(() => ({}));
     const token = String(body?.token ?? "").trim();
     const pdfBase64 = String(body?.pdfBase64 ?? "");
-    const filename = String(body?.filename ?? "aurora-ai-karta.pdf").replace(/[^\w.\-]/g, "-").slice(0, 120);
+    const filename = String(body?.filename ?? "aurora-ai-karta.pdf").replace(/[^\w.-]/g, "-").slice(0, 120);
 
     if (!/^[a-f0-9]{16,64}$/i.test(token)) return json({ error: "invalid_token" }, 400);
     // jsPDF-bilagor är normalt 100–400 kB → base64 ~150–550 tusen tecken. Tak: 10 MB.
