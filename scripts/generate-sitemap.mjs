@@ -86,9 +86,16 @@ function buildIndex(sitemaps) {
 }
 
 function write(file, content) {
-  const output = resolve(PUBLIC_DIR, file);
-  mkdirSync(dirname(output), { recursive: true });
-  writeFileSync(output, content, "utf8");
+  // Vite copies public/ into dist/ before this script runs. Write both so
+  // the committed files stay current and the deploy output is not stale.
+  const targets = [resolve(PUBLIC_DIR, file)];
+  const distDir = resolve(ROOT, "dist");
+  if (existsSync(distDir)) targets.push(resolve(distDir, file));
+
+  for (const output of targets) {
+    mkdirSync(dirname(output), { recursive: true });
+    writeFileSync(output, content, "utf8");
+  }
 }
 
 function extractObjectSlugs(relativeFile) {

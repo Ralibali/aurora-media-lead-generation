@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { expect, it } from 'vitest';
 import { renderEditorialArticle } from '../../scripts/editorial-html.mjs';
 import articles from '../content/editorial/articles.json';
@@ -11,4 +13,11 @@ it('renders complete editorial content and next-step links without executable te
   const unsafe = renderEditorialArticle({ ...article, intro: '<script>alert(1)</script>', sections: [] });
   expect(unsafe).not.toContain('<script>');
   expect(unsafe).toContain('&lt;script&gt;');
+});
+
+it('sitemap-blog includes every editorial slug from articles.json', () => {
+  const xml = readFileSync(resolve(__dirname, '../../public/sitemap-blog.xml'), 'utf8');
+  for (const article of articles) {
+    expect(xml).toContain(`https://auroramedia.se/blogg/${article.slug}`);
+  }
 });
