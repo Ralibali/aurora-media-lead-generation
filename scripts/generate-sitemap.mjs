@@ -2,6 +2,7 @@
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadArticles } from "./article-catalog.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -86,9 +87,16 @@ function buildIndex(sitemaps) {
 }
 
 function write(file, content) {
-  const output = resolve(PUBLIC_DIR, file);
-  mkdirSync(dirname(output), { recursive: true });
-  writeFileSync(output, content, "utf8");
+  // Vite copies public/ into dist/ before this script runs. Write both so
+  // the committed files stay current and the deploy output is not stale.
+  const targets = [resolve(PUBLIC_DIR, file)];
+  const distDir = resolve(ROOT, "dist");
+  if (existsSync(distDir)) targets.push(resolve(distDir, file));
+
+  for (const output of targets) {
+    mkdirSync(dirname(output), { recursive: true });
+    writeFileSync(output, content, "utf8");
+  }
 }
 
 function extractObjectSlugs(relativeFile) {
@@ -110,37 +118,14 @@ function extractPublicPortfolioSlugs(relativeFile) {
 }
 
 function extractArticles() {
-  const files = [
-    "articlesData1.ts",
-    "articlesData2.ts",
-    "articlesData3.ts",
-    "articlesData4.ts",
-    "articlesData5.ts",
-    "articlesData6.ts",
-    "articlesData7.ts",
-  ];
-  const articles = JSON.parse(readFileSync(resolve(ROOT, 'src/content/editorial/articles.json'), 'utf8')).map(article => ({
-    loc: `${SITE_URL}/blogg/${article.slug}`, lastmod: article.updatedDate || article.publishedDate, changefreq: 'monthly', priority: '0.8',
-  }));
-
-  for (const file of files) {
-    const source = resolve(ROOT, "src/lib", file);
-    if (!existsSync(source)) continue;
-
-    const text = readFileSync(source, "utf8");
-    const blocks = text.matchAll(/slug:\s*"([^"]+)"[\s\S]*?updatedDate:\s*"([^"]+)"/g);
-
-    for (const match of blocks) {
-      articles.push({
-        loc: `${SITE_URL}/blogg/${match[1]}`,
-        lastmod: match[2],
-        changefreq: "monthly",
-        priority: "0.8",
-      });
-    }
-  }
-
-  return dedupeByLocation(articles);
+  return dedupeByLocation(
+    loadArticles().map((article) => ({
+      loc: `${SITE_URL}/blogg/${article.slug}`,
+      lastmod: article.updatedDate || article.publishedDate,
+      changefreq: "monthly",
+      priority: "0.8",
+    })),
+  );
 }
 
 function dedupeByLocation(entries) {
