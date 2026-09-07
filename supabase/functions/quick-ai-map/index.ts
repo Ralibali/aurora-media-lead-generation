@@ -1356,7 +1356,7 @@ Gör motsvarande analys för just denna text. Kom ihåg: bara processer texten s
       const rule_based = VALID_YPN.has(p.rule_based) ? p.rule_based : "partial";
       const data_available = VALID_YPN.has(p.data_available) ? p.data_available : "partial";
       const business_value = VALID_VALUE.has(p.business_value) ? p.business_value : "medium";
-      const score = (FREQ as any)[frequency] + (TIME as any)[weekly_time] + (RULE as any)[rule_based] + (DATA as any)[data_available] + (VALUE as any)[business_value];
+      const score = FREQ[frequency as keyof typeof FREQ] + TIME[weekly_time as keyof typeof TIME] + RULE[rule_based as keyof typeof RULE] + DATA[data_available as keyof typeof DATA] + VALUE[business_value as keyof typeof VALUE];
       const weeklyHours = HOURS_PER_WEEK[weekly_time] ?? 2;
       const savedHoursPerWeek = Math.round(weeklyHours * automationFactor({ rule_based, data_available }) * 10) / 10;
       return {

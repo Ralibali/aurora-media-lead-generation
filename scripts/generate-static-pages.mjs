@@ -398,7 +398,8 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
   const canonical = fullUrl(route);
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
   const ogImageUrl = ogImage ? `${SITE_URL}${ogImage}` : `${SITE_URL}/og-image-sv.jpg`;
-  let html = template;
+  // Every generated page has its own visible content; discard the homepage-only fallback.
+  let html = template.replace(/<noscript>[\s\S]*?<\/noscript>/gi, '');
 
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(fullTitle)}</title>`);
 

@@ -93,7 +93,19 @@ Christoffer, Aurora Media AB`;
 }
 
 /** Kontrollerar Stripe-sessionen mot katalogen. Fel data → ingen leverans. */
-function validateSession(session: any): { ok: true; product: Product } | { ok: false; reason: string } {
+type CheckoutSession = {
+  id?: string;
+  metadata?: Record<string, string>;
+  payment_status?: string;
+  amount_total?: number;
+  currency?: string;
+  customer_details?: { email?: string | null };
+  customer_email?: string | null;
+  payment_intent?: string | null;
+  customer?: string | { id: string } | null;
+};
+type PurchaseRow = { id: string; email: string; product: Product; delivery_count?: number; delivered_at?: string | null };
+function validateSession(session: CheckoutSession): { ok: true; product: Product } | { ok: false; reason: string } {
   const product = session?.metadata?.product;
   if (!isProduct(product)) return { ok: false, reason: "unknown_product" };
   const item = CATALOG[product];
@@ -122,7 +134,7 @@ Deno.serve(async (req: Request) => {
       ? `email=eq.${encodeURIComponent(email)}&order=created_at.desc&limit=1`
       : "";
     if (!filter) return json({ error: "session_id_or_email_required" }, 400);
-    const rows = await dbSelect(`ai_kontoret_purchases?${filter}&select=*`);
+    const rows = await dbSelect<PurchaseRow>(`ai_kontoret_purchases?${filter}&select=*`);
     const purchase = rows[0];
     if (!purchase) return json({ error: "purchase_not_found" }, 404);
     const links = await buildLinks(purchase.product as Product);
@@ -144,7 +156,7 @@ Deno.serve(async (req: Request) => {
   const valid = await verifyStripeSignature(raw, req.headers.get("stripe-signature"), secret);
   if (!valid) return json({ error: "invalid_signature" }, 400);
 
-  let event: any;
+  let event: { id?: string; type?: string; data: { object: CheckoutSession } };
   try {
     event = JSON.parse(raw);
   } catch {
@@ -191,7 +203,7 @@ Deno.serve(async (req: Request) => {
     if (!email) return json({ received: true, delivered: false, reason: "no_email" });
 
     // Idempotens 2: unik stripe_session_id.
-    const existing = await dbSelect(
+    const existing = await dbSelect<Pick<PurchaseRow, 'id' | 'delivered_at'>>(
       `ai_kontoret_purchases?stripe_session_id=eq.${encodeURIComponent(sessionId)}&select=id,delivered_at`,
     );
     if (existing.length > 0 && existing[0].delivered_at) {
@@ -213,7 +225,7 @@ Deno.serve(async (req: Request) => {
       });
       if (!ins.ok) {
         // Race: en parallell webhook hann före → hämta raden.
-        const again = await dbSelect(
+        const again = await dbSelect<Pick<PurchaseRow, 'id' | 'delivered_at'>>(
           `ai_kontoret_purchases?stripe_session_id=eq.${encodeURIComponent(sessionId)}&select=id,delivered_at`,
         );
         if (again[0]?.delivered_at) return json({ received: true, duplicate: true });
