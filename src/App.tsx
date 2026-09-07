@@ -1,3 +1,4 @@
+import editorialArticles from "@/content/editorial/articles.json";
 import { ContactModalProvider } from "@/components/ContactModal";
 import { SEO } from "@/components/SEO";
 import { getPortfolioBySlug, isPortfolioDraft } from "@/data/portfolio";
@@ -424,9 +425,11 @@ function getDynamicSeo(pathname: string): SEOConfig {
   }
 
   if (pathname.startsWith("/blogg/")) {
+    const slug = pathname.replace(/^\/blogg\//, "").replace(/\/+$/, "");
+    const article = editorialArticles.find(item => item.slug === slug);
     return {
-      title: "Bloggartikel | Aurora Media AB",
-      description:
+      title: article?.metaTitle ?? "Bloggartikel | Aurora Media AB",
+      description: article?.metaDesc ??
         "Läs en artikel från Aurora Media om AI, SaaS, marknadsföring och digital tillväxt.",
       canonical: `https://auroramedia.se${pathname}`,
     };
