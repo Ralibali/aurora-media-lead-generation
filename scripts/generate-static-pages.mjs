@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import fs from 'node:fs/promises';
+import { renderEditorialArticle } from './editorial-html.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildInstantPreview, setInstantPreview } from './instant-preview.mjs';
@@ -320,7 +321,7 @@ function buildArticleSchema(article) {
       image: [`${SITE_URL}/og-image-sv.jpg`],
       datePublished: article.publishedDate,
       dateModified: article.updatedDate || article.publishedDate,
-      author: { '@type': 'Person', name: 'Christoffer Holstensson' },
+      author: article.editorial?.aiAssisted ? { '@type': 'Organization', name: SITE_NAME } : { '@type': 'Person', name: 'Christoffer Holstensson' },
       publisher: {
         '@type': 'Organization',
         name: SITE_NAME,
@@ -522,7 +523,7 @@ function extractFaq(block) {
 
 function extractArticles() {
   const files = ['articlesData1.ts', 'articlesData2.ts', 'articlesData3.ts', 'articlesData4.ts', 'articlesData5.ts', 'articlesData6.ts', 'articlesData7.ts'];
-  const articles = [];
+  const articles = JSON.parse(readFileSync(path.join(SRC_LIB_DIR, '../content/editorial/articles.json'), 'utf8'));
 
   for (const file of files) {
     const filePath = path.join(SRC_LIB_DIR, file);
@@ -557,6 +558,7 @@ function extractArticles() {
 }
 
 function buildArticleBody(article) {
+  if (article.editorial) return renderEditorialArticle(article);
   const sections = article.sections
     .map((s) => `<section><h2>${escapeHtml(s.heading)}</h2><p>${escapeHtml(stripTags(s.content))}</p></section>`)
     .join('\n');

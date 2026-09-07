@@ -119,7 +119,9 @@ function extractArticles() {
     "articlesData6.ts",
     "articlesData7.ts",
   ];
-  const articles = [];
+  const articles = JSON.parse(readFileSync(resolve(ROOT, 'src/content/editorial/articles.json'), 'utf8')).map(article => ({
+    loc: `${SITE_URL}/blogg/${article.slug}`, lastmod: article.updatedDate || article.publishedDate, changefreq: 'monthly', priority: '0.8',
+  }));
 
   for (const file of files) {
     const source = resolve(ROOT, "src/lib", file);

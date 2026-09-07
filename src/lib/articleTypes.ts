@@ -16,6 +16,7 @@ export interface ArticleFAQ {
 }
 
 export interface Article {
+  editorial?: { aiAssisted: boolean; sourceUrls: string[] };
   slug: string;
   title: string;
   metaTitle: string;
