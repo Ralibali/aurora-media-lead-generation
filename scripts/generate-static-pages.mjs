@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs/promises';
 import { renderEditorialArticle } from './editorial-html.mjs';
+import { loadArticles, buildBlogIndexBody } from './article-catalog.mjs';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { buildInstantPreview, setInstantPreview } from './instant-preview.mjs';
@@ -488,30 +489,6 @@ function extractString(block, key) {
   return m ? m[1].replace(/\\n/g, '\n').replace(/\\"/g, '"') : '';
 }
 
-function splitArticleBlocks(text) {
-  const blocks = [];
-  const marker = /\n\s*\{\s*\n\s*slug:\s*"/g;
-  const starts = [];
-  let m;
-  while ((m = marker.exec(text))) starts.push(m.index + 1);
-  for (let i = 0; i < starts.length; i++) {
-    blocks.push(text.slice(starts[i], starts[i + 1] || text.lastIndexOf('\n];')));
-  }
-  return blocks;
-}
-
-function extractSections(block) {
-  const sections = [];
-  const re = /heading:\s*"([\s\S]*?)"[\s\S]*?content:\s*(?:`([\s\S]*?)`|"([\s\S]*?)")/g;
-  let m;
-  while ((m = re.exec(block))) {
-    const heading = (m[1] || '').replace(/\\"/g, '"');
-    const content = (m[2] || m[3] || '').replace(/\\n/g, '\n').replace(/\\"/g, '"');
-    if (heading && content) sections.push({ heading, content });
-  }
-  return sections;
-}
-
 function extractFaq(block) {
   const faq = [];
   const re = /q:\s*"([\s\S]*?)"[\s\S]*?a:\s*"([\s\S]*?)"/g;
@@ -520,42 +497,6 @@ function extractFaq(block) {
     faq.push({ q: m[1].replace(/\\"/g, '"'), a: m[2].replace(/\\"/g, '"') });
   }
   return faq;
-}
-
-function extractArticles() {
-  const files = ['articlesData1.ts', 'articlesData2.ts', 'articlesData3.ts', 'articlesData4.ts', 'articlesData5.ts', 'articlesData6.ts', 'articlesData7.ts'];
-  const articles = JSON.parse(readFileSync(path.join(SRC_LIB_DIR, '../content/editorial/articles.json'), 'utf8'));
-
-  for (const file of files) {
-    const filePath = path.join(SRC_LIB_DIR, file);
-    if (!existsSync(filePath)) continue;
-    const text = readFileSync(filePath, 'utf8');
-    for (const block of splitArticleBlocks(text)) {
-      const slug = extractString(block, 'slug');
-      if (!slug) continue;
-      const article = {
-        slug,
-        keyword: extractString(block, 'keyword'),
-        category: extractString(block, 'category'),
-        title: extractString(block, 'title'),
-        metaTitle: extractString(block, 'metaTitle'),
-        metaDesc: extractString(block, 'metaDesc'),
-        publishedDate: extractString(block, 'publishedDate'),
-        updatedDate: extractString(block, 'updatedDate'),
-        intro: extractString(block, 'intro'),
-        sections: extractSections(block),
-        faq: extractFaq(block),
-      };
-      articles.push(article);
-    }
-  }
-
-  const seen = new Set();
-  return articles.filter((a) => {
-    if (seen.has(a.slug)) return false;
-    seen.add(a.slug);
-    return true;
-  });
 }
 
 function buildArticleBody(article) {
@@ -677,6 +618,29 @@ async function main() {
     inLanguage: 'sv-SE',
   };
 
+  const articles = loadArticles();
+  const blogPage = STATIC_PAGES.find((page) => page.route === '/blogg');
+  if (blogPage) {
+    blogPage.htmlBody = buildBlogIndexBody(articles);
+    blogPage.schemas = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Blogg – Aurora Media',
+        url: `${SITE_URL}/blogg`,
+        mainEntity: {
+          '@type': 'ItemList',
+          itemListElement: articles.map((article, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            url: `${SITE_URL}/blogg/${article.slug}`,
+            name: article.title,
+          })),
+        },
+      },
+    ];
+  }
+
   // Static pages
   for (const page of STATIC_PAGES) {
     const extraSchemas = page.cityName
@@ -773,7 +737,7 @@ async function main() {
 
   // Blog articles
   let articleCount = 0;
-  for (const article of extractArticles()) {
+  for (const article of articles) {
     const route = `/blogg/${article.slug}`;
     const html = injectHtml({
       template,
