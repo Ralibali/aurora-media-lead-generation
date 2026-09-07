@@ -162,7 +162,7 @@ const BlogPost = () => {
                 </h1>
                 <p className="lead">{article.intro}</p>
                 <p className="mono" style={{ marginTop: 22, color: "var(--bone-mute)" }}>
-                  Skriven av Christoffer Holstensson · Aurora Media AB, Linköping
+                  {article.editorial?.aiAssisted ? "AI-assisterad originalguide · Aurora Media AB" : "Skriven av Christoffer Holstensson · Aurora Media AB, Linköping"}
                 </p>
               </header>
 
