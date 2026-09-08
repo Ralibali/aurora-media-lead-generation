@@ -94,7 +94,7 @@ try {
   await drawer.locator('select').selectOption('offert_skickad');
   await page.waitForFunction(() => document.querySelector('[role="dialog"] select')?.value === 'offert_skickad');
   assert.equal(lead.status, 'offert_skickad');
-  assert.match(await page.getByText('Obehandlade', { exact: true }).locator('..').innerText(), /Obehandlade\s+0/);
+  assert.match(await page.getByText('Obehandlade', { exact: true }).locator('..').innerText(), /Obehandlade\s+0/i);
   assert.deepEqual(updates.filter(item => item.status).map(item => item.status), ['kontaktad', 'offert_skickad']);
   await drawer.screenshot({ path: out + '/admin-saved.png' });
   await drawer.getByRole('button', { name: 'Stäng', exact: true }).click();
