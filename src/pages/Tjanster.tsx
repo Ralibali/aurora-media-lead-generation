@@ -1,3 +1,4 @@
+import { PACKAGES } from "@/data/offers";
 import { useEffect } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { SEO } from "@/components/SEO";
@@ -8,7 +9,7 @@ import "@/styles/verkstad.css";
 
 const SERVICES = [
   {
-    num: "01", name: "SaaS-produkt", price: "från 4 900 kr", time: "1–4 veckor",
+    num: "01", name: "SaaS-produkt", price: `Prototyp ${PACKAGES[0].price}`, time: `Prototyp ${PACKAGES[0].time} · MVP ${PACKAGES[1].time}`,
     desc: "Från avgränsad MVP till lansering. Vi planerar inloggning, betalning, e-post och admin utifrån vad produkten behöver. Samma teknik som i våra egna produkter.",
     includes: ["Autentisering och användarhantering", "Betalningsflöde med Stripe", "Admin-panel och dashboards", "E-post och notifikationer", "Hosting och CI/CD-pipeline", "Dokumentation och kodöverlämning"],
   },
@@ -18,12 +19,12 @@ const SERVICES = [
     includes: ["Modern React-arkitektur", "SEO-optimering från grunden", "CMS-integration om önskat", "Responsiv design", "Google Analytics och sökkonsol", "Domän och hosting"],
   },
   {
-    num: "03", name: "Internt system", price: "pris på offert", time: "2–6 veckor",
+    num: "03", name: "Internt system", price: "pris på offert", time: "Efter genomgång",
     desc: "Admin-paneler, dashboards och flöden som ersätter era Excel-arkiv. Ni äger källkoden och kan bygga vidare.",
     includes: ["Admin-paneler skräddarsydda för er", "Databasdesign och API-lager", "Rollbaserad åtkomst", "Rapporter och exportfunktioner", "Integration mot befintliga system", "Driftmiljö och backups"],
   },
   {
-    num: "04", name: "AI-integration", price: "pris på offert", time: "1–3 veckor",
+    num: "04", name: "AI-integration", price: PACKAGES[3].price, time: PACKAGES[3].time,
     desc: "Språkmodeller, agenter och automatiseringar in i era befintliga system. Byggda för att faktiskt fungera i produktion.",
     includes: ["Språkmodell-integration (OpenAI, Anthropic m.fl.)", "Promptdesign och finjustering", "Agent-flöden och automatiseringar", "RAG och kunskapsbaser", "Säker hantering av API-nycklar", "Monitorering och loggning"],
   },
@@ -50,7 +51,7 @@ const Tjanster = () => {
       />
       <div className="verkstad">
         <VkNav />
-        <main>
+        <main id="main">
           {/* Hero */}
           <section className="vk-section vk-hero">
             <div className="vk-wrap">
@@ -102,7 +103,7 @@ const Tjanster = () => {
                   <Reveal delay={0.1}>
                     <div>
                       <p style={{ fontSize: 18, lineHeight: 1.65, color: "#3E444B", marginBottom: 28 }}>{s.desc}</p>
-                      <p className="vk-mono" style={{ marginBottom: 16 }}>Vad ingår</p>
+                      <p className="vk-mono" style={{ marginBottom: 16 }}>Exempel på funktioner</p>
                       <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 12 }}>
                         {s.includes.map((item) => (
                           <li key={item} style={{ display: "flex", alignItems: "flex-start", gap: 12, fontSize: 16, lineHeight: 1.55, color: "var(--granbark)" }}>

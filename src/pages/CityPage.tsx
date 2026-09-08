@@ -178,7 +178,7 @@ export default function CityPage() {
             </Reveal>
           )}
           <div className="feat-list" style={{ marginTop: 0 }}>
-            {paket.map((p: { name: string; features: string[] }, i: number) => (
+            {paket.map((p: { name: string; features: readonly string[] }, i: number) => (
               <Reveal key={p.name} delay={i * 0.05}>
                 <div className="feat-row">
                   <span className="feat-num">{String(i + 1).padStart(2, "0")}</span>

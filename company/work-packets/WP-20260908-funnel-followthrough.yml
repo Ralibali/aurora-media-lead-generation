@@ -1,0 +1,19 @@
+id: WP-20260908-funnel-followthrough
+company: Aurora Media AB
+objective: Preserve tool-to-contact enquiries, align package references and prevent lost admin updates.
+why_now: Owner requested continued improvements after the first release.
+evidence:
+  - 'VERIFIED FACT: contact context has a hidden 500-character validation limit while tools generate longer summaries.'
+  - 'VERIFIED FACT: package component and calculator conflict with the published pricing-page catalogue.'
+  - 'VERIFIED FACT: admin autosave requests can overlap and server update receipts do not confirm a matching row.'
+owner: Christoffer Holstensson
+skill: site-revenue-experiment
+skill_version: '1.0'
+authority: 'COMMIT: continued owner-authorized site and admin improvements; existing authorization to push this work to main. No external messages or purchases.'
+usage_level: focused implementation and verification
+definition_of_done:
+  - Tool context survives contact submission and server storage
+  - One public package catalogue without fabricated calculator prices
+  - Ordered admin updates and explicit notes save with failure recovery
+  - Relevant regression tests, build and desktop/mobile verification pass
+expected_artifact: company/artifacts/experiments/20260908-funnel-followthrough.md

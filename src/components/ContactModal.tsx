@@ -11,8 +11,9 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { getSupabase } from "@/lib/getSupabase";
 import { trackEvent } from "@/lib/analytics";
+import { CONTACT_CONTEXT_MAX } from "../../supabase/functions/_shared/contactLimits";
 
-type OpenOptions = { paket?: string; internalNote?: string };
+type OpenOptions = { paket?: string; internalNote?: string; message?: string };
 type ContactModalCtx = {
   open: (paketOrOptions?: string | OpenOptions, options?: OpenOptions) => void;
 };
@@ -66,7 +67,7 @@ const schema = z.object({
   paket: z.string().trim().max(120).optional().or(z.literal("")),
   platform: z.string().trim().max(40).optional().or(z.literal("")),
   leadLabel: z.string().trim().max(200).optional().or(z.literal("")),
-  internalNote: z.string().trim().max(500).optional().or(z.literal("")),
+  internalNote: z.string().trim().max(CONTACT_CONTEXT_MAX, "Projektunderlaget är för långt").optional().or(z.literal("")),
   message: z
     .string()
     .trim()
@@ -120,6 +121,7 @@ export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [defaultPaket, setDefaultPaket] = useState<string>("");
   const [internalNote, setInternalNote] = useState<string>("");
+  const [initialMessage, setInitialMessage] = useState("");
 
   const open: ContactModalCtx["open"] = (paketOrOptions, options) => {
     let paket = "";
@@ -131,8 +133,11 @@ export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
       paket = paketOrOptions.paket ?? "";
       note = paketOrOptions.internalNote ?? "";
     }
+    const message = typeof paketOrOptions === "object" ? paketOrOptions.message : options?.message;
+    setInitialMessage((message || "").slice(0, 2000));
     setDefaultPaket(paket);
-    setInternalNote(note);
+    setInternalNote(note.slice(0, CONTACT_CONTEXT_MAX));
+    trackEvent("kontakt_open", { paket: paket || "Vet inte", has_context: Boolean(note) });
     setIsOpen(true);
   };
 
@@ -144,6 +149,7 @@ export const ContactModalProvider = ({ children }: { children: ReactNode }) => {
         onOpenChange={setIsOpen}
         defaultPaket={defaultPaket}
         internalNote={internalNote}
+        initialMessage={initialMessage}
       />
     </Ctx.Provider>
   );
@@ -154,11 +160,13 @@ const ContactDialog = ({
   onOpenChange,
   defaultPaket,
   internalNote,
+  initialMessage,
 }: {
   isOpen: boolean;
   onOpenChange: (v: boolean) => void;
   defaultPaket: string;
   internalNote: string;
+  initialMessage: string;
 }) => {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
@@ -207,24 +215,24 @@ const ContactDialog = ({
     if (isOpen) {
       const paket = defaultPaket || "";
       setPaketValue(paket);
-      setMessageValue(buildPrefill(paket));
+      setMessageValue(initialMessage || buildPrefill(paket));
       setMessageTouched(false);
       setPlatformValue("");
       setFieldErrors({});
       setRenderedAt(Date.now());
     }
-  }, [isOpen, defaultPaket]);
+  }, [isOpen, defaultPaket, initialMessage]);
 
   // Uppdatera meddelandet när paketet ändras – men bara om användaren inte börjat redigera
   useEffect(() => {
     if (!messageTouched) {
-      setMessageValue(buildPrefill(paketValue));
+      setMessageValue(initialMessage || buildPrefill(paketValue));
     }
     // Nollställ plattform när paketet inte längre handlar om app
     if (!paketValue.startsWith("Mobilapp") && paketValue !== "Kombination – SaaS + app") {
       setPlatformValue("");
     }
-  }, [paketValue, messageTouched]);
+  }, [paketValue, messageTouched, initialMessage]);
 
   const selectedOption = PAKET_OPTIONS.find((o) => o.value === paketValue);
   const platformOption = PLATFORM_OPTIONS.find((p) => p.value === platformValue);
@@ -237,6 +245,7 @@ const ContactDialog = ({
     if (submitting) return;
     const form = e.currentTarget;
     const data = new FormData(form);
+    trackEvent("kontakt_submit_attempt");
     const parsed = schema.safeParse({
       name: data.get("name"),
       email: data.get("email"),
@@ -250,6 +259,7 @@ const ContactDialog = ({
       website: data.get("website") ?? "",
     });
     if (!parsed.success) {
+      trackEvent("kontakt_validation_error", { fields: [...new Set(parsed.error.issues.map(issue => String(issue.path[0])))].join(",") });
       // Sätt alla fältfel + fokusera första felfält
       const newErrors: Record<string, string> = {};
       parsed.error.issues.forEach((issue) => {
@@ -298,6 +308,7 @@ const ContactDialog = ({
       setPlatformValue("");
     } catch (err) {
       console.error("[ContactModal] submit error", err);
+      trackEvent("kontakt_submit_error");
       toast.error("Kunde inte skicka just nu", {
         description: "Försök igen om en stund eller mejla info@auroramedia.se",
         duration: 8000,
@@ -505,7 +516,7 @@ const ContactDialog = ({
                   <Tag className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
                   <div className="space-y-1">
                     <p className="label-caps text-muted-foreground">Skickas med din förfrågan</p>
-                    <p className="text-foreground/85">{internalNote}</p>
+                    <p className="max-h-48 overflow-y-auto whitespace-pre-line break-words text-foreground/85">{internalNote}</p>
                   </div>
                 </div>
               </div>

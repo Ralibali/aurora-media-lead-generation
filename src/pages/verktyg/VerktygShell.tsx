@@ -68,9 +68,9 @@ export const TOOLS: ToolMeta[] = [
     title: "App-prisräknare",
     seoTitle: "App-prisräknare – vad kostar en app eller SaaS? | Aurora Media",
     description:
-      "Uppskatta priset för app, SaaS eller intern plattform. Välj plattform, funktioner och integrationer och få ett transparent prisintervall och rekommenderat paket.",
+      "Se startpriser för Aurora Medias paket och skapa ett underlag för app, SaaS eller interna verktyg. Välj mål, plattform och funktioner inför en offert.",
     intro:
-      "Konfigurera scope visuellt och se ett rimligt prisintervall baserat på Aurora Medias fasta paket. Ingen offert – bara en snabb fingervisning.",
+      "Välj vad ni vill bygga och se samma startpriser som på prissidan. Funktionsvalen blir ett projektunderlag inför en avgränsad offert.",
     estimatedTime: "≈ 2 min",
     faq: [
       { q: "Är detta en bindande offert?", a: "Nej. Slutpriset sätts efter en kort scope-genomgång och kan avvika beroende på verkliga krav." },
@@ -88,9 +88,9 @@ export const TOOLS: ToolMeta[] = [
       "Ange dagens siffror och en realistisk trafikökning. Kalkylatorn räknar ut potentiell extra omsättning och bruttovinst per månad och år.",
     estimatedTime: "≈ 1 min",
     faq: [
-      { q: "Vad är en rimlig trafikökning?", a: "20–60 % över 6–12 månader är vanligt för aktivt SEO-arbete på en liten sajt." },
+      { q: "Vad är en rimlig trafikökning?", a: "Utgå från er egen historik och prova flera scenarier. En viss trafikökning kan inte förutsägas av kalkylatorn." },
       { q: "Räknas Google Ads in?", a: "Nej, kalkylatorn avser organisk trafik från sökmotorer." },
-      { q: "Hur bör konverteringsgraden sättas?", a: "Använd faktisk siffra från Google Analytics – e-handel ligger ofta 1–3 %, B2B-leads 1–5 %." },
+      { q: "Hur bör konverteringsgraden sättas?", a: "Använd er uppmätta konvertering och skilj mellan köp, förfrågningar och kvalificerade leads. Om data saknas, märk värdet som ett antagande och prova flera nivåer." },
     ],
   },
   {
@@ -119,7 +119,7 @@ export const TOOLS: ToolMeta[] = [
     estimatedTime: "≈ 1 min",
     faq: [
       { q: "Är AI en ersättning för personal?", a: "Nej. Kalkylen visar frigjord kapacitet som kan läggas på mer värdeskapande arbete." },
-      { q: "Vad är rimlig andel automatiserbart?", a: "10–40 % av administrativt/repetitivt arbete är vanligt beroende på roll." },
+      { q: "Vad är rimlig andel automatiserbart?", a: "Bedöm ett konkret arbetsmoment och prova lösningen i liten skala. Andelen beror på datakvalitet, undantag och hur mycket mänsklig kontroll som behövs." },
       { q: "Räknas semester in?", a: "Ja, kalkylen använder 12 månader × månadslön inkl. sociala avgifter." },
     ],
   },
