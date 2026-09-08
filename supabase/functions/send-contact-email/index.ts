@@ -1,3 +1,4 @@
+import { CONTACT_CONTEXT_MAX } from "../_shared/contactLimits.ts";
 // Edge Function: send-contact-email
 // Receives contact form submissions, saves them to the `leads` table,
 // and emails info@auroramedia.se (+ optional internal BCC) via Resend.
@@ -171,7 +172,7 @@ Deno.serve(async (req: Request) => {
     const paket = String(body.paket || "Vet inte").trim().slice(0, 60);
     const platform = String(body.platform ?? "").trim().slice(0, 40);
     const leadLabel = String(body.leadLabel ?? "").trim().slice(0, 160);
-    const internalNote = String(body.internalNote ?? "").trim().slice(0, 500);
+    const internalNote = String(body.internalNote ?? "").trim().slice(0, CONTACT_CONTEXT_MAX);
     const message = String(body.message ?? "").trim().slice(0, 2000);
     const userAgent = req.headers.get("user-agent")?.slice(0, 300) ?? "";
 

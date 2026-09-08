@@ -1,3 +1,4 @@
+import { LEAD_NOTES_MAX, LEAD_SOURCES, validLeadId, validFollowupDate } from "../_shared/leadValidation.ts";
 // Edge Function: list-leads
 // Unified admin API för lead-hantering. Skyddad med FAQ_ANALYTICS_PASSWORD (Bearer).
 // Actions (POST): list | detail | update | delete
@@ -80,7 +81,11 @@ Deno.serve(async (req: Request) => {
           })
         : { action: "list" as const };
 
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "Invalid request" }, 400);
     const action = body.action ?? "list";
+    if (["detail", "update", "delete"].includes(action) && (!validLeadId(body.id) || !LEAD_SOURCES.has(body.source ?? ""))) {
+      return json({ error: "Invalid id/source" }, 400);
+    }
 
     // ─────────────────────────── LIST ───────────────────────────
     if (action === "list") {
@@ -240,20 +245,29 @@ Deno.serve(async (req: Request) => {
         if (!ALLOWED_STATUS.has(body.status)) return json({ error: "Invalid status" }, 400);
         patch.status = body.status;
       }
-      if (body.notes !== undefined) patch.notes = body.notes;
-      if (body.followup_at !== undefined) patch.followup_at = body.followup_at || null;
+      if (body.notes !== undefined) {
+        if (body.notes !== null && (typeof body.notes !== "string" || body.notes.length > LEAD_NOTES_MAX)) return json({ error: "Invalid notes" }, 400);
+        patch.notes = body.notes;
+      }
+      if (body.followup_at !== undefined) {
+        if (!validFollowupDate(body.followup_at)) return json({ error: "Invalid followup date" }, 400);
+        patch.followup_at = body.followup_at || null;
+      }
       if (Object.keys(patch).length === 0) return json({ error: "Nothing to update" }, 400);
-      const { error } = await admin.from(tableFor(body.source)).update(patch).eq("id", body.id);
+      const { data: lead, error } = await admin.from(tableFor(body.source)).update(patch).eq("id", body.id).select("id, status, notes, followup_at").maybeSingle();
       if (error) throw error;
-      return json({ ok: true });
+      if (!lead) return json({ error: "Lead not found" }, 404);
+      return json({ ok: true, lead });
     }
 
     // ─────────────────────────── DELETE ───────────────────────────
     if (action === "delete") {
       if (!body.id || !body.source) return json({ error: "Missing id/source" }, 400);
       if (body.source === "karta") {
-        await admin.from("ai_map_email_sequence").delete().eq("lead_id", body.id);
-        await admin.from("ai_map_processes").delete().eq("lead_id", body.id);
+        const { error: sequenceError } = await admin.from("ai_map_email_sequence").delete().eq("lead_id", body.id);
+        if (sequenceError) throw sequenceError;
+        const { error: processError } = await admin.from("ai_map_processes").delete().eq("lead_id", body.id);
+        if (processError) throw processError;
       }
       const { error } = await admin.from(tableFor(body.source)).delete().eq("id", body.id);
       if (error) throw error;

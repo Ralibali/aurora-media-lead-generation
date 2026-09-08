@@ -14,7 +14,7 @@ async function handler(name: string, client: unknown, environment: Record<string
   vi.stubGlobal("__auroraTestClient", client);
   vi.stubGlobal("Deno", { env: { get: (key: string) => ({ SUPABASE_URL: "https://local.invalid", SUPABASE_SERVICE_ROLE_KEY: "local-test-key", ...environment })[key] }, serve: (fn: typeof serve) => { serve = fn; } });
   await import(/* @vite-ignore */ `data:text/javascript;base64,${Buffer.from(compiled.outputFiles[0].text).toString("base64")}#${Math.random()}`);
-  return (body: unknown) => serve(new Request("https://local.invalid/function", { method: "POST", headers: { "Content-Type": "application/json", origin: "https://auroramedia.se", "x-forwarded-for": "local-test" }, body: JSON.stringify(body) }));
+  return (body: unknown, headers: Record<string, string> = {}) => serve(new Request("https://local.invalid/function", { method: "POST", headers: { "Content-Type": "application/json", origin: "https://auroramedia.se", "x-forwarded-for": "local-test", ...headers }, body: JSON.stringify(body) }));
 }
 beforeEach(() => { vi.spyOn(console, "error").mockImplementation(() => {}); });
 afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
@@ -78,4 +78,47 @@ describe("AI map handler integrity", () => {
     expect(cleanup).toHaveBeenCalledWith("id", "incomplete-map");
   });
 
+});
+
+describe("admin write receipts", () => {
+  const id = "00000000-0000-4000-8000-000000000001";
+  const headers = { authorization: "Bearer local-admin" };
+  const environment = { FAQ_ANALYTICS_PASSWORD: "local-admin" };
+  it("rejects unknown sources, malformed dates and oversized notes before a write", async () => {
+    const from = vi.fn();
+    const submit = await handler("list-leads", { from }, environment);
+    for (const patch of [{ source: "unknown", notes: "test" }, { followup_at: "2026-02-30" }, { followup_at: "tomorrow" }, { notes: "a".repeat(2001) }]) {
+      const response = await submit({ action: "update", id, source: "kontakt", ...patch }, headers);
+      expect(response.status).toBe(400);
+    }
+    expect(from).not.toHaveBeenCalled();
+  });
+  it("does not confirm an update when no matching record exists", async () => {
+    const chain = { update: () => chain, eq: () => chain, select: () => chain, maybeSingle: async () => ({ data: null }) };
+    const submit = await handler("list-leads", { from: () => chain }, environment);
+    const response = await submit({ action: "update", id, source: "kontakt", notes: "Nästa steg" }, headers);
+    expect(response.status).toBe(404);
+    expect((await response.json()).ok).not.toBe(true);
+  });
+  it("returns the stored record after a successful update", async () => {
+    const saved = { id, status: "kontaktad", notes: "Nästa steg", followup_at: "2026-09-12" };
+    const update = vi.fn(() => chain);
+    const chain = { update, eq: () => chain, select: () => chain, maybeSingle: async () => ({ data: saved }) };
+    const submit = await handler("list-leads", { from: () => chain }, environment);
+    const response = await submit({ action: "update", source: "kontakt", ...saved }, headers);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true, lead: saved });
+    expect(update).toHaveBeenCalledWith({ status: "kontaktad", notes: "Nästa steg", followup_at: "2026-09-12" });
+  });
+});
+describe("tool context receipt", () => {
+  it("persists project context longer than the former hidden 500-character limit", async () => {
+    const note = "Behov och funktionsval från verktyget. ".repeat(35);
+    const insert = vi.fn(() => chain);
+    const chain = { select: () => chain, eq: () => chain, gte: () => chain, limit: async () => ({ data: [] }), insert, single: async () => ({ data: { id: "local-lead" } }) };
+    const submit = await handler("send-contact-email", { rpc: async () => ({ data: true }), from: () => chain });
+    const response = await submit({ ...contact, internalNote: note });
+    expect(response.status).toBe(200);
+    expect(insert).toHaveBeenCalledWith(expect.objectContaining({ internal_note: note.trim() }));
+  });
 });

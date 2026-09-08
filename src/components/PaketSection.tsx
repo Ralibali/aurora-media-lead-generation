@@ -1,88 +1,15 @@
+import { PACKAGES } from "@/data/offers";
 import { Check, ArrowUpRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useContactModal } from "@/components/ContactModal";
 
-export const paket = [
-  {
-    id: "Prototyp",
-    number: "01",
-    name: "Prototyp",
-    price: "Offert efter behov",
-    priceFrom: "Pris",
-    priceAmount: "Rimlig offert",
-    priceCurrency: "",
-    time: "2–3 arbetsdagar · Snabb start",
-    desc: "Klickbar prototyp. Perfekt när du vill se idén på riktigt innan du investerar stort.",
-    features: [
-      "Responsiv design, mobil + desktop",
-      "Riktig data — inte bara mockup",
-      "Deployment på din domän",
-      "En veckas support",
-    ],
-    cta: "Be om offert",
-    featured: false,
-  },
-  {
-    id: "MVP",
-    number: "02",
-    name: "MVP",
-    price: "Offert efter behov",
-    priceFrom: "Pris",
-    priceAmount: "Du blir inte besviken",
-    priceCurrency: "",
-    time: "5–10 arbetsdagar · Lanseringsfokus",
-    desc: "Första riktiga versionen. Login, betalningar, databas och det viktigaste som krävs för lansering.",
-    features: [
-      "Allt i Prototyp",
-      "Användarlogin & roller",
-      "Stripe-betalningar",
-      "Admin-dashboard",
-      "Två veckors support",
-    ],
-    cta: "Få ett förslag",
-    featured: true,
-  },
-  {
-    id: "SaaS",
-    number: "03",
-    name: "Skalbar SaaS",
-    price: "Offert efter behov",
-    priceFrom: "Pris",
-    priceAmount: "Anpassas efter omfattning",
-    priceCurrency: "",
-    time: "2–3 veckor · Tydlig plan",
-    desc: "Komplett app redo för betalande kunder. Vi bygger det som skapar värde först och skalar därifrån.",
-    features: [
-      "Allt i MVP",
-      "Avancerad analys",
-      "Integrationer vid behov",
-      "SEO-grund från start",
-      "En månads support",
-    ],
-    cta: "Boka genomgång",
-    featured: false,
-  },
-  {
-    id: "Skraddarsytt",
-    number: "04",
-    name: "Skräddarsytt",
-    price: "Offert efter behov",
-    priceFrom: "Pris",
-    priceAmount: "Efter genomgång",
-    priceCurrency: "",
-    time: "3–6 veckor · Offert",
-    desc: "Större projekt med specifika krav. Vi definierar omfattningen tillsammans innan du bestämmer dig.",
-    features: [
-      "Custom integrationer",
-      "Multi-tenant arkitektur",
-      "Säkerhetskrav och GDPR",
-      "Större datamängder",
-    ],
-    cta: "Boka samtal",
-    featured: false,
-  },
-];
+export const paket = PACKAGES.map((offer) => ({
+  id: offer.modalValue, number: offer.num, name: offer.name,
+  price: offer.price, priceFrom: "Från", priceAmount: new Intl.NumberFormat("sv-SE").format(offer.priceFrom),
+  priceCurrency: "kr", time: offer.time, desc: offer.desc, features: offer.features,
+  cta: "Få en avgränsad offert", featured: offer.featured ?? false,
+}));
 
 const PaketSection = () => {
   const { open } = useContactModal();
@@ -104,7 +31,7 @@ const PaketSection = () => {
             <span className="italic text-primary">Rimlig offert.</span>
           </h2>
           <p className="mt-6 text-lg text-muted-foreground">
-            Jag visar inte fasta prislappar här eftersom varje projekt ser olika ut. Men målet är enkelt: du ska få en tydlig offert, en snabb väg framåt och känna att värdet är större än kostnaden.
+            Samma paket och startpriser som på prissidan. Exakt omfattning, leverans och pris bestäms i offerten. Tidsangivelserna är planeringsintervall.
           </p>
         </motion.div>
 
@@ -134,7 +61,7 @@ const PaketSection = () => {
                   className="absolute -right-2 top-4 z-10 rotate-[3deg] rounded-sm bg-primary px-3 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-primary-foreground shadow-lg"
                   aria-hidden
                 >
-                  Populärast
+                  För en första lansering
                 </div>
               )}
 

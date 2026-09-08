@@ -77,14 +77,11 @@ resources:
     - npm run typecheck
     - npm run test
     - npm run build
-  deployment: UNKNOWN
-  analytics: UNKNOWN
-  crm: UNKNOWN
-  pricing: UNKNOWN
+  deployment: "GitHub main syncs to Lovable project 2327e44d-6ed4-4f0f-bc14-f8f5fabd7c91. Publishing and Edge Function versions must be verified separately."
+  analytics: "Lovable Analytics aggregate traffic; Plausible event wrapper in src/lib/analytics.ts. Baseline in company/artifacts/experiments/20260908-customer-journey.md."
+  crm: "Lovable-managed Supabase cyymcdqkpvcvwjoqxbco: leads, ai_map_leads, genomlysning_leads; unified admin through list-leads."
+  pricing: "Public package names, starting prices and planning intervals: src/data/offers.ts. Exact scope remains a written quote."
   needs_decision:
-    - current commercial pricing and packaging
-    - current deployment source of truth
-    - current CRM/lead pipeline source
     - measurable 30-day revenue target
 
 standards:

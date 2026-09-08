@@ -1,3 +1,5 @@
+import { createSerialTaskQueue } from "@/lib/serialTaskQueue";
+import { LEAD_NOTES_MAX } from "../../../supabase/functions/_shared/leadValidation";
 import { useSearchParams } from "react-router-dom";
 import AdminShell, { adminFetch } from "./AdminShell";
 import { csvCell, needsFollowup, pipelineSummary } from "@/lib/leadPipeline";
@@ -25,7 +27,7 @@ import "@/styles/verkstad.css";
 const STORAGE_KEY = "faq_analytics_pwd";
 const FUNCTION_URL = "list-leads";
 const RESEND_URL = "resend-ai-map-email";
-const NOTES_MAX = 2000;
+const NOTES_MAX = LEAD_NOTES_MAX;
 
 function useIsMobile(bp = 720) {
   const [m, setM] = useState(() => (typeof window !== "undefined" ? window.innerWidth < bp : false));
@@ -143,6 +145,8 @@ const Leads = () => {
   const [openId, setOpenId] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ processes: Process[] } | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const detailRequest = useRef(0);
+  const enqueueUpdate = useRef(createSerialTaskQueue());
 
 
   useEffect(() => {
@@ -178,6 +182,8 @@ const Leads = () => {
   }, []);
 
   const openDetail = async (lead: Lead) => {
+    const request = ++detailRequest.current;
+    setDetailLoading(false);
     setOpenId(lead.id);
     setDetail(null);
     if (lead.source !== "karta") return;
@@ -187,11 +193,11 @@ const Leads = () => {
         method: "POST",
         body: JSON.stringify({ action: "detail", source: "karta", id: lead.id }),
       });
-      setDetail({ processes: json.processes ?? [] });
+      if (request === detailRequest.current) setDetail({ processes: json.processes ?? [] });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Kunde inte hämta detaljer");
+      if (request === detailRequest.current) toast.error(e instanceof Error ? e.message : "Kunde inte hämta detaljer");
     } finally {
-      setDetailLoading(false);
+      if (request === detailRequest.current) setDetailLoading(false);
     }
   };
 
@@ -199,17 +205,18 @@ const Leads = () => {
     lead: Lead,
     patch: { status?: Status; notes?: string | null; followup_at?: string | null }
   ) => {
-    // optimistisk uppdatering
-    setLeads((prev) => prev.map((l) => (l.id === lead.id ? { ...l, ...patch } : l)));
     try {
-      await call({
-        method: "POST",
-        body: JSON.stringify({ action: "update", id: lead.id, source: lead.source, ...patch }),
+      await enqueueUpdate.current(`${lead.source}:${lead.id}`, async () => {
+        const json = await call({
+          method: "POST",
+          body: JSON.stringify({ action: "update", id: lead.id, source: lead.source, ...patch }),
+        });
+        if (json.ok !== true || json.lead?.id !== lead.id) throw new Error("Servern bekräftade inte ändringen.");
+        setLeads((prev) => prev.map((item) => item.id === lead.id && item.source === lead.source ? { ...item, ...json.lead } : item));
       });
-    } catch (e) {
-      toast.error("Kunde inte spara");
-      fetchLeads();
-      throw e;
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Kunde inte spara");
+      throw error;
     }
   };
 
@@ -365,8 +372,8 @@ const Leads = () => {
               }}
             >
               {[
-                { label: "Nya denna vecka", val: stats.new_this_week },
-                { label: "Obehandlade", val: stats.unhandled },
+                { label: "Nya senaste 7 dagarna", val: leads.filter(lead => new Date(lead.created_at).getTime() >= Date.now() - 7 * 86400000).length },
+                { label: "Obehandlade", val: pipeline.unhandled },
                 { label: "Möten bokade", val: pipeline.meetings },
                 { label: "Kunder", val: pipeline.customers },
               ].map((s) => (
@@ -593,7 +600,7 @@ const Leads = () => {
                 Inga leads matchar filtret.
               </div>
             ) : (
-              filtered.map((l) => <LeadRow key={l.id} lead={l} onOpen={() => openDetail(l)} onStatus={(s) => patchLead(l, { status: s })} />)
+              filtered.map((l) => <LeadRow key={l.id} lead={l} onOpen={() => openDetail(l)} onStatus={(s) => { void patchLead(l, { status: s }).catch(() => {}); }} />)
             )}
           </div>
         </div>
@@ -601,10 +608,11 @@ const Leads = () => {
 
       {openLead && (
         <DetailDrawer
+          key={`${openLead.source}:${openLead.id}`}
           lead={openLead}
           processes={detail?.processes ?? []}
           loading={detailLoading}
-          onClose={() => setOpenId(null)}
+          onClose={() => { detailRequest.current++; setOpenId(null); }}
           onPatch={(patch) => patchLead(openLead, patch)}
           onDelete={() => deleteLead(openLead)}
           onResendMap={async () => {
@@ -874,32 +882,46 @@ const DetailDrawer = ({
   const [notes, setNotes] = useState(lead.notes ?? "");
   const [followup, setFollowup] = useState(lead.followup_at ?? "");
   const [notesSaving, setNotesSaving] = useState(false);
-  const notesTimer = useRef<number | null>(null);
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const [savedNotes, setSavedNotes] = useState(lead.notes ?? "");
+  const [showCloseWarning, setShowCloseWarning] = useState(false);
+  const [followupSaving, setFollowupSaving] = useState(false);
+  const today = new Date();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
   const notesOver = notes.length > NOTES_MAX;
+  const notesDirty = notes !== savedNotes;
   const followupPast = !!(followup && followup < todayStr);
 
   useEffect(() => {
-    setNotes(lead.notes ?? "");
-    setFollowup(lead.followup_at ?? "");
-  }, [lead.id]);
+    if (!notesDirty) return;
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ""; };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [notesDirty]);
 
-  const scheduleNotesSave = (val: string) => {
-    setNotes(val);
-    if (val.length > NOTES_MAX) return; // don't autosave over-limit content
-    if (notesTimer.current) window.clearTimeout(notesTimer.current);
+  const saveNotes = async (closeAfter = false) => {
+    if (notesSaving || notesOver) return;
+    const value = notes;
     setNotesSaving(true);
-    notesTimer.current = window.setTimeout(() => {
-      onPatch({ notes: val || null })
-        .then(() => toast.success("Anteckning sparad", { duration: 1200 }))
-        .catch(() => {})
-        .finally(() => setNotesSaving(false));
-    }, 800);
+    try {
+      await onPatch({ notes: value || null });
+      setSavedNotes(value);
+      setShowCloseWarning(false);
+      toast.success("Anteckning sparad", { duration: 1200 });
+      if (closeAfter) onClose();
+    } catch { /* Keep the draft visible so the user can retry. */ }
+    finally { setNotesSaving(false); }
   };
-
-  const setFollowupAndSave = (val: string) => {
-    setFollowup(val);
-    onPatch({ followup_at: val || null });
+  const requestClose = () => {
+    if (notesSaving) return;
+    if (notesDirty) setShowCloseWarning(true);
+    else onClose();
+  };
+  const setFollowupAndSave = async (value: string) => {
+    const previous = followup;
+    setFollowup(value); setFollowupSaving(true);
+    try { await onPatch({ followup_at: value || null }); }
+    catch { setFollowup(previous); }
+    finally { setFollowupSaving(false); }
   };
 
 
@@ -913,13 +935,15 @@ const DetailDrawer = ({
     <div
       role="dialog"
       aria-modal="true"
+      aria-labelledby="lead-detail-title"
+      onKeyDown={(event) => { if (event.key === "Escape") { event.stopPropagation(); requestClose(); } }}
       style={{
         position: "fixed", inset: 0, zIndex: 60,
         display: "flex", justifyContent: "flex-end",
       }}
     >
       <div
-        onClick={onClose}
+        onClick={requestClose}
         style={{ position: "absolute", inset: 0, background: "rgba(20,23,26,.5)" }}
       />
       <aside
@@ -937,7 +961,7 @@ const DetailDrawer = ({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
           <SourceBadge source={lead.source} />
           <button
-            onClick={onClose}
+            onClick={requestClose}
             aria-label="Stäng"
             style={{ background: "transparent", border: 0, cursor: "pointer", padding: 4 }}
           >
@@ -945,7 +969,7 @@ const DetailDrawer = ({
           </button>
         </div>
 
-        <h2 style={{ marginTop: 16, fontSize: isMobile ? 22 : 28, lineHeight: 1.2, wordBreak: "break-word" }}>{lead.name}</h2>
+        <h2 id="lead-detail-title" style={{ marginTop: 16, fontSize: isMobile ? 22 : 28, lineHeight: 1.2, wordBreak: "break-word" }}>{lead.name}</h2>
         {lead.company && (
           <p style={{ margin: "4px 0 0", color: "var(--granbark-mut)" }}>{lead.company}</p>
         )}
@@ -989,13 +1013,14 @@ const DetailDrawer = ({
         {/* Status + followup */}
         <div style={{ marginTop: 24, display: "grid", gap: 14, gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr" }}>
           <Field label="Status">
-            <StatusSelect value={lead.status} onChange={(s) => onPatch({ status: s })} />
+            <StatusSelect value={lead.status} onChange={(s) => { void onPatch({ status: s }).catch(() => {}); }} />
           </Field>
           <Field label="Följ upp">
             <input
               type="date"
               value={followup}
-              onChange={(e) => setFollowupAndSave(e.target.value)}
+              onChange={(e) => { void setFollowupAndSave(e.target.value); }}
+              disabled={followupSaving}
               aria-describedby={followupPast ? "followup-warn" : undefined}
               style={{
                 width: "100%",
@@ -1085,6 +1110,14 @@ const DetailDrawer = ({
           </section>
         )}
 
+        {showCloseWarning && <div role="alert" style={{ padding: 18, marginTop: 24, border: "1px solid var(--varsel)", borderRadius: 10, background: "#fff" }}>
+          <strong>Du har osparade anteckningar</strong><p style={{ marginBlock: 10 }}>Spara dem innan du stänger, eller välj att kasta ändringarna.</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <button className="vk-btn vk-btn-primary" disabled={notesSaving || notesOver} onClick={() => void saveNotes(true)}>Spara och stäng</button>
+            <button className="vk-btn vk-btn-ghost" disabled={notesSaving} onClick={onClose}>Stäng utan att spara</button>
+            <button className="vk-btn vk-btn-ghost" onClick={() => setShowCloseWarning(false)}>Fortsätt redigera</button>
+          </div>
+        </div>}
         {/* Anteckningar */}
         <section style={{ marginTop: 28 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
@@ -1102,8 +1135,9 @@ const DetailDrawer = ({
           </div>
           <textarea
             value={notes}
-            onChange={(e) => scheduleNotesSave(e.target.value)}
-            placeholder="Sparas automatiskt…"
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Nästa steg, behov och vad ni kom överens om…"
+            disabled={notesSaving}
             rows={6}
             maxLength={NOTES_MAX + 200}
             aria-invalid={notesOver || undefined}
@@ -1121,9 +1155,13 @@ const DetailDrawer = ({
               resize: "vertical",
             }}
           />
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginTop: 10 }}>
+            <button className="vk-btn vk-btn-primary" disabled={!notesDirty || notesSaving || notesOver} onClick={() => void saveNotes()}>{notesSaving ? "Sparar…" : "Spara anteckning"}</button>
+            <span role="status" style={{ fontSize: 12, color: "var(--granbark-mut)" }}>{notesDirty ? "Osparade ändringar" : "Sparat"}</span>
+          </div>
           {notesOver && (
             <p id="notes-err" role="alert" style={{ margin: "6px 0 0", fontSize: 12, color: "var(--varsel-hover)", display: "flex", alignItems: "center", gap: 6 }}>
-              <AlertCircle size={12} /> Max {NOTES_MAX} tecken — korta ner texten för att spara automatiskt.
+              <AlertCircle size={12} /> Max {NOTES_MAX} tecken — korta ner texten för att spara.
             </p>
           )}
         </section>

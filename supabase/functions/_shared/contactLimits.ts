@@ -1,0 +1,1 @@
+export const CONTACT_CONTEXT_MAX = 5000;
