@@ -4,6 +4,7 @@
 // kostar och hur snabbt det betalar sig. Byggs som jsPDF-dokument så att
 // samma fil både kan laddas ner och mejlas som bilaga.
 import { jsPDF } from "jspdf";
+import { HOURLY_RATE, WEEKS_PER_MONTH, estimatedPayback } from "@/lib/aiMapEstimates";
 import {
   AiMapResult,
   ScoredProcess,
@@ -30,8 +31,7 @@ const PAGE_H = 297;
 const MARGIN = 18;
 const CONTENT_W = PAGE_W - MARGIN * 2;
 
-const HOURLY_RATE = 600;
-const WEEKS_PER_MONTH = 4.33;
+
 
 type RGB = readonly number[];
 const rgb = (c: RGB) => c as unknown as [number, number, number];
@@ -87,12 +87,6 @@ function hoursPerWeek(p: ScoredProcess): number {
 
 function costPerMonth(p: ScoredProcess): number {
   return Math.round(hoursPerWeek(p) * WEEKS_PER_MONTH * HOURLY_RATE);
-}
-
-function paybackMonths(p: ScoredProcess): number | null {
-  const monthly = costPerMonth(p);
-  if (monthly <= 0) return null;
-  return Math.max(1, Math.round(TIERS[tierForProcess(p)].price / monthly));
 }
 
 function ensureSpace(doc: jsPDF, cur: Cursor, needed: number, company: string) {
@@ -204,9 +198,9 @@ function coverPage(doc: jsPDF, result: AiMapResult, company: string) {
   const h = 30;
   const y0 = ty + 6;
   const stats: { label: string; value: string; accent: RGB }[] = [
-    { label: "Tid som går åt / vecka", value: `${Math.round(totalW * 10) / 10} h`, accent: INK },
-    { label: "Kostnad / månad", value: fmtKr(krMonth), accent: ORANGE },
-    { label: "Kostnad / år", value: fmtKr(krYear), accent: GREEN },
+    { label: "Möjlig frigjord tid / vecka", value: `${Math.round(totalW * 10) / 10} h`, accent: INK },
+    { label: "Tidsvärde / månad", value: fmtKr(krMonth), accent: ORANGE },
+    { label: "Tidsvärde / år", value: fmtKr(krYear), accent: GREEN },
   ];
   stats.forEach((s, i) => {
     const x = MARGIN + i * (w + gap);
@@ -227,16 +221,16 @@ function coverPage(doc: jsPDF, result: AiMapResult, company: string) {
   const cur: Cursor = { y: y0 + h + 12 };
   const intro = result.ai_analysis?.executive_summary
     ? result.ai_analysis.executive_summary
-    : `Ni har kartlagt ${result.processes.length} ${result.processes.length === 1 ? "process" : "processer"} hos ${company}. Tillsammans binder de ungefär ${Math.round(totalW * 10) / 10} timmar i veckan – motsvarande ${fmtKr(krMonth)} i månaden räknat på ${HOURLY_RATE} kr/h. I den här rapporten ser ni vad varje process kostar, vilken som bör automatiseras först och vad ett första bygge kostar.`;
+    : `Ni har kartlagt ${result.processes.length} ${result.processes.length === 1 ? "process" : "processer"} hos ${company}. Modellen uppskattar möjlig frigjord tid till ${Math.round(totalW * 10) / 10} timmar i veckan – motsvarande ${fmtKr(krMonth)} i månaden räknat på ${HOURLY_RATE} kr/h. Detta är ett scenario, inte en uppmätt besparing. Pris och omfattning kräver offert.`;
   paragraph(doc, cur, intro, company, { size: 11, lineH: 5.6 });
 
   // "Så läser du kartan"
   cur.y += 4;
   const guideW = (CONTENT_W - 10) / 3;
   const guide: { n: string; t: string }[] = [
-    { n: "01", t: "Se vad processerna kostar idag – i timmar och kronor." },
-    { n: "02", t: "Välj första bygget utifrån återbetalningstid." },
-    { n: "03", t: "Boka 20 min – vi pekar ut exakt första steget." },
+    { n: "01", t: "Se uppskattad möjlig tidsvinst och dess schablonvärde." },
+    { n: "02", t: "Välj en pilot och kontrollera antagandena." },
+    { n: "03", t: "Boka en genomgång av ert första steg." },
   ];
   guide.forEach((g, i) => {
     const x = MARGIN + i * (guideW + 5);
@@ -257,7 +251,7 @@ function coverPage(doc: jsPDF, result: AiMapResult, company: string) {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(...rgb(MUTED));
-  doc.text(pdfSafe(`Räknat på ${HOURLY_RATE} kr/h intern arbetstid och 4,3 veckor per månad. Kartan är gratis och er att behålla.`), MARGIN, PAGE_H - 26, { align: "left" });
+  doc.text(pdfSafe(`Räknat på ${HOURLY_RATE} kr/h intern arbetstid och 46 arbetsveckor per år. Kartan är gratis och er att behålla.`), MARGIN, PAGE_H - 26, { align: "left" });
 }
 
 // ---------- SIDA 2: KOSTNAD IDAG (STAPELGRAF) ----------
@@ -269,9 +263,9 @@ function costChartPage(doc: jsPDF, result: AiMapResult, company: string) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(19);
   doc.setTextColor(...rgb(INK));
-  doc.text("Vad det kostar er idag", MARGIN, cur.y);
+  doc.text("Möjligt tidsvärde – modellens uppskattning", MARGIN, cur.y);
   cur.y += 8;
-  paragraph(doc, cur, `Processerna rankade efter månadskostnad – intern tid omräknad till ${HOURLY_RATE} kr/h.`, company, { color: MUTED, size: 10 });
+  paragraph(doc, cur, `Processerna rankade efter möjligt tidsvärde per månad, räknat på ${HOURLY_RATE} kr/h.`, company, { color: MUTED, size: 10 });
   cur.y += 2;
 
   const ranked = [...result.processes]
@@ -314,7 +308,7 @@ function costChartPage(doc: jsPDF, result: AiMapResult, company: string) {
   });
 
   if (ranked.length === 0) {
-    paragraph(doc, cur, "Ingen tidsuppskattning angavs – kostnaden kan inte räknas ut per process.", company, { color: MUTED });
+    paragraph(doc, cur, "Ingen tidsuppskattning angavs. Tidsvärdet kan inte beräknas per process.", company, { color: MUTED });
   }
 
   // Topp-3 tabell
@@ -327,8 +321,6 @@ function costChartPage(doc: jsPDF, result: AiMapResult, company: string) {
   cur.y += 6;
 
   result.top3.forEach((p, i) => {
-    const tier = tierForProcess(p);
-    const pb = paybackMonths(p);
     const rowH2 = 13;
     ensureSpace(doc, cur, rowH2, company);
     doc.setFillColor(...rgb(CARD));
@@ -350,11 +342,11 @@ function costChartPage(doc: jsPDF, result: AiMapResult, company: string) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
     doc.setTextColor(...rgb(MUTED));
-    doc.text(pdfSafe(`${TIERS[tier].label} · ${TIERS[tier].priceLabel}`), MARGIN + 92, cur.y + rowH2 / 2 + 1.8);
+    doc.text(pdfSafe(`${p.score}/16 poäng`), MARGIN + 92, cur.y + rowH2 / 2 + 1.8);
     // återbetalning
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...rgb(GREEN));
-    doc.text(pb ? pdfSafe(`betalar sig på ~${pb} mån`) : "–", PAGE_W - MARGIN - 5, cur.y + rowH2 / 2 + 1.8, { align: "right" });
+    doc.text(pdfSafe(p.potential), PAGE_W - MARGIN - 5, cur.y + rowH2 / 2 + 1.8, { align: "right" });
     cur.y += rowH2 + 3;
   });
 }
@@ -378,7 +370,6 @@ function processCardsPage(doc: jsPDF, result: AiMapResult, company: string) {
     const tier = tierForProcess(p);
     const tierMeta = TIERS[tier];
     const monthly = costPerMonth(p);
-    const pb = paybackMonths(p);
     const aiCase = findCase(p.process_name);
 
     // Kortets höjd uppskattas löpande – börja på ny sida om det inte rymmer grunden
@@ -396,7 +387,7 @@ function processCardsPage(doc: jsPDF, result: AiMapResult, company: string) {
     doc.text(doc.splitTextToSize(pdfSafe(`#${i + 1}  ${p.process_name}`), CONTENT_W - 60), MARGIN + 6, cardY + 6);
     // Nivå-chip
     doc.setFontSize(8);
-    const chipText = pdfSafe(`${tierMeta.label} · ${tierMeta.priceLabel}`);
+    const chipText = pdfSafe("Pris kräver avgränsning");
     const chipW = doc.getTextWidth(chipText) + 8;
     doc.setFillColor(...rgb(INK));
     doc.roundedRect(PAGE_W - MARGIN - chipW, cardY, chipW, 7, 3.5, 3.5, "F");
@@ -408,8 +399,7 @@ function processCardsPage(doc: jsPDF, result: AiMapResult, company: string) {
     // Pengarad
     if (monthly > 0) {
       doc.setFillColor(...rgb(ORANGE_SOFT));
-      const pbText = pb ? ` · betalar sig på ~${pb} mån` : "";
-      const moneyText = pdfSafe(`Kostar idag ~${fmtKr(monthly)}/mån (${hoursPerWeek(p)} h/vecka × ${HOURLY_RATE} kr)${pbText}`);
+      const moneyText = pdfSafe(`Möjligt tidsvärde ~${fmtKr(monthly)}/mån (${hoursPerWeek(p)} h/vecka, schablon)`);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.6);
       const mw = Math.min(CONTENT_W, doc.getTextWidth(moneyText) + 10);
@@ -446,7 +436,7 @@ function processCardsPage(doc: jsPDF, result: AiMapResult, company: string) {
 // ---------- SIDA 4: FÖRSTA BYGGET ----------
 const TIER_BUILD: Record<TierKey, { title: string; includes: string[] }> = {
   prototyp: {
-    title: "Prototyp – bevisa värdet på 1–2 veckor",
+    title: "Prototyp – gör arbetsflödet testbart",
     includes: [
       "Klickbar/testbar version av flödet på era riktiga exempel",
       "Mätning av tidsbesparing mot dagens arbetssätt",
@@ -477,13 +467,12 @@ function buildPlanPage(doc: jsPDF, result: AiMapResult, company: string) {
   const tier = tierForProcess(top);
   const tierMeta = TIERS[tier];
   const plan = TIER_BUILD[tier];
-  const pb = paybackMonths(top);
 
   doc.addPage();
   const cur: Cursor = { y: 0 };
   addPageHeader(doc, cur, company);
 
-  monoLabel(doc, "Rekommenderat första bygge", MARGIN, cur.y, ORANGE);
+  monoLabel(doc, "Förslag att diskutera", MARGIN, cur.y, ORANGE);
   cur.y += 8;
   doc.setFont("helvetica", "bold");
   doc.setFontSize(19);
@@ -503,11 +492,11 @@ function buildPlanPage(doc: jsPDF, result: AiMapResult, company: string) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.setTextColor(...rgb(GREEN));
-  doc.text(pdfSafe(`${tierMeta.label} · Fast pris ${tierMeta.priceLabel}`), MARGIN + 6, cur.y + 9);
+  doc.text(pdfSafe(`Exempel på första steg: ${tierMeta.label.toLowerCase()} ${tierMeta.priceLabel} exkl. moms`), MARGIN + 6, cur.y + 9);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(...rgb(INK));
-  doc.text(pdfSafe(pb ? `Återbetalning på ~${pb} mån – sedan är besparingen er varje månad.` : "Fast pris – exakt omfattning sätts före start."), MARGIN + 6, cur.y + 16);
+  doc.text(pdfSafe("Pris och genomförbarhet bedöms efter genomgång. Ingen besparing garanteras."), MARGIN + 6, cur.y + 16);
   cur.y += 30;
 
   // Vad som byggs
@@ -527,14 +516,14 @@ function buildPlanPage(doc: jsPDF, result: AiMapResult, company: string) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12.5);
   doc.setTextColor(...rgb(INK));
-  doc.text("Så går det till – fyra veckor", MARGIN, cur.y);
+  doc.text("Fyra steg – tidsplan bestäms tillsammans", MARGIN, cur.y);
   cur.y += 7;
 
   const weeks: { w: string; t: string }[] = [
-    { w: "Vecka 1", t: "Kickoff 30 min. Vi kartlägger flödet i detalj och designar lösningen tillsammans med er." },
-    { w: "Vecka 2", t: "Vi bygger. Ni ser en första version och ger feedback i vardagslaget." },
-    { w: "Vecka 3", t: "Test med skarpa fall. Vi justerar tills flödet håller i verkligheten." },
-    { w: "Vecka 4", t: "Lansering. Vi mäter sparad tid från dag ett – och ni bestämmer nästa steg." },
+    { w: "Steg 1", t: "Kickoff 30 min. Vi kartlägger flödet i detalj och designar lösningen tillsammans med er." },
+    { w: "Steg 2", t: "Vi bygger. Ni ser en första version och ger feedback i vardagslaget." },
+    { w: "Steg 3", t: "Test med representativa fall. Vi stämmer av kvalitet och undantag." },
+    { w: "Steg 4", t: "Lansering och uppföljning mot den baslinje vi kommit överens om." },
   ];
   weeks.forEach((wk) => {
     ensureSpace(doc, cur, 12, company);
@@ -558,9 +547,9 @@ function buildPlanPage(doc: jsPDF, result: AiMapResult, company: string) {
   monoLabel(doc, "Det vi behöver från er", MARGIN, cur.y);
   cur.y += 5;
   const needs = [
-    "30 minuter för kickoff – vi sköter resten",
+    "En gemensam genomgång av nuläge och mål",
     top.systems ? `Tillgång till: ${top.systems}` : "Tillgång till de system som rör processen",
-    "En person som kan testa på riktiga fall (ca 1 timme)",
+    "En person som kan granska och testa representativa fall",
   ];
   for (const n of needs) {
     doc.setFillColor(...rgb(INK));
@@ -579,7 +568,7 @@ function ctaPage(doc: jsPDF, result: AiMapResult, company: string, shareUrl?: st
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10.5);
   const ctaBody = doc.splitTextToSize(
-    pdfSafe("Boka 20 minuter så går vi igenom er karta tillsammans. Jag visar konkret hur första bygget ser ut för just er – tid, pris och vad som händer vecka ett. Inga köpkrav."),
+    pdfSafe("Boka en kostnadsfri genomgång av kartan. Vi stämmer av underlaget, diskuterar en möjlig pilot och vad som behövs för en offert. Inga köpkrav."),
     CONTENT_W - 16
   );
   const cardH = 24 + ctaBody.length * 5 + 24;
@@ -620,7 +609,7 @@ function ctaPage(doc: jsPDF, result: AiMapResult, company: string, shareUrl?: st
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(210, 212, 216);
-  doc.text("christoffer@auroramedia.se", PAGE_W - MARGIN - 8, y + 6.8, { align: "right" });
+  doc.text("info@auroramedia.se", PAGE_W - MARGIN - 8, y + 6.8, { align: "right" });
   cur.y += cardH + 12;
 
   // Om Aurora
@@ -629,7 +618,7 @@ function ctaPage(doc: jsPDF, result: AiMapResult, company: string, shareUrl?: st
   paragraph(
     doc,
     cur,
-    "Aurora Media är en AI-byrå i Linköping som bygger AI-system, appar och automationer för svenska företag. Vi driver sju egna produkter i skarp drift – samma stack som vi bygger åt kunder. Fast pris, första versionen på veckor, och koden äger ni själva.",
+    "Aurora Media i Linköping bygger AI-system, appar och automationer för svenska företag. I portfolion finns egna verksamheter och produkter som visar hur arbetsflöden kan fungera. Omfattning, pris, drift och överlämning bestäms tillsammans före start.",
     company,
     { size: 10, color: MUTED }
   );

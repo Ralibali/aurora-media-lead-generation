@@ -7,13 +7,13 @@ import { buildInstantPreview, setInstantPreview } from "./instant-preview.mjs";
 const pages = [
   {
     file: path.resolve(process.cwd(), "dist", "index.html"),
-    title: "Aurora Media AB | AI-driven mjukvarupartner för svenska företag",
+    title: "AI-system och automation för företag | Aurora Media",
     description:
-      "Aurora Media bygger AI-lösningar, interna system, appar och SaaS för svenska företag. Snabb leverans, tydligt scope och kod ni äger.",
+      "Mindre manuellt arbete. Mer tid för affären. Aurora Media i Linköping bygger AI-lösningar, integrationer och interna system. Börja med ett kostnadsfritt samtal.",
     body:
       "Aurora Media AB bygger AI-lösningar, interna system, appar, integrationer och SaaS för svenska företag. Företaget är baserat i Linköping och hjälper verksamheter att minska manuellt arbete och skapa bättre digitala flöden.",
     preview: {
-      h1: "AI-driven mjukvarupartner för svenska företag",
+      h1: "Mindre handpåläggning. Mer affär.",
       mono: "Aurora Media · Linköping",
       ctas: [
         { label: "Starta AI-kartan – gratis", href: "/ai-karta" },

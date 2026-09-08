@@ -23,7 +23,7 @@ export default function CityPage() {
   const routeVariant = isAiVariant ? "ai-byra" : "saas-utveckling";
   const slug = location.pathname.replace(/^\/(ai-byra|saas-utveckling)-/, "").replace(/\/+$/, "");
 
-  const city = slug ? getCity(slug) : null;
+  const city = /^\/(ai-byra|saas-utveckling)-/.test(location.pathname) && slug ? getCity(slug) : null;
   const seo = slug ? getCitySeo(slug) : null;
   const seoTitle = seo ? (isAiVariant ? seo.metaTitleAI : seo.metaTitleSaaS) : "";
   const seoDescription = seo ? (isAiVariant ? seo.metaDescAI : seo.metaDescSaaS) : "";

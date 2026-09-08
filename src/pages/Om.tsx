@@ -8,15 +8,15 @@ const VALUES = [
   { title: "Ärlighet framför allt", desc: "Om något inte är möjligt eller inte passar ert behov — vi säger det direkt. Ingen projektledning för projektledningens skull." },
   { title: "Snabbhet är ett designval", desc: "Leveranstakt på veckor är inte en gimmick. Det är resultatet av en process utan onödiga överlämningar och med rätt verktyg." },
   { title: "Ni äger allt", desc: "Källkod, domän, databas, drift. Allt överlämnas. Ni ska inte vara beroende av oss för att er produkt ska leva." },
-  { title: "Enkelt är svårare", desc: "Vi undviker onödig komplexitet. En lösning som funkar i tre år utan underhåll är bättre än en som imponerar men spricker." },
-  { title: "Data stannar i EU", desc: "Alla produkter vi bygger är GDPR-anpassade och körs på EU-baserad infrastruktur som standard." },
+  { title: "Enkelt är svårare", desc: "Vi undviker onödig komplexitet. Vi väljer lösningar som går att förstå, underhålla och bygga vidare på." },
+  { title: "Kontroll över er data", desc: "Vi går igenom lagring, behörigheter och vilka tjänster som behandlar er data. Krav på drift och personuppgifter bestäms innan vi väljer lösning." },
 ];
 
 const FACTS: [string, string][] = [
   ["Bas", "Linköping"],
   ["Sedan", "2021"],
   ["Utbildning", "Södertörns högskola"],
-  ["Produkter", "6 i drift"],
+  ["Arbetssätt", "Från behov till fungerande system"],
   ["Specialitet", "SaaS, AI, system"],
 ];
 
@@ -37,7 +37,7 @@ const Om = () => {
           <Reveal><p className="mono">om aurora · christoffer holstensson</p></Reveal>
           <Reveal delay={0.1}>
             <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>
-              Aurora är en person. <span className="it">Det är en feature.</span>
+              Direktkontakt med den som <span className="it">bygger.</span>
             </h1>
           </Reveal>
         </div>
@@ -68,10 +68,10 @@ const Om = () => {
             <Reveal delay={0.1}>
               <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
                 <p className="lead">
-                  De flesta byråer skickar runt projekt mellan projektledare, designers, utvecklare och konsulter. Något försvinner i varje överlämning.
+                  Jag heter Christoffer och bygger digitala verktyg för företag som vill få mer gjort. Mitt arbete börjar i er vardag: vad tar tid, var fastnar informationen och vad behöver fungera bättre?
                 </p>
                 <p className="body">
-                  Aurora Media är annorlunda byggt: en person bygger hela vägen, från första skissen till driftsatt produkt. Det är därför vi kan leverera på veckor istället för månader — och det är därför ni alltid pratar med personen som faktiskt kodar.
+                  Aurora Media är annorlunda byggt: en person bygger hela vägen, från första skissen till driftsatt produkt. Ni pratar direkt med personen som bygger. Vi avgränsar en första version och bestämmer tidsplanen utifrån vad den behöver klara.
                 </p>
                 <p className="body">
                   När projektet växer förbi vad en person rimligen klarar säger vi det rakt ut. Då tar vi in externa specialister med ert godkännande — eller så hänvisar vi vidare.

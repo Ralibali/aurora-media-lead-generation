@@ -3,7 +3,7 @@ import { Loader2, Lock, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { setSEOMeta } from "@/lib/seoHelpers";
-import { getFunctionUrl } from "@/lib/functionUrl";
+import AdminShell, { adminFetch } from "./AdminShell";
 
 type TopOpened = {
   question: string;
@@ -29,9 +29,6 @@ type Report = {
   top_query_terms_to_cta: TopTerm[];
 };
 
-const STORAGE_KEY = "faq_analytics_pwd";
-const FUNCTION_URL = getFunctionUrl("faq-analytics");
-
 const ranges: { value: Report["range"]; label: string }[] = [
   { value: "7d", label: "7 dagar" },
   { value: "30d", label: "30 dagar" },
@@ -39,10 +36,6 @@ const ranges: { value: Report["range"]; label: string }[] = [
 ];
 
 const FaqRapport = () => {
-  const [password, setPassword] = useState(
-    () => sessionStorage.getItem(STORAGE_KEY) ?? "",
-  );
-  const [authed, setAuthed] = useState(false);
   const [range, setRange] = useState<Report["range"]>("30d");
   const [data, setData] = useState<Report | null>(null);
   const [loading, setLoading] = useState(false);
@@ -56,108 +49,26 @@ const FaqRapport = () => {
     });
   }, []);
 
-  const fetchReport = async (pwd: string, r: Report["range"]) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`${FUNCTION_URL}?range=${r}`, {
-        headers: { Authorization: `Bearer ${pwd}` },
-      });
-      if (res.status === 401) {
-        sessionStorage.removeItem(STORAGE_KEY);
-        setAuthed(false);
-        setData(null);
-        setError("Fel lösenord.");
-        return;
-      }
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(txt || `HTTP ${res.status}`);
-      }
-      const json = (await res.json()) as Report;
-      setData(json);
-      setAuthed(true);
-      sessionStorage.setItem(STORAGE_KEY, pwd);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Något gick fel.");
-    } finally {
-      setLoading(false);
-    }
+  const fetchReport = async (r: Report["range"]) => {
+    setLoading(true); setError(null);
+    try { setData(await adminFetch(`faq-analytics?range=${r}`)); }
+    catch (error) { setError(error instanceof Error ? error.message : "Kunde inte hämta rapporten."); }
+    finally { setLoading(false); }
   };
-
-  // Auto-fetch om lösenord finns sparat
-  useEffect(() => {
-    if (password && !authed) {
-      void fetchReport(password, range);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    void fetchReport(password, range);
-  };
-
-  const onChangeRange = (r: Report["range"]) => {
-    setRange(r);
-    if (authed) void fetchReport(password, r);
-  };
-
-  if (!authed) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-6">
-        <form
-          onSubmit={onSubmit}
-          className="w-full max-w-sm rounded-xl border border-border bg-card p-8"
-        >
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Lock className="h-4 w-4" />
-            <span className="font-mono text-xs uppercase tracking-wider">
-              Skyddad sida
-            </span>
-          </div>
-          <h1 className="mt-3 font-serif text-2xl">FAQ-rapport</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Ange lösenord för att se statistiken.
-          </p>
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Lösenord"
-            autoFocus
-            className="mt-5"
-          />
-          {error && (
-            <p className="mt-3 text-sm text-destructive">{error}</p>
-          )}
-          <Button
-            type="submit"
-            className="mt-5 w-full"
-            disabled={loading || !password}
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              "Logga in"
-            )}
-          </Button>
-        </form>
-      </div>
-    );
-  }
+  useEffect(() => { void fetchReport(range); }, [range]);
+  const onChangeRange = (r: Report["range"]) => setRange(r);
 
   return (
-    <div className="min-h-screen bg-background">
+    <AdminShell title="FAQ-rapport" kicker="Frågor & kontaktklick">
       <header className="border-b border-border">
         <div className="container mx-auto px-6 py-8 flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               Intern rapport
             </p>
-            <h1 className="mt-2 font-serif text-3xl md:text-4xl">
-              FAQ-rapport
-            </h1>
+            <p className="mt-2 font-serif text-2xl">
+              Vad behöver besökarna veta?
+            </p>
             <p className="mt-2 text-sm text-muted-foreground">
               Vilka frågor öppnas efter sökning och vilka söktermer driver kontakter.
             </p>
@@ -187,7 +98,7 @@ const FaqRapport = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => void fetchReport(password, range)}
+              onClick={() => void fetchReport(range)}
               disabled={loading}
             >
               {loading ? (
@@ -200,7 +111,7 @@ const FaqRapport = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-10">
+      <div className="container mx-auto px-6 py-10">
         {error && (
           <div className="mb-6 rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
             {error}
@@ -209,15 +120,15 @@ const FaqRapport = () => {
 
         {/* Stat cards */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat label="Sökningar" value={data?.totals.searches ?? 0} />
+          <Stat label="Sökningar" value={data?.totals?.searches ?? 0} />
           <Stat
             label="Sökningar med öppnad fråga"
-            value={data?.totals.searches_with_open ?? 0}
+            value={data?.totals?.searches_with_open ?? 0}
           />
-          <Stat label="CTA-klick" value={data?.totals.cta_clicks ?? 0} />
+          <Stat label="CTA-klick" value={data?.totals?.cta_clicks ?? 0} />
           <Stat
             label="CTA-klick efter sökterm"
-            value={data?.totals.cta_with_query ?? 0}
+            value={data?.totals?.cta_with_query ?? 0}
           />
         </div>
 
@@ -288,8 +199,8 @@ const FaqRapport = () => {
             </tbody>
           </table>
         </Section>
-      </main>
-    </div>
+      </div>
+    </AdminShell>
   );
 };
 

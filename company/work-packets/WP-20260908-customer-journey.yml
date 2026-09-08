@@ -1,0 +1,24 @@
+id: WP-20260908-customer-journey
+company: Aurora Media AB
+objective: Improve the complete public customer journey, AI map and admin follow-up.
+why_now: Owner explicitly requested a comprehensive website improvement on 2026-09-08.
+evidence:
+  - 'VERIFIED FACT: no mobile navigation in VkNav.'
+  - 'VERIFIED FACT: draft autosave overwrites stored draft before restore.'
+  - 'VERIFIED FACT: result analysis retries indefinitely after failure.'
+  - 'VERIFIED FACT: price and delivery descriptions differ between home and pricing.'
+  - 'VERIFIED FACT: admin reports requests as booked meetings.'
+  - 'VERIFIED FACT: 90 visitors and 160 page views in the last measured 30-day window; 13 stored requests and no records marked customer.'
+  - 'UNKNOWN: qualified lead conversion, which records are tests, and deployed Edge Function administration access.'
+owner: Christoffer Holstensson
+skill: site-revenue-experiment
+skill_version: '1.0'
+authority: 'COMMIT: owner-authorized website and admin fixes; prepare reviewable release. No outbound, purchases or destructive production data changes.'
+usage_level: focused implementation and verification
+definition_of_done:
+  - Consistent offer and functioning mobile navigation
+  - AI map draft recovery, transparent estimates and bounded requests
+  - Authenticated admin routing and actionable lead follow-up
+  - Lint, real TypeScript check, tests, production build and visual verification
+  - Explicit distinction between locally verified and deployed backend behavior
+expected_artifact: company/artifacts/experiments/20260908-customer-journey.md

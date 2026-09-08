@@ -452,7 +452,7 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
     body,
     mono:
       mono ??
-      (route === '/ai-karta' ? 'Gratis · 2 min · Resultat direkt' : route === '/' ? 'Aurora Media · Linköping' : undefined),
+      (route === '/ai-karta' ? 'Gratis · 3–5 min · Resultat direkt' : route === '/' ? 'Aurora Media · Linköping' : undefined),
     ctas:
       ctas ??
       (route === '/ai-karta'

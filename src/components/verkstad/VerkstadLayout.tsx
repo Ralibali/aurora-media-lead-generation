@@ -1,9 +1,10 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Menu } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 import "@/styles/verkstad.css";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 /* ─────────────────────────────────────────────────────────────
    Nordisk Verkstad — shared layout primitives.
@@ -40,6 +41,9 @@ export const Reveal = ({
 
 export const VkNav = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { pathname } = useLocation();
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
   const { open } = useContactModal();
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 20);
@@ -49,6 +53,7 @@ export const VkNav = () => {
   }, []);
   return (
     <header className={`vk-nav ${scrolled ? "scrolled" : ""}`}>
+      <a href="#main" className="vk-skip">Hoppa till innehåll</a>
       <div className="vk-wrap vk-nav-inner">
         <Link to="/" className="vk-brand">
           <span className="vk-brand-dot" /> aurora media
@@ -61,13 +66,23 @@ export const VkNav = () => {
           <Link to="/ai-karta">AI-kartan</Link>
           <Link to="/om">Om</Link>
         </nav>
+        <div className="vk-nav-actions">
         <button
           onClick={() => open()}
           className="vk-btn vk-btn-ghost"
           style={{ padding: "10px 18px", fontSize: 13 }}
         >
-          Boka samtal <ArrowRight size={14} />
+          <span>Prata med oss</span> <ArrowRight size={14} />
         </button>
+        <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+          <SheetTrigger asChild><button className="vk-menu-trigger" aria-label="Öppna meny"><Menu size={22} /></button></SheetTrigger>
+          <SheetContent className="verkstad vk-mobile-sheet">
+            <SheetTitle>Meny</SheetTitle><SheetDescription>Utforska Aurora Media och hitta rätt nästa steg.</SheetDescription>
+            <nav aria-label="Mobilmeny" className="vk-mobile-links">{[["/arbete", "Våra projekt"], ["/tjanster", "Tjänster"], ["/priser", "Priser & upplägg"], ["/ai-karta", "Gratis AI-karta"], ["/verktyg", "Gratis verktyg"], ["/blogg", "Guider & insikter"], ["/om", "Om Aurora"], ["/kontakt", "Kontakt"]].map(([href, label]) => <Link key={href} to={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}<ArrowRight size={17} /></Link>)}</nav>
+            <a className="vk-mobile-email" href="mailto:info@auroramedia.se">info@auroramedia.se</a>
+          </SheetContent>
+        </Sheet>
+        </div>
       </div>
     </header>
   );
@@ -118,6 +133,8 @@ export const VkFooter = () => (
           <Link to="/om">Om Aurora</Link>
           <Link to="/oppna-siffror">Öppna siffror</Link>
           <Link to="/kontakt">Kontakt</Link>
+          <Link to="/blogg">Guider & insikter</Link>
+          <Link to="/villkor">Villkor</Link>
           <Link to="/integritetspolicy">Integritetspolicy</Link>
           <span style={{ display: "block", padding: "4px 0", opacity: 0.6 }}>
             Org.nr 559272-0220
@@ -126,7 +143,7 @@ export const VkFooter = () => (
       </div>
       <div className="vk-footer-bottom">
         <span>© {new Date().getFullYear()} Aurora Media AB · Linköping</span>
-        <span>Svarstid &lt; 24 h · GDPR & EU-datalagring</span>
+        <span>AI, automation & systemutveckling</span>
       </div>
     </div>
   </footer>
@@ -139,7 +156,7 @@ export const VkFooter = () => (
 export const VerkstadLayout = ({ children }: { children: ReactNode }) => (
   <div className="verkstad">
     <VkNav />
-    <main>{children}</main>
+    <main id="main">{children}</main>
     <VkFooter />
   </div>
 );

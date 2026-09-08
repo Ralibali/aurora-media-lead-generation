@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
+import { parseAiMapDraft } from "@/lib/aiMapDraft";
+import { HOURLY_RATE, WEEKS_PER_MONTH, WEEKLY_HOURS } from "@/lib/aiMapEstimates";
 import { toast } from "sonner";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { trackEvent } from "@/lib/analytics";
@@ -29,8 +31,7 @@ import {
 const DRAFT_KEY = "ai-karta-draft";
 const RESULT_KEY = "ai_map_result";
 const STEPS = ["Bransch", "Processer", "Kontakt"];
-const HOURLY_RATE = 600; // schablon
-const WEEKS_PER_MONTH = 4.3;
+
 
 /* Mappning från bransch → föreslagna tidstjuvar och exempelprocesser */
 type IndustryKey = "transport" | "bygg" | "besok" | "tillverk" | "handel" | "tjanste" | "annat";
@@ -89,27 +90,6 @@ const INDUSTRY_EXAMPLES: Record<IndustryKey, string[]> = {
   annat: [],
 };
 
-// Rimliga standardvärden när ett exempel klickas in – besökaren behöver bara bekräfta.
-const EXAMPLE_DEFAULTS: Record<string, { frequency: Frequency; weekly_time: WeeklyTime }> = {
-  "Skapa körorder från mejl/telefon":        { frequency: "daily",   weekly_time: "3-5" },
-  "Fakturaunderlag efter körning":           { frequency: "weekly",  weekly_time: "3-5" },
-  "Svara på ETA-frågor från kunder":         { frequency: "daily",   weekly_time: "1-3" },
-  "Skapa offerter från ritningar/mail":      { frequency: "weekly",  weekly_time: "3-5" },
-  "Sammanställa tidsrapporter till lön":     { frequency: "monthly", weekly_time: "1-3" },
-  "Svara på återkommande kundfrågor":        { frequency: "daily",   weekly_time: "1-3" },
-  "Svara på bokningsfrågor via mail":        { frequency: "daily",   weekly_time: "3-5" },
-  "Onboarding-mail till nya gäster":         { frequency: "weekly",  weekly_time: "1-3" },
-  "Sammanställa recensioner till rapporter": { frequency: "monthly", weekly_time: "0-1" },
-  "Lagerplock och orderbekräftelser":        { frequency: "daily",   weekly_time: "3-5" },
-  "Produktionsrapporter från Excel":         { frequency: "weekly",  weekly_time: "1-3" },
-  "Reklamationer och ärenden":               { frequency: "weekly",  weekly_time: "1-3" },
-  "Uppdatera produkttexter i webbshop":      { frequency: "weekly",  weekly_time: "1-3" },
-  "Sammanställa försäljningsrapport":        { frequency: "weekly",  weekly_time: "1-3" },
-  "Skapa offerter i Word efter samtal":      { frequency: "weekly",  weekly_time: "3-5" },
-  "Uppdatera CRM efter kundmöten":           { frequency: "weekly",  weekly_time: "1-3" },
-  "Sammanställa månadsrapporter":            { frequency: "monthly", weekly_time: "1-3" },
-};
-
 /* ── Zod-schema (samma som tidigare för kontaktsteget) ── */
 const ContactSchema = z.object({
   company_name: z.string().trim().min(1, "Ange företagsnamn").max(120),
@@ -120,21 +100,14 @@ const ContactSchema = z.object({
 });
 
 /* ── Timkonvertering ── */
-const WEEKLY_HOURS: Record<WeeklyTime, number> = {
-  "0-1": 0.5,
-  "1-3": 2,
-  "3-5": 4,
-  "5-10": 7.5,
-  "10+": 12,
-  unknown: 0,
-};
-
 function calcHoursPerWeek(processes: ProcessInput[]): number {
   return processes.reduce((sum, p) => sum + (p.weekly_time ? WEEKLY_HOURS[p.weekly_time as WeeklyTime] || 0 : 0), 0);
 }
 
 /* ── Styles ── */
 const CSS = `
+.aikw-contact-grid { display:grid;gap:16px;grid-template-columns:1fr 1fr; }
+@media(max-width:540px){.aikw-contact-grid{grid-template-columns:1fr}}
 .aikw-wrap { max-width: 1080px; margin: 0 auto; padding-inline: clamp(20px, 4vw, 48px); }
 .aikw-shell { padding-top: clamp(40px, 6vw, 72px); padding-bottom: 120px; }
 .aikw-layout { display: grid; grid-template-columns: 1fr; gap: 24px; }
@@ -335,7 +308,12 @@ const AiKartaStart = () => {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const [industry, setIndustry] = useState<IndustryKey | "">("");
-  const [showRestore, setShowRestore] = useState(false);
+  const [savedDraft] = useState(() => {
+    try { return parseAiMapDraft(localStorage.getItem(DRAFT_KEY)); } catch { return null; }
+  });
+  const [showRestore, setShowRestore] = useState(!!savedDraft);
+  const submitLock = useRef(false);
+  const [submitError, setSubmitError] = useState("");
   const [form, setForm] = useState<AiMapFormState>(() => emptyForm());
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -350,16 +328,6 @@ const AiKartaStart = () => {
       canonical: "https://auroramedia.se/ai-karta/start",
       noindex: true,
     });
-    try {
-      const raw = localStorage.getItem(DRAFT_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as { form: AiMapFormState; industry: IndustryKey | ""; step: number };
-        if (parsed?.form?.company_name || (parsed?.form?.processes?.length ?? 0) > 0 && parsed.form.processes.some((p) => p.process_name)) {
-          setShowRestore(true);
-        }
-      }
-    } catch { /* ignore */ }
-
     // Förvald bransch via länk (?bransch=transport) – från hero-chips eller drip-mejl
     const branschParam = searchParams.get("bransch");
     const match = INDUSTRIES.find((i) => i.key === branschParam);
@@ -374,7 +342,7 @@ const AiKartaStart = () => {
         return {
           ...f,
           industry: match.label,
-          pain_areas: Array.from(new Set([...f.pain_areas, ...INDUSTRY_PAINS[match.key]])),
+          pain_areas: f.pain_areas,
         };
       });
     }
@@ -396,12 +364,13 @@ const AiKartaStart = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* Autospara */
+  /* Do not overwrite a saved draft while the visitor chooses whether to restore it. */
   useEffect(() => {
+    if (showRestore || submitLock.current) return;
     try {
       localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, industry, step }));
     } catch { /* ignore */ }
-  }, [form, industry, step]);
+  }, [form, industry, step, showRestore]);
 
   /* Track step-visits */
   useEffect(() => {
@@ -414,15 +383,11 @@ const AiKartaStart = () => {
   }, [step]);
 
   const restoreDraft = () => {
-    try {
-      const raw = localStorage.getItem(DRAFT_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as { form: AiMapFormState; industry: IndustryKey | ""; step: number };
-        setForm({ ...emptyForm(), ...parsed.form });
-        setIndustry(parsed.industry || "");
-        setStep(Math.min(3, Math.max(1, parsed.step || 1)));
-      }
-    } catch { /* ignore */ }
+    if (savedDraft) {
+      setForm(savedDraft.form);
+      setIndustry(savedDraft.industry);
+      setStep(savedDraft.step);
+    }
     setShowRestore(false);
   };
   const clearDraft = () => {
@@ -452,24 +417,18 @@ const AiKartaStart = () => {
 
   const selectIndustry = (key: IndustryKey, label: string) => {
     setIndustry(key);
-    update("industry", label);
-    // Förfyll relevanta tidstjuvar som markerbara chips – markera dem direkt
-    const suggested = INDUSTRY_PAINS[key];
-    setForm((f) => ({
-      ...f,
-      pain_areas: Array.from(new Set([...f.pain_areas, ...suggested])),
-    }));
+    update("industry", key === "annat" ? "" : label);
+    // Suggested areas stay unselected until the visitor confirms them.
   };
 
   const applyExample = (idx: number, example: string) => {
-    const d = EXAMPLE_DEFAULTS[example];
-    updateProcess(idx, { process_name: example, ...(d ?? {}) });
+    updateProcess(idx, { process_name: example });
   };
 
   const validateStep = (current: number): boolean => {
     setErrors({});
     if (current === 1) {
-      if (!industry && !form.industry.trim()) {
+      if (!industry || !form.industry.trim()) {
         setErrors({ industry: "Välj eller ange en bransch." });
         return false;
       }
@@ -521,7 +480,12 @@ const AiKartaStart = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(3)) { setStep(3); return; }
+    if (submitLock.current) return;
+    for (const current of [1, 2, 3]) {
+      if (!validateStep(current)) { setStep(current); return; }
+    }
+    submitLock.current = true;
+    setSubmitError("");
     setSubmitting(true);
     try {
       const normalized = form.processes.map((p) => ({
@@ -533,10 +497,11 @@ const AiKartaStart = () => {
       const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke("submit-ai-map", {
         body: { ...form, processes: normalized, website },
+        signal: AbortSignal.timeout(60000),
       });
       if (error) throw error;
-      if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
-      trackEvent("ai_karta_submit", { company: form.company_name });
+      if (!data?.ok || !data.leadId || !data.processes?.length) throw new Error(data?.error || "Kartan kunde inte sparas. Försök igen.");
+      trackEvent("ai_karta_submit", { process_count: normalized.length });
 
       // Kom ihåg kontaktuppgifterna till nästa besök
       try {
@@ -560,9 +525,10 @@ const AiKartaStart = () => {
         }));
         localStorage.removeItem(DRAFT_KEY);
       } catch { /* ignore */ }
-      navigate("/ai-karta/resultat");
+      navigate("/ai-karta/resultat", { state: { result: { ...data, meta: { company_name: form.company_name, contact_name: form.contact_name, email: form.email, industry: form.industry, employee_count: form.employee_count } } } });
     } catch (err) {
       console.error("[AiKartaStart] submit failed", err);
+      setSubmitError("Kartan kunde inte skapas just nu. Era svar finns kvar. Försök igen eller kontakta info@auroramedia.se.");
       const raw = err instanceof Error ? err.message : "";
       const technical = /edge function|failed to fetch|networkerror|non-2xx|timeout/i.test(raw);
       toast.error(
@@ -571,6 +537,7 @@ const AiKartaStart = () => {
           : raw
       );
     } finally {
+      submitLock.current = false;
       setSubmitting(false);
     }
   };
@@ -604,18 +571,18 @@ const AiKartaStart = () => {
               )}
 
               <span className="aikw-mono">
-                Steg {step} av 3 · sparas automatiskt
-                {` · ca ${step === 1 ? "60" : step === 2 ? "45" : "15"} sek kvar`}
+                Steg {step} av 3 · utkast sparas i denna webbläsare
+
               </span>
               <h1 className="aikw-h1">
                 {step === 1 && "Vilken bransch är ni i?"}
                 {step === 2 && "Vad tar tid att göra manuellt?"}
-                {step === 3 && "Vart skickar vi kopian?"}
+                {step === 3 && "Se kartan och få en kopia"}
               </h1>
               <p className="aikw-sub">
-                {step === 1 && "Välj en bransch så förfyller vi de vanligaste tidstjuvarna. Ni kan markera fler eller ta bort."}
+                {step === 1 && "Välj bransch och markera de områden där ni vill minska manuellt arbete."}
                 {step === 2 && "Beskriv 1–5 arbetsuppgifter som återkommer. Vi räknar ut AI-potentialen för varje."}
-                {step === 3 && "Er karta är klar att räknas fram direkt. Vi skickar också en kopia på mejlen."}
+                {step === 3 && "När ni skickar era svar beräknas kartan och visas här. Ni får också en kopia via mejl."}
               </p>
 
               {/* Progress */}
@@ -659,6 +626,7 @@ const AiKartaStart = () => {
                         <button
                           key={ind.key}
                           type="button"
+                          aria-pressed={industry === ind.key}
                           className={`aikw-chip ${industry === ind.key ? "active" : ""}`}
                           onClick={() => selectIndustry(ind.key, ind.label)}
                         >
@@ -671,7 +639,7 @@ const AiKartaStart = () => {
                         <label className="aikw-label">Beskriv er bransch</label>
                         <input
                           className={`aikw-input ${errors.industry ? "err" : ""}`}
-                          value={form.industry}
+                          aria-label="Bransch"  value={form.industry}
                           onChange={(e) => update("industry", e.target.value)}
                           placeholder="t.ex. konsultbolag, redovisning..."
                         />
@@ -683,13 +651,14 @@ const AiKartaStart = () => {
                     {industry && (
                       <div style={{ marginTop: 28 }}>
                         <label className="aikw-label">
-                          Var sitter era största tidstjuvar? ({suggestedPains.length > 0 ? "vi föreslår baserat på bransch" : "välj minst ett"})
+                          Var sitter era största tidstjuvar? ({suggestedPains.length > 0 ? "välj de som gäller er" : "välj minst ett"})
                         </label>
                         <div className="aikw-chips">
                           {suggestedPains.map((p) => (
                             <button
                               key={p}
                               type="button"
+                              aria-pressed={form.pain_areas.includes(p)}
                               className={`aikw-chip suggested ${form.pain_areas.includes(p) ? "active" : ""}`}
                               onClick={() => togglePain(p)}
                             >
@@ -700,6 +669,7 @@ const AiKartaStart = () => {
                             <button
                               key={p}
                               type="button"
+                              aria-pressed={form.pain_areas.includes(p)}
                               className={`aikw-chip ${form.pain_areas.includes(p) ? "active" : ""}`}
                               onClick={() => togglePain(p)}
                             >
@@ -728,7 +698,7 @@ const AiKartaStart = () => {
                         <label className="aikw-label">Namn på arbetsuppgift *</label>
                         <input
                           className={`aikw-input ${errors[`p_${idx}_name`] ? "err" : ""}`}
-                          value={p.process_name}
+                          aria-label={`Namn på arbetsuppgift ${idx + 1}`} maxLength={160} value={p.process_name}
                           onChange={(e) => updateProcess(idx, { process_name: e.target.value })}
                           placeholder="t.ex. Skapa offerter manuellt"
                         />
@@ -754,7 +724,7 @@ const AiKartaStart = () => {
                           <div className="aikw-chips">
                             {Object.entries(FREQ_LABELS).map(([k, v]) => (
                               <button key={k} type="button"
-                                className={`aikw-chip ${p.frequency === k ? "active" : ""}`}
+                                aria-pressed={p.frequency === k} className={`aikw-chip ${p.frequency === k ? "active" : ""}`}
                                 onClick={() => updateProcess(idx, { frequency: k as ProcessInput["frequency"] })}
                               >{v}</button>
                             ))}
@@ -767,7 +737,7 @@ const AiKartaStart = () => {
                           <div className="aikw-chips">
                             {Object.entries(TIME_LABELS).map(([k, v]) => (
                               <button key={k} type="button"
-                                className={`aikw-chip ${p.weekly_time === k ? "active" : ""}`}
+                                aria-pressed={p.weekly_time === k} className={`aikw-chip ${p.weekly_time === k ? "active" : ""}`}
                                 onClick={() => updateProcess(idx, { weekly_time: k as ProcessInput["weekly_time"] })}
                               >{v}</button>
                             ))}
@@ -781,7 +751,7 @@ const AiKartaStart = () => {
                             <label className="aikw-label">Vilka system används?</label>
                             <input
                               className="aikw-input"
-                              value={p.systems}
+                              aria-label={`System för arbetsuppgift ${idx + 1}`} maxLength={200} value={p.systems}
                               onChange={(e) => updateProcess(idx, { systems: e.target.value })}
                               placeholder="t.ex. Fortnox, Excel, HubSpot"
                             />
@@ -792,7 +762,7 @@ const AiKartaStart = () => {
                             <div className="aikw-chips">
                               {Object.entries(YPN_LABELS).map(([k, v]) => (
                                 <button key={k} type="button"
-                                  className={`aikw-chip ${p.rule_based === k ? "active" : ""}`}
+                                  aria-pressed={p.rule_based === k} className={`aikw-chip ${p.rule_based === k ? "active" : ""}`}
                                   onClick={() => updateProcess(idx, { rule_based: k as ProcessInput["rule_based"] })}
                                 >{v}</button>
                               ))}
@@ -804,7 +774,7 @@ const AiKartaStart = () => {
                             <div className="aikw-chips">
                               {Object.entries(YPN_LABELS).map(([k, v]) => (
                                 <button key={k} type="button"
-                                  className={`aikw-chip ${p.data_available === k ? "active" : ""}`}
+                                  aria-pressed={p.data_available === k} className={`aikw-chip ${p.data_available === k ? "active" : ""}`}
                                   onClick={() => updateProcess(idx, { data_available: k as ProcessInput["data_available"] })}
                                 >{v}</button>
                               ))}
@@ -816,7 +786,7 @@ const AiKartaStart = () => {
                             <div className="aikw-chips">
                               {Object.entries(VALUE_LABELS).map(([k, v]) => (
                                 <button key={k} type="button"
-                                  className={`aikw-chip ${p.business_value === k ? "active" : ""}`}
+                                  aria-pressed={p.business_value === k} className={`aikw-chip ${p.business_value === k ? "active" : ""}`}
                                   onClick={() => updateProcess(idx, { business_value: k as ProcessInput["business_value"] })}
                                 >{v}</button>
                               ))}
@@ -841,17 +811,17 @@ const AiKartaStart = () => {
                       Resultatet visas <b>direkt på skärmen</b>. Mejlkopian är för att kunna visa kollegor.
                     </div>
 
-                    <div style={{ display: "grid", gap: 16, gridTemplateColumns: "1fr 1fr" }}>
+                    <div className="aikw-contact-grid">
                       <div>
                         <label className="aikw-label">Företagsnamn *</label>
                         <input className={`aikw-input ${errors.company_name ? "err" : ""}`}
-                          value={form.company_name} onChange={(e) => update("company_name", e.target.value)} />
+                          aria-label="Företagsnamn" autoComplete="organization" value={form.company_name} onChange={(e) => update("company_name", e.target.value)} />
                         {errors.company_name && <p className="aikw-err">{errors.company_name}</p>}
                       </div>
                       <div>
                         <label className="aikw-label">Bransch *</label>
                         <input className={`aikw-input ${errors.industry ? "err" : ""}`}
-                          value={form.industry} onChange={(e) => update("industry", e.target.value)} />
+                          aria-label="Bransch"  value={form.industry} onChange={(e) => update("industry", e.target.value)} />
                         {errors.industry && <p className="aikw-err">{errors.industry}</p>}
                       </div>
                       <div style={{ gridColumn: "1 / -1" }}>
@@ -859,7 +829,7 @@ const AiKartaStart = () => {
                         <div className="aikw-chips">
                           {EMPLOYEE_OPTIONS.map((opt) => (
                             <button key={opt} type="button"
-                              className={`aikw-chip ${form.employee_count === opt ? "active" : ""}`}
+                              aria-pressed={form.employee_count === opt} className={`aikw-chip ${form.employee_count === opt ? "active" : ""}`}
                               onClick={() => update("employee_count", opt)}
                             >{opt}</button>
                           ))}
@@ -869,13 +839,13 @@ const AiKartaStart = () => {
                       <div>
                         <label className="aikw-label">Kontaktperson *</label>
                         <input className={`aikw-input ${errors.contact_name ? "err" : ""}`}
-                          value={form.contact_name} onChange={(e) => update("contact_name", e.target.value)} />
+                          aria-label="Kontaktperson" autoComplete="name" value={form.contact_name} onChange={(e) => update("contact_name", e.target.value)} />
                         {errors.contact_name && <p className="aikw-err">{errors.contact_name}</p>}
                       </div>
                       <div>
                         <label className="aikw-label">E-post *</label>
                         <input type="email" className={`aikw-input ${errors.email ? "err" : ""}`}
-                          value={form.email} onChange={(e) => update("email", e.target.value)} />
+                          aria-label="E-post" autoComplete="email" inputMode="email" value={form.email} onChange={(e) => update("email", e.target.value)} />
                         {errors.email && <p className="aikw-err">{errors.email}</p>}
                       </div>
                     </div>
@@ -903,6 +873,7 @@ const AiKartaStart = () => {
 
               </div>
 
+              {submitError && <p role="alert" className="aikw-err">{submitError} <a href="mailto:info@auroramedia.se">Mejla oss</a></p>}
               <div className="aikw-actions">
                 {step > 1 ? (
                   <button type="button" onClick={prev} className="aikw-btn-ghost" disabled={submitting}>← Tillbaka</button>
@@ -918,12 +889,12 @@ const AiKartaStart = () => {
 
               {step === 3 && (
                 <p style={{ marginTop: 18, textAlign: "center", fontSize: 13, color: "#4A5058" }}>
-                  🔒 Era svar delas aldrig. Kartan är gratis – oavsett om vi jobbar ihop sen eller inte.
+                  Kartan är gratis. Läs hur era uppgifter behandlas i integritetspolicyn.
                 </p>
               )}
 
               <p style={{ marginTop: 24, textAlign: "center", fontSize: 12, color: "#A9A69C" }}>
-                Analysen är automatiskt genererad och ska ses som en första indikation. För exakt scope krävs genomgång av processer, system och data.
+                Analysen är automatiskt genererad och ska ses som en första indikation. Omfattning och genomförbarhet kräver en genomgång av processer, system och data.
               </p>
             </div>
 
@@ -937,7 +908,7 @@ const AiKartaStart = () => {
                 ≈ {monthlyCost.toLocaleString("sv-SE")} kr<span>per månad · {(monthlyCost * 12).toLocaleString("sv-SE")} kr/år</span>
               </div>
               <p className="aikw-meter-hint">
-                Räknat på {WEEKS_PER_MONTH} veckor/månad × 600 kr/timme. Uppdateras när ni lägger till processer.
+                Räknat på 46 arbetsveckor/år och 600 kr/timme. Intervallens mittvärden används; 10+ räknas som 12 timmar. Okänd tid ingår inte.
               </p>
             </aside>
           </div>

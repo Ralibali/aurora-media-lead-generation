@@ -268,7 +268,7 @@ const NordicLayout = ({
     <div className="verkstad">
       {!hideNav && <VkNav />}
       <div className="aur">
-        <main>{children}</main>
+        <main id="main">{children}</main>
       </div>
       {!hideFooter && <VkFooter />}
     </div>

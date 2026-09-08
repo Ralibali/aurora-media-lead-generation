@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { TriangleAlert as AlertTriangle, CalendarCheck, Check, Copy, Download, Loader as Loader2, Mail, RefreshCw, Share2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -19,10 +19,12 @@ import { downloadAiMapPdf, aiMapPdfBase64, aiMapPdfFilename } from "@/lib/aiMapP
 import { trackAiKartaClick } from "@/lib/aiKartaTracking";
 import { getSupabase } from "@/lib/getSupabase";
 import { trackEvent } from "@/lib/analytics";
+import { HOURLY_RATE, WEEKS_PER_MONTH, estimatedPayback } from "@/lib/aiMapEstimates";
+
+import { parseAiMapResult } from "@/lib/aiMapResult";
 
 const RESULT_KEY = "ai_map_result";
-const HOURLY_RATE = 600;   // kr/h intern arbetstid – från AI-kartans värdemätare
-const WEEKS_PER_MONTH = 4.33;
+
 // Klistra in din Cal.com/Calendly-länk här. Lämnas den tom används bokningsdialogen som idag.
 const BOOKING_URL = "";
 
@@ -39,6 +41,7 @@ function formatDate(d?: string): string {
 
 const AiKartaResultat = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [params] = useSearchParams();
   const token = params.get("t")?.trim() || "";
 
@@ -49,8 +52,7 @@ const AiKartaResultat = () => {
   const [pdfMailStatus, setPdfMailStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
 
   // Async personlig AI-analys (bara om ai_analysis saknas på leaden)
-  const [liveAnalysis, setLiveAnalysis] = useState<{ heading: string; body: string } | null>(null);
-  const [liveAnalysisLoading, setLiveAnalysisLoading] = useState(false);
+
 
   // Booking dialog
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -62,7 +64,7 @@ const AiKartaResultat = () => {
   useEffect(() => {
     setSEOMeta({
       title: "Er AI-karta · Resultat | Aurora Media",
-      description: "Personlig AI-karta med rekommenderad nivå, tidsbesparing och första steg.",
+      description: "Personlig AI-karta med prioriterade arbetsflöden, uppskattat tidsvärde och förslag på första steg.",
       canonical: "https://auroramedia.se/ai-karta/resultat",
       noindex: true,
     });
@@ -78,22 +80,26 @@ const AiKartaResultat = () => {
           const supabase = await getSupabase();
           const { data, error } = await supabase.functions.invoke("get-ai-map-result", {
             body: { token },
+            signal: AbortSignal.timeout(20000),
           });
           if (cancelled) return;
           if (error || !data || (data as { error?: string }).error) {
-            setErrorMsg("Länken är ogiltig eller har gått ut.");
+            setErrorMsg("Kartan kunde inte hämtas. Försök igen; om felet kvarstår, kontrollera länken eller kontakta oss.");
             setStatus("error");
             return;
           }
-          const parsed = data as AiMapResult;
+          const parsed = parseAiMapResult(data);
+          if (!parsed) { setErrorMsg("Kartan är ofullständig. Kontakta oss så hjälper vi er."); setStatus("error"); return; }
           setResult(parsed);
           setStatus(parsed.processes?.length ? "ready" : "error");
           trackEvent("ai_karta_result_viewed", { source: "share_token" });
           return;
         }
-        const raw = sessionStorage.getItem(RESULT_KEY);
-        if (!raw) { setStatus("missing"); return; }
-        const parsed = JSON.parse(raw) as AiMapResult;
+        const inMemory = (location.state as { result?: AiMapResult } | null)?.result;
+        let raw: string | null = null;
+        try { raw = sessionStorage.getItem(RESULT_KEY); } catch { /* use navigation state */ }
+        if (!raw && !inMemory) { setStatus("missing"); return; }
+        const parsed = parseAiMapResult(inMemory || JSON.parse(raw!));
         if (!parsed || !parsed.top3 || parsed.top3.length === 0) {
           setErrorMsg("Resultatet verkar vara tomt eller skadat.");
           setStatus("error");
@@ -110,35 +116,7 @@ const AiKartaResultat = () => {
     };
     void load();
     return () => { cancelled = true; };
-  }, [token]);
-
-  // Hämta live-analys om ai_analysis saknas
-  useEffect(() => {
-    if (!result || result.ai_analysis || liveAnalysis || liveAnalysisLoading) return;
-    setLiveAnalysisLoading(true);
-    const industry = result.meta?.industry || "okänd bransch";
-    const topName = result.top3?.[0]?.process_name || result.processes?.[0]?.process_name || "";
-    const rows = (result.processes ?? []).slice(0, 6).map((p) => `• ${p.process_name} (score ${p.score}, ${p.potential})`).join("\n");
-    const context = `Bransch: ${industry}. Företag: ${result.meta?.company_name || ""}.\nProcesser med score/potential:\n${rows}\n\nToppområde: ${topName}.`;
-    const topic = `AI-karta för ${result.meta?.company_name || "kund"} – 3–4 meningar på svenska: vad som sticker ut, vilken process de ska börja med och varför. Ingen säljfras.`;
-    (async () => {
-      try {
-        const supabase = await getSupabase();
-        const { data, error } = await supabase.functions.invoke("generate-text", {
-          body: { textType: "landing-section", topic, context, maxLength: 700 },
-        });
-        if (error) throw error;
-        const c = (data as { content?: { heading?: string; paragraphs?: string[] } })?.content;
-        if (!c || !Array.isArray(c.paragraphs) || c.paragraphs.length === 0) return;
-        setLiveAnalysis({ heading: c.heading || "Vad kartan säger", body: c.paragraphs.join("\n\n") });
-      } catch (err) {
-        // Tyst fail – panelen göms
-        console.warn("[AiKartaResultat] generate-text failed", err);
-      } finally {
-        setLiveAnalysisLoading(false);
-      }
-    })();
-  }, [result, liveAnalysis, liveAnalysisLoading]);
+  }, [token, location.state]);
 
   // Mejla PDF:en automatiskt direkt efter wizarden (färskt resultat, ej delningslänk).
   // Körs en gång per lead – sker tyst i bakgrunden, status visas vid PDF-knappen.
@@ -146,7 +124,9 @@ const AiKartaResultat = () => {
     if (!result || token) return; // token i URL = delad länk, skicka inte igen
     if (!result.shareToken || !result.meta?.email) return;
     const guardKey = `aik_pdf_mail:${result.leadId || result.shareToken}`;
-    if (sessionStorage.getItem(guardKey)) {
+    let alreadySent = false;
+    try { alreadySent = !!sessionStorage.getItem(guardKey); } catch { /* optional cache */ }
+    if (alreadySent) {
       setPdfMailStatus("sent");
       return;
     }
@@ -159,12 +139,13 @@ const AiKartaResultat = () => {
         const supabase = await getSupabase();
         const { data, error } = await supabase.functions.invoke("send-ai-map-pdf", {
           body: { token: result.shareToken, pdfBase64, filename: aiMapPdfFilename(result) },
+          signal: AbortSignal.timeout(25000),
         });
         if (cancelled) return;
         if (error || (data as { error?: string })?.error) throw error ?? new Error((data as { error?: string }).error);
-        sessionStorage.setItem(guardKey, "1");
+        try { sessionStorage.setItem(guardKey, "1"); } catch { /* optional cache */ }
         setPdfMailStatus("sent");
-        trackEvent("ai_karta_pdf_emailed", { company: result.meta.company_name });
+        trackEvent("ai_karta_pdf_emailed", { source: "result" });
       } catch (err) {
         console.warn("[AiKartaResultat] auto-PDF-mejl misslyckades", err);
         if (!cancelled) setPdfMailStatus("failed");
@@ -182,7 +163,7 @@ const AiKartaResultat = () => {
     const monthlyCost = Math.round(totalSavedPerWeek * WEEKS_PER_MONTH * HOURLY_RATE);
     const topProcess = processes[0] ?? null;
     const topTier: TierKey | null = topProcess ? tierForProcess(topProcess) : null;
-    const paybackMonths = topTier && monthlyCost > 0 ? Math.max(1, Math.round(TIERS[topTier].price / monthlyCost)) : null;
+    const paybackMonths = topTier && topProcess ? estimatedPayback(topProcess, TIERS[topTier].price) : null;
     const maxScore = processes.reduce((m, p) => Math.max(m, p.score ?? 0), 0) || 16;
     return { processes, totalSavedPerWeek, savedPerMonth, monthlyCost, topProcess, topTier, paybackMonths, maxScore };
   }, [result]);
@@ -202,7 +183,7 @@ const AiKartaResultat = () => {
 
   const analysis = result.ai_analysis
     ? { heading: "Vad vi ser i era svar", body: [result.ai_analysis.executive_summary, result.ai_analysis.overall_recommendation].filter(Boolean).join("\n\n") }
-    : liveAnalysis;
+    : { heading: "Börja med ett avgränsat test", body: topProcess ? `${topProcess.process_name} har högst prioriteringspoäng i era svar. ${topProcess.next_step} Kontrollera datakvalitet, undantag och systemåtkomst innan ni bestämmer lösning.` : "Gå igenom era arbetsuppgifter och välj ett första test." };
 
   const handlePrint = () => {
     void trackAiKartaClick("result_pdf_download");
@@ -331,7 +312,7 @@ const AiKartaResultat = () => {
               Er AI-karta, {meta.company_name}
             </h1>
             <p style={{ maxWidth: 640, color: "var(--granbark-mut)", fontSize: 17, lineHeight: 1.6 }}>
-              {processes.length} processer analyserade. Nedan ser ni potentialen per område, uppskattad tidsbesparing och en rekommenderad nivå för första bygget.
+              {processes.length} processer analyserade. Nedan ser ni potentialen per område, uppskattad tidsbesparing och en ett förslag på första steg.
             </p>
 
             {/* Summerings-kvitto */}
@@ -368,7 +349,7 @@ const AiKartaResultat = () => {
             </div>
 
             {/* Personlig analys */}
-            {(analysis || liveAnalysisLoading) && (
+            {analysis && (
               <div style={{
                 marginTop: 32,
                 background: "var(--gran-soft)",
@@ -377,20 +358,8 @@ const AiKartaResultat = () => {
                 padding: "24px 26px",
               }}>
                 <p className="vk-mono" style={{ color: "var(--gran)" }}>Analys</p>
-                {liveAnalysisLoading && !analysis ? (
-                  <div style={{ marginTop: 12 }}>
-                    <div style={{ height: 14, width: "70%", background: "rgba(15,81,50,0.12)", borderRadius: 4, marginBottom: 10 }} />
-                    <div style={{ height: 14, width: "94%", background: "rgba(15,81,50,0.10)", borderRadius: 4, marginBottom: 10 }} />
-                    <div style={{ height: 14, width: "82%", background: "rgba(15,81,50,0.10)", borderRadius: 4 }} />
-                  </div>
-                ) : (
-                  <>
-                    <h3 style={{ marginTop: 12, marginBottom: 10, fontSize: 20 }}>{analysis!.heading}</h3>
-                    <p style={{ color: "var(--granbark)", fontSize: 16, lineHeight: 1.65, whiteSpace: "pre-wrap" }}>
-                      {analysis!.body}
-                    </p>
-                  </>
-                )}
+                <h3 style={{ marginTop: 12, marginBottom: 10, fontSize: 20 }}>{analysis.heading}</h3>
+                <p style={{ fontSize: 16, lineHeight: 1.65, whiteSpace: "pre-wrap" }}>{analysis.body}</p>
               </div>
             )}
 
@@ -409,7 +378,7 @@ const AiKartaResultat = () => {
               </div>
               {topProcess && (
                 <p style={{ marginTop: 14, color: "var(--granbark-mut)", fontSize: 14 }}>
-                  <strong style={{ color: "var(--granbark)" }}>"{topProcess.process_name}"</strong> hamnar först: högst potential ({topProcess.potential.toLowerCase()}) och mest tid att vinna
+                  <strong style={{ color: "var(--granbark)" }}>"{topProcess.process_name}"</strong> hamnar först utifrån prioriteringspoängen i era svar. Modellens uppskattade tidsvinst är
                   {(topProcess.saved_hours_per_week ?? 0) > 0 && ` (~${topProcess.saved_hours_per_week} h/vecka)`}.
                 </p>
               )}
@@ -582,17 +551,18 @@ function ReceiptSummary({ totalPotential, savedPerMonth, monthlyCost, topTier, p
       gap: 20,
     }}>
       <ReceiptCell label="Total potential" value={totalPotential} />
-      <ReceiptCell label="Tidsbesparing / mån" value={savedPerMonth > 0 ? `~${savedPerMonth} h` : "–"} />
-      <ReceiptCell label="Kostnad idag / mån" value={monthlyCost > 0 ? fmtKr(monthlyCost) : "–"} sub="600 kr/h schablon" />
+      <ReceiptCell label="Möjlig frigjord tid / mån" value={savedPerMonth > 0 ? `~${savedPerMonth} h` : "–"} />
+      <ReceiptCell label="Uppskattat tidsvärde / mån" value={monthlyCost > 0 ? fmtKr(monthlyCost) : "–"} sub="600 kr/h · 46 arbetsveckor/år" />
       <ReceiptCell
-        label="Återbetalningstid"
-        value={topTier && paybackMonths ? `~${paybackMonths} mån` : "–"}
-        sub={topTier ? `${TIERS[topTier].label} · ${TIERS[topTier].priceLabel}` : undefined}
+        label="Första steget"
+        value="Avgränsa en pilot"
+        sub="Omfattning och pris kräver offert"
       />
+      <p style={{ gridColumn: "1 / -1", fontSize: 12, color: "var(--granbark-mut)", margin: 0 }}>Schablon utifrån era svar, inte uppmätt besparing. Frigjord tid är kapacitet, inte automatiskt pengar på kontot. Drift, granskning och införande tillkommer. Okänd tid ingår inte.</p>
       {topName && (
         <div style={{ gridColumn: "1 / -1", borderTop: "1px dashed var(--linje)", paddingTop: 14 }}>
           <span style={{ fontFamily: mono, fontSize: 11, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--granbark-mut)" }}>
-            Rekommenderad start · {topName}
+            Prioriterad process att undersöka · {topName}
           </span>
         </div>
       )}
@@ -616,11 +586,11 @@ function ProcessRow({ process, maxScore, isTop }: { process: ScoredProcess; maxS
   const tier = tierForProcess(process);
   const tierMeta = TIERS[tier];
   const score = process.score ?? 0;
-  const pct = Math.max(6, Math.round((score / (maxScore || 16)) * 100));
+  const pct = Math.max(0, Math.min(100, Math.round((score / 16) * 100)));
   const saved = process.saved_hours_per_week ?? 0;
   const monthly = saved > 0 ? Math.round(saved * WEEKS_PER_MONTH * 10) / 10 : 0;
   const payback = saved > 0
-    ? Math.max(1, Math.round(tierMeta.price / (saved * WEEKS_PER_MONTH * HOURLY_RATE)))
+    ? estimatedPayback(process, tierMeta.price)
     : null;
   const barGradient = score >= 9 || process.potential === "Mycket hög" || process.potential === "Hög" || process.potential === "Direkt AI-case" || process.potential === "Hög potential"
     ? "linear-gradient(90deg, #0F5132 0%, #4CAF80 100%)"
@@ -657,13 +627,9 @@ function ProcessRow({ process, maxScore, isTop }: { process: ScoredProcess; maxS
         <div style={{ textAlign: "right" }}>
           <p style={{ fontFamily: mono, fontSize: 18, fontWeight: 600, color: "var(--granbark)" }}>{score} p</p>
           <p style={{ fontFamily: mono, fontSize: 11, color: "var(--granbark-mut)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-            {tierMeta.label} · {tierMeta.priceLabel}
+            Prioriteringspoäng · max 16
           </p>
-          {payback && (
-            <p style={{ fontFamily: mono, fontSize: 11, color: "var(--gran)", textTransform: "uppercase", letterSpacing: "0.08em", marginTop: 3 }}>
-              betalar sig på ~{payback} mån
-            </p>
-          )}
+
         </div>
       </div>
 
@@ -676,7 +642,7 @@ function ProcessRow({ process, maxScore, isTop }: { process: ScoredProcess; maxS
         <span><strong style={{ color: "var(--granbark)" }}>{monthly > 0 ? `~${monthly} h/mån` : "–"}</strong> per månad</span>
         {process.recommended_solution && (
           <span style={{ fontFamily: "'Schibsted Grotesk',sans-serif", textTransform: "none", letterSpacing: 0, fontSize: 13, color: "var(--granbark)" }}>
-            Bygger: {process.recommended_solution}
+            Att undersöka: {process.recommended_solution}
           </span>
         )}
       </div>

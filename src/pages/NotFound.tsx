@@ -17,12 +17,11 @@ const NotFound = () => {
 
   return (
     <NordicLayout>
-      <main
-        id="main"
+      <section
         style={{
           display: "flex", flexDirection: "column",
           alignItems: "center", justifyContent: "center",
-          minHeight: "100vh", textAlign: "center",
+          minHeight: "65vh", textAlign: "center",
           padding: "clamp(100px,14vw,160px) clamp(20px,4vw,48px) 60px",
         }}
       >
@@ -30,25 +29,25 @@ const NotFound = () => {
           fontFamily: "'Fraunces',Georgia,serif",
           fontSize: "clamp(80px,14vw,140px)",
           lineHeight: 1,
-          color: "#EDE9DC",
+          color: "var(--gran)",
           letterSpacing: "-0.04em",
           marginBottom: 20,
         }}>
           404.
         </p>
-        <p style={{
+        <h1 style={{
           fontFamily: "'Inter',system-ui,sans-serif",
           fontSize: 15, lineHeight: 1.6,
-          color: "rgba(237,233,220,0.55)",
+          color: "var(--granbark-mut)",
           maxWidth: 340, marginBottom: 40,
         }}>
           Sidan finns inte.{" "}
-          <em style={{ fontFamily: "'Fraunces',Georgia,serif", fontStyle: "italic", color: "rgba(237,233,220,0.75)" }}>
+          <em style={{ fontFamily: "'Fraunces',Georgia,serif", fontStyle: "italic", color: "var(--granbark)" }}>
             Eller så har vi inte byggt den än.
           </em>
-        </p>
+        </h1>
         <Link to="/" className="btn-primary">Tillbaka till start →</Link>
-      </main>
+      </section>
     </NordicLayout>
   );
 };

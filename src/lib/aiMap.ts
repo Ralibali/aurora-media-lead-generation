@@ -114,20 +114,14 @@ export interface ScoredProcess {
 export type TierKey = "prototyp" | "mvp" | "saas";
 
 export const TIERS: Record<TierKey, { label: string; price: number; priceLabel: string }> = {
-  prototyp: { label: "Prototyp", price: 4900, priceLabel: "4 900:-" },
-  mvp:      { label: "MVP",      price: 11900, priceLabel: "11 900:-" },
-  saas:     { label: "SaaS",     price: 24900, priceLabel: "från 24 900:-" },
+  prototyp: { label: "Prototyp", price: 4900, priceLabel: "från 4 900 kr" },
+  mvp:      { label: "MVP",      price: 11900, priceLabel: "från 11 900 kr" },
+  saas:     { label: "SaaS",     price: 24900, priceLabel: "från 24 900 kr" },
 };
 
-export function tierForProcess(p: ScoredProcess): TierKey {
-  // Score-baserade trösklar (robust mot etikett-varianter) + komplexitetsvikt.
-  const complex = p.rule_based !== "yes" || p.data_available !== "yes";
-  const isVeryHigh = p.score >= 13 || p.potential === "Mycket hög" || p.potential === "Direkt AI-case";
-  const isHigh = isVeryHigh || p.score >= 9 || p.potential === "Hög" || p.potential === "Hög potential";
-  if (isVeryHigh || (isHigh && complex)) return "saas";
-  if (isHigh) return "mvp";
-  return "prototyp";
-}
+// Readiness is not a specification. Start with a scoped prototype; final scope
+// and price are agreed separately. Kept for PDF backwards compatibility.
+export function tierForProcess(_p: ScoredProcess): TierKey { return "prototyp"; }
 
 export interface AiAnalysisCase {
   process_name: string;

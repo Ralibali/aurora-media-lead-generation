@@ -8,7 +8,7 @@ const FACTS: [string, string][] = [
   ["Plats", "Linköping, Sverige"],
   ["Org.nr", "559272-0220"],
   ["VAT", "SE559272022001"],
-  ["Leverans", "Veckor, inte månader"],
+  ["Första steg", "En kostnadsfri genomgång"],
 ];
 
 const Kontakt = () => {
@@ -16,7 +16,7 @@ const Kontakt = () => {
   useEffect(() => {
     setSEOMeta({
       title: "Kontakt — begär offert | Aurora Media",
-      description: "Berätta vad ni vill bygga. Vi återkommer med offert inom 24 timmar.",
+      description: "Berätta vad ni vill bygga. Personligt svar inom 24 timmar på vardagar. Vi avgränsar behov och nästa steg tillsammans.",
       canonical: "/kontakt",
     });
     setBreadcrumb([{ name: "Hem", url: "/" }, { name: "Kontakt", url: "/kontakt" }]);
@@ -27,21 +27,21 @@ const Kontakt = () => {
     <NordicLayout>
       <section className="page-hero">
         <div className="wrap">
-          <Reveal><p className="mono">kontakt · svar inom 24 timmar</p></Reveal>
+          <Reveal><p className="mono">kontakt · svar inom 24 timmar på vardagar</p></Reveal>
           <Reveal delay={0.1}>
             <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "14ch" }}>
-              Berätta vad ni <span className="it">vill bygga.</span>
+              Vad vill ni få <span className="it">att fungera bättre?</span>
             </h1>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="lead" style={{ marginTop: 24 }}>
-              Klicka på knappen nedan så öppnas ett enkelt formulär. Vi återkommer med förslag, tidsplan och ungefärlig budget — utan kostnad och bindning.
+              Beskriv ett arbetsmoment som tar för mycket tid, ett system som saknas eller en produktidé. Ni behöver ingen färdig kravspecifikation. Christoffer återkommer med frågor och ett konkret förslag på nästa steg.
             </p>
           </Reveal>
           <Reveal delay={0.3}>
             <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", gap: 16 }}>
               <button onClick={() => open()} className="btn btn-moss">
-                Boka kostnadsfri rådgivning <span className="a"><ArrowRight size={14} /></span>
+                Skicka en förfrågan <span className="a"><ArrowRight size={14} /></span>
               </button>
               <a href="mailto:info@auroramedia.se" className="btn btn-ghost">
                 <Mail size={14} /> info@auroramedia.se
