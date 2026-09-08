@@ -5,7 +5,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 Deno.serve(async (req) => {
@@ -59,7 +59,10 @@ Deno.serve(async (req) => {
       .eq("lead_id", lead.id)
       .order("score", { ascending: false });
 
-    if (pErr) console.error("[get-ai-map-result] procs err", pErr);
+    if (pErr || !procs?.length) {
+      console.error("[get-ai-map-result] incomplete result", pErr);
+      return new Response(JSON.stringify({ error: "incomplete_result" }), { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
     const processes = (procs ?? []) as Array<Record<string, unknown> & { saved_hours_per_week?: number | null; score?: number | null }>;
 
     const totalSavedPerWeek = processes.reduce((s, p) => s + (Number(p.saved_hours_per_week) || 0), 0);
@@ -71,7 +74,7 @@ Deno.serve(async (req) => {
       JSON.stringify({
         leadId: lead.id,
         totalScore: lead.total_score,
-        avg: 0,
+        avg: processes.reduce((sum, p) => sum + (Number(p.score) || 0), 0) / processes.length,
         total_potential: lead.total_potential,
         processes,
         top3,

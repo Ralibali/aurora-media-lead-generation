@@ -201,11 +201,11 @@ Deno.serve(async (req: Request) => {
         new_this_week: unified.filter((l) => new Date(l.created_at).getTime() >= weekAgo).length,
         unhandled: unified.filter((l) => l.status === "ny").length,
         meetings_booked: unified.filter(
-          (l) => l.source === "genomlysning" || l.status === "mote_bokat"
+          (l) => l.status === "mote_bokat"
         ).length,
         karta_to_booking_pct:
           kartaRows.length > 0
-            ? Math.round((genomlysningRows.length / kartaRows.length) * 1000) / 10
+            ? Math.round((kartaRows.filter(l => ["mote_bokat", "offert_skickad", "kund"].includes(l.status)).length / kartaRows.length) * 1000) / 10
             : 0,
       };
 

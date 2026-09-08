@@ -25,65 +25,9 @@ import { getFunctionUrl } from "@/lib/functionUrl";
 import "@/styles/verkstad.css";
 
 
-export const ADMIN_STORAGE_KEY = "faq_analytics_pwd";
-const VERIFY_URL = getFunctionUrl("list-leads");
-
-export type AdminErrorKind = "auth" | "network" | "server" | "notfound" | "parse" | "empty";
-
-export class AdminError extends Error {
-  kind: AdminErrorKind;
-  status?: number;
-  path?: string;
-  detail?: string;
-  constructor(kind: AdminErrorKind, message: string, opts: { status?: number; path?: string; detail?: string } = {}) {
-    super(message);
-    this.kind = kind;
-    this.status = opts.status;
-    this.path = opts.path;
-    this.detail = opts.detail;
-  }
-}
-
-export const adminFetch = async (path: string, init: RequestInit = {}) => {
-  const pwd = sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
-  if (!pwd) throw new AdminError("auth", "Inte inloggad.", { path });
-  const url = getFunctionUrl(path);
-  let res: Response;
-  try {
-    res = await fetch(url, {
-      ...init,
-      headers: {
-        Authorization: `Bearer ${pwd}`,
-        "Content-Type": "application/json",
-        ...(init.headers ?? {}),
-      },
-    });
-  } catch (e) {
-    throw new AdminError("network", "Nätverksfel — kunde inte nå servern.", {
-      path,
-      detail: e instanceof Error ? e.message : String(e),
-    });
-  }
-  if (res.status === 401 || res.status === 403) {
-    sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-    throw new AdminError("auth", "Fel lösenord — logga in på nytt.", { status: res.status, path });
-  }
-  if (res.status === 404) {
-    throw new AdminError("notfound", `Endpoint saknas: ${path}`, { status: 404, path });
-  }
-  if (!res.ok) {
-    const detail = await res.text().catch(() => "");
-    throw new AdminError("server", `Serverfel (${res.status}) från ${path}`, { status: res.status, path, detail });
-  }
-  try {
-    return await res.json();
-  } catch (e) {
-    throw new AdminError("parse", "Kunde inte tolka svaret från servern.", {
-      path,
-      detail: e instanceof Error ? e.message : String(e),
-    });
-  }
-};
+import { AdminError, type AdminErrorKind } from "@/lib/adminClient";
+import { useAdminSession } from "./AdminAccess";
+export { adminFetch, AdminError, ADMIN_STORAGE_KEY } from "@/lib/adminClient";
 
 const KIND_META: Record<AdminErrorKind, { label: string; Icon: typeof AlertTriangle; color: string }> = {
   auth: { label: "Autentiseringsfel", Icon: ShieldAlert, color: "#B4531A" },
@@ -152,7 +96,7 @@ export function AdminStatus({
           {e.kind === "auth" && (
             <button
               className="vk-btn vk-btn-primary"
-              onClick={() => { sessionStorage.removeItem(ADMIN_STORAGE_KEY); window.location.reload(); }}
+              onClick={() => { window.location.reload(); }}
               style={{ fontSize: 13 }}
             >
               Logga in igen
@@ -206,126 +150,11 @@ const QUICK = [
 type Props = { children: ReactNode; title: string; kicker?: string };
 
 export default function AdminShell({ children, title, kicker = "Admin" }: Props) {
-  const [pwd, setPwd] = useState(() => sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "");
-  const [authed, setAuthed] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { pathname } = useLocation();
-
+  const { logout } = useAdminSession();
   useEffect(() => {
     setSEOMeta({ title: `${title} · Admin · Aurora Media`, description: "Internt.", noindex: true });
   }, [title]);
-
-  useEffect(() => {
-    if (!pwd) return;
-    (async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(VERIFY_URL, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${pwd}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "list" }),
-        });
-        if (res.ok) {
-          setAuthed(true);
-          sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
-        } else if (res.status === 401 || res.status === 403) {
-          sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-          setError("Sparat lösenord fungerar inte längre — logga in på nytt.");
-        } else {
-          setError(`Serverfel (HTTP ${res.status}) vid verifiering.`);
-        }
-      } catch (err) {
-        setError(`Nätverksfel — kunde inte nå servern. (${err instanceof Error ? err.message : "okänt fel"})`);
-      } finally {
-        setLoading(false);
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const login = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    let res: Response;
-    try {
-      res = await fetch(VERIFY_URL, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${pwd}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "list" }),
-      });
-    } catch (err) {
-      setLoading(false);
-      setError(
-        `Nätverksfel — kunde inte nå servern. (${err instanceof Error ? err.message : "okänt fel"})`
-      );
-      return;
-    }
-    setLoading(false);
-    if (res.status === 401 || res.status === 403) {
-      setError("Fel lösenord. Kontrollera och försök igen.");
-      return;
-    }
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      setError(`Serverfel (HTTP ${res.status}) från list-leads.${body ? ` ${body.slice(0, 200)}` : ""}`);
-      return;
-    }
-    sessionStorage.setItem(ADMIN_STORAGE_KEY, pwd);
-    window.location.reload();
-  };
-
-  const logout = () => {
-    sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-    setPwd("");
-    setAuthed(false);
-  };
-
-  if (!authed) {
-    return (
-      <div className="verkstad" style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
-        <form
-          onSubmit={login}
-          style={{
-            width: "100%",
-            maxWidth: 380,
-            background: "#fff",
-            border: "1px solid var(--linje)",
-            borderRadius: 14,
-            padding: 28,
-            display: "grid",
-            gap: 16,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Lock size={18} color="var(--gran)" />
-            <h1 style={{ fontSize: 22, margin: 0 }}>Admin · inloggning</h1>
-          </div>
-          <input
-            type="password"
-            placeholder="Lösenord"
-            autoFocus
-            value={pwd}
-            onChange={(e) => setPwd(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "12px 14px",
-              border: "1px solid var(--linje)",
-              borderRadius: 8,
-              fontFamily: "var(--font-sans)",
-              fontSize: 15,
-            }}
-          />
-          {error && <p style={{ color: "var(--varsel-hover)", fontSize: 13, margin: 0 }}>{error}</p>}
-          <button type="submit" className="vk-btn vk-btn-primary" disabled={loading || !pwd}>
-            {loading ? <Loader2 size={16} className="animate-spin" /> : "Logga in"}
-          </button>
-        </form>
-      </div>
-    );
-  }
-
   return <AdminLayout pathname={pathname} onLogout={logout} title={title} kicker={kicker}>{children}</AdminLayout>;
 }
 
@@ -401,10 +230,10 @@ function AdminLayout({
 
   const Brand = () => (
     <div style={{ padding: "0 8px 20px" }}>
-      <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", opacity: 0.55, margin: 0 }}>
+      <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", color: "#fff", opacity: 0.75, margin: 0 }}>
         AURORA MEDIA
       </p>
-      <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", opacity: 0.55, margin: "4px 0 0" }}>
+      <p style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.1em", color: "#fff", opacity: 0.75, margin: "4px 0 0" }}>
         ADMIN
       </p>
     </div>
@@ -449,10 +278,10 @@ function AdminLayout({
           }}
         >
           <div>
-            <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", opacity: 0.55, margin: 0 }}>
+            <p style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.1em", color: "#fff", opacity: 0.75, margin: 0 }}>
               AURORA · ADMIN
             </p>
-            <p style={{ margin: "2px 0 0", fontSize: 15, fontWeight: 600 }}>{title}</p>
+            <p style={{ color: "#fff", margin: "2px 0 0", fontSize: 15, fontWeight: 600 }}>{title}</p>
           </div>
           <button
             onClick={() => setOpen(true)}

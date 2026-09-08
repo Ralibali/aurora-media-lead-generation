@@ -1,3 +1,6 @@
+import { useSearchParams } from "react-router-dom";
+import AdminShell, { adminFetch } from "./AdminShell";
+import { csvCell, needsFollowup, pipelineSummary } from "@/lib/leadPipeline";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Loader2,
@@ -20,8 +23,8 @@ import { toast } from "sonner";
 import "@/styles/verkstad.css";
 
 const STORAGE_KEY = "faq_analytics_pwd";
-const FUNCTION_URL = getFunctionUrl("list-leads");
-const RESEND_URL = getFunctionUrl("resend-ai-map-email");
+const FUNCTION_URL = "list-leads";
+const RESEND_URL = "resend-ai-map-email";
 const NOTES_MAX = 2000;
 
 function useIsMobile(bp = 720) {
@@ -115,20 +118,17 @@ const svDate = (iso: string) =>
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
-const csvEscape = (v: unknown) => {
-  const s = v == null ? "" : String(v);
-  return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-};
+const csvEscape = csvCell;
 
 const Leads = () => {
+  const [searchParams] = useSearchParams();
+  const [queueFilter, setQueueFilter] = useState(searchParams.get("view") || "all");
   const isMobile = useIsMobile();
-  const [password, setPassword] = useState(() => sessionStorage.getItem(STORAGE_KEY) ?? "");
-  const [authed, setAuthed] = useState(false);
+
   const [leads, setLeads] = useState<Lead[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [loginTouched, setLoginTouched] = useState(false);
 
   const [query, setQuery] = useState("");
   const [sourceFilter, setSourceFilter] = useState<"all" | Source>("all");
@@ -153,72 +153,27 @@ const Leads = () => {
     });
   }, []);
 
-  const call = async (options: RequestInit & { path?: string } = {}) => {
-    const res = await fetch(options.path ?? FUNCTION_URL, {
-      ...options,
-      headers: {
-        Authorization: `Bearer ${password}`,
-        "Content-Type": "application/json",
-        ...(options.headers ?? {}),
-      },
-    });
-    if (res.status === 401) {
-      sessionStorage.removeItem(STORAGE_KEY);
-      setAuthed(false);
-      setError("Fel lösenord.");
-      throw new Error("Unauthorized");
-    }
-    if (!res.ok) throw new Error(await res.text());
-    return res.json();
+  const call = (options: RequestInit & { path?: string } = {}) => {
+    const { path, ...init } = options;
+    return adminFetch(path ?? FUNCTION_URL, init);
   };
 
-  const fetchLeads = async (pwd?: string) => {
-    const usePwd = pwd ?? password;
-    if (!usePwd) {
-      setError("Ange lösenord för att logga in.");
-      return;
-    }
+  const fetchLeads = async () => {
     setLoading(true);
     setError(null);
-    let res: Response;
     try {
-      res = await fetch(FUNCTION_URL, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${usePwd}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "list" }),
-      });
-    } catch (e) {
-      setLoading(false);
-      setError(`Nätverksfel — kunde inte nå servern. (${e instanceof Error ? e.message : "okänt fel"})`);
-      return;
-    }
-    setLoading(false);
-    if (res.status === 401 || res.status === 403) {
-      sessionStorage.removeItem(STORAGE_KEY);
-      setAuthed(false);
-      setLeads([]);
-      setError("Fel lösenord. Kontrollera och försök igen.");
-      return;
-    }
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      setError(`Serverfel (HTTP ${res.status}).${body ? ` ${body.slice(0, 200)}` : ""}`);
-      return;
-    }
-    try {
-      const json = await res.json();
-      setLeads(json.leads ?? []);
+      const json = await call({ method: "POST", body: JSON.stringify({ action: "list" }) });
+      if (!Array.isArray(json.leads)) throw new Error("Ogiltigt svar från servern.");
+      setLeads(json.leads);
       setStats(json.stats ?? null);
-      setAuthed(true);
-      sessionStorage.setItem(STORAGE_KEY, usePwd);
-    } catch (e) {
-      setError(`Ogiltigt svar från servern. (${e instanceof Error ? e.message : "okänt"})`);
-    }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Kunde inte hämta förfrågningar.");
+    } finally { setLoading(false); }
   };
 
-
   useEffect(() => {
-    if (password) fetchLeads(password);
+    void fetchLeads();
+    // Authentication is handled before mounting by AdminAccess.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -278,6 +233,10 @@ const Leads = () => {
     const fromTs = dateFrom ? new Date(dateFrom + "T00:00:00").getTime() : null;
     const toTs = dateTo ? new Date(dateTo + "T23:59:59.999").getTime() : null;
     let list = leads.filter((l) => {
+      if (queueFilter === "new" && l.status !== "ny") return false;
+      if (queueFilter === "followup" && !needsFollowup(l)) return false;
+      if (queueFilter === "offers" && l.status !== "offert_skickad") return false;
+      if (queueFilter === "customers" && l.status !== "kund") return false;
       if (sourceFilter !== "all" && l.source !== sourceFilter) return false;
       if (statusFilter !== "all" && l.status !== statusFilter) return false;
       if (fromTs != null || toTs != null) {
@@ -301,7 +260,7 @@ const Leads = () => {
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
     return list;
-  }, [leads, query, sourceFilter, statusFilter, sort, dateFrom, dateTo]);
+  }, [leads, query, sourceFilter, statusFilter, sort, dateFrom, dateTo, queueFilter]);
 
   const applyDatePreset = (preset: "all" | "today" | "7d" | "30d") => {
     setDatePreset(preset);
@@ -316,13 +275,21 @@ const Leads = () => {
   };
 
   const clearFilters = () => {
-    setQuery(""); setSourceFilter("all"); setStatusFilter("all");
+    setQueueFilter("all"); setQuery(""); setSourceFilter("all"); setStatusFilter("all");
     setDateFrom(""); setDateTo(""); setDatePreset("all");
   };
 
   const activeFilterCount =
-    (query ? 1 : 0) + (sourceFilter !== "all" ? 1 : 0) + (statusFilter !== "all" ? 1 : 0) + (dateFrom || dateTo ? 1 : 0);
+    (queueFilter !== "all" ? 1 : 0) + (query ? 1 : 0) + (sourceFilter !== "all" ? 1 : 0) + (statusFilter !== "all" ? 1 : 0) + (dateFrom || dateTo ? 1 : 0);
 
+  useEffect(() => {
+    const leadId = searchParams.get("lead");
+    const lead = leads.find(l => l.id === leadId);
+    if (lead && !openId) void openDetail(lead);
+    // Open a requested lead once after data arrives, not again when the drawer closes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [leads.length, searchParams]);
+  const pipeline = pipelineSummary(leads);
   const openLead = leads.find((l) => l.id === openId) ?? null;
 
 
@@ -365,84 +332,16 @@ const Leads = () => {
     URL.revokeObjectURL(url);
   };
 
-  if (!authed) {
-    const pwdEmpty = loginTouched && !password.trim();
-    return (
-      <div
-        className="verkstad"
-        style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 16 }}
-      >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setLoginTouched(true);
-            if (!password.trim()) return;
-            fetchLeads(password.trim());
-          }}
-          noValidate
-          style={{
-            width: "100%",
-            maxWidth: 380,
-            background: "#fff",
-            border: "1px solid var(--linje)",
-            borderRadius: 14,
-            padding: "24px clamp(20px, 5vw, 28px)",
-            display: "grid",
-            gap: 14,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Lock size={18} color="var(--gran)" />
-            <h1 style={{ fontSize: 20, margin: 0 }}>Leads · inloggning</h1>
-          </div>
-          <label style={{ display: "grid", gap: 6 }}>
-            <span className="vk-mono" style={{ fontSize: 11, color: "var(--granbark-mut)" }}>LÖSENORD</span>
-            <input
-              type="password"
-              placeholder="Ange lösenord"
-              autoFocus
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={() => setLoginTouched(true)}
-              aria-invalid={pwdEmpty || undefined}
-              aria-describedby={pwdEmpty ? "pwd-err" : error ? "pwd-srv-err" : undefined}
-              style={{
-                width: "100%",
-                padding: "12px 14px",
-                border: `1px solid ${pwdEmpty ? "var(--varsel)" : "var(--linje)"}`,
-                borderRadius: 8,
-                fontFamily: "var(--font-sans)",
-                fontSize: 16, /* prevents iOS zoom */
-              }}
-            />
-            {pwdEmpty && (
-              <span id="pwd-err" style={{ color: "var(--varsel-hover)", fontSize: 12 }}>
-                Fältet får inte vara tomt.
-              </span>
-            )}
-          </label>
-          {error && !pwdEmpty && (
-            <p id="pwd-srv-err" role="alert" style={{ color: "var(--varsel-hover)", fontSize: 13, margin: 0 }}>{error}</p>
-          )}
-          <button type="submit" className="vk-btn vk-btn-primary" disabled={loading}>
-
-            {loading ? <Loader2 size={16} className="animate-spin" /> : "Logga in"}
-          </button>
-        </form>
-      </div>
-    );
-  }
 
   return (
-    <div className="verkstad" style={{ minHeight: "100vh" }}>
-      <main>
-        <div className="vk-wrap" style={{ paddingBlock: 40 }}>
+    <AdminShell title="Leads" kicker="Försäljning & uppföljning">
+      <div>
+        <div>
           {/* Header */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
             <div>
               <p className="vk-mono">Admin · leadhantering</p>
-              <h1 style={{ marginTop: 8, fontSize: "clamp(36px, 5vw, 52px)" }}>Leads</h1>
+              <p style={{ marginTop: 8, fontSize: 16 }}>Svara, boka nästa steg och följ upp i tid.</p>
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <button className="vk-btn vk-btn-ghost" onClick={exportCsv}>
@@ -454,6 +353,7 @@ const Leads = () => {
             </div>
           </div>
 
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 22 }} aria-label="Snabbfilter för leads">{[["all", "Alla"], ["new", `Obesvarade (${pipeline.unhandled})`], ["followup", `Följ upp idag (${pipeline.followups})`], ["offers", `Offerter (${pipeline.offers})`], ["customers", "Kunder"]].map(([value, label]) => <button key={value} className={`vk-btn ${queueFilter === value ? "vk-btn-primary" : "vk-btn-ghost"}`} aria-pressed={queueFilter === value} onClick={() => setQueueFilter(value)} style={{ fontSize: 12, padding: "9px 14px" }}><span>{label}</span></button>)}</div>
           {/* Stats */}
           {stats && (
             <div
@@ -467,8 +367,8 @@ const Leads = () => {
               {[
                 { label: "Nya denna vecka", val: stats.new_this_week },
                 { label: "Obehandlade", val: stats.unhandled },
-                { label: "Möten bokade", val: stats.meetings_booked },
-                { label: "Karta → bokning", val: `${stats.karta_to_booking_pct}%` },
+                { label: "Möten bokade", val: pipeline.meetings },
+                { label: "Kunder", val: pipeline.customers },
               ].map((s) => (
                 <div
                   key={s.label}
@@ -697,7 +597,7 @@ const Leads = () => {
             )}
           </div>
         </div>
-      </main>
+      </div>
 
       {openLead && (
         <DetailDrawer
@@ -722,33 +622,13 @@ const Leads = () => {
                 potential: p.potential,
                 recommended_solution: p.recommended_solution,
               }));
-            let res: Response;
             try {
-              res = await fetch(RESEND_URL, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${password}`,
-                },
-                body: JSON.stringify({
-                  email: openLead.email,
-                  contact_name: openLead.name,
-                  company_name: openLead.company ?? "",
-                  total_potential: openLead.total_potential ?? "",
-                  top3,
-                }),
-              });
-            } catch (e) {
-              toast.error(`Nätverksfel — kunde inte nå servern. (${e instanceof Error ? e.message : "okänt"})`);
-              return;
-            }
-            if (res.status === 401 || res.status === 403) {
-              toast.error("Sessionen har gått ut — logga in igen.");
-              return;
-            }
-            if (!res.ok) {
-              const body = await res.text().catch(() => "");
-              toast.error(`Serverfel (HTTP ${res.status}). ${body.slice(0, 160)}`);
+              await call({ path: RESEND_URL, method: "POST", body: JSON.stringify({
+                email: openLead.email, contact_name: openLead.name,
+                company_name: openLead.company ?? "", total_potential: openLead.total_potential ?? "", top3,
+              }) });
+            } catch (error) {
+              toast.error(error instanceof Error ? error.message : "Kunde inte skicka kartmejlet.");
               return;
             }
             toast.success("Kartmejlet skickat");
@@ -756,7 +636,7 @@ const Leads = () => {
 
         />
       )}
-    </div>
+    </AdminShell>
   );
 };
 

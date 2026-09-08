@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SEO } from "@/components/SEO";
-import { Reveal, VkNav, VkFooter } from "@/pages/Index";
+import { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 import { setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpers";
 import "@/styles/verkstad.css";
 

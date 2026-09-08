@@ -2,6 +2,7 @@ import { Component, ReactNode, Suspense } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { AlertTriangle, Loader2, RefreshCw } from "lucide-react";
 import "@/styles/verkstad.css";
+import AdminAccess from "./AdminAccess";
 
 type State = { error: Error | null };
 
@@ -140,9 +141,11 @@ export default function AdminBoundary() {
   const navigate = useNavigate();
   return (
     <AdminErrorBoundaryInner onReset={() => navigate(0)}>
+      <AdminAccess>
       <Suspense fallback={<AdminRouteFallback />}>
         <Outlet />
       </Suspense>
+      </AdminAccess>
     </AdminErrorBoundaryInner>
   );
 }

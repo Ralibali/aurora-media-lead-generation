@@ -84,10 +84,6 @@ function looksLikeSpam(name: string, message: string): string | null {
   const urlMatches = combined.match(/(https?:\/\/|www\.)/gi) ?? [];
   if (urlMatches.length > 3) return "too_many_links";
 
-  // Övervägande icke-latinska tecken (kyrilliska/CJK) i namn = ofta spam-bot
-  const nonLatin = (name.match(/[\u0400-\u04FF\u3040-\u30FF\u4E00-\u9FFF]/g) ?? []).length;
-  if (name.length > 0 && nonLatin / name.length > 0.5) return "non_latin_name";
-
   // Meddelande där > 70% är versaler och > 40 tecken långt
   const letters = message.replace(/[^A-Za-zÅÄÖåäö]/g, "");
   if (letters.length > 40) {
@@ -139,10 +135,10 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // 2) Fill-time — < 4s = bot, > 2h = uppslagen sida/prerender-replay
+    // 2) Reject implausibly fast requests; allow returning to a drafted form.
     if (typeof body._renderedAt === "number" && body._renderedAt > 0) {
       const elapsed = Date.now() - body._renderedAt;
-      if (elapsed < 4000 || elapsed > 2 * 60 * 60 * 1000) {
+      if (elapsed < 1000) {
         console.warn("[send-contact-email] suspicious fill-time", { elapsed, ip: getClientIp(req) });
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
@@ -172,7 +168,7 @@ Deno.serve(async (req: Request) => {
     const name = String(body.name ?? "").trim().slice(0, 80);
     const email = String(body.email ?? "").trim().slice(0, 160);
     const company = String(body.company ?? "").trim().slice(0, 120);
-    const paket = String(body.paket ?? "").trim().slice(0, 60);
+    const paket = String(body.paket || "Vet inte").trim().slice(0, 60);
     const platform = String(body.platform ?? "").trim().slice(0, 40);
     const leadLabel = String(body.leadLabel ?? "").trim().slice(0, 160);
     const internalNote = String(body.internalNote ?? "").trim().slice(0, 500);
@@ -258,7 +254,7 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // Spara leadet i databasen (best effort — bryt inte mailet om det failar)
+    // Bekräfta först när förfrågan är sparad och synlig i admin.
     let leadId: string | null = null;
     if (admin) {
       try {
@@ -286,6 +282,12 @@ Deno.serve(async (req: Request) => {
       } catch (e) {
         console.error("[send-contact-email] lead save threw", e);
       }
+    }
+
+    if (!leadId) {
+      return new Response(JSON.stringify({ error: "Kunde inte spara förfrågan. Försök igen." }), {
+        status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Använd den fullständiga lead-etiketten i ämnesraden om den finns,
@@ -330,6 +332,7 @@ Deno.serve(async (req: Request) => {
       : undefined;
 
     const res = await fetch("https://api.resend.com/emails", {
+      signal: AbortSignal.timeout(10000),
       method: "POST",
       headers: {
         Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -343,13 +346,15 @@ Deno.serve(async (req: Request) => {
         subject,
         html,
       }),
+    }).catch((error) => {
+      console.error("[send-contact-email] notification failed", error);
+      return null;
     });
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("[send-contact-email] Resend error", res.status, text);
-      return new Response(JSON.stringify({ error: "Email provider failed", leadId }), {
-        status: 502,
+    if (!res?.ok) {
+      console.error("[send-contact-email] notification unavailable", res?.status);
+      return new Response(JSON.stringify({ ok: true, leadId, notification_sent: false }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -379,6 +384,7 @@ Deno.serve(async (req: Request) => {
         </div>
       `;
       const autoRes = await fetch("https://api.resend.com/emails", {
+        signal: AbortSignal.timeout(10000),
         method: "POST",
         headers: {
           Authorization: `Bearer ${RESEND_API_KEY}`,

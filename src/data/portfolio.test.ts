@@ -77,18 +77,7 @@ describe("bergs-slussar-stayboost public case", () => {
 });
 
 describe("bergs-slussar-stayboost dependents", () => {
-  it("homepage featured rail links Bergs Slussar Glamping to the Stayboost case", () => {
-    const src = readFileSync(resolve(__dirname, "../pages/Index.tsx"), "utf8");
-    const casesBlock = src.slice(src.indexOf("const CASES"), src.indexOf("const FAQS"));
-    expect(casesBlock).toContain('title: "Bergs Slussar Glamping"');
-    expect(casesBlock).toMatch(
-      /title:\s*"Bergs Slussar Glamping"[\s\S]*?href:\s*"\/arbete\/bergs-slussar-stayboost"/,
-    );
-    expect(casesBlock).not.toMatch(
-      /title:\s*"Bergs Slussar Glamping"[\s\S]*?href:\s*"\/arbete\/goglamping-sweden"/,
-    );
-  });
-
+  // Homepage case navigation is exercised as rendered UI in Index.test.tsx.
   it("other Bergs Slussar Glamping labels point at Stayboost, not the booking slug", () => {
     const landing = readFileSync(resolve(__dirname, "../pages/AiByraLinkoping.tsx"), "utf8");
     const landingCases = landing.slice(landing.indexOf("const CASES"), landing.indexOf("const PROCESS"));

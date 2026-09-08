@@ -13,13 +13,10 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Copy, RotateCw, Save, Star, Trash2, Sparkles } from "lucide-react";
-import { getFunctionUrl } from "@/lib/functionUrl";
+import AdminShell, { adminFetch } from "./AdminShell";
 
-// Delar samma admin-lösenord som resten av /admin (verifieras server-side via list-leads).
-const ADMIN_STORAGE_KEY = "faq_analytics_pwd";
-const VERIFY_URL = getFunctionUrl("list-leads");
-const LIB_URL = getFunctionUrl("admin-text-library");
-const GEN_URL = getFunctionUrl("generate-text");
+const LIB_URL = "admin-text-library";
+const GEN_URL = "generate-text";
 
 const TEXT_TYPES = [
   { value: "hero", label: "Hero" },
@@ -46,83 +43,11 @@ type LibraryRow = {
   used_on_page: string | null;
 };
 
-async function bearerFetch(url: string, body: unknown) {
-  const pwd = sessionStorage.getItem(ADMIN_STORAGE_KEY) ?? "";
-  if (!pwd) throw new Error("Inte inloggad");
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${pwd}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-  if (res.status === 401 || res.status === 403) {
-    sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-    throw new Error("Fel lösenord – logga in igen");
-  }
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error((data as any)?.error || `HTTP ${res.status}`);
-  return data as any;
+function bearerFetch(name: string, body: unknown) {
+  return adminFetch(name, { method: "POST", body: JSON.stringify(body), signal: AbortSignal.timeout(name === GEN_URL ? 60000 : 20000) });
 }
 
-const PasswordGate = ({ onUnlock }: { onUnlock: () => void }) => {
-  const [pw, setPw] = useState("");
-  const [loading, setLoading] = useState(false);
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-6">
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (!pw) return;
-          setLoading(true);
-          try {
-            const res = await fetch(VERIFY_URL, {
-              method: "POST",
-              headers: { Authorization: `Bearer ${pw}`, "Content-Type": "application/json" },
-              body: JSON.stringify({ action: "list" }),
-            });
-            if (res.status === 401 || res.status === 403) {
-              toast.error("Fel lösenord");
-              return;
-            }
-            if (!res.ok) {
-              toast.error(`Serverfel (${res.status})`);
-              return;
-            }
-            sessionStorage.setItem(ADMIN_STORAGE_KEY, pw);
-            onUnlock();
-          } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Nätverksfel");
-          } finally {
-            setLoading(false);
-          }
-        }}
-        className="w-full max-w-sm space-y-4 rounded-xl border border-border bg-card p-8"
-      >
-        <h1 className="font-serif text-2xl">Aurora Admin</h1>
-        <p className="text-sm text-muted-foreground">Lösenord krävs.</p>
-        <Input
-          type="password"
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
-          placeholder="••••••"
-          autoFocus
-        />
-        <Button type="submit" className="w-full" disabled={loading || !pw}>
-          {loading ? "Verifierar…" : "Lås upp"}
-        </Button>
-      </form>
-    </div>
-  );
-};
-
 const TextGenerator = () => {
-  const [unlocked, setUnlocked] = useState(false);
-  useEffect(() => {
-    if (sessionStorage.getItem(ADMIN_STORAGE_KEY)) setUnlocked(true);
-  }, []);
-
   const [textType, setTextType] = useState("hero");
   const [topic, setTopic] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -153,8 +78,8 @@ const TextGenerator = () => {
   };
 
   useEffect(() => {
-    if (unlocked) loadLibrary();
-  }, [unlocked]);
+    void loadLibrary();
+  }, []);
 
   const runGenerate = async (payload: Record<string, unknown>) => {
     const data = await bearerFetch(GEN_URL, payload);
@@ -336,29 +261,9 @@ const TextGenerator = () => {
       { textType: "article", topic: "PWA eller native app – när räcker det med en PWA?", context: "Pragmatisk guide." },
     ]);
 
-  if (!unlocked) return <PasswordGate onUnlock={() => setUnlocked(true)} />;
-
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border">
-        <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <div>
-            <h1 className="font-serif text-2xl">Aurora Text Generator</h1>
-            <p className="text-sm text-muted-foreground">Gemini 2.5 Pro · anti-AI röst · validation pipeline</p>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              sessionStorage.removeItem(ADMIN_STORAGE_KEY);
-              setUnlocked(false);
-            }}
-          >
-            Logga ut
-          </Button>
-        </div>
-      </header>
-
+    <AdminShell title="Textverktyg" kicker="Innehåll & utkast">
+      <p style={{ marginBottom: 20, color: "var(--granbark-mut)" }}>Skapa ett utkast, granska fakta och välj var texten ska användas.</p>
       <div className="container mx-auto px-6 py-8 space-y-8">
         <section className="rounded-xl border border-border bg-card p-6">
           <div className="flex items-center gap-2 mb-4">
@@ -569,7 +474,7 @@ const TextGenerator = () => {
           </div>
         </section>
       </div>
-    </div>
+    </AdminShell>
   );
 };
 

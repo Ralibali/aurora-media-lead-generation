@@ -10,15 +10,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-// Konverteringskritiska sidor hålls i huvudbundlen så att den statiska
-// förhandsvisningen kan bytas mot riktig sida utan laddningssteg.
-import AiKarta from "./pages/AiKarta";
-import AiKartaStart from "./pages/AiKartaStart";
-import AiKartaResultat from "./pages/AiKartaResultat";
+// Keep the homepage immediate. Reports and their PDF libraries load only when visited.
+const AiKarta = lazy(() => import("./pages/AiKarta"));
+const AiKartaStart = lazy(() => import("./pages/AiKartaStart"));
+const AiKartaResultat = lazy(() => import("./pages/AiKartaResultat"));
 import Index from "./pages/Index";
 import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
-import Priser from "./pages/Priser";
+const Priser = lazy(() => import("./pages/Priser"));
 // Övriga sidor lazy-loadas: huvudbundlen blir betydligt lättare att ladda
 // och parsa på mobil (Core Web Vitals / bounce rate).
 const AiSnabbanalys = lazy(() => import("./pages/AiSnabbanalys"));
@@ -142,15 +141,15 @@ type SEOConfig = {
 
 const seoMap: Record<string, SEOConfig> = {
   "/": {
-    title: "Aurora Media – Interna AI-system för småföretag | Fast pris",
+    title: "AI-system och automation för företag | Aurora Media",
     description:
-      "Jag bygger interna AI-system och automatiseringar åt svenska småföretag. Fast pris, ingen bindningstid och kod ni äger själva. Leverans på veckor.",
+      "Mindre manuellt arbete. Mer tid för affären. Aurora Media i Linköping bygger AI-lösningar, integrationer och interna system. Börja med ett kostnadsfritt samtal.",
     canonical: "https://auroramedia.se/",
   },
   "/index": {
-    title: "Aurora Media – Interna AI-system för småföretag | Fast pris",
+    title: "AI-system och automation för företag | Aurora Media",
     description:
-      "Jag bygger interna AI-system och automatiseringar åt svenska småföretag. Fast pris, ingen bindningstid och kod ni äger själva. Leverans på veckor.",
+      "Mindre manuellt arbete. Mer tid för affären. Aurora Media i Linköping bygger AI-lösningar, integrationer och interna system. Börja med ett kostnadsfritt samtal.",
     canonical: "https://auroramedia.se/",
   },
   "/ai-karta": {
@@ -271,9 +270,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/tjanster",
   },
   "/oppna-siffror": {
-    title: "Öppna siffror – metrics i realtid | Aurora Media AB",
+    title: "Öppna siffror – projekt och dokumenterade resultat | Aurora Media AB",
     description:
-      "Aurora Media visar sina siffror öppet: produkter i drift, leveranstider, upptid och deploys. Ingen PowerPoint – facit.",
+      "Se publicerade projekt och dokumenterade resultat från Aurora Medias egen verksamhet, med datum och underlag.",
     canonical: "https://auroramedia.se/oppna-siffror",
   },
   "/villkor": {
@@ -582,8 +581,7 @@ const App = () => (
               <Route path="/verktyg/ai-mognadsanalys" element={<Suspense fallback={<VerktygFallback />}><AiMognadsanalys /></Suspense>} />
               <Route path="/verktyg/personalkostnad-vs-ai" element={<Suspense fallback={<VerktygFallback />}><PersonalkostnadVsAi /></Suspense>} />
               <Route path="/verktyg/prompt-generator" element={<Suspense fallback={<VerktygFallback />}><PromptGenerator /></Suspense>} />
-              <Route path="/saas-utveckling-:city" element={<CityPage />} />
-              <Route path="/ai-byra-:city" element={<CityPage />} />
+              <Route path="/:cityPage" element={<CityPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>

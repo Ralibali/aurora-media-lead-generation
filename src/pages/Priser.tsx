@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { SEO, SITE_URL } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
-import { Reveal, VkNav, VkFooter } from "@/pages/Index";
+import { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 import { setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 import { trackEvent } from "@/lib/analytics";
 import "@/styles/verkstad.css";
@@ -72,7 +72,7 @@ const PACKAGES: readonly Package[] = [
   {
     num: "04",
     name: "Aurora AI Ops",
-    modalValue: "Skraddarsytt",
+    modalValue: "AI-automation",
     time: "Efter scope",
     price: "från 4 900 kr",
     priceFrom: 4900,

@@ -227,22 +227,22 @@ const CSS = `
 `;
 
 const previewRows = [
-  { name: "Fakturaunderlag efter körning", sub: "Manuell sammanställning från Excel + mail", score: 92, flag: true },
-  { name: "Svara på ETA-frågor från kunder", sub: "Återkommande frågor, samma info varje gång", score: 78, flag: false },
-  { name: "Rapport till ledning varje måndag", sub: "Sammanställs från 3 system", score: 64, flag: false },
+  { name: "Fakturaunderlag efter körning", sub: "Manuell sammanställning från Excel + mail", score: 14, flag: true },
+  { name: "Svara på ETA-frågor från kunder", sub: "Återkommande frågor, samma info varje gång", score: 11, flag: false },
+  { name: "Rapport till ledning varje måndag", sub: "Sammanställs från 3 system", score: 9, flag: false },
 ];
 
 const valueStack = [
   { t: "Personlig topp-lista", b: "Vilka av era processer som ger störst effekt först – inte en generisk lista." },
-  { t: "Konkret tidsbesparing", b: "Beräknat per process, per vecka och per år. Lätt att räkna ROI på." },
+  { t: "Uppskattat tidsvärde", b: "Schablon per process utifrån era svar. Ett scenario att kontrollera i verkligheten." },
   { t: "Förslag på lösning", b: "AI-assistent, automation, dashboard eller integration – med motivering." },
   { t: "Djupanalys", b: "Snabba vinster, risker och rekommenderad ordning på pilotprojekten." },
   { t: "PDF att dela internt", b: "Snyggt formaterad, byggd för ledningsmöte eller workshop." },
-  { t: "Metodguide", b: "Aurora Medias 6-stegsmetod för att gå från idé till driftsatt lösning på 2–4 veckor." },
+  { t: "Metodguide", b: "Sex steg från kartläggning till pilot och uppföljning. Tidsplanen beror på omfattning och datatillgång." },
 ];
 
 const steps = [
-  { n: "01", t: "Fyll i AI-kartan online", s: "Några minuter. Lista era vanligaste tidskrävande processer.", time: "2 min" },
+  { n: "01", t: "Fyll i AI-kartan online", s: "Några minuter. Lista era vanligaste tidskrävande processer.", time: "3–5 min" },
   { n: "02", t: "Få analysen direkt", s: "Topp-processer, tidsbesparing, lösningsförslag och AI-djupanalys – på skärmen.", time: "Direkt" },
   { n: "03", t: "Ladda ner PDF:en", s: "Innehållsrikt underlag att dela med ledning, personal eller styrelse.", time: "1 klick" },
   { n: "04", t: "(Valfritt) Boka genomlysning", s: "Vi går igenom kartan tillsammans och pekar ut bästa första pilot.", time: "20 min" },
@@ -250,9 +250,9 @@ const steps = [
 
 const objections = [
   { q: "Vi är inte tekniska – förstår vi svaren?", a: "Ja. Allt är på vanlig svenska, utan AI-jargong. Du svarar på hur ni jobbar idag – vi översätter till lösningar." },
-  { q: "Är det ett sätt att fånga leads för att ringa oss sen?", a: "Nej. Ni får hela analysen och PDF:en direkt på skärmen, utan säljmöte. Vill ni boka en genomlysning är det helt frivilligt." },
-  { q: "Vi har redan testat ChatGPT – behöver vi det här?", a: "ChatGPT är ett verktyg. AI-kartan handlar om VAD i er verksamhet som faktiskt sparar tid och pengar att automatisera – och i vilken ordning." },
-  { q: "Hur vet ni vad som passar just oss?", a: "Analysen är byggd på era egna svar om frekvens, tid, regelstyrning, data och affärsvärde – samma kriterier som med betalande kunder." },
+  { q: "Är det ett sätt att fånga leads för att ringa oss sen?", a: "Ni får resultatet och PDF:en direkt. Vi använder kontaktuppgifterna för att leverera kartan och följa upp enligt integritetspolicyn. En personlig genomgång är frivillig och det finns inget köpkrav." },
+  { q: "Vi har redan testat ChatGPT – behöver vi det här?", a: "ChatGPT är ett verktyg. AI-kartan handlar om VAD i er verksamhet som kan vara värda att undersöka för automation – och i vilken ordning." },
+  { q: "Hur vet ni vad som passar just oss?", a: "Analysen är byggd på era egna svar om frekvens, tid, regelstyrning, data och affärsvärde – ett första underlag som behöver stämmas av mot verkliga data." },
 ];
 
 const jsonLd = {
@@ -279,7 +279,7 @@ const AiKarta = () => {
     setSEOMeta({
       title: "AI-kartan – gratis AI-kartläggning för svenska företag | Aurora Media",
       description:
-        "Svara på några frågor om era flöden. Ni får en konkret karta: vilka processer som går att automatisera, vad de kostar er idag och var ni ska börja.",
+        "Svara på några frågor om era flöden. Ni får en konkret karta: vilka processer som går att automatisera, vilket tidsvärde de kan ha och var ni ska börja.",
       canonical: "https://auroramedia.se/ai-karta",
     });
     setBreadcrumb([
@@ -297,13 +297,13 @@ const AiKarta = () => {
       {/* HERO */}
       <section className="aik-hero">
         <div className="aik-wrap">
-          <span className="aik-mono">Gratis · 2 min · Resultat direkt</span>
+          <span className="aik-mono">Gratis · 3–5 min · Resultat direkt</span>
           <h1 className="aik-h1">
             Vad kan AI <em>automatisera</em> hos er?
           </h1>
           <p className="aik-sub">
             Svara på några frågor om era flöden. Ni får en konkret karta: vilka processer som går att
-            automatisera, vad de kostar er idag och var ni ska börja.
+            automatisera, vilket tidsvärde de kan ha och var ni ska börja.
           </p>
 
           {/* Bransch-chips: direkt in i verktyget med rätt exempel ifyllda */}
@@ -335,9 +335,9 @@ const AiKarta = () => {
 
           {/* Värdeframgång */}
           <div className="aik-valuechips">
-            <span className="chip"><s>Värde som konsult ~12 000 kr</s></span>
+            <span className="chip">Baserad på era egna svar</span>
             <span className="chip hot">0 kr för dig</span>
-            <span className="chip">Personligt svar inom 24 h</span>
+            <span className="chip">Ingen betalning krävs</span>
           </div>
 
           {/* Exempelkarta */}
@@ -354,9 +354,9 @@ const AiKarta = () => {
                   <small>{r.sub}</small>
                 </div>
                 <div className="aik-preview-bar" aria-hidden>
-                  <i style={{ width: `${r.score}%` }} />
+                  <i style={{ width: `${r.score / 16 * 100}%` }} />
                 </div>
-                <div className="aik-preview-score">{r.score}/100</div>
+                <div className="aik-preview-score">{r.score}/16</div>
               </div>
             ))}
           </div>
@@ -454,9 +454,9 @@ const AiKarta = () => {
         <div className="aik-wrap">
           <div className="aik-final">
             <span className="aik-mono" style={{ color: "rgba(246,245,241,.75)" }}>
-              Redo? Det tar 2 minuter.
+              Redo? Det tar 3–5 minuter.
             </span>
-            <h2 style={{ marginTop: 12 }}>Några minuter nu kan spara er hundratals timmar nästa år.</h2>
+            <h2 style={{ marginTop: 12 }}>Hitta ett arbetsflöde som är värt att börja med.</h2>
             <p>Helt kostnadsfritt. Inget säljmöte krävs.</p>
             <div className="aik-cta-row">
               <Link to="/ai-karta/start" className="aik-cta-primary">
@@ -469,7 +469,7 @@ const AiKarta = () => {
 
       {/* Sticky mobil-CTA */}
       <Link to="/ai-karta/start" className="aik-cta-primary aik-sticky" aria-label="Starta gratis AI-analys">
-        Starta gratis (2 min) <span className="arr">→</span>
+        Starta gratis (3–5 min) <span className="arr">→</span>
       </Link>
     </AiKartaShell>
   );

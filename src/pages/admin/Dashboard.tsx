@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ExternalLink, ArrowUpRight } from "lucide-react";
+import FollowupQueue from "./FollowupQueue";
 import AdminShell, { adminFetch, AdminStatus } from "./AdminShell";
 
 type Overview = {
@@ -29,7 +30,7 @@ const card: React.CSSProperties = {
 
 const Stat = ({ label, val, sub }: { label: string; val: string | number; sub?: string }) => (
   <div style={card}>
-    <p className="vk-mono" style={{ color: "var(--granbark-mut)", margin: 0 }}>{label}</p>
+    <p className="vk-mono" style={{ color: "var(--granbark-mut)", margin: 0, overflowWrap: "anywhere" }}>{label}</p>
     <p style={{ fontFamily: "var(--font-mono)", fontSize: 32, fontWeight: 700, margin: "6px 0 0", letterSpacing: "-0.01em" }}>
       {val}
     </p>
@@ -71,15 +72,16 @@ export default function AdminDashboard() {
 
   return (
     <AdminShell title="Översikt" kicker="Admin · dashboard">
+      <FollowupQueue />
       <AdminStatus loading={!data && !err} error={err} empty={isEmpty} onRetry={retry} />
 
-      {data && (
+      {data?.overview && (
         <>
           <div style={{ display: "grid", gap: 14, gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
             <Stat label="Leads totalt" val={data.overview.leads_total} sub={`${data.overview.leads_7d} senaste 7 d`} />
             <Stat label="AI-karta" val={data.overview.leads_karta} />
             <Stat
-              label="Kontakt (konverteringar)"
+              label="Kontaktförfrågningar"
               val={data.overview.leads_kontakt}
               sub={
                 data.overview.leads_kontakt_7d !== undefined
@@ -87,7 +89,7 @@ export default function AdminDashboard() {
                   : undefined
               }
             />
-            <Stat label="Genomlysning" val={data.overview.leads_genomlysning} />
+            <Stat label="Önskar genomgång" val={data.overview.leads_genomlysning} />
             <Stat label="CTA-klick (30d)" val={data.overview.cta_clicks_30d} />
             <Stat label="FAQ-sökningar (30d)" val={data.overview.faq_searches_30d} sub={`${data.overview.faq_zero_results_30d} utan träff`} />
             <Stat label="AI-karta klick (30d)" val={data.overview.ai_karta_clicks_30d} />

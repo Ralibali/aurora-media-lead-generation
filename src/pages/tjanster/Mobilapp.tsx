@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { VkNav as SiteHeader, VkFooter as SiteFooter } from "@/pages/Index";
+import { VkNav as SiteHeader, VkFooter as SiteFooter } from "@/components/verkstad/VerkstadLayout";
 import "@/styles/verkstad.css";
 import { setSEOMeta, setJsonLd, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 

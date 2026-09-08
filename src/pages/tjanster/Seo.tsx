@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { VkNav as SiteHeader, VkFooter as SiteFooter } from "@/pages/Index";
+import { VkNav as SiteHeader, VkFooter as SiteFooter } from "@/components/verkstad/VerkstadLayout";
 import "@/styles/verkstad.css";
 import { setSEOMeta, setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 
@@ -44,7 +44,7 @@ const process = [
 
 const faqs = [
   { q: "Hur lång tid tar det att se resultat?", a: "Tekniska fixar syns ofta inom två till fyra veckor. On-page tar en till tre månader. Innehållsbaserad ranking tre till sex månader. Inga garantier på exakta positioner – det vore fusk." },
-  { q: "Kan ni garantera plats 1 på Google?", a: "Nej. Den som lovar det ljuger. Jag lovar mätbara förbättringar i synlighet, klick och konvertering." },
+  { q: "Kan ni garantera plats 1 på Google?", a: "Nej. Vi prioriterar konkreta förbättringar och följer synlighet, klick och relevanta förfrågningar. Utfallet påverkas också av konkurrens, efterfrågan och sökmotorernas förändringar." },
   { q: "Behöver jag löpande SEO?", a: "Inte alltid. Många klarar sig med en grundlig audit + fix, sen content varje månad. Jag säger till om du behöver mer." },
   { q: "Hjälper du med innehåll?", a: "Ja, se Content-tjänsten. SEO-optimerade artiklar från 995 kr/styck." },
   { q: "Hjälper SEO även för en mobilapp?", a: "Ja, men på två sätt. Indirekt: en SEO-optimerad webb driver nedladdningar till din app. Direkt: App Store / Play Store har egen sökoptimering (ASO). Bygger du en app med mig kombinerar vi ofta SEO på sajten med ASO – läs mer på /tjanster/mobilapp." },

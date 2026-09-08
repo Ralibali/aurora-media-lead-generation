@@ -2,7 +2,7 @@ import { useEffect, type ReactNode } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
-import { Reveal, VkNav, VkFooter } from "@/pages/Index";
+import { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 import { setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 import "@/styles/verkstad.css";
 

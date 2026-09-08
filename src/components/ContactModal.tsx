@@ -49,8 +49,7 @@ const schema = z.object({
     .trim()
     .min(2, "Skriv ditt fullständiga namn (minst 2 tecken)")
     .max(80, "Namnet är för långt")
-    .regex(NAME_REGEX, "Namnet får bara innehålla bokstäver, mellanslag och bindestreck")
-    .refine((v) => v.includes(" "), "Ange både för- och efternamn"),
+    .regex(NAME_REGEX, "Skriv ditt namn med bokstäver, mellanslag, bindestreck eller apostrof"),
   email: z
     .string()
     .trim()
@@ -91,9 +90,11 @@ const schema = z.object({
 });
 
 const PAKET_OPTIONS = [
-  { value: "Prototyp", label: "Prototyp – 4 900 kr" },
-  { value: "MVP", label: "MVP – 11 900 kr" },
-  { value: "SaaS", label: "Skalbar SaaS – 24 900 kr" },
+  { value: "AI-automation", label: "AI och automation – diskutera ett arbetsflöde" },
+  { value: "Konsult", label: "Utveckling och rådgivning" },
+  { value: "Prototyp", label: "Prototyp – från 4 900 kr" },
+  { value: "MVP", label: "MVP – från 11 900 kr" },
+  { value: "SaaS", label: "Skalbar SaaS – från 24 900 kr" },
   { value: "Skraddarsytt", label: "Skräddarsytt – från 89 000 kr" },
   { value: "Hemsida", label: "Hemsida – från 4 900 kr" },
   { value: "E-handel", label: "E-handel – från 19 900 kr" },
@@ -233,13 +234,14 @@ const ContactDialog = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitting) return;
     const form = e.currentTarget;
     const data = new FormData(form);
     const parsed = schema.safeParse({
       name: data.get("name"),
       email: data.get("email"),
       company: data.get("company") ?? "",
-      paket: paketValue || (data.get("paket") as string) || defaultPaket,
+      paket: paketValue || (data.get("paket") as string) || defaultPaket || "Vet inte",
       platform: platformValue,
       leadLabel,
       internalNote,
@@ -275,17 +277,19 @@ const ContactDialog = ({
     setSubmitting(true);
     try {
       const supabase = await getSupabase();
-      const { error } = await supabase.functions.invoke("send-contact-email", {
+      const { data: receipt, error } = await supabase.functions.invoke("send-contact-email", {
+        signal: AbortSignal.timeout(30000),
         body: { ...parsed.data, _renderedAt: renderedAt },
       });
       if (error) throw error;
+      if (!receipt?.ok || !receipt?.leadId) throw new Error("Förfrågan kunde inte bekräftas.");
       setSubmittedLabel(leadLabel || (selectedOption ? selectedOption.label : paketValue));
       setSubmittedEmail(parsed.data.email);
       setDone(true);
       trackEvent("kontakt_submit", { source: "ContactModal", paket: paketValue });
       trackEvent("lead_conversion", { source: "ContactModal", form: "kontakt", paket: paketValue });
       toast.success(
-        `Tack! Din förfrågan om "${selectedOption?.label ?? paketValue}" är mottagen. Jag svarar inom 24 timmar.`,
+        "Tack! Din förfrågan är mottagen. Jag återkommer inom 24 timmar vardagar.",
         { duration: 6000 }
       );
       form.reset();
@@ -347,7 +351,7 @@ const ContactDialog = ({
                   <div className="mt-3 flex items-center gap-2.5 text-sm text-muted-foreground">
                     <Mail className="h-4 w-4 shrink-0" />
                     <span>
-                      Bekräftelse skickad till <span className="text-foreground">{submittedEmail}</span>
+                      Jag återkommer till <span className="text-foreground">{submittedEmail}</span>
                     </span>
                   </div>
                 )}
@@ -360,14 +364,14 @@ const ContactDialog = ({
                 <li className="flex items-start gap-3">
                   <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <span className="text-foreground/85">
-                    Inom <strong>24 timmar</strong> får du ett personligt svar från mig (Christoffer) på{" "}
+                    Inom <strong>24 timmar på vardagar</strong> får du ett personligt svar från mig (Christoffer) på{" "}
                     <span className="text-foreground">{submittedEmail || "din mejl"}</span>.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <span className="text-foreground/85">
-                    Vi bokar ett kort 20-min samtal för att stämma av scope och tidsplan.
+                    Vi bokar ett kort 20-min samtal för att stämma av behov och tidsplan.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
@@ -545,7 +549,7 @@ const ContactDialog = ({
                   onCheckedChange={() => fieldErrors.consent && setFieldError("consent", null)}
                 />
                 <Label htmlFor="consent" className="text-sm text-muted-foreground font-normal leading-snug">
-                  Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt integritetspolicyn. *
+                  Jag godkänner att Aurora Media AB hanterar mina uppgifter enligt <a href="/integritetspolicy" target="_blank" rel="noopener noreferrer" className="underline">integritetspolicyn</a>. *
                 </Label>
               </div>
               {fieldErrors.consent && (
