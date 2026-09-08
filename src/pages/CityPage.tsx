@@ -142,16 +142,16 @@ export default function CityPage() {
         </div>
       </section>
 
-      {/* Lokal kontext */}
+      {/* Ett första användningsfall */}
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
-            <Reveal><div className="meta-label">Lokal kontext</div></Reveal>
+            <Reveal><div className="meta-label">Ett första användningsfall</div></Reveal>
             <Reveal delay={0.1}>
               <h2 className="h2">
                 {isAiVariant
-                  ? <>AI-kompetens förankrad i <span className="it">{city.city}.</span></>
-                  : <>SaaS-erfarenhet i <span className="it">{city.city}s marknad.</span></>}
+                  ? <>AI-stöd för företag i <span className="it">{city.city}.</span></>
+                  : <>Digitala verktyg för företag i <span className="it">{city.city}.</span></>}
               </h2>
             </Reveal>
           </div>
@@ -196,13 +196,13 @@ export default function CityPage() {
         </div>
       </section>
 
-      {/* Jämförelse */}
+      {/* Arbetssätt */}
       <section className="section">
         <div className="wrap">
           <div className="sec-head">
-            <Reveal><div className="meta-label">Jämförelse</div></Reveal>
+            <Reveal><div className="meta-label">Arbetssätt</div></Reveal>
             <Reveal delay={0.1}>
-              <h2 className="h2">Så <span className="it">skiljer</span> vi oss.</h2>
+              <h2 className="h2">Från behov till <span className="it">testbar lösning.</span></h2>
             </Reveal>
           </div>
           <Reveal>

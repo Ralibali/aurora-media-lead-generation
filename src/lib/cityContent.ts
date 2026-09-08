@@ -28,684 +28,373 @@ export const cities: CityContent[] = [
     slug: "linkoping",
     city: "Linköping",
     region: "Östergötlands län",
-    intro:
-      "Linköping är Sveriges fjärde största universitetsstad med ett tätt teknik-näringsliv kring Saab, Ericsson och en växande startup-scen runt Mjärdevi. Många bolag här har sett dev-kostnaderna explodera de senaste åren samtidigt som leveranstiderna kryper uppåt. AI-kodning vänder den ekvationen – du får en lanseringsklar SaaS på 2 veckor istället för 6 månader.",
-    localContext:
-      "Mjärdevi Science Park, LiU och försvarsindustrin gör Linköping till en av Sveriges tätaste tech-kluster per capita. Jag bygger interna verktyg åt bolag som tröttnat på att betala konsultbyråer 1 800 kr/h för enkla CRUD-appar.",
-    comparison:
-      "En traditionell webbyrå i Linköping tar 80 000–250 000 kr för en företagshemsida och sex till tolv månader för en SaaS. Jag levererar prototyp på tre till fem dagar (4 900 kr), MVP på två veckor (11 900 kr) och full SaaS på fyra veckor (24 900 kr). Fast pris, ingen timdebitering.",
-    caseNote:
-      "Aurora Transport, ett dispatching-system för svenska transportbolag, byggdes från grunden i Linköping på tre veckor. Det visar vad som faktiskt går att leverera lokalt med rätt verktyg.",
+    intro: "Samlar ni kunduppgifter i flera system eller följer upp arbetsorder för hand? Vi bygger verktyg som knyter ihop det dagliga arbetet. Aurora Media är baserat i Linköping och ni har direktkontakt med den som bygger.",
+    localContext: "Ett första projekt kan vara en intern portal där teamet ser uppdrag, ansvarig och nästa steg. Vi utgår från ett befintligt arbetsflöde och gör en första version som ni kan prova.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
+    caseNote: "I portfolion finns Aurora Transport, en egen produkt för transportflöden. Se projektet och använd det som underlag för vad ni vill bygga.",
     faqs: [
-      {
-        q: "Finns det bra SaaS-utvecklare i Linköping 2026?",
-        a: "Ja, men de flesta jobbar internt på Saab, Ericsson eller Sectra. Frilanskonsulter ligger på 1 200–1 800 kr/timmen. Jag är ett av få alternativ som jobbar fast pris och levererar färdig produkt på veckor.",
-      },
-      {
-        q: "Tar du fysiska möten i Linköping?",
-        a: "Ja, jag är baserad här och kan ses i centrala Linköping eller på Mjärdevi. För 90 procent av kunderna räcker dock video-möten – det går snabbare att komma igång.",
-      },
-      {
-        q: "Vilka branscher i Linköping passar för AI-byggd SaaS?",
-        a: "Tillverkning, transport, hälsa, utbildning – allt som har manuella Excel-flöden eller dyra licensavtal med utländska SaaS-bolag. Jag har byggt åt transport, agility-träning, hönsuppfödning och massagebokning. Det är väldigt brett.",
-      },
-      {
-        q: "Hur snabbt kan vi börja?",
-        a: "Skickar du e-post idag svarar jag inom 24 timmar vardagar. Vi har ett kort samtal samma vecka, jag levererar offert dagen efter, och vi kan vara igång inom sju till tio dagar.",
-      },
+      { q: "Kan vi träffas i Linköping?", a: "Ja, ett möte i Linköping kan bokas efter överenskommelse. Vi kan också arbeta via videomöten och gemensamma genomgångar av produkten." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Linköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "norrkoping",
     city: "Norrköping",
     region: "Östergötlands län",
-    intro:
-      "Norrköping har gått från industristad till logistik- och datacenter-hub med Visualiseringscenter C och en växande tech-scen runt Inlandsbanan. Många mellanstora bolag här sitter fortfarande på interna Excel-system som borde vara appar. AI-kodning gör det realistiskt att bygga om dem på veckor istället för år.",
-    localContext:
-      "Logistik, transport, e-handel och digital konst dominerar Norrköpings näringsliv. Närheten till Linköping ger tillgång till tech-kompetens utan storstadens prislapp.",
-    comparison:
-      "Lokala byråer i Norrköping ligger ofta på 800–1 500 kr/timmen och tre till sex månaders ledtid. Jag har fast pris från 4 900 kr och levererar prototyp på tre till fem dagar. För Norrköpings logistikbolag betyder det att en intern app går från idé till produktion innan kvartalet är slut.",
+    intro: "För företag i Norrköping bygger vi interna verktyg, kundportaler och automation. Börja med ett flöde där order, kundfrågor eller leveransuppgifter behöver flyttas mellan mejl och kalkylark.",
+    localContext: "En orderportal kan samla inkommande uppdrag, status och ansvarig på samma plats. Kopplingar till ekonomi- eller transportsystem utreds innan vi lämnar offert.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
+    caseNote: "I portfolion finns Aurora Transport, en egen produkt för transportflöden. Se projektet och använd det som underlag för vad ni vill bygga.",
     faqs: [
-      {
-        q: "Bygger du för logistikbolag i Norrköping?",
-        a: "Ja, det är en av mina vanligaste branscher. Aurora Transport är ett dispatching-system för transportbolag och kan användas som mall eller skräddarsys.",
-      },
-      {
-        q: "Hur fungerar samarbete på distans från Norrköping?",
-        a: "Jag är 45 min bort i Linköping och kan ses fysiskt vid behov. Annars kör vi video-möten en till två gånger per vecka under projektet. Lika smidigt som lokalt.",
-      },
-      {
-        q: "Kan ni bygga ihop oss med Fortnox eller Visma?",
-        a: "Ja, jag har byggt Fortnox-integrationer i flera produkter. Visma fungerar också. Båda har bra svenska API:er.",
-      },
-      {
-        q: "Vad kostar en intern app som ersätter Excel?",
-        a: "Oftast 11 900–24 900 kr beroende på komplexitet. Det betalar sig på tre till sex månader genom sparad administrativ tid.",
-      },
+      { q: "Kan ni koppla ihop order och fakturering?", a: "Vi går igenom vilka system ni använder och deras API:er och behörigheter. Därefter kan vi föreslå en avgränsad integration och vad som fortsatt behöver kontrolleras av en människa." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Norrköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "jonkoping",
     city: "Jönköping",
     region: "Jönköpings län",
-    intro:
-      "Jönköping är handels- och logistik-huvudstaden i södra Sverige med en stark närvaro av familjeägda bolag och industri. Många här letar efter mer effektiva interna verktyg men har avskräckts av byrå-priser. AI-kodning gör att även mindre bolag har råd med en skräddarsydd SaaS – från 4 900 kr för en prototyp.",
-    localContext:
-      "Handel, logistik, träindustri och tillverkning. Familjeföretag som vuxit ur sina Excel-flöden men inte vill betala 500 000 kr för en intern app.",
-    comparison:
-      "Jönköpings webbyråer fokuserar oftast på WordPress och e-handel. För moderna SaaS-projekt får du leta längre. Jag bygger React + Supabase-baserade produkter på fast pris med två till fyra veckors leverans.",
+    intro: "Behöver ert företag i Jönköping en portal för kunder, återförsäljare eller interna beställningar? Vi hjälper er att göra behovet konkret och bygga en första version med tydlig omfattning.",
+    localContext: "Ett exempel är en B2B-portal där kunden lämnar en förfrågan, bifogar underlag och följer status. Börja med den del som minskar flest manuella överlämningar.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      {
-        q: "Bygger du e-handel i Jönköping?",
-        a: "Inte traditionell e-handel (Shopify gör det bättre). Men marknadsplatser, B2B-portaler, prenumerationsmodeller och hybrid-modeller bygger jag gärna.",
-      },
-      {
-        q: "Tar du fysiska möten i Jönköping?",
-        a: "Det går att lösa, men för effektivitetens skull föredrar jag video-möten. Hälften av mina kunder finns utanför Östergötland.",
-      },
-      {
-        q: "Hur fungerar fast pris om vi ändrar oss under projektet?",
-        a: "Mindre justeringar ingår. Större förändringar i scope skrivs som tilläggsoffert med fast pris. Du blir aldrig överraskad av en faktura.",
-      },
-      {
-        q: "Vilken support får vi efter lansering?",
-        a: "30 dagars buggfri-garanti ingår. Sedan kan du teckna löpande underhåll från 1 990 kr/mån eller köpa timmar vid behov.",
-      },
+      { q: "Kan vi börja med en enda del av vårt orderflöde?", a: "Ja. Vi kan avgränsa exempelvis inkommande beställningar eller kundernas statusfrågor. Resten av verksamheten kan fortsätta använda befintliga system medan den första delen provas." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Jönköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "stockholm",
     city: "Stockholm",
     region: "Stockholms län",
-    intro:
-      "Stockholms tech-scen är Sveriges tätaste men också dyraste. Att bygga en SaaS med en stockholmsbyrå kostar ofta 500 000–2 000 000 kr och tar sex till tolv månader. Jag levererar samma sak från Linköping på två till fyra veckor till en bråkdel av priset – samma React + Supabase-stack, samma kvalitet, ingen Stockholm-overhead.",
-    localContext:
-      "Fintech, SaaS, hälsa, e-handel och AI-startups dominerar. Många grundare här har redan testat traditionella byråer och tröttnat på prislappar och ledtider.",
-    comparison:
-      "Stockholmsbyråer ligger på 1 500–2 500 kr/timmen och sex till tolv månaders projekt. Jag har fast pris från 4 900 kr och två till fyra veckors leverans. Samma slutprodukt – ofta bättre eftersom jag kan iterera snabbare.",
+    intro: "Har ni en produktidé eller ett internt arbetsflöde som behöver bli enklare? Vi hjälper företag i Stockholm att avgränsa, bygga och testa SaaS, AI-automation och interna verktyg, med direktkontakt från vår bas i Linköping.",
+    localContext: "En första version kan testa ett centralt kundflöde: registrering, ett konkret arbetsmoment och resultatet användaren får. Med ett tydligt mål blir det lättare att avgöra vad som ska byggas härnäst.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
+    caseNote: "I portfolion finns Aurora Transport, en egen produkt för transportflöden. Se projektet och använd det som underlag för vad ni vill bygga.",
     faqs: [
-      {
-        q: "Du sitter i Linköping – funkar det för stockholmsbolag?",
-        a: "Ja, hälften av mina kunder finns i Stockholm. Vi kör video-möten och jag åker upp för fysiska möten vid större milstolpar om det önskas.",
-      },
-      {
-        q: "Är ni billigare för att ni är utanför Stockholm?",
-        a: "Delvis, men främst för att jag använder AI-verktyg som Lovable och Bolt och därmed inte behöver fakturera 200 timmar för det som tar 30. Värdet ligger i metoden, inte i geografin.",
-      },
-      {
-        q: "Kan ni jobba med våra interna utvecklare?",
-        a: "Ja, jag levererar fullständig källkod och kan jobba ihop med era team via GitHub. Många kunder tar över utveckling efter MVP.",
-      },
-      {
-        q: "Hur jämför ni er med Stockholms AI-byråer som dyker upp 2026?",
-        a: "Jag har byggt sju egna SaaS-produkter och har tio års bakgrund i säkerhetsbranschen innan det. Ren erfarenhet av att leverera, inte bara använda verktygen.",
-      },
+      { q: "Kan ni samarbeta med vårt utvecklingsteam?", a: "Ja, vi kan planera gränssnitt, kodöverlämning och ansvar tillsammans med ert team. Om ni redan har en produkt börjar vi med att gå igenom dess förutsättningar." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Stockholm kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "goteborg",
     city: "Göteborg",
     region: "Västra Götalands län",
-    intro:
-      "Göteborg är fordonsindustrins och tillverkningens huvudstad i Sverige. Volvo, AstraZeneca och hundratals tier 2-bolag driver tech-behov för intern automation, dashboards och B2B-portaler. AI-kodning gör att projekt som tidigare krävde 200 konsulttimmar kan levereras på fast pris från 4 900 kr.",
-    localContext:
-      "Fordon, life science, sjöfart och industri. Mellanstora tillverkningsbolag som vill digitalisera interna processer men inte har råd med traditionella IT-konsulter.",
-    comparison:
-      "Göteborgsbyråer prissätter ofta 1 200–2 000 kr/timmen för React-utveckling. Jag levererar fast pris från 4 900 kr för prototyp och 11 900 kr för MVP. Hälften till en tredjedel av kostnaden, en fjärdedel av tiden.",
+    intro: "Vi hjälper företag i Göteborg att bygga verktyg för sådant som idag kräver manuella sammanställningar. Det kan handla om en kundportal, en orderöversikt eller rapportering som hämtar data från era befintliga system.",
+    localContext: "En verksamhetsöversikt kan visa status, avvikelser och vem som behöver agera. Datakällor, uppdateringsintervall och åtkomst behöver vara tydliga innan utvecklingen börjar.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      {
-        q: "Bygger du integrationer med Volvos system eller liknande?",
-        a: "Ja, så länge ni har dokumenterade API:er. Jag har byggt integrationer mot Fortnox, Stripe, HubSpot, Resend, Slack och flera anpassade ERP-system.",
-      },
-      {
-        q: "Hur ofta åker du till Göteborg för möten?",
-        a: "Vid behov en till två gånger per projekt. Annars video-möten. De flesta kunder här föredrar effektiv distans framför fysiska möten.",
-      },
-      {
-        q: "Är ni rätt val för en industribolag i Göteborg?",
-        a: "Ja, särskilt för interna verktyg, dashboards och kund-portaler. Jag har byggt liknande system för transport, hälsa och utbildning.",
-      },
-      {
-        q: "Vad är skillnaden mot en lokal Göteborgsbyrå?",
-        a: "Snabbare leverans, fast pris, modernare stack (React + Supabase istället för WordPress eller .NET). Och jag jobbar ensam – ingen byråkrati.",
-      },
+      { q: "Kan ni bygga ovanpå vårt befintliga affärssystem?", a: "Det beror på systemets API, licensvillkor och vilka uppgifter ni behöver. Vi undersöker detta först och tar med integrationsarbetet i omfattningen." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Göteborg kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "malmo",
     city: "Malmö",
     region: "Skåne län",
-    intro:
-      "Malmö har blivit en av Nordens mest dynamiska tech-städer med Minc, MTS och en ständigt växande startup-scen. Många nya bolag här söker snabb produktutveckling utan att binda sig till stora byråer. AI-kodning passar perfekt för MVP-fasen – från idé till lanseringsklar produkt på 2 veckor för 11 900 kr.",
-    localContext:
-      "Gaming, fintech, greentech, e-handel och kreativa byråer. Många grundare med svenskt-danskt nätverk som tänker norden från start.",
-    comparison:
-      "Malmöbyråer är ofta starka på design men dyra på utveckling. Jag levererar både design och kod på fast pris. För en startup som behöver MVP betyder det 11 900 kr och två veckor istället för 200 000 kr och fyra månader.",
+    intro: "För företag och produktteam i Malmö bygger vi SaaS, kundportaler och AI-stöd. Vi börjar med vad en användare ska kunna göra och avgränsar en första version kring just det.",
+    localContext: "En prototyp kan hjälpa er att pröva ett bokningsflöde, en prenumerationstjänst eller en marknadsplats innan ni investerar i fler funktioner. Betalning och andra integrationer planeras när behovet är tydligt.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      {
-        q: "Bygger du för danska kunder också?",
-        a: "Ja, jag har kunder i hela Norden. Allt levereras på engelska eller svenska beroende på önskemål.",
-      },
-      {
-        q: "Hur skiljer ni er från Malmös design-byråer?",
-        a: "De gör snyggt men outsourcar utvecklingen. Jag gör båda. Du får färdig produkt, inte bara mock-ups.",
-      },
-      {
-        q: "Kan ni bygga gaming-relaterade dashboards?",
-        a: "Spel-logik nej, men metadashboards, communityverktyg, leaderboards och adminpaneler ja. Allt som är webb-baserat.",
-      },
-      {
-        q: "Vad är ledtiden för Malmö-projekt?",
-        a: "Samma som för alla andra: prototyp tre till fem dagar, MVP två veckor, skalbar SaaS fyra veckor. Geografin spelar ingen roll på distans.",
-      },
+      { q: "Kan en prototyp användas i kundintervjuer?", a: "Ja, en klickbar eller fungerande prototyp kan ge något konkret att visa. Vi bestämmer vad som ska fungera och vad som är demonstrationsdata, så att deltagarna förstår vad de provar." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Malmö kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "uppsala",
     city: "Uppsala",
     region: "Uppsala län",
-    intro:
-      "Uppsala är Sveriges äldsta universitetsstad med en stark life science- och biotech-sektor kring Uppsala universitet och SLU. Många forskningsavknoppningar här behöver enkla interna verktyg eller lättviktiga SaaS-produkter snabbt och billigt. AI-kodning gör att även mindre forskningsteam har råd med skräddarsydd mjukvara.",
-    localContext:
-      "Life science, biotech, akademiska avknoppningar och pharma. Små team med specifika behov som inte täcks av kommersiell mjukvara.",
-    comparison:
-      "Akademiska projekt har sällan stora budgetar. Jag erbjuder prototyp för 4 900 kr och MVP för 11 900 kr – det får plats i de flesta forskningsanslag eller seed-rundor.",
+    intro: "Behöver ert team i Uppsala samla projektinformation, följa upp ärenden eller minska dubbelregistrering? Vi bygger webbaserade verktyg med tydliga arbetsflöden och användarroller.",
+    localContext: "En projektportal kan samla uppgifter, dokument och ansvariga. Om arbetet berör känsliga uppgifter börjar vi med dataklassning och krav på åtkomst, lagring och granskning innan vi bedömer en lösning.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      {
-        q: "Bygger du för forskningsprojekt i Uppsala?",
-        a: "Ja, så länge det är webbaserat. Datainsamling, lab-management, deltagarportaler – allt som inte är CAD eller bioinformatik kan jag bygga.",
-      },
-      {
-        q: "Kan ni hantera GDPR-känslig forskningsdata?",
-        a: "Ja, jag bygger med Supabase i EU-region och säkerställer korrekt RLS, kryptering och loggning. Jag har erfarenhet från säkerhetsbranschen.",
-      },
-      {
-        q: "Hur fungerar samarbetet på distans från Uppsala?",
-        a: "Video-möten en till två gånger per vecka under projektet. Vid behov åker jag upp för workshops eller större milstolpar.",
-      },
-      {
-        q: "Vad ingår i ett MVP-paket för en biotech-startup?",
-        a: "Allt som behövs för att lansera: design, utveckling, databas, autentisering, betalningar om relevant, deploy. 11 900 kr fast pris, två veckor.",
-      },
+      { q: "Kan vi använda känsliga uppgifter i en prototyp?", a: "Vi börjar med exempeldata eller anonymiserade uppgifter. Användning av verkliga känsliga uppgifter kräver en separat genomgång av krav, ansvar och tekniska skydd." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Uppsala kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "vasteras",
     city: "Västerås",
     region: "Västmanlands län",
-    intro:
-      "Västerås är industri- och energi-hub med ABB, Northvolt och en växande digital sektor. Många traditionella industribolag här digitaliserar nu interna processer på allvar – och många upptäcker att AI-kodning ger dem råd att bygga skräddarsydda lösningar istället för att betala dyra licensavtal.",
-    localContext:
-      "Energi, industri-automation, tillverkning och tunga maskiner. Bolag som behöver dashboards, rapportverktyg och interna portaler men inte vill bygga själva.",
-    comparison:
-      "Industribolag i Västerås har historiskt anlitat IT-konsulter på 1 500 kr/timmen för långa projekt. Jag levererar fast pris från 4 900 kr på tre till fem dagar för prototyp. Stor förändring för CFO:n.",
+    intro: "Vi hjälper företag i Västerås att göra rapportering, uppföljning och interna beställningar enklare. Ett tydligt avgränsat verktyg kan samla information som annars behöver hämtas från flera håll.",
+    localContext: "Börja exempelvis med en översikt för avvikelser: vad har hänt, vem ansvarar och när ska nästa kontroll ske? Vi kan utreda ett webbaserat gränssnitt till befintliga datakällor.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      {
-        q: "Bygger du dashboards för industri?",
-        a: "Ja, det är en av mina vanligaste leveranser. Realtidsdata, KPI:er, rapportexport, användarroller – allt på React + Supabase.",
-      },
-      {
-        q: "Kan ni integrera med PLC eller SCADA-system?",
-        a: "Webb-lagret ja, om det finns ett API eller MQTT-broker. Direkt PLC-integration är inget jag tar – det kräver specialistkonsulter.",
-      },
-      {
-        q: "Hur långa projekt brukar Västerås-bolag beställa?",
-        a: "Oftast börjar de med prototyp eller MVP (två veckor) för att testa konceptet, sedan skalar upp till full SaaS (fyra veckor) när det är validerat.",
-      },
-      {
-        q: "Tar du fysiska möten i Västerås?",
-        a: "Vid behov för större projekt. För de flesta räcker video-möten – mer effektivt och håller projektet i takt.",
-      },
+      { q: "Kan ni ansluta till produktionssystem?", a: "Vi kan bedöma webbaserade integrationer när det finns ett dokumenterat gränssnitt. Styrning av maskiner och säkerhetskritiska system kräver särskild kompetens och ingår inte automatiskt." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Västerås kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "orebro",
     city: "Örebro",
     region: "Örebro län",
-    intro:
-      "Örebro är ett strategiskt nav mellan Stockholm och Göteborg med ett brett näringsliv från logistik till hälsa. Många mellanstora bolag här söker mer effektiva digitala verktyg men har inte resurser att anlita stora byråer. AI-kodning gör att även 50-personers företag har råd med skräddarsydd SaaS – från 4 900 kr.",
-    localContext:
-      "Logistik, livsmedel, hälsa och universitetsanknutna projekt via Örebro universitet. Mix av etablerade industriföretag och unga startups.",
-    comparison:
-      "Lokala byråer i Örebro fokuserar oftast på WordPress och visuell identitet. För moderna SaaS-projekt med inloggning, betalningar och databas behövs en annan sorts partner. Jag bygger React + Supabase på fast pris.",
+    intro: "För företag i Örebro bygger vi digitala verktyg runt vardagens återkommande uppgifter. Vi börjar med ett problem, exempelvis kundärenden som tappas mellan mejl, telefon och delade dokument.",
+    localContext: "Ett ärendeflöde kan samla underlag, ansvarig person och nästa uppföljning. Teamet får en gemensam vy och kunden kan vid behov följa sin förfrågan i en portal.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      {
-        q: "Vilka företag i Örebro har du jobbat med?",
-        a: "Jag pratar inte specifikt om kunder utan deras tillstånd. Men exempel på bygg-typer: dispatching, marknadsplatser, prenumerations-SaaS, bokningssystem och interna verktyg.",
-      },
-      {
-        q: "Är ni rätt för en mellanstor verksamhet i Örebro?",
-        a: "Ja, det är min vanligaste kundprofil. 10–100 anställda, behöver något specifikt byggt, vill inte binda upp sig i flera månaders projekt.",
-      },
-      {
-        q: "Hur fungerar betalningsstrukturen?",
-        a: "Hälften vid uppstart, hälften vid leverans. Större projekt kan delas upp i milstolpar. Inga dolda kostnader.",
-      },
-      {
-        q: "Kan ni komma till Örebro för möten?",
-        a: "Ja, vid större projekt. Annars video-möten – fungerar lika bra och sparar tid för alla.",
-      },
+      { q: "Måste vi byta alla system samtidigt?", a: "Nej. Vi identifierar en avgränsad del som går att förbättra och undersöker hur den kan fungera tillsammans med det ni redan använder." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Örebro kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "motala",
     city: "Motala",
     region: "Östergötlands län",
-    intro:
-      "Motala är Östergötlands tredje stad med industriarv från Motala Verkstad och ett näringsliv byggt på verkstad, tillverkning och besöksnäring kring Vättern och Göta kanal. Många mindre industribolag kör fortfarande produktionsplanering, underhåll och orderflöden i Excel och pärmar. AI-kodning gör det möjligt att ersätta det med skräddarsydda verktyg på veckor – till en kostnad även ett tiomannabolag klarar.",
-    localContext:
-      "Verkstadsindustri, tillverkning och en stark besöksnäring runt Göta kanal och Vätternrundan. Jag sitter 40 minuter bort i Linköping och driver själv verksamhet längs kanalen, så jag känner både industrin och besöksnäringen härifrån.",
-    comparison:
-      "En etablerad byrå i Östergötland tar ofta 800–1 500 kr/timmen med månaders ledtid. Jag jobbar med fast pris: prototyp 4 900 kr på tre till fem dagar, MVP 11 900 kr på två veckor, full SaaS från 24 900 kr. För ett verkstadsbolag i Motala betyder det att ett internt system kostar mindre än en månads konsulttimmar.",
-    caseNote:
-      "Aurora Transport – ett dispatchsystem för åkerier – byggdes på under två veckor och används skarpt idag. Samma upplägg passar produktionsplanering, underhåll eller orderflöden i Motalas industri.",
+    intro: "Vi hjälper företag i Motala med verktyg för bokningar, arbetsorder och intern uppföljning. Utgångspunkten är ett konkret moment som idag kräver extra telefonsamtal, dubbelregistrering eller letande.",
+    localContext: "För en boendeverksamhet kan det vara gästinformation och tilläggstjänster. För en verkstad kan det vara arbetsorder med bilder och status. Vi väljer ett första flöde som går att prova i vardagen.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      { q: "Bygger du system för tillverkande industri i Motala?", a: "Ja, det är en av de vanligaste projekttyperna: produktionsplanering, underhållsscheman, avvikelsehantering och orderflöden. Ofta med Fortnox-koppling så ekonomin hänger med automatiskt." },
-      { q: "Kan vi ses fysiskt i Motala?", a: "Absolut, jag är 40 minuter bort och tar gärna ett uppstartsmöte på plats. Under projektet räcker oftast korta videoavstämningar en till två gånger i veckan." },
-      { q: "Vi har ett gammalt Excel- eller Access-system – går det att modernisera?", a: "Det är mitt vanligaste projekt. Vi behåller logiken ni redan litar på, flyttar in datan i en riktig databas och bygger ett gränssnitt som funkar i mobilen ute i verkstaden." },
-      { q: "Vad kostar det och hur snabbt kan vi börja?", a: "Prototyp 4 900 kr på tre till fem dagar, MVP 11 900 kr på två veckor. Hör du av dig idag har vi ett samtal samma vecka och kan vara igång inom sju till tio dagar." },
+      { q: "Kan ni visa exempel från en boendeverksamhet?", a: "Ja. I portfolion finns Bergs Slussar Glamping och arbetet med Stayboost i vår egen verksamhet. Det ger ett konkret underlag för att diskutera vad som kan passa er." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Motala kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "mjolby",
     city: "Mjölby",
     region: "Östergötlands län",
-    intro:
-      "Mjölby är ett av Sveriges starkaste kluster för lantbruks- och materialhanteringsteknik, med Väderstad och Toyota Material Handling som draglok och hundratals underleverantörer och lantbruksföretag runt omkring. Många av dem kör fortfarande manuella flöden för order, kvalitet och leveransplaner. AI-kodning gör skräddarsydda system tillgängliga även för bolag utan egen IT-avdelning.",
-    localContext:
-      "Lantbruksteknik, materialhantering, livsmedel och logistik längs E4:an och Södra stambanan. Jag sitter 20 minuter bort i Linköping och kan vara på plats samma dag.",
-    comparison:
-      "Att anlita en Stockholmsbyrå för ett internt system kostar lätt 300 000–500 000 kr. Jag levererar prototyp för 4 900 kr på dagar, MVP för 11 900 kr på två veckor och full SaaS från 24 900 kr – med fast pris och kod ni äger själva.",
-    caseNote:
-      "Odlingsdagboken och Hönsgården är två egna produkter jag byggt inom odling och djurhållning, och Aurora Transport täcker logistiksidan. Gröna näringen och flöden på hjul är hemmaplan.",
+    intro: "För företag i Mjölby bygger vi verktyg som samlar planering, dokumentation och återkommande uppgifter. Vi hjälper er att gå från behov och befintliga kalkylark till en avgränsad första lösning.",
+    localContext: "Ett exempel är en mobil vy för registrering av utfört arbete, bilder och nästa åtgärd. Vi börjar med vad som faktiskt behöver dokumenteras och vilka som ska kunna se uppgifterna.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      { q: "Vi är underleverantör till industrin i Mjölby – vad kan du bygga åt oss?", a: "Typiska projekt är leveransplanering, kvalitetsuppföljning, avvikelsehantering och kundportaler där era beställare ser status i realtid. Sådant som idag ligger i mejltrådar och Excel." },
-      { q: "Bygger du digitala verktyg för lantbruk?", a: "Ja, jag har byggt egna produkter inom odling och djurhållning och förstår vardagen: journalföring, planering, dokumentationskrav. En gårdsanpassad app är ofta ett MVP-projekt på 11 900 kr." },
-      { q: "Kan systemet kopplas mot Fortnox eller Visma?", a: "Ja, jag har byggt Fortnox-integrationer i flera skarpa produkter och Visma fungerar också bra. Fakturor, kunder och artiklar synkas automatiskt." },
-      { q: "Hur går ett projekt till rent praktiskt?", a: "Kort uppstartssamtal, fast offert dagen efter, sedan bygger jag med avstämningar en till två gånger i veckan. Prototyp inom en vecka, MVP inom två till tre." },
+      { q: "Kan verktyget fungera ute i verksamheten på mobilen?", a: "Ja, gränssnittet kan anpassas för mobil användning. Behov av kamera, dålig uppkoppling eller arbete utan nät behöver tas med när vi bestämmer omfattningen." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Mjölby kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "finspang",
     city: "Finspång",
     region: "Östergötlands län",
-    intro:
-      "Finspång är en av Sveriges mest specialiserade industriorter – Siemens Energys gasturbiner och Gränges aluminium sätter tonen, med ett nät av underleverantörer runt omkring. Kraven på spårbarhet, dokumentation och kvalitet är höga, men hos många mindre bolag hanteras de fortfarande i Excel och pärmar. Skräddarsydda system behöver inte längre kosta en årslön.",
-    localContext:
-      "Avancerad tillverkning, energi och metall. En halvtimme från Linköping – nära nog för fysiska möten, med samma fasta priser som på hemmaplan.",
-    comparison:
-      "Specialiserade industrikonsulter ligger ofta på 1 200–1 800 kr/timmen. Jag bygger med fast pris: prototyp 4 900 kr, MVP 11 900 kr, full SaaS från 24 900 kr. Ett spårbarhets- eller egenkontrollsystem är oftast ett MVP-projekt – klart på två veckor.",
+    intro: "Vi hjälper företag i Finspång att samla dokumentation och göra uppföljningen lättare. Ett första verktyg kan ge bättre ordning på ärenden, underlag och vem som ansvarar för nästa steg.",
+    localContext: "Ett arbetsflöde för kvalitetsdokumentation kan innehålla formulär, bilder och sökbar historik. Krav från kunder, revisioner och branschregler behöver beskrivas och valideras separat.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      { q: "Kan du bygga system för spårbarhet och kvalitetsdokumentation?", a: "Ja, det är ett klassiskt fall: registrering vid varje steg, foton, signaturer och sökbar historik. Byggt för att klara kundrevisioner utan panikletande i pärmar." },
-      { q: "Kan ni integrera mot vårt affärssystem?", a: "Fortnox och Visma har jag byggt mot i skarpa produkter, och de flesta moderna affärssystem med API går att koppla. Vi reder ut det i uppstartssamtalet innan offert." },
-      { q: "Behöver vi träffas fysiskt eller sker allt på distans?", a: "Båda funkar. Jag tar gärna uppstarten på plats i Finspång, sedan brukar korta videomöten vara effektivast. Ni ser fungerande version redan efter första veckan." },
-      { q: "Vad kostar ett internt system som ersätter Excel?", a: "Oftast 11 900–24 900 kr beroende på komplexitet. Räkna på timmarna ni lägger på dubbelregistrering och letande idag – det betalar sig vanligen inom ett kvartal." },
+      { q: "Kan systemet anpassas till våra dokumentationskrav?", a: "Vi går igenom kraven med er och skiljer på önskade funktioner och sådant som måste uppfylla en viss standard. Om specialiserad granskning behövs planeras den innan leverans." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Finspång kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "nykoping",
     city: "Nyköping",
     region: "Södermanlands län",
-    intro:
-      "Nyköping växer så det knakar – Ostlänken, Skavsta och närheten till Stockholm drar företag och inflyttare till Sörmlandskusten. Många växande bolag här hamnar i gapet: för stora för Excel, för små för tunga affärssystem med sexsiffriga licenser. Det är exakt där skräddarsydd SaaS till fast pris hör hemma.",
-    localContext:
-      "Besöksnäring, bygg, logistik och tjänsteföretag i Stockholms pendlingsskugga. Ostlänken-bygget lyfter hela stråket och skapar tillväxt som gamla system inte hänger med i.",
-    comparison:
-      "Stockholmsbyråer tar Stockholmspriser – ofta 1 500–2 500 kr/timmen. Jag levererar samma moderna stack (React, Supabase, AI) till Östgötapris: prototyp 4 900 kr, MVP 11 900 kr, full SaaS från 24 900 kr. Fast pris, ingen timdebitering.",
-    caseNote:
-      "Jag driver själv en boendeanläggning och har byggt gästkommunikation, bokningsflöden och merförsäljning till den – besöksnäringens behov kan jag inifrån, inte bara som konsult.",
+    intro: "För företag i Nyköping bygger vi verktyg som gör kundkontakt och återkommande administration enklare. Vi kan börja med en bokningsförfrågan, en arbetsorder eller information som kunden behöver före ett besök.",
+    localContext: "En sammanhållen kundresa kan ta emot underlag, visa status och förbereda nästa svar. Automatiska utskick och AI-stöd avgränsas så att det är tydligt vad som kräver godkännande.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
     faqs: [
-      { q: "Bygger du för besöksnäringen i Nyköping?", a: "Ja, och jag driver själv en anläggning. Gästkommunikation, digitala gästhubbar, bokningsflöden och merförsäljning är sådant jag byggt och kör skarpt i egen verksamhet." },
-      { q: "Vi är ett byggföretag – vad kan digitaliseras?", a: "ÄTA-hantering, egenkontroller, arbetsorder och tidrapportering är de vanligaste. Mobilanpassat för killarna på plats, med automatisk koppling till Fortnox för fakturering." },
-      { q: "Fungerar samarbete på distans från Nyköping?", a: "Ja, drygt en timme bort och hälften av mina kunder finns utanför Östergötland. Videomöten en till två gånger i veckan räcker – ni ser fungerande version tidigt istället för powerpoints." },
-      { q: "Hur snabbt kan vi ha något live?", a: "Prototyp på tre till fem dagar, MVP på två veckor. Hör du av dig idag tar vi ett samtal samma vecka och du har offert med fast pris dagen efter." },
+      { q: "Kan ni hjälpa oss med gästinformation eller bokningsflöden?", a: "Ja, vi kan gå igenom er nuvarande resa och avgränsa en förbättring. Portfolion visar även hur vi arbetar med gästflöden i vår egen boendeverksamhet." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Nyköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "katrineholm",
     city: "Katrineholm",
     region: "Södermanlands län",
-    intro:
-      "Katrineholm byggdes där stambanorna korsas och lever fortfarande på sitt logistikläge – lager, transport och livsmedelsindustri dominerar, med anrika industribolag som SKF Mekan i ryggen. För logistik- och lagerbolag är manuella flöden dyra flaskhalsar: körningar i telefon, fraktsedlar på papper, fakturering dagar i efterskott. Det går att bygga bort på veckor.",
-    localContext:
-      "Järnvägsknut och logistikcentrum mitt i Sörmland, med livsmedel, gjuteri och lager som bas. Bolag i er storlek ska inte behöva välja mellan Excel och miljonsystem.",
-    comparison:
-      "Ett branschsystem för transport eller lager kostar ofta 5 000–15 000 kr i månaden i licenser – och passar ändå inte era flöden. Jag bygger ett som gör det, för fast pris: MVP 11 900 kr, full SaaS från 24 900 kr. Ni äger koden och slipper eviga licenser.",
-    caseNote:
-      "Aurora Transport – dispatch, körorder och fakturering för åkerier – byggdes på under två veckor och används skarpt. Perfekt utgångspunkt för transport- och logistikbolag i Katrineholm.",
+    intro: "Vi hjälper företag i Katrineholm att samla order, uppdrag och uppföljning i digitala flöden. Målet är att göra det tydligt vad som ska göras, vem som ansvarar och vilken information som saknas.",
+    localContext: "En mobil uppdragsvy kan visa underlag och låta personal rapportera status. Kundportaler och kopplingar till fakturering kan läggas till när datakällor och ansvar är utredda.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
+    caseNote: "I portfolion finns Aurora Transport, en egen produkt för transportflöden. Se projektet och använd det som underlag för vad ni vill bygga.",
     faqs: [
-      { q: "Bygger du dispatchsystem för åkerier i Katrineholm?", a: "Ja, Aurora Transport är byggt exakt för det: order in, schemaläggning, körorder till chauffören i mobilen och automatisk fakturering via Fortnox. Det kan skräddarsys efter era flöden." },
-      { q: "Vi driver lager – vad kan du bygga?", a: "Inleverans, plock, saldokoll och enkel kundportal där era kunder ser lagerstatus själva. Oftast ett MVP-projekt på 11 900 kr, byggt mobilanpassat för truckhytten." },
-      { q: "Måste vi ha egen IT-kompetens?", a: "Nej. Jag levererar ett färdigt system, står för drift och underhåll om ni vill, och ni får kod och data i eget ägande. Ingen inlåsning." },
-      { q: "Vad händer efter lansering?", a: "30 dagars buggfri-garanti ingår. Därefter löpande underhåll från 1 990 kr/mån eller timmar vid behov – de flesta väljer en liten underhållsplan och sover gott." },
+      { q: "Finns det ett transportexempel att titta på?", a: "Ja, Aurora Transport finns i portfolion. Vi använder det som konkret utgångspunkt för att diskutera order, planering och mobil återrapportering utifrån era behov." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Katrineholm kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
   {
     slug: "eskilstuna",
     city: "Eskilstuna",
     region: "Södermanlands län",
-    intro:
-      "Eskilstuna har växlat upp från Smedstaden till ett av Sveriges hetaste logistiklägen – Amazon la sitt första svenska logistikcenter här, Volvo CE både utvecklar och tillverkar, och logistikparken drar ständigt nya etableringar. Med den tillväxten följer interna system som inte hänger med. AI-kodning bygger om dem på veckor istället för år.",
-    localContext:
-      "Logistik, tung industri, e-handel och Mälardalens universitet. En dryg timme från min bas i Linköping – samma stack, samma fasta priser, utan Mälardalspåslag.",
-    comparison:
-      "Byråer i Mälardalen ligger ofta på 1 200–2 000 kr/timmen med långa ledtider. Jag jobbar med fast pris: prototyp 4 900 kr på dagar, MVP 11 900 kr på två veckor, full SaaS från 24 900 kr. Ni vet totalkostnaden innan projektet startar.",
+    intro: "För företag i Eskilstuna bygger vi verktyg för orderflöden, kundportaler och intern samordning. Vi börjar med att förstå var arbetet fastnar och vilken första förändring som kan göra störst nytta.",
+    localContext: "En kundportal kan samla beställningar, dokument och leveransstatus. Vi undersöker vilka uppgifter som kan hämtas automatiskt och vilka som behöver registreras eller granskas manuellt.",
+    comparison: "Vi börjar med behov, användare och ett arbetsflöde att förbättra. En avgränsad prototyp erbjuds från 4 900 kr. Ni får en offert med omfattning, pris och tidsplan innan utvecklingen startar. Drift, externa tjänster och fortsatt utveckling specificeras separat.",
+    caseNote: "I portfolion finns Aurora Transport, en egen produkt för transportflöden. Se projektet och använd det som underlag för vad ni vill bygga.",
     faqs: [
-      { q: "Bygger du system för logistik och e-handel i Eskilstuna?", a: "Ja – orderflöden, lagerstatus, fraktbokning, kundportaler och dispatch. Aurora Transport, mitt eget dispatchsystem för åkerier, visar nivån: byggt på under två veckor och i skarp drift." },
-      { q: "Vi är underleverantör till industrin – vad är typiska projekt?", a: "Leveransplaner, kvalitetsuppföljning, avvikelsehantering och portaler där era beställare följer status i realtid. Det som idag bor i mejltrådar och delade Excelfiler." },
-      { q: "Hur fungerar distanssamarbete från Eskilstuna?", a: "Smidigt – videomöten en till två gånger i veckan och fungerande version att klicka i redan efter första veckan. Fysiskt uppstartsmöte går att ordna vid behov." },
-      { q: "Varför inte en lokal byrå i Mälardalen?", a: "Gärna om de matchar priset och tempot. Min modell är fast pris, leverans på veckor och kod ni äger – jämför gärna offerter, det brukar räcka som argument." },
+      { q: "Kan vi börja med en portal för ett fåtal kunder?", a: "Ja. En avgränsad pilot kan göra det lättare att få återkoppling och bedöma fortsatt utveckling. Antal användare, funktioner och åtkomst bestäms innan bygget börjar." },
+      { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Eskilstuna kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
 ];
 
-
 export const getCity = (slug: string): CityContent | undefined =>
   cities.find((c) => c.slug === slug);
 
-// Per-city unique SEO fields – generated to avoid duplicate titles/descriptions.
 export const citySeo: Record<string, CitySeo> = {
   linkoping: {
-    metaTitleSaaS: "SaaS-utveckling i Linköping från 4 900 kr | Aurora Media",
-    metaDescSaaS:
-      "Från idé till SaaS i Linköping. Vi bygger er MVP med koppling till Mjärdevis tech-scen. Få en offert, start från 4 900 kr.",
-    metaTitleAI: "AI-byrå Linköping: AI-lösningar för tech & industri | AM",
-    metaDescAI:
-      "Er AI-byrå i Linköping. Vi hjälper bolag inom tech och industri, inspirerade av Saabs och LiUs innovation, att bygga smarta AI-lösningar.",
-    h1Pre: "AI-byrå i Linköping som bygger",
-    h1Em: "SaaS och AI för teknikbolag",
-    keywords: [
-      "AI-byrå Linköping",
-      "SaaS-utveckling Linköping",
-      "webbyrå Linköping",
-      "systemutveckling Linköping",
-      "Mjärdevi startups",
-      "SaaS-bolag Linköping",
-    ],
-    tjansterIntro:
-      "Vi är en AI-byrå i Linköping som hjälper lokala företag att förverkliga sina digitala ambitioner. Se hur vi kan hjälpa er med SaaS-utveckling och anpassade AI-lösningar.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Linköping | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Linköping. Fokus på interna verktyg och kundflöden. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Linköping | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Linköping. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Linköping.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Linköping", "SaaS-utveckling Linköping", "interna verktyg Linköping"],
+    tjansterIntro: "Vill ni förbättra interna verktyg och kundflöden? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   norrkoping: {
-    metaTitleSaaS: "Bygga SaaS i Norrköping? Vi startar från 4 900 kr | AM",
-    metaDescSaaS:
-      "Effektiv SaaS-utveckling för logistik och e-handel i Norrköping. Snabb MVP-leverans från 4 900 kr för att testa din affärsidé skarpt.",
-    metaTitleAI: "AI-byrå Norrköping: Automation för logistik & e-handel",
-    metaDescAI:
-      "Aurora Media är er AI-byrå i Norrköping. Vi utvecklar AI-driven automation för att optimera er logistik, drift och e-handel. Förstärk ert datacenter.",
-    h1Pre: "Från Norrköpings logistiknav till",
-    h1Em: "optimerad SaaS & AI-drift",
-    keywords: [
-      "AI-byrå Norrköping",
-      "SaaS Norrköping",
-      "e-handel utveckling Norrköping",
-      "logistik automation",
-      "webbyrå Norrköping pris",
-      "systemutvecklare Norrköping",
-    ],
-    tjansterIntro:
-      "I hjärtat av Östergötlands logistik- och e-handelskluster erbjuder vi SaaS- och AI-utveckling. Utforska våra tjänster för att se hur vi kan effektivisera er verksamhet.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Norrköping | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Norrköping. Fokus på order, transport och uppföljning. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Norrköping | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Norrköping. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Norrköping.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Norrköping", "SaaS-utveckling Norrköping", "interna verktyg Norrköping"],
+    tjansterIntro: "Vill ni förbättra order, transport och uppföljning? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   jonkoping: {
-    metaTitleSaaS: "SaaS för familjeföretag i Jönköping – från 4 900 kr",
-    metaDescSaaS:
-      "Digitalisera ert familjeföretag med en egen SaaS. Vi bygger robusta lösningar för handel och logistik i Jönköping. Pris från 4 900 kr.",
-    metaTitleAI: "AI-byrå Jönköping | AI för handel & logistik | Aurora Media",
-    metaDescAI:
-      "AI för Jönköpings näringsliv. Som er lokala AI-byrå hjälper vi allt från anrika familjeföretag till logistik-giganter att bli effektivare med AI.",
-    h1Pre: "AI och SaaS för Jönköpings",
-    h1Em: "handels- och industriföretag",
-    keywords: [
-      "AI-byrå Jönköping",
-      "SaaS-utveckling Jönköping",
-      "webbyrå Jönköping",
-      "digitalisering familjeföretag",
-      "systemutveckling Småland",
-      "IT-bolag Jönköping",
-    ],
-    tjansterIntro:
-      "För Jönköpings drivna företagskultur erbjuder vi utvecklingstjänster som gör skillnad. Upptäck hur vi kan hjälpa ert familje- eller logistikföretag med SaaS och AI.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Jönköping | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Jönköping. Fokus på handel och företagsportaler. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Jönköping | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Jönköping. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Jönköping.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Jönköping", "SaaS-utveckling Jönköping", "interna verktyg Jönköping"],
+    tjansterIntro: "Vill ni förbättra handel och företagsportaler? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   stockholm: {
-    metaTitleSaaS: "Prisvärd SaaS-utveckling i Stockholm – från 4 900 kr",
-    metaDescSaaS:
-      "Slipp dyra byråarvoden. Vi bygger er SaaS-tjänst i Stockholm från 4 900 kr. Perfekt för startups inom fintech och B2B. Snabb, effektiv MVP.",
-    metaTitleAI: "AI-byrå Stockholm: Bättre pris, samma spetskompetens | AM",
-    metaDescAI:
-      "Varför betala överpris? Aurora Media är en AI-byrå för Stockholm som levererar avancerade AI-lösningar för fintech och SaaS utan dyra konsultarvoden.",
-    h1Pre: "SaaS-utveckling i Stockholm utan",
-    h1Em: "stockholmspriser",
-    keywords: [
-      "AI-byrå Stockholm pris",
-      "SaaS-utveckling Stockholm",
-      "webbyrå Stockholm billig",
-      "fintech startup Stockholm",
-      "SaaS-bolag Stockholm",
-      "MVP-utveckling Stockholm",
-    ],
-    tjansterIntro:
-      "I en stad där byråkostnaderna lätt skenar erbjuder vi ett smartare alternativ. Se våra tjänster inom SaaS och AI, anpassade för Stockholms snabbrörliga startups.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Stockholm | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Stockholm. Fokus på er nästa produkt eller interna tjänst. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Stockholm | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Stockholm. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Stockholm.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Stockholm", "SaaS-utveckling Stockholm", "interna verktyg Stockholm"],
+    tjansterIntro: "Vill ni förbättra er nästa produkt eller interna tjänst? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   goteborg: {
-    metaTitleSaaS: "SaaS-utveckling Göteborg: MVP för industri & life science",
-    metaDescSaaS:
-      "Vi bygger er nästa SaaS-plattform i Göteborg med fokus på industri, fordon och life science. Få er MVP från 4 900 kr. Testa er idé på marknaden.",
-    metaTitleAI: "AI-byrå Göteborg: AI för fordon, industri & life science",
-    metaDescAI:
-      "Som AI-byrå för Göteborgs näringsliv bygger vi lösningar som stärker er konkurrenskraft inom fordon, industri och life science. Från vision till verklighet.",
-    h1Pre: "Från fordonsindustri till SaaS i Göteborg",
-    h1Em: "vi bygger er nästa innovation",
-    keywords: [
-      "AI-byrå Göteborg",
-      "SaaS Göteborg",
-      "industri 4.0 Göteborg",
-      "Volvo IT",
-      "life science AI",
-      "webbyrå Göteborg",
-    ],
-    tjansterIntro:
-      "Med rötterna i innovationsstaden Göteborg hjälper vi företag inom industri och life science. Ta en titt på våra tjänster för att se hur vi kan realisera er nästa idé.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Göteborg | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Göteborg. Fokus på orderflöden och verksamhetsöversikt. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Göteborg | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Göteborg. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Göteborg.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Göteborg", "SaaS-utveckling Göteborg", "interna verktyg Göteborg"],
+    tjansterIntro: "Vill ni förbättra orderflöden och verksamhetsöversikt? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   malmo: {
-    metaTitleSaaS: "SaaS för startups i Malmö – MVP från 4 900 kr | AM",
-    metaDescSaaS:
-      "För Malmös tech-scen: Vi bygger er MVP! Oavsett om ni är inom gaming, fintech eller greentech, startar vi er SaaS-resa från 4 900 kr.",
-    metaTitleAI: "AI-byrå Malmö: För startups inom gaming, fintech, greentech",
-    metaDescAI:
-      "AI-byrå för Malmös innovativa startup-klimat. Vi hjälper er att integrera AI för att skapa nästa generations produkter inom gaming, fintech och greentech.",
-    h1Pre: "AI-driven utveckling för Malmös",
-    h1Em: "startup-scen",
-    keywords: [
-      "AI-byrå Malmö",
-      "SaaS startup Malmö",
-      "fintech Malmö",
-      "gaming utvecklare Malmö",
-      "greentech bolag",
-      "webbyrå Malmö",
-    ],
-    tjansterIntro:
-      "För den pulserande startup-scenen i Malmö erbjuder vi spetskompetens inom AI och SaaS. Se hur våra tjänster kan ge er den tekniska skjuts ni behöver.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Malmö | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Malmö. Fokus på en första version att prova. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Malmö | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Malmö. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Malmö.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Malmö", "SaaS-utveckling Malmö", "interna verktyg Malmö"],
+    tjansterIntro: "Vill ni förbättra en första version att prova? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   uppsala: {
-    metaTitleSaaS: "SaaS för biotech & life science i Uppsala | fr. 4 900 kr",
-    metaDescSaaS:
-      "Specialiserad SaaS-utveckling för biotech och life science i Uppsala. Från akademisk forskning till kommersiell produkt. MVP från 4 900 kr.",
-    metaTitleAI: "AI-byrå Uppsala: AI-lösningar för biotech & life science",
-    metaDescAI:
-      "Er AI-byrå i Uppsala med expertis inom life science och biotech. Vi omvandlar forskning och data till intelligenta applikationer och AI-modeller.",
-    h1Pre: "Från akademi till applikation i Uppsala",
-    h1Em: "AI & SaaS för life science",
-    keywords: [
-      "AI-byrå Uppsala",
-      "biotech Uppsala",
-      "life science AI",
-      "SaaS-utveckling Uppsala",
-      "webbyrå Uppsala",
-      "systemutveckling akademi",
-    ],
-    tjansterIntro:
-      "I kunskapsstaden Uppsala bygger vi broar mellan akademi och näringsliv. Upptäck våra AI- och SaaS-tjänster, skräddarsydda för biotech och life science.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Uppsala | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Uppsala. Fokus på projektsamordning och dataöversikt. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Uppsala | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Uppsala. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Uppsala.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Uppsala", "SaaS-utveckling Uppsala", "interna verktyg Uppsala"],
+    tjansterIntro: "Vill ni förbättra projektsamordning och dataöversikt? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   vasteras: {
-    metaTitleSaaS: "SaaS-utveckling Västerås: För industri & automation | AM",
-    metaDescSaaS:
-      "Bygg en SaaS-lösning för industri, energi eller automation i Västerås. Vi levererar en första version (MVP) från 4 900 kr för att validera er idé.",
-    metaTitleAI: "AI-byrå Västerås | AI för industri, energi & automation",
-    metaDescAI:
-      "Som er AI-byrå i Västerås hjälper vi industriföretag som ABB och andra att implementera AI för automation och effektivare energilösningar.",
-    h1Pre: "AI-byrå i Västerås för",
-    h1Em: "industri, energi och automation",
-    keywords: [
-      "AI-byrå Västerås",
-      "industriautomation",
-      "SaaS Västerås",
-      "ABB Västerås",
-      "energi tech",
-      "webbyrå Västerås",
-    ],
-    tjansterIntro:
-      "I industristaden Västerås levererar vi digitala lösningar för framtidens industri. Se hur våra tjänster inom SaaS och AI kan transformera er verksamhet.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Västerås | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Västerås. Fokus på rapportering och interna flöden. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Västerås | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Västerås. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Västerås.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Västerås", "SaaS-utveckling Västerås", "interna verktyg Västerås"],
+    tjansterIntro: "Vill ni förbättra rapportering och interna flöden? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   orebro: {
-    metaTitleSaaS: "SaaS-utveckling Örebro: För logistik & mellanstora bolag",
-    metaDescSaaS:
-      "Effektiv SaaS-utveckling för mellanstora bolag i Örebro, med fokus på logistik och livsmedel. Få er skräddarsydda MVP från bara 4 900 kr.",
-    metaTitleAI: "AI-byrå Örebro: Praktiska AI-lösningar för ditt företag",
-    metaDescAI:
-      "Letar du efter en AI-byrå i Örebro? Vi hjälper mellanstora bolag att ta steget med praktiska AI-lösningar för logistik och effektivare drift.",
-    h1Pre: "Smartare SaaS & AI för",
-    h1Em: "mellanstora företag i Örebro",
-    keywords: [
-      "AI-byrå Örebro",
-      "SaaS Örebro",
-      "logistik Örebro",
-      "webbyrå Örebro",
-      "IT-företag Örebro",
-      "systemutveckling Närke",
-    ],
-    tjansterIntro:
-      "För Örebros växande företag erbjuder vi handfasta digitala tjänster som ger resultat. Utforska hur vi kan hjälpa er med SaaS-utveckling och smarta AI-lösningar.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Örebro | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Örebro. Fokus på kundärenden och intern samordning. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Örebro | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Örebro. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Örebro.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Örebro", "SaaS-utveckling Örebro", "interna verktyg Örebro"],
+    tjansterIntro: "Vill ni förbättra kundärenden och intern samordning? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   motala: {
-    metaTitleSaaS: "SaaS-utveckling i Motala – fast pris från 4 900 kr",
-    metaDescSaaS:
-      "Skräddarsydd SaaS och interna system för industri och besöksnäring i Motala. Prototyp på dagar, MVP på två veckor. Fast pris från 4 900 kr.",
-    metaTitleAI: "AI-byrå Motala – automation för industrin | Aurora Media",
-    metaDescAI:
-      "AI-byrå nära Motala. Vi automatiserar orderflöden, dokument och Excel-arbete för verkstad och besöksnäring. Lokal partner, fast pris, snabb leverans.",
-    h1Pre: "AI och SaaS för Motalas",
-    h1Em: "industri och besöksnäring",
-    keywords: [
-      "AI-byrå Motala",
-      "SaaS-utveckling Motala",
-      "systemutveckling Motala",
-      "webbyrå Motala",
-      "AI-automation Östergötland",
-      "digitalisera industri Motala",
-    ],
-    tjansterIntro:
-      "Vi hjälper företag i Motala att ersätta Excel och pärmar med skräddarsydda system. Se hur vi kan hjälpa er med SaaS-utveckling och AI-automation.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Motala | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Motala. Fokus på bokningar och arbetsorder. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Motala | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Motala. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Motala.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Motala", "SaaS-utveckling Motala", "interna verktyg Motala"],
+    tjansterIntro: "Vill ni förbättra bokningar och arbetsorder? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   mjolby: {
-    metaTitleSaaS: "SaaS i Mjölby för lantbruk & industri | från 4 900 kr",
-    metaDescSaaS:
-      "Digitala verktyg för Mjölbys lantbruk, industri och underleverantörer. Skräddarsydd SaaS med fast pris från 4 900 kr och leverans på veckor.",
-    metaTitleAI: "AI-byrå Mjölby – lantbruksteknik & industri | Aurora Media",
-    metaDescAI:
-      "AI-byrå nära Mjölby. Automation för lantbruk, materialhantering och underleverantörer – order, kvalitet och leveransplaner utan manuellt Excel-arbete.",
-    h1Pre: "Digitala verktyg för Mjölbys",
-    h1Em: "lantbruk och industri",
-    keywords: [
-      "AI-byrå Mjölby",
-      "SaaS Mjölby",
-      "systemutveckling Mjölby",
-      "digitalisering lantbruk",
-      "webbyrå Mjölby",
-      "app underleverantör industri",
-    ],
-    tjansterIntro:
-      "Mitt i ett av Sveriges starkaste kluster för lantbruks- och materialhanteringsteknik bygger vi system som får flödena att flyta. Utforska våra tjänster.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Mjölby | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Mjölby. Fokus på planering och dokumentation. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Mjölby | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Mjölby. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Mjölby.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Mjölby", "SaaS-utveckling Mjölby", "interna verktyg Mjölby"],
+    tjansterIntro: "Vill ni förbättra planering och dokumentation? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   finspang: {
-    metaTitleSaaS: "SaaS-utveckling i Finspång – system för industrin",
-    metaDescSaaS:
-      "Skräddarsydda system för Finspångs industri och underleverantörer: spårbarhet, kvalitet och orderflöden. Fast pris från 4 900 kr, MVP på två veckor.",
-    metaTitleAI: "AI-byrå Finspång – automation för industrin | Aurora Media",
-    metaDescAI:
-      "AI-byrå nära Finspång. Vi automatiserar dokumentation, spårbarhet och kvalitetsflöden för industri och underleverantörer. Fast pris, snabb leverans.",
-    h1Pre: "System och AI för Finspångs",
-    h1Em: "industri och underleverantörer",
-    keywords: [
-      "AI-byrå Finspång",
-      "SaaS-utveckling Finspång",
-      "systemutveckling Finspång",
-      "kvalitetssystem industri",
-      "spårbarhet tillverkning",
-      "webbyrå Finspång",
-    ],
-    tjansterIntro:
-      "Vi bygger system för industriorten Finspång: spårbarhet, kvalitetsdokumentation och orderflöden som klarar revision. Se våra tjänster.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Finspång | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Finspång. Fokus på dokumentation och uppföljning. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Finspång | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Finspång. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Finspång.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Finspång", "SaaS-utveckling Finspång", "interna verktyg Finspång"],
+    tjansterIntro: "Vill ni förbättra dokumentation och uppföljning? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   nykoping: {
-    metaTitleSaaS: "SaaS-utveckling Nyköping – fast pris från 4 900 kr",
-    metaDescSaaS:
-      "Modern SaaS för växande bolag i Nyköping – utan Stockholmspriser. Prototyp på dagar, MVP på två veckor, kod ni äger. Fast pris från 4 900 kr.",
-    metaTitleAI: "AI-byrå Nyköping – AI för bygg & besöksnäring | AM",
-    metaDescAI:
-      "AI-byrå för Nyköping. Automation för bygg, besöksnäring och tjänsteföretag i Ostlänkens tillväxtstråk. Fast pris och leverans på veckor.",
-    h1Pre: "SaaS och AI för Nyköpings",
-    h1Em: "växande företag",
-    keywords: [
-      "AI-byrå Nyköping",
-      "SaaS-utveckling Nyköping",
-      "webbyrå Nyköping",
-      "systemutveckling Sörmland",
-      "app byggföretag",
-      "digitalisering besöksnäring",
-    ],
-    tjansterIntro:
-      "Nyköping växer med Ostlänken – vi bygger systemen som håller jämna steg. Se hur vi hjälper bygg, besöksnäring och tjänsteföretag att digitalisera.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Nyköping | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Nyköping. Fokus på service, bokningar och kundkontakt. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Nyköping | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Nyköping. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Nyköping.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Nyköping", "SaaS-utveckling Nyköping", "interna verktyg Nyköping"],
+    tjansterIntro: "Vill ni förbättra service, bokningar och kundkontakt? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   katrineholm: {
-    metaTitleSaaS: "SaaS-utveckling Katrineholm – logistik & industri",
-    metaDescSaaS:
-      "Skräddarsydda system för logistik, lager och industri i Katrineholm. Dispatch, plock och fakturering utan miljonlicenser. Fast pris från 4 900 kr.",
-    metaTitleAI: "AI-byrå Katrineholm – automation för logistik | AM",
-    metaDescAI:
-      "AI-byrå för Katrineholm. Vi automatiserar transport-, lager- och orderflöden för bolag i Sörmlands logistiknav. Fast pris, kod ni äger själva.",
-    h1Pre: "Från Katrineholms järnvägsknut till",
-    h1Em: "digitala logistikflöden",
-    keywords: [
-      "AI-byrå Katrineholm",
-      "SaaS Katrineholm",
-      "dispatchsystem åkeri",
-      "lagersystem småföretag",
-      "systemutveckling Katrineholm",
-      "webbyrå Katrineholm",
-    ],
-    tjansterIntro:
-      "I Sörmlands logistiknav bygger vi system för transport, lager och industri. Utforska hur vi ersätter telefon och Excel med riktiga flöden.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Katrineholm | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Katrineholm. Fokus på order och transportuppföljning. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Katrineholm | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Katrineholm. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Katrineholm.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Katrineholm", "SaaS-utveckling Katrineholm", "interna verktyg Katrineholm"],
+    tjansterIntro: "Vill ni förbättra order och transportuppföljning? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
   eskilstuna: {
-    metaTitleSaaS: "SaaS-utveckling Eskilstuna – fast pris från 4 900 kr",
-    metaDescSaaS:
-      "SaaS och interna system för Eskilstunas logistik, industri och e-handel. Prototyp på dagar, MVP på två veckor. Fast pris utan Mälardalspåslag.",
-    metaTitleAI: "AI-byrå Eskilstuna – logistik & industri | Aurora Media",
-    metaDescAI:
-      "AI-byrå för Eskilstuna. Automation för logistik, e-handel och tillverkning – från orderflöden till kundportaler. Fast pris och leverans på veckor.",
-    h1Pre: "AI och SaaS för Eskilstunas",
-    h1Em: "logistik och industri",
-    keywords: [
-      "AI-byrå Eskilstuna",
-      "SaaS-utveckling Eskilstuna",
-      "systemutveckling Eskilstuna",
-      "webbyrå Eskilstuna",
-      "AI-automation logistik",
-      "digitalisering e-handel",
-    ],
-    tjansterIntro:
-      "Från Smedstaden till logistiknav – vi bygger systemen som matchar Eskilstunas tempo. Se hur vi hjälper logistik, industri och e-handel.",
+    metaTitleSaaS: "SaaS-utveckling för företag i Eskilstuna | Aurora Media",
+    metaDescSaaS: "Vi bygger SaaS och interna verktyg för företag i Eskilstuna. Fokus på orderöversikt och kundportaler. Avgränsad prototyp från 4 900 kr.",
+    metaTitleAI: "AI-byrå för företag i Eskilstuna | Aurora Media",
+    metaDescAI: "AI-automation och digitala verktyg för företag i Eskilstuna. Vi utgår från era arbetsflöden. Direktkontakt med utvecklaren i Linköping.",
+    h1Pre: "AI och SaaS för företag i Eskilstuna.",
+    h1Em: "Börja med ett konkret behov.",
+    keywords: ["AI-byrå Eskilstuna", "SaaS-utveckling Eskilstuna", "interna verktyg Eskilstuna"],
+    tjansterIntro: "Vill ni förbättra orderöversikt och kundportaler? Vi hjälper er att välja en första insats, från avgränsad prototyp till ett system med överenskomna funktioner och integrationer.",
   },
 };
-
 
 export const getCitySeo = (slug: string): CitySeo | undefined => citySeo[slug];

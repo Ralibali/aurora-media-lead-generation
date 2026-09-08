@@ -47,7 +47,7 @@ const STATIC_PAGES = [
   { route: '/arbete', title: 'Case och projekt', description: 'Se projekt, SaaS-lösningar och digitala system byggda av Aurora Media.', body: 'Aurora Media bygger egna SaaS-produkter och kundprojekt inom AI, transport, marknadsplatser och interna system.' },
   { route: '/priser', title: 'Priser för SaaS, prototyp, MVP och konsult', description: 'Fast pris från 4 900 kr för prototyp, 11 900 kr för MVP och 24 900 kr för skalbar SaaS. Konsultuppdrag 895 kr/timme eller från 12 000 kr/månad.', body: 'Aurora Media erbjuder fast pris för prototyper, MVP:er och skalbara SaaS-projekt – samt konsultuppdrag inom AI-rådgivning och utveckling för 895 kr/timme eller från 12 000 kr/månad. Du vet kostnaden innan arbetet börjar.' },
   { route: '/om', title: 'Om Aurora Media', description: 'Aurora Media AB drivs av Christoffer Holstensson i Linköping och bygger AI-driven mjukvara för svenska bolag.', body: 'Aurora Media AB är en AI-driven mjukvarubyrå från Linköping grundad av Christoffer Holstensson. Bolaget bygger SaaS, appar och skräddarsydda system.' },
-  { route: '/oppna-siffror', title: 'Öppna siffror – metrics i realtid', description: 'Aurora Media visar sina siffror öppet: produkter i drift, leveranstider, upptid och deploys. Ingen PowerPoint – facit.', body: 'Aurora Media visar öppna siffror: 7 produkter i drift, snittleverans 2 veckor, 99,9 % upptid och löpande bygglogg. Vi driver det vi bygger – varje dag.' },
+  { route: '/oppna-siffror', title: 'Öppna siffror – projekt och dokumenterade resultat', description: 'Se publicerade projekt och dokumenterade resultat från Aurora Medias egen verksamhet, med datum och underlag.', body: 'Se Aurora Medias projekt och arbete med egna produkter. Tillgängliga uppgifter och deras underlag redovisas på sidan.' },
   { route: '/villkor', title: 'Villkor för AI-kartan', description: 'Villkoren för AI-kartan: du får kartan på mejl, Aurora Media kan höra av sig för uppföljning, och du kan avsluta när du vill.', body: 'När du fyller i AI-kartan godkänner du att Aurora Media skickar kartan till din mejl tillsammans med upp till fyra uppföljande tipsmejl, och att vi kan höra av oss för uppföljning. Uppgifterna används bara för detta, delas aldrig med tredje part, och du kan avregistrera dig när du vill via länken i varje mejl eller genom att mejla christoffer@auroramedia.se. Behandlingen sker enligt GDPR med ditt samtycke som grund. Aurora Media AB, org.nr 559272-0220, Linköping.' },
   { route: '/ai-snabbanalys', title: 'AI-snabbanalys – beskriv er vardag, få en AI-plan som PDF', description: 'Skriv några meningar om vad som tar tid i er vardag. Vår AI tolkar texten och skickar en personlig AI-plan som PDF – gratis, på någon minut.', body: 'AI-snabbanalysen är snabbvarianten av Aurora Medias AI-karta. Beskriv er vardag i fritext – vad som tar mest tid, vilka system ni använder – så tolkar vår AI texten, identifierar de bästa automationscasen och räknar ut vad de kostar er idag. Ni får en personlig AI-plan som PDF direkt till mejlen: kostnad per process, rekommenderat första bygge med fast pris och återbetalningstid. Gratis och utan köpkrav, från AI-byrån i Linköping.' },
   { route: '/kontakt', title: 'Kontakt', description: 'Kontakta Aurora Media för SaaS, AI, webbappar, integrationer och digital produktutveckling.', body: 'Kontakta Aurora Media AB via info@auroramedia.se för att diskutera SaaS, MVP, AI-system, webbappar och digital utveckling.' },
@@ -573,9 +573,9 @@ function buildCityBody({ city, intro, localContext, comparison, variantH1, varia
       <h1>${escapeHtml(variantH1)}</h1>
       <p>${escapeHtml(variantSubtitle)}</p>
       <p>${escapeHtml(intro)}</p>
-      <h2>Lokal kontext – ${escapeHtml(city)}</h2>
+      <h2>Ett första användningsfall – ${escapeHtml(city)}</h2>
       <p>${escapeHtml(localContext)}</p>
-      <h2>Så skiljer vi oss</h2>
+      <h2>Från behov till testbar lösning</h2>
       <p>${escapeHtml(comparison)}</p>
       <p><a href="/kontakt">Kontakta oss för en kostnadsfri rådgivning</a> eller läs mer om våra <a href="/priser">priser</a>.</p>
     </main>

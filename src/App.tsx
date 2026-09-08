@@ -270,9 +270,9 @@ const seoMap: Record<string, SEOConfig> = {
     canonical: "https://auroramedia.se/tjanster",
   },
   "/oppna-siffror": {
-    title: "Öppna siffror – metrics i realtid | Aurora Media AB",
+    title: "Öppna siffror – projekt och dokumenterade resultat | Aurora Media AB",
     description:
-      "Aurora Media visar sina siffror öppet: produkter i drift, leveranstider, upptid och deploys. Ingen PowerPoint – facit.",
+      "Se publicerade projekt och dokumenterade resultat från Aurora Medias egen verksamhet, med datum och underlag.",
     canonical: "https://auroramedia.se/oppna-siffror",
   },
   "/villkor": {

@@ -24,8 +24,11 @@ Ett tydligare erbjudande, verkliga arbetsflöden i portfolion, fungerande mobiln
 - Gemensam mobilmeny, synlig tangentbordsfokus, innehållslänk och kompaktare mobilfooter.
 - Kontakt utan valt paket fungerar. Serverns mottagningskvitto kräver sparad förfrågan. Fel hos mejlleverantören gör inte en redan sparad förfrågan till ett formulärfel. Bekräftelsesidan påstår inte att ett mejl säkert har skickats.
 - Tydligare kontakt- och om-sida. Ogrundade generella leveranslöften, produktantal och datalagringsgarantier har tagits bort från de ändrade huvudflödena.
+- Samtliga 15 städers innehåll och metadata beskriver nu konkreta användningsfall, korrekt startpris för prototyp och samarbete från Linköping. Obelagda konkurrentpriser, kundantal, lokala kontor och generella leverans-/besparingslöften har tagits bort.
 - Stadsadressernas felaktiga partiella route-parametrar har ersatts. Befintliga stadsidor kan nu nås via sina länkar. 404-sidan har läsbar text, huvudrubrik och återväg.
 - Startsidan laddar inte rapport- och PDF-koden. Huvudfilen minskar från 1 214 kB till cirka 696 kB före komprimering, från 383 till 216 kB med gzip. Det är en byggmätning, inte ett uppmätt Core Web Vitals-resultat.
+
+- Öppna siffror hämtar nu projekt från portfolion och visar daterade Stayboost-resultat med hänvisning till caset. Obelagda upptids-, leverans-, konverterings- och kundlöften har tagits bort från sidan.
 
 **AI-kartan**
 

@@ -669,7 +669,7 @@ function ResultState({ kind, message, onPrimary, onSecondary }: {
 }) {
   const config = {
     loading: { Icon: Loader2, iconClass: "animate-spin", title: "Laddar er AI-karta…", body: "Vi hämtar era svar och räknar fram kartan." },
-    missing: { Icon: Sparkles, iconClass: "", title: "Vi hittar ingen ifylld AI-karta", body: "Starta om analysen så bygger vi ett nytt resultat på under två minuter." },
+    missing: { Icon: Sparkles, iconClass: "", title: "Vi hittar ingen ifylld AI-karta", body: "Starta en AI-karta och beskriv era arbetsflöden. Det tar vanligtvis 3–5 minuter." },
     error:   { Icon: AlertTriangle, iconClass: "", title: "Vi kunde inte ladda er analys", body: message || "Det kan vara ett tillfälligt problem – försök igen." },
   }[kind];
   const Icon = config.Icon;
