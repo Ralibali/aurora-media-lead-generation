@@ -48,7 +48,7 @@ export default function Index() {
                 <Link to="/ai-karta/start" className="am-text-link" onClick={() => trackEvent("home_hero_ai_karta_click")}>Gör gratis AI-kartan <ArrowUpRight size={17} /></Link>
               </div>
               <p className="am-micro">Kostnadsfritt första samtal · Tydlig offert före start</p>
-              <div className="am-person"><div className="am-monogram" aria-hidden>CH</div><div><strong>Christoffer Holstensson</strong><span>Grundare & utvecklare. Din kontakt genom hela projektet.</span></div></div>
+              <div className="am-person"><div className="am-monogram" aria-hidden>AM</div><div><strong>Aurora Media AB</strong><span>Byggare, inte rådgivare. Samma team följer projektet hela vägen.</span></div></div>
             </div>
             <div className="am-workflow">
               <div className="am-panel-top"><span className="vk-mono">Vad vill ni få ordning på?</span><span className="am-status">Börja här</span></div>
