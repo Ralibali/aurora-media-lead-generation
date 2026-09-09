@@ -13,19 +13,20 @@ const VALUES = [
 ];
 
 const FACTS: [string, string][] = [
+  ["Bolag", "Aurora Media AB"],
+  ["Org.nr", "559272-0220"],
   ["Bas", "Linköping"],
   ["Sedan", "2021"],
-  ["Utbildning", "Södertörns högskola"],
-  ["Arbetssätt", "Från behov till fungerande system"],
-  ["Specialitet", "SaaS, AI, system"],
+  ["Kontakt", "info@auroramedia.se"],
+  ["Specialitet", "SaaS, AI, interna system"],
 ];
 
 const Om = () => {
   const { open } = useContactModal();
   useEffect(() => {
     setSEOMeta({
-      title: "Om aurora — Christoffer Holstensson | Aurora Media",
-      description: "Aurora Media är byggt av en person. En person bygger hela vägen, från skiss till driftsatt produkt.",
+      title: "Om Aurora Media AB — AI-driven mjukvarubyrå i Linköping",
+      description: "Aurora Media AB bygger SaaS, AI-automation och interna system för svenska bolag. Fast pris, fast scope, leverans på veckor.",
       canonical: "/om", ogImage: "/og-image-sv.jpg",
     });
   }, []);
@@ -34,10 +35,10 @@ const Om = () => {
     <NordicLayout>
       <section className="page-hero">
         <div className="wrap">
-          <Reveal><p className="mono">om aurora · christoffer holstensson</p></Reveal>
+          <Reveal><p className="mono">om aurora media ab · linköping</p></Reveal>
           <Reveal delay={0.1}>
             <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>
-              Direktkontakt med den som <span className="it">bygger.</span>
+Ett litet team som <span className="it">bygger.</span>
             </h1>
           </Reveal>
         </div>
@@ -49,10 +50,10 @@ const Om = () => {
             <Reveal>
               <div>
                 <div style={{ width: 84, height: 84, borderRadius: "50%", border: "1px solid var(--hair)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-                  <span style={{ fontFamily: "var(--font-display)", fontSize: 32, color: "var(--bone)", fontStyle: "italic" }}>C</span>
+                  <span style={{ fontFamily: "var(--font-display)", fontSize: 26, color: "var(--bone)", fontStyle: "italic" }}>AM</span>
                 </div>
-                <p style={{ color: "var(--bone)", fontSize: 15, fontWeight: 500 }}>Christoffer Holstensson</p>
-                <p className="body" style={{ fontSize: 13, marginTop: 2 }}>Grundare och utvecklare</p>
+                <p style={{ color: "var(--bone)", fontSize: 15, fontWeight: 500 }}>Aurora Media AB</p>
+                <p className="body" style={{ fontSize: 13, marginTop: 2 }}>AI-driven mjukvarubyrå i Linköping</p>
                 <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 24 }}>
                   <tbody>
                     {FACTS.map(([k, v]) => (
@@ -68,16 +69,19 @@ const Om = () => {
             <Reveal delay={0.1}>
               <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
                 <p className="lead">
-                  Jag heter Christoffer och bygger digitala verktyg för företag som vill få mer gjort. Mitt arbete börjar i er vardag: vad tar tid, var fastnar informationen och vad behöver fungera bättre?
+                  Aurora Media AB bygger digitala verktyg för företag som vill få mer gjort. Arbetet börjar i er vardag: vad tar tid, var fastnar informationen och vad behöver fungera bättre?
                 </p>
                 <p className="body">
-                  Aurora Media är annorlunda byggt: en person bygger hela vägen, från första skissen till driftsatt produkt. Ni pratar direkt med personen som bygger. Vi avgränsar en första version och bestämmer tidsplanen utifrån vad den behöver klara.
+                  Vi arbetar i små team utan onödiga överlämningar. Samma personer följer projektet från första skissen till driftsatt produkt, så att ni alltid pratar med dem som faktiskt bygger. Vi avgränsar en första version och sätter tidsplanen utifrån vad den behöver klara.
                 </p>
                 <p className="body">
-                  När projektet växer förbi vad en person rimligen klarar säger vi det rakt ut. Då tar vi in externa specialister med ert godkännande — eller så hänvisar vi vidare.
+                  Leveransmodellen är fast pris, fast omfattning och fast deadline. Prototyp på ett par veckor, MVP därefter, och vidareutveckling i korta iterationer när produkten är i drift.
+                </p>
+                <p className="body">
+                  Kompetensområdena är SaaS-utveckling, AI-automation, integrationer, interna system och webb. När ett projekt kräver specialistkompetens vi inte har internt tar vi in den med ert godkännande — eller hänvisar vidare.
                 </p>
                 <p className="body" style={{ color: "var(--bone-mute)" }}>
-                  Bakgrunden är inom säkerhet och systemvetenskap — studerade vid Södertörns högskola och hamnade sedan i skärningspunkten mellan teknisk problemlösning och affärsnytta.
+                  Aurora Media AB, org.nr 559272-0220, med bas i Linköping. Kunder finns i hela Sverige och arbetet sker digitalt med gemensamma genomgångar av testbara versioner.
                 </p>
               </div>
             </Reveal>
