@@ -30,7 +30,7 @@ import {
   type Product,
 } from "../_shared/aiKontoret.ts";
 
-const FROM = "Christoffer på Aurora Media <info@auroramedia.se>";
+const FROM = "Aurora Media <info@auroramedia.se>";
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -62,7 +62,7 @@ async function sendDeliveryEmail(email: string, product: Product, links: { label
 <p>Här är dina nedladdningar:</p>
 <ul>${list}</ul>
 <p>Länkarna är personliga och gäller i ${days} dygn. Behöver du nya länkar – svara på detta mejl eller skriv till <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>
-<p>Lycka till med kontoret.<br/>Christoffer, Aurora Media AB</p>
+<p>Lycka till med kontoret.<br/>Aurora Media AB</p>
 </body></html>`;
   const text = `Tack för ditt köp av AI-KONTORET (version ${PRODUCT_VERSION}).
 
@@ -71,7 +71,7 @@ ${textList}
 
 Länkarna gäller i ${days} dygn. Behöver du nya länkar, skriv till ${SUPPORT_EMAIL}.
 
-Christoffer, Aurora Media AB`;
+Aurora Media AB`;
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",

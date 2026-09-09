@@ -136,9 +136,9 @@ function buildSchemas(article, url) {
       datePublished: article.publishedDate,
       dateModified: article.updatedDate || article.publishedDate,
       author: {
-        "@type": "Person",
-        name: "Christoffer Holstensson",
-        url: `${SITE_URL}/om`,
+        "@type": "Organization",
+        name: "Aurora Media AB",
+        url: SITE_URL,
       },
       publisher: { "@id": `${SITE_URL}/#organization` },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },

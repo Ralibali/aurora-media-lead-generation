@@ -28,7 +28,7 @@ export const articles13to18: Article[] = [
       {
         heading: "Så bygger Aurora Media SaaS annorlunda",
         content:
-          "Jag heter Christoffer och driver Aurora Media AB i Linköping. Jag bygger SaaS-produkter, MVP:er och interna verktyg åt svenska företag med AI-kodning som primärt verktyg — Lovable, Bolt, Cursor, Claude och modern utvecklingsstack. Det innebär att samma typ av produkt som tidigare krävde flera roller kan byggas snabbare, tydligare och billigare, utan att du behöver betala för varje intern timme i ett stort team.",
+          "Aurora Media AB är en AI-driven mjukvarubyrå i Linköping. Vi bygger SaaS-produkter, MVP:er och interna verktyg åt svenska företag med AI-kodning som primärt verktyg — Lovable, Bolt, Cursor, Claude och modern utvecklingsstack. Det innebär att samma typ av produkt som tidigare krävde flera roller kan byggas snabbare, tydligare och billigare, utan att du behöver betala för varje intern timme i ett stort team.",
       },
       {
         heading: "Fast pris istället för skenande timrapporter",

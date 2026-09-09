@@ -14,7 +14,7 @@ const corsHeaders = {
 };
 
 // Samma avsändare som uppföljningsmejlen – ett domänrykte, inte två.
-const FROM = "Christoffer på Aurora Media <info@auroramedia.se>";
+const FROM = "Aurora Media <info@auroramedia.se>";
 const REPLY_TO = "info@auroramedia.se";
 const UNSUB_BASE = "https://cyymcdqkpvcvwjoqxbco.functions.supabase.co/ai-map-unsubscribe";
 
@@ -125,7 +125,7 @@ Deno.serve(async (req: Request) => {
         <p style="margin:0 0 20px;">
           <a href="${resultUrl}" style="display:inline-block;background:#E8500A;color:#ffffff;text-decoration:none;padding:13px 24px;border-radius:10px;font-size:15px;font-weight:600;">Öppna er AI-karta →</a>
         </p>
-        <p style="margin:22px 0 0;">/ Christoffer<br/><span style="color:#4A5058;font-size:13px;">Aurora Media AB · Org.nr 559272-0220 · Linköping · info@auroramedia.se</span></p>
+        <p style="margin:22px 0 0;">/ Aurora Media<br/><span style="color:#4A5058;font-size:13px;">Aurora Media AB · Org.nr 559272-0220 · Linköping · info@auroramedia.se</span></p>
         ${unsubUrl ? `<p style="margin:18px 0 0;font-size:12px;color:#8A9099;">Du får det här mejlet eftersom du fyllde i AI-kartan på auroramedia.se. <a href="${unsubUrl}" style="color:#8A9099;">Avregistrera dig från uppföljningen</a>.</p>` : ""}
       </div>`;
 
@@ -136,7 +136,7 @@ Deno.serve(async (req: Request) => {
       "",
       `Kartan finns också online: ${resultUrl}`,
       "",
-      "/ Christoffer",
+      "/ Aurora Media",
       "Aurora Media AB · Org.nr 559272-0220 · Linköping · info@auroramedia.se",
       unsubUrl ? `\nAvregistrera dig från uppföljningen: ${unsubUrl}` : "",
     ].join("\n");

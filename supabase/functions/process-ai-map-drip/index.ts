@@ -10,7 +10,7 @@ const corsHeaders = {
 
 const SITE_URL = "https://auroramedia.se";
 const UNSUB_BASE = "https://cyymcdqkpvcvwjoqxbco.functions.supabase.co/ai-map-unsubscribe";
-const FROM = "Christoffer på Aurora Media <info@auroramedia.se>";
+const FROM = "Aurora Media <info@auroramedia.se>";
 const REPLY_TO = "info@auroramedia.se";
 const MAX_PER_RUN = 50;
 
@@ -220,7 +220,7 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
       </tr>
     </table>
     <p style="margin:0 0 16px;">Antingen vägen, tack för att du tog dig tid att fylla i analysen. ${painLine}</p>
-    <p style="margin:18px 0 0;color:#0f172a;">/Christoffer<br/>Aurora Media AB<br/><a href="mailto:info@auroramedia.se" style="color:#0f5132;">info@auroramedia.se</a></p>`;
+    <p style="margin:18px 0 0;color:#0f172a;">/ Aurora Media<br/>Aurora Media AB<br/><a href="mailto:info@auroramedia.se" style="color:#0f5132;">info@auroramedia.se</a></p>`;
   return {
     subject: "Sista pinget – ska vi prata, eller pausar jag?",
     html: shellHtml({

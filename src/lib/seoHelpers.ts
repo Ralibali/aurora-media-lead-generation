@@ -137,10 +137,6 @@ export const organizationSchema = {
   priceRange: "4900-89000 SEK",
   foundingDate: "2020",
   slogan: "AI-byrå i Linköping – SaaS, AI och interna verktyg på veckor.",
-  founder: {
-    "@type": "Person",
-    name: "Christoffer Holstensson",
-  },
   sameAs: [
     "https://github.com/Ralibali",
     "https://www.allabolag.se/5592720220/aurora-media-ab",

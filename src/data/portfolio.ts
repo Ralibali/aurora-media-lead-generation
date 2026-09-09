@@ -1,4 +1,4 @@
-// Single source of truth för portfolio. Christoffer kan editera direkt här
+// Single source of truth för portfolio. Redigeras direkt här
 // utan AI-kodning. Nya publika case: bumpa `order`. Utkast: draft+noindex true.
 
 export type PortfolioCategory = "saas" | "seo" | "development" | "marketing";

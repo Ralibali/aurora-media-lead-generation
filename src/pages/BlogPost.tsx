@@ -47,11 +47,7 @@ const BlogPost = () => {
       description: article.metaDesc,
       datePublished: article.publishedDate,
       dateModified: article.updatedDate,
-      author: article.editorial?.aiAssisted ? { "@type": "Organization", name: "Aurora Media AB", url: SITE_URL } : {
-        "@type": "Person",
-        name: "Christoffer Holstensson",
-        url: `${SITE_URL}/om`,
-      },
+      author: { "@type": "Organization", name: "Aurora Media AB", url: SITE_URL },
       publisher: { "@id": `${SITE_URL}/#organization` },
       mainEntityOfPage: `${SITE_URL}/blogg/${article.slug}`,
       keywords: article.keyword,
@@ -162,7 +158,7 @@ const BlogPost = () => {
                 </h1>
                 <p className="lead">{article.intro}</p>
                 <p className="mono" style={{ marginTop: 22, color: "var(--bone-mute)" }}>
-                  {article.editorial?.aiAssisted ? "AI-assisterad originalguide · Aurora Media AB" : "Skriven av Christoffer Holstensson · Aurora Media AB, Linköping"}
+                  {article.editorial?.aiAssisted ? "AI-assisterad originalguide · Aurora Media" : "Skriven av Aurora Media · Aurora Media AB, Linköping"}
                 </p>
               </header>
 

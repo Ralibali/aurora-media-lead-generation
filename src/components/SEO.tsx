@@ -170,8 +170,8 @@ export function buildArticleSchema(opts: {
     datePublished: opts.publishedTime,
     dateModified: opts.modifiedTime ?? opts.publishedTime,
     author: {
-      "@type": "Person",
-      name: opts.author ?? "Christoffer Holstensson",
+      "@type": "Organization",
+      name: opts.author ?? SITE_NAME,
     },
     publisher: {
       "@type": "Organization",

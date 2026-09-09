@@ -1,6 +1,6 @@
 # Egen redaktion för https://auroramedia.se
 
-Ägarmandat: Christoffer bad den 7 september 2026 om egna nischartiklar som riktiga blogginlägg. Kod, innehåll, tester, merge och publicering ingår. Artikeldata i `src/content/editorial/articles.json` läses av både webbplatsen och byggets HTML/webbplatskarta. En ny artikel läggs överst i denna array. Gamla artiklar får inte tappas bort eller skrivas över när nästa läggs till.
+Ägarmandat: ägaren bad den 7 september 2026 om egna nischartiklar som riktiga blogginlägg. Kod, innehåll, tester, merge och publicering ingår. Artikeldata i `src/content/editorial/articles.json` läses av både webbplatsen och byggets HTML/webbplatskarta. En ny artikel läggs överst i denna array. Gamla artiklar får inte tappas bort eller skrivas över när nästa läggs till.
 
 Nisch: AI, automatisering, interna system och digitala arbetsflöden för svenska företag.
 Publiceringsadress: `https://auroramedia.se/blogg/<slug>`.

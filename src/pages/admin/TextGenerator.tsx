@@ -224,7 +224,7 @@ const TextGenerator = () => {
       { textType: "service-page", topic: "Content", context: "1 490 kr per artikel" },
       { textType: "service-page", topic: "Grafisk profil", context: "Från 6 900 kr" },
       { textType: "service-page", topic: "Fotografering", context: "Från 4 900 kr" },
-      { textType: "about-section", topic: "Vem är Christoffer" },
+      { textType: "about-section", topic: "Vilka är Aurora Media" },
       { textType: "about-section", topic: "Hur jag jobbar" },
       { textType: "about-section", topic: "Varför AI-kodning" },
       { textType: "about-section", topic: "Aurora Media som företag" },

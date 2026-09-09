@@ -6,7 +6,7 @@ evidence:
   - 'VERIFIED FACT: contact context has a hidden 500-character validation limit while tools generate longer summaries.'
   - 'VERIFIED FACT: package component and calculator conflict with the published pricing-page catalogue.'
   - 'VERIFIED FACT: admin autosave requests can overlap and server update receipts do not confirm a matching row.'
-owner: Christoffer Holstensson
+owner: Aurora Media AB
 skill: site-revenue-experiment
 skill_version: '1.0'
 authority: 'COMMIT: continued owner-authorized site and admin improvements; existing authorization to push this work to main. No external messages or purchases.'

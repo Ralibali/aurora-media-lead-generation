@@ -375,7 +375,7 @@ const ContactDialog = ({
                 <li className="flex items-start gap-3">
                   <Clock className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <span className="text-foreground/85">
-                    Inom <strong>24 timmar på vardagar</strong> får du ett personligt svar från mig (Christoffer) på{" "}
+                    Inom <strong>24 timmar på vardagar</strong> får du ett personligt svar från Aurora Media på{" "}
                     <span className="text-foreground">{submittedEmail || "din mejl"}</span>.
                   </span>
                 </li>
