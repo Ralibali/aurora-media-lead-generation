@@ -30,7 +30,7 @@ import {
   type Product,
 } from "../_shared/aiKontoret.ts";
 
-const FROM = "Christoffer på Aurora Media <christoffer@auroramedia.se>";
+const FROM = "Christoffer på Aurora Media <info@auroramedia.se>";
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");

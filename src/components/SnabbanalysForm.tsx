@@ -157,7 +157,7 @@ const SnabbanalysForm = ({
       const technical = /edge function|failed to fetch|networkerror|non-2xx|timeout/i.test(raw);
       setSubmitError(
         technical || !raw
-          ? "Analysen kunde inte nås just nu – försök igen om en liten stund. Fungerar det fortfarande inte? Mejla christoffer@auroramedia.se så gör jag analysen manuellt åt dig."
+          ? "Analysen kunde inte nås just nu – försök igen om en liten stund. Fungerar det fortfarande inte? Mejla info@auroramedia.se så gör jag analysen manuellt åt dig."
           : raw
       );
       setSubmitting(false);

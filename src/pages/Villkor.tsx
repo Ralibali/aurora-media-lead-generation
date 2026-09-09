@@ -29,7 +29,7 @@ const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: "Du kan avsluta när du vill",
     body: [
-      "Varje mejl har en avregistreringslänk längst ner – ett klick och uppföljningen slutar direkt. Du kan också när som helst mejla christoffer@auroramedia.se och be oss radera allt vi har om dig. Det gör vi utan diskussion.",
+      "Varje mejl har en avregistreringslänk längst ner – ett klick och uppföljningen slutar direkt. Du kan också när som helst mejla info@auroramedia.se och be oss radera allt vi har om dig. Det gör vi utan diskussion.",
       "Samtycket gäller tills du drar tillbaka det. AI-kartan du fått är din att behålla oavsett.",
     ],
   },
@@ -104,8 +104,8 @@ const Villkor = () => {
 
               <p style={{ marginTop: 32, fontSize: 14, color: "var(--granbark-mut)", lineHeight: 1.6 }}>
                 Frågor om villkoren eller dina uppgifter? Mejla{" "}
-                <a href="mailto:christoffer@auroramedia.se" style={{ color: "var(--gran)", fontWeight: 600 }}>
-                  christoffer@auroramedia.se
+                <a href="mailto:info@auroramedia.se" style={{ color: "var(--gran)", fontWeight: 600 }}>
+                  info@auroramedia.se
                 </a>{" "}
                 – jag svarar personligen inom 24 timmar.
               </p>

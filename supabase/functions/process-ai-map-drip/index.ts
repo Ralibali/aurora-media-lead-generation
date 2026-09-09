@@ -10,8 +10,8 @@ const corsHeaders = {
 
 const SITE_URL = "https://auroramedia.se";
 const UNSUB_BASE = "https://cyymcdqkpvcvwjoqxbco.functions.supabase.co/ai-map-unsubscribe";
-const FROM = "Christoffer på Aurora Media <christoffer@auroramedia.se>";
-const REPLY_TO = "christoffer@auroramedia.se";
+const FROM = "Christoffer på Aurora Media <info@auroramedia.se>";
+const REPLY_TO = "info@auroramedia.se";
 const MAX_PER_RUN = 50;
 
 type Step = "step_2" | "step_5" | "step_9" | "step_14";
@@ -111,7 +111,7 @@ ${preheader ? `<div style="display:none;max-height:0;overflow:hidden;color:#f8fa
     <div style="margin:0 0 4px;"><strong style="color:#334155;">Aurora Media AB</strong> · Org.nr 559272-0220 · Linköping, Sverige</div>
     <div style="margin:0 0 8px;">
       <a href="https://auroramedia.se" style="color:#0f5132;text-decoration:none;">auroramedia.se</a> ·
-      <a href="mailto:christoffer@auroramedia.se" style="color:#0f5132;text-decoration:none;">christoffer@auroramedia.se</a>
+      <a href="mailto:info@auroramedia.se" style="color:#0f5132;text-decoration:none;">info@auroramedia.se</a>
     </div>
     <div style="color:#94a3b8;">
       Du får det här mejlet eftersom du fyllde i AI-kartan på auroramedia.se.
@@ -220,7 +220,7 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
       </tr>
     </table>
     <p style="margin:0 0 16px;">Antingen vägen, tack för att du tog dig tid att fylla i analysen. ${painLine}</p>
-    <p style="margin:18px 0 0;color:#0f172a;">/Christoffer<br/>Aurora Media AB<br/><a href="mailto:christoffer@auroramedia.se" style="color:#0f5132;">christoffer@auroramedia.se</a></p>`;
+    <p style="margin:18px 0 0;color:#0f172a;">/Christoffer<br/>Aurora Media AB<br/><a href="mailto:info@auroramedia.se" style="color:#0f5132;">info@auroramedia.se</a></p>`;
   return {
     subject: "Sista pinget – ska vi prata, eller pausar jag?",
     html: shellHtml({

@@ -533,7 +533,7 @@ const AiKartaStart = () => {
       const technical = /edge function|failed to fetch|networkerror|non-2xx|timeout/i.test(raw);
       toast.error(
         technical || !raw
-          ? "Kartan kunde inte skapas just nu – försök igen om en liten stund. Fungerar det fortfarande inte? Mejla christoffer@auroramedia.se."
+          ? "Kartan kunde inte skapas just nu – försök igen om en liten stund. Fungerar det fortfarande inte? Mejla info@auroramedia.se."
           : raw
       );
     } finally {
