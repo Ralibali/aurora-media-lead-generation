@@ -10,7 +10,7 @@ evidence:
   - 'VERIFIED FACT: admin reports requests as booked meetings.'
   - 'VERIFIED FACT: 90 visitors and 160 page views in the last measured 30-day window; 13 stored requests and no records marked customer.'
   - 'UNKNOWN: qualified lead conversion, which records are tests, and deployed Edge Function administration access.'
-owner: Christoffer Holstensson
+owner: Aurora Media AB
 skill: site-revenue-experiment
 skill_version: '1.0'
 authority: 'COMMIT: owner-authorized website and admin fixes; prepare reviewable release. No outbound, purchases or destructive production data changes.'

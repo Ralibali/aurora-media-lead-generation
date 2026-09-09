@@ -172,10 +172,6 @@ const AiByraLinkoping = () => {
       image: `${SITE_URL}/og-image-sv.jpg`,
       email: "info@auroramedia.se",
       priceRange: "4900-89000+ SEK",
-      founder: {
-        "@type": "Person",
-        name: "Christoffer Holstensson",
-      },
       address: {
         "@type": "PostalAddress",
         addressLocality: "Linköping",

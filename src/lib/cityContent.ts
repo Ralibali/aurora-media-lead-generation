@@ -35,7 +35,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan vi träffas i Linköping?", a: "Ja, ett möte i Linköping kan bokas efter överenskommelse. Vi kan också arbeta via videomöten och gemensamma genomgångar av produkten." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Linköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Linköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -50,7 +50,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan ni koppla ihop order och fakturering?", a: "Vi går igenom vilka system ni använder och deras API:er och behörigheter. Därefter kan vi föreslå en avgränsad integration och vad som fortsatt behöver kontrolleras av en människa." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Norrköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Norrköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -64,7 +64,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan vi börja med en enda del av vårt orderflöde?", a: "Ja. Vi kan avgränsa exempelvis inkommande beställningar eller kundernas statusfrågor. Resten av verksamheten kan fortsätta använda befintliga system medan den första delen provas." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Jönköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Jönköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -79,7 +79,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan ni samarbeta med vårt utvecklingsteam?", a: "Ja, vi kan planera gränssnitt, kodöverlämning och ansvar tillsammans med ert team. Om ni redan har en produkt börjar vi med att gå igenom dess förutsättningar." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Stockholm kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Stockholm kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -93,7 +93,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan ni bygga ovanpå vårt befintliga affärssystem?", a: "Det beror på systemets API, licensvillkor och vilka uppgifter ni behöver. Vi undersöker detta först och tar med integrationsarbetet i omfattningen." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Göteborg kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Göteborg kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -107,7 +107,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan en prototyp användas i kundintervjuer?", a: "Ja, en klickbar eller fungerande prototyp kan ge något konkret att visa. Vi bestämmer vad som ska fungera och vad som är demonstrationsdata, så att deltagarna förstår vad de provar." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Malmö kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Malmö kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -121,7 +121,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan vi använda känsliga uppgifter i en prototyp?", a: "Vi börjar med exempeldata eller anonymiserade uppgifter. Användning av verkliga känsliga uppgifter kräver en separat genomgång av krav, ansvar och tekniska skydd." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Uppsala kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Uppsala kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -135,7 +135,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan ni ansluta till produktionssystem?", a: "Vi kan bedöma webbaserade integrationer när det finns ett dokumenterat gränssnitt. Styrning av maskiner och säkerhetskritiska system kräver särskild kompetens och ingår inte automatiskt." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Västerås kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Västerås kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -149,7 +149,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Måste vi byta alla system samtidigt?", a: "Nej. Vi identifierar en avgränsad del som går att förbättra och undersöker hur den kan fungera tillsammans med det ni redan använder." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Örebro kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Örebro kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -163,7 +163,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan ni visa exempel från en boendeverksamhet?", a: "Ja. I portfolion finns Bergs Slussar Glamping och arbetet med Stayboost i vår egen verksamhet. Det ger ett konkret underlag för att diskutera vad som kan passa er." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Motala kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Motala kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -177,7 +177,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan verktyget fungera ute i verksamheten på mobilen?", a: "Ja, gränssnittet kan anpassas för mobil användning. Behov av kamera, dålig uppkoppling eller arbete utan nät behöver tas med när vi bestämmer omfattningen." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Mjölby kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Mjölby kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -191,7 +191,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan systemet anpassas till våra dokumentationskrav?", a: "Vi går igenom kraven med er och skiljer på önskade funktioner och sådant som måste uppfylla en viss standard. Om specialiserad granskning behövs planeras den innan leverans." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Finspång kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Finspång kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -205,7 +205,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan ni hjälpa oss med gästinformation eller bokningsflöden?", a: "Ja, vi kan gå igenom er nuvarande resa och avgränsa en förbättring. Portfolion visar även hur vi arbetar med gästflöden i vår egen boendeverksamhet." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Nyköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Nyköping kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -220,7 +220,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Finns det ett transportexempel att titta på?", a: "Ja, Aurora Transport finns i portfolion. Vi använder det som konkret utgångspunkt för att diskutera order, planering och mobil återrapportering utifrån era behov." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Katrineholm kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Katrineholm kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },
@@ -235,7 +235,7 @@ export const cities: CityContent[] = [
     faqs: [
       { q: "Kan vi börja med en portal för ett fåtal kunder?", a: "Ja. En avgränsad pilot kan göra det lättare att få återkoppling och bedöma fortsatt utveckling. Antal användare, funktioner och åtkomst bestäms innan bygget börjar." },
       { q: "Vad kostar det att börja?", a: "En avgränsad prototyp erbjuds från 4 900 kr. Pris för ett fungerande verksamhetssystem beror på funktioner, integrationer och krav. Se paketen på prissidan; exakt omfattning och pris fastställs i offert." },
-      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Christoffer i Linköping. För företag i Eskilstuna kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
+      { q: "Hur fungerar samarbetet?", a: "Ni har direktkontakt med Aurora Media i Linköping. För företag i Eskilstuna kan arbetet ske via videomöten och gemensamma genomgångar av en testbar version. Tidsplan och eventuella fysiska möten bestäms vid uppstart." },
       { q: "Vad händer efter leverans?", a: "Ni får överlämning enligt offerten, inklusive överenskommen kod och dokumentation. Drift, support och fortsatt utveckling planeras tillsammans så att ansvar och löpande kostnader är tydliga." },
     ],
   },

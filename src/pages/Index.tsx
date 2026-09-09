@@ -48,7 +48,7 @@ export default function Index() {
                 <Link to="/ai-karta/start" className="am-text-link" onClick={() => trackEvent("home_hero_ai_karta_click")}>Gör gratis AI-kartan <ArrowUpRight size={17} /></Link>
               </div>
               <p className="am-micro">Kostnadsfritt första samtal · Tydlig offert före start</p>
-              <div className="am-person"><div className="am-monogram" aria-hidden>CH</div><div><strong>Christoffer Holstensson</strong><span>Grundare & utvecklare. Din kontakt genom hela projektet.</span></div></div>
+              <div className="am-person"><div className="am-monogram" aria-hidden>AM</div><div><strong>Aurora Media AB</strong><span>Byggare, inte rådgivare. Samma team följer projektet hela vägen.</span></div></div>
             </div>
             <div className="am-workflow">
               <div className="am-panel-top"><span className="vk-mono">Vad vill ni få ordning på?</span><span className="am-status">Börja här</span></div>
@@ -98,7 +98,7 @@ export default function Index() {
 
         <section className="vk-section"><div className="vk-wrap am-faq-grid"><div><p className="vk-mono">Innan vi börjar</p><h2>Raka svar.<br />Från början.</h2><p className="am-faq-intro">Har ni ett speciellt system eller en knepig process? Beskriv den så tittar vi på förutsättningarna.</p><button className="am-text-link" onClick={() => contact("faq")}>Ställ en fråga <ArrowRight size={16} /></button></div><div>{FAQS.map(f => <details className="am-faq" key={f.q}><summary>{f.q}<span aria-hidden>+</span></summary><p>{f.a}</p></details>)}</div></div></section>
         <section className="am-lab"><div className="vk-wrap"><div className="am-lab-heading"><div><p className="vk-mono">Utforska på egen hand</p><h3>Prova en idéskiss eller räkna på ett scenario.</h3></div><div className="am-actions"><button className="vk-btn vk-btn-ghost" aria-expanded={showDemo} onClick={() => setShowDemo(!showDemo)}>{showDemo ? "Stäng idéskissen" : "Prova idéskissen"}<ArrowRight size={16} /></button><Link className="am-text-link" to="/verktyg">Alla gratisverktyg <ArrowUpRight size={16} /></Link></div></div>{showDemo && <div className="am-demo"><p>En simulerad skiss med exempeldata. En färdig lösning kräver utveckling och test.</p><Suspense fallback={<p role="status">Laddar idéskissen…</p>}><LiveBuildDemo /></Suspense></div>}</div></section>
-        <section className="am-final"><div className="vk-wrap"><p className="vk-mono">Låt oss börja med er vardag</p><h2>Vilket arbetsmoment<br />har ni tröttnat på?</h2><p>Berätta vad som krånglar. Jag återkommer med hur vi kan ta det vidare.</p><div className="am-actions"><button className="vk-btn vk-btn-primary" onClick={() => contact("final")}><span>Prata med Christoffer</span><ArrowRight size={18} /></button><a className="am-text-link" href="mailto:info@auroramedia.se">info@auroramedia.se <ArrowUpRight size={17} /></a></div></div></section>
+        <section className="am-final"><div className="vk-wrap"><p className="vk-mono">Låt oss börja med er vardag</p><h2>Vilket arbetsmoment<br />har ni tröttnat på?</h2><p>Berätta vad som krånglar. Vi återkommer med hur vi kan ta det vidare.</p><div className="am-actions"><button className="vk-btn vk-btn-primary" onClick={() => contact("final")}><span>Prata med Aurora Media</span><ArrowRight size={18} /></button><a className="am-text-link" href="mailto:info@auroramedia.se">info@auroramedia.se <ArrowUpRight size={17} /></a></div></div></section>
       </main><VkFooter />
     </div>
   </>;

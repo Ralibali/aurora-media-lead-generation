@@ -35,7 +35,7 @@ const Kontakt = () => {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="lead" style={{ marginTop: 24 }}>
-              Beskriv ett arbetsmoment som tar för mycket tid, ett system som saknas eller en produktidé. Ni behöver ingen färdig kravspecifikation. Christoffer återkommer med frågor och ett konkret förslag på nästa steg.
+              Beskriv ett arbetsmoment som tar för mycket tid, ett system som saknas eller en produktidé. Ni behöver ingen färdig kravspecifikation. Aurora Media återkommer med frågor och ett konkret förslag på nästa steg.
             </p>
           </Reveal>
           <Reveal delay={0.3}>

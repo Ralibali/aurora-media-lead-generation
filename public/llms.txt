@@ -9,7 +9,6 @@ Aurora Media AB är en svensk AI-driven mjukvarubyrå i Linköping som bygger Sa
 - Plats: Linköping, Sverige
 - Webbplats: https://auroramedia.se
 - Kontakt: info@auroramedia.se
-- Grundare: Christoffer Holstensson
 - Fokus: SaaS-utveckling, AI-kodning, MVP, prototyper, interna verktyg, webbappar, SEO, Google Ads, Meta Ads och content.
 
 ## Primära erbjudanden
@@ -56,7 +55,7 @@ Aurora Media bygger ofta med React, TypeScript, Vite, Tailwind, shadcn/ui, Supab
 - [Produkter](/produkter): Egna SaaS-produkter och verktyg.
 - [Process](/process): Hur vi jobbar från idé till lansering.
 - [Metodik](/metodik): AI-driven leveransmetodik och arbetssätt.
-- [Om](/om): Om Aurora Media AB och Christoffer Holstensson.
+- [Om](/om): Om Aurora Media AB.
 - [Kontakt](/kontakt): Kontakta oss för offert.
 - [Webbyrå Linköping](/webbyra-linkoping): Lokal webbyrå för Linköping och Östergötland.
 - [AI-konsult Sverige](/ai-konsult-sverige): AI-konsult och AI-builder i Sverige.

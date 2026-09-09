@@ -6,7 +6,7 @@ import { setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpe
 import "@/styles/verkstad.css";
 
 const SECTIONS = [
-  { h: "Vem skriver innehållet?", p: "Allt innehåll på auroramedia.se skrivs av Christoffer Holstensson, grundare av Aurora Media AB. Inga ghostwriters, inga generiska SEO-texter köpta utomlands." },
+  { h: "Vem skriver innehållet?", p: "Allt innehåll på auroramedia.se skrivs internt av Aurora Media AB. Inga ghostwriters, inga generiska SEO-texter köpta utomlands." },
   { h: "Hur används AI i texterna?", p: "AI-verktyg används för att utkast-skriva, strukturera och redigera. Varje publicerad artikel går igenom manuell revision där AI-fluff stryks, konkreta exempel läggs till och viktiga siffror verifieras. Ingen artikel publiceras helt AI-genererad utan mänsklig granskning." },
   { h: "Faktakontroll", p: "Priser, leveranstider och statistik kommer från egna projekt eller publika källor som myndigheter och leverantörers prislistor. Externa källhänvisningar länkas direkt i texten." },
   { h: "Uppdateringar", p: "Varje artikel har ett uppdaterad-datum som speglar senaste verkliga genomgång. Artiklar äldre än sex månader granskas på nytt eller markeras som arkiverade." },
