@@ -411,7 +411,7 @@ function injectHtml({ template, route, title, description, ogType = 'website', j
   }
 
   const headTags = [
-    `<link rel="canonical" href="${canonical}" />`,
+    `<link rel="canonical" data-rh="true" href="${canonical}" />`,
     `<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />`,
     `<meta property="og:title" content="${escapeHtml(fullTitle)}" />`,
     `<meta property="og:description" content="${escapeHtml(description)}" />`,
