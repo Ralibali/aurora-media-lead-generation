@@ -73,6 +73,10 @@ const Hemsidor = lazy(() => import("./pages/tjanster/Hemsidor"));
 const MetaAds = lazy(() => import("./pages/tjanster/MetaAds"));
 const Mobilapp = lazy(() => import("./pages/tjanster/Mobilapp"));
 const Seo = lazy(() => import("./pages/tjanster/Seo"));
+const AuroraCare = lazy(() => import("./pages/erbjudanden/AuroraCare"));
+const AuroraSight = lazy(() => import("./pages/erbjudanden/AuroraSight"));
+const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));
+const AuroraVoice = lazy(() => import("./pages/erbjudanden/AuroraVoice"));
 // Verktyg-sidorna lazy-loadas: de drar med sig recharts/jspdf och ska inte
 // tynga huvudbundlen (Core Web Vitals).
 const VerktygIndex = lazy(() => import("./pages/verktyg/VerktygIndex"));
@@ -323,6 +327,30 @@ const seoMap: Record<string, SEOConfig> = {
       "Strategiskt innehåll som bygger förtroende, stärker varumärket och hjälper kunder att välja dig.",
     canonical: "https://auroramedia.se/tjanster/content",
   },
+  "/care": {
+    title: "Aurora Care – WordPress drift & underhåll från 995 kr/mån | Aurora Media",
+    description:
+      "Löpande WordPress-underhåll: uppdateringar, säkerhetskopior, säkerhetsövervakning, hastighet och supporttid. Fast månadspris, ingen bindningstid.",
+    canonical: "https://auroramedia.se/care",
+  },
+  "/ai-synlighet": {
+    title: "AI-synlighet & GEO-audit – syns ni i ChatGPT och AI-sök? | Aurora Media",
+    description:
+      "Aurora Sight mäter hur ert företag nämns i AI-svar från ChatGPT, Perplexity och Googles AI-översikter, hittar källorna bakom svaren och åtgärdar det som saknas.",
+    canonical: "https://auroramedia.se/ai-synlighet",
+  },
+  "/lokal-synlighet": {
+    title: "Lokal SEO & Google företagsprofil – fler kunder lokalt | Aurora Media",
+    description:
+      "Aurora Local optimerar er Google-företagsprofil, lokala sökord, kartsynlighet och recensioner. Fast månadspris från 1 495 kr, ingen bindningstid.",
+    canonical: "https://auroramedia.se/lokal-synlighet",
+  },
+  "/ai-receptionist": {
+    title: "AI-receptionist för telefon och chatt – missa inga kunder | Aurora Media",
+    description:
+      "Aurora Voice svarar på samtal, chatt och e-post, besvarar vanliga frågor och samlar in bokningsunderlag. Uppsättning från 14 900 kr, drift från 1 995 kr/mån.",
+    canonical: "https://auroramedia.se/ai-receptionist",
+  },
   "/tjanster/grafisk-profil": {
     title: "Grafisk profil | Aurora Media AB",
     description:
@@ -542,6 +570,10 @@ const App = () => (
               <Route path="/tjanster/content" element={<Content />} />
               <Route path="/tjanster/grafisk-profil" element={<GrafiskProfil />} />
               <Route path="/tjanster/fotografering" element={<Fotografering />} />
+              <Route path="/care" element={<AuroraCare />} />
+              <Route path="/ai-synlighet" element={<AuroraSight />} />
+              <Route path="/lokal-synlighet" element={<AuroraLocal />} />
+              <Route path="/ai-receptionist" element={<AuroraVoice />} />
               <Route path="/webbyra-linkoping" element={<WebbyraLinkoping />} />
               <Route path="/webbbyra-linkoping" element={<Navigate to="/webbyra-linkoping" replace />} />
               <Route path="/blogg" element={<Blog />} />
