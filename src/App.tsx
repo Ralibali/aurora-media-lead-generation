@@ -87,6 +87,7 @@ const AiMognadsanalys = lazy(() => import("./pages/verktyg/AiMognadsanalys"));
 const PersonalkostnadVsAi = lazy(() => import("./pages/verktyg/PersonalkostnadVsAi"));
 const PromptGenerator = lazy(() => import("./pages/verktyg/PromptGenerator"));
 const GrokBot = lazy(() => import("./pages/GrokBot"));
+const AuroraPlanDemo = lazy(() => import("./pages/AuroraPlanDemo"));
 
 const queryClient = new QueryClient();
 
@@ -155,6 +156,12 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Mindre manuellt arbete. Mer tid för affären. Aurora Media i Linköping bygger AI-lösningar, integrationer och interna system. Börja med ett kostnadsfritt samtal.",
     canonical: "https://auroramedia.se/",
+  },
+  "/aurora-plan": {
+    title: "Aurora Plan – BK Ljungsbro 2026/27",
+    description: "Privat arbetsyta för planering av BK Ljungsbros träningstider 2026/27.",
+    canonical: "https://auroramedia.se/aurora-plan",
+    noindex: true,
   },
   "/ai-karta": {
     title: "AI-kartan | Hitta företagets bästa AI-områden | Aurora Media",
@@ -548,6 +555,7 @@ const App = () => (
               <Route path="/ai-karta/resultat" element={<AiKartaResultat />} />
               <Route path="/ai-snabbanalys" element={<AiSnabbanalys />} />
               <Route path="/grok-bot" element={<GrokBot />} />
+              <Route path="/aurora-plan" element={<AuroraPlanDemo />} />
               <Route path="/ai-automation-foretag" element={<AiAutomationForetag />} />
               <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />
