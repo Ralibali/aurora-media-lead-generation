@@ -4,6 +4,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
 import { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
+import AuroraPlattformen from "@/components/verkstad/AuroraPlattformen";
 import { setBreadcrumb, removeJsonLd } from "@/lib/seoHelpers";
 import "@/styles/verkstad.css";
 
@@ -118,6 +119,11 @@ const Tjanster = () => {
               </div>
             </section>
           ))}
+
+          <hr className="vk-hair" />
+          <AuroraPlattformen />
+
+
 
           {/* CTA */}
           <section className="vk-dark">

@@ -78,7 +78,7 @@ export const VkNav = () => {
           <SheetTrigger asChild><button className="vk-menu-trigger" aria-label="Öppna meny"><Menu size={22} /></button></SheetTrigger>
           <SheetContent className="verkstad vk-mobile-sheet">
             <SheetTitle>Meny</SheetTitle><SheetDescription>Utforska Aurora Media och hitta rätt nästa steg.</SheetDescription>
-            <nav aria-label="Mobilmeny" className="vk-mobile-links">{[["/arbete", "Våra projekt"], ["/tjanster", "Tjänster"], ["/priser", "Priser & upplägg"], ["/ai-karta", "Gratis AI-karta"], ["/verktyg", "Gratis verktyg"], ["/blogg", "Guider & insikter"], ["/om", "Om Aurora"], ["/kontakt", "Kontakt"]].map(([href, label]) => <Link key={href} to={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}<ArrowRight size={17} /></Link>)}</nav>
+            <nav aria-label="Mobilmeny" className="vk-mobile-links">{[["/arbete", "Våra projekt"], ["/tjanster", "Tjänster"], ["/priser", "Priser & upplägg"], ["/care", "WordPress-drift"], ["/lokal-synlighet", "Lokal synlighet"], ["/ai-synlighet", "AI-synlighet"], ["/ai-receptionist", "AI-receptionist"], ["/ai-karta", "Gratis AI-karta"], ["/verktyg", "Gratis verktyg"], ["/blogg", "Guider & insikter"], ["/om", "Om Aurora"], ["/kontakt", "Kontakt"]].map(([href, label]) => <Link key={href} to={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}<ArrowRight size={17} /></Link>)}</nav>
             <a className="vk-mobile-email" href="mailto:info@auroramedia.se">info@auroramedia.se</a>
           </SheetContent>
         </Sheet>
@@ -110,6 +110,10 @@ export const VkFooter = () => (
           <Link to="/tjanster/mobilapp">Mobilapp</Link>
           <Link to="/ai-automation-foretag">AI-automation</Link>
           <Link to="/tjanster/seo">SEO</Link>
+          <Link to="/care">Aurora Care – WordPress-drift</Link>
+          <Link to="/lokal-synlighet">Lokal synlighet</Link>
+          <Link to="/ai-synlighet">AI-synlighet</Link>
+          <Link to="/ai-receptionist">AI-receptionist</Link>
           <Link to="/verktyg">Gratis verktyg</Link>
         </div>
         <div>

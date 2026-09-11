@@ -748,3 +748,19 @@
 .vk-btn-primary:hover { background:var(--varsel-hover); }
 .vk-btn:disabled { opacity:.6;cursor:wait; }
 @media(max-width:480px){.vk-brand{font-size:17px}.vk-nav-actions{gap:8px}.vk-nav-actions>.vk-btn{font-size:12px!important;padding:10px 12px!important}.vk-nav-inner{gap:10px}.vk-btn{white-space:normal}.vk-nav-actions>.vk-btn svg{display:none}}
+
+/* ── Aurora-plattformen + erbjudandesidor ── */
+.vk-platform-grid { margin-top: 36px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.vk-platform-card {
+  display: block; height: 100%; text-decoration: none; color: var(--granbark);
+  border: 1px solid var(--linje); border-radius: 14px; background: #fff; padding: 24px 22px;
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.vk-platform-card:hover { transform: translateY(-3px); border-color: var(--gran); box-shadow: 0 18px 34px -26px rgba(20,23,26,.35); }
+.vk-offer-sticky { display: none; }
+@media (max-width: 760px) {
+  .vk-offer-sticky {
+    display: block; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 45;
+  }
+  .vk-offer-sticky .vk-btn { width: 100%; padding: 15px 18px; box-shadow: 0 18px 34px -18px rgba(20,23,26,.5); }
+}
