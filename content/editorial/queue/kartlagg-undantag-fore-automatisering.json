@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-09-10T18:29:08Z",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Recheck current main and all published content; complete previous live article and product/source-link browser checks before promotion. Set actual publication dates only at publication.",
+  "sourceReview": {
+    "checkedAt": "2026-09-10T18:29:08Z",
+    "status": "product_html_and_repository_reviewed_browser_pending",
+    "note": "Original editorial work template. Recheck the live product and links before publishing; no human review or measured outcomes claimed."
+  },
+  "article": {
+    "slug": "kartlagg-undantag-fore-automatisering",
+    "title": "Kartlägg undantagen innan ni automatiserar arbetsflödet",
+    "metaTitle": "Kartlägg undantagen innan ni automatiserar arbetsflödet",
+    "metaDesc": "Beskriv vad som ska hända när uppgifter saknas eller ett flöde stannar. En undantagslista som underlag inför ett avgränsat automationsprojekt.",
+    "category": "AI & automation",
+    "readMinutes": 5,
+    "keyword": "kartlagg undantag fore automatisering",
+    "intro": "Det vanliga ärendet är ofta lätt att demonstrera. Det svåra är vad som händer när en uppgift saknas, två underlag säger olika saker eller nästa system inte svarar. En undantagslista hjälper er att förklara sådana situationer innan ni bestämmer vad som ska automatiseras.",
+    "sections": [
+      {
+        "heading": "Rita flödet från underlag till nästa användare",
+        "content": "Välj en återkommande uppgift och skriv vad som kommer in, vilken bearbetning som görs och vem som använder resultatet. Håll beskrivningen till en uppgift som går att följa hela vägen.\n\nMarkera var människor i dag fyller i luckor eller fattar ett beslut. En instruktion som ”handläggaren löser det” behöver brytas ned i konkreta frågor. Vad saknas? Var hittas svaret? När lämnas ärendet vidare?"
+      },
+      {
+        "heading": "Samla undantag från verkliga observationer",
+        "content": "Gå igenom exempel som verksamheten får använda för det här arbetet. Anteckna vad som gjorde att den vanliga rutinen inte räckte. Håll återkommande fall skilda från sådant ni bara tror kan hända.\n\nKonstruerade fall kan också vara användbara, men märk dem tydligt som testexempel. Ett påhittat exempel säger inget om hur vanligt problemet är. Undvik att fylla en utvecklingsbrief med onödiga person- eller kunduppgifter när själva situationen kan beskrivas utan dem."
+      },
+      {
+        "heading": "Skriv en rad per situation",
+        "content": "Använd följande fält i er undantagslista:\n\n- Situation och vilket steg den uppstår i.\n- Hur den upptäcks och vilket underlag som finns.\n- Vilken information eller bedömning som saknas.\n- Vad flödet får göra medan frågan är öppen.\n- Vem som tar över och vilken information personen behöver.\n- Hur ärendet kan fortsätta efter beslutet.\n- Ett testfall med ett beskrivet godtagbart resultat.\n\nExempel: ett formulär saknar en nödvändig referens. Ange om nästa steg är att be om uppgiften, lämna ett utkast eller pausa ärendet. Låt inte en gissad referens se bekräftad ut."
+      },
+      {
+        "heading": "Gör överlämningen till en människa användbar",
+        "content": "Den som tar över behöver förstå vad som redan har hänt. Samla ärendets identifiering, den aktuella frågan och länken till rätt underlag. Ett allmänt felmeddelande utan sammanhang gör det svårt att avgöra nästa steg.\n\nBeskriv vem som ansvarar när den vanliga mottagaren är frånvarande. Om ingen kan ta ärendet direkt ska dess status vara begriplig för nästa person. Bestäm rutinen tillsammans med dem som ska använda den."
+      },
+      {
+        "heading": "Beskriv omförsöket innan ni bygger det",
+        "content": "Ett avbrutet flöde kan ha hunnit genomföra vissa steg. Skriv vilka steg som kan kontrolleras och vad som ska hända vid ett nytt försök. Det gäller särskilt om resultat lämnas vidare till ett annat system.\n\nAnvänd exempelvis testfrågan: ”Vad ser handläggaren om samma underlag behandlas igen?” Svaret ska gå att kontrollera i den tänkta lösningen. Denna arbetsmall föreskriver ingen viss teknisk metod; använd den för att få ett tydligt förslag från den som ska bygga flödet."
+      },
+      {
+        "heading": "Ta med listan till avgränsningen",
+        "content": "Prioritera de undantag som måste kunna hanteras i det första försöket. Skriv också vilka fall som ska stanna i den nuvarande rutinen. Därefter går det att välja testfall för [utvärderingen av AI-piloten](/blogg/utvardera-ai-pilot-arbetsmall).\n\n[AI-kartan](/ai-karta) kan vara en startpunkt för att beskriva verksamhetens behov. Ta med undantagslistan när ni diskuterar ett konkret flöde. AI-assisterad originalguide med en redaktionell arbetsmall. Den visar inga uppmätta besparingar och innebär ingen granskning av er befintliga installation."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Öppna AI-kartan",
+    "ctaText": "Ta med ditt eget underlag när du granskar nästa steg.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Företag som vill specificera ofullständigt underlag, mänskligt övertagande och omförsök före automatisering.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ]
+    }
+  }
+}
