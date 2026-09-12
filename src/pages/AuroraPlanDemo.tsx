@@ -1,7 +1,7 @@
 import { ExternalLink } from "lucide-react";
 import { useEffect } from "react";
 
-const PLANNER_URL = "https://bk-ljungsbro-vinterplaneraren-2026-27.lovable.app/planera";
+const PLANNER_URL = "https://bk-ljungsbro-vinterplaneraren-2026-27.lovable.app/planera?embed=1";
 
 export default function AuroraPlanDemo() {
   useEffect(() => {
