@@ -8,9 +8,9 @@ import auroraMonogram from "@/assets/aurora-monogram.png";
 const NAV = [
   { label: "AI-kartan", href: "/ai-karta", type: "route" },
   { label: "AI & automation", href: "/ai-automation-foretag", type: "route" },
+  { label: "Produkter", href: "/produkter", type: "route" },
+  { label: "Arbete", href: "/arbete", type: "route" },
   { label: "Tjänster", href: "#tjanster", type: "section" },
-  { label: "Process", href: "#process", type: "section" },
-  { label: "Paket", href: "#paket", type: "section" },
 ];
 
 const AuroraLogo = () => (

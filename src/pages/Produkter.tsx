@@ -1,83 +1,111 @@
 import { useEffect } from "react";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Boxes, Check, Network } from "lucide-react";
+import { Link } from "react-router-dom";
+
 import NordicLayout, { Reveal } from "@/components/nordic/NordicLayout";
 import { useContactModal } from "@/components/ContactModal";
+import { AURORA_PRODUCTS, PRODUCT_GROUPS, PRODUCT_STATUS_LABEL, type AuroraProduct, type AuroraProductGroup } from "@/data/products";
 import { setSEOMeta } from "@/lib/seoHelpers";
 
-const PRODUCTS = [
-  { num: "01", name: "Hönsgården", url: "honsgarden.se", tagline: "Mobilapp för hönshållning.", tags: ["Mobilapp", "React Native", "iOS & Android"], desc: "En mobilapp som hjälper hönshållare att hålla koll på sin flock — hälsologg, äggproduktion, påminnelser och råd. Byggd med React Native och Supabase." },
-  { num: "02", name: "AgilityManager", url: "agilitymanager.se", tagline: "Träningslogg och kursplaner för hundsporten.", tags: ["SaaS", "Community", "Sport"], desc: "Digital plattform för agility-tränare och hundägare. Loggbok, kursplanering, progresstracking och community-funktioner." },
-  { num: "03", name: "Aurora Transport", url: "auroratransport.se", tagline: "TMS för svenska åkerier.", tags: ["SaaS", "Multi-tenant", "Logistik"], desc: "Multi-tenant transportshanteringssystem. Körordrar, fordonsstatus, förarhantering och fakturering. Levererat på fyra veckor.", highlight: "Levererat på fyra veckor." },
-  { num: "04", name: "Updro", url: "updro.se", tagline: "Marknadsplats för svenska byråer.", tags: ["Marketplace", "B2B", "SaaS"], desc: "En plattform där svenska byråer kan lista sina tjänster och kunder kan hitta rätt partner. Marketplace med dubbelsidiga nätverkseffekter." },
-  { num: "05", name: "Odlingsdagboken", url: "odlingsdagboken.com", tagline: "Köksträdgård med AI-coach Gro.", tags: ["AI", "Consumer", "SaaS"], desc: "Digital trädgårdsdagbok med inbyggd AI-coach (Gro) som ger råd baserade på vad du odlar, var du bor och årstiden." },
-  { num: "06", name: "GoGlamping", url: "goglamping.se", tagline: "Bokning vid Göta kanal.", tags: ["Bokningssystem", "Hospitality", "B2C"], desc: "Bokningsplattform för glamping-upplevelser. Kalenderhantering, betalningsflöde, gästkommunikation och administratörspanel." },
-];
+const GROUP_ORDER: AuroraProductGroup[] = ["platform", "vertical", "venture"];
+
+const ProductLink = ({ product }: { product: AuroraProduct }) => {
+  const content = <>
+    <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start" }}>
+      <div>
+        <span className="mono" style={{ color: "var(--moss)" }}>{PRODUCT_STATUS_LABEL[product.status]}</span>
+        <h3 style={{ marginTop: 10 }}>{product.name}</h3>
+      </div>
+      <ArrowUpRight size={17} style={{ color: "var(--moss)", flexShrink: 0 }} />
+    </div>
+    <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--moss-soft)", fontSize: 15, marginTop: 8 }}>{product.tagline}</p>
+    <p className="body" style={{ marginTop: 14 }}>{product.description}</p>
+    <div style={{ marginTop: "auto", paddingTop: 20 }}>
+      {product.tags.map((tag) => <span key={tag} className="pill">{tag}</span>)}
+    </div>
+  </>;
+  const style = { display: "flex", flexDirection: "column" } as const;
+
+  return product.external
+    ? <a href={product.href} target="_blank" rel="noopener noreferrer" className="work-card" style={style}>{content}</a>
+    : <Link to={product.href} className="work-card" style={style}>{content}</Link>;
+};
 
 const Produkter = () => {
   const { open } = useContactModal();
+
   useEffect(() => {
     setSEOMeta({
-      title: "Produkter — sex SaaS i drift | Aurora Media",
-      description: "Aurora Media driver sex egna SaaS-produkter. Inte case studies — produkter i drift.",
-      canonical: "/produkter", ogImage: "/og-image-sv.jpg",
+      title: "Produkter och plattformar | Aurora Media AB",
+      description: "Utforska Aurora Medias gemensamma plattform, branschsystem och egna digitala produkter – från Aurora Care till Aurora Transport och StayBoost.",
+      canonical: "/produkter",
+      ogImage: "/og-image-sv.jpg",
     });
   }, []);
 
-  return (
-    <NordicLayout>
+  const liveCount = AURORA_PRODUCTS.filter((product) => product.status === "live").length;
+
+  return <NordicLayout>
+    <main id="main">
       <section className="page-hero">
         <div className="wrap">
-          <Reveal><p className="mono">egna produkter · sex i drift</p></Reveal>
+          <Reveal><p className="mono">Aurora Media AB · produktportfölj</p></Reveal>
           <Reveal delay={0.1}>
-            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "16ch" }}>
-              Sex produkter. <span className="it">I drift idag.</span>
-            </h1>
+            <h1 className="hero-line" style={{ marginTop: 18, fontSize: "clamp(2rem,5.4vw,4.4rem)", maxWidth: "18ch" }}>Ett bolag. Flera produkter. <span className="it">En tydlig helhet.</span></h1>
           </Reveal>
           <Reveal delay={0.2}>
-            <p className="lead" style={{ marginTop: 24 }}>
-              Inte case studies. Inte mockups. Produkter vi äger, driver och itererar på — bevis på att vi faktiskt kan bygga.
-            </p>
+            <p className="lead" style={{ marginTop: 24, maxWidth: 760 }}>Aurora Media är paraplyet. Gemensamma tjänster möts i Aurora Care, medan branschplattformar och egna varumärken behåller de arbetsflöden som gör dem värdefulla.</p>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <div style={{ display: "flex", gap: "clamp(28px,5vw,64px)", flexWrap: "wrap", marginTop: 42 }}>
+              <div><span className="stat-num bone">{AURORA_PRODUCTS.length}</span><p className="kicker" style={{ marginTop: 6 }}>publika produkter</p></div>
+              <div><span className="stat-num bone">{liveCount}</span><p className="kicker" style={{ marginTop: 6 }}>i drift</p></div>
+              <div><span className="stat-num bone">1</span><p className="kicker" style={{ marginTop: 6 }}>kommersiellt paraply</p></div>
+            </div>
           </Reveal>
         </div>
       </section>
 
-      <section className="section">
+      <section className="section" style={{ paddingTop: 0 }}>
         <div className="wrap">
-          <div className="work-grid">
-            {PRODUCTS.map((p) => (
-              <a key={p.num} href={`https://${p.url}`} target="_blank" rel="noopener noreferrer" className="work-card">
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-                  <span className="mono">{p.num}</span>
-                  <ArrowUpRight size={14} style={{ color: "var(--moss)" }} />
-                </div>
-                <h4>{p.name}</h4>
-                <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--moss-soft)", fontSize: 14, marginTop: 4 }}>{p.tagline}</p>
-                <p className="body" style={{ marginTop: 12 }}>{p.desc}</p>
-                <div className="url" style={{ marginTop: 14 }}>{p.url}</div>
-                <div style={{ marginTop: 10 }}>
-                  {p.tags.map((t) => (<span key={t} className="pill">{t}</span>))}
-                </div>
-                {p.highlight && (
-                  <p style={{ marginTop: 14, fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--bone-mute)", fontSize: 13 }}>"{p.highlight}"</p>
-                )}
-              </a>
-            ))}
+          <div className="surface surface-pad featured" style={{ display: "grid", gap: 28, gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,280px),1fr))" }}>
+            <div><p className="eyebrow">Så hänger det ihop</p><h2 className="h3" style={{ marginTop: 12 }}>Gemensam ingång utan en enda jätteapp</h2></div>
+            <div className="body" style={{ display: "grid", gap: 12 }}>
+              <p style={{ display: "flex", gap: 10 }}><Network size={18} style={{ color: "var(--moss)", flexShrink: 0, marginTop: 2 }} />auroramedia.se visar och säljer hela erbjudandet.</p>
+              <p style={{ display: "flex", gap: 10 }}><Boxes size={18} style={{ color: "var(--moss)", flexShrink: 0, marginTop: 2 }} />Aurora Care blir kontrollpanel för gemensamma kundtjänster.</p>
+              <p style={{ display: "flex", gap: 10 }}><Check size={18} style={{ color: "var(--moss)", flexShrink: 0, marginTop: 2 }} />Specialistprodukterna behåller egen kod, data och domän.</p>
+            </div>
           </div>
         </div>
       </section>
 
+      {GROUP_ORDER.map((group) => {
+        const meta = PRODUCT_GROUPS[group];
+        const products = AURORA_PRODUCTS.filter((product) => product.group === group);
+        return <section key={group} className="section">
+          <div className="wrap">
+            <div style={{ display: "grid", gap: 20, gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,320px),1fr))", alignItems: "end", marginBottom: 34 }}>
+              <div><p className="mono">{meta.eyebrow} · {products.length}</p><h2 className="h2" style={{ marginTop: 12 }}>{meta.title}</h2></div>
+              <p className="body" style={{ maxWidth: 620 }}>{meta.description}</p>
+            </div>
+            <div className="work-grid">{products.map((product) => <ProductLink key={product.name} product={product} />)}</div>
+          </div>
+        </section>;
+      })}
+
       <section className="cta-band">
         <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-          <div className="meta-label">Vill ni ha er egen?</div>
-          <h2 className="h2" style={{ marginTop: 18 }}>Vi bygger samma sak <span className="it">åt er.</span></h2>
-          <p className="lead" style={{ marginTop: 22 }}>Fast pris, veckor inte månader, kod ni äger.</p>
-          <button onClick={() => open()} className="btn btn-moss" style={{ marginTop: 28 }}>
-            Begär offert <span className="a"><ArrowRight size={14} /></span>
-          </button>
+          <div className="meta-label">Kundprojekt och leveranser</div>
+          <h2 className="h2" style={{ marginTop: 18 }}>Se även det vi har byggt <span className="it">åt andra.</span></h2>
+          <p className="lead" style={{ marginTop: 22 }}>Kundsajter, utvecklingsuppdrag och verifierade case ligger samlade under Arbete.</p>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 28 }}>
+            <Link to="/arbete" className="btn btn-moss">Se alla case <span className="a"><ArrowRight size={14} /></span></Link>
+            <button onClick={() => open()} className="btn">Diskutera ett projekt</button>
+          </div>
         </div>
       </section>
-    </NordicLayout>
-  );
+    </main>
+  </NordicLayout>;
 };
 
 export default Produkter;

@@ -26,6 +26,7 @@ const FOOTER_COLUMNS = [
   {
     title: "Aurora Media",
     items: [
+      { label: "Produkter", href: "/produkter" },
       { label: "Arbete", href: "/arbete" },
       { label: "Blogg", href: "/blogg" },
       { label: "Verktyg", href: "/verktyg" },
