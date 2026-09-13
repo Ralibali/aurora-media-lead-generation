@@ -73,6 +73,12 @@ const Hemsidor = lazy(() => import("./pages/tjanster/Hemsidor"));
 const MetaAds = lazy(() => import("./pages/tjanster/MetaAds"));
 const Mobilapp = lazy(() => import("./pages/tjanster/Mobilapp"));
 const Seo = lazy(() => import("./pages/tjanster/Seo"));
+const AuroraCare = lazy(() => import("./pages/erbjudanden/AuroraCare"));
+const AuroraSight = lazy(() => import("./pages/erbjudanden/AuroraSight"));
+const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));
+const AuroraVoice = lazy(() => import("./pages/erbjudanden/AuroraVoice"));
+const Tillganglighet = lazy(() => import("./pages/erbjudanden/Tillganglighet"));
+const CookieSamtycke = lazy(() => import("./pages/erbjudanden/CookieSamtycke"));
 // Verktyg-sidorna lazy-loadas: de drar med sig recharts/jspdf och ska inte
 // tynga huvudbundlen (Core Web Vitals).
 const VerktygIndex = lazy(() => import("./pages/verktyg/VerktygIndex"));
@@ -83,6 +89,7 @@ const AiMognadsanalys = lazy(() => import("./pages/verktyg/AiMognadsanalys"));
 const PersonalkostnadVsAi = lazy(() => import("./pages/verktyg/PersonalkostnadVsAi"));
 const PromptGenerator = lazy(() => import("./pages/verktyg/PromptGenerator"));
 const GrokBot = lazy(() => import("./pages/GrokBot"));
+const AuroraPlanDemo = lazy(() => import("./pages/AuroraPlanDemo"));
 
 const queryClient = new QueryClient();
 
@@ -151,6 +158,12 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Mindre manuellt arbete. Mer tid för affären. Aurora Media i Linköping bygger AI-lösningar, integrationer och interna system. Börja med ett kostnadsfritt samtal.",
     canonical: "https://auroramedia.se/",
+  },
+  "/aurora-plan": {
+    title: "Aurora Plan – BK Ljungsbro 2026/27",
+    description: "Privat arbetsyta för planering av BK Ljungsbros träningstider 2026/27.",
+    canonical: "https://auroramedia.se/aurora-plan",
+    noindex: true,
   },
   "/ai-karta": {
     title: "AI-kartan | Hitta företagets bästa AI-områden | Aurora Media",
@@ -322,6 +335,42 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Strategiskt innehåll som bygger förtroende, stärker varumärket och hjälper kunder att välja dig.",
     canonical: "https://auroramedia.se/tjanster/content",
+  },
+  "/care": {
+    title: "Aurora Care – WordPress drift & underhåll från 995 kr/mån | Aurora Media",
+    description:
+      "Löpande WordPress-underhåll: uppdateringar, säkerhetskopior, säkerhetsövervakning, hastighet och supporttid. Fast månadspris, ingen bindningstid.",
+    canonical: "https://auroramedia.se/care",
+  },
+  "/tillganglighet": {
+    title: "Tillgänglighetsaudit & WCAG-granskning | Aurora Media",
+    description:
+      "Teknisk tillgänglighetsaudit för webbplatser och e-handel. Prioriterade WCAG-fynd, åtgärdslista och löpande monitoring från Aurora Media.",
+    canonical: "https://auroramedia.se/tillganglighet",
+  },
+  "/cookie-samtycke": {
+    title: "Cookie-banner, Consent Mode v2 & tracker-scan | Aurora Media",
+    description:
+      "Teknisk cookie- och samtyckeshantering med tracker-scan, blockering före samtycke, Consent Mode v2 och löpande kontroll.",
+    canonical: "https://auroramedia.se/cookie-samtycke",
+  },
+  "/ai-synlighet": {
+    title: "AI-synlighet & GEO-audit – syns ni i ChatGPT och AI-sök? | Aurora Media",
+    description:
+      "Aurora Sight mäter hur ert företag nämns i AI-svar från ChatGPT, Perplexity och Googles AI-översikter, hittar källorna bakom svaren och åtgärdar det som saknas.",
+    canonical: "https://auroramedia.se/ai-synlighet",
+  },
+  "/lokal-synlighet": {
+    title: "Lokal SEO & Google företagsprofil – fler kunder lokalt | Aurora Media",
+    description:
+      "Aurora Local optimerar er Google-företagsprofil, lokala sökord, kartsynlighet och recensioner. Fast månadspris från 1 495 kr, ingen bindningstid.",
+    canonical: "https://auroramedia.se/lokal-synlighet",
+  },
+  "/ai-receptionist": {
+    title: "AI-receptionist för telefon och chatt – missa inga kunder | Aurora Media",
+    description:
+      "Aurora Voice svarar på samtal, chatt och e-post, besvarar vanliga frågor och samlar in bokningsunderlag. Uppsättning från 14 900 kr, drift från 1 995 kr/mån.",
+    canonical: "https://auroramedia.se/ai-receptionist",
   },
   "/tjanster/grafisk-profil": {
     title: "Grafisk profil | Aurora Media AB",
@@ -520,6 +569,7 @@ const App = () => (
               <Route path="/ai-karta/resultat" element={<AiKartaResultat />} />
               <Route path="/ai-snabbanalys" element={<AiSnabbanalys />} />
               <Route path="/grok-bot" element={<GrokBot />} />
+              <Route path="/aurora-plan" element={<AuroraPlanDemo />} />
               <Route path="/ai-automation-foretag" element={<AiAutomationForetag />} />
               <Route path="/ai-konsult-sverige" element={<AiKonsultSverige />} />
               <Route path="/en" element={<EnIndex />} />
@@ -542,6 +592,12 @@ const App = () => (
               <Route path="/tjanster/content" element={<Content />} />
               <Route path="/tjanster/grafisk-profil" element={<GrafiskProfil />} />
               <Route path="/tjanster/fotografering" element={<Fotografering />} />
+              <Route path="/care" element={<AuroraCare />} />
+              <Route path="/tillganglighet" element={<Tillganglighet />} />
+              <Route path="/cookie-samtycke" element={<CookieSamtycke />} />
+              <Route path="/ai-synlighet" element={<AuroraSight />} />
+              <Route path="/lokal-synlighet" element={<AuroraLocal />} />
+              <Route path="/ai-receptionist" element={<AuroraVoice />} />
               <Route path="/webbyra-linkoping" element={<WebbyraLinkoping />} />
               <Route path="/webbbyra-linkoping" element={<Navigate to="/webbyra-linkoping" replace />} />
               <Route path="/blogg" element={<Blog />} />

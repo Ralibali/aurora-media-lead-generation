@@ -1,0 +1,33 @@
+id: WP-20260913-web-governance
+company: Aurora Media AB
+objective: "Lansera två produktifierade webbstyrningstjänster som säljs från auroramedia.se och levereras i Aurora Care."
+why_now: "Ägaren har gett GO efter verifierad svensk efterfrågan på tillgänglighets- och samtyckesstöd."
+evidence:
+  - "VERIFIED FACT: Aurora Care är redan ett publikt erbjudande och har en separat kundportal."
+  - "VERIFIED FACT: PTS-tillsyn och tidigare research visar ett aktuellt behov av teknisk tillgänglighetskontroll."
+  - "HYPOTHESIS: Fasta instegsaudits kan skapa kvalificerade leads som konverterar till löpande Care-intäkt."
+owner: "Aurora Media CEO"
+skill: "site-revenue-experiment"
+skill_version: "1.0"
+authority: EMIT
+usage_level: medium
+context:
+  include_only:
+    - "Publika tjänstesidor, SEO-rutter, Care-koppling och kontakt-CTA."
+constraints:
+  - "Ingen automatisk scan får marknadsföras som full WCAG- eller GDPR-garanti."
+  - "Inga nya domäner eller fristående produkter."
+definition_of_done:
+  - "Publika sidor för tillgänglighet och cookie/samtycke finns i befintlig router."
+  - "SEO metadata, statisk crawlbar version och sitemap innehåller båda sidorna."
+  - "Aurora Care visar hur funktionerna ingår och länkar vidare."
+  - "Projektets check, test och build passerar före push till main."
+expected_artifact: "company/artifacts/experiments/20260913-web-governance.md"
+measurement:
+  baseline: "UNKNOWN"
+  target: "Minst 1 kvalificerad förfrågan om audit inom 30 dagar efter publicering."
+  window: "30 dagar"
+stop_conditions:
+  - "Required authority unavailable"
+  - "Evidence invalidates the hypothesis"
+  - "Expected value no longer justifies cost"

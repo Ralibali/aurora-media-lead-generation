@@ -10,6 +10,7 @@ Disallow: /login
 Disallow: /dashboard
 Disallow: /settings
 Disallow: /preview
+Disallow: /aurora-plan
 
 # Gamla/redirectade rutter ska inte crawlas som egna mål
 Disallow: /om-oss-2
