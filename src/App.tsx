@@ -77,6 +77,8 @@ const AuroraCare = lazy(() => import("./pages/erbjudanden/AuroraCare"));
 const AuroraSight = lazy(() => import("./pages/erbjudanden/AuroraSight"));
 const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));
 const AuroraVoice = lazy(() => import("./pages/erbjudanden/AuroraVoice"));
+const Tillganglighet = lazy(() => import("./pages/erbjudanden/Tillganglighet"));
+const CookieSamtycke = lazy(() => import("./pages/erbjudanden/CookieSamtycke"));
 // Verktyg-sidorna lazy-loadas: de drar med sig recharts/jspdf och ska inte
 // tynga huvudbundlen (Core Web Vitals).
 const VerktygIndex = lazy(() => import("./pages/verktyg/VerktygIndex"));
@@ -340,6 +342,18 @@ const seoMap: Record<string, SEOConfig> = {
       "Löpande WordPress-underhåll: uppdateringar, säkerhetskopior, säkerhetsövervakning, hastighet och supporttid. Fast månadspris, ingen bindningstid.",
     canonical: "https://auroramedia.se/care",
   },
+  "/tillganglighet": {
+    title: "Tillgänglighetsaudit & WCAG-granskning | Aurora Media",
+    description:
+      "Teknisk tillgänglighetsaudit för webbplatser och e-handel. Prioriterade WCAG-fynd, åtgärdslista och löpande monitoring från Aurora Media.",
+    canonical: "https://auroramedia.se/tillganglighet",
+  },
+  "/cookie-samtycke": {
+    title: "Cookie-banner, Consent Mode v2 & tracker-scan | Aurora Media",
+    description:
+      "Teknisk cookie- och samtyckeshantering med tracker-scan, blockering före samtycke, Consent Mode v2 och löpande kontroll.",
+    canonical: "https://auroramedia.se/cookie-samtycke",
+  },
   "/ai-synlighet": {
     title: "AI-synlighet & GEO-audit – syns ni i ChatGPT och AI-sök? | Aurora Media",
     description:
@@ -579,6 +593,8 @@ const App = () => (
               <Route path="/tjanster/grafisk-profil" element={<GrafiskProfil />} />
               <Route path="/tjanster/fotografering" element={<Fotografering />} />
               <Route path="/care" element={<AuroraCare />} />
+              <Route path="/tillganglighet" element={<Tillganglighet />} />
+              <Route path="/cookie-samtycke" element={<CookieSamtycke />} />
               <Route path="/ai-synlighet" element={<AuroraSight />} />
               <Route path="/lokal-synlighet" element={<AuroraLocal />} />
               <Route path="/ai-receptionist" element={<AuroraVoice />} />

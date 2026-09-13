@@ -26,6 +26,7 @@ const AuroraCare = () => (
       "Databasstädning och borttagning av oanvända plugins",
       "Supporttid för textändringar och småfix",
       "Månadsrapport med vad som gjorts och vad som rekommenderas",
+      "Tillgänglighets- och consent-översikt som tillval i samma portal",
     ]}
     tiers={[
       {
@@ -41,7 +42,7 @@ const AuroraCare = () => (
         cadence: "/mån",
         desc: "För sajter som är en viktig del av försäljningen.",
         featured: true,
-        features: ["Allt i Basic", "Uppdateringar varannan vecka", "Prestanda- och SEO-kontroll", "2 h supporttid/mån", "Prioriterat svar samma arbetsdag"],
+        features: ["Allt i Basic", "Uppdateringar varannan vecka", "Prestanda-, SEO- och tillgänglighetskontroll", "2 h supporttid/mån", "Prioriterat svar samma arbetsdag"],
       },
       {
         name: "Care Complete",
@@ -75,11 +76,14 @@ const AuroraCare = () => (
       { q: "Vad räknas som småfix?", a: "Textändringar, byta bilder, lägga till en sida, justera ett formulär, felsöka ett plugin. Allt som ryms i månadens supporttid." },
       { q: "Vad händer om sajten blir hackad?", a: "I Complete ingår sanering och återställning. I Basic och Plus hjälper vi till på löpande timpris, och backup gör att vi oftast är uppe igen samma dag." },
       { q: "Hanterar ni även andra plattformar än WordPress?", a: "Vi driftar även sajter vi själva byggt i React eller Shopify. Kontakta oss så säger vi om det passar." },
+      { q: "Kan ni övervaka tillgänglighet och cookies också?", a: "Ja. Accessibility Monitor och Consent Monitor kan läggas till i Care och visas i samma portal. Automatiken kompletteras med manuella kontroller där det behövs." },
     ]}
     related={[
       { name: "Hemsidor", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
       { name: "Lokal synlighet", price: "Från 1 495 kr/mån", to: "/lokal-synlighet" },
       { name: "SEO", price: "Från 4 900 kr", to: "/tjanster/seo" },
+      { name: "Tillgänglighetsaudit", price: "2 995 kr", to: "/tillganglighet" },
+      { name: "Cookie & samtycke", price: "Från 149 kr/mån", to: "/cookie-samtycke" },
     ]}
   />
 );
