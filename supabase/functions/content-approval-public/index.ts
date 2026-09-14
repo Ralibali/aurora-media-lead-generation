@@ -26,6 +26,21 @@ const page = (body: string, status = 200) => new Response(`<!doctype html>
 <style>
 :root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#14171a;background:#f6f5f1}*{box-sizing:border-box}body{margin:0}main{max-width:760px;margin:0 auto;padding:32px 18px 64px}.brand{font:700 12px ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:#44524a}.card{background:white;border:1px solid #dedbd3;border-radius:18px;padding:24px;margin-top:18px;box-shadow:0 12px 35px rgba(20,23,26,.05)}h1{font-size:28px;margin:6px 0 8px}h2{font-size:15px;margin:0 0 8px}.muted{color:#666d69;font-size:14px}.content{white-space:pre-wrap;line-height:1.6;background:#f8f8f5;border-radius:12px;padding:16px;margin:18px 0}.pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#e8eee9;font-size:12px;font-weight:700}.comments{border-top:1px solid #ebe9e3;margin-top:20px;padding-top:16px}.comment{padding:10px 0;border-bottom:1px solid #f0eee8;font-size:14px}label{display:block;font-size:12px;font-weight:700;margin:14px 0 5px}input,textarea{width:100%;border:1px solid #cfcac0;border-radius:10px;padding:11px;font:inherit}textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}.approve{background:#244a37;color:white}.changes{background:#f1e8df;color:#8a3f17}a{color:#244a37;font-weight:700}.notice{background:#eef6ef;border:1px solid #cadfcd;border-radius:12px;padding:12px 14px;margin-top:14px}</style></head><body><main>${body}</main></body></html>`, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
 
+type ApprovalItem = {
+  id: string;
+  client_name: string;
+  title: string;
+  channel: string;
+  body: string;
+  media_url: string | null;
+  status: string;
+  expires_at: string | null;
+  approved_at: string | null;
+  created_at: string;
+};
+type ApprovalComment = { author_name: string; comment: string; created_at: string };
+type ApprovalState = { item: ApprovalItem | null; comments: ApprovalComment[] };
+
 Deno.serve(async (req) => {
   const url = new URL(req.url);
   const token = url.searchParams.get("token") ?? "";
@@ -37,24 +52,24 @@ Deno.serve(async (req) => {
   const admin = createClient(supabaseUrl, serviceRole);
   const tokenHash = await hashToken(token);
 
-  const load = async () => {
+  const load = async (): Promise<ApprovalState> => {
     const itemResult = await admin
       .from("content_approval_items")
       .select("id,client_name,title,channel,body,media_url,status,expires_at,approved_at,created_at")
       .eq("approval_token_hash", tokenHash)
       .maybeSingle();
     if (itemResult.error) throw itemResult.error;
-    if (!itemResult.data) return { item: null, comments: [] as any[] };
+    if (!itemResult.data) return { item: null, comments: [] };
     const commentsResult = await admin
       .from("content_approval_comments")
       .select("author_name,comment,created_at")
       .eq("approval_id", itemResult.data.id)
       .order("created_at", { ascending: true });
     if (commentsResult.error) throw commentsResult.error;
-    return { item: itemResult.data, comments: commentsResult.data ?? [] };
+    return { item: itemResult.data as ApprovalItem, comments: (commentsResult.data ?? []) as ApprovalComment[] };
   };
 
-  let state;
+  let state: ApprovalState;
   try { state = await load(); } catch { return page("<div class=card><h1>Kunde inte öppna godkännandet</h1></div>", 500); }
   if (!state.item) return page("<div class=card><h1>Länken är ogiltig eller ersatt</h1><p class=muted>Be Aurora Media om en ny länk.</p></div>", 404);
   if (state.item.expires_at && new Date(state.item.expires_at).getTime() < Date.now()) {
@@ -79,10 +94,11 @@ Deno.serve(async (req) => {
         updated_at: new Date().toISOString(),
       }).eq("id", state.item.id);
       state = await load();
+      if (!state.item) return page("<div class=card><h1>Godkännandet kunde inte läsas om</h1></div>", 500);
     }
   }
 
-  const item = state.item!;
+  const item = state.item;
   const media = safeUrl(item.media_url);
   const statusLabel: Record<string, string> = {
     awaiting_approval: "Väntar på ditt godkännande",
@@ -92,7 +108,7 @@ Deno.serve(async (req) => {
     draft: "Utkast",
   };
   const commentsHtml = state.comments.length
-    ? `<div class=comments><h2>Kommentarer</h2>${state.comments.map((c: any) => `<div class=comment><strong>${esc(c.author_name)}</strong><br>${esc(c.comment)}</div>`).join("")}</div>`
+    ? `<div class=comments><h2>Kommentarer</h2>${state.comments.map((comment) => `<div class=comment><strong>${esc(comment.author_name)}</strong><br>${esc(comment.comment)}</div>`).join("")}</div>`
     : "";
   const locked = ["approved", "cancelled"].includes(item.status);
   const formHtml = locked ? `<div class=notice>${item.status === "approved" ? "Tack – innehållet är godkänt." : "Det här godkännandet är avslutat."}</div>` : `

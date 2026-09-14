@@ -13,6 +13,13 @@ const clean = (value: unknown, max: number) => String(value ?? "").trim().slice(
 const GATEWAY = "https://connector-gateway.lovable.dev/google_search_console";
 
 type GscRow = { keys?: string[]; clicks?: number; impressions?: number; position?: number };
+type TrackedKeyword = { id: string; keyword: string; active: boolean };
+type ProjectWithKeywords = {
+  id: string;
+  name: string;
+  site_url: string;
+  seo_rank_keywords: TrackedKeyword[] | null;
+};
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
@@ -120,7 +127,6 @@ Deno.serve(async (req) => {
       .eq("active", true);
     if (projectsError) return json({ error: projectsError.message }, 500);
 
-    // Search Console settles with delay; use a 7-day window ending 3 days ago.
     const endDate = new Date(Date.now() - 3 * 86400_000);
     const startDate = new Date(endDate.getTime() - 6 * 86400_000);
     const end = endDate.toISOString().slice(0, 10);
@@ -128,8 +134,8 @@ Deno.serve(async (req) => {
     const checkedOn = end;
     const results: { project: string; synced: number; error?: string }[] = [];
 
-    for (const project of projects ?? []) {
-      const tracked = ((project as any).seo_rank_keywords ?? []).filter((keyword: any) => keyword.active);
+    for (const project of (projects ?? []) as ProjectWithKeywords[]) {
+      const tracked = (project.seo_rank_keywords ?? []).filter((keyword) => keyword.active);
       if (tracked.length === 0) {
         results.push({ project: project.name, synced: 0 });
         continue;
@@ -145,8 +151,8 @@ Deno.serve(async (req) => {
         const payload = await response.json();
         const rows: GscRow[] = payload.rows ?? [];
         const byQuery = new Map(rows.map((row) => [String(row.keys?.[0] ?? "").trim().toLocaleLowerCase("sv-SE"), row]));
-        const snapshots = tracked.map((keyword: any) => {
-          const row = byQuery.get(String(keyword.keyword).trim().toLocaleLowerCase("sv-SE"));
+        const snapshots = tracked.map((keyword) => {
+          const row = byQuery.get(keyword.keyword.trim().toLocaleLowerCase("sv-SE"));
           return {
             keyword_id: keyword.id,
             checked_on: checkedOn,
