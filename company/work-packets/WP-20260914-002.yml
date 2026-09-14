@@ -1,0 +1,35 @@
+id: WP-20260914-002
+company: Aurora Media AB
+objective: "Add multi-client keyword rank tracking to the existing Aurora Media SEO admin using the Search Console connector already in the repository."
+why_now: "Aurora Media already has GSC reporting but no persistent tracked-keyword/client layer; the owner explicitly authorized implementation in the existing repository."
+evidence:
+  - "admin-seo already reads Search Console data for auroramedia.se."
+  - "The existing GSC connector can be reused for client properties the connected account can access."
+owner: "Aurora Media CEO"
+skill: "site-revenue-experiment"
+skill_version: "1.0"
+authority: COMMIT
+usage_level: medium
+context:
+  include_only:
+    - "src/pages/admin/Seo.tsx"
+    - "supabase/functions/admin-seo"
+    - "supabase/functions/admin-rank-tracking"
+    - "supabase/migrations"
+constraints:
+  - "Do not duplicate Aurora Sight's AI/GEO product."
+  - "Use verified Search Console data; do not pretend GSC positions are city-level local-pack rankings."
+  - "Reuse existing admin authentication and Google connector."
+definition_of_done:
+  - "Admin can create client/site projects."
+  - "Admin can add tracked keywords."
+  - "Admin can sync and persist GSC position snapshots."
+  - "SEO UI shows latest position and movement for tracked keywords."
+expected_artifact: "company/artifacts/experiments/rank-tracking-20260914.md"
+measurement:
+  baseline: "One-off GSC top-query view only"
+  target: "At least 3 client/site projects with recurring tracked keywords"
+  window: "30 days after launch"
+stop_conditions:
+  - "Connected GSC account cannot access target client properties"
+  - "Clients require city/local-pack accuracy before an external SERP provider is added"
