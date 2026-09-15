@@ -39,12 +39,22 @@ verify_jwt = false
 [functions.firecrawl-prospect-search]
 verify_jwt = true
 
+# Aurora Media admin commercial layers use the existing arbitrary admin bearer
+# token, so platform JWT verification must be disabled and auth is enforced in code.
+[functions.admin-content-approval]
+verify_jwt = false
 
+[functions.content-approval-public]
+verify_jwt = false
 
+[functions.admin-rank-tracking]
+verify_jwt = false
 
+[functions.admin-managed-channels]
+verify_jwt = false
 
-
-
+[functions.admin-commerce-ops]
+verify_jwt = false
 
 # Stripe-webhook: Stripe skickar ingen JWT. Signaturen verifieras i koden.
 [functions.ai-kontoret-deliver]

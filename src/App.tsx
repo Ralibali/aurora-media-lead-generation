@@ -58,6 +58,8 @@ const AdminContent = lazy(() => import("./pages/admin/Content"));
 const AdminSeo = lazy(() => import("./pages/admin/Seo"));
 const AdminEmail = lazy(() => import("./pages/admin/Email"));
 const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
+const AdminManagedChannels = lazy(() => import("./pages/admin/ManagedChannels"));
+const AdminCommerceOps = lazy(() => import("./pages/admin/CommerceOps"));
 const AdminAiKontoret = lazy(() => import("./pages/admin/AiKontoret"));
 const AdminAiKontoretPreview = lazy(() => import("./pages/admin/AiKontoretPreview"));
 // AdminBoundary is intentionally eager: it must be available synchronously
@@ -620,6 +622,8 @@ const App = () => (
                 <Route path="/admin/text-generator" element={<TextGenerator />} />
                 <Route path="/admin/faq-rapport" element={<FaqRapport />} />
                 <Route path="/admin/prospektering" element={<AdminProspektering />} />
+                <Route path="/admin/whatsapp" element={<AdminManagedChannels />} />
+                <Route path="/admin/commerce" element={<AdminCommerceOps />} />
                 <Route path="/admin/ai-kontoret" element={<AdminAiKontoret />} />
                 <Route path="/admin/ai-kontoret/forhandsgranskning" element={<AdminAiKontoretPreview />} />
               </Route>

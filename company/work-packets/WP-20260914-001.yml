@@ -1,0 +1,35 @@
+id: WP-20260914-001
+company: Aurora Media AB
+objective: "Add client content approval as a commercial delivery layer inside the existing Aurora Media admin content workflow."
+why_now: "Agency delivery already produces client-facing content; approval friction is a repeated manual step and the owner explicitly authorized implementation in the existing repository."
+evidence:
+  - "Existing admin content workflow and shared admin authentication are already in production."
+  - "External client approval, comments and scoped access are a documented gap in generic social publishing tools."
+owner: "Aurora Media CEO"
+skill: "site-revenue-experiment"
+skill_version: "1.0"
+authority: COMMIT
+usage_level: medium
+context:
+  include_only:
+    - "src/pages/admin/Content.tsx"
+    - "src/lib/adminClient.ts"
+    - "supabase/functions"
+    - "supabase/migrations"
+constraints:
+  - "Do not fork or copy AGPL social-publishing code."
+  - "Public client access must be token-scoped and must not expose Supabase tables directly."
+  - "Reuse the existing admin secret/authentication path."
+definition_of_done:
+  - "Admin can create an approval request and obtain a client link."
+  - "Client can approve or request changes without an Aurora admin account."
+  - "Admin can see status and comments."
+  - "No public RLS policy exposes approval tables."
+expected_artifact: "company/artifacts/experiments/content-approval-20260914.md"
+measurement:
+  baseline: "Manual approval outside Aurora admin"
+  target: "At least 3 real client approvals completed through the workflow"
+  window: "30 days after first client use"
+stop_conditions:
+  - "Client adoption is below 3 approvals after 30 days of active use"
+  - "Security review finds token scope insufficient"

@@ -1,0 +1,18 @@
+id: WP-20260915-001
+company: Aurora Media AB
+objective: "Productize WACRM operations and guarded commerce recommendations inside the existing Aurora Media admin."
+why_now: "The owner approved direct implementation after an evidence-backed opportunity scan."
+evidence:
+  - "WACRM stable public API and account-scoped keys at revision 80c3f9a1."
+  - "Anthropic Commerce Agents staged-write and host-approval reference at revision fd4d5922."
+owner: Aurora Media CEO
+skill: delivery-productization-scan
+skill_version: "1.0"
+authority: COMMIT
+usage_level: "minimum viable internal control layers"
+definition_of_done:
+  - "WACRM instances can be registered, verified and read from Aurora admin."
+  - "WhatsApp messages require stage, approve and explicit send actions."
+  - "Commerce snapshots produce guarded staged recommendations with approval history."
+  - "Repository checks pass and the change is pushed to main."
+expected_artifact: "Admin pages, Edge Functions, migration, tests and source notices."

@@ -19,6 +19,8 @@ import {
   BarChart3,
   PackageCheck,
   Radar,
+  MessageCircle,
+  ShoppingBag,
 } from "lucide-react";
 import { setSEOMeta } from "@/lib/seoHelpers";
 import { getFunctionUrl } from "@/lib/functionUrl";
@@ -134,6 +136,8 @@ const NAV = [
   { to: "/admin/email", label: "E-post", icon: Mail },
   { to: "/admin/faq-rapport", label: "FAQ-rapport", icon: BarChart3 },
   { to: "/admin/prospektering", label: "Prospektering", icon: Radar },
+  { to: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle },
+  { to: "/admin/commerce", label: "Commerce Ops", icon: ShoppingBag },
   { to: "/admin/ai-kontoret", label: "AI-KONTORET", icon: PackageCheck },
   { to: "/admin/ai-kontoret/forhandsgranskning", label: "Förhandsgranska PDF", icon: FileText },
 ];
@@ -444,4 +448,3 @@ function AdminLayout({
     </div>
   );
 }
-
