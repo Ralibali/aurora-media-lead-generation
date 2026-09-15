@@ -55,15 +55,19 @@ const BlogPost = () => {
       inLanguage: "sv-SE",
     });
 
-    setJsonLd("blogpost-faq-jsonld", {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: article.faq.map((item) => ({
-        "@type": "Question",
-        name: item.q,
-        acceptedAnswer: { "@type": "Answer", text: item.a },
-      })),
-    });
+    if (article.faq.length > 0) {
+      setJsonLd("blogpost-faq-jsonld", {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: article.faq.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      });
+    } else {
+      removeJsonLd("blogpost-faq-jsonld");
+    }
 
     return () => {
       removeJsonLd("blogpost-jsonld");
@@ -223,28 +227,30 @@ const BlogPost = () => {
                 ))}
               </div>
 
-              <section
-                style={{
-                  marginTop: 48,
-                  paddingTop: 32,
-                  borderTop: "1px solid var(--hair)",
-                }}
-              >
-                <h2
-                  className="h2"
-                  style={{ fontSize: "clamp(1.4rem,2.8vw,2rem)", marginBottom: 20 }}
+              {article.faq.length > 0 && (
+                <section
+                  style={{
+                    marginTop: 48,
+                    paddingTop: 32,
+                    borderTop: "1px solid var(--hair)",
+                  }}
                 >
-                  Vanliga <span className="it">frågor</span>
-                </h2>
-                {article.faq.map((item) => (
-                  <details key={item.q} className="faq-row">
-                    <summary>
-                      <span>{item.q}</span>
-                    </summary>
-                    <p>{item.a}</p>
-                  </details>
-                ))}
-              </section>
+                  <h2
+                    className="h2"
+                    style={{ fontSize: "clamp(1.4rem,2.8vw,2rem)", marginBottom: 20 }}
+                  >
+                    Vanliga <span className="it">frågor</span>
+                  </h2>
+                  {article.faq.map((item) => (
+                    <details key={item.q} className="faq-row">
+                      <summary>
+                        <span>{item.q}</span>
+                      </summary>
+                      <p>{item.a}</p>
+                    </details>
+                  ))}
+                </section>
+              )}
 
               <section className="surface surface-pad" style={{ marginTop: 48, textAlign: "center" }}>
                 <p className="eyebrow" style={{ marginBottom: 10 }}>
