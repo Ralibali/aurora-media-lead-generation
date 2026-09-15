@@ -1,5 +1,61 @@
 [
   {
+    "slug": "driftkort-for-automation-ansvar-uppfoljning",
+    "title": "Ett driftkort för automationen: ansvar och uppföljning efter starten",
+    "metaTitle": "Driftkort för automation: ansvar och uppföljning",
+    "metaDesc": "Samla syfte, ansvar, kontroller och kontaktvägar i ett kort underlag. En arbetsmall för företaget som ska ta hand om en automation efter starten.",
+    "category": "AI & automation",
+    "readMinutes": 5,
+    "keyword": "driftkort automation ansvar uppföljning",
+    "intro": "När ett automatiserat flöde börjar användas behöver någon veta hur det ska följas upp. Ett driftkort samlar den information som nästa ansvariga person behöver för att förstå flödet, upptäcka frågor och hitta rätt hjälp. Här är en mall att fylla i tillsammans med dem som bygger och använder lösningen.",
+    "sections": [
+      {
+        "heading": "Beskriv vad flödet ska lämna efter sig",
+        "content": "Skriv en mening om uppgiften: vilket underlag kommer in, vilket resultat ska lämnas vidare och vem använder det? Ange var resultatet går att hitta och vad som räknas som färdigt. Håll detta skilt från en beskrivning av vilka verktyg som används.\n\nTa också med avgränsningen. Om resultatet är ett utkast som en person måste godkänna ska det stå tydligt. Den som läser driftkortet ska inte behöva gissa om ett framtaget dokument redan har skickats till en kund eller fortfarande väntar på granskning."
+      },
+      {
+        "heading": "Sätt namn på ansvar och ersättare",
+        "content": "Ange vilken roll som äger arbetsrutinen och vilken som tar emot tekniska frågor. Bestäm vem som ersätter den vanliga ansvariga vid frånvaro. Skriv hur dessa personer nås i verksamhetens ordinarie kontaktvägar.\n\nEn leverantörs kontaktperson och den egna verksamhetens beslutsfattare har inte nödvändigtvis samma uppgift. Beskriv därför vem som får ändra arbetssättet och vem som kan utföra den överenskomna tekniska ändringen. Hänvisa till rätt behörighetsrutin; lägg inga lösenord i driftkortet."
+      },
+      {
+        "heading": "Kopiera fälten till ert eget driftkort",
+        "content": "Börja med följande fält och stryk sådant som inte hjälper er i vardagen:\n\n- Flödets namn, syfte och aktuella version.\n- Var underlag kommer in och resultat hamnar.\n- Verksamhetsansvarig, teknisk kontakt och ersättare.\n- Kontroll som visar att ett ärende blev färdigt.\n- Vad som ska göras om kontrollen inte går igenom.\n- Hänvisning till rutin för paus och återstart.\n- Datum för senaste genomgång och nästa uppföljning.\n\nBeskriv kontroller som går att utföra i just er lösning. En knapp eller status som bara finns i planeringen ska märkas som ett öppet behov."
+      },
+      {
+        "heading": "Bestäm hur avvikelser tas om hand",
+        "content": "Välj en gemensam plats för öppna frågor. Varje notering behöver visa vad som observerats, vilket ärende den avser och vem som följer upp. Länka till underlaget där behöriga personer redan har tillgång till det.\n\nÅteranvänd gärna [undantagslistan inför automatisering](/blogg/kartlagg-undantag-fore-automatisering). Skillnaden är att driftkortet beskriver vem som använder rutinen efter starten. Håll ett bekräftat fel skilt från ett önskemål om nytt innehåll eller större omfattning."
+      },
+      {
+        "heading": "Gå igenom kortet med en kollega",
+        "content": "Låt någon som inte skrev kortet följa ett överenskommet testexempel. Kan personen hitta resultatet, förstå statusen och avgöra vem som ska kontaktas? Anteckna var information saknas och förbättra just den delen.\n\nAnvänd ett avgränsat test som får genomföras utan att påverka kundärenden. Ett begripligt driftkort är inte i sig bevis för att flödet är driftsäkert. Det hjälper er att se vilka rutiner och kontroller som fortfarande behöver undersökas."
+      },
+      {
+        "heading": "Uppdatera när arbetssättet förändras",
+        "content": "Gå igenom driftkortet när ansvar, underlag eller flödets omfattning ändras. Spara vilken version som ersatts och varför. Ta med öppna frågor till nästa avstämning med dem som förvaltar lösningen.\n\n[AI-kartan](/ai-karta) kan användas som startpunkt när ni vill beskriva ett nytt arbetsflöde. Driftkortet hjälper er sedan att formulera vad som behöver lämnas över efter starten. AI-assisterad originalguide med en redaktionell arbetsmall; inga uppmätta besparingar eller garantier om drift anges."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "kartlagg-undantag-fore-automatisering"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Beskriv ert arbetsflöde",
+    "ctaText": "Ta med era rutiner och ansvariga till nästa avgränsning.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Företag som behöver ett praktiskt underlag för ansvar och löpande uppföljning efter att en automation tas i bruk.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "publishedAt": "2026-09-15T18:25:07.572Z",
+      "sourceCheckedAt": "2026-09-15T18:25:07.572Z"
+    },
+    "publishedDate": "2026-09-15",
+    "updatedDate": "2026-09-15"
+  },
+  {
     "slug": "kartlagg-undantag-fore-automatisering",
     "title": "Kartlägg undantagen innan ni automatiserar arbetsflödet",
     "metaTitle": "Kartlägg undantagen innan ni automatiserar arbetsflödet",
