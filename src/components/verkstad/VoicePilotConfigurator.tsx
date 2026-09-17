@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { ArrowRight, CheckCircle2, PhoneForwarded, Sparkles } from "lucide-react";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
@@ -44,6 +45,7 @@ const labelStyle = {
 
 export default function VoicePilotConfigurator() {
   const { open } = useContactModal();
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
   const [vertical, setVertical] = useState<VerticalKey>("trafikskola");
   const [company, setCompany] = useState("");
   const [openingHours, setOpeningHours] = useState("Vardagar 08:00–17:00");
@@ -51,6 +53,21 @@ export default function VoicePilotConfigurator() {
   const [handoffNumber, setHandoffNumber] = useState("");
   const [faq, setFaq] = useState("");
   const [goal, setGoal] = useState("Svara på vanliga frågor och skapa ett komplett bokningsunderlag");
+
+  useEffect(() => {
+    const pricing = document.getElementById("priser");
+    if (!pricing?.parentElement) return;
+
+    const slot = document.createElement("div");
+    slot.dataset.voicePilotSlot = "true";
+    pricing.parentElement.insertBefore(slot, pricing);
+    setPortalTarget(slot);
+
+    return () => {
+      setPortalTarget(null);
+      slot.remove();
+    };
+  }, []);
 
   const selected = VERTICALS[vertical];
   const preview = useMemo(
@@ -96,82 +113,88 @@ export default function VoicePilotConfigurator() {
     });
   };
 
-  return (
-    <section className="vk-section" id="voice-pilot">
-      <div className="vk-wrap">
-        <p className="vk-mono">Bygg pilotunderlaget direkt</p>
-        <h2 style={{ marginTop: 14, maxWidth: "20ch" }}>
-          Se hur ett första <span style={{ fontFamily: "'Fraunces', Georgia, serif", fontStyle: "italic", color: "var(--gran)" }}>samtalsflöde</span> kan se ut.
-        </h2>
-        <p style={{ marginTop: 16, maxWidth: "72ch", color: "#3E444B", lineHeight: 1.7 }}>
-          Det här konfigurerar ett pilotunderlag – inte ett live-telefonnummer. Inget kopplas till telefoni, bokningssystem eller AI-tjänst förrän flödet har granskats och godkänts.
-        </p>
+  if (!portalTarget) return null;
 
-        <div style={{ display: "grid", gap: 24, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", marginTop: 34 }}>
-          <div style={{ border: "1px solid var(--linje)", borderRadius: 16, background: "#fff", padding: 24 }}>
-            <div style={{ display: "grid", gap: 16 }}>
-              <label style={labelStyle}>
-                Bransch
-                <select value={vertical} onChange={(event) => setVertical(event.target.value as VerticalKey)} style={inputStyle}>
-                  {Object.entries(VERTICALS).map(([value, item]) => (
-                    <option key={value} value={value}>{item.label}</option>
-                  ))}
-                </select>
-              </label>
-              <label style={labelStyle}>
-                Företag
-                <input value={company} onChange={(event) => setCompany(event.target.value)} placeholder="Företagsnamn" style={inputStyle} maxLength={120} />
-              </label>
-              <label style={labelStyle}>
-                Vad ska receptionisten främst lösa?
-                <textarea value={goal} onChange={(event) => setGoal(event.target.value)} rows={3} style={{ ...inputStyle, resize: "vertical" }} maxLength={500} />
-              </label>
-              <label style={labelStyle}>
-                Öppettider
-                <input value={openingHours} onChange={(event) => setOpeningHours(event.target.value)} style={inputStyle} maxLength={200} />
-              </label>
-              <label style={labelStyle}>
-                Bokningslänk, om ni har en
-                <input value={bookingUrl} onChange={(event) => setBookingUrl(event.target.value)} placeholder="https://…" style={inputStyle} maxLength={300} />
-              </label>
-              <label style={labelStyle}>
-                Nummer för mänsklig överlämning, valfritt
-                <input value={handoffNumber} onChange={(event) => setHandoffNumber(event.target.value)} placeholder="07… / växel" style={inputStyle} maxLength={80} />
-              </label>
-              <label style={labelStyle}>
-                Vanliga frågor eller viktig kontext
-                <textarea value={faq} onChange={(event) => setFaq(event.target.value)} rows={4} placeholder="Priser, regler, vad AI:n aldrig får lova…" style={{ ...inputStyle, resize: "vertical" }} maxLength={1200} />
-              </label>
-            </div>
-          </div>
+  return createPortal(
+    <>
+      <hr className="vk-hair" />
+      <section className="vk-section" id="voice-pilot">
+        <div className="vk-wrap">
+          <p className="vk-mono">Bygg pilotunderlaget direkt</p>
+          <h2 style={{ marginTop: 14, maxWidth: "20ch" }}>
+            Se hur ett första <span style={{ fontFamily: "'Fraunces', Georgia, serif", fontStyle: "italic", color: "var(--gran)" }}>samtalsflöde</span> kan se ut.
+          </h2>
+          <p style={{ marginTop: 16, maxWidth: "72ch", color: "#3E444B", lineHeight: 1.7 }}>
+            Det här konfigurerar ett pilotunderlag – inte ett live-telefonnummer. Inget kopplas till telefoni, bokningssystem eller AI-tjänst förrän flödet har granskats och godkänts.
+          </p>
 
-          <div style={{ border: "1.5px solid var(--gran)", borderRadius: 16, background: "#fff", padding: 24, alignSelf: "start" }}>
-            <p className="vk-mono" style={{ color: "var(--gran)" }}>Förhandsvisning · {selected.label}</p>
-            <div style={{ marginTop: 18, display: "grid", gap: 13 }}>
-              {preview.map((line) => (
-                <div key={line} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 15, lineHeight: 1.6, color: "#3E444B" }}>
-                  <CheckCircle2 size={17} style={{ color: "var(--gran)", flexShrink: 0, marginTop: 3 }} />
-                  <span>{line}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 22, padding: 16, borderRadius: 12, background: "var(--dimma)" }}>
-              <div style={{ display: "flex", gap: 10, alignItems: "center", fontWeight: 700 }}>
-                <PhoneForwarded size={18} /> Säker pilotprincip
+          <div style={{ display: "grid", gap: 24, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", marginTop: 34 }}>
+            <div style={{ border: "1px solid var(--linje)", borderRadius: 16, background: "#fff", padding: 24 }}>
+              <div style={{ display: "grid", gap: 16 }}>
+                <label style={labelStyle}>
+                  Bransch
+                  <select value={vertical} onChange={(event) => setVertical(event.target.value as VerticalKey)} style={inputStyle}>
+                    {Object.entries(VERTICALS).map(([value, item]) => (
+                      <option key={value} value={value}>{item.label}</option>
+                    ))}
+                  </select>
+                </label>
+                <label style={labelStyle}>
+                  Företag
+                  <input value={company} onChange={(event) => setCompany(event.target.value)} placeholder="Företagsnamn" style={inputStyle} maxLength={120} />
+                </label>
+                <label style={labelStyle}>
+                  Vad ska receptionisten främst lösa?
+                  <textarea value={goal} onChange={(event) => setGoal(event.target.value)} rows={3} style={{ ...inputStyle, resize: "vertical" }} maxLength={500} />
+                </label>
+                <label style={labelStyle}>
+                  Öppettider
+                  <input value={openingHours} onChange={(event) => setOpeningHours(event.target.value)} style={inputStyle} maxLength={200} />
+                </label>
+                <label style={labelStyle}>
+                  Bokningslänk, om ni har en
+                  <input value={bookingUrl} onChange={(event) => setBookingUrl(event.target.value)} placeholder="https://…" style={inputStyle} maxLength={300} />
+                </label>
+                <label style={labelStyle}>
+                  Nummer för mänsklig överlämning, valfritt
+                  <input value={handoffNumber} onChange={(event) => setHandoffNumber(event.target.value)} placeholder="07… / växel" style={inputStyle} maxLength={80} />
+                </label>
+                <label style={labelStyle}>
+                  Vanliga frågor eller viktig kontext
+                  <textarea value={faq} onChange={(event) => setFaq(event.target.value)} rows={4} placeholder="Priser, regler, vad AI:n aldrig får lova…" style={{ ...inputStyle, resize: "vertical" }} maxLength={1200} />
+                </label>
               </div>
-              <p style={{ marginTop: 8, fontSize: 14, lineHeight: 1.6, color: "#3E444B" }}>
-                Assistenten ska alltid kunna lämna över eller skapa ett ärende. Direktbokning, betalning och andra skrivande integrationer aktiveras först efter separat verifiering.
+            </div>
+
+            <div style={{ border: "1.5px solid var(--gran)", borderRadius: 16, background: "#fff", padding: 24, alignSelf: "start" }}>
+              <p className="vk-mono" style={{ color: "var(--gran)" }}>Förhandsvisning · {selected.label}</p>
+              <div style={{ marginTop: 18, display: "grid", gap: 13 }}>
+                {preview.map((line) => (
+                  <div key={line} style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 15, lineHeight: 1.6, color: "#3E444B" }}>
+                    <CheckCircle2 size={17} style={{ color: "var(--gran)", flexShrink: 0, marginTop: 3 }} />
+                    <span>{line}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: 22, padding: 16, borderRadius: 12, background: "var(--dimma)" }}>
+                <div style={{ display: "flex", gap: 10, alignItems: "center", fontWeight: 700 }}>
+                  <PhoneForwarded size={18} /> Säker pilotprincip
+                </div>
+                <p style={{ marginTop: 8, fontSize: 14, lineHeight: 1.6, color: "#3E444B" }}>
+                  Assistenten ska alltid kunna lämna över eller skapa ett ärende. Direktbokning, betalning och andra skrivande integrationer aktiveras först efter separat verifiering.
+                </p>
+              </div>
+              <button onClick={startPilot} className="vk-btn vk-btn-primary" style={{ marginTop: 22, width: "100%", justifyContent: "center" }}>
+                <Sparkles size={16} /> Skicka pilotunderlaget <ArrowRight size={16} />
+              </button>
+              <p className="vk-mono" style={{ marginTop: 12, color: "var(--granbark-mut)", lineHeight: 1.5 }}>
+                Öppnar befintligt kontaktflöde med underlaget förifyllt. Inget samtal skickas automatiskt.
               </p>
             </div>
-            <button onClick={startPilot} className="vk-btn vk-btn-primary" style={{ marginTop: 22, width: "100%", justifyContent: "center" }}>
-              <Sparkles size={16} /> Skicka pilotunderlaget <ArrowRight size={16} />
-            </button>
-            <p className="vk-mono" style={{ marginTop: 12, color: "var(--granbark-mut)", lineHeight: 1.5 }}>
-              Öppnar befintligt kontaktflöde med underlaget förifyllt. Inget samtal skickas automatiskt.
-            </p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>,
+    portalTarget,
   );
 }
