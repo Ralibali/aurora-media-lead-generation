@@ -1,0 +1,68 @@
+name: Aurora Drift uptime pilot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: aurora-drift-uptime
+  cancel-in-progress: true
+
+jobs:
+  uptime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      TARGET_URL: https://auroramedia.se/
+      INCIDENT_TITLE: "Aurora Drift: auroramedia.se unreachable"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check production with retries
+        id: check
+        shell: bash
+        run: |
+          set +e
+          healthy=false
+          last_code="000"
+
+          for attempt in 1 2 3; do
+            last_code="$(curl --location --silent --show-error --max-time 20 --output /tmp/aurora-drift-response --write-out "%{http_code}" "$TARGET_URL")"
+
+            if [[ "$last_code" =~ ^[23][0-9][0-9]$ ]]; then
+              healthy=true
+              break
+            fi
+
+            sleep 10
+          done
+
+          echo "healthy=$healthy" >> "$GITHUB_OUTPUT"
+          echo "status_code=$last_code" >> "$GITHUB_OUTPUT"
+
+      - name: Open one incident when unhealthy
+        if: ${{ steps.check.outputs.healthy }} != 'true'
+        shell: bash
+        run: |
+          existing="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$INCIDENT_TITLE\" in:title" --json number --jq '.[0].number // empty')"
+
+          if [[ -n "$existing" ]]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "Ny kontroll misslyckades. HTTP-status: `${{ steps.check.outputs.status_code }}`. Tid: `$(date -u +'%Y-%m-%dT%H:%M:%SZ')`."
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$INCIDENT_TITLE" --body "Aurora Drift fick ingen frisk respons efter tre försök. Senaste HTTP-status: `${{ steps.check.outputs.status_code }}`. Kontrollera deployment, DNS och upstream-tjänster."
+          fi
+
+      - name: Close incident after recovery
+        if: ${{ steps.check.outputs.healthy }} == 'true'
+        shell: bash
+        run: |
+          existing="$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$INCIDENT_TITLE\" in:title" --json number --jq '.[0].number // empty')"
+
+          if [[ -n "$existing" ]]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "Tjänsten svarar igen med HTTP `${{ steps.check.outputs.status_code }}`. Incidenten stängs automatiskt."
+            gh issue close "$existing" --repo "$GITHUB_REPOSITORY"
+          fi
