@@ -4,6 +4,9 @@ declare global {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
     plausible?: (eventName: string, options?: { props?: Record<string, string | number | boolean> }) => void;
+    umami?: {
+      track: (eventName: string, data?: Record<string, string | number | boolean>) => void;
+    };
   }
 }
 
@@ -26,6 +29,11 @@ export function trackEvent(name: string, params?: Record<string, unknown>): void
     // Plausible is the primary analytics provider on auroramedia.se.
     if (typeof window.plausible === "function") {
       window.plausible(name, { props: plausibleProps(params) });
+    }
+
+    // Aurora Pulse can use a self-hosted Umami instance without changing product code.
+    if (typeof window.umami?.track === "function") {
+      window.umami.track(name, plausibleProps(params));
     }
 
     // Keep GA4 support for environments where a real measurement ID is configured.
