@@ -79,6 +79,7 @@ const AuroraCare = lazy(() => import("./pages/erbjudanden/AuroraCare"));
 const AuroraSight = lazy(() => import("./pages/erbjudanden/AuroraSight"));
 const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));
 const AuroraVoice = lazy(() => import("./pages/erbjudanden/AuroraVoice"));
+const AuroraOps = lazy(() => import("./pages/erbjudanden/AuroraOps"));
 const Tillganglighet = lazy(() => import("./pages/erbjudanden/Tillganglighet"));
 const CookieSamtycke = lazy(() => import("./pages/erbjudanden/CookieSamtycke"));
 // Verktyg-sidorna lazy-loadas: de drar med sig recharts/jspdf och ska inte
@@ -374,6 +375,12 @@ const seoMap: Record<string, SEOConfig> = {
       "Aurora Voice svarar på samtal, chatt och e-post, besvarar vanliga frågor och samlar in bokningsunderlag. Uppsättning från 14 900 kr, drift från 1 995 kr/mån.",
     canonical: "https://auroramedia.se/ai-receptionist",
   },
+  "/aurora-ops": {
+    title: "Automation, analys och managed drift för företag | Aurora Ops",
+    description:
+      "Aurora Ops samlar automationer, analytics, drift och kundkommunikation för svenska småföretag. Fasta paket, tydlig onboarding och löpande övervakning.",
+    canonical: "https://auroramedia.se/aurora-ops",
+  },
   "/tjanster/grafisk-profil": {
     title: "Grafisk profil | Aurora Media AB",
     description:
@@ -600,6 +607,7 @@ const App = () => (
               <Route path="/ai-synlighet" element={<AuroraSight />} />
               <Route path="/lokal-synlighet" element={<AuroraLocal />} />
               <Route path="/ai-receptionist" element={<AuroraVoice />} />
+              <Route path="/aurora-ops" element={<AuroraOps />} />
               <Route path="/webbyra-linkoping" element={<WebbyraLinkoping />} />
               <Route path="/webbbyra-linkoping" element={<Navigate to="/webbyra-linkoping" replace />} />
               <Route path="/blogg" element={<Blog />} />
