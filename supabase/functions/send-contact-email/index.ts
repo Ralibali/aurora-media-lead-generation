@@ -101,6 +101,42 @@ function looksLikeSpam(name: string, message: string): string | null {
 const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
+async function emitAutomationEvent(payload: Record<string, unknown>): Promise<boolean> {
+  const url = Deno.env.get("AURORA_AUTOMATION_WEBHOOK_URL")?.trim();
+  if (!url) return false;
+
+  try {
+    const token = Deno.env.get("AURORA_AUTOMATION_WEBHOOK_TOKEN")?.trim();
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(6000),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify({
+        source: "auroramedia.se",
+        occurredAt: new Date().toISOString(),
+        ...payload,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(
+        "[send-contact-email] automation webhook failed",
+        response.status,
+        (await response.text()).slice(0, 180),
+      );
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("[send-contact-email] automation webhook threw", error);
+    return false;
+  }
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") {
@@ -291,6 +327,21 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    // Automation Pack hook. No-op until AURORA_AUTOMATION_WEBHOOK_URL is configured.
+    // A failed external workflow must never lose a lead or block the contact form.
+    const automationForwarded = await emitAutomationEvent({
+      event: "lead.created",
+      leadId,
+      lead: {
+        name,
+        email,
+        company: company || null,
+        paket,
+        platform: platform || null,
+        leadLabel: leadLabel || null,
+      },
+    });
+
     // Använd den fullständiga lead-etiketten i ämnesraden om den finns,
     // annars fall tillbaka på paket-värdet.
     const subjectLabel = leadLabel || `Intresserad av: ${paket}`;
@@ -320,7 +371,7 @@ Deno.serve(async (req: Request) => {
       console.log("[send-contact-email] RESEND_API_KEY not set – logging only", {
         name, email, company, paket, messageLength: message.length, leadId,
       });
-      return new Response(JSON.stringify({ ok: true, queued: false, leadId }), {
+      return new Response(JSON.stringify({ ok: true, queued: false, leadId, automation_forwarded: automationForwarded }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -354,7 +405,7 @@ Deno.serve(async (req: Request) => {
 
     if (!res?.ok) {
       console.error("[send-contact-email] notification unavailable", res?.status);
-      return new Response(JSON.stringify({ ok: true, leadId, notification_sent: false }), {
+      return new Response(JSON.stringify({ ok: true, leadId, notification_sent: false, automation_forwarded: automationForwarded }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -407,7 +458,7 @@ Deno.serve(async (req: Request) => {
       console.error("[send-contact-email] auto-reply threw", e);
     }
 
-    return new Response(JSON.stringify({ ok: true, leadId }), {
+    return new Response(JSON.stringify({ ok: true, leadId, automation_forwarded: automationForwarded }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
