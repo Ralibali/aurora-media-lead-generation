@@ -154,7 +154,7 @@ Deno.serve(async (req) => {
     if (action === "test_connection") {
       const started = Date.now();
       try {
-        const res = await fetch(`${connector.baseUrl}/v1/health`, {
+        const res = await fetch(`${connector.baseUrl}/health`, {
           method: "GET",
           headers: { Authorization: `Bearer ${connector.token}` },
           signal: AbortSignal.timeout(8_000),
