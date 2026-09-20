@@ -56,6 +56,15 @@ verify_jwt = false
 [functions.admin-commerce-ops]
 verify_jwt = false
 
+[functions.admin-commerce-agent]
+verify_jwt = false
+
+[functions.admin-integrations-hub]
+verify_jwt = false
+
+[functions.admin-coworkers]
+verify_jwt = false
+
 # Stripe-webhook: Stripe skickar ingen JWT. Signaturen verifieras i koden.
 [functions.ai-kontoret-deliver]
 verify_jwt = false
