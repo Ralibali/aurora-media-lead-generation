@@ -23,7 +23,8 @@ function adminAuthorized(req: Request) {
 }
 
 function extractJson(raw: string) {
-  const cleaned = raw.replace(/\`\`\`json\s*/gi, "").replace(/\`\`\`/g, "").trim();
+  const fence = String.fromCharCode(96).repeat(3);
+  const cleaned = raw.replace(fence + "json", "").replaceAll(fence, "").trim();
   const start = cleaned.indexOf("{");
   const end = cleaned.lastIndexOf("}");
   if (start < 0 || end <= start) throw new Error("ai_response_not_json");
