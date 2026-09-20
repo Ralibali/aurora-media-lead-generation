@@ -84,7 +84,7 @@ export default function IntegrationsHub() {
     setAllowlist((selected?.allowed_actions ?? []).join("\n"));
     setRunForm((current) => ({ ...current, action_id: selected?.allowed_actions?.[0] ?? "" }));
     setActions([]);
-  }, [selected?.id]);
+  }, [selected?.id, selected?.allowed_actions]);
 
   const mutate = async (payload: Record<string, unknown>) => {
     setBusy(true);
