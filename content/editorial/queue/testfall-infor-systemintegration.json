@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-09-20T13:27:25.389794+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Earliest 2026-09-22 Europe/Stockholm. Recheck previous article reader flow, current main, complete inventory and live sources before publication. Assign actual publication dates only when publishing.",
+  "sourceReview": {
+    "checkedAt": "2026-09-20T13:27:25.389794+00:00",
+    "status": "current_product_and_inventory_reviewed_recheck_before_publication",
+    "note": "Original editorial work template; no human review, measured result or unsupported product feature claimed."
+  },
+  "article": {
+    "slug": "testfall-infor-systemintegration",
+    "title": "Skriv testfall för systemintegrationen med verksamhetens egna exempel",
+    "metaTitle": "Testfall inför systemintegration – en praktisk mall",
+    "metaDesc": "Beskriv startläge, indata och förväntat resultat för en systemintegration. En arbetsmall som hjälper verksamheten att förbereda en tydlig kontroll.",
+    "category": "AI & automation",
+    "readMinutes": 5,
+    "keyword": "testfall systemintegration verksamhet",
+    "intro": "När två system ska utbyta information behöver någon kunna avgöra om resultatet blev rätt. Ett testfall beskriver ett bestämt utgångsläge och vad ni förväntar er ska hända. Här får verksamheten en mall att fylla i tillsammans med dem som bygger och förvaltar lösningen.",
+    "sections": [
+      {
+        "heading": "Välj ett resultat som går att se",
+        "content": "Börja med en liten del av flödet. Beskriv vad mottagaren ska kunna se eller göra efter att uppgiften har skickats vidare. Undvik att skriva att hela integrationen ska fungera; välj ett resultat som går att kontrollera utan att gissa vad ordet fungerar betyder.\n\nEtt konstruerat exempel är att en nyregistrerad förfrågan ska finnas hos mottagaren med rätt referens och angiven status. Förklara var resultatet ska synas och vem som kan avgöra om innehållet stämmer. Exemplet beskriver en metod för granskning, inte en befintlig funktion hos en viss produkt."
+      },
+      {
+        "heading": "Skriv ned startläget före kontrollen",
+        "content": "Anteckna vilka uppgifter som redan finns och vilken version av flödet som ska prövas. Beskriv om mottagande system ska innehålla en motsvarande post från början eller om den ska saknas. Det hjälper er att skilja en ny överföring från gammal information som redan låg där.\n\nBestäm vilka exempel ni får använda och vilken miljö som är avsedd för kontrollen. Använd godkänt testunderlag. Om ett steg kan skapa en verklig beställning, ett mejl eller någon annan extern åtgärd behöver ansvariga först bestämma hur testet ska avgränsas."
+      },
+      {
+        "heading": "Kopiera den här mallen för varje testfall",
+        "content": "Fyll i ett kort som går att läsa fristående:\n\n- Testfallets namn och vilket behov det gäller.\n- Startläge i avsändande och mottagande system.\n- Underlag eller exempel som ska användas.\n- Händelsen som sätter i gång flödet.\n- Förväntat resultat och var det kontrolleras.\n- Vad som inte ska skapas eller ändras.\n- Vem som utför kontrollen och bedömer svaret.\n- Observerat resultat, datum och nästa steg.\n\nLåt förväntat resultat stå kvar när ni dokumenterar utfallet. Annars blir det svårt att se om det som hände motsvarade planen eller om planen skrevs om efteråt."
+      },
+      {
+        "heading": "Ta med ett exempel som inte går raka vägen",
+        "content": "Välj ett känt undantag ur verksamhetens arbete. Det kan vara att en nödvändig referens saknas eller att uppgiften redan finns hos mottagaren. Be ansvarig utvecklare förklara vilken hantering lösningen är tänkt att ha och skriv hur ni kan observera den.\n\nUtgå från [undantagslistan inför automatisering](/blogg/kartlagg-undantag-fore-automatisering). Om det saknas ett beslut om vad som ska hända är det en öppen verksamhetsfråga. Markera den som sådan, i stället för att låta den som kör kontrollen hitta på det förväntade beteendet."
+      },
+      {
+        "heading": "Spara vad ni faktiskt observerade",
+        "content": "Skriv vilket testfall som kördes, när det gjordes och vilket resultat som visades. Spara en relevant hänvisning som de ansvariga får ta del av. Skilj observationen från din tolkning av orsaken: att en uppgift saknas är en observation, medan förklaringen kan behöva undersökas.\n\nOm ord eller statusvärden är oklara, gå tillbaka till [den gemensamma ordlistan](/blogg/gemensam-ordlista-infor-systemintegration). Förtydliga betydelsen innan testfallet bedöms igen. Ändras själva förväntningen ska både den nya formuleringen och skälet till ändringen gå att följa."
+      },
+      {
+        "heading": "Bestäm vad som behövs för nästa beslut",
+        "content": "Sammanställ vilka fall som motsvarade förväntningarna, vilka som avvek och vilka som ännu inte kunde köras. Låt ansvariga avgöra vilka frågor som måste besvaras innan nästa steg. Ett godkänt exempel är ett underlag i bedömningen; det säger inte att alla tänkbara situationer är täckta.\n\nBörja med [AI-kartan](/ai-karta) om ni först behöver beskriva arbetsflödet och dess praktiska behov. Ta sedan med testfallen till dialogen om lösningen. AI-assisterad originalguide med en redaktionell arbetsmall; inga testresultat, leveranstider eller effekter för ett verkligt kundprojekt påstås."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "gemensam-ordlista-infor-systemintegration",
+      "kartlagg-undantag-fore-automatisering"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Beskriv flödet som behöver fungera",
+    "ctaText": "Samla behov och exempel inför dialogen om er lösning.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Verksamhetsteam som ska formulera kontrollerbara testfall för överföring mellan system; skilt från begreppsdefinitioner, undantagsinventering och pilotens affärsbeslut.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ]
+    }
+  }
+}
