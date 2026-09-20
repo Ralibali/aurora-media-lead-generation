@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://auroramedia.se/blogg/gemensam-ordlista-infor-systemintegration</loc>
+    <lastmod>2026-09-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://auroramedia.se/blogg/driftkort-for-automation-ansvar-uppfoljning</loc>
     <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
