@@ -127,17 +127,17 @@ export default function AdminDashboard() {
           <div style={{ marginTop: 22, ...card, background: "#14171A", color: "#fff", borderColor: "#14171A" }}>
             <p className="vk-mono" style={{ opacity: 0.55, margin: 0 }}>Extern analys</p>
             <p style={{ marginTop: 6, fontSize: 15 }}>
-              Plausible visar besökare, källor och toppsidor i realtid.
+              Google Analytics 4 visar besökare, källor och toppsidor i realtid.
             </p>
             <div style={{ marginTop: 12, display: "flex", gap: 10, flexWrap: "wrap" }}>
               <a
-                href="https://plausible.io/auroramedia.se"
+                href="https://analytics.google.com/"
                 target="_blank"
                 rel="noreferrer"
                 className="vk-btn vk-btn-primary"
                 style={{ textDecoration: "none" }}
               >
-                Öppna Plausible <ExternalLink size={14} />
+                Öppna Google Analytics 4 <ExternalLink size={14} />
               </a>
               <a
                 href="https://search.google.com/search-console"

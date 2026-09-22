@@ -1,3 +1,4 @@
+import AnalyticsConsent from './components/AnalyticsConsent';
 import editorialArticles from "@/content/editorial/articles.json";
 import { ContactModalProvider } from "@/components/ContactModal";
 import { SEO } from "@/components/SEO";
@@ -568,6 +569,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AnalyticsConsent />
         <RouteSEO />
         <ContactModalProvider>
           <div className="min-h-screen">
