@@ -23,6 +23,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   scan:
@@ -41,6 +42,13 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Kör Accessibility Guard
         run: npm run a11y:guard
+      - name: Synka Aurora Care-åtgärdskö
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          REPORT="$(find artifacts/accessibility -name report.json -type f | sort | tail -1)"
+          node scripts/sync-accessibility-issues.mjs "$REPORT"
       - name: Spara rapporter
         if: always()
         uses: actions/upload-artifact@v4
