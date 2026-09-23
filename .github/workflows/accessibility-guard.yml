@@ -1,6 +1,12 @@
 name: Accessibility Guard
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/accessibility-guard.yml"
+      - "scripts/accessibility-guard.mjs"
+      - "config/accessibility-sites.json"
   workflow_dispatch:
     inputs:
       url:

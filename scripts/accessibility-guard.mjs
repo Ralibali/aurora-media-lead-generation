@@ -191,6 +191,10 @@ process.stdout.write(`Report: ${path.relative(ROOT, outDir)}\n`);
 if (process.env.GITHUB_STEP_SUMMARY) {
   await fs.appendFile(process.env.GITHUB_STEP_SUMMARY, markdownReport(report) + "\n");
 }
+if (totals.errors > 0) {
+  process.stderr.write(`Accessibility Guard failed to scan ${totals.errors} page(s).\n`);
+  process.exitCode = 1;
+}
 if (process.env.A11Y_FAIL_ON_CRITICAL === "true" && totals.critical > 0) {
   process.exitCode = 1;
 }
