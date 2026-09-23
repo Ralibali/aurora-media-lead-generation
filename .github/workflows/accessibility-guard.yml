@@ -1,0 +1,45 @@
+name: Accessibility Guard
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Valfri publik URL för en engångsscan. Tomt = konfigurerade sajter."
+        required: false
+        type: string
+      fail_on_critical:
+        description: "Markera körningen som misslyckad om kritiska axe-fynd finns."
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    - cron: "15 5 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      A11Y_URL: ${{ inputs.url }}
+      A11Y_FAIL_ON_CRITICAL: ${{ inputs.fail_on_critical || 'false' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Kör Accessibility Guard
+        run: npm run a11y:guard
+      - name: Spara rapporter
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-guard-${{ github.run_number }}
+          path: artifacts/accessibility/
+          if-no-files-found: warn
+          retention-days: 90

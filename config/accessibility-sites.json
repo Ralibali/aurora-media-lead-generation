@@ -1,0 +1,20 @@
+[
+  {
+    "id": "aurora-media",
+    "name": "Aurora Media",
+    "baseUrl": "https://auroramedia.se",
+    "paths": ["/", "/tjanster", "/priser", "/kontakt"]
+  },
+  {
+    "id": "updro",
+    "name": "Updro",
+    "baseUrl": "https://updro.se",
+    "paths": ["/", "/priser", "/for-byraer"]
+  },
+  {
+    "id": "honsgarden",
+    "name": "Hönsgården",
+    "baseUrl": "https://honsgarden.se",
+    "paths": ["/", "/login", "/blogg"]
+  }
+]
