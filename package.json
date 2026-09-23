@@ -15,7 +15,8 @@
     "test:watch": "vitest",
     "check:visual": "node scripts/visual-regression.mjs",
     "editorial:check": "node scripts/editorial-check.mjs",
-    "prebuild": "npm run editorial:check"
+    "prebuild": "npm run editorial:check",
+    "a11y:guard": "node scripts/accessibility-guard.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
