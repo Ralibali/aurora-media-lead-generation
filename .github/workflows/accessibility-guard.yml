@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/accessibility-guard.yml"
       - "scripts/accessibility-guard.mjs"
+      - "scripts/sync-accessibility-issues.mjs"
       - "config/accessibility-sites.json"
   workflow_dispatch:
     inputs:
