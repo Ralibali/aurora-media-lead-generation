@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Link2, Play, Plus, RefreshCw, Search, ShieldCheck, X } from "lucide-react";
+import { Check, Link2, MapPin, Play, Plus, RefreshCw, Search, ShieldCheck, X } from "lucide-react";
 import AdminShell, { adminFetch, AdminStatus } from "./AdminShell";
 
 type Connection = {
@@ -79,6 +79,10 @@ export default function IntegrationsHub() {
     () => data?.connections.find((connection) => connection.id === selectedId) ?? null,
     [data, selectedId],
   );
+  const localConnection = useMemo(
+    () => data?.connections.find((connection) => connection.service === "google_business_profile") ?? null,
+    [data],
+  );
 
   useEffect(() => {
     setAllowlist((selected?.allowed_actions ?? []).join("\n"));
@@ -157,6 +161,44 @@ export default function IntegrationsHub() {
           <span className="vk-mono" style={{ alignSelf: "start", fontSize: 11, color: data?.configured ? "#2D6A4F" : "#9A6A19" }}>
             {data?.configured ? "RUNTIME KONFIGURERAD" : "VÄNTAR PÅ OPENCONNECTOR_BASE_URL + TOKEN"}
           </span>
+        </div>
+
+        <div style={{ marginTop: 18, border: "1px solid #2D6A4F33", borderRadius: 12, padding: 14, background: "#F2F8F4" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 10 }}>
+              <MapPin size={18} style={{ color: "#2D6A4F", marginTop: 2 }} />
+              <div>
+                <strong style={{ fontSize: 13 }}>Aurora Local · Google Business Profile</strong>
+                <p style={{ margin: "4px 0 0", maxWidth: 700, fontSize: 12, lineHeight: 1.6, color: "var(--granbark-mut)" }}>
+                  Förbered en separat GBP-anslutning för profiler, recensioner och performance-data. Presetet
+                  lägger inte till några skrivande rättigheter. Skapa anslutningen, verifiera providern och
+                  använd därefter “Upptäck actions” innan du väljer exakt allowlist.
+                </p>
+              </div>
+            </div>
+            {localConnection ? (
+              <button
+                type="button"
+                className="vk-btn"
+                onClick={() => setSelectedId(localConnection.id)}
+              >
+                <ShieldCheck size={13} /> {localConnection.status === "connected" ? "Öppna GBP-anslutning" : "Fortsätt konfigurera"}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="vk-btn vk-btn-primary"
+                onClick={() => setCreateForm({
+                  name: "Aurora Local · Google Business Profile",
+                  service: "google_business_profile",
+                  connection_alias: "default",
+                  allowed_actions: "",
+                })}
+              >
+                <Plus size={13} /> Förbered Aurora Local
+              </button>
+            )}
+          </div>
         </div>
 
         <form
