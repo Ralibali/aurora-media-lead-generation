@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-09-25T10:06:46.303229+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Earliest 2026-09-27, and only after a fresh previous-publication reader check, current main, complete published inventory and current primary-source review. Keep unpublished until all checks pass; assign actual publication dates at release. Set both publishedDate and updatedDate to the actual release date, as required by the native schema.",
+  "sourceReview": {
+    "checkedAt": "2026-09-25T10:06:46.303229+00:00",
+    "publishedInventoryReviewed": 35,
+    "distinctIntent": "Beslutsunderlag för att avsluta återkommande manuella moment efter en verifierad automation; skilt från tekniska testfall, integration och pilotmätning.",
+    "note": "Owned product entry reviewed; article is an original procedural template. No invented outcomes, prices or automatic product features. Fresh source review required before publication."
+  },
+  "article": {
+    "slug": "avsluta-manuell-rutin-efter-automatisering",
+    "title": "Bestäm när en manuell rutin kan avslutas efter automatisering",
+    "metaTitle": "Bestäm när en manuell rutin kan avslutas efter automatisering",
+    "metaDesc": "Samla beslut, beroenden och ansvar innan en manuell rutin avslutas efter automatisering. En arbetsmall för verksamhetens kontrollerade övergång.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "avsluta manuell rutin efter automatisering",
+    "intro": "Ett automatiserat flöde kan vara infört samtidigt som personalen fortsätter göra samma arbete manuellt. Det kan vara en medveten övergång, men det behöver vara tydligt vem som bestämmer när rutinen ändras. Ett kort beslutsunderlag hjälper verksamheten att skilja tillfällig parallell hantering från ett fortsatt krav på manuell kontroll.\n",
+    "sections": [
+      {
+        "heading": "Beskriv den manuella uppgiften exakt",
+        "content": "Välj ett avgränsat moment. Skriv vad personen gör, vad som startar uppgiften och vilket resultat nästa person behöver. Undvik att kalla hela arbetssättet gammalt om bara en liten del av det har fått en ny lösning. Kontroll och bedömning kan fortfarande behövas även om själva kopieringen har förändrats.\n\nUtgå från [kartläggningen av dubbelregistrering](/blogg/kartlagg-dubbelregistrering-infor-integration). Markera vilka moment som faktiskt omfattas av den nya lösningen och vilka som uttryckligen ligger kvar hos verksamheten. Oklara gränser behöver redas ut innan instruktionen ändras."
+      },
+      {
+        "heading": "Bestäm vilket underlag beslutet kräver",
+        "content": "Be de ansvariga ange vilka kontroller, observationer och besked som ska finnas före ett beslut. Hänvisa till konkreta [testfall för systemintegrationen](/blogg/testfall-infor-systemintegration) och dokumentera även sådant som inte har kunnat kontrolleras. Ett enstaka exempel visar inte hur alla situationer kommer att hanteras.\n\nSkriv också vilka kända undantag som kräver fortsatt manuell hantering. Beslutet kan behöva gälla vissa uppgifter eller situationer, snarare än hela flödet på en gång. Den avgränsningen ska gå att förstå av den som utför arbetet i vardagen."
+      },
+      {
+        "heading": "Använd ett beslutsblad",
+        "content": "Samla följande uppgifter på ett ställe:\n\n- Den manuella rutin som berörs.\n- Delar som föreslås upphöra respektive finnas kvar.\n- Underlag som de ansvariga ska granska.\n- Kända undantag och obesvarade frågor.\n- Vem som får fatta beslutet.\n- När en beslutad ändring börjar gälla.\n- Vem som informerar berörda och ändrar instruktionerna.\n\nHåll förslaget skilt från själva beslutet. Ett planerat datum är inget besked till personalen om att sluta utföra en uppgift. Hänvisa till det godkända beslutet när den nya instruktionen delas."
+      },
+      {
+        "heading": "Gör hanteringen av problem tydlig",
+        "content": "Bestäm vem användaren kontaktar när det nya flödet inte ger det förväntade underlaget. De ansvariga behöver ange vilka tillfälliga arbetssätt som får användas och hur eventuella kompletteringar ska följas upp. Improviserad parallell registrering kan annars bli svår att skilja från ordinarie arbete.\n\nDokumentera detta tillsammans med lösningens [driftkort för ansvar och uppföljning](/blogg/driftkort-for-automation-ansvar-uppfoljning). Be den tekniskt ansvariga och verksamhetsansvariga förklara sina respektive delar. Mallen är inget tekniskt återställningsförfarande."
+      },
+      {
+        "heading": "Följ upp den ändrade rutinen",
+        "content": "Bestäm när ni ska fråga dem som använder flödet vad som fortfarande kräver manuella steg. Samla konkreta exempel och skilj en ny förbättringsidé från ett problem med den beslutade hanteringen. Uppdatera instruktionerna när ansvariga lämnat ett nytt besked.\n\nBörja med [AI-kartan](/ai-karta) om ni behöver beskriva arbetsflödet och dess manuella delar. Ta med beslutsbladet i samtalet om införande och förvaltning. AI-assisterad originalguide med en egen arbetsmall; inga tidsvinster eller resultat för verkliga kundprojekt påstås."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "kartlagg-dubbelregistrering-infor-integration",
+      "testfall-infor-systemintegration"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Planera nästa steg i verksamhetens automatisering",
+    "ctaText": "Ta med rutinen och de öppna frågorna som underlag för samtalet.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Beslutsunderlag för att avsluta återkommande manuella moment efter en verifierad automation; skilt från tekniska testfall, integration och pilotmätning.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-09-25T10:06:46.303229+00:00"
+    }
+  }
+}
