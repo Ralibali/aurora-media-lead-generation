@@ -74,6 +74,32 @@ const Integritetspolicy = () => {
                 </div>
               </Reveal>
 
+              <Reveal delay={0.22}>
+                <div
+                  id="ai-kontoret"
+                  style={{
+                    marginTop: 24,
+                    padding: "24px 28px",
+                    border: "1px dashed var(--gran)",
+                    borderRadius: 14,
+                    background: "#F7F4EC",
+                  }}
+                >
+                  <p className="vk-mono" style={{ color: "var(--gran)" }}>
+                    UTKAST · inte juridiskt granskat
+                  </p>
+                  <h2 style={{ fontSize: 20, marginTop: 10, marginBottom: 10 }}>
+                    AI-KONTORET – köp och leverans
+                  </h2>
+                  <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--granbark)", margin: 0 }}>
+                    Vid köp av AI-KONTORET (digital PDF) sparar vi köparens e-postadress,
+                    Stripe-session-id och en leveranslogg för att fullgöra avtalet och uppfylla
+                    bokföringsskyldighet. Betalningen hanteras av Stripe. Vi lagrar inte
+                    kortuppgifter. Det här stycket är ett utkast och har inte granskats av jurist.
+                  </p>
+                </div>
+              </Reveal>
+
               <div style={{ marginTop: 48 }}>
                 {SECTIONS.map((s, i) => (
                   <Reveal key={s.h} delay={Math.min(i * 0.03, 0.2)}>
