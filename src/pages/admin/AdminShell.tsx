@@ -140,7 +140,7 @@ const NAV = [
   { to: "/admin/email", label: "E-post", icon: Mail },
   { to: "/admin/faq-rapport", label: "FAQ-rapport", icon: BarChart3 },
   { to: "/admin/prospektering", label: "Prospektering", icon: Radar },
-  { to: "/admin/whatsapp", label: "WhatsApp", icon: MessageCircle },
+  { to: "/admin/whatsapp", label: "Aurora Inbox", icon: MessageCircle },
   { to: "/admin/commerce", label: "Commerce Ops", icon: ShoppingBag },
   { to: "/admin/commerce-agent", label: "Commerce Agent", icon: PackageSearch },
   { to: "/admin/accessibility", label: "Accessibility Care", icon: Accessibility },
