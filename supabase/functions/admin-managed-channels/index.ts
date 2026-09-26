@@ -13,6 +13,10 @@ const clean = (value: unknown, max: number) => String(value ?? "").trim().slice(
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const E164 = /^\+[1-9][0-9]{7,14}$/;
 const ENV_KEY = /^[A-Z][A-Z0-9_]{2,79}$/;
+const PLANS = new Set(["starter", "team", "agency"]);
+const SUBSCRIPTION_STATUSES = new Set(["trialing", "active", "past_due", "paused", "canceled"]);
+const ONBOARDING_STATUSES = new Set(["draft", "configuring", "ready", "live", "paused"]);
+const PIPELINE_STAGES = new Set(["new", "qualified", "followup", "meeting", "customer", "lost"]);
 
 type Workspace = {
   id: string;
@@ -20,6 +24,9 @@ type Workspace = {
   base_url: string;
   credential_env_name: string;
   active: boolean;
+  plan?: string;
+  subscription_status?: string;
+  onboarding_status?: string;
 };
 
 function adminAuthorized(req: Request) {
@@ -78,13 +85,14 @@ Deno.serve(async (req) => {
   const action = clean(body.action || "list", 40);
 
   const list = async () => {
-    const [workspaces, outbox] = await Promise.all([
+    const [workspaces, outbox, pipeline] = await Promise.all([
       db.from("managed_channel_workspaces").select("*").order("created_at", { ascending: true }),
       db.from("managed_channel_outbox").select("*").order("created_at", { ascending: false }).limit(100),
+      db.from("managed_channel_pipeline").select("*").order("updated_at", { ascending: false }).limit(250),
     ]);
-    const error = workspaces.error || outbox.error;
+    const error = workspaces.error || outbox.error || pipeline.error;
     if (error) throw error;
-    return { workspaces: workspaces.data ?? [], outbox: outbox.data ?? [] };
+    return { workspaces: workspaces.data ?? [], outbox: outbox.data ?? [], pipeline: pipeline.data ?? [] };
   };
 
   const getWorkspace = async (id: unknown) => {
@@ -103,16 +111,97 @@ Deno.serve(async (req) => {
       const name = clean(body.name, 160);
       const credentialEnvName = clean(body.credential_env_name || "WACRM_API_KEY", 80);
       if (!name || !ENV_KEY.test(credentialEnvName)) return json({ error: "invalid_workspace" }, 400);
+      const plan = clean(body.plan || "starter", 20);
+      if (!PLANS.has(plan)) return json({ error: "invalid_plan" }, 400);
+      const defaults = plan === "agency"
+        ? { monthly_price_sek: 2495, included_seats: 15 }
+        : plan === "team"
+          ? { monthly_price_sek: 1295, included_seats: 5 }
+          : { monthly_price_sek: 695, included_seats: 1 };
       const { error } = await db.from("managed_channel_workspaces").insert({
         name,
+        customer_name: clean(body.customer_name || name, 200) || name,
         base_url: normalizeBaseUrl(body.base_url),
         credential_env_name: credentialEnvName,
+        plan,
+        ...defaults,
+        trial_ends_at: new Date(Date.now() + 14 * 86_400_000).toISOString(),
+        onboarding_status: "draft",
+        subscription_status: "trialing",
       });
       if (error) throw error;
       return json(await list(), 201);
     }
 
     const workspace = await getWorkspace(body.workspace_id);
+
+    if (action === "update_commercial") {
+      const plan = clean(body.plan ?? workspace.plan ?? "starter", 20);
+      const subscriptionStatus = clean(body.subscription_status ?? workspace.subscription_status ?? "trialing", 30);
+      const onboardingStatus = clean(body.onboarding_status ?? workspace.onboarding_status ?? "draft", 30);
+      const price = Math.round(Number(body.monthly_price_sek));
+      const seats = Math.round(Number(body.included_seats));
+      if (!PLANS.has(plan) || !SUBSCRIPTION_STATUSES.has(subscriptionStatus) || !ONBOARDING_STATUSES.has(onboardingStatus)) {
+        return json({ error: "invalid_commercial_status" }, 400);
+      }
+      if (!Number.isFinite(price) || price < 0 || price > 100000 || !Number.isFinite(seats) || seats < 1 || seats > 100) {
+        return json({ error: "invalid_commercial_numbers" }, 400);
+      }
+      const trialEndsAtRaw = clean(body.trial_ends_at, 80);
+      const trialEndsAt = trialEndsAtRaw ? new Date(trialEndsAtRaw) : null;
+      if (trialEndsAt && !Number.isFinite(trialEndsAt.getTime())) return json({ error: "invalid_trial_end" }, 400);
+      const { error } = await db.from("managed_channel_workspaces").update({
+        customer_name: clean(body.customer_name, 200) || null,
+        plan,
+        monthly_price_sek: price,
+        included_seats: seats,
+        subscription_status: subscriptionStatus,
+        onboarding_status: onboardingStatus,
+        trial_ends_at: trialEndsAt ? trialEndsAt.toISOString() : null,
+        commercial_notes: clean(body.commercial_notes, 2000) || null,
+        updated_at: new Date().toISOString(),
+      }).eq("id", workspace.id);
+      if (error) throw error;
+      return json(await list());
+    }
+
+    if (action === "upsert_pipeline") {
+      const conversationId = clean(body.provider_conversation_id, 300);
+      if (!conversationId) return json({ error: "conversation_id_required" }, 400);
+      const rawPhone = clean(body.phone, 30).replace(/[\s()-]/g, "");
+      const phone = rawPhone && E164.test(rawPhone) ? rawPhone : null;
+      const now = new Date().toISOString();
+      const { error } = await db.from("managed_channel_pipeline").upsert({
+        workspace_id: workspace.id,
+        provider_conversation_id: conversationId,
+        contact_name: clean(body.contact_name, 200) || null,
+        phone,
+        company: clean(body.company, 200) || null,
+        last_message: clean(body.last_message, 4000) || null,
+        last_provider_update_at: now,
+        updated_at: now,
+      }, { onConflict: "workspace_id,provider_conversation_id" });
+      if (error) throw error;
+      return json(await list(), 201);
+    }
+
+    if (action === "update_pipeline") {
+      const pipelineId = clean(body.pipeline_id, 80);
+      const stage = clean(body.stage, 30);
+      if (!UUID.test(pipelineId) || !PIPELINE_STAGES.has(stage)) return json({ error: "invalid_pipeline_update" }, 400);
+      const followupRaw = clean(body.followup_at, 80);
+      const followup = followupRaw ? new Date(followupRaw) : null;
+      if (followup && !Number.isFinite(followup.getTime())) return json({ error: "invalid_followup" }, 400);
+      const { data, error } = await db.from("managed_channel_pipeline").update({
+        stage,
+        owner_name: clean(body.owner_name, 160) || null,
+        followup_at: followup ? followup.toISOString() : null,
+        updated_at: new Date().toISOString(),
+      }).eq("id", pipelineId).eq("workspace_id", workspace.id).select("id").maybeSingle();
+      if (error) throw error;
+      if (!data) return json({ error: "pipeline_item_not_found" }, 404);
+      return json(await list());
+    }
 
     if (action === "verify") {
       try {

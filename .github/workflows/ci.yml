@@ -37,4 +37,9 @@ jobs:
         run: exit 1
       - run: npm run typecheck
       - run: npm run test
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Check Aurora Inbox edge function
+        run: deno check supabase/functions/admin-managed-channels/index.ts
       - run: npm run build
