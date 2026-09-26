@@ -225,7 +225,7 @@ export default function ManagedChannels() {
     });
   };
 
-  const usePlanDefaults = (plan: InboxPlan) => {
+  const applyPlanDefaults = (plan: InboxPlan) => {
     const preset = PLAN_DEFAULTS[plan];
     setCommercialForm((current) => ({
       ...current,
@@ -358,7 +358,7 @@ export default function ManagedChannels() {
                   </label>
                   <label style={{ fontSize: 11 }}>Paket
                     <select style={{ ...input, marginTop: 4 }} value={commercialForm.plan}
-                      onChange={(event) => usePlanDefaults(event.target.value as InboxPlan)}>
+                      onChange={(event) => applyPlanDefaults(event.target.value as InboxPlan)}>
                       {(Object.keys(PLAN_DEFAULTS) as InboxPlan[]).map((plan) => (
                         <option key={plan} value={plan}>{PLAN_DEFAULTS[plan].label}</option>
                       ))}
