@@ -144,6 +144,7 @@ const NAV = [
   { to: "/admin/commerce", label: "Commerce Ops", icon: ShoppingBag },
   { to: "/admin/commerce-agent", label: "Commerce Agent", icon: PackageSearch },
   { to: "/admin/accessibility", label: "Accessibility Care", icon: Accessibility },
+  { to: "/admin/ai-visibility", label: "AI Visibility", icon: Radar },
   { to: "/admin/integrationer", label: "Integrationer", icon: PlugZap },
   { to: "/admin/coworkers", label: "AI Coworkers", icon: Bot },
   { to: "/admin/ai-kontoret", label: "AI-KONTORET", icon: PackageCheck },
