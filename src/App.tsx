@@ -1,6 +1,7 @@
 import AnalyticsConsent from './components/AnalyticsConsent';
 import editorialArticles from "@/content/editorial/articles.json";
 import { ContactModalProvider } from "@/components/ContactModal";
+import { SEO_DESC as GROK_BOT_SEO_DESC, SEO_TITLE as GROK_BOT_SEO_TITLE } from "@/config/aiKontoret";
 import { SEO } from "@/components/SEO";
 import { getPortfolioBySlug, isPortfolioDraft } from "@/data/portfolio";
 import { Toaster } from "@/components/ui/toaster";
@@ -200,9 +201,8 @@ const seoMap: Record<string, SEOConfig> = {
     noindex: true,
   },
   "/grok-bot": {
-    title: "AI-KONTORET – Bygg ett AI-drivet företag med Grok Bot | Guide 199 kr",
-    description:
-      "Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups och owner gates – ett AI-kontor som jobbar åt dig. 199 kr.",
+    title: GROK_BOT_SEO_TITLE,
+    description: GROK_BOT_SEO_DESC,
     canonical: "https://auroramedia.se/grok-bot",
     ogImage: "https://auroramedia.se/og-grok-bot.jpg",
   },
