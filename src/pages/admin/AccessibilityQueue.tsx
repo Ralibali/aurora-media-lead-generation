@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, ExternalLink, RefreshCw, ShieldCheck } from "lucide-react";
+import AccessibilityCareCommercial from "@/components/admin/AccessibilityCareCommercial";
 import AdminShell, { AdminStatus } from "./AdminShell";
 
 type QueueIssue = {
@@ -52,6 +53,7 @@ export default function AccessibilityQueue() {
 
   return (
     <AdminShell title="Accessibility Care" kicker="Aurora Care · åtgärdskö">
+      <AccessibilityCareCommercial />
       <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
         <p style={{ margin: 0, maxWidth: 760, color: "var(--granbark-mut)", fontSize: 14 }}>
           Aktiva fynd från Accessibility Guard, sorterade efter påverkan. När nästa scan inte längre hittar ett fynd stängs ärendet automatiskt.
