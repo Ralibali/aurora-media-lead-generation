@@ -37,4 +37,16 @@ jobs:
         run: exit 1
       - run: npm run typecheck
       - run: npm run test
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Check Aurora Inbox edge function
+        run: deno check supabase/functions/admin-managed-channels/index.ts
+      - name: Check AI visibility edge function
+        run: deno check supabase/functions/admin-ai-visibility/index.ts
+      - name: Check Accessibility Care edge function
+        run: deno check supabase/functions/admin-accessibility-care/index.ts
+      - name: Check Voice pilot edge function
+        run: deno check supabase/functions/admin-voice-pilots/index.ts
+      - run: npm run test:guardian-db
       - run: npm run build

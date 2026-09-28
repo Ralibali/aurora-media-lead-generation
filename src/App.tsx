@@ -56,6 +56,7 @@ const Leads = lazy(() => import("./pages/admin/Leads"));
 const TextGenerator = lazy(() => import("./pages/admin/TextGenerator"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminContent = lazy(() => import("./pages/admin/Content"));
+const WebsiteGuardian = lazy(() => import("./pages/admin/WebsiteGuardian"));
 const AdminSeo = lazy(() => import("./pages/admin/Seo"));
 const AdminEmail = lazy(() => import("./pages/admin/Email"));
 const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
@@ -63,6 +64,8 @@ const AdminManagedChannels = lazy(() => import("./pages/admin/ManagedChannels"))
 const AdminCommerceOps = lazy(() => import("./pages/admin/CommerceOps"));
 const AdminCommerceAgent = lazy(() => import("./pages/admin/CommerceAgent"));
 const AdminAccessibilityQueue = lazy(() => import("./pages/admin/AccessibilityQueue"));
+const AdminAiVisibility = lazy(() => import("./pages/admin/AiVisibility"));
+const AdminVoicePilots = lazy(() => import("./pages/admin/VoicePilots"));
 const AdminIntegrationsHub = lazy(() => import("./pages/admin/IntegrationsHub"));
 const AdminCoworkers = lazy(() => import("./pages/admin/Coworkers"));
 const AdminAiKontoret = lazy(() => import("./pages/admin/AiKontoret"));
@@ -631,6 +634,7 @@ const App = () => (
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/leads" element={<Leads />} />
                 <Route path="/admin/content" element={<AdminContent />} />
+                <Route path="/admin/website-guardian" element={<WebsiteGuardian />} />
                 <Route path="/admin/seo" element={<AdminSeo />} />
                 <Route path="/admin/email" element={<AdminEmail />} />
                 <Route path="/admin/text-generator" element={<TextGenerator />} />
@@ -640,6 +644,8 @@ const App = () => (
                 <Route path="/admin/commerce" element={<AdminCommerceOps />} />
                 <Route path="/admin/commerce-agent" element={<AdminCommerceAgent />} />
                 <Route path="/admin/accessibility" element={<AdminAccessibilityQueue />} />
+                <Route path="/admin/ai-visibility" element={<AdminAiVisibility />} />
+                <Route path="/admin/voice-pilots" element={<AdminVoicePilots />} />
                 <Route path="/admin/integrationer" element={<AdminIntegrationsHub />} />
                 <Route path="/admin/coworkers" element={<AdminCoworkers />} />
                 <Route path="/admin/ai-kontoret" element={<AdminAiKontoret />} />
