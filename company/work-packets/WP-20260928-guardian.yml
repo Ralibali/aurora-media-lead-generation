@@ -1,0 +1,19 @@
+id: WP-20260928-guardian
+company: Aurora Media AB
+objective: Integrera Website Guardian i befintlig administration som grund för intern kontroll och kundförvaltning.
+why_now: Ägaren begärde implementation som tredje prioritet efter AI Visibility och Smart Rutt.
+evidence:
+  - 'VERIFIED FACT: befintligt AdminShell, adminprotokoll och Supabase-arkitektur återanvänds.'
+  - 'HYPOTHESIS: HTTP-kontroller och historik kan minska manuell kontrolltid.'
+  - 'UNKNOWN: betalningsvilja, pris, SLA och faktisk effekt.'
+owner: Christoffer
+skill: site-revenue-experiment
+skill_version: '1.0'
+authority: PREPARE
+usage_level: Avgränsad implementation och tester; ingen produktionsdeploy eller kundkommunikation.
+definition_of_done:
+  - Separat branch och PR med granskbar implementation.
+  - Lint, typecheck, test, PostgreSQL-behörighetstest och build passerar.
+  - UI verifierat med simulerade externa anrop.
+  - Env, migration, funktion och aktivering dokumenterade.
+expected_artifact: docs/website-guardian-2026-09-28.md

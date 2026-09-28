@@ -56,6 +56,7 @@ const Leads = lazy(() => import("./pages/admin/Leads"));
 const TextGenerator = lazy(() => import("./pages/admin/TextGenerator"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminContent = lazy(() => import("./pages/admin/Content"));
+const WebsiteGuardian = lazy(() => import("./pages/admin/WebsiteGuardian"));
 const AdminSeo = lazy(() => import("./pages/admin/Seo"));
 const AdminEmail = lazy(() => import("./pages/admin/Email"));
 const AdminProspektering = lazy(() => import("./pages/admin/Prospektering"));
@@ -631,6 +632,7 @@ const App = () => (
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/leads" element={<Leads />} />
                 <Route path="/admin/content" element={<AdminContent />} />
+                <Route path="/admin/website-guardian" element={<WebsiteGuardian />} />
                 <Route path="/admin/seo" element={<AdminSeo />} />
                 <Route path="/admin/email" element={<AdminEmail />} />
                 <Route path="/admin/text-generator" element={<TextGenerator />} />

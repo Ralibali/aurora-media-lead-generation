@@ -1,0 +1,34 @@
+name: Website Guardian
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+permissions: {}
+concurrency:
+  group: website-guardian
+  cancel-in-progress: false
+jobs:
+  check:
+    if: github.event_name == 'workflow_dispatch' || vars.GUARDIAN_SCHEDULE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check due websites
+        env:
+          GUARDIAN_FUNCTION_URL: ${{ vars.GUARDIAN_FUNCTION_URL }}
+          GUARDIAN_CRON_SECRET: ${{ secrets.GUARDIAN_CRON_SECRET }}
+        run: |
+          node --input-type=module <<'JS'
+          const url = new URL(process.env.GUARDIAN_FUNCTION_URL);
+          if (url.protocol !== 'https:' || !process.env.GUARDIAN_CRON_SECRET) throw new Error('Configure Guardian URL and scheduler secret first.');
+          const response = await fetch(url, {
+            method: 'POST', signal: AbortSignal.timeout(60000),
+            headers: { Authorization: `Bearer ${process.env.GUARDIAN_CRON_SECRET}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'run_due' }),
+          });
+          if (!response.ok || !(await response.json()).ok) throw new Error(`Guardian run failed: HTTP ${response.status}`);
+          console.log('Due websites checked. Review incidents in Aurora Media admin.');
+          JS

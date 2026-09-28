@@ -80,3 +80,6 @@ verify_jwt = false
 
 [functions.ai-kontoret-upload-asset]
 verify_jwt = false
+
+[functions.website-guardian]
+verify_jwt = false
