@@ -64,6 +64,8 @@ const AdminManagedChannels = lazy(() => import("./pages/admin/ManagedChannels"))
 const AdminCommerceOps = lazy(() => import("./pages/admin/CommerceOps"));
 const AdminCommerceAgent = lazy(() => import("./pages/admin/CommerceAgent"));
 const AdminAccessibilityQueue = lazy(() => import("./pages/admin/AccessibilityQueue"));
+const AdminAiVisibility = lazy(() => import("./pages/admin/AiVisibility"));
+const AdminVoicePilots = lazy(() => import("./pages/admin/VoicePilots"));
 const AdminIntegrationsHub = lazy(() => import("./pages/admin/IntegrationsHub"));
 const AdminCoworkers = lazy(() => import("./pages/admin/Coworkers"));
 const AdminAiKontoret = lazy(() => import("./pages/admin/AiKontoret"));
@@ -642,6 +644,8 @@ const App = () => (
                 <Route path="/admin/commerce" element={<AdminCommerceOps />} />
                 <Route path="/admin/commerce-agent" element={<AdminCommerceAgent />} />
                 <Route path="/admin/accessibility" element={<AdminAccessibilityQueue />} />
+                <Route path="/admin/ai-visibility" element={<AdminAiVisibility />} />
+                <Route path="/admin/voice-pilots" element={<AdminVoicePilots />} />
                 <Route path="/admin/integrationer" element={<AdminIntegrationsHub />} />
                 <Route path="/admin/coworkers" element={<AdminCoworkers />} />
                 <Route path="/admin/ai-kontoret" element={<AdminAiKontoret />} />

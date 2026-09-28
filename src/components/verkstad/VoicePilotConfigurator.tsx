@@ -13,6 +13,10 @@ const VERTICALS = {
     label: "Hotell / glamping / boende",
     examples: ["Tillgänglighet", "In- och utcheckning", "Frukost och tillval", "Bokningsunderlag"],
   },
+  transport: {
+    label: "Transport / åkeri",
+    examples: ["Hämtadress", "Leveransadress", "Tid", "Gods och återkoppling"],
+  },
   service: {
     label: "Service / hantverk",
     examples: ["Typ av jobb", "Adress och område", "Brådska", "Offertunderlag"],

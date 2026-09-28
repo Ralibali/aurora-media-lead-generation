@@ -18,7 +18,7 @@ It generates a deterministic preview of the proposed call flow and passes the ap
 
 ## Intended Aurora Connect handoff
 
-The separate Aurora Connect application remains the runtime target for actual voice operations. When that runtime is ready for a stable integration, use a server-to-server adapter rather than exposing credentials in the browser.
+The admin pilot layer now supports an approved server-to-server runtime handoff. Pipecat is the default runtime label, while Aurora Connect remains a supported target. No runtime is considered live until VOICE_RUNTIME_URL and VOICE_RUNTIME_TOKEN are configured and an approved pilot is explicitly provisioned. When that runtime is ready for a stable integration, use a server-to-server adapter rather than exposing credentials in the browser.
 
 Recommended environment contract:
 
@@ -35,3 +35,16 @@ A future provisioning endpoint should accept an approved, versioned configuratio
 - document recording/transcription, retention and processor roles before live traffic
 - store secrets server-side only
 - keep transcripts and personal data tenant-scoped with auditable retention settings
+
+
+## Operational pilot layer
+
+The internal admin now tracks:
+- traffic school, accommodation/StayBoost, transport, service and generic pilots
+- explicit allowed actions and actions blocked until an integration is verified
+- intake → design → approved → provisioning → live/evaluation lifecycle
+- setup and monthly pricing metadata
+- retention period and human handoff settings
+- registered call outcomes, automation rate, handoff rate, qualified leads, minutes and actual recorded cost
+
+Provisioning is only available from an `approved` pilot and uses `VOICE_RUNTIME_URL` + `VOICE_RUNTIME_TOKEN` server-side. Public intake never calls the runtime.
