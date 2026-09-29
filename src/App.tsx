@@ -85,7 +85,8 @@ const Mobilapp = lazy(() => import("./pages/tjanster/Mobilapp"));
 const Seo = lazy(() => import("./pages/tjanster/Seo"));
 const AuroraCare = lazy(() => import("./pages/erbjudanden/AuroraCare"));
 const AuroraSight = lazy(() => import("./pages/erbjudanden/AuroraSight"));
-const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));\nconst AuroraStaff = lazy(() => import("./pages/erbjudanden/AuroraStaff"));
+const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));
+const AuroraStaff = lazy(() => import("./pages/erbjudanden/AuroraStaff"));
 const AuroraVoice = lazy(() => import("./pages/erbjudanden/AuroraVoice"));
 const AuroraOps = lazy(() => import("./pages/erbjudanden/AuroraOps"));
 const Tillganglighet = lazy(() => import("./pages/erbjudanden/Tillganglighet"));
@@ -377,7 +378,13 @@ const seoMap: Record<string, SEOConfig> = {
       "Aurora Local optimerar er Google-företagsprofil, lokala sökord, kartsynlighet och recensioner. Fast månadspris från 1 495 kr, ingen bindningstid.",
     canonical: "https://auroramedia.se/lokal-synlighet",
   },
-  "/ai-personal": {\n    title: "AI-medarbetare för företag – sälj, SEO & administration | Aurora Media",\n    description:\n      "Aurora Staff ger svenska företag managed AI-medarbetare med tydliga roller, rutiner, integrationer och mänskligt godkännande. Från 995 kr/mån.",\n    canonical: "https://auroramedia.se/ai-personal",\n  },\n  "/ai-receptionist": {
+  "/ai-personal": {
+    title: "AI-medarbetare för företag – sälj, SEO & administration | Aurora Media",
+    description:
+      "Aurora Staff ger svenska företag managed AI-medarbetare med tydliga roller, rutiner, integrationer och mänskligt godkännande. Från 995 kr/mån.",
+    canonical: "https://auroramedia.se/ai-personal",
+  },
+  "/ai-receptionist": {
     title: "AI-receptionist för telefon och chatt – missa inga kunder | Aurora Media",
     description:
       "Aurora Voice svarar på samtal, chatt och e-post, besvarar vanliga frågor och samlar in bokningsunderlag. Uppsättning från 14 900 kr, drift från 1 995 kr/mån.",
@@ -614,7 +621,8 @@ const App = () => (
               <Route path="/tillganglighet" element={<Tillganglighet />} />
               <Route path="/cookie-samtycke" element={<CookieSamtycke />} />
               <Route path="/ai-synlighet" element={<AuroraSight />} />
-              <Route path="/lokal-synlighet" element={<AuroraLocal />} />\n              <Route path="/ai-personal" element={<AuroraStaff />} />
+              <Route path="/lokal-synlighet" element={<AuroraLocal />} />
+              <Route path="/ai-personal" element={<AuroraStaff />} />
               <Route path="/ai-receptionist" element={<AuroraVoice />} />
               <Route path="/aurora-ops" element={<AuroraOps />} />
               <Route path="/webbyra-linkoping" element={<WebbyraLinkoping />} />
