@@ -47,7 +47,7 @@ const AuroraPlattformen = ({ activeSlug }: { activeSlug?: string }) => (
     <div className="vk-wrap">
       <Reveal><p className="vk-mono">Aurora-plattformen</p></Reveal>
       <Reveal delay={0.05}>
-        <h2 style={{ marginTop: 14 }}>Fem delar, <span style={italic}>ett system</span>.</h2>
+        <h2 style={{ marginTop: 14 }}>Sex delar, <span style={italic}>ett system</span>.</h2>
       </Reveal>
       <Reveal delay={0.1}>
         <p style={{ marginTop: 18, maxWidth: "62ch", fontSize: 17, lineHeight: 1.7, color: "#3E444B" }}>
