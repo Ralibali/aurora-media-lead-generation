@@ -4,7 +4,7 @@ import { PGlite } from '@electric-sql/pglite';
 const db = new PGlite();
 await db.exec('create role anon; create role authenticated; create role service_role bypassrls;');
 await db.exec(await readFile('supabase/migrations/20260928065604_website_guardian.sql','utf8'));
-await db.exec(await readFile('supabase/migrations/20261001084700_sitewatch_commercial_layer.sql','utf8'));\nawait db.exec(await readFile('supabase/migrations/20261001084700_sitewatch_commercial_layer.sql','utf8'));
+await db.exec(await readFile('supabase/migrations/20261001084700_sitewatch_commercial_layer.sql','utf8'));
 for (const role of ['anon','authenticated']) {
   await db.exec(`set role ${role}`);
   await assert.rejects(()=>db.query('select * from guardian_sites'),/permission denied/);
