@@ -46,17 +46,17 @@ interface Process {
 }
 
 const escape = (s: string) =>
-  (s ?? "").replace(/[&<>"']/g, (c) =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!
-  );
+  (s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 function normalizeCompanyName(name: string): string {
   if (!name) return "ert företag";
   const t = name.trim();
   if (t === t.toLowerCase() || t === t.toUpperCase()) {
-    return t.toLowerCase().split(/\s+/).map((w) =>
-      /^(ab|hb|kb|as)$/i.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)
-    ).join(" ");
+    return t
+      .toLowerCase()
+      .split(/\s+/)
+      .map((w) => (/^(ab|hb|kb|as)$/i.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)))
+      .join(" ");
   }
   return t;
 }
@@ -103,10 +103,14 @@ ${preheader ? `<div style="display:none;max-height:0;overflow:hidden;color:#f8fa
   <div style="padding:0 28px 8px;font-size:15px;line-height:1.6;color:#334155;">
     ${bodyHtml}
   </div>
-  ${ctaLabel && ctaHref ? `
+  ${
+    ctaLabel && ctaHref
+      ? `
   <div style="padding:16px 28px 28px;">
     <a href="${ctaHref}" style="display:inline-block;background:#0f5132;color:#ffffff;text-decoration:none;padding:13px 24px;border-radius:999px;font-size:14px;font-weight:600;">${escape(ctaLabel)} →</a>
-  </div>` : ""}
+  </div>`
+      : ""
+  }
   <div style="background:#f8fafc;border-top:1px solid #e2e8f0;padding:20px 28px;font-size:12px;color:#64748b;line-height:1.6;">
     <div style="margin:0 0 4px;"><strong style="color:#334155;">Aurora Media AB</strong> · Org.nr 559272-0220 · Linköping, Sverige</div>
     <div style="margin:0 0 8px;">
@@ -129,8 +133,7 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
   const resultUrl = lead.share_token
     ? `${SITE_URL}/ai-karta/resultat?t=${encodeURIComponent(lead.share_token)}`
     : `${SITE_URL}/ai-karta`;
-  const withRef = (ref: string) =>
-    resultUrl.includes("?") ? `${resultUrl}&ref=${ref}` : `${resultUrl}?ref=${ref}`;
+  const withRef = (ref: string) => (resultUrl.includes("?") ? `${resultUrl}&ref=${ref}` : `${resultUrl}?ref=${ref}`);
   const unsubUrl = `${UNSUB_BASE}?token=${encodeURIComponent(token)}`;
   const unsubPauseUrl = `${unsubUrl}&pause=6m`;
   const unsubNotNowUrl = `${unsubUrl}&reason=not_now`;
@@ -202,9 +205,10 @@ function buildEmail(step: Step, lead: Lead, top: Process[], token: string): { su
   }
 
   // step_14
-  const painLine = painFiltered.length > 0
-    ? `Det är inte alla VD:ar som faktiskt sätter sig och kartlägger ${escape(painFiltered.slice(0, 2).join(" och ").toLowerCase())} på riktigt.`
-    : "";
+  const painLine =
+    painFiltered.length > 0
+      ? `Det är inte alla VD:ar som faktiskt sätter sig och kartlägger ${escape(painFiltered.slice(0, 2).join(" och ").toLowerCase())} på riktigt.`
+      : "";
   const body = `
     <p style="margin:0 0 16px;">Det här är mitt sista uppföljningsmejl om AI-kartan ni gjorde för <strong>${companyDisplay}</strong>.</p>
     <p style="margin:0 0 16px;">Antingen är det rätt timing och du vill boka 20 min – då finns länken nedan. Eller så är det inte rätt timing, och då är det inte värt att jag tröttar dig vidare.</p>
@@ -293,7 +297,10 @@ async function sendPdfFallbacks(
   const { data: leads, error } = await admin
     .from("ai_map_leads")
     .select("id, company_name, contact_name, email, share_token")
-    .in("id", candidates.map((s) => s.lead_id))
+    .in(
+      "id",
+      candidates.map((s) => s.lead_id),
+    )
     .is("pdf_sent_at", null)
     .limit(25);
 
@@ -323,7 +330,13 @@ async function sendPdfFallbacks(
       unsubUrl,
     });
 
-    const ok = await sendEmail(apiKey, lead.email, `Er AI-karta – ${lead.company_name || "personlig analys"}`, html, seq.unsubscribe_token);
+    const ok = await sendEmail(
+      apiKey,
+      lead.email,
+      `Er AI-karta – ${lead.company_name || "personlig analys"}`,
+      html,
+      seq.unsubscribe_token,
+    );
     if (!ok) continue;
 
     const { error: markErr } = await admin
@@ -336,7 +349,6 @@ async function sendPdfFallbacks(
   return sent;
 }
 
-
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
@@ -344,7 +356,8 @@ Deno.serve(async (req: Request) => {
   const expected = Deno.env.get("CRON_SECRET");
   if (!expected || cronSecret !== expected) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
@@ -353,7 +366,8 @@ Deno.serve(async (req: Request) => {
   const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
   if (!RESEND_API_KEY) {
     return new Response(JSON.stringify({ error: "RESEND_API_KEY missing" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
@@ -370,22 +384,28 @@ Deno.serve(async (req: Request) => {
   if (seqErr) {
     console.error("[drip] sequence query failed", seqErr);
     return new Response(JSON.stringify({ error: "DB error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
-  const seqList = ((sequences as Sequence[] | null) ?? []);
+  const seqList = (sequences as Sequence[] | null) ?? [];
   const pdf_fallbacks = await sendPdfFallbacks(admin, RESEND_API_KEY, seqList);
 
-  let processed = 0, sent = 0, skipped = 0, errors = 0;
-
+  let processed = 0,
+    sent = 0,
+    skipped = 0,
+    errors = 0;
 
   for (const s of seqList) {
     if (sent >= MAX_PER_RUN) break;
     processed++;
     const age = daysSince(s.created_at);
     const step = pickStep(age, s);
-    if (!step) { skipped++; continue; }
+    if (!step) {
+      skipped++;
+      continue;
+    }
 
     const { data: lead } = await admin
       .from("ai_map_leads")
@@ -394,7 +414,10 @@ Deno.serve(async (req: Request) => {
       .maybeSingle();
 
     // Requested PDF delivery is handled above independently of marketing.
-    if (!lead || lead.marketing_consent !== true) { skipped++; continue; }
+    if (!lead || lead.marketing_consent !== true) {
+      skipped++;
+      continue;
+    }
 
     const { data: procs } = await admin
       .from("ai_map_processes")
@@ -406,14 +429,14 @@ Deno.serve(async (req: Request) => {
     const { subject, html } = buildEmail(step, lead as Lead, (procs as Process[]) ?? [], s.unsubscribe_token);
     const ok = await sendEmail(RESEND_API_KEY, s.email, subject, html, s.unsubscribe_token);
 
-    if (!ok) { errors++; continue; }
+    if (!ok) {
+      errors++;
+      continue;
+    }
 
     const update: Record<string, string> = {};
     update[`${step}_sent_at`] = new Date().toISOString();
-    const { error: updErr } = await admin
-      .from("ai_map_email_sequence")
-      .update(update)
-      .eq("id", s.id);
+    const { error: updErr } = await admin.from("ai_map_email_sequence").update(update).eq("id", s.id);
     if (updErr) {
       console.error("[drip] update failed", updErr);
       errors++;
@@ -423,6 +446,7 @@ Deno.serve(async (req: Request) => {
   }
 
   return new Response(JSON.stringify({ ok: true, processed, sent, skipped, errors, pdf_fallbacks }), {
-    status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 });
