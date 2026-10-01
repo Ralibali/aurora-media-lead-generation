@@ -79,6 +79,7 @@ const AuroraCare = () => (
       { q: "Kan ni övervaka tillgänglighet och cookies också?", a: "Ja. Accessibility Monitor och Consent Monitor kan läggas till i Care och visas i samma portal. Automatiken kompletteras med manuella kontroller där det behövs." },
     ]}
     related={[
+      { name: "Aurora SiteWatch", price: "Från 299 kr/mån", to: "/sitewatch" },
       { name: "Hemsidor", price: "Från 4 900 kr", to: "/tjanster/hemsidor" },
       { name: "Lokal synlighet", price: "Från 1 495 kr/mån", to: "/lokal-synlighet" },
       { name: "SEO", price: "Från 4 900 kr", to: "/tjanster/seo" },
