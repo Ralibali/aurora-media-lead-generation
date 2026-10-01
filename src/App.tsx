@@ -83,7 +83,7 @@ const Hemsidor = lazy(() => import("./pages/tjanster/Hemsidor"));
 const MetaAds = lazy(() => import("./pages/tjanster/MetaAds"));
 const Mobilapp = lazy(() => import("./pages/tjanster/Mobilapp"));
 const Seo = lazy(() => import("./pages/tjanster/Seo"));
-const AuroraCare = lazy(() => import("./pages/erbjudanden/AuroraCare"));
+const AuroraCare = lazy(() => import("./pages/erbjudanden/AuroraCare"));\nconst AuroraSiteWatch = lazy(() => import("./pages/erbjudanden/AuroraSiteWatch"));
 const AuroraSight = lazy(() => import("./pages/erbjudanden/AuroraSight"));
 const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));
 const AuroraStaff = lazy(() => import("./pages/erbjudanden/AuroraStaff"));
@@ -354,6 +354,12 @@ const seoMap: Record<string, SEOConfig> = {
       "Löpande WordPress-underhåll: uppdateringar, säkerhetskopior, säkerhetsövervakning, hastighet och supporttid. Fast månadspris, ingen bindningstid.",
     canonical: "https://auroramedia.se/care",
   },
+  "/sitewatch": {
+    title: "Aurora SiteWatch – webbövervakning från 299 kr/mån | Aurora Media",
+    description:
+      "Övervaka viktiga webbsidor, svarstid, noindex och förväntat innehåll. Bekräftade incidenter och återställningar kan aviseras via e-post.",
+    canonical: "https://auroramedia.se/sitewatch",
+  },
   "/tillganglighet": {
     title: "Tillgänglighetsaudit & WCAG-granskning | Aurora Media",
     description:
@@ -617,7 +623,7 @@ const App = () => (
               <Route path="/tjanster/content" element={<Content />} />
               <Route path="/tjanster/grafisk-profil" element={<GrafiskProfil />} />
               <Route path="/tjanster/fotografering" element={<Fotografering />} />
-              <Route path="/care" element={<AuroraCare />} />
+              <Route path="/care" element={<AuroraCare />} />\n              <Route path="/sitewatch" element={<AuroraSiteWatch />} />
               <Route path="/tillganglighet" element={<Tillganglighet />} />
               <Route path="/cookie-samtycke" element={<CookieSamtycke />} />
               <Route path="/ai-synlighet" element={<AuroraSight />} />
