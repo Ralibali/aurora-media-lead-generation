@@ -48,5 +48,7 @@ jobs:
         run: deno check supabase/functions/admin-accessibility-care/index.ts
       - name: Check Voice pilot edge function
         run: deno check supabase/functions/admin-voice-pilots/index.ts
+      - name: Check portfolio dashboard edge function
+        run: deno check supabase/functions/admin-portfolio/index.ts
       - run: npm run test:guardian-db
       - run: npm run build
