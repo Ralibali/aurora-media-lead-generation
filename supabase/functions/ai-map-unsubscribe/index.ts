@@ -39,9 +39,17 @@ Deno.serve(async (req: Request) => {
   const reason = reasonParam || (pause ? `pause_${pause}` : "user_request");
 
   if (!token) {
-    return new Response(pageHtml("Ogiltig länk", "Avregistreringslänken saknar token. Kontakta info@auroramedia.se om du behöver hjälp.", false), {
-      status: 400, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
-    });
+    return new Response(
+      pageHtml(
+        "Ogiltig länk",
+        "Avregistreringslänken saknar token. Kontakta info@auroramedia.se om du behöver hjälp.",
+        false,
+      ),
+      {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      },
+    );
   }
 
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
@@ -55,9 +63,17 @@ Deno.serve(async (req: Request) => {
     .maybeSingle();
 
   if (selErr || !row) {
-    return new Response(pageHtml("Ogiltig länk", "Vi hittade ingen prenumeration som matchar den här länken. Den kan redan ha tagits bort.", false), {
-      status: 404, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
-    });
+    return new Response(
+      pageHtml(
+        "Ogiltig länk",
+        "Vi hittade ingen prenumeration som matchar den här länken. Den kan redan ha tagits bort.",
+        false,
+      ),
+      {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      },
+    );
   }
 
   if (!row.unsubscribed_at) {
@@ -66,9 +82,17 @@ Deno.serve(async (req: Request) => {
       .update({ unsubscribed_at: new Date().toISOString(), unsubscribed_reason: reason })
       .eq("id", row.id);
     if (unsubscribeError) {
-      return new Response(pageHtml("Försök igen", "Avregistreringen kunde inte sparas. Försök igen eller kontakta info@auroramedia.se.", false), {
-        status: 503, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
-      });
+      return new Response(
+        pageHtml(
+          "Försök igen",
+          "Avregistreringen kunde inte sparas. Försök igen eller kontakta info@auroramedia.se.",
+          false,
+        ),
+        {
+          status: 503,
+          headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+        },
+      );
     }
   }
 
@@ -78,16 +102,26 @@ Deno.serve(async (req: Request) => {
     .update({ marketing_consent: false, marketing_consent_at: null })
     .eq("id", row.lead_id);
   if (consentError) {
-    return new Response(pageHtml("Uppföljningen är stoppad", "Vi kunde inte uppdatera hela ditt samtyckesval. Uppföljningen för denna analys är stoppad; kontakta info@auroramedia.se om problemet kvarstår.", false), {
-      status: 503, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
-    });
+    return new Response(
+      pageHtml(
+        "Uppföljningen är stoppad",
+        "Vi kunde inte uppdatera hela ditt samtyckesval. Uppföljningen för denna analys är stoppad; kontakta info@auroramedia.se om problemet kvarstår.",
+        false,
+      ),
+      {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      },
+    );
   }
 
-  const msg = pause === "6m"
-    ? "Vi pausar uppföljningen. Du hör inte av oss mer om denna analys – men hör gärna av dig själv om något ändras."
-    : "Du är avregistrerad. Inget mer mejl kommer från denna analys. Hör gärna av dig om något ändras.";
+  const msg =
+    pause === "6m"
+      ? "Vi pausar uppföljningen. Du hör inte av oss mer om denna analys – men hör gärna av dig själv om något ändras."
+      : "Du är avregistrerad. Inget mer mejl kommer från denna analys. Hör gärna av dig om något ändras.";
 
   return new Response(pageHtml("Tack – du är avregistrerad", msg), {
-    status: 200, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+    status: 200,
+    headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
   });
 });
