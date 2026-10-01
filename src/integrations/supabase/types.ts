@@ -344,6 +344,8 @@ export type Database = {
           id: string
           industry: string
           ip: string | null
+          marketing_consent: boolean
+          marketing_consent_at: string | null
           notes: string | null
           pain_areas: string[]
           pdf_sent_at: string | null
@@ -366,6 +368,8 @@ export type Database = {
           id?: string
           industry: string
           ip?: string | null
+          marketing_consent?: boolean
+          marketing_consent_at?: string | null
           notes?: string | null
           pain_areas?: string[]
           pdf_sent_at?: string | null
@@ -388,6 +392,8 @@ export type Database = {
           id?: string
           industry?: string
           ip?: string | null
+          marketing_consent?: boolean
+          marketing_consent_at?: string | null
           notes?: string | null
           pain_areas?: string[]
           pdf_sent_at?: string | null
@@ -461,6 +467,361 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "ai_map_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commerce_agent_sessions: {
+        Row: {
+          answer: string | null
+          created_at: string
+          id: string
+          last_error: string | null
+          model: string | null
+          question: string
+          recommended_product_ids: string[]
+          status: string
+          store_id: string
+        }
+        Insert: {
+          answer?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          model?: string | null
+          question: string
+          recommended_product_ids?: string[]
+          status?: string
+          store_id: string
+        }
+        Update: {
+          answer?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          model?: string | null
+          question?: string
+          recommended_product_ids?: string[]
+          status?: string
+          store_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commerce_agent_sessions_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "commerce_ops_stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commerce_ops_catalog: {
+        Row: {
+          active: boolean
+          captured_at: string
+          category: string | null
+          description: string | null
+          external_id: string
+          id: string
+          inventory: number | null
+          metadata: Json
+          price: number | null
+          product_url: string | null
+          source: string
+          store_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          captured_at?: string
+          category?: string | null
+          description?: string | null
+          external_id: string
+          id?: string
+          inventory?: number | null
+          metadata?: Json
+          price?: number | null
+          product_url?: string | null
+          source?: string
+          store_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          captured_at?: string
+          category?: string | null
+          description?: string | null
+          external_id?: string
+          id?: string
+          inventory?: number | null
+          metadata?: Json
+          price?: number | null
+          product_url?: string | null
+          source?: string
+          store_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commerce_ops_catalog_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "commerce_ops_stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commerce_ops_changes: {
+        Row: {
+          applied_at: string | null
+          approved_at: string | null
+          created_at: string
+          guardrail_notes: string[]
+          id: string
+          items: Json
+          kind: string
+          last_error: string | null
+          rationale: string | null
+          source: string
+          status: string
+          store_id: string
+          summary: string
+          updated_at: string
+        }
+        Insert: {
+          applied_at?: string | null
+          approved_at?: string | null
+          created_at?: string
+          guardrail_notes?: string[]
+          id?: string
+          items?: Json
+          kind: string
+          last_error?: string | null
+          rationale?: string | null
+          source?: string
+          status?: string
+          store_id: string
+          summary: string
+          updated_at?: string
+        }
+        Update: {
+          applied_at?: string | null
+          approved_at?: string | null
+          created_at?: string
+          guardrail_notes?: string[]
+          id?: string
+          items?: Json
+          kind?: string
+          last_error?: string | null
+          rationale?: string | null
+          source?: string
+          status?: string
+          store_id?: string
+          summary?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commerce_ops_changes_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "commerce_ops_stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commerce_ops_snapshots: {
+        Row: {
+          average_order_value: number | null
+          captured_at: string
+          conversion_rate: number | null
+          id: string
+          low_stock_count: number
+          note: string | null
+          order_issues_count: number
+          orders: number
+          period_end: string
+          period_start: string
+          sales: number
+          sales_change_pct: number | null
+          slow_movers_count: number
+          source: string
+          store_id: string
+          traffic: number | null
+        }
+        Insert: {
+          average_order_value?: number | null
+          captured_at?: string
+          conversion_rate?: number | null
+          id?: string
+          low_stock_count?: number
+          note?: string | null
+          order_issues_count?: number
+          orders?: number
+          period_end: string
+          period_start: string
+          sales?: number
+          sales_change_pct?: number | null
+          slow_movers_count?: number
+          source?: string
+          store_id: string
+          traffic?: number | null
+        }
+        Update: {
+          average_order_value?: number | null
+          captured_at?: string
+          conversion_rate?: number | null
+          id?: string
+          low_stock_count?: number
+          note?: string | null
+          order_issues_count?: number
+          orders?: number
+          period_end?: string
+          period_start?: string
+          sales?: number
+          sales_change_pct?: number | null
+          slow_movers_count?: number
+          source?: string
+          store_id?: string
+          traffic?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commerce_ops_snapshots_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "commerce_ops_stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commerce_ops_stores: {
+        Row: {
+          active: boolean
+          created_at: string
+          currency: string
+          id: string
+          name: string
+          platform: string
+          shop_domain: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          currency?: string
+          id?: string
+          name: string
+          platform?: string
+          shop_domain?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          currency?: string
+          id?: string
+          name?: string
+          platform?: string
+          shop_domain?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      coworker_profiles: {
+        Row: {
+          active: boolean
+          allowed_action_prefixes: string[]
+          approval_mode: string
+          created_at: string
+          description: string
+          id: string
+          key: string
+          name: string
+          system_role: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          allowed_action_prefixes?: string[]
+          approval_mode?: string
+          created_at?: string
+          description: string
+          id?: string
+          key: string
+          name: string
+          system_role: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          allowed_action_prefixes?: string[]
+          approval_mode?: string
+          created_at?: string
+          description?: string
+          id?: string
+          key?: string
+          name?: string
+          system_role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      coworker_tasks: {
+        Row: {
+          approved_at: string | null
+          created_at: string
+          executed_at: string | null
+          goal: string
+          id: string
+          last_error: string | null
+          plan: Json
+          profile_id: string
+          requires_approval: boolean
+          result_summary: Json | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          created_at?: string
+          executed_at?: string | null
+          goal: string
+          id?: string
+          last_error?: string | null
+          plan?: Json
+          profile_id: string
+          requires_approval?: boolean
+          result_summary?: Json | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          created_at?: string
+          executed_at?: string | null
+          goal?: string
+          id?: string
+          last_error?: string | null
+          plan?: Json
+          profile_id?: string
+          requires_approval?: boolean
+          result_summary?: Json | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coworker_tasks_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "coworker_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -645,6 +1006,184 @@ export type Database = {
         }
         Relationships: []
       }
+      guardian_checks: {
+        Row: {
+          created_at: string
+          details: Json
+          id: string
+          site_id: string
+          slot: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json
+          id?: string
+          site_id: string
+          slot: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json
+          id?: string
+          site_id?: string
+          slot?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guardian_checks_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "guardian_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guardian_sites: {
+        Row: {
+          active: boolean
+          check_interval_minutes: number
+          created_at: string
+          expected_text: string
+          id: string
+          last_checked_at: string | null
+          last_notified_at: string | null
+          last_notified_state: string
+          name: string
+          notify_email: string
+          url: string
+        }
+        Insert: {
+          active?: boolean
+          check_interval_minutes?: number
+          created_at?: string
+          expected_text?: string
+          id?: string
+          last_checked_at?: string | null
+          last_notified_at?: string | null
+          last_notified_state?: string
+          name: string
+          notify_email?: string
+          url: string
+        }
+        Update: {
+          active?: boolean
+          check_interval_minutes?: number
+          created_at?: string
+          expected_text?: string
+          id?: string
+          last_checked_at?: string | null
+          last_notified_at?: string | null
+          last_notified_state?: string
+          name?: string
+          notify_email?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      integration_connections: {
+        Row: {
+          account_label: string | null
+          active: boolean
+          allowed_actions: string[]
+          connection_alias: string
+          created_at: string
+          id: string
+          last_error: string | null
+          last_verified_at: string | null
+          name: string
+          service: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          account_label?: string | null
+          active?: boolean
+          allowed_actions?: string[]
+          connection_alias?: string
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_verified_at?: string | null
+          name: string
+          service: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          account_label?: string | null
+          active?: boolean
+          allowed_actions?: string[]
+          connection_alias?: string
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_verified_at?: string | null
+          name?: string
+          service?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      integration_runs: {
+        Row: {
+          action_id: string
+          approved_at: string | null
+          connection_id: string
+          created_at: string
+          executed_at: string | null
+          execution_id: string | null
+          id: string
+          idempotency_key: string
+          input: Json
+          last_error: string | null
+          output_summary: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          action_id: string
+          approved_at?: string | null
+          connection_id: string
+          created_at?: string
+          executed_at?: string | null
+          execution_id?: string | null
+          id?: string
+          idempotency_key?: string
+          input?: Json
+          last_error?: string | null
+          output_summary?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          action_id?: string
+          approved_at?: string | null
+          connection_id?: string
+          created_at?: string
+          executed_at?: string | null
+          execution_id?: string | null
+          id?: string
+          idempotency_key?: string
+          input?: Json
+          last_error?: string | null
+          output_summary?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_runs_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "integration_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           company: string | null
@@ -699,6 +1238,113 @@ export type Database = {
           status?: string
           updated_at?: string
           user_agent?: string | null
+        }
+        Relationships: []
+      }
+      managed_channel_outbox: {
+        Row: {
+          approved_at: string | null
+          conversation_id: string | null
+          created_at: string
+          id: string
+          last_error: string | null
+          message_body: string
+          message_type: string
+          provider_message_id: string | null
+          recipient_e164: string
+          sent_at: string | null
+          status: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          message_body: string
+          message_type?: string
+          provider_message_id?: string | null
+          recipient_e164: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          message_body?: string
+          message_type?: string
+          provider_message_id?: string | null
+          recipient_e164?: string
+          sent_at?: string | null
+          status?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "managed_channel_outbox_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "managed_channel_workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      managed_channel_workspaces: {
+        Row: {
+          active: boolean
+          base_url: string
+          created_at: string
+          credential_env_name: string
+          external_account_id: string | null
+          external_account_name: string | null
+          id: string
+          last_error: string | null
+          last_verified_at: string | null
+          name: string
+          provider: string
+          scopes: string[]
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          base_url: string
+          created_at?: string
+          credential_env_name?: string
+          external_account_id?: string | null
+          external_account_name?: string | null
+          id?: string
+          last_error?: string | null
+          last_verified_at?: string | null
+          name: string
+          provider?: string
+          scopes?: string[]
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          base_url?: string
+          created_at?: string
+          credential_env_name?: string
+          external_account_id?: string | null
+          external_account_name?: string | null
+          id?: string
+          last_error?: string | null
+          last_verified_at?: string | null
+          name?: string
+          provider?: string
+          scopes?: string[]
+          status?: string
+          updated_at?: string
         }
         Relationships: []
       }
