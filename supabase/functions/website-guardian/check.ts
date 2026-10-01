@@ -1,10 +1,12 @@
 export type CheckResult = { status: 'healthy' | 'degraded' | 'down'; issues: string[]; httpStatus: number | null; durationMs: number; checkedAt: string };
+
 export function allowedUrl(raw: string, origins: string[]): URL {
   const url = new URL(raw);
   if (url.protocol !== 'https:' || url.username || url.password || url.port || !origins.includes(url.origin)) throw new Error('Adressen måste finnas i serverns godkända domänlista.');
   url.hash = '';
   return url;
 }
+
 export function evaluate(status: number, html: string, expected: string, durationMs: number, robots = ''): CheckResult {
   const issues: string[] = [];
   if (status < 200 || status >= 300) issues.push(`HTTP ${status}${status >= 300 && status < 400 ? ': ange den slutliga adressen efter omdirigeringen' : ''}`);
@@ -15,10 +17,11 @@ export function evaluate(status: number, html: string, expected: string, duratio
   }
   return { status: status < 200 || status >= 400 ? 'down' : issues.length ? 'degraded' : 'healthy', issues, httpStatus: status, durationMs, checkedAt: new Date().toISOString() };
 }
+
 export async function checkWebsite(url: URL, expected: string, fetcher: typeof fetch = fetch): Promise<CheckResult> {
   const start = Date.now();
   try {
-    const response = await fetcher(url, { redirect: 'manual', signal: AbortSignal.timeout(10000), headers: { 'User-Agent': 'Aurora-Website-Guardian/1.0', Accept: 'text/html' } });
+    const response = await fetcher(url, { redirect: 'manual', signal: AbortSignal.timeout(10000), headers: { 'User-Agent': 'Aurora-SiteWatch/1.0', Accept: 'text/html' } });
     const reader = response.body?.getReader();
     let text = ''; let bytes = 0;
     const decoder = new TextDecoder();
@@ -38,8 +41,17 @@ export async function checkWebsite(url: URL, expected: string, fetcher: typeof f
     return { status: 'down', issues: ['Kontrollen kunde inte slutföras: nätverk, TLS, timeout eller för stort svar.'], httpStatus: null, durationMs: Date.now() - start, checkedAt: new Date().toISOString() };
   }
 }
+
 export function incidentState(latest: string | undefined, previous: string | undefined) {
   if (!latest || latest === 'running') return 'Okänt';
   if (latest === 'healthy') return previous && previous !== 'healthy' && previous !== 'running' ? 'Återställd' : 'OK';
   return previous && previous !== 'healthy' && previous !== 'running' ? 'Incident' : 'Kontrollera igen';
+}
+
+export function isDue(lastCheckedAt: string | null | undefined, intervalMinutes: number, nowMs = Date.now()) {
+  if (!lastCheckedAt) return true;
+  const last = Date.parse(lastCheckedAt);
+  if (!Number.isFinite(last)) return true;
+  const interval = [15, 60, 360, 1440].includes(intervalMinutes) ? intervalMinutes : 60;
+  return nowMs - last >= interval * 60_000;
 }
