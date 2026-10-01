@@ -3,14 +3,27 @@
 // ai_map_leads + ai_map_processes och mailar både kunden och info@.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-import { type Body, validProcesses, FREQ, TIME, RULE, DATA, VALUE, potentialFromScore, totalPotentialLabel, recommendSolution, recommendNextStep, HOURS_PER_WEEK, automationFactor } from "../_shared/aiMapScoring.ts";
+import {
+  type Body,
+  validProcesses,
+  FREQ,
+  TIME,
+  RULE,
+  DATA,
+  VALUE,
+  potentialFromScore,
+  totalPotentialLabel,
+  recommendSolution,
+  recommendNextStep,
+  HOURS_PER_WEEK,
+  automationFactor,
+} from "../_shared/aiMapScoring.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
-
 
 const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -60,7 +73,10 @@ Deno.serve(async (req: Request) => {
   try {
     const raw = await req.json();
     if (!raw || typeof raw !== "object" || !validProcesses(raw.processes)) {
-      return new Response(JSON.stringify({ error: "Kontrollera processerna och besvara alla frågor." }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "Kontrollera processerna och besvara alla frågor." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
     const body = raw as Body;
 
@@ -71,35 +87,51 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const company_name = String(body.company_name ?? "").trim().slice(0, 120);
-    const industry = String(body.industry ?? "").trim().slice(0, 80);
-    const employee_count = String(body.employee_count ?? "").trim().slice(0, 20);
-    const contact_name = String(body.contact_name ?? "").trim().slice(0, 80);
-    const email = String(body.email ?? "").trim().slice(0, 160);
+    const company_name = String(body.company_name ?? "")
+      .trim()
+      .slice(0, 120);
+    const industry = String(body.industry ?? "")
+      .trim()
+      .slice(0, 80);
+    const employee_count = String(body.employee_count ?? "")
+      .trim()
+      .slice(0, 20);
+    const contact_name = String(body.contact_name ?? "")
+      .trim()
+      .slice(0, 80);
+    const email = String(body.email ?? "")
+      .trim()
+      .slice(0, 160);
     const phone: string | null = null;
-    const pain_areas = Array.isArray(body.pain_areas) ? body.pain_areas.slice(0, 12).map((s) => String(s).slice(0, 60)) : [];
+    const pain_areas = Array.isArray(body.pain_areas)
+      ? body.pain_areas.slice(0, 12).map((s) => String(s).slice(0, 60))
+      : [];
     const consent = body.consent === true;
     const marketingConsent = body.marketing_consent === true;
     const processes = Array.isArray(body.processes) ? body.processes.slice(0, 5) : [];
 
     if (!company_name || !industry || !employee_count || !contact_name || !email) {
       return new Response(JSON.stringify({ error: "Obligatoriska fält saknas." }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return new Response(JSON.stringify({ error: "Ogiltig e-postadress." }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (!consent) {
       return new Response(JSON.stringify({ error: "Samtycke krävs." }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     if (processes.length < 1) {
       return new Response(JSON.stringify({ error: "Minst 1 process krävs." }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -116,7 +148,9 @@ Deno.serve(async (req: Request) => {
       const savedHoursPerWeek = Math.round(weeklyHours * automationFactor(p) * 10) / 10;
       return {
         position: idx,
-        process_name: String(p.process_name ?? "").trim().slice(0, 160),
+        process_name: String(p.process_name ?? "")
+          .trim()
+          .slice(0, 160),
         frequency: p.frequency,
         weekly_time: p.weekly_time,
         systems: p.systems ? String(p.systems).slice(0, 200) : null,
@@ -154,12 +188,12 @@ Deno.serve(async (req: Request) => {
       overall_recommendation: string;
     } | null = null;
 
-
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!SUPABASE_URL || !SERVICE_KEY) {
       return new Response(JSON.stringify({ error: "Server-konfiguration saknas." }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
@@ -167,8 +201,14 @@ Deno.serve(async (req: Request) => {
     const { data: lead, error: leadErr } = await admin
       .from("ai_map_leads")
       .insert({
-        company_name, industry, employee_count, contact_name, email, phone,
-        pain_areas, consent,
+        company_name,
+        industry,
+        employee_count,
+        contact_name,
+        email,
+        phone,
+        pain_areas,
+        consent,
         marketing_consent: marketingConsent,
         marketing_consent_at: marketingConsent ? new Date().toISOString() : null,
         total_score: totalScore,
@@ -183,7 +223,8 @@ Deno.serve(async (req: Request) => {
     if (leadErr || !lead) {
       console.error("[submit-ai-map] lead insert failed", leadErr);
       return new Response(JSON.stringify({ error: "Kunde inte spara lead." }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -212,9 +253,13 @@ Deno.serve(async (req: Request) => {
       // Compensate only this newly-created, incomplete submission.
       const { error: cleanupError } = await admin.from("ai_map_leads").delete().eq("id", leadId);
       if (cleanupError) console.error("[submit-ai-map] incomplete submission cleanup failed", cleanupError);
-      return new Response(JSON.stringify({ error: "Kunde inte spara hela kartläggningen. Kontakta info@auroramedia.se." }), {
-        status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ error: "Kunde inte spara hela kartläggningen. Kontakta info@auroramedia.se." }),
+        {
+          status: 503,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -329,12 +374,7 @@ Skriv också:
                         },
                       },
                     },
-                    required: [
-                      "executive_summary",
-                      "maturity_note",
-                      "overall_recommendation",
-                      "cases",
-                    ],
+                    required: ["executive_summary", "maturity_note", "overall_recommendation", "cases"],
                     additionalProperties: false,
                   },
                 },
@@ -346,12 +386,27 @@ Skriv också:
 
         if (aiResp.ok) {
           const aiJson = await aiResp.json();
-          const argsStr =
-            aiJson?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
+          const argsStr = aiJson?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
           if (argsStr) {
             try {
               const candidate = JSON.parse(argsStr);
-              if (candidate && ["executive_summary", "maturity_note", "overall_recommendation"].every(k => typeof candidate[k] === "string") && Array.isArray(candidate.cases) && candidate.cases.every((c: Record<string, unknown>) => c && ["process_name", "why_it_matters", "deep_analysis", "concrete_example", "risks"].every(k => typeof c[k] === "string") && Array.isArray(c.quick_wins) && c.quick_wins.every((v: unknown) => typeof v === "string"))) aiAnalysis = candidate;
+              if (
+                candidate &&
+                ["executive_summary", "maturity_note", "overall_recommendation"].every(
+                  (k) => typeof candidate[k] === "string",
+                ) &&
+                Array.isArray(candidate.cases) &&
+                candidate.cases.every(
+                  (c: Record<string, unknown>) =>
+                    c &&
+                    ["process_name", "why_it_matters", "deep_analysis", "concrete_example", "risks"].every(
+                      (k) => typeof c[k] === "string",
+                    ) &&
+                    Array.isArray(c.quick_wins) &&
+                    c.quick_wins.every((v: unknown) => typeof v === "string"),
+                )
+              )
+                aiAnalysis = candidate;
             } catch (e) {
               console.error("[submit-ai-map] failed to parse AI args", e);
             }
@@ -365,16 +420,16 @@ Skriv också:
     }
 
     if (aiAnalysis) {
-      const { error: analysisError } = await admin.from("ai_map_leads").update({ ai_analysis: aiAnalysis }).eq("id", leadId);
+      const { error: analysisError } = await admin
+        .from("ai_map_leads")
+        .update({ ai_analysis: aiAnalysis })
+        .eq("id", leadId);
       if (analysisError) console.error("[submit-ai-map] could not store optional analysis", analysisError);
     }
 
-
     // Skriv in lead i drip-sekvensen för automatiska uppföljningsmail (dag 2/5/9/14)
     try {
-      const { error: dripErr } = await admin
-        .from("ai_map_email_sequence")
-        .insert({ lead_id: leadId, email });
+      const { error: dripErr } = await admin.from("ai_map_email_sequence").insert({ lead_id: leadId, email });
       if (dripErr) console.error("[submit-ai-map] failed to enqueue drip", dripErr);
     } catch (e) {
       console.error("[submit-ai-map] drip enqueue threw", e);
@@ -398,18 +453,20 @@ Skriv också:
           <ol>${top3.map((t) => `<li><strong>${escape(t.process_name)}</strong> – ${escape(t.potential)} (${t.score} p)<br/>→ ${escape(t.recommended_solution)}</li>`).join("")}</ol>
           <p><a href="https://auroramedia.se/admin/leads">Öppna admin/leads</a> · Lead-ID: ${leadId}</p>
         </div>`;
-      mailJobs.push(fetch("https://api.resend.com/emails", {
-        signal: AbortSignal.timeout(10000),
-        method: "POST",
-        headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          from: "Aurora Media <noreply@auroramedia.se>",
-          to: ["info@auroramedia.se"],
-          reply_to: email,
-          subject: `Ny AI-karta – ${companyNormalized} (${total_potential})`,
-          html: internalHtml,
-        }),
-      }).catch((e) => console.error("[submit-ai-map] internal mail threw", e)));
+      mailJobs.push(
+        fetch("https://api.resend.com/emails", {
+          signal: AbortSignal.timeout(10000),
+          method: "POST",
+          headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: "Aurora Media <noreply@auroramedia.se>",
+            to: ["info@auroramedia.se"],
+            reply_to: email,
+            subject: `Ny AI-karta – ${companyNormalized} (${total_potential})`,
+            html: internalHtml,
+          }),
+        }).catch((e) => console.error("[submit-ai-map] internal mail threw", e)),
+      );
 
       // Bekräftelse till kunden
       const firstName = escape(contact_name.split(" ")[0]);
@@ -419,27 +476,31 @@ Skriv också:
         .slice(0, 8)
         .map(
           (p) =>
-            `<span style="display:inline-block;background:#eef2ff;border:1px solid #c7d2fe;color:#3730a3;font-size:13px;padding:6px 12px;border-radius:999px;margin:0 6px 6px 0;">${escape(p)}</span>`
+            `<span style="display:inline-block;background:#eef2ff;border:1px solid #c7d2fe;color:#3730a3;font-size:13px;padding:6px 12px;border-radius:999px;margin:0 6px 6px 0;">${escape(p)}</span>`,
         )
         .join("");
 
       const aiCaseLookup = (name: string) =>
-        aiAnalysis?.cases?.find(
-          (c) => c.process_name.trim().toLowerCase() === name.trim().toLowerCase()
-        ) ?? null;
+        aiAnalysis?.cases?.find((c) => c.process_name.trim().toLowerCase() === name.trim().toLowerCase()) ?? null;
 
       const topCasesHtml = top3
         .map((t, i) => {
           const potentialColor =
-            t.potential === "Direkt AI-case" ? "#16a34a"
-            : t.potential === "Hög potential" ? "#2563eb"
-            : t.potential === "Medelpotential" ? "#ca8a04"
-            : "#64748b";
+            t.potential === "Direkt AI-case"
+              ? "#16a34a"
+              : t.potential === "Hög potential"
+                ? "#2563eb"
+                : t.potential === "Medelpotential"
+                  ? "#ca8a04"
+                  : "#64748b";
           const potentialBg =
-            t.potential === "Direkt AI-case" ? "#dcfce7"
-            : t.potential === "Hög potential" ? "#dbeafe"
-            : t.potential === "Medelpotential" ? "#fef3c7"
-            : "#f1f5f9";
+            t.potential === "Direkt AI-case"
+              ? "#dcfce7"
+              : t.potential === "Hög potential"
+                ? "#dbeafe"
+                : t.potential === "Medelpotential"
+                  ? "#fef3c7"
+                  : "#f1f5f9";
           const ai = aiCaseLookup(t.process_name);
           const aiBlock = ai
             ? `
@@ -582,18 +643,20 @@ Skriv också:
           ? `Er AI-analys är klar – ${total_potential.toLowerCase()} potential identifierad`
           : `Er AI-analys är klar – ${companyNormalized}`;
 
-      mailJobs.push(fetch("https://api.resend.com/emails", {
-        signal: AbortSignal.timeout(10000),
-        method: "POST",
-        headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          from: "Aurora Media <noreply@auroramedia.se>",
-          to: [email],
-          reply_to: "info@auroramedia.se",
-          subject: subjectLine,
-          html: userHtml,
-        }),
-      }).catch((e) => console.error("[submit-ai-map] user mail threw", e)));
+      mailJobs.push(
+        fetch("https://api.resend.com/emails", {
+          signal: AbortSignal.timeout(10000),
+          method: "POST",
+          headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: "Aurora Media <noreply@auroramedia.se>",
+            to: [email],
+            reply_to: "info@auroramedia.se",
+            subject: subjectLine,
+            html: userHtml,
+          }),
+        }).catch((e) => console.error("[submit-ai-map] user mail threw", e)),
+      );
     }
 
     await Promise.allSettled(mailJobs);
@@ -612,12 +675,13 @@ Skriv också:
         pain_areas,
         ai_analysis: aiAnalysis,
       }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (err) {
     console.error("[submit-ai-map] error", err);
     return new Response(JSON.stringify({ error: "Internal error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      status: 500,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
