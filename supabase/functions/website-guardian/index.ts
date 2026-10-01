@@ -152,7 +152,7 @@ Deno.serve(async req => {
     if (listError) throw listError;
 
     if (body.action === 'run' || body.action === 'run_due') {
-      let targets = (sites ?? []).filter((site: GuardianSite) =>
+      const targets = (sites ?? []).filter((site: GuardianSite) =>
         site.active &&
         (body.action === 'run_due'
           ? isDue(site.last_checked_at, site.check_interval_minutes)
