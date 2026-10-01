@@ -67,6 +67,7 @@ const SnabbanalysForm = ({
   const [fritext, setFritext] = useState("");
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const [website, setWebsite] = useState(""); // honeypot
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -77,7 +78,8 @@ const SnabbanalysForm = ({
   // Förfyll e-post/företag om vi sett besökaren förut
   useEffect(() => {
     try {
-      const lead = JSON.parse(localStorage.getItem("aurora_lead") || "null") as
+      localStorage.removeItem("aurora_lead");
+      const lead = JSON.parse(sessionStorage.getItem("aurora_lead") || "null") as
         | { email?: string; company?: string }
         | null;
       if (lead?.email) setEmail(lead.email);
@@ -115,6 +117,7 @@ const SnabbanalysForm = ({
           email: email.trim(),
           company_name: company.trim(),
           consent,
+          marketing_consent: marketingConsent,
           website,
         },
       });
@@ -122,7 +125,7 @@ const SnabbanalysForm = ({
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
 
       try {
-        localStorage.setItem("aurora_lead", JSON.stringify({
+        sessionStorage.setItem("aurora_lead", JSON.stringify({
           name: "",
           email: email.trim(),
           company: company.trim(),
@@ -238,9 +241,10 @@ const SnabbanalysForm = ({
             <Link to="/villkor" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", fontWeight: 600 }}>
               villkoren
             </Link>{" "}
-            – Aurora Media skickar AI-planen på mejl och kan höra av sig för uppföljning.
+            – Aurora Media skickar den beställda AI-planen på mejl. Läs <Link to="/integritetspolicy" style={{ textDecoration: "underline" }}>integritetspolicyn</Link>.
           </span>
         </label>
+        <label className="snf-consent" style={{ marginTop: 12 }}><input type="checkbox" checked={marketingConsent} onChange={e => setMarketingConsent(e.target.checked)} /><span>Jag vill även få tips och erbjudanden om AI och automation via mejl (valfritt). Jag kan avregistrera mig i varje mejl.</span></label>
         {errors.consent && <p className="snf-error">{errors.consent}</p>}
       </div>
 

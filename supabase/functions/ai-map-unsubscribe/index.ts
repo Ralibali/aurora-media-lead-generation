@@ -50,7 +50,7 @@ Deno.serve(async (req: Request) => {
 
   const { data: row, error: selErr } = await admin
     .from("ai_map_email_sequence")
-    .select("id, unsubscribed_at")
+    .select("id, lead_id, unsubscribed_at")
     .eq("unsubscribe_token", token)
     .maybeSingle();
 
@@ -60,16 +60,28 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  if (row.unsubscribed_at) {
-    return new Response(pageHtml("Redan avregistrerad", "Du är redan borttagen från uppföljningen för denna AI-karta. Vi hör inte av oss mer."), {
-      status: 200, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
-    });
+  if (!row.unsubscribed_at) {
+    const { error: unsubscribeError } = await admin
+      .from("ai_map_email_sequence")
+      .update({ unsubscribed_at: new Date().toISOString(), unsubscribed_reason: reason })
+      .eq("id", row.id);
+    if (unsubscribeError) {
+      return new Response(pageHtml("Försök igen", "Avregistreringen kunde inte sparas. Försök igen eller kontakta info@auroramedia.se.", false), {
+        status: 503, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
   }
 
-  await admin
-    .from("ai_map_email_sequence")
-    .update({ unsubscribed_at: new Date().toISOString(), unsubscribed_reason: reason })
-    .eq("id", row.id);
+  // Keep the optional consent state in sync; the stopped sequence is a second gate.
+  const { error: consentError } = await admin
+    .from("ai_map_leads")
+    .update({ marketing_consent: false, marketing_consent_at: null })
+    .eq("id", row.lead_id);
+  if (consentError) {
+    return new Response(pageHtml("Uppföljningen är stoppad", "Vi kunde inte uppdatera hela ditt samtyckesval. Uppföljningen för denna analys är stoppad; kontakta info@auroramedia.se om problemet kvarstår.", false), {
+      status: 503, headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+    });
+  }
 
   const msg = pause === "6m"
     ? "Vi pausar uppföljningen. Du hör inte av oss mer om denna analys – men hör gärna av dig själv om något ändras."

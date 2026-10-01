@@ -14,7 +14,7 @@ async function handler(name: string, client: unknown, environment: Record<string
   vi.stubGlobal("__auroraTestClient", client);
   vi.stubGlobal("Deno", { env: { get: (key: string) => ({ SUPABASE_URL: "https://local.invalid", SUPABASE_SERVICE_ROLE_KEY: "local-test-key", ...environment })[key] }, serve: (fn: typeof serve) => { serve = fn; } });
   await import(/* @vite-ignore */ `data:text/javascript;base64,${Buffer.from(compiled.outputFiles[0].text).toString("base64")}#${Math.random()}`);
-  return (body: unknown, headers: Record<string, string> = {}) => serve(new Request("https://local.invalid/function", { method: "POST", headers: { "Content-Type": "application/json", origin: "https://auroramedia.se", "x-forwarded-for": "local-test", ...headers }, body: JSON.stringify(body) }));
+  return (body: unknown, headers: Record<string, string> = {}, url = "https://local.invalid/function") => serve(new Request(url, { method: "POST", headers: { "Content-Type": "application/json", origin: "https://auroramedia.se", "x-forwarded-for": "local-test", ...headers }, body: JSON.stringify(body) }));
 }
 beforeEach(() => { vi.spyOn(console, "error").mockImplementation(() => {}); });
 afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
@@ -38,6 +38,20 @@ describe("contact handler receipts", () => {
     const response = await submit(contact);
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ ok: true, leadId: "local-lead", notification_sent: false });
+  });
+  it("routes owner contact to the central inbox while keeping the customer's receipt", async () => {
+    const fetch = vi.fn(async () => new Response("{}", { status: 200 }));
+    vi.stubGlobal("fetch", fetch);
+    const submit = await handler("send-contact-email", contactDb(false), {
+      RESEND_API_KEY: "local-test-key", INTERNAL_LEADS_EMAIL: "former-admin@example.test",
+    });
+    expect((await submit(contact)).status).toBe(200);
+    const envelopes = (fetch.mock.calls as unknown as Array<[unknown, RequestInit]>).map((call) => JSON.parse(String(call[1].body)));
+    expect(envelopes).toHaveLength(2);
+    expect(envelopes[0].to).toEqual(["info@auroramedia.se"]);
+    expect(envelopes[0]).not.toHaveProperty("bcc");
+    expect(envelopes[1].to).toEqual([contact.email]);
+    expect(envelopes[1].reply_to).toBe("info@auroramedia.se");
   });
 });
 describe("AI map handler integrity", () => {
@@ -120,5 +134,55 @@ describe("tool context receipt", () => {
     const response = await submit({ ...contact, internalNote: note });
     expect(response.status).toBe(200);
     expect(insert).toHaveBeenCalledWith(expect.objectContaining({ internal_note: note.trim() }));
+  });
+});
+
+
+describe("AI map marketing choice", () => {
+  it.each([undefined, false, "true", true])("stores only an explicit boolean optional choice: %s", async (choice) => {
+    let saved: Record<string, unknown> = {};
+    const lead = { insert: (row: Record<string, unknown>) => { saved = row; return lead; }, select: () => lead, single: async () => ({ data: { id: "local-map", share_token: "abcdef0123456789" } }) };
+    const client = { from: (table: string) => table === "ai_map_leads" ? lead : { insert: async () => ({ error: null }) } };
+    const submit = await handler("submit-ai-map", client);
+    const response = await submit({ company_name: "Test", industry: "Transport", employee_count: "1–5", contact_name: "Test", email: "test@example.test", pain_areas: [], consent: true, marketing_consent: choice, processes: [{ process_name: "Veckorapport", frequency: "weekly", weekly_time: "1-3", rule_based: "yes", data_available: "yes", business_value: "high" }] });
+    expect(response.status).toBe(200);
+    expect(saved.marketing_consent).toBe(choice === true);
+    if (choice === true) expect(Date.parse(String(saved.marketing_consent_at))).not.toBeNaN();
+    else expect(saved.marketing_consent_at).toBeNull();
+  });
+  it.each([
+    { consent: false, deliverPdf: false, marketing: 0, delivery: 0 },
+    { consent: true, deliverPdf: false, marketing: 1, delivery: 0 },
+    { consent: false, deliverPdf: true, marketing: 0, delivery: 1 },
+  ])("requires recorded marketing consent while preserving requested PDF delivery: %j", async (scenario) => {
+    const fetch = vi.fn(async () => new Response("{}", { status: 200 })); vi.stubGlobal("fetch", fetch);
+    const sequence = { id: "local-sequence", lead_id: "local-map", email: "test@example.test", unsubscribe_token: "test-token", created_at: new Date(Date.now() - 2.2 * 86400000).toISOString(), step_2_sent_at: null, step_5_sent_at: null, step_9_sent_at: null, step_14_sent_at: null };
+    const lead = { id: "local-map", company_name: "Test", contact_name: "Test", email: "test@example.test", share_token: "share-token", pain_areas: [], total_potential: "1", marketing_consent: scenario.consent };
+    const sequences = { select: () => sequences, is: () => sequences, gte: () => sequences, order: () => sequences, limit: async () => ({ data: [sequence] }), update: () => ({ eq: async () => ({ error: null }) }) };
+    const leads = { select: () => leads, in: () => leads, is: () => leads, limit: async () => ({ data: scenario.deliverPdf ? [lead] : [] }), eq: () => leads, maybeSingle: async () => ({ data: lead }), update: () => ({ eq: async () => ({ error: null }) }) };
+    const processes = { select: () => processes, eq: () => processes, order: () => processes, limit: async () => ({ data: [] }) };
+    const submit = await handler("process-ai-map-drip", { from: (table: string) => table === "ai_map_email_sequence" ? sequences : table === "ai_map_leads" ? leads : processes }, { CRON_SECRET: "local-secret", RESEND_API_KEY: "local-email-key" });
+    const response = await submit({}, { "x-cron-secret": "local-secret" });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ sent: scenario.marketing, pdf_fallbacks: scenario.delivery });
+    expect(fetch).toHaveBeenCalledTimes(scenario.marketing + scenario.delivery);
+  });
+});
+
+
+describe("AI-map marketing withdrawal", () => {
+  it("does not claim success when unsubscribe storage fails", async () => {
+    const sequence = { select: () => sequence, eq: () => sequence, maybeSingle: async () => ({ data: { id: "seq", lead_id: "lead", unsubscribed_at: null } }), update: () => ({ eq: async () => ({ error: new Error("local-write-error") }) }) };
+    const submit = await handler("ai-map-unsubscribe", { from: () => sequence });
+    expect((await submit({}, {}, "https://local.invalid/function?token=opaque")).status).toBe(503);
+  });
+  it("stops the sequence and removes the active marketing choice", async () => {
+    const updates: Record<string, unknown>[] = [];
+    const sequence = { select: () => sequence, eq: () => sequence, maybeSingle: async () => ({ data: { id: "seq", lead_id: "lead", unsubscribed_at: null } }), update: (value: Record<string, unknown>) => { updates.push(value); return { eq: async () => ({ error: null }) }; } };
+    const consent = { update: (value: Record<string, unknown>) => { updates.push(value); return { eq: async () => ({ error: null }) }; } };
+    const submit = await handler("ai-map-unsubscribe", { from: (table: string) => table === "ai_map_email_sequence" ? sequence : consent });
+    expect((await submit({}, {}, "https://local.invalid/function?token=opaque")).status).toBe(200);
+    expect(updates[0]).toHaveProperty("unsubscribed_at");
+    expect(updates[1]).toEqual({ marketing_consent: false, marketing_consent_at: null });
   });
 });

@@ -37,7 +37,8 @@ const AiKartaForm = () => {
   useEffect(() => {
     renderedAtRef.current = Date.now();
     try {
-      const raw = localStorage.getItem("aurora_lead");
+      localStorage.removeItem("aurora_lead");
+      const raw = sessionStorage.getItem("aurora_lead");
       if (raw) {
         const saved = JSON.parse(raw) as { name?: string; email?: string; company?: string };
         if (saved.name) setName(saved.name);
@@ -98,18 +99,18 @@ const AiKartaForm = () => {
             catch { return "form_direct"; }
           })(),
           page_path: typeof window !== "undefined" ? window.location.pathname : null,
-          referrer: typeof document !== "undefined" ? document.referrer || null : null,
+          referrer: typeof document !== "undefined" && document.referrer ? new URL(document.referrer).origin : null,
         },
       });
 
       if (error) throw error;
       if (!data?.ok) throw new Error(data?.error || "Något gick fel.");
-      trackEvent("ai_karta_pdf", { company: parsed.data.company ?? "" });
+      trackEvent("ai_karta_pdf");
 
 
       if (data.downloadUrl) setDownloadUrl(data.downloadUrl);
       try {
-        localStorage.setItem(
+        sessionStorage.setItem(
           "aurora_lead",
           JSON.stringify({ name: parsed.data.name, email: parsed.data.email, company: parsed.data.company ?? "" })
         );
@@ -194,7 +195,7 @@ const AiKartaForm = () => {
               setEmail("");
               setCompany("");
               setPrefilled(false);
-              try { localStorage.removeItem("aurora_lead"); } catch { /* ignore */ }
+              try { sessionStorage.removeItem("aurora_lead"); } catch { /* ignore */ }
             }}
             className="shrink-0 text-primary underline underline-offset-2"
           >
@@ -283,7 +284,7 @@ const AiKartaForm = () => {
               className="mt-0.5"
             />
             <Label htmlFor="aikarta-consent" className="text-xs leading-relaxed text-foreground/80">
-              Jag godkänner att Aurora Media AB lagrar mitt namn och min e-postadress för att skicka AI-kartan och eventuell uppföljning. Jag kan när som helst avregistrera mig genom att mejla{" "}
+              Jag vill att Aurora Media AB skickar AI-kartan till min e-postadress. Frågor om mina uppgifter kan skickas till{" "}
               <a href="mailto:info@auroramedia.se" className="text-primary underline underline-offset-2">
                 info@auroramedia.se
               </a>

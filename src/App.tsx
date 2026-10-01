@@ -624,7 +624,8 @@ const App = () => (
               <Route path="/tjanster/content" element={<Content />} />
               <Route path="/tjanster/grafisk-profil" element={<GrafiskProfil />} />
               <Route path="/tjanster/fotografering" element={<Fotografering />} />
-              <Route path="/care" element={<AuroraCare />} />\n              <Route path="/sitewatch" element={<AuroraSiteWatch />} />
+              <Route path="/care" element={<AuroraCare />} />
+              <Route path="/sitewatch" element={<AuroraSiteWatch />} />
               <Route path="/tillganglighet" element={<Tillganglighet />} />
               <Route path="/cookie-samtycke" element={<CookieSamtycke />} />
               <Route path="/ai-synlighet" element={<AuroraSight />} />

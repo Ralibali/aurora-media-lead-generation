@@ -79,6 +79,7 @@ Deno.serve(async (req: Request) => {
     const phone: string | null = null;
     const pain_areas = Array.isArray(body.pain_areas) ? body.pain_areas.slice(0, 12).map((s) => String(s).slice(0, 60)) : [];
     const consent = body.consent === true;
+    const marketingConsent = body.marketing_consent === true;
     const processes = Array.isArray(body.processes) ? body.processes.slice(0, 5) : [];
 
     if (!company_name || !industry || !employee_count || !contact_name || !email) {
@@ -168,6 +169,8 @@ Deno.serve(async (req: Request) => {
       .insert({
         company_name, industry, employee_count, contact_name, email, phone,
         pain_areas, consent,
+        marketing_consent: marketingConsent,
+        marketing_consent_at: marketingConsent ? new Date().toISOString() : null,
         total_score: totalScore,
         total_potential,
         ai_analysis: aiAnalysis ?? null,
@@ -401,7 +404,7 @@ Skriv också:
         headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           from: "Aurora Media <noreply@auroramedia.se>",
-          to: [Deno.env.get("INTERNAL_LEADS_EMAIL")?.trim() || "info@auroramedia.se"],
+          to: ["info@auroramedia.se"],
           reply_to: email,
           subject: `Ny AI-karta – ${companyNormalized} (${total_potential})`,
           html: internalHtml,

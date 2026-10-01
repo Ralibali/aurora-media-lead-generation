@@ -5,18 +5,18 @@ import { Reveal, VkNav, VkFooter } from "@/components/verkstad/VerkstadLayout";
 import { setBreadcrumb, setJsonLd, removeJsonLd, SITE_URL } from "@/lib/seoHelpers";
 import "@/styles/verkstad.css";
 
-const UPDATED = "27 april 2026";
+const UPDATED = "1 oktober 2026";
 
 const SECTIONS = [
   { h: "1. Personuppgiftsansvarig", content: ["Aurora Media AB, org.nr 559272-0220, är personuppgiftsansvarig för behandlingen av personuppgifter som sker via denna webbplats, kontaktformulär, offertförfrågningar och digitala marknadsföringskanaler.", "Kontakt: info@auroramedia.se. Bolaget är baserat i Linköping, Sverige."] },
   { h: "2. Vilka personuppgifter vi behandlar", content: ["När du kontaktar oss kan vi behandla namn, e-post, telefonnummer, företagsnamn, webbplats, meddelanden samt uppgifter om vilken tjänst du är intresserad av.", "Vid besök på webbplatsen kan vi, beroende på dina cookieval, behandla IP-adress, enhetsinformation, webbläsare och användningsdata."] },
   { h: "3. Varför vi behandlar personuppgifter", content: ["Vi behandlar personuppgifter för att besvara förfrågningar, lämna offerter, boka möten, leverera våra tjänster och följa upp pågående dialoger.", "Vi kan även använda uppgifter för att förbättra webbplatsen, mäta annonsering och analysera efterfrågan."] },
-  { h: "4. Laglig grund", content: ["Kontaktförfrågningar: berättigat intresse.", "Avtal: fullgörande av avtal.", "Bokföring: rättslig förpliktelse.", "Icke-nödvändiga cookies: samtycke."] },
-  { h: "5. Cookies och analys", content: ["Webbplatsen kan använda tekniskt nödvändiga cookies och, efter samtycke, Google Analytics 4 för statistik och Google Ads för marknadsföringsmätning enligt dina separata cookieval.", "Vi strävar efter dataminimering och behandlar inga känsliga personuppgifter via spårning."] },
-  { h: "6. Mottagare", content: ["Personuppgifter kan delas med leverantörer för hosting, e-post, CRM, analys och bokföring. De agerar personuppgiftsbiträden enligt våra instruktioner."] },
-  { h: "7. Överföring utanför EU/EES", content: ["Vid överföring utanför EU/EES sker det med stöd av EU-kommissionens standardavtalsklausuler eller annat tillåtet rättsligt stöd."] },
-  { h: "8. Lagringstid", content: ["Förfrågningar sparas så länge dialogen är aktiv. Kund- och avtalsuppgifter sparas enligt avtal och bokföringsregler."] },
-  { h: "9. Dina rättigheter", content: ["Du har rätt till tillgång, rättelse, radering, begränsning, invändning och dataportabilitet. Kontakta info@auroramedia.se. Klagomål riktas till Integritetsskyddsmyndigheten (IMY)."] },
+  { h: "4. Laglig grund", content: ["Kontaktförfrågningar: berättigat intresse.", "Avtal: fullgörande av avtal.", "Bokföring: rättslig förpliktelse.", "Icke-nödvändiga cookies: samtycke. Tips och erbjudanden via AI-kartans automatiska mejlsekvens: separat, valfritt samtycke som kan återkallas med länken i varje mejl."] },
+  { h: "5. Cookies och analys", content: ["Webbplatsen kan använda tekniskt nödvändiga cookies och, efter samtycke, Google Analytics 4 för statistik och Google Ads för marknadsföringsmätning enligt dina separata cookieval.", "Du väljer statistik och marknadsföring separat i Cookieinställningar. auroramedia_cookie_consent_v2 är vår nödvändiga localStorage-post med kategori-val, datum och version; den används i högst 12 månader. Vid återkallelse stoppas mätningen för den kategori du nekat och kända mätcookies raderas. Typsnitten levereras från vår egen webbplats.", "Google Analytics kan efter statistikval sätta _ga och _ga_* med pseudonyma besöks- och sessionsidentifierare. Googles standardlivslängd är två år. Google Ads kan efter marknadsföringsval använda _gcl_*-cookies med annonsklick och konverteringsidentifierare, normalt i 90 dagar. Inställningar och webbläsaren kan begränsa dessa tider.", "För kontofunktioner kan Supabase använda nödvändig localStorage med namnet sb-*-auth-token för inloggningssessionen tills du loggar ut, sessionen upphör eller lagringen rensas. aurora_lead, ai-karta-draft och ai_map_result sparar kontaktuppgifter, formulärutkast respektive den beställda analysen i sessionStorage för det begärda formulärflödet; de försvinner när fliken stängs eller du rensar lagringen."] },
+  { h: "6. Mottagare", content: ["Webbplatsen använder Supabase för databas och formulärhantering, Resend för beställda mejl och, efter respektive cookieval, Google Analytics och Google Ads. AI-kartans text och processbeskrivningar skickas till Lovables AI-tjänst, som använder Google Gemini för den begärda analysen. Personuppgifter du skriver i beskrivningen kan därför omfattas; skriv bara det som behövs för analysen. Uppgifter kan även behandlas av leverantörer för webbdrift och bokföring när det behövs för tjänsten."] },
+  { h: "7. Överföring utanför EU/EES", content: ["Vissa leverantörer kan behandla uppgifter utanför EU/EES. Sådana överföringar kräver rättsligt stöd och skyddsåtgärder enligt GDPR. Kontakta info@auroramedia.se för information om aktuella behandlingsländer och dokumenterade skyddsåtgärder."] },
+  { h: "8. Lagringstid", content: ["Förfrågningar sparas så länge dialogen är aktiv. Kund- och avtalsuppgifter sparas enligt avtal och bokföringsregler. Formulärutkast och kontaktuppgifter för förifyllning sparas endast i den aktuella webbläsarfliken (sessionStorage)."] },
+  { h: "9. Dina rättigheter", content: ["Du kan, beroende på omständigheterna, begära tillgång, rättelse, radering, begränsning och dataportabilitet samt invända mot behandling som grundas på berättigat intresse. Samtycke kan återkallas för framtida behandling utan att påverka lagligheten före återkallelsen. Kontakta info@auroramedia.se; vi kan behöva verifiera din identitet och svarar normalt inom en månad. Klagomål kan lämnas till Integritetsskyddsmyndigheten (IMY)."] },
   { h: "10. Ändringar", content: ["Vi kan uppdatera denna policy när tjänster eller regler ändras. Den senaste versionen finns alltid på denna sida."] },
 ];
 
@@ -28,7 +28,7 @@ const Integritetspolicy = () => {
       name: "Integritetspolicy",
       url: `${SITE_URL}/integritetspolicy`,
       publisher: { "@id": `${SITE_URL}/#organization` },
-      inLanguage: "sv-SE", dateModified: "2026-04-27",
+      inLanguage: "sv-SE", dateModified: "2026-10-01",
     });
     return () => { removeJsonLd("breadcrumb-jsonld"); removeJsonLd("privacy-policy-webpage"); };
   }, []);

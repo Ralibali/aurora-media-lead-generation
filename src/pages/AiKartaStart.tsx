@@ -309,7 +309,7 @@ const AiKartaStart = () => {
   const [step, setStep] = useState(1);
   const [industry, setIndustry] = useState<IndustryKey | "">("");
   const [savedDraft] = useState(() => {
-    try { return parseAiMapDraft(localStorage.getItem(DRAFT_KEY)); } catch { return null; }
+    try { localStorage.removeItem(DRAFT_KEY); localStorage.removeItem("aurora_lead"); return parseAiMapDraft(sessionStorage.getItem(DRAFT_KEY)); } catch { return null; }
   });
   const [showRestore, setShowRestore] = useState(!!savedDraft);
   const submitLock = useRef(false);
@@ -318,9 +318,10 @@ const AiKartaStart = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [website, setWebsite] = useState("");
+  const [marketingConsent, setMarketingConsent] = useState(false);
   const stepTracked = useRef<Set<number>>(new Set());
 
-  /* Draft-restore: kolla localStorage vid mount */
+  /* Draft-restore: kolla sessionens lagring vid mount */
   useEffect(() => {
     setSEOMeta({
       title: "Starta AI-kartan | Aurora Media",
@@ -349,7 +350,7 @@ const AiKartaStart = () => {
 
     // Förfyll kontaktuppgifter om vi sett besökaren förut
     try {
-      const lead = JSON.parse(localStorage.getItem("aurora_lead") || "null") as
+      const lead = JSON.parse(sessionStorage.getItem("aurora_lead") || "null") as
         | { name?: string; email?: string; company?: string }
         | null;
       if (lead) {
@@ -368,7 +369,7 @@ const AiKartaStart = () => {
   useEffect(() => {
     if (showRestore || submitLock.current) return;
     try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, industry, step }));
+      sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ form, industry, step }));
     } catch { /* ignore */ }
   }, [form, industry, step, showRestore]);
 
@@ -391,7 +392,7 @@ const AiKartaStart = () => {
     setShowRestore(false);
   };
   const clearDraft = () => {
-    try { localStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
+    try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* ignore */ }
     setShowRestore(false);
     setForm(emptyForm());
     setIndustry("");
@@ -496,16 +497,16 @@ const AiKartaStart = () => {
       }));
       const supabase = await getSupabase();
       const { data, error } = await supabase.functions.invoke("submit-ai-map", {
-        body: { ...form, processes: normalized, website },
+        body: { ...form, processes: normalized, website, marketing_consent: marketingConsent },
         signal: AbortSignal.timeout(60000),
       });
       if (error) throw error;
       if (!data?.ok || !data.leadId || !data.processes?.length) throw new Error(data?.error || "Kartan kunde inte sparas. Försök igen.");
       trackEvent("ai_karta_submit", { process_count: normalized.length });
 
-      // Kom ihåg kontaktuppgifterna till nästa besök
+      // Kom ihåg kontaktuppgifterna i den här fliken
       try {
-        localStorage.setItem("aurora_lead", JSON.stringify({
+        sessionStorage.setItem("aurora_lead", JSON.stringify({
           name: form.contact_name,
           email: form.email,
           company: form.company_name,
@@ -523,7 +524,7 @@ const AiKartaStart = () => {
             employee_count: form.employee_count,
           },
         }));
-        localStorage.removeItem(DRAFT_KEY);
+        sessionStorage.removeItem(DRAFT_KEY);
       } catch { /* ignore */ }
       navigate("/ai-karta/resultat", { state: { result: { ...data, meta: { company_name: form.company_name, contact_name: form.contact_name, email: form.email, industry: form.industry, employee_count: form.employee_count } } } });
     } catch (err) {
@@ -864,9 +865,10 @@ const AiKartaStart = () => {
                         >
                           villkoren för AI-kartan
                         </Link>
-                        {" "}– Aurora Media skickar kartan på mejl och kan höra av sig för uppföljning.
+                        {" "}– Aurora Media skickar den beställda kartan på mejl. Läs <Link to="/integritetspolicy" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>integritetspolicyn</Link>.
                       </span>
                     </label>
+                    <label className="aikw-consent"><input type="checkbox" checked={marketingConsent} onChange={e => setMarketingConsent(e.target.checked)} /><span>Jag vill även få tips och erbjudanden om AI och automation via mejl (valfritt). Jag kan avregistrera mig i varje mejl.</span></label>
                     {errors.consent && <p className="aikw-err">{errors.consent}</p>}
                   </>
                 )}

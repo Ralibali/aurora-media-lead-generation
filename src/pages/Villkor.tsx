@@ -14,29 +14,28 @@ const SECTIONS: { title: string; body: string[] }[] = [
   {
     title: "Vad du godkänner",
     body: [
-      "När du fyller i AI-kartan och kryssar i rutan godkänner du två saker:",
-      "1. Att Aurora Media skickar din AI-karta till den e-postadress du anger – tillsammans med upp till fyra korta uppföljningsmejl med konkreta tips kopplade till just din kartläggning.",
-      "2. Att Aurora Media får höra av sig till dig för uppföljning – till exempel för att fråga hur det gick, svara på frågor om kartan eller föreslå ett kostnadsfritt 20-minuterssamtal om första bygget.",
+      "När du beställer AI-kartan ber du Aurora Media att ta fram analysen och skicka den till den e-postadress du anger. Nödvändiga leveransmeddelanden ingår i beställningen.",
+      "Tips om AI och automation, erbjudanden och uppföljningsmejl är ett separat, frivilligt val som inte är förkryssat. Du kan få din karta utan att välja dessa mejl.",
     ],
   },
   {
     title: "Vad vi sparar – och varför",
     body: [
       "Vi sparar det du själv fyller i: namn, e-post, företagsnamn, bransch och svaren i kartläggningen. Uppgifterna används bara för att ta fram din AI-karta och för den uppföljning du godkänt ovan. Vi säljer aldrig vidare dina uppgifter till tredje part.",
-      "Behandlingen sker enligt GDPR med ditt samtycke som rättslig grund. Aurora Media AB (org.nr 559272-0220, Linköping) är personuppgiftsansvarig.",
+      "Aurora Media AB (org.nr 559272-0220, Linköping) är personuppgiftsansvarig. Den beställda analysen och leveransen behandlas för att utföra din förfrågan; frivillig mejlmarknadsföring bygger på ditt separata samtycke. Läs integritetspolicyn för ändamål, lagring och rättigheter.",
     ],
   },
   {
     title: "Du kan avsluta när du vill",
     body: [
-      "Varje mejl har en avregistreringslänk längst ner – ett klick och uppföljningen slutar direkt. Du kan också när som helst mejla info@auroramedia.se och be oss radera allt vi har om dig. Det gör vi utan diskussion.",
+      "Marknadsföringsmejl har en avregistreringslänk. Du kan också mejla info@auroramedia.se för att återkalla samtycke eller begära radering. Vi kan behöva verifiera din identitet och bedöma om något behöver bevaras enligt lag; vi svarar normalt inom en månad.",
       "Samtycket gäller tills du drar tillbaka det. AI-kartan du fått är din att behålla oavsett.",
     ],
   },
   {
     title: "Kort sagt",
     body: [
-      "Du får din karta på mejlen. Vi kan höra av oss för uppföljning. Du kan avsluta när du vill. Det är allt.",
+      "Du får din beställda karta på mejlen. Tips och erbjudanden får du bara om du väljer det separat. Du kan ändra det valet när du vill.",
     ],
   },
 ];
@@ -54,7 +53,7 @@ const Villkor = () => {
     <>
       <SEO
         title="Villkor för AI-kartan | Aurora Media"
-        description="Villkoren för AI-kartan: du får kartan på mejl, Aurora Media kan höra av sig för uppföljning, och du kan avsluta när du vill. Kort och mänskligt."
+        description="Villkoren för AI-kartan: beställd analys och leverans, separat frivilligt mejlval och hur du ändrar ditt val."
         canonical="/villkor"
         noindex
       />

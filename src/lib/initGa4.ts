@@ -12,6 +12,7 @@ initGa4({
     "/portal",
     "/dashboard"
   ],
-  "consentKey": "auroramedia_ga4_consent_v1"
+  "consentKey": "auroramedia_cookie_consent_v2",
+  "consentFormat": "updro"
 });
 restoreAdsConsent();

@@ -72,7 +72,7 @@ Deno.serve(async (req: Request) => {
     const body = (await req.json()) as Body;
 
     if (typeof body.website === "string" && body.website.trim() !== "") {
-      console.warn("[send-ai-karta] honeypot triggered", { ip: getClientIp(req) });
+      console.warn("[send-ai-karta] honeypot triggered", { blocked: true });
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -82,7 +82,7 @@ Deno.serve(async (req: Request) => {
     if (typeof body._renderedAt === "number" && body._renderedAt > 0) {
       const elapsed = Date.now() - body._renderedAt;
       if (elapsed < 3000) {
-        console.warn("[send-ai-karta] submitted too fast", { elapsed, ip: getClientIp(req) });
+        console.warn("[send-ai-karta] submitted too fast", { elapsed });
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -263,8 +263,7 @@ Deno.serve(async (req: Request) => {
       }),
     }).catch((e) => console.error("[send-ai-karta] user mail threw", e));
 
-    const INTERNAL_LEADS_EMAIL = Deno.env.get("INTERNAL_LEADS_EMAIL")?.trim();
-    const internalTo = INTERNAL_LEADS_EMAIL || "info@auroramedia.se";
+    const internalTo = "info@auroramedia.se";
     const internalHtml = `
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;color:#0f172a;">
   <h2 style="margin:0 0 12px;">Ny AI-karta-nedladdning</h2>

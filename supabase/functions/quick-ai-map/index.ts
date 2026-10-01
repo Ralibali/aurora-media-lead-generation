@@ -1208,6 +1208,7 @@ Deno.serve(async (req: Request) => {
     const contact_name = String(body.contact_name ?? "").trim().slice(0, 80);
     const companyInput = String(body.company_name ?? "").trim().slice(0, 120);
     const consent = body.consent === true;
+    const marketingConsent = body.marketing_consent === true;
 
     if (fritext.length < 30) return json({ error: "Beskriv gärna lite mer – minst några meningar om er vardag." }, 400);
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: "Ogiltig e-postadress." }, 400);
@@ -1415,6 +1416,8 @@ Gör motsvarande analys för just denna text. Kom ihåg: bara processer texten s
         phone: null,
         pain_areas: ["Snabbanalys (fritext)"],
         consent,
+        marketing_consent: marketingConsent,
+        marketing_consent_at: marketingConsent ? new Date().toISOString() : null,
         total_score: totalScore,
         total_potential,
         ai_analysis: aiAnalysis,
@@ -1479,7 +1482,7 @@ Gör motsvarande analys för just denna text. Kom ihåg: bara processer texten s
         headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           from: "Aurora Media <noreply@auroramedia.se>",
-          to: [Deno.env.get("INTERNAL_LEADS_EMAIL")?.trim() || "info@auroramedia.se"],
+          to: ["info@auroramedia.se"],
           reply_to: email,
           subject: `Snabbanalys – ${company_name || "okänt"} (${total_potential})`,
           html: internalHtml,

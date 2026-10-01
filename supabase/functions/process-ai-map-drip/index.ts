@@ -265,7 +265,7 @@ async function sendEmail(apiKey: string, to: string, subject: string, html: stri
       html,
       text: htmlToText(html),
       headers: {
-        "List-Unsubscribe": `<${unsubUrl}>, <mailto:unsubscribe@auroramedia.se?subject=unsubscribe-${token}>`,
+        "List-Unsubscribe": `<${unsubUrl}>, <mailto:info@auroramedia.se?subject=unsubscribe-${token}>`,
         "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
       },
     }),
@@ -389,11 +389,12 @@ Deno.serve(async (req: Request) => {
 
     const { data: lead } = await admin
       .from("ai_map_leads")
-      .select("id, company_name, contact_name, email, pain_areas, total_potential, share_token")
+      .select("id, company_name, contact_name, email, pain_areas, total_potential, share_token, marketing_consent")
       .eq("id", s.lead_id)
       .maybeSingle();
 
-    if (!lead) { skipped++; continue; }
+    // Requested PDF delivery is handled above independently of marketing.
+    if (!lead || lead.marketing_consent !== true) { skipped++; continue; }
 
     const { data: procs } = await admin
       .from("ai_map_processes")

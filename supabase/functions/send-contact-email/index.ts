@@ -149,11 +149,7 @@ Deno.serve(async (req: Request) => {
   try {
     // 0) Origin/Referer måste komma från en godkänd host.
     if (!isAllowedOrigin(req)) {
-      console.warn("[send-contact-email] blocked origin", {
-        origin: req.headers.get("origin"),
-        referer: req.headers.get("referer"),
-        ip: getClientIp(req),
-      });
+      console.warn("[send-contact-email] blocked origin");
       // Svara 200 så bot inte får feedback om varför den avvisas
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
@@ -165,7 +161,7 @@ Deno.serve(async (req: Request) => {
 
     // 1) Honeypot — bots fyller i dolda fält
     if (typeof body.website === "string" && body.website.trim() !== "") {
-      console.warn("[send-contact-email] honeypot triggered", { ip: getClientIp(req) });
+      console.warn("[send-contact-email] honeypot triggered", { blocked: true });
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -176,7 +172,7 @@ Deno.serve(async (req: Request) => {
     if (typeof body._renderedAt === "number" && body._renderedAt > 0) {
       const elapsed = Date.now() - body._renderedAt;
       if (elapsed < 1000) {
-        console.warn("[send-contact-email] suspicious fill-time", { elapsed, ip: getClientIp(req) });
+        console.warn("[send-contact-email] suspicious fill-time", { elapsed });
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -184,7 +180,7 @@ Deno.serve(async (req: Request) => {
       }
     } else {
       // Saknar timestamp helt = manipulerad klient
-      console.warn("[send-contact-email] missing _renderedAt", { ip: getClientIp(req) });
+      console.warn("[send-contact-email] missing _renderedAt", { blocked: true });
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -195,7 +191,7 @@ Deno.serve(async (req: Request) => {
     const ip = getClientIp(req);
     const rate = checkRateLimit(ip);
     if (!rate.ok) {
-      console.warn("[send-contact-email] rate limited (memory)", { ip, reason: rate.reason });
+      console.warn("[send-contact-email] rate limited (memory)", { reason: rate.reason });
       return new Response(JSON.stringify({ error: rate.reason ?? "Rate limited" }), {
         status: 429,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -228,7 +224,7 @@ Deno.serve(async (req: Request) => {
     // 4) Innehållsheuristik — plockar upp uppenbart spam
     const spamHint = looksLikeSpam(name, message);
     if (spamHint) {
-      console.warn("[send-contact-email] spam heuristic hit", { spamHint, ip, email });
+      console.warn("[send-contact-email] spam heuristic hit", { spamHint });
       return new Response(JSON.stringify({ ok: true }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -253,7 +249,7 @@ Deno.serve(async (req: Request) => {
         if (rlErr) {
           console.error("[send-contact-email] rate-limit rpc failed", rlErr);
         } else if (allowed === false) {
-          console.warn("[send-contact-email] rate limited (db)", { ip, email });
+          console.warn("[send-contact-email] rate limited (db)", { limited: true });
           return new Response(
             JSON.stringify({ error: "För många förfrågningar. Försök igen om en stund." }),
             { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -279,7 +275,7 @@ Deno.serve(async (req: Request) => {
         if (dupErr) {
           console.error("[send-contact-email] dedupe check failed", dupErr);
         } else if (dupes && dupes.length > 0) {
-          console.log("[send-contact-email] duplicate suppressed", { email, leadId: dupes[0].id });
+          console.log("[send-contact-email] duplicate suppressed");
           // Svara 200 så användaren inte tror att något gick fel
           return new Response(JSON.stringify({ ok: true, leadId: dupes[0].id, deduplicated: true }), {
             status: 200,
@@ -369,7 +365,7 @@ Deno.serve(async (req: Request) => {
 
     if (!RESEND_API_KEY) {
       console.log("[send-contact-email] RESEND_API_KEY not set – logging only", {
-        name, email, company, paket, messageLength: message.length, leadId,
+        queued: false, saved: Boolean(leadId),
       });
       return new Response(JSON.stringify({ ok: true, queued: false, leadId, automation_forwarded: automationForwarded }), {
         status: 200,
@@ -377,12 +373,7 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    // Intern BCC-mottagare (kopia av varje lead). Faller tillbaka till info@.
-    const INTERNAL_LEADS_EMAIL = Deno.env.get("INTERNAL_LEADS_EMAIL")?.trim();
-    const bcc = INTERNAL_LEADS_EMAIL && INTERNAL_LEADS_EMAIL !== "info@auroramedia.se"
-      ? [INTERNAL_LEADS_EMAIL]
-      : undefined;
-
+    // Ägarens kontaktförfrågningar samlas i den gemensamma inkorgen.
     const res = await fetch("https://api.resend.com/emails", {
       signal: AbortSignal.timeout(10000),
       method: "POST",
@@ -393,7 +384,6 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         from: "Aurora Media <noreply@auroramedia.se>",
         to: ["info@auroramedia.se"],
-        ...(bcc ? { bcc } : {}),
         reply_to: email,
         subject,
         html,
@@ -418,7 +408,7 @@ Deno.serve(async (req: Request) => {
           <h2 style="font-size:20px;margin:0 0 16px;color:#0f1f1a;">Tack ${escape(name)} – vi har tagit emot din förfrågan!</h2>
           <p style="font-size:15px;line-height:1.55;color:#333;margin:0 0 16px;">
             Vi återkommer personligen inom 24 timmar (vardagar) med nästa steg. Under tiden – om något brådskar
-            är du välkommen att svara direkt på det här mejlet eller ringa oss.
+            är du välkommen att svara direkt på det här mejlet eller mejla info@auroramedia.se.
           </p>
           <div style="padding:14px 16px;background:#f3f6f4;border-left:3px solid #1f7a5e;border-radius:4px;margin:18px 0;">
             <p style="margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:#1f7a5e;font-weight:600;">Din förfrågan</p>
