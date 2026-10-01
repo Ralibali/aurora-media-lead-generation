@@ -198,14 +198,30 @@ Deno.serve(async (req: Request) => {
       });
     }
 
-    const name = String(body.name ?? "").trim().slice(0, 80);
-    const email = String(body.email ?? "").trim().slice(0, 160);
-    const company = String(body.company ?? "").trim().slice(0, 120);
-    const paket = String(body.paket || "Vet inte").trim().slice(0, 60);
-    const platform = String(body.platform ?? "").trim().slice(0, 40);
-    const leadLabel = String(body.leadLabel ?? "").trim().slice(0, 160);
-    const internalNote = String(body.internalNote ?? "").trim().slice(0, CONTACT_CONTEXT_MAX);
-    const message = String(body.message ?? "").trim().slice(0, 2000);
+    const name = String(body.name ?? "")
+      .trim()
+      .slice(0, 80);
+    const email = String(body.email ?? "")
+      .trim()
+      .slice(0, 160);
+    const company = String(body.company ?? "")
+      .trim()
+      .slice(0, 120);
+    const paket = String(body.paket || "Vet inte")
+      .trim()
+      .slice(0, 60);
+    const platform = String(body.platform ?? "")
+      .trim()
+      .slice(0, 40);
+    const leadLabel = String(body.leadLabel ?? "")
+      .trim()
+      .slice(0, 160);
+    const internalNote = String(body.internalNote ?? "")
+      .trim()
+      .slice(0, CONTACT_CONTEXT_MAX);
+    const message = String(body.message ?? "")
+      .trim()
+      .slice(0, 2000);
     const userAgent = req.headers.get("user-agent")?.slice(0, 300) ?? "";
 
     if (!name || !email || !paket || message.length < 20) {
@@ -250,10 +266,10 @@ Deno.serve(async (req: Request) => {
           console.error("[send-contact-email] rate-limit rpc failed", rlErr);
         } else if (allowed === false) {
           console.warn("[send-contact-email] rate limited (db)", { limited: true });
-          return new Response(
-            JSON.stringify({ error: "För många förfrågningar. Försök igen om en stund." }),
-            { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
-          );
+          return new Response(JSON.stringify({ error: "För många förfrågningar. Försök igen om en stund." }), {
+            status: 429,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
         }
       } catch (e) {
         console.error("[send-contact-email] rate-limit rpc threw", e);
@@ -319,7 +335,8 @@ Deno.serve(async (req: Request) => {
 
     if (!leadId) {
       return new Response(JSON.stringify({ error: "Kunde inte spara förfrågan. Försök igen." }), {
-        status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -347,10 +364,14 @@ Deno.serve(async (req: Request) => {
       <p style="font-size:14px;padding:8px 12px;background:#f3f6f4;border-left:3px solid #1f7a5e;display:inline-block;border-radius:4px;">
         <strong>${escape(leadLabel || `Intresserad av: ${paket}`)}</strong>
       </p>
-      ${internalNote ? `
+      ${
+        internalNote
+          ? `
       <p style="font-size:13px;padding:10px 12px;margin-top:8px;background:#fff8e1;border-left:3px solid #d97706;border-radius:4px;">
         <strong>Intern notering:</strong><br/>${escape(internalNote)}
-      </p>` : ""}
+      </p>`
+          : ""
+      }
       <p><strong>Namn:</strong> ${escape(name)}</p>
       <p><strong>E-post:</strong> ${escape(email)}</p>
       <p><strong>Företag:</strong> ${escape(company || "—")}</p>
@@ -365,12 +386,16 @@ Deno.serve(async (req: Request) => {
 
     if (!RESEND_API_KEY) {
       console.log("[send-contact-email] RESEND_API_KEY not set – logging only", {
-        queued: false, saved: Boolean(leadId),
+        queued: false,
+        saved: Boolean(leadId),
       });
-      return new Response(JSON.stringify({ ok: true, queued: false, leadId, automation_forwarded: automationForwarded }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ ok: true, queued: false, leadId, automation_forwarded: automationForwarded }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     // Ägarens kontaktförfrågningar samlas i den gemensamma inkorgen.
@@ -395,10 +420,13 @@ Deno.serve(async (req: Request) => {
 
     if (!res?.ok) {
       console.error("[send-contact-email] notification unavailable", res?.status);
-      return new Response(JSON.stringify({ ok: true, leadId, notification_sent: false, automation_forwarded: automationForwarded }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(
+        JSON.stringify({ ok: true, leadId, notification_sent: false, automation_forwarded: automationForwarded }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
     }
 
     // Auto-svar till avsändaren — bekräftelse på att vi tagit emot meddelandet
