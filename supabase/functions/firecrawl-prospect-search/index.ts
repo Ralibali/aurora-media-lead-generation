@@ -13,6 +13,7 @@ import {
   type NeedType,
   type ObservedSignal,
 } from "./lib.ts";
+import { buildOpportunityAudit } from "./audit.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -58,7 +59,7 @@ type LeadRow = {
 };
 
 type RequestBody = {
-  action?: "search" | "list_campaigns" | "list_leads" | "update_lead";
+  action?: "search" | "list_campaigns" | "list_leads" | "update_lead" | "audit_lead" | "audit_campaign";
   campaignName?: string;
   query?: string;
   location?: string;
@@ -70,6 +71,138 @@ type RequestBody = {
   status?: string;
   outreach_note?: string | null;
 };
+
+type FirecrawlScrapePayload = {
+  success?: boolean;
+  data?: {
+    markdown?: string;
+    rawHtml?: string;
+    links?: FirecrawlLink[];
+    screenshot?: string | { url?: string };
+    metadata?: {
+      title?: string;
+      description?: string;
+      robots?: string;
+      sourceURL?: string;
+      statusCode?: number;
+      contentType?: string;
+    };
+  };
+};
+
+async function loadLeadsWithAudits(admin: SupabaseAdminClient, campaignId: string) {
+  const [{ data: leads, error: leadError }, { data: audits, error: auditError }] = await Promise.all([
+    admin.from("prospecting_leads").select("*").eq("campaign_id", campaignId).order("fit_score", { ascending: false }),
+    admin.from("prospecting_audits").select("*").eq("campaign_id", campaignId).order("audited_at", { ascending: false }),
+  ]);
+  if (leadError) throw leadError;
+  if (auditError) throw auditError;
+  const byLead = new Map((audits ?? []).map((audit) => [audit.lead_id, audit]));
+  return (leads ?? []).map((lead) => ({ ...lead, audit: byLead.get(lead.id) ?? null }));
+}
+
+async function auditLead(admin: SupabaseAdminClient, apiKey: string, leadId: string) {
+  if (!apiKey) throw new Error("FIRECRAWL_API_KEY_MISSING");
+
+  const { data: lead, error: leadError } = await admin
+    .from("prospecting_leads")
+    .select("id,campaign_id,company_name,domain,website_url")
+    .eq("id", leadId)
+    .single();
+  if (leadError || !lead) throw new Error("Lead hittades inte.");
+
+  const { data: campaign, error: campaignError } = await admin
+    .from("prospecting_campaigns")
+    .select("need_type,industry,location")
+    .eq("id", lead.campaign_id)
+    .single();
+  if (campaignError || !campaign) throw new Error("Kampanjen hittades inte.");
+
+  try {
+    const response = await fetch("https://api.firecrawl.dev/v2/scrape", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: lead.website_url,
+        formats: ["markdown", "rawHtml", "links", "screenshot"],
+        onlyMainContent: false,
+        timeout: 30000,
+      }),
+      signal: AbortSignal.timeout(45000),
+    });
+
+    const raw = await response.text();
+    if (!response.ok) throw new Error(`Firecrawl ${response.status}: ${raw.slice(0, 300)}`);
+    const payload = JSON.parse(raw) as FirecrawlScrapePayload;
+    const page = payload.data ?? {};
+    const screenshotUrl =
+      typeof page.screenshot === "string"
+        ? page.screenshot
+        : page.screenshot && typeof page.screenshot === "object"
+          ? page.screenshot.url ?? null
+          : null;
+
+    const audit = buildOpportunityAudit({
+      companyName: lead.company_name,
+      domain: lead.domain,
+      needType: campaign.need_type as NeedType,
+      industry: campaign.industry,
+      location: campaign.location,
+      markdown: page.markdown,
+      rawHtml: page.rawHtml,
+      links: page.links,
+      screenshotUrl,
+      metadata: page.metadata,
+    });
+
+    const { data, error } = await admin
+      .from("prospecting_audits")
+      .upsert({
+        lead_id: lead.id,
+        campaign_id: lead.campaign_id,
+        status: "completed",
+        opportunity_score: audit.opportunityScore,
+        http_status: audit.httpStatus,
+        page_title: audit.pageTitle,
+        meta_description: audit.metaDescription,
+        robots: audit.robots,
+        screenshot_url: audit.screenshotUrl,
+        screenshot_expires_at: audit.screenshotUrl
+          ? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+          : null,
+        audit_signals: audit.signals,
+        opportunity_summary: audit.summary,
+        pitch_draft: audit.pitchDraft,
+        demo_brief: audit.demoBrief,
+        source_url: page.metadata?.sourceURL ?? lead.website_url,
+        error_message: null,
+        audited_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "lead_id" })
+      .select("*")
+      .single();
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    const message = error instanceof Error ? error.message.slice(0, 500) : "Audit misslyckades.";
+    await admin.from("prospecting_audits").upsert({
+      lead_id: lead.id,
+      campaign_id: lead.campaign_id,
+      status: "failed",
+      opportunity_score: 0,
+      audit_signals: [],
+      demo_brief: [],
+      source_url: lead.website_url,
+      error_message: message,
+      audited_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "lead_id" });
+    throw new Error(message);
+  }
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -112,13 +245,45 @@ Deno.serve(async (req: Request) => {
 
     if (action === "list_leads") {
       if (!body.campaignId) return json({ error: "Missing campaignId" }, 400);
-      const { data, error } = await admin
+      return json({ leads: await loadLeadsWithAudits(admin, body.campaignId) });
+    }
+
+    if (action === "audit_lead") {
+      if (!body.leadId) return json({ error: "Missing leadId" }, 400);
+      const audit = await auditLead(admin, FIRECRAWL_API_KEY, body.leadId);
+      return json({ audit });
+    }
+
+    if (action === "audit_campaign") {
+      if (!body.campaignId) return json({ error: "Missing campaignId" }, 400);
+      const { data: candidates, error } = await admin
         .from("prospecting_leads")
-        .select("*")
+        .select("id")
         .eq("campaign_id", body.campaignId)
-        .order("fit_score", { ascending: false });
+        .neq("status", "do_not_contact")
+        .order("fit_score", { ascending: false })
+        .limit(5);
       if (error) throw error;
-      return json({ leads: data ?? [] });
+
+      let completed = 0;
+      const failures: { leadId: string; error: string }[] = [];
+      for (const candidate of candidates ?? []) {
+        try {
+          await auditLead(admin, FIRECRAWL_API_KEY, candidate.id);
+          completed += 1;
+        } catch (auditError) {
+          failures.push({
+            leadId: candidate.id,
+            error: auditError instanceof Error ? auditError.message : String(auditError),
+          });
+        }
+      }
+      return json({
+        completed,
+        failed: failures.length,
+        failures,
+        leads: await loadLeadsWithAudits(admin, body.campaignId),
+      });
     }
 
     if (action === "update_lead") {
@@ -295,7 +460,7 @@ Deno.serve(async (req: Request) => {
       .update({ status: "completed" })
       .eq("id", campaignRow.id);
 
-    return json({ ok: true, campaignId: campaignRow.id, inserted: rows.length, queryString });
+    return json({ ok: true, campaignId: campaignRow.id, inserted: rows.length, leadsFound: rows.length, queryString });
   } catch (err) {
     console.error("[firecrawl-prospect-search] error", err);
     return json({ error: err instanceof Error ? err.message : String(err) }, 500);
