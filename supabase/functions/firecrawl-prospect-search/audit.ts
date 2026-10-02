@@ -117,7 +117,7 @@ export function buildOpportunityAudit(input: WebsiteAuditInput): OpportunityAudi
     });
   }
 
-  if (html.length >= 300 && !hasViewport(html)) {
+  if (html.length > 0 && !hasViewport(html)) {
     signals.push({
       signal: "missing_viewport",
       evidence: "Ingen viewport-meta hittades i sidans rå-HTML.",
@@ -133,7 +133,7 @@ export function buildOpportunityAudit(input: WebsiteAuditInput): OpportunityAudi
     });
   }
 
-  if (html.length >= 300 && !metaDescription && !hasMetaDescription(html)) {
+  if (html.length > 0 && !metaDescription && !hasMetaDescription(html)) {
     signals.push({
       signal: "missing_meta_description",
       evidence: "Ingen meta description kunde verifieras.",
@@ -141,7 +141,7 @@ export function buildOpportunityAudit(input: WebsiteAuditInput): OpportunityAudi
     });
   }
 
-  if (html.length >= 300 && !hasCanonical(html)) {
+  if (html.length > 0 && !hasCanonical(html)) {
     signals.push({
       signal: "missing_canonical",
       evidence: "Ingen canonical-länk kunde verifieras i sidans rå-HTML.",
