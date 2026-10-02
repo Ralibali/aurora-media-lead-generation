@@ -72,6 +72,20 @@ type RequestBody = {
   outreach_note?: string | null;
 };
 
+type AuditLeadRow = {
+  id: string;
+  campaign_id: string;
+  company_name: string;
+  domain: string;
+  website_url: string;
+};
+
+type AuditCampaignRow = {
+  need_type: NeedType;
+  industry: string | null;
+  location: string;
+};
+
 type FirecrawlScrapePayload = {
   success?: boolean;
   data?: {
@@ -104,18 +118,20 @@ async function loadLeadsWithAudits(admin: SupabaseAdminClient, campaignId: strin
 async function auditLead(admin: SupabaseAdminClient, apiKey: string, leadId: string) {
   if (!apiKey) throw new Error("FIRECRAWL_API_KEY_MISSING");
 
-  const { data: lead, error: leadError } = await admin
+  const { data: leadData, error: leadError } = await admin
     .from("prospecting_leads")
     .select("id,campaign_id,company_name,domain,website_url")
     .eq("id", leadId)
     .single();
+  const lead = leadData as AuditLeadRow | null;
   if (leadError || !lead) throw new Error("Lead hittades inte.");
 
-  const { data: campaign, error: campaignError } = await admin
+  const { data: campaignData, error: campaignError } = await admin
     .from("prospecting_campaigns")
     .select("need_type,industry,location")
     .eq("id", lead.campaign_id)
     .single();
+  const campaign = campaignData as AuditCampaignRow | null;
   if (campaignError || !campaign) throw new Error("Kampanjen hittades inte.");
 
   try {
@@ -267,7 +283,7 @@ Deno.serve(async (req: Request) => {
 
       let completed = 0;
       const failures: { leadId: string; error: string }[] = [];
-      for (const candidate of candidates ?? []) {
+      for (const candidate of (candidates ?? []) as { id: string }[]) {
         try {
           await auditLead(admin, FIRECRAWL_API_KEY, candidate.id);
           completed += 1;
