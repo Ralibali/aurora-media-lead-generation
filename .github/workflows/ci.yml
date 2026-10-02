@@ -44,6 +44,10 @@ jobs:
         run: deno check supabase/functions/admin-managed-channels/index.ts
       - name: Check AI visibility edge function
         run: deno check supabase/functions/admin-ai-visibility/index.ts
+      - name: Check Opportunity Engine edge function
+        run: deno check supabase/functions/firecrawl-prospect-search/index.ts
+      - name: Test Opportunity Engine evidence rules
+        run: deno test supabase/functions/firecrawl-prospect-search/audit.test.ts
       - name: Check Accessibility Care edge function
         run: deno check supabase/functions/admin-accessibility-care/index.ts
       - name: Check Voice pilot edge function
