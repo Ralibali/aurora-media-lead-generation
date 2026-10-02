@@ -44,7 +44,6 @@ type Campaign = {
   status: CampaignStatus;
   error_message: string | null;
   created_at: string;
-  audit: OpportunityAudit | null;
 };
 
 type Signal = { signal: string; evidence: string; points: number };
@@ -94,6 +93,7 @@ type Lead = {
   outreach_note: string | null;
   contacted_at: string | null;
   created_at: string;
+  audit: OpportunityAudit | null;
 };
 
 const LEAD_STATUSES: LeadStatus[] = [
