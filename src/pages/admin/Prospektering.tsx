@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   AlertTriangle,
+  ClipboardCopy,
+  FileSearch,
   ChevronDown,
   ChevronUp,
   ExternalLink,
@@ -56,6 +58,24 @@ type LeadStatus =
   | "rejected"
   | "do_not_contact";
 
+type OpportunityAudit = {
+  id: string;
+  status: "completed" | "failed";
+  opportunity_score: number;
+  http_status: number | null;
+  page_title: string | null;
+  meta_description: string | null;
+  robots: string | null;
+  screenshot_url: string | null;
+  screenshot_expires_at: string | null;
+  audit_signals: Signal[];
+  opportunity_summary: string | null;
+  pitch_draft: string | null;
+  demo_brief: string[];
+  error_message: string | null;
+  audited_at: string;
+};
+
 type Lead = {
   id: string;
   campaign_id: string;
@@ -73,6 +93,7 @@ type Lead = {
   outreach_note: string | null;
   contacted_at: string | null;
   created_at: string;
+  audit: OpportunityAudit | null;
 };
 
 const LEAD_STATUSES: LeadStatus[] = [
@@ -181,6 +202,8 @@ export default function Prospektering() {
   const [quickFilter, setQuickFilter] = useState<QuickFilter>("all");
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [savingLead, setSavingLead] = useState<Record<string, "saving" | "saved" | "error" | undefined>>({});
+  const [auditingLead, setAuditingLead] = useState<Record<string, boolean>>({});
+  const [auditingCampaign, setAuditingCampaign] = useState(false);
 
   // Auto-suggest campaign name (without overwriting manual edits)
   useEffect(() => {
@@ -303,6 +326,48 @@ export default function Prospektering() {
     }
   };
 
+  const auditOne = async (leadId: string) => {
+    setAuditingLead((state) => ({ ...state, [leadId]: true }));
+    try {
+      await callFn({ action: "audit_lead", leadId });
+      if (selected) await loadLeads(selected);
+      toast.success("Opportunity-audit klar");
+    } catch (e) {
+      toast.error("Auditen misslyckades", { description: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setAuditingLead((state) => ({ ...state, [leadId]: false }));
+    }
+  };
+
+  const auditTopFive = async () => {
+    if (!selected) return;
+    setAuditingCampaign(true);
+    try {
+      const result = await callFn<{ completed?: number; failed?: number; leads?: Lead[] }>({
+        action: "audit_campaign",
+        campaignId: selected,
+      });
+      if (Array.isArray(result.leads)) setLeads(result.leads);
+      else await loadLeads(selected);
+      toast.success(`Audit klar: ${result.completed ?? 0} företag`, {
+        description: result.failed ? `${result.failed} misslyckades och kan köras om individuellt.` : undefined,
+      });
+    } catch (e) {
+      toast.error("Kampanjauditen misslyckades", { description: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setAuditingCampaign(false);
+    }
+  };
+
+  const copyText = async (text: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success(`${label} kopierat`);
+    } catch {
+      toast.error("Kunde inte kopiera till urklipp.");
+    }
+  };
+
   // Kampanjfilter
   const filteredCampaigns = useMemo(() => {
     const q = campaignQuery.trim().toLowerCase();
@@ -347,8 +412,13 @@ export default function Prospektering() {
     const total = leads.length;
     const news = leads.filter((l) => l.status === "new").length;
     const qualified = leads.filter((l) => l.status === "qualified").length;
+    const audited = leads.filter((l) => l.audit?.status === "completed").length;
+    const auditScores = leads.flatMap((l) => l.audit?.status === "completed" ? [l.audit.opportunity_score] : []);
+    const opportunityAvg = auditScores.length
+      ? Math.round(auditScores.reduce((sum, value) => sum + value, 0) / auditScores.length)
+      : 0;
     const avg = total ? Math.round(leads.reduce((sum, l) => sum + l.fit_score, 0) / total) : 0;
-    return { total, news, qualified, avg };
+    return { total, news, qualified, audited, opportunityAvg, avg };
   }, [leads]);
 
   const selectedCampaign = campaigns.find((c) => c.id === selected) ?? null;
@@ -365,9 +435,9 @@ export default function Prospektering() {
               <Radar size={18} />
             </div>
             <div className="min-w-0">
-              <h1 className="m-0 text-lg font-semibold">Företagsresearch med Firecrawl</h1>
+              <h1 className="m-0 text-lg font-semibold">Aurora Opportunity Engine</h1>
               <p className="mt-1 text-sm text-neutral-500">
-                Sök efter potentiella kunder och gör din egen bedömning innan du hör av dig.
+                Hitta företag, verifiera konkreta problem på webbplatsen och bygg ett granskningsbart säljunderlag.
                 Ingen kontakt sker automatiskt och inga e-postadresser eller personnamn samlas in.
               </p>
             </div>
@@ -375,11 +445,13 @@ export default function Prospektering() {
         </div>
 
         {/* Summary cards */}
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
           <SummaryCard label="Företag" value={stats.total} subtitle={selectedCampaign?.name ?? "Ingen kampanj vald"} />
           <SummaryCard label="Nya" value={stats.news} />
           <SummaryCard label="Kvalificerade" value={stats.qualified} />
-          <SummaryCard label="Snitt-score" value={selectedCampaign ? stats.avg : 0} suffix={selectedCampaign ? "/100" : ""} />
+          <SummaryCard label="Auditerade" value={stats.audited} />
+          <SummaryCard label="Snitt fit" value={selectedCampaign ? stats.avg : 0} suffix={selectedCampaign ? "/100" : ""} />
+          <SummaryCard label="Snitt opportunity" value={stats.opportunityAvg} suffix={stats.audited ? "/100" : ""} />
         </div>
 
         {/* Sökformulär */}
@@ -632,14 +704,25 @@ export default function Prospektering() {
                   Visar {filteredLeads.length} av {leads.length} företag
                 </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => selected && void loadLeads(selected)}
-                disabled={leadsLoading}
-              >
-                <RefreshCw size={14} className={cn("mr-1.5", leadsLoading && "animate-spin")} /> Uppdatera
-              </Button>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => void auditTopFive()}
+                  disabled={auditingCampaign || leadsLoading || leads.length === 0}
+                >
+                  {auditingCampaign ? <Loader2 size={14} className="mr-1.5 animate-spin" /> : <FileSearch size={14} className="mr-1.5" />}
+                  {auditingCampaign ? "Auditerar…" : "Audita topp 5"}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => selected && void loadLeads(selected)}
+                  disabled={leadsLoading}
+                >
+                  <RefreshCw size={14} className={cn("mr-1.5", leadsLoading && "animate-spin")} /> Uppdatera
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="grid gap-4">
               {/* Snabbfilter */}
@@ -797,13 +880,33 @@ export default function Prospektering() {
                                           </CollapsibleContent>
                                         </Collapsible>
                                       )}
+                                      {l.audit && (
+                                        <OpportunityPanel
+                                          audit={l.audit}
+                                          onCopy={(text, label) => void copyText(text, label)}
+                                        />
+                                      )}
                                     </div>
                                   </td>
                                   <td className="px-3 py-3 text-xs text-neutral-600">
                                     <div>{l.city ?? "—"}</div>
                                     <div className="text-neutral-500">{l.industry ?? "—"}</div>
                                   </td>
-                                  <td className="px-3 py-3"><ScoreBadge score={l.fit_score} /></td>
+                                  <td className="px-3 py-3">
+                                    <div className="grid gap-1">
+                                      <span className="text-[10px] uppercase tracking-wide text-neutral-500">Fit</span>
+                                      <div className="flex items-center gap-1.5">
+                              <ScoreBadge score={l.fit_score} />
+                              {l.audit?.status === "completed" && <ScoreBadge score={l.audit.opportunity_score} />}
+                            </div>
+                                      {l.audit?.status === "completed" && (
+                                        <>
+                                          <span className="mt-1 text-[10px] uppercase tracking-wide text-neutral-500">Opportunity</span>
+                                          <ScoreBadge score={l.audit.opportunity_score} />
+                                        </>
+                                      )}
+                                    </div>
+                                  </td>
                                   <td className="px-3 py-3">
                                     <div className="flex flex-col gap-1 text-xs">
                                       <a href={l.website_url} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1 text-neutral-800 underline">
@@ -814,6 +917,15 @@ export default function Prospektering() {
                                           Kontaktsida <ExternalLink size={11} />
                                         </a>
                                       )}
+                                      <button
+                                        type="button"
+                                        className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-[var(--gran)] hover:underline disabled:opacity-50"
+                                        onClick={() => void auditOne(l.id)}
+                                        disabled={!!auditingLead[l.id]}
+                                      >
+                                        {auditingLead[l.id] ? <Loader2 size={11} className="animate-spin" /> : <FileSearch size={11} />}
+                                        {l.audit ? "Kör om audit" : "Kör audit"}
+                                      </button>
                                     </div>
                                   </td>
                                   <td className="px-3 py-3">
@@ -874,6 +986,15 @@ export default function Prospektering() {
                                 Kontaktsida <ExternalLink size={11} />
                               </a>
                             )}
+                            <button
+                              type="button"
+                              className="inline-flex items-center gap-1 font-medium text-[var(--gran)] hover:underline disabled:opacity-50"
+                              onClick={() => void auditOne(l.id)}
+                              disabled={!!auditingLead[l.id]}
+                            >
+                              {auditingLead[l.id] ? <Loader2 size={11} className="animate-spin" /> : <FileSearch size={11} />}
+                              {l.audit ? "Kör om audit" : "Kör audit"}
+                            </button>
                           </div>
                           {l.observed_signals?.length > 0 && (
                             <Collapsible open={isOpen} onOpenChange={(o) => setExpanded((s) => ({ ...s, [l.id]: o }))} className="mt-2">
@@ -893,6 +1014,12 @@ export default function Prospektering() {
                                 </ul>
                               </CollapsibleContent>
                             </Collapsible>
+                          )}
+                          {l.audit && (
+                            <OpportunityPanel
+                              audit={l.audit}
+                              onCopy={(text, label) => void copyText(text, label)}
+                            />
                           )}
                           <div className="mt-3">
                             <StatusControl
@@ -917,6 +1044,68 @@ export default function Prospektering() {
         )}
       </div>
     </AdminShell>
+  );
+}
+
+function OpportunityPanel({
+  audit,
+  onCopy,
+}: {
+  audit: OpportunityAudit;
+  onCopy: (text: string, label: string) => void;
+}) {
+  if (audit.status === "failed") {
+    return (
+      <div className="mt-2 rounded-md border border-red-200 bg-red-50 p-2 text-xs text-red-800">
+        Audit misslyckades: {audit.error_message ?? "okänt fel"}
+      </div>
+    );
+  }
+
+  const screenshotIsFresh =
+    audit.screenshot_url &&
+    (!audit.screenshot_expires_at || new Date(audit.screenshot_expires_at).getTime() > Date.now());
+
+  return (
+    <div className="mt-2 rounded-md border border-[var(--linje)] bg-neutral-50 p-2.5 text-xs text-neutral-700">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <strong>Opportunity {audit.opportunity_score}/100</strong>
+        <span className="font-mono text-[10px] text-neutral-500">{svDateTime(audit.audited_at)}</span>
+      </div>
+      {audit.opportunity_summary && <p className="mt-1.5 leading-relaxed">{audit.opportunity_summary}</p>}
+      {audit.demo_brief?.length > 0 && (
+        <div className="mt-2">
+          <p className="font-semibold">Demo-underlag</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-4">
+            {audit.demo_brief.map((item) => <li key={item}>{item}</li>)}
+          </ul>
+        </div>
+      )}
+      <div className="mt-2 flex flex-wrap gap-2">
+        {audit.pitch_draft && (
+          <button
+            type="button"
+            className="inline-flex items-center gap-1 font-medium text-[var(--gran)] hover:underline"
+            onClick={() => onCopy(audit.pitch_draft ?? "", "Pitchutkast")}
+          >
+            <ClipboardCopy size={11} /> Kopiera pitchutkast
+          </button>
+        )}
+        {screenshotIsFresh && (
+          <a
+            href={audit.screenshot_url ?? undefined}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-1 font-medium text-neutral-700 underline"
+          >
+            Skärmdump <ExternalLink size={11} />
+          </a>
+        )}
+      </div>
+      <p className="mt-2 text-[10px] text-neutral-500">
+        Utkastet bygger på sparad evidens. Granska alltid manuellt innan kontakt.
+      </p>
+    </div>
   );
 }
 
