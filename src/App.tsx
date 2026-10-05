@@ -55,6 +55,8 @@ const FaqRapport = lazy(() => import("./pages/admin/FaqRapport"));
 const Leads = lazy(() => import("./pages/admin/Leads"));
 const TextGenerator = lazy(() => import("./pages/admin/TextGenerator"));
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const AdminProjects = lazy(() => import("./pages/admin/Projects"));
+const AdminSupportHub = lazy(() => import("./pages/admin/SupportHub"));
 const AdminContent = lazy(() => import("./pages/admin/Content"));
 const WebsiteGuardian = lazy(() => import("./pages/admin/WebsiteGuardian"));
 const AdminSeo = lazy(() => import("./pages/admin/Seo"));
@@ -671,6 +673,8 @@ const App = () => (
                   instead of a white screen, and never affects the public site. */}
               <Route element={<AdminBoundary />}>
                 <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/projekt" element={<AdminProjects />} />
+                <Route path="/admin/arenden" element={<AdminSupportHub />} />
                 <Route path="/admin/leads" element={<Leads />} />
                 <Route path="/admin/content" element={<AdminContent />} />
                 <Route path="/admin/website-guardian" element={<WebsiteGuardian />} />

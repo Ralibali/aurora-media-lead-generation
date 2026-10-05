@@ -4,6 +4,8 @@ import { adminFetch } from '@/lib/adminClient';
 import type { AnalyticsSnapshot, MetricPair, PortfolioResponse } from '@/lib/portfolioDashboard';
 import { attentionItems, changeLabel, googleLink, healthPresentation, IMPORT_MAX_AGE, isStale, metric, missingData, numberLabel, periodLabel, projectViews, refreshTasks, safeExternalUrl, SOURCE_MAX_AGE, sumMetric, summarySnapshots, timeLabel, type PortfolioSource, type ProjectView, type Tone } from '@/lib/portfolioPresentation';
 import '@/styles/portfolio-dashboard.css';
+import ProjectManagement, { ProjectLinks, type ManageProject } from './ProjectManagement';
+import { useSupportOverview } from '@/lib/supportHub';
 
 type RangeDays = 7 | 28 | 90;
 type Filter = 'all' | 'live' | 'attention' | 'missing';
@@ -111,7 +113,7 @@ function SourceDetail({ view, source, connected, busy, onRefresh }: { view: Proj
   </section>;
 }
 
-function ProjectRow({ view, open, onToggle, connections, busy, onRefresh }: { view: ProjectView; open: boolean; onToggle: () => void; connections: PortfolioResponse['connections']; busy: boolean; onRefresh: (source: PortfolioSource) => void }) {
+function ProjectRow({ view, open, onToggle, connections, busy, onRefresh, onManage, supportCount }: { view: ProjectView; open: boolean; onToggle: () => void; connections: PortfolioResponse['connections']; busy: boolean; onRefresh: (source: PortfolioSource) => void; onManage: ManageProject; supportCount?: number }) {
   const health = healthPresentation(view);
   const site = safeExternalUrl(view.project.url);
   const users = metric(view.ga4, 'activeUsers');
@@ -127,7 +129,8 @@ function ProjectRow({ view, open, onToggle, connections, busy, onRefresh }: { vi
     </button>
     <div id={detailId} hidden={!open} className="pf-project-details">
       {open && <>
-        <div className="pf-project-links"><span className="pf-stage">{stageNames[view.project.stage]}</span>{site && <a href={site} target="_blank" rel="noopener noreferrer">Öppna webbplats <ExternalLink size={14} /></a>}{view.project.lovableProjectId && /^[\w-]+$/.test(view.project.lovableProjectId) && <a href={`https://lovable.dev/projects/${encodeURIComponent(view.project.lovableProjectId)}`} target="_blank" rel="noopener noreferrer">Öppna projekt <ExternalLink size={14} /></a>}</div>
+        <div className="pf-project-links"><span className="pf-stage">{stageNames[view.project.stage]}</span>{site && <a href={site} target="_blank" rel="noopener noreferrer">Öppna webbplats <ExternalLink size={14} /></a>}{view.project.lovableProjectId && /^[\w-]+$/.test(view.project.lovableProjectId) && <a href={`https://lovable.dev/projects/${encodeURIComponent(view.project.lovableProjectId)}`} target="_blank" rel="noopener noreferrer">Lovable <ExternalLink size={14} /></a>}<ProjectLinks project={view.project} supportCount={supportCount} /></div>
+        <ProjectManagement project={view.project} onSave={onManage} />
         <div className="pf-health-detail"><Activity size={18} aria-hidden="true" /><div><strong>Tillgänglighet: {health.label.toLocaleLowerCase('sv-SE')}</strong><p>{health.detail}</p><small>Kontrollen visar om webbadressen svarar. Inloggning, betalning och bokning behöver egna funktionskontroller.</small></div>{site && <button className="pf-button pf-button-small" disabled={busy} onClick={() => onRefresh('health')}><RefreshCw size={14} />Kontrollera</button>}</div>
         {view.states.health?.error && <div className="pf-source-error"><TriangleAlert size={16} /><p>{view.states.health.error}</p></div>}
         <div className="pf-source-grid"><SourceDetail view={view} source="ga4" connected={connections.ga4} busy={busy} onRefresh={onRefresh} /><SourceDetail view={view} source="gsc" connected={connections.gsc} busy={busy} onRefresh={onRefresh} /></div>
@@ -148,7 +151,8 @@ function AggregatePeriod({ views, source }: { views: ProjectView[]; source: 'ga4
   return <><span>{periods[0] ?? 'Ingen rapportperiod tillgänglig'}</span>{excluded > 0 && <span>{excluded} äldre rapportperioder ingår inte i summan</span>}{imports > 0 && <span>{imports} importerade rapporter</span>}</>;
 }
 
-export default function PortfolioDashboard() {
+export default function PortfolioDashboard({ managementMode = false }: { managementMode?: boolean }) {
+  const { data: supportData } = useSupportOverview(managementMode);
   const [rangeDays, setRangeDays] = useState<RangeDays>(28);
   const [data, setData] = useState<PortfolioResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -156,7 +160,7 @@ export default function PortfolioDashboard() {
   const [refreshNote, setRefreshNote] = useState<string | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>(managementMode ? 'live' : 'all');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [allAttention, setAllAttention] = useState(false);
   const [reload, setReload] = useState(0);
@@ -244,18 +248,26 @@ export default function PortfolioDashboard() {
   const freshChecks = checkable.filter(view => view.check && !isStale(view.check.checkedAt, SOURCE_MAX_AGE.health));
   const healthy = freshChecks.filter(view => view.check?.status === 'healthy').length;
   const busy = !!progress;
+  const manageProject: ManageProject = async (projectId, expectedVersion, management) => {
+    const result: PortfolioResponse = await adminFetch('admin-portfolio', { method: 'POST', body: JSON.stringify({ action: 'manage', projectId, expectedVersion, management, rangeDays }) });
+    const saved = result.projects?.find(project => project.id === projectId)?.management;
+    if (!saved) throw new Error('Servern bekräftade inte den sparade projektplanen.');
+    if (mounted.current) setData(result);
+    return saved;
+  };
   const openProject = (id: string) => {
     setQuery(''); setFilter('all'); setExpanded(previous => new Set([...previous, id]));
     window.setTimeout(() => document.getElementById(`portfolio-detail-${id}`)?.closest('article')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30);
   };
 
   return <section className="pf-dashboard" aria-labelledby="portfolio-heading">
-    <div className="pf-header"><div><p className="pf-eyebrow">Aurora Media · Projektportfölj</p><h2 id="portfolio-heading">Din dagliga överblick<span className="pf-heading-dot">.</span></h2><p className="pf-subtitle">Trafik, synlighet och tillgänglighet. Alla dina projekt på samma plats.</p></div><span className="pf-today">{new Intl.DateTimeFormat('sv-SE', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Stockholm' }).format(new Date())}</span></div>
+    <div className="pf-header"><div><p className="pf-eyebrow">Aurora Media · Projektportfölj</p><h2 id="portfolio-heading">{managementMode ? 'Ett projekt i taget' : 'Din dagliga överblick'}<span className="pf-heading-dot">.</span></h2><p className="pf-subtitle">{managementMode ? 'Webbplats, kod, support och nästa steg. Publicerade projekt visas först; hela registret finns under Alla.' : 'Trafik, synlighet och tillgänglighet. Alla dina projekt på samma plats.'}</p></div><span className="pf-today">{new Intl.DateTimeFormat('sv-SE', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Stockholm' }).format(new Date())}</span></div>
     <div className="pf-toolbar"><div className="pf-ranges" role="group" aria-label="Rapportperiod">{([7, 28, 90] as const).map(days => <button key={days} className={days === rangeDays ? 'pf-selected' : ''} aria-pressed={days === rangeDays} disabled={busy} onClick={() => setRangeDays(days)}>{days} dagar</button>)}</div><div className="pf-toolbar-right"><span className="pf-muted">Jämfört med föregående lika långa period</span><button className="pf-button pf-button-primary" disabled={!data || busy || loading} onClick={() => { if (data) { const tasks = refreshTasks(views, data.connections, false); if (tasks.length) void runRefresh(tasks); else setRefreshNote('Inga källor är anslutna för uppdatering ännu.'); } }}><RefreshCw size={16} className={busy ? 'pf-spin' : ''} />{busy ? `Uppdaterar ${progress.done}/${progress.total}` : 'Uppdatera allt'}</button></div></div>
     <div className="pf-refresh-status" role="status" aria-live="polite">{progress ? <><span>Hämtar projektens data. Du kan läsa översikten under tiden.</span><progress max={progress.total} value={progress.done} aria-label="Uppdaterade datakällor" /></> : refreshNote ? <span>{refreshNote}</span> : data ? <span>Översikt hämtad {timeLabel(data.generatedAt)} · Äldre kontroller uppdateras när du öppnar sidan.</span> : <span>{loading ? 'Hämtar projekt och sparade rapporter…' : ''}</span>}</div>
     {error && <div className="pf-error" role="alert"><TriangleAlert size={20} /><div><strong>Översikten kunde inte uppdateras</strong><p>{error}{data ? ' Senast hämtade underlag visas nedan.' : ''}</p></div><button className="pf-button pf-button-small" onClick={() => setReload(value => value + 1)} disabled={loading}>Försök igen</button></div>}
     {loading && !data && <div className="pf-loading" aria-busy="true"><RefreshCw size={22} className="pf-spin" /><p>Samlar dina projekt…</p></div>}
     {data && <>
+      {!managementMode && <>
       <div className="pf-overview-grid">
         <OverviewCard label="Hela portföljen" value={numberLabel(views.length)} description={`${liveCount} publicerade · ${views.length - liveCount} under utveckling eller interna`} icon={<Layers3 size={20} />} emphasis><span>{attentionIds.size ? `${attentionIds.size} projekt att följa upp` : 'Se mätt status och datatäckning nedan'}</span></OverviewCard>
         <OverviewCard label="Aktiva användare · GA4" value={numberLabel(users.value)} description={`Summa för ${users.covered} av ${views.length} projekt. En person kan räknas i flera projekt.`} icon={<Users size={20} />}><AggregatePeriod views={views} source="ga4" /></OverviewCard>
@@ -266,10 +278,11 @@ export default function PortfolioDashboard() {
       <section className="pf-attention" aria-labelledby="pf-attention-heading"><div className="pf-section-heading"><div><h3 id="pf-attention-heading">Börja här idag <span className="pf-count">{alerts.length}</span></h3><p>Uppmätta avvikelser och förändringar att följa upp.</p></div>{alerts.length > 5 && <button className="pf-text-button" onClick={() => setAllAttention(value => !value)}>{allAttention ? 'Visa färre' : `Visa alla ${alerts.length}`}</button>}</div>
         {alerts.length ? <div className="pf-attention-list">{(allAttention ? alerts : alerts.slice(0, 5)).map(alert => <button key={alert.id} className={`pf-attention-item pf-attention-${alert.tone}`} onClick={() => openProject(alert.projectId)}><span className="pf-attention-symbol">{alert.tone === 'good' ? <TrendingUp size={18} /> : <TriangleAlert size={18} />}</span><span><strong>{views.find(view => view.project.id === alert.projectId)?.project.name}<span> · {alert.title}</span></strong><span className="pf-attention-description">{alert.detail}</span></span><ArrowUpRight size={18} aria-hidden="true" /></button>)}</div> : <div className="pf-no-alerts"><Check size={18} /><p>Inga avvikelser hittades i det tillgängliga underlaget. {views.filter(missingData).length} projekt saknar delar av sin statistik; deras resultat är ännu okända.</p></div>}
       </section>
-      <section className="pf-projects" aria-labelledby="pf-projects-heading"><div className="pf-section-heading"><div><h3 id="pf-projects-heading">Alla projekt <span className="pf-count">{views.length}</span></h3><p>Öppna ett projekt för siffror, sökningar, trafikkällor och kontroller.</p></div><label className="pf-search"><Search size={17} aria-hidden="true" /><span className="sr-only">Sök projekt</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Sök projekt eller domän…" type="search" /></label></div>
+      </>}
+      <section className="pf-projects" aria-labelledby="pf-projects-heading"><div className="pf-section-heading"><div><h3 id="pf-projects-heading">Alla projekt <span className="pf-count">{views.length}</span></h3><p>{managementMode ? 'Öppna ett projekt för länkar, ärenden, privat arbetsplan och statistik.' : 'Öppna ett projekt för siffror, sökningar, trafikkällor och kontroller.'}</p></div><label className="pf-search"><Search size={17} aria-hidden="true" /><span className="sr-only">Sök projekt</span><input value={query} onChange={event => setQuery(event.target.value)} placeholder="Sök projekt eller domän…" type="search" /></label></div>
         <div className="pf-filters" role="group" aria-label="Filtrera projekt">{([{ id: 'all', label: 'Alla', count: views.length }, { id: 'live', label: 'Publicerade', count: liveCount }, { id: 'attention', label: 'Att följa upp', count: attentionIds.size }, { id: 'missing', label: 'Saknar underlag', count: views.filter(missingData).length }] as const).map(item => <button key={item.id} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)} className={filter === item.id ? 'pf-filter-active' : ''}>{item.label}<span>{item.count}</span></button>)}</div>
         <div className="pf-table-heading" aria-hidden="true"><span>Projekt</span><span>Tillgänglighet</span><span>Aktiva användare · GA4</span><span>Google-klick · GSC</span><span /></div>
-        <div className="pf-project-list">{filteredViews.map(view => <ProjectRow key={view.project.id} view={view} open={expanded.has(view.project.id)} onToggle={() => setExpanded(previous => { const next = new Set(previous); if (next.has(view.project.id)) next.delete(view.project.id); else next.add(view.project.id); return next; })} connections={data.connections} busy={busy} onRefresh={source => void runRefresh([{ projectId: view.project.id, source }])} />)}</div>
+        <div className="pf-project-list">{filteredViews.map(view => <ProjectRow key={view.project.id} view={view} open={expanded.has(view.project.id)} onToggle={() => setExpanded(previous => { const next = new Set(previous); if (next.has(view.project.id)) next.delete(view.project.id); else next.add(view.project.id); return next; })} connections={data.connections} busy={busy} onRefresh={source => void runRefresh([{ projectId: view.project.id, source }])} onManage={manageProject} supportCount={supportData?.project_counts?.[view.project.id]?.open} />)}</div>
         {!filteredViews.length && <div className="pf-filter-empty"><Search size={24} /><h4>Inga projekt matchar urvalet</h4><button className="pf-text-button" onClick={() => { setQuery(''); setFilter('all'); }}>Visa alla projekt</button></div>}
         <div className="pf-list-footer"><span>Visar {filteredViews.length} av {views.length} projekt</span><span>— = saknat underlag · 0 = uppmätt noll</span></div>
       </section>

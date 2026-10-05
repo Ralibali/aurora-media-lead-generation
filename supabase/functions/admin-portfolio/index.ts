@@ -8,6 +8,7 @@ import type {
   SourceState,
 } from "../_shared/portfolio-types.ts";
 import { allowedUrl, checkWebsite } from "./guardian-check.ts";
+import { managementInput } from "./management.ts";
 import {
   ANALYTICS_TTL_MS,
   HEALTH_TTL_MS,
@@ -50,7 +51,12 @@ Deno.serve(async (request) => {
   const days = body.rangeDays ?? 28;
   if (!validRange(days)) return json({ error: "Välj 7, 28 eller 90 dagar." }, 400);
   const action = body.action ?? "overview";
-  if (action !== "overview" && action !== "refresh") return json({ error: "Okänd åtgärd." }, 400);
+  if (!["overview", "refresh", "manage"].includes(String(action))) return json({ error: "Okänd åtgärd." }, 400);
+  let management: ReturnType<typeof managementInput> | undefined;
+  if (action === "manage") {
+    try { management = managementInput(body.management, body.expectedVersion); }
+    catch (error) { return json({ error: error instanceof Error ? error.message : "Ogiltig projektplan." }, 400); }
+  }
   const source = body.source;
   if (action === "refresh" && (!body.projectId || !["ga4", "gsc", "health"].includes(String(source)))) {
     return json({ error: "Välj ett registrerat projekt och en giltig datakälla." }, 400);
@@ -66,7 +72,7 @@ Deno.serve(async (request) => {
   const projects = (registry.data ?? []).map((row) => row.payload as PortfolioProject);
   const ids = projects.map((item) => item.id);
   const project = projects.find((item) => item.id === body.projectId);
-  if (action === "refresh" && !project) return json({ error: "Projektet finns inte i det skyddade registret." }, 400);
+  if ((action === "refresh" || action === "manage") && !project) return json({ error: "Projektet finns inte i det skyddade registret." }, 400);
 
   const overview = async (): Promise<PortfolioResponse> => {
     const [snapshots, checks, states] = await Promise.all([
@@ -90,6 +96,16 @@ Deno.serve(async (request) => {
   };
 
   try {
+    if (action === "manage" && project && management) {
+      const saved = await db.rpc("portfolio_update_management", {
+        p_project_id: project.id, p_expected_version: management.version, p_management: management.management,
+      });
+      if (saved.error) {
+        if (saved.error.message.includes("PORTFOLIO_VERSION_CONFLICT")) return json({ error: "Projektplanen har ändrats. Ladda om innan du sparar igen." }, 409);
+        throw new Error("Portfolio management write failed");
+      }
+      project.management = saved.data;
+    }
     if (action === "refresh" && project && (source === "ga4" || source === "gsc" || source === "health")) {
       const now = new Date();
       const attemptedAt = now.toISOString();

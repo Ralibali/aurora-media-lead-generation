@@ -4,6 +4,7 @@ import { ExternalLink, ArrowUpRight } from "lucide-react";
 import FollowupQueue from "./FollowupQueue";
 import AdminShell, { adminFetch, AdminStatus } from "./AdminShell";
 import PortfolioDashboard from "./PortfolioDashboard";
+import SupportOverview from "./SupportOverview";
 
 type Overview = {
   overview: {
@@ -73,6 +74,7 @@ export default function AdminDashboard() {
 
   return (
     <AdminShell title="Översikt" kicker="Admin · dashboard">
+      <SupportOverview />
       <PortfolioDashboard />
       <h2 style={{ marginTop: 36, marginBottom: 16, fontSize: 22, fontWeight: 650 }}>Aurora Media · leads och uppföljning</h2>
       <FollowupQueue />

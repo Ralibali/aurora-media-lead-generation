@@ -1,0 +1,21 @@
+id: WP-20261005-portfolio-support-hub
+company: Aurora Media AB
+objective: Hantera alla verifierat publicerade GitHub-projekt, deras support och feedback samt info@auroramedia.se i befintlig admin.
+why_now: Agaren begar en gemensam arbetsplats for sin onlineportfolj och inkommande arenden.
+evidence:
+  - 'VERIFIED FACT: befintligt privat portfolio_projects innehaller 36 projekt men saknar GitHub-identitet och gemensam supporthantering.'
+  - 'VERIFIED FACT: support och feedback finns i separata projektdatabaser; befintlig Aurora Inbox ar ett annat kommersiellt arbetsflode.'
+owner: Christoffer
+skill: supabase
+skill_version: 0.1.2
+authority: COMMIT / EMIT for denna uttryckligen bestallda implementation, migration och publicering i befintliga projekt. Inga support-svar skickas av agenten.
+usage_level: scoped_implementation
+definition_of_done:
+  - Befintligt register kompletterat med verifierade GitHub- och publiceringskopplingar, med full tackningsredovisning.
+  - Central privat arendehantering med projektkoppling, status, uppfoljning och privata anteckningar.
+  - Anslutna kallor synkar verkliga supportarenden automatiskt och redovisar kopplingsstatus; privat kund-till-kund-chatt exkluderas.
+  - E-postanslutning med lasande import, saker agarkonfiguration och tydlig skillnad mellan byggd integration och verifierad kontoanslutning.
+  - Additiva migrationer med RLS och service-only integrationer, verifierad idempotens och konfliktkontroll.
+  - Lint, typecheck, meningsfulla tester, build, PR och faktisk publicering verifierade.
+expected_artifact: docs/portfolio-support-hub.md
+business_measure: Andel anslutna supportkallor, obesvarade arenden och agartid sparad genom samlad hantering.

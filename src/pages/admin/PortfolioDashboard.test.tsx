@@ -13,6 +13,29 @@ const initial = (): PortfolioResponse => ({
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
 
 describe('daily portfolio dashboard', { timeout: 45_000 }, () => {
+  it('prioritizes published projects in management mode and saves a private project plan', async () => {
+    let current = initial();
+    current.projects[0].github = { fullName: 'example/project', url: 'https://github.com/example/project', isPrivate: true };
+    fetchMock.mockImplementation(async (path, init) => {
+      if (path === 'admin-support') return { cases: [], sources: [], projects: current.projects, counts: { scope: 'all_matching_filters' }, project_counts: { 'project-0': { open: 4, total: 6 } } };
+      const body = JSON.parse(String(init?.body));
+      if (body.action === 'manage') current = { ...current, projects: current.projects.map(project => project.id === body.projectId ? { ...project, management: { ...body.management, version: 1 } } : project) };
+      return current;
+    });
+    render(<PortfolioDashboard managementMode />);
+    const name = await screen.findByText('Projekt 01');
+    expect(screen.getAllByRole('article')).toHaveLength(1);
+    expect(screen.queryByText('Anslut Google för löpande statistik')).not.toBeInTheDocument();
+    fireEvent.click(within(name.closest('article')!).getByRole('button'));
+    expect(await screen.findByRole('link', { name: /4 öppna inlästa/ })).toHaveAttribute('href', '/admin/arenden?project=project-0');
+    expect(screen.getByRole('link', { name: /GitHub/ })).toHaveAttribute('href', 'https://github.com/example/project');
+    fireEvent.change(screen.getByLabelText('Nästa åtgärd'), { target: { value: 'Följ upp ny support' } });
+    fireEvent.change(screen.getByLabelText('Privat projektnotering'), { target: { value: 'Kontrollera inloggningen före nästa release.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Spara projektplan' }));
+    expect(await screen.findByText('Projektets plan är sparad.')).toBeInTheDocument();
+    const request = fetchMock.mock.calls.map(([, init]) => JSON.parse(String(init?.body))).find(body => body.action === 'manage');
+    expect(request).toMatchObject({ projectId: 'project-0', expectedVersion: 0, management: { note: 'Kontrollera inloggningen före nästa release.', nextAction: 'Följ upp ny support', followupDate: null } });
+  });
   it('shows the complete inventory including internal and legacy projects', async () => {
     fetchMock.mockResolvedValue(initial());
     render(<PortfolioDashboard />);
