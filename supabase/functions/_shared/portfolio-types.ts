@@ -2,6 +2,9 @@ export type PortfolioProject = {
   id: string; name: string; url: string | null;
   kind: string; stage: 'live' | 'build' | 'internal';
   lovableProjectId?: string; ga4PropertyId?: string; gscSiteUrl?: string;
+  github?: { fullName: string; url: string; isPrivate?: boolean; defaultBranch?: string; verifiedAt?: string };
+  adminUrl?: string; hostingUrl?: string; inventoryCheckedAt?: string; inventorySource?: string;
+  management?: { note: string; nextAction: string; followupDate: string | null; version: number };
 };
 export type MetricPair = { current: number | null; previous: number | null };
 export type AnalyticsSnapshot = {

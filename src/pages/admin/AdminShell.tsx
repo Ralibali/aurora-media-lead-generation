@@ -133,6 +133,8 @@ export function AdminStatus({
 
 const NAV = [
   { to: "/admin", label: "Översikt", icon: LayoutDashboard, end: true },
+  { to: "/admin/projekt", label: "Alla projekt", icon: PackageCheck },
+  { to: "/admin/arenden", label: "Support och feedback", icon: Inbox },
   { to: "/portal", label: "Aurora-tjänster", icon: PackageCheck },
   { to: "/admin/leads", label: "Leads", icon: Users },
   { to: "/admin/text-generator", label: "Textgenerator", icon: Sparkles },
@@ -156,6 +158,8 @@ const NAV = [
 
 // Snabbmeny — visas överst i mobil-drawern för åtkomst med få klick.
 const QUICK = [
+  { to: "/admin/projekt", label: "Projekt", icon: PackageCheck },
+  { to: "/admin/arenden", label: "Ärenden", icon: Inbox },
   { to: "/admin/leads", label: "Leads", icon: Users },
   { to: "/admin/text-generator", label: "Text", icon: Sparkles },
   { to: "/admin/content", label: "Innehåll", icon: FileText },

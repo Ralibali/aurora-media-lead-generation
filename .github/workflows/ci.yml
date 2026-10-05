@@ -60,5 +60,19 @@ jobs:
         run: deno check supabase/functions/website-guardian/index.ts
       - name: Check consolidated Aurora product API
         run: deno check supabase/functions/aurora-product-api/index.ts
+      - name: Check private support administration and ingestion
+        run: deno check --no-lock supabase/functions/admin-support/index.ts supabase/functions/support-ingest/index.ts
+      - name: Check private support mailbox
+        run: deno check --config supabase/functions/admin-support-mailbox/deno.json supabase/functions/admin-support-mailbox/index.ts
+      - name: Test private mailbox protocol and safety
+        run: deno test --allow-net=127.0.0.1 --allow-read --allow-env --allow-sys=hostname --config supabase/functions/admin-support-mailbox/deno.json supabase/functions/admin-support-mailbox/mailbox.test.ts
+      - name: Test central support permissions and synchronization
+        run: node scripts/test-support-db.mjs
+      - name: Test mailbox watermark and permissions
+        run: node scripts/test-support-mailbox-db.mjs
+      - name: Test source support relay acknowledgements and retries
+        run: node scripts/test-support-relay.mjs
+      - name: Test portfolio management version conflicts
+        run: node scripts/test-portfolio-management-db.mjs
       - run: npm run test:guardian-db
       - run: npm run build

@@ -89,3 +89,13 @@ verify_jwt = false
 
 [functions.aurora-product-api]
 verify_jwt = false
+
+# Shared admin token and source-bound ingest credentials are validated in code.
+[functions.admin-support]
+verify_jwt = false
+
+[functions.support-ingest]
+verify_jwt = false
+
+[functions.admin-support-mailbox]
+verify_jwt = false
