@@ -19,3 +19,10 @@ test('retry success is unstable, never silently healthy',()=>{
   assert.equal(classifyAttempts([{status:'failed'},{status:'passed'}]),'flaky');
   assert.equal(classifyAttempts([{status:'failed'},{status:'failed'}]),'failed');
 });
+test('encoded secret query keys cannot bypass navigation or request protection',()=>{
+  for (const key of ['%74oken','access%5ftoken','%41CTION','pass%77ord','%73ecret']) {
+    const url=origin+'/kontakt?'+key+'=private';
+    assert.throws(()=>safeNavigation(url,origin));
+    assert.equal(requestAllowed(url,'GET',origin),false);
+  }
+});
