@@ -39,6 +39,10 @@ jobs:
       - run: npm run test
       - name: Test browser runner safety and retry states
         run: node --test scripts/aurora-watch-runner.test.mjs
+      - name: Verify Edge Function upload boundaries
+        run: |
+          node --test scripts/check-edge-packages.test.mjs
+          node scripts/check-edge-packages.mjs
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x

@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.104.0';
-import { equalSecret } from '../website-guardian/auth.ts';
+import { equalSecret } from '../_shared/secret.ts';
 import { object, presentSupportSource, supportId, SupportValidationError, validateFilters, validateUpdate } from '../_shared/support-validation.ts';
 import type { SupportCase, SupportCursor, SupportSource } from '../_shared/support-types.ts';
 
