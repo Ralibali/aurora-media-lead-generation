@@ -133,6 +133,7 @@ export function AdminStatus({
 
 const NAV = [
   { to: "/admin", label: "Översikt", icon: LayoutDashboard, end: true },
+  { to: "/portal", label: "Aurora-tjänster", icon: PackageCheck },
   { to: "/admin/leads", label: "Leads", icon: Users },
   { to: "/admin/text-generator", label: "Textgenerator", icon: Sparkles },
   { to: "/admin/content", label: "Innehåll", icon: FileText },

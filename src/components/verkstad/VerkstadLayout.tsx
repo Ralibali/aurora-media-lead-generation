@@ -64,6 +64,7 @@ export const VkNav = () => {
           <Link to="/priser">Priser</Link>
           <Link to="/verktyg">Verktyg</Link>
           <Link to="/ai-karta">AI-kartan</Link>
+          <Link to="/portal">Kundportal</Link>
           <Link to="/om">Om</Link>
         </nav>
         <div className="vk-nav-actions">
@@ -78,7 +79,7 @@ export const VkNav = () => {
           <SheetTrigger asChild><button className="vk-menu-trigger" aria-label="Öppna meny"><Menu size={22} /></button></SheetTrigger>
           <SheetContent className="verkstad vk-mobile-sheet">
             <SheetTitle>Meny</SheetTitle><SheetDescription>Utforska Aurora Media och hitta rätt nästa steg.</SheetDescription>
-            <nav aria-label="Mobilmeny" className="vk-mobile-links">{[["/arbete", "Våra projekt"], ["/tjanster", "Tjänster"], ["/priser", "Priser & upplägg"], ["/care", "WordPress-drift"], ["/aurora-watch", "Aurora Watch"], ["/lokal-synlighet", "Lokal synlighet"], ["/ai-synlighet", "AI-synlighet"], ["/ai-receptionist", "AI-receptionist"], ["/ai-karta", "Gratis AI-karta"], ["/verktyg", "Gratis verktyg"], ["/blogg", "Guider & insikter"], ["/om", "Om Aurora"], ["/kontakt", "Kontakt"]].map(([href, label]) => <Link key={href} to={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}<ArrowRight size={17} /></Link>)}</nav>
+            <nav aria-label="Mobilmeny" className="vk-mobile-links">{[["/portal", "Kundportal"], ["/arbete", "Våra projekt"], ["/tjanster", "Tjänster"], ["/priser", "Priser & upplägg"], ["/care", "WordPress-drift"], ["/aurora-watch", "Aurora Watch"], ["/lokal-synlighet", "Lokal synlighet"], ["/ai-synlighet", "AI-synlighet"], ["/ai-receptionist", "AI-receptionist"], ["/ai-karta", "Gratis AI-karta"], ["/verktyg", "Gratis verktyg"], ["/blogg", "Guider & insikter"], ["/om", "Om Aurora"], ["/kontakt", "Kontakt"]].map(([href, label]) => <Link key={href} to={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}<ArrowRight size={17} /></Link>)}</nav>
             <a className="vk-mobile-email" href="mailto:info@auroramedia.se">info@auroramedia.se</a>
           </SheetContent>
         </Sheet>

@@ -1,0 +1,16 @@
+{
+  "projectName": "Aurora Connect",
+  "projectId": "4e4f76de-f018-413b-a45d-aa9489d356fc",
+  "sourceCommit": "91c8f474712419fee0d487e51b5916a31c38d0f1",
+  "sourceEditor": "https://lovable.dev/projects/4e4f76de-f018-413b-a45d-aa9489d356fc",
+  "exportedAt": "2026-10-05",
+  "exportedTextFileCount": 124,
+  "binariesOmitted": [
+    "public/favicon.ico"
+  ],
+  "environmentFilesOmitted": [
+    ".env"
+  ],
+  "suspectedSecretsOmitted": [],
+  "errors": []
+}

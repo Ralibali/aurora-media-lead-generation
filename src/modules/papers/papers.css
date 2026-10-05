@@ -1,0 +1,11 @@
+.papers-module .bg-aurora {
+  background: linear-gradient(135deg, #18354a, #24616a 65%, #5da99c);
+}
+.papers-module .shadow-soft {
+  box-shadow: 0 1px 2px rgb(24 53 74 / 6%), 0 8px 24px rgb(24 53 74 / 8%);
+}
+.papers-module a[data-status="active"] {
+  background: hsl(var(--secondary));
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}

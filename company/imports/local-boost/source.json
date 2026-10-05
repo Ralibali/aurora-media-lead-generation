@@ -1,0 +1,16 @@
+{
+  "projectName": "Aurora Local Boost",
+  "projectId": "7d4218ea-cdf0-40cf-b8aa-13c6f75a9e24",
+  "sourceCommit": "69eae8c6af7ef31518ccd243ddddaea6d41f53a9",
+  "sourceEditor": "https://lovable.dev/projects/7d4218ea-cdf0-40cf-b8aa-13c6f75a9e24",
+  "exportedAt": "2026-10-05",
+  "exportedTextFileCount": 122,
+  "binariesOmitted": [
+    "public/favicon.ico"
+  ],
+  "environmentFilesOmitted": [
+    ".env"
+  ],
+  "suspectedSecretsOmitted": [],
+  "errors": []
+}
