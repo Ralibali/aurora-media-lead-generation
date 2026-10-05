@@ -37,6 +37,8 @@ jobs:
         run: exit 1
       - run: npm run typecheck
       - run: npm run test
+      - name: Test browser runner safety and retry states
+        run: node --test scripts/aurora-watch-runner.test.mjs
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
@@ -54,5 +56,7 @@ jobs:
         run: deno check supabase/functions/admin-voice-pilots/index.ts
       - name: Check portfolio dashboard edge function
         run: deno check supabase/functions/admin-portfolio/index.ts
+      - name: Check Aurora Watch backend
+        run: deno check supabase/functions/website-guardian/index.ts
       - run: npm run test:guardian-db
       - run: npm run build

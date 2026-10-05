@@ -1,5 +1,9 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.104.0';
 import { allowedUrl, checkWebsite, incidentState, isDue } from './check.ts';
+import { equalSecret, runnerActionAllowed } from './auth.ts';
+import { githubRunnerAccess } from './github-auth.ts';
+import { flowActions, handleFlowAction, listSiteFlows, FlowConflictError } from './flow-api.ts';
+import { FlowValidationError } from './flows.ts';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -7,12 +11,6 @@ const cors = {
 };
 const json = (data: unknown, status = 200) =>
   Response.json(data, { status, headers: { ...cors, 'Cache-Control': 'no-store' } });
-
-function equal(a: string, b: string) {
-  let diff = a.length ^ b.length;
-  for (let i = 0; i < b.length; i++) diff |= (a.charCodeAt(i) || 0) ^ b.charCodeAt(i);
-  return !!a && !!b && diff === 0;
-}
 
 function validInterval(value: unknown) {
   const interval = Number(value ?? 60);
@@ -78,24 +76,30 @@ Deno.serve(async req => {
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
   const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
-  const adminAccess = [Deno.env.get('ADMIN_SECRET') ?? '', Deno.env.get('FAQ_ANALYTICS_PASSWORD') ?? ''].some(key => equal(token, key));
-  const scheduler = equal(token, Deno.env.get('GUARDIAN_CRON_SECRET') ?? '');
-  if (!adminAccess && !scheduler) return json({ error: 'unauthorized' }, 401);
+  const adminAccess = [Deno.env.get('ADMIN_SECRET') ?? '', Deno.env.get('FAQ_ANALYTICS_PASSWORD') ?? ''].some(key => equalSecret(token, key));
+  const scheduler = equalSecret(token, Deno.env.get('GUARDIAN_CRON_SECRET') ?? '');
+  const oidc = !adminAccess && !scheduler && await githubRunnerAccess(token);
+  if (!adminAccess && !scheduler && !oidc) return json({ error: 'unauthorized' }, 401);
 
   let body: Record<string, unknown>;
   try {
-    body = await req.json();
+    const raw = await req.text();
+    if (raw.length > 1_400_000) return json({ error: 'Begäran är för stor.' }, 413);
+    body = JSON.parse(raw);
   } catch {
     return json({ error: 'Ogiltig begäran.' }, 400);
   }
   if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ error: 'Ogiltig begäran.' }, 400);
-  if (scheduler && !adminAccess && body.action !== 'run_due') return json({ error: 'forbidden' }, 403);
+  if (!adminAccess && !runnerActionAllowed(body.action, oidc)) return json({ error: 'forbidden' }, 403);
 
   const db = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
   const origins = (Deno.env.get('GUARDIAN_ALLOWED_ORIGINS') ?? '').split(',').map(s => s.trim()).filter(Boolean);
 
   try {
-    if (body.action === 'create') {
+    if (flowActions.includes(String(body.action))) {
+      const response = await handleFlowAction(db, body, origins);
+      if (response) return json(response);
+    } else if (body.action === 'create') {
       let url: URL;
       try {
         url = allowedUrl(String(body.url ?? ''), origins);
@@ -231,10 +235,12 @@ Deno.serve(async req => {
         .order('created_at', { ascending: false })
         .limit(50);
       if (error) throw error;
-      return { ...site, checks };
+      return { ...site, checks, flows: await listSiteFlows(db, site.id) };
     }));
     return json({ sites: history });
   } catch (error) {
+    if (error instanceof FlowValidationError) return json({ error: error.message }, 400);
+    if (error instanceof FlowConflictError) return json({ error: error.message }, 409);
     console.error('[sitewatch] request failed', error);
     return json({ error: 'Kontrollen kunde inte sparas eller konfigurationen är ofullständig.' }, 500);
   }

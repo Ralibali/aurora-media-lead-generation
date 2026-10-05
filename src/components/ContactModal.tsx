@@ -91,6 +91,7 @@ const schema = z.object({
 });
 
 const PAKET_OPTIONS = [
+  { value: "Aurora Watch", label: "Aurora Watch – webbövervakning från 299 kr/mån" },
   { value: "AI-automation", label: "AI och automation – diskutera ett arbetsflöde" },
   { value: "Konsult", label: "Utveckling och rådgivning" },
   { value: "Prototyp", label: "Prototyp – från 4 900 kr" },

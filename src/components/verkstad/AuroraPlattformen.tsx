@@ -23,6 +23,12 @@ export const PLATFORM_PARTS = [
     body: "WordPress-drift, uppdateringar, backup och säkerhet varje månad.",
   },
   {
+    slug: "aurora-watch",
+    name: "Aurora Watch",
+    role: "Bevakningen",
+    body: "Kontrollera att viktiga sidor och vägar till kontakt, bokning och köp går att nå.",
+  },
+  {
     slug: "lokal-synlighet",
     name: "Aurora Local",
     role: "Närområdet",

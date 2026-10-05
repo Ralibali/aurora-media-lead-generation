@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import AdminShell, { adminFetch, AdminStatus } from './AdminShell';
+import WatchFlows from './WatchFlows';
+import type { WatchFlow } from '@/lib/auroraWatch';
 import { incidentState } from '../../../supabase/functions/website-guardian/check';
 
 type Check = {
@@ -20,6 +22,7 @@ type Site = {
   last_checked_at: string | null;
   last_notified_state: string;
   checks: Check[];
+  flows?: WatchFlow[];
 };
 
 const intervalLabel = (minutes: number) =>
@@ -80,15 +83,15 @@ export default function WebsiteGuardian() {
   };
 
   return (
-    <AdminShell title="Aurora SiteWatch" kicker="Webbövervakning och incidentbevakning">
+    <AdminShell title="Aurora Watch" kicker="Webbövervakning och kundflöden">
       <div className="space-y-2">
         <p>
           Bevaka tillgänglighet, svarstid, noindex och viktig sidtext. En första avvikelse markeras för
           omkontroll; två avvikande kontroller i följd blir en incident.
         </p>
         <p className="text-sm text-muted-foreground">
-          SiteWatch läser serverns HTML-svar. Inloggade browserflöden, formulärinskick och checkout testas
-          inte av den här monitorn. Endast servergodkända HTTPS-domäner kan läggas till.
+          Sidkontrollen läser serverns HTML-svar. Lägg till kundflöden under en monitor för att även testa
+          navigering och synligt innehåll i en webbläsare. Endast servergodkända HTTPS-domäner kan läggas till.
         </p>
       </div>
 
@@ -215,6 +218,7 @@ export default function WebsiteGuardian() {
                 </button>
               </div>
 
+              <h3 className="font-semibold">Sidkontroller · HTTP och HTML</h3>
               <ul className="space-y-2">
                 {site.checks.slice(0, 10).map(check => (
                   <li key={check.id} className="rounded border p-3 text-sm">
@@ -224,6 +228,7 @@ export default function WebsiteGuardian() {
                   </li>
                 ))}
               </ul>
+              <WatchFlows site={site} busy={busy} request={request} />
             </section>
           );
         })}
