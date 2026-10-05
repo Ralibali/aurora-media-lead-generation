@@ -30,6 +30,15 @@ export default tseslint.config(
     },
   },
   {
+    // Lovable regenerates this broker with a timer read by a closure before its
+    // later assignment. Preserve the generated source across deployments while
+    // retaining prefer-const for ordinary initialized bindings.
+    files: ["src/integrations/supabase/previewAuthStorage.ts"],
+    rules: {
+      "prefer-const": ["error", { ignoreReadBeforeAssign: true }],
+    },
+  },
+  {
     // shadcn-generated component aliases intentionally mirror upstream's empty interfaces.
     files: ["src/components/ui/**/*.{ts,tsx}"],
     rules: {
