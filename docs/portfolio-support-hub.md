@@ -30,7 +30,12 @@ committed. Provisioning uses the following sequence:
    Generate an independent 32-byte secret, with bearer format `source_uuid.secret`.
    Store only the SHA-256 hash of that entire bearer in the central row.
 2. Apply the source repository's migration. Browser roles must have no access to
-   `support_hub_private`, Vault decrypted secrets, or the pg_net request queue.
+   `support_hub_private` or Vault decrypted secrets. Verify that `net` and private
+   schemas are excluded from the Data API, that client roles remain NOLOGIN, and
+   that no exposed RPC or view bridges to the network queue or Vault. Hosted
+   pg_net's extension-owned PUBLIC grants are intentional; revoking them without
+   ownership can silently do nothing. Its client boundary is documented in the
+   [Supabase pg_net permissions guide](https://supabase.com/docs/guides/database/extensions/pg_net#permissions).
 3. Put the bearer in the source project's Vault and configure the private source
    mapping to its UUID and approved table. Copy only the selected contact and
    support fields. Demo rows are excluded.
