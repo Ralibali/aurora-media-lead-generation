@@ -1348,6 +1348,174 @@ export type Database = {
         }
         Relationships: []
       }
+      portfolio_checks: {
+        Row: {
+          payload: Json
+          project_id: string
+          updated_at: string
+        }
+        Insert: {
+          payload: Json
+          project_id: string
+          updated_at?: string
+        }
+        Update: {
+          payload?: Json
+          project_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      portfolio_projects: {
+        Row: {
+          payload: Json
+          project_id: string
+          updated_at: string
+        }
+        Insert: {
+          payload: Json
+          project_id: string
+          updated_at?: string
+        }
+        Update: {
+          payload?: Json
+          project_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      portfolio_snapshots: {
+        Row: {
+          payload: Json
+          project_id: string
+          range_days: number
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          payload: Json
+          project_id: string
+          range_days: number
+          source: string
+          updated_at?: string
+        }
+        Update: {
+          payload?: Json
+          project_id?: string
+          range_days?: number
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      portfolio_source_states: {
+        Row: {
+          payload: Json
+          project_id: string
+          range_days: number
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          payload: Json
+          project_id: string
+          range_days?: number
+          source: string
+          updated_at?: string
+        }
+        Update: {
+          payload?: Json
+          project_id?: string
+          range_days?: number
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      prospecting_audits: {
+        Row: {
+          audit_signals: Json
+          audited_at: string
+          campaign_id: string
+          created_at: string
+          demo_brief: Json
+          error_message: string | null
+          http_status: number | null
+          id: string
+          lead_id: string
+          meta_description: string | null
+          opportunity_score: number
+          opportunity_summary: string | null
+          page_title: string | null
+          pitch_draft: string | null
+          robots: string | null
+          screenshot_expires_at: string | null
+          screenshot_url: string | null
+          source_url: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          audit_signals?: Json
+          audited_at?: string
+          campaign_id: string
+          created_at?: string
+          demo_brief?: Json
+          error_message?: string | null
+          http_status?: number | null
+          id?: string
+          lead_id: string
+          meta_description?: string | null
+          opportunity_score?: number
+          opportunity_summary?: string | null
+          page_title?: string | null
+          pitch_draft?: string | null
+          robots?: string | null
+          screenshot_expires_at?: string | null
+          screenshot_url?: string | null
+          source_url?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          audit_signals?: Json
+          audited_at?: string
+          campaign_id?: string
+          created_at?: string
+          demo_brief?: Json
+          error_message?: string | null
+          http_status?: number | null
+          id?: string
+          lead_id?: string
+          meta_description?: string | null
+          opportunity_score?: number
+          opportunity_summary?: string | null
+          page_title?: string | null
+          pitch_draft?: string | null
+          robots?: string | null
+          screenshot_expires_at?: string | null
+          screenshot_url?: string | null
+          source_url?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prospecting_audits_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "prospecting_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prospecting_audits_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: true
+            referencedRelation: "prospecting_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prospecting_campaigns: {
         Row: {
           admin_id: string
@@ -1520,6 +1688,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      portfolio_claim_refresh: {
+        Args: {
+          p_attempted_at: string
+          p_project_id: string
+          p_range_days?: number
+          p_source: string
+        }
+        Returns: boolean
+      }
       try_contact_rate_limit: {
         Args: {
           p_email: string

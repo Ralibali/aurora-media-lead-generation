@@ -7,7 +7,7 @@ import type {
   PortfolioResponse,
   SourceState,
 } from "../_shared/portfolio-types.ts";
-import { allowedUrl, checkWebsite } from "../website-guardian/check.ts";
+import { allowedUrl, checkWebsite } from "./guardian-check.ts";
 import {
   ANALYTICS_TTL_MS,
   HEALTH_TTL_MS,
