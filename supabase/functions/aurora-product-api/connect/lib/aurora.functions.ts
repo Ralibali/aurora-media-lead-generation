@@ -894,6 +894,11 @@ export const deployAgentToProvider = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ agentId: uuid, confirm: z.literal(true) }).parse(input))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    // Reading an organization's agent does not grant permission to deploy it.
+    // Check the same staff boundary as the agents write policy before any
+    // credentialed provider action, which cannot be protected by database RLS.
+    const { data: isStaff, error: staffError } = await supabase.rpc("is_aurora_staff", { _user_id: userId });
+    if (staffError || isStaff !== true) throw new Error("Endast Aurora-personal kan publicera agenter.");
     const { data: agent } = await supabase.from("agents").select("*").eq("id", data.agentId).maybeSingle();
     if (!agent) throw new Error("Agenten hittades inte.");
     const [org, knowledge, questions, handoff, hours] = await Promise.all([
@@ -932,10 +937,13 @@ export const deployAgentToProvider = createServerFn({ method: "POST" })
     });
 
     if (result.ok && !result.simulated) {
-      await supabase
+      const { error: updateError } = await supabase
         .from("agents")
         .update({ provider: provider.id, provider_agent_id: result.providerAgentId, status: "testing" })
-        .eq("id", agent.id);
+        .eq("id", agent.id)
+        .select("id")
+        .single();
+      if (updateError) throw new Error("Röstmotorn svarade, men agentens publiceringsstatus kunde inte sparas.");
     }
     await logAudit(supabase, userId, "agent.deploy_attempt", "agents", agent.id, agent.org_id, {
       provider: provider.id,

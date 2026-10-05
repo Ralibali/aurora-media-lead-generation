@@ -27,9 +27,16 @@ Source schemas and evidence are under `company/imports/<product>`. These are ref
 - Connect's original voice-provider endpoints are unverified. Real calls and Swedish voice quality remain separate activation work.
 - Local Boost's original external data providers return `not_configured` even when credentials are present. No ranking, review publication or Google Business connection is invented.
 - Papers stores originals in its existing private bucket; server-side file validation, hash computation, approval locks, CSV export and interrupted-export recovery are preserved. It does not claim accounting-provider or Stripe integration.
-- Connect and Local Boost database DNS failed during investigation; reactivation must be verified before reporting those services operational.
+- VERIFIED FACT: Connect and Local Boost were sleeping. Opening their existing Lovable projects woke the original databases; Auth settings and public plan reads returned HTTP 200 after startup. No replacement database was created.
+- VERIFIED FACT: Connect has no accounts, organizations or customer data. Local Boost has no accounts or admins and contains demo organizations/locations. Staff-account activation is still required; this import does not turn demo content into customer activity. See their `company/imports/*/activation.json` records.
 - Aurora Watch is already implemented in this repository by another authorized task. Its existing routes, workflow and production behavior must be preserved.
 
 ## Verification
 
-Local and production results are recorded after verification. A build or source import alone is not evidence that external integrations or customer account flows are operational.
+VERIFIED FACT: the combined lint, typecheck, 220-test suite, Guardian database checks and production build passed locally after rebasing on Aurora Watch's deployed main commit. Deno checked the complete product API. Twelve subsequent callback ownership tests passed; callback tokens are consumed only by their own product client, and existing host callbacks remain supported. GitHub CI will verify the final combined revision.
+
+VERIFIED FACT: browser checks reached the native portal and each product's correct sign-in guard without console errors. Papers' exact production email callback was saved and read back in its original Auth settings. Sight's narrow shared-report function passed a rollback regression against real database roles before additive deployment; no synthetic fixtures remain. Papers' tenant, invitation, Storage and export integrity checks also passed with rollback cleanup.
+
+UNKNOWN: a real customer login, signup email confirmation, upload-to-export session and external paid provider workflow have not been exercised on the integrated production site. No customer password, user account, email or provider call was created for testing.
+
+Frontend publishing and the separate `aurora-product-api` deployment must be read back before calling the integration live. A build alone is not production evidence.

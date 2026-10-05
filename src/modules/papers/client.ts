@@ -1,12 +1,18 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
+import { detectAuthSessionFor } from "@/modules/shared/auth-callback";
 
 // Public project configuration only; data access remains protected by Papers Auth and RLS.
 export const PAPERS_URL = "https://mqizbxeifqqibluujlfy.supabase.co";
 export const PAPERS_PUBLISHABLE_KEY = "sb_publishable_997N3I3D3kb-K8-TvtcMyA_-QMeJTxY";
 
 export const supabase = createClient<Database>(PAPERS_URL, PAPERS_PUBLISHABLE_KEY, {
-  auth: { storageKey: "aurora-media-papers-auth", persistSession: true, autoRefreshToken: true },
+  auth: {
+    storageKey: "aurora-media-papers-auth",
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: detectAuthSessionFor("papers"),
+  },
   global: {
     fetch: (input, init) => {
       const headers = new Headers(input instanceof Request ? input.headers : undefined);

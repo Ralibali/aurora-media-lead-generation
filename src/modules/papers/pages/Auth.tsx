@@ -55,7 +55,7 @@ function AuthPage() {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/portal/papers` },
+        options: { emailRedirectTo: `${window.location.origin}/portal/papers/auth` },
       });
       if (error) throw error;
       if (data.session) navigate({ to: "/app" });

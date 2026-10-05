@@ -1,0 +1,47 @@
+{
+  "sourceProjectId": "6ab955f8-87dd-41a6-a730-f7f231c63933",
+  "sourceBackendRef": "xsrjgnqhkfjmmhywxnsn",
+  "before": {
+    "rows": [
+      {
+        "brands": 3,
+        "organizations": 1,
+        "reports": 3,
+        "rpc_exists": false
+      }
+    ]
+  },
+  "rollbackRegression": {
+    "rows": [
+      {
+        "brands": 3,
+        "remaining_fixture_organizations": 0,
+        "reports": 3,
+        "rpc_exists_after_rollback": false,
+        "status": "regression_passed_and_rolled_back"
+      }
+    ]
+  },
+  "applied": {
+    "rows": [
+      {
+        "anon_execute": true,
+        "authenticated_execute": true,
+        "remaining_fixture_organizations": 0,
+        "rpc_exists": true,
+        "unknown_token_denied": true
+      }
+    ]
+  },
+  "checks": [
+    "invalid, missing, disabled and cross-organization token/report references return found:false",
+    "anon and authenticated may resolve explicitly shared synthetic report",
+    "private columns and cross-organization result/citation/action rows excluded",
+    "actions capped at 12 and sorted by priority",
+    "reports without runs return null run and empty results/citations",
+    "PUBLIC execution revoked; anon/authenticated explicit grants",
+    "SECURITY DEFINER and fixed search_path validated",
+    "all synthetic data and candidate function rolled back before final application"
+  ],
+  "scope": "Function and grants only applied to original Sight backend; no auth users, email, providers, production report contents, or existing table rows were modified."
+}
