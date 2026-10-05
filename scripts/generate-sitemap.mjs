@@ -29,7 +29,7 @@ const STATIC_ROUTES = [
   { path: "/tjanster/grafisk-profil", changefreq: "monthly", priority: "0.75" },
   { path: "/tjanster/fotografering", changefreq: "monthly", priority: "0.75" },
   { path: "/care", changefreq: "monthly", priority: "0.85" },
-  { path: "/sitewatch", changefreq: "monthly", priority: "0.85" },
+  { path: "/aurora-watch", changefreq: "monthly", priority: "0.85" },
   { path: "/tillganglighet", changefreq: "monthly", priority: "0.9" },
   { path: "/cookie-samtycke", changefreq: "monthly", priority: "0.9" },
   { path: "/ai-synlighet", changefreq: "monthly", priority: "0.85" },

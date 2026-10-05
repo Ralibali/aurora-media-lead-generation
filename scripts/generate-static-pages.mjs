@@ -44,7 +44,8 @@ const STATIC_PAGES = [
   { route: '/tjanster/seo', title: 'SEO för svenska företag', description: 'Teknisk SEO, innehåll, struktur och synlighet för företag som vill växa organiskt.', body: 'Aurora Media arbetar med teknisk SEO, innehållsstrategi, internlänkning, strukturerad data och konverterande landningssidor.' },
   { route: '/tjanster/google-ads', title: 'Google Ads', description: 'Datadriven Google Ads med fokus på leads, konvertering och lönsamhet.', body: 'Aurora Media hjälper företag med Google Ads, sökannonsering, kampanjstruktur och löpande optimering.' },
   { route: '/tjanster/meta-ads', title: 'Meta Ads', description: 'Annonsering på Facebook och Instagram med rätt målgrupp, budskap och konvertering.', body: 'Aurora Media skapar och optimerar Meta Ads-kampanjer för svenska företag.' },
-  { route: '/sitewatch', title: 'Aurora SiteWatch – webbövervakning från 299 kr/mån', description: 'Övervaka viktiga webbsidor, svarstid, noindex och förväntat innehåll. Bekräftade incidenter och återställningar kan aviseras via e-post.', body: 'Aurora SiteWatch bevakar viktiga HTTPS-sidor, svarstid, noindex och förväntad HTML-text. Två avvikande kontroller i följd bekräftar en incident och notifiering kan skickas till vald kontakt.' },
+  { route: '/aurora-watch', title: 'Aurora Watch – kundflöden och webbövervakning från 299 kr/mån', description: 'Bevaka viktiga sidor och testa navigering, länkar och synligt innehåll i webbläsaren. Aurora Watch från 299 kr/mån.', body: 'Aurora Watch kombinerar SiteWatch-sidbevakning med kontroller av publika kundflöden i en riktig webbläsare. Definierade steg, omkontroll, körhistorik och privat bildunderlag. Från 299 kr/mån för upp till 5 flöden. Inga formulär, inloggningar eller betalningar skickas.' },
+  { route: '/sitewatch', canonicalRoute: '/aurora-watch', title: 'Aurora Watch – kundflöden och webbövervakning från 299 kr/mån', description: 'Bevaka viktiga sidor och testa navigering, länkar och synligt innehåll i webbläsaren. Aurora Watch från 299 kr/mån.', body: 'Aurora Watch kombinerar SiteWatch-sidbevakning med kontroller av publika kundflöden i en riktig webbläsare. Definierade steg, omkontroll, körhistorik och privat bildunderlag. Från 299 kr/mån för upp till 5 flöden. Inga formulär, inloggningar eller betalningar skickas.' },
   { route: '/tillganglighet', title: 'Tillgänglighetsaudit och WCAG-granskning', description: 'Teknisk tillgänglighetsaudit med prioriterade WCAG-fynd, åtgärdslista och löpande monitoring.', body: 'Aurora Media granskar webbplatser och e-handel med automatiska tester och manuell kontroll. Varje fynd kopplas till sida, allvarlighetsgrad, kriterium och konkret åtgärd. En automatisk scan är beslutsstöd och inte en garanti om full WCAG-efterlevnad.' },
   { route: '/cookie-samtycke', title: 'Cookie-banner, Consent Mode v2 och tracker-scan', description: 'Teknisk cookie- och samtyckeshantering med trackerinventering, blockering före samtycke och löpande kontroll.', body: 'Aurora Media inventerar cookies, scripts och pixlar, konfigurerar blockering före aktivt samtycke och verifierar Consent Mode v2. Tjänsten ger tekniskt underlag och löpande kontroll men är inte en garanti om full juridisk efterlevnad.' },
   { route: '/arbete', title: 'Case och projekt', description: 'Se projekt, SaaS-lösningar och digitala system byggda av Aurora Media.', body: 'Aurora Media bygger egna SaaS-produkter och kundprojekt inom AI, transport, marknadsplatser och interna system.' },
@@ -292,14 +293,15 @@ function fullUrl(route) {
   return `${SITE_URL}${normalizePath(route)}`;
 }
 
-function buildPageSchema({ route, title, description }) {
+function buildPageSchema({ route, canonicalRoute, title, description }) {
+  const pageRoute = canonicalRoute ?? route;
   return [
     {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
       name: title,
       description,
-      url: fullUrl(route),
+      url: fullUrl(pageRoute),
       isPartOf: { '@id': `${SITE_URL}/#website` },
       about: { '@id': `${SITE_URL}/#organization` },
     },
@@ -308,7 +310,7 @@ function buildPageSchema({ route, title, description }) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Hem', item: SITE_URL },
-        ...(route === '/' ? [] : [{ '@type': 'ListItem', position: 2, name: title, item: fullUrl(route) }]),
+        ...(pageRoute === '/' ? [] : [{ '@type': 'ListItem', position: 2, name: title, item: fullUrl(pageRoute) }]),
       ],
     },
   ];
@@ -398,8 +400,8 @@ function buildCityFaqSchema(faqs) {
   };
 }
 
-function injectHtml({ template, route, title, description, ogType = 'website', jsonLd = [], body, hreflang = false, ogImage, mono, ctas }) {
-  const canonical = fullUrl(route);
+function injectHtml({ template, route, canonicalRoute, title, description, ogType = 'website', jsonLd = [], body, hreflang = false, ogImage, mono, ctas }) {
+  const canonical = fullUrl(canonicalRoute ?? route);
   const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
   const ogImageUrl = ogImage ? `${SITE_URL}${ogImage}` : `${SITE_URL}/og-image-sv.jpg`;
   // Every generated page has its own visible content; discard the homepage-only fallback.
@@ -651,6 +653,7 @@ async function main() {
     const html = injectHtml({
       template,
       route: page.route,
+      canonicalRoute: page.canonicalRoute,
       title: page.title,
       description: page.description,
       jsonLd: [organizationSchema, websiteSchema, ...buildPageSchema(page), ...extraSchemas, ...(page.schemas ?? [])],

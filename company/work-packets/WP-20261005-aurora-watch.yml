@@ -1,0 +1,20 @@
+id: WP-20261005-aurora-watch
+company: Aurora Media AB
+objective: Erbjud och leverera Aurora Watch i befintlig SiteWatch-administration.
+why_now: Ägaren beställde implementation, gröna PR-kontroller, merge och publicering den 5 oktober 2026.
+evidence:
+  - 'VERIFIED FACT: SiteWatch finns redan med guardian_sites/checks och aktiv HTTP-bevakning.'
+  - 'VERIFIED FACT: HTTP-kontroller kör inte webbplatsens JavaScript eller följer kundens länkar.'
+  - 'HYPOTHESIS: schemalagda kontroller av publika kundvägar sparar felsökningstid och kan säljas som förvaltad tjänst.'
+  - 'UNKNOWN: betalningsvilja och intäkt är ännu inte verifierade.'
+owner: Christoffer
+skill: site-revenue-experiment
+skill_version: '1.0'
+authority: EMIT
+usage_level: Befintligt repo och Lovable-projekt; additiv databasändring, säker PR, merge och publicering enligt direkt beställning. Ingen kundkommunikation eller debitering.
+definition_of_done:
+  - Kommersiellt erbjudande och befintlig offertförfrågan publicerade.
+  - Browserflöden med skyddade bevis, historik och tydliga osäkra resultat.
+  - Lint, typecheck, tester, databasbehörigheter och build passerar.
+  - Migration, funktion, publicerad frontend och riktig schemakörning verifierade separat.
+expected_artifact: docs/aurora-watch-2026-10-05.md

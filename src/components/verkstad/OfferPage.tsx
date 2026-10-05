@@ -46,6 +46,8 @@ export type OfferPageProps = {
   faqs: { q: string; a: string }[];
   related: { name: string; price: string; to: string }[];
   serviceType: string;
+  contactMessage?: string;
+  featuredLabel?: string;
 };
 
 const OfferPage = (props: OfferPageProps) => {
@@ -53,9 +55,9 @@ const OfferPage = (props: OfferPageProps) => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const url = `${SITE_URL}/${props.slug}`;
 
-  const book = (placement: string) => {
+  const book = (placement: string, tier?: string) => {
     trackEvent("offer_cta_click", { offer: props.paketValue, placement });
-    open({ paket: props.paketValue, internalNote: `Sida: /${props.slug}` });
+    open({ paket: props.paketValue, internalNote: `Sida: /${props.slug}${tier ? ` · Paket: ${tier}` : ""}`, ...(props.contactMessage ? { message: `${props.contactMessage}${tier ? `\nÖnskat paket: ${tier}` : ""}` } : {}) });
   };
 
   useEffect(() => {
@@ -211,7 +213,7 @@ const OfferPage = (props: OfferPageProps) => {
                   >
                     {t.featured && (
                       <span className="vk-mono" style={{ position: "absolute", top: -11, left: 20, background: "var(--gran)", color: "#fff", borderRadius: 6, padding: "3px 10px", fontSize: 10.5 }}>
-                        Populärast
+                        {props.featuredLabel ?? "Populärast"}
                       </span>
                     )}
                     <p className="vk-mono" style={{ color: "var(--granbark-mut)" }}>{t.name}</p>
@@ -228,7 +230,7 @@ const OfferPage = (props: OfferPageProps) => {
                         </li>
                       ))}
                     </ul>
-                    <button onClick={() => book(`tier:${t.name}`)} className={`vk-btn ${t.featured ? "vk-btn-primary" : "vk-btn-ghost"}`}>
+                    <button onClick={() => book(`tier:${t.name}`, t.name)} className={`vk-btn ${t.featured ? "vk-btn-primary" : "vk-btn-ghost"}`}>
                       Begär offert <ArrowRight size={15} />
                     </button>
                   </div>

@@ -1,79 +1,59 @@
 import OfferPage from "@/components/verkstad/OfferPage";
 
+// Extend the existing SiteWatch offer; /sitewatch remains a compatible entry point.
 const AuroraSiteWatch = () => (
   <OfferPage
-    slug="sitewatch"
-    paketValue="Aurora SiteWatch"
-    serviceType="Webbövervakning och incidentbevakning"
-    eyebrow="Aurora SiteWatch"
-    title="Upptäck webbproblem"
-    titleEm="innan kunden gör det."
-    intro="Aurora SiteWatch bevakar viktiga sidor, svarstid, noindex och att affärskritisk text faktiskt finns kvar. Vid bekräftad incident kan rätt kontakt få e-post, och när sidan återhämtar sig markeras den som återställd."
-    seoTitle="Aurora SiteWatch – webbövervakning från 299 kr/mån | Aurora Media"
-    seoDescription="Övervaka viktiga webbsidor, svarstid, noindex och förväntat innehåll. Bekräftade incidenter och återställningar kan aviseras via e-post."
+    slug="aurora-watch"
+    paketValue="Aurora Watch"
+    serviceType="Webbövervakning och kontroll av kundflöden"
+    eyebrow="Aurora Watch"
+    title="Hittar kunden fram"
+    titleEm="när det gäller?"
+    intro="En hemsida kan vara uppe även när länken till kontakt, priser eller bokning har slutat fungera. Aurora Watch kontrollerar utvalda vägar genom er webbplats i en riktig webbläsare och bevakar viktiga sidor med SiteWatch. Ni får ett tydligt underlag när något avviker."
+    seoTitle="Aurora Watch – kundflöden och webbövervakning från 299 kr/mån | Aurora Media"
+    seoDescription="Bevaka viktiga sidor och testa navigering, länkar och synligt innehåll i webbläsaren. Aurora Watch från 299 kr/mån. Boka en genomgång."
+    contactMessage={'Hej! Jag vill diskutera Aurora Watch för vår webbplats.\n\nWebbplats:\nViktigaste vägen till kontakt, bokning eller köp:\nAntal webbplatser:\n'}
+    featuredLabel="Fler flöden"
     outcomes={[
-      { title: "Fånga riktiga driftfel", body: "Vi kontrollerar HTTPS-svar, timeout och onormala statuskoder så att nedtid syns snabbt." },
-      { title: "Se när en viktig sida förändras", body: "SiteWatch kan verifiera att vald text fortfarande finns i HTML och varnar om den försvinner." },
-      { title: "Skydda indexeringen", body: "Oavsiktlig noindex i HTML eller X-Robots-Tag markeras som avvikelse innan den hinner bli ett långvarigt SEO-problem." },
-      { title: "Mindre larmbrus", body: "En enstaka avvikelse kräver omkontroll. Incidentstatus sätts först efter två avvikande kontroller i följd." },
+      { title: "Se om besökaren hittar fram", body: "Kontrollen öppnar sidan, följer valda länkar och verifierar att rätt text eller element är synligt. Exempel: startsida → kontakt → kontaktformulär visas." },
+      { title: "Få underlag att agera på", body: "Varje körning får tidpunkt, resultat och information om steget som avvek. Aurora Media kan granska skärmbilder i sin skyddade administration." },
+      { title: "Skilj fel från tillfälliga problem", body: "En omkontroll hjälper oss att skilja återkommande fel från ett instabilt flöde. Väntande eller osäkra kontroller redovisas separat." },
+      { title: "Behåll koll på webbplatsens grund", body: "Den befintliga sidbevakningen kontrollerar status, svarstid, noindex och utvald text i sidans HTML. Kundflödena kompletterar den kontrollen." },
     ]}
     includes={[
-      "Kontroll av HTTPS-status och svarstid",
-      "Kontroll av noindex i HTML och X-Robots-Tag",
-      "Valfri textkontroll per bevakad sida",
-      "Kontrollintervall från 15 minuter till 24 timmar",
-      "Incidentstatus efter två avvikande kontroller i följd",
-      "E-post vid bekräftad incident och återställning när notifiering är konfigurerad",
-      "Historik för de senaste kontrollerna i Aurora Medias adminportal",
-      "Paus/aktivering per monitor och manuell kontroll på begäran",
+      "Tillsammans definierar vi de publika kundflöden som ska bevakas",
+      "Navigering och länkklick på samma godkända webbplats",
+      "Kontroll av synlig text och viktiga element i en riktig webbläsare",
+      "Schemalagda kontroller och möjlighet att köa en extra kontroll",
+      "Separata resultat för godkänt, avvikelse, instabilt och ej avgjort",
+      "Körhistorik, stegresultat och privat bildunderlag för Aurora Medias uppföljning",
+      "Nedladdningsbar sammanställning av de senaste körningarna under sju dagar",
+      "SiteWatch-kontroller av serverrespons, svarstid, noindex och HTML-text",
     ]}
     tiers={[
-      {
-        name: "SiteWatch Basic",
-        price: "299 kr",
-        cadence: "/mån",
-        desc: "För en mindre webbplats där de viktigaste sidorna behöver bevakas.",
-        features: ["Upp till 5 bevakade sidor", "Kontroll varje timme", "Incident- och återställningsmail", "90 dagars kontrollhistorik"],
-      },
-      {
-        name: "SiteWatch Pro",
-        price: "799 kr",
-        cadence: "/mån",
-        desc: "För webbplatser där leads, bokningar eller försäljning är viktiga.",
-        featured: true,
-        features: ["Upp till 20 bevakade sidor", "Kontroll var 15:e minut", "Text- och noindex-kontroller", "Prioriterad incidenthantering"],
-      },
-      {
-        name: "SiteWatch Managed",
-        price: "1 490 kr",
-        cadence: "/mån",
-        desc: "För företag som vill att Aurora Media även följer upp och åtgärdar fel.",
-        features: ["Allt i Pro", "Månadsvis genomgång", "Aurora Media följer upp bekräftade incidenter", "Åtgärdstid debiteras enligt avtal eller Care-paket"],
-      },
+      { name: "Watch Start", price: "299 kr", cadence: "/mån", desc: "För en webbplats med ett fåtal viktiga vägar till nästa steg.", features: ["Upp till 5 kundflöden", "Kontroll varje dygn", "Sidbevakning med SiteWatch", "Resultat och underlag via Aurora Media"] },
+      { name: "Watch Pro", price: "699 kr", cadence: "/mån", featured: true, desc: "För fler kundflöden och tätare kontroll av det som är viktigt.", features: ["Upp till 20 kundflöden", "Kontroll upp till varje timme", "Sidbevakning med SiteWatch", "7-dagarsrapport från körhistoriken"] },
+      { name: "Watch Byrå", price: "1 490 kr", cadence: "/mån", desc: "För byråer och företag som vill samla bevakningen av flera webbplatser.", features: ["Upp till 20 kundflöden fördelade på flera sajter", "Kontroll upp till varje timme", "Gemensam uppföljning med Aurora Media", "Fler flöden enligt offert"] },
     ]}
-    pricingNote={
-      <>
-        Priser exklusive moms. Ingen bindningstid. SiteWatch testar serverrespons och HTML-baserade signaler.
-        Inloggade användarflöden, formulärinskick och checkout-automation ingår inte i dessa paket förrän ett
-        separat browser-test har satts upp och verifierats.
-      </>
-    }
+    pricingNote={<>Priser exklusive moms. Paketen beställs efter en genomgång av era flöden. Eventuell uppstart och särskilda anpassningar specificeras i offerten. Varje flöde omfattar upp till åtta steg på samma webbplats. Kontrollintervall är planerade tider och kan fördröjas.</>}
     process={[
-      { title: "Välj kritiska sidor", body: "Vi väljer de URL:er som faktiskt betyder något: startsida, kontakt, bokning, priser eller andra konverteringssidor." },
-      { title: "Sätt kontrollregler", body: "Per sida bestämmer vi kontrollintervall och eventuell text som måste finnas kvar." },
-      { title: "Bekräfta incident", body: "En första avvikelse markeras för omkontroll. Två avvikelser i följd blir en incident." },
-      { title: "Följ återställningen", body: "När sidan är frisk igen markeras återställning och notifiering kan skickas till vald kontakt." },
+      { title: "Välj vägarna som betyder något", body: "Vi väljer konkreta flöden på er publika webbplats, exempelvis att nå ett kontaktformulär eller hitta rätt bokningsinformation." },
+      { title: "Verifiera första kontrollen", body: "Vi bestämmer vad som måste vara synligt och kör flödet. Det markeras inte som godkänt innan ett faktiskt test har lyckats." },
+      { title: "Följ resultatet", body: "Kontroller körs enligt valt intervall. Avvikelser, instabilitet och osäkra resultat syns med tidpunkt och underlag i administrationen." },
+      { title: "Bedöm och åtgärda", body: "Aurora Media kan följa upp underlaget tillsammans med er. Reparationer och löpande underhåll hanteras enligt separat offert eller Care-avtal." },
     ]}
     honesty={[
-      "SiteWatch är inte en garanti för 100 % drifttid och ersätter inte webbhotellets SLA.",
-      "HTML-kontroller bevisar inte att ett komplext JavaScript-flöde eller ett betalsteg fungerar från början till slut.",
-      "Notifiering via e-post kräver att utskicksdomänen är korrekt konfigurerad hos Aurora Media.",
+      "Flödena kontrollerar publika sidor, länkar och synligt innehåll. De skickar inte formulär, loggar inte in, skapar inga bokningar och genomför inga betalningar.",
+      "Ett godkänt test gäller de definierade stegen vid den angivna tidpunkten. Det är ingen garanti för hela kundresan eller 100 procent drifttid.",
+      "Kundflödenas avvikelser och underlag följs i Aurora Medias administration. Automatiska kundmejl för dessa flöden ingår inte i denna version.",
+      "Rapporten är ett urval ur de senaste körningarna, inte en komplett drifttidsmätning. Privata skärmbilder sparas tidsbegränsat.",
     ]}
     faqs={[
-      { q: "Kan ni bevaka flera sidor på samma webbplats?", a: "Ja. Varje viktig URL kan läggas upp som en egen monitor med egen textkontroll och eget intervall." },
-      { q: "Testar ni formulär och checkout?", a: "Grundpaketen testar serverrespons och HTML-signaler. Riktiga browserflöden med klick och formulär kräver ett separat syntetiskt test som vi sätter upp först när flödet är definierat och verifierat." },
-      { q: "Varför krävs två fel i följd?", a: "Det minskar falsklarm från korta nätverksstörningar och tillfälliga problem som går över innan en kund påverkas." },
-      { q: "Kan SiteWatch ingå i Aurora Care?", a: "Ja. SiteWatch kan användas som fristående tjänst eller kombineras med Care när Aurora Media även sköter underhåll och åtgärder." },
+      { q: "Vad är skillnaden mot vanlig driftbevakning?", a: "Sidbevakningen läser serverns svar. Aurora Watch öppnar dessutom sidan i en webbläsare och kontrollerar de länkar, texter och element vi valt. Det kan fånga en trasig väg till kontakt även när servern svarar normalt." },
+      { q: "Testar ni kontaktformulär och checkout?", a: "Vi kan kontrollera att ett formulär eller en länk dit är synlig på samma webbplats. Vi skickar inte formulär eller betalningar och verifierar inte externa betaltjänster. Ett godkänt test bevisar därför inte att ett köp eller en registrering slutförs." },
+      { q: "Vad betyder ett instabilt flöde?", a: "Första försöket misslyckades men omkontrollen lyckades. Det redovisas separat så att ett återkommande problem inte försvinner bakom ett grönt resultat." },
+      { q: "Vad händer med SiteWatch?", a: "SiteWatch finns kvar som sidbevakningen i Aurora Watch. Befintliga monitorer behålls och kundflöden kan läggas till i samma administration." },
+      { q: "Får vi ett eget konto?", a: "Det här är en tjänst som Aurora Media sätter upp och följer i sin administration. Om ni behöver egen kundportal eller särskild rapportleverans tar vi med det i offerten." },
     ]}
     related={[
       { name: "Aurora Care", price: "Från 995 kr/mån", to: "/care" },

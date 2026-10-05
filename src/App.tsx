@@ -355,11 +355,16 @@ const seoMap: Record<string, SEOConfig> = {
       "Löpande WordPress-underhåll: uppdateringar, säkerhetskopior, säkerhetsövervakning, hastighet och supporttid. Fast månadspris, ingen bindningstid.",
     canonical: "https://auroramedia.se/care",
   },
+  "/aurora-watch": {
+    title: "Aurora Watch – kundflöden och webbövervakning från 299 kr/mån | Aurora Media",
+    description: "Bevaka viktiga sidor och testa navigering, länkar och synligt innehåll i webbläsaren. Aurora Watch från 299 kr/mån.",
+    canonical: "https://auroramedia.se/aurora-watch",
+  },
   "/sitewatch": {
-    title: "Aurora SiteWatch – webbövervakning från 299 kr/mån | Aurora Media",
+    title: "Aurora Watch – kundflöden och webbövervakning från 299 kr/mån | Aurora Media",
     description:
-      "Övervaka viktiga webbsidor, svarstid, noindex och förväntat innehåll. Bekräftade incidenter och återställningar kan aviseras via e-post.",
-    canonical: "https://auroramedia.se/sitewatch",
+      "Bevaka viktiga sidor och testa navigering, länkar och synligt innehåll i webbläsaren. Aurora Watch från 299 kr/mån.",
+    canonical: "https://auroramedia.se/aurora-watch",
   },
   "/tillganglighet": {
     title: "Tillgänglighetsaudit & WCAG-granskning | Aurora Media",
@@ -625,6 +630,7 @@ const App = () => (
               <Route path="/tjanster/grafisk-profil" element={<GrafiskProfil />} />
               <Route path="/tjanster/fotografering" element={<Fotografering />} />
               <Route path="/care" element={<AuroraCare />} />
+              <Route path="/aurora-watch" element={<AuroraSiteWatch />} />
               <Route path="/sitewatch" element={<AuroraSiteWatch />} />
               <Route path="/tillganglighet" element={<Tillganglighet />} />
               <Route path="/cookie-samtycke" element={<CookieSamtycke />} />

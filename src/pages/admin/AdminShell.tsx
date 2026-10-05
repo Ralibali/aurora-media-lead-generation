@@ -146,7 +146,7 @@ const NAV = [
   { to: "/admin/accessibility", label: "Accessibility Care", icon: Accessibility },
   { to: "/admin/ai-visibility", label: "AI Visibility", icon: Radar },
   { to: "/admin/voice-pilots", label: "Voice Pilots", icon: MessageCircle },
-  { to: "/admin/website-guardian", label: "Website Guardian", icon: ShieldAlert },
+  { to: "/admin/website-guardian", label: "Aurora Watch", icon: ShieldAlert },
   { to: "/admin/integrationer", label: "Integrationer", icon: PlugZap },
   { to: "/admin/coworkers", label: "AI Coworkers", icon: Bot },
   { to: "/admin/ai-kontoret", label: "AI-KONTORET", icon: PackageCheck },
