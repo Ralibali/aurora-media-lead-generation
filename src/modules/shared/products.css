@@ -1,0 +1,9 @@
+.aurora-product { min-height:100vh; background:hsl(var(--background)); color:hsl(var(--foreground)); --background:40 25% 97%; --foreground:210 12% 12%; --primary:155 55% 23%; --primary-foreground:0 0% 100%; --card:0 0% 100%; --card-foreground:210 12% 12%; --surface:40 16% 94%; --surface-foreground:210 12% 12%; --success:155 55% 28%; --success-foreground:0 0% 100%; --warning:38 78% 44%; --warning-foreground:38 75% 18%; --danger:0 65% 45%; --danger-foreground:0 0% 100%; --ink:210 12% 12%; --ink-foreground:0 0% 100%; --rec:155 55% 28%; --rec-foreground:0 0% 100%; --cited:210 60% 42%; --cited-foreground:0 0% 100%; --mentioned:38 78% 44%; --mentioned-foreground:38 75% 18%; --absent:0 65% 45%; --absent-foreground:0 0% 100%; --demo:260 35% 48%; --demo-foreground:0 0% 100%; font-family:Inter,system-ui,sans-serif; }
+.product-bar {display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:12px 24px;background:#14171a;color:#fff;font-size:13px;position:relative;z-index:30;}
+.product-bar a {color:#fff;text-decoration:none;}
+.aurora-product .font-display {font-family:Inter,system-ui,sans-serif;}
+.aurora-product .aurora-gradient {background:linear-gradient(145deg,#142b3c,#174b4b);color:white;}
+.aurora-product .aurora-glow {background-image:radial-gradient(100% 80% at 85% 0%,#39af8a33,transparent);}
+.aurora-product .card-elevated,.aurora-product .card-soft {box-shadow:0 1px 3px #142b3c0a,0 8px 24px #142b3c0a;}
+.aurora-product .shadow-lift {box-shadow:0 4px 28px #142b3c18;}
+@media print {.product-bar,.aurora-product .no-print {display:none!important}}

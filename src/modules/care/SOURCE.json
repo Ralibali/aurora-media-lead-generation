@@ -1,0 +1,6 @@
+{
+  "name": "care",
+  "repository": "https://github.com/Ralibali/aurora-care-portal",
+  "commit": "e19c65eae67c989cfe288d288b57fcab9128fa25",
+  "integration": "Native React Router module; original RLS database and accounts preserved"
+}

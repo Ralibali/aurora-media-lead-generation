@@ -1,0 +1,6 @@
+{
+  "name": "sight",
+  "repository": "https://github.com/Ralibali/aurora-sight",
+  "commit": "7d3dd01d76d28be285e24a8ee3adf29e313ef393",
+  "integration": "Native React Router module; original RLS database and accounts preserved"
+}

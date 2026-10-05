@@ -104,6 +104,12 @@ const PromptGenerator = lazy(() => import("./pages/verktyg/PromptGenerator"));
 const GrokBot = lazy(() => import("./pages/GrokBot"));
 const AuroraPlanDemo = lazy(() => import("./pages/AuroraPlanDemo"));
 
+const AuroraCareModule = lazy(() => import("./modules/care/ModuleApp"));
+const AuroraSightModule = lazy(() => import("./modules/sight/ModuleApp"));
+const AuroraConnectModule = lazy(() => import("./modules/connect/ModuleApp"));
+const AuroraLocalBoostModule = lazy(() => import("./modules/local-boost/ModuleApp"));
+const AuroraPapersModule = lazy(() => import("./modules/papers/PapersModule"));
+const AuroraPortal = lazy(() => import("./pages/AuroraPortal"));
 const queryClient = new QueryClient();
 
 // Lugnt, varumärkesburet laddningsläge vid byte mellan lazy-loadade sidor.
@@ -528,6 +534,9 @@ function getDynamicSeo(pathname: string): SEOConfig {
     };
   }
 
+  if (pathname.startsWith("/portal")) {
+    return { title: "Kundportal | Aurora Media", description: "Dina tjänster hos Aurora Media.", canonical: `https://auroramedia.se${pathname}`, noindex: true };
+  }
   if (pathname.startsWith("/admin")) {
     return {
       title: "Aurora Media Admin",
@@ -555,6 +564,7 @@ function RouteSEO() {
     !pathname.startsWith("/saas-utveckling-") &&
     !pathname.startsWith("/ai-byra-") &&
     !pathname.startsWith("/admin") &&
+    !pathname.startsWith("/portal") &&
     !["/artiklar", "/blog", "/webbbyra-linkoping"].includes(pathname) &&
     !pathname.startsWith("/artiklar/");
 
@@ -598,6 +608,13 @@ const App = () => (
           <div className="min-h-screen">
             <Suspense fallback={<PageFallback />}>
             <Routes>
+<Route path="/portal" element={<AuroraPortal />} />
+<Route path="/portal/care/*" element={<AuroraCareModule />} />
+<Route path="/portal/sight/*" element={<AuroraSightModule />} />
+<Route path="/portal/connect/*" element={<AuroraConnectModule />} />
+<Route path="/portal/local-boost/*" element={<AuroraLocalBoostModule />} />
+<Route path="/portal/papers/*" element={<AuroraPapersModule />} />
+
               <Route path="/" element={<Index />} />
               <Route path="/index" element={<Navigate to="/" replace />} />
               <Route path="/v5" element={<PreviewOnlyV5 />} />

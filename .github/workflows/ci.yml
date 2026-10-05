@@ -58,5 +58,7 @@ jobs:
         run: deno check supabase/functions/admin-portfolio/index.ts
       - name: Check Aurora Watch backend
         run: deno check supabase/functions/website-guardian/index.ts
+      - name: Check consolidated Aurora product API
+        run: deno check supabase/functions/aurora-product-api/index.ts
       - run: npm run test:guardian-db
       - run: npm run build

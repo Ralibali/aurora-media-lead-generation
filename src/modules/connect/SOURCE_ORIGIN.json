@@ -1,0 +1,105 @@
+{
+  "projectName": "Aurora Connect",
+  "projectId": "4e4f76de-f018-413b-a45d-aa9489d356fc",
+  "sourceCommit": "91c8f474712419fee0d487e51b5916a31c38d0f1",
+  "sourceEditor": "https://lovable.dev/projects/4e4f76de-f018-413b-a45d-aa9489d356fc",
+  "exportedAt": "2026-10-05",
+  "exportedTextFileCount": 124,
+  "binariesOmitted": [
+    "public/favicon.ico"
+  ],
+  "environmentFilesOmitted": [
+    ".env"
+  ],
+  "suspectedSecretsOmitted": [],
+  "errors": [],
+  "nativeIntegration": {
+    "framework": "existing Aurora Media React 18 SPA",
+    "backend": "original source project; RLS and source sessions preserved",
+    "serverBoundary": "aurora-product-api; no provider secret or admin client in frontend",
+    "copiedNativeFiles": 19,
+    "rpcOperations": [
+      "getMe",
+      "claimFirstAdmin",
+      "getOverview",
+      "listOrganizations",
+      "listTemplates",
+      "listPlans",
+      "onboardOrganization",
+      "getOrganization",
+      "updateAgent",
+      "saveKnowledgeItem",
+      "deleteKnowledgeItem",
+      "saveOpeningHours",
+      "saveGuardrails",
+      "saveIntegration",
+      "listCalls",
+      "getCall",
+      "listLeads",
+      "updateLeadStatus",
+      "saveScorecard",
+      "getUsage",
+      "listAudit",
+      "getProviderHealth",
+      "listVoiceTests",
+      "recordVoiceTest",
+      "generateDemoActivity",
+      "setDemoMode",
+      "deployAgentToProvider"
+    ],
+    "routes": [
+      {
+        "file": "routes/_authenticated/kostnader.tsx",
+        "route": "/_authenticated/kostnader"
+      },
+      {
+        "file": "routes/_authenticated/kunder.$orgId.tsx",
+        "route": "/_authenticated/kunder/$orgId"
+      },
+      {
+        "file": "routes/_authenticated/kunder.index.tsx",
+        "route": "/_authenticated/kunder/"
+      },
+      {
+        "file": "routes/_authenticated/kvalitet.tsx",
+        "route": "/_authenticated/kvalitet"
+      },
+      {
+        "file": "routes/_authenticated/leads.tsx",
+        "route": "/_authenticated/leads"
+      },
+      {
+        "file": "routes/_authenticated/logg.tsx",
+        "route": "/_authenticated/logg"
+      },
+      {
+        "file": "routes/_authenticated/onboarding.tsx",
+        "route": "/_authenticated/onboarding"
+      },
+      {
+        "file": "routes/_authenticated/oversikt.tsx",
+        "route": "/_authenticated/oversikt"
+      },
+      {
+        "file": "routes/_authenticated/portal.tsx",
+        "route": "/_authenticated/portal"
+      },
+      {
+        "file": "routes/_authenticated/rosttester.tsx",
+        "route": "/_authenticated/rosttester"
+      },
+      {
+        "file": "routes/_authenticated/route.tsx",
+        "route": "/_authenticated"
+      },
+      {
+        "file": "routes/_authenticated/samtal.$callId.tsx",
+        "route": "/_authenticated/samtal/$callId"
+      },
+      {
+        "file": "routes/_authenticated/samtal.index.tsx",
+        "route": "/_authenticated/samtal/"
+      }
+    ]
+  }
+}

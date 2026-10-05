@@ -1,0 +1,28 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791214898551,
+      "tag": "0000_aurora_core",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791215485898,
+      "tag": "0001_keep_owner_allow_cascade",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791215523853,
+      "tag": "0002_audit_skip_cascade",
+      "breakpoints": true
+    }
+  ]
+}
+

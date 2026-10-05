@@ -1,0 +1,11 @@
+{
+  "projectId": "c985f148-d546-4561-b171-316711af1127",
+  "sourceCommit": "e19c65eae67c989cfe288d288b57fcab9128fa25",
+  "source": "existing GitHub repository clone",
+  "environmentFilesOmitted": [
+    ".env"
+  ],
+  "exportedAt": "2026-10-05",
+  "binaryFiles": "present in clone; do not copy unseen assets blindly",
+  "gitHistory": "preserved locally"
+}

@@ -1,0 +1,20 @@
+import type * as Contract from './aurora.contracts';
+import { invokeProductFunction } from '@/modules/shared/server-client';
+import { supabase } from '@/modules/local-boost/integrations/supabase/client';
+
+export const getMe: typeof Contract.getMe = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getMe>>>('local-boost', 'getMe', options?.data, supabase);
+export const claimFirstAdmin: typeof Contract.claimFirstAdmin = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.claimFirstAdmin>>>('local-boost', 'claimFirstAdmin', options?.data, supabase);
+export const getOverview: typeof Contract.getOverview = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getOverview>>>('local-boost', 'getOverview', options?.data, supabase);
+export const getLocationDetail: typeof Contract.getLocationDetail = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getLocationDetail>>>('local-boost', 'getLocationDetail', options?.data, supabase);
+export const updateChecklistItem: typeof Contract.updateChecklistItem = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.updateChecklistItem>>>('local-boost', 'updateChecklistItem', options?.data, supabase);
+export const createOnboarding: typeof Contract.createOnboarding = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.createOnboarding>>>('local-boost', 'createOnboarding', options?.data, supabase);
+export const getReviewQueue: typeof Contract.getReviewQueue = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getReviewQueue>>>('local-boost', 'getReviewQueue', options?.data, supabase);
+export const decideReviewResponse: typeof Contract.decideReviewResponse = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.decideReviewResponse>>>('local-boost', 'decideReviewResponse', options?.data, supabase);
+export const publishReviewResponse: typeof Contract.publishReviewResponse = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.publishReviewResponse>>>('local-boost', 'publishReviewResponse', options?.data, supabase);
+export const getLocalDataOverview: typeof Contract.getLocalDataOverview = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getLocalDataOverview>>>('local-boost', 'getLocalDataOverview', options?.data, supabase);
+export const updateActionStatus: typeof Contract.updateActionStatus = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.updateActionStatus>>>('local-boost', 'updateActionStatus', options?.data, supabase);
+export const getReports: typeof Contract.getReports = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getReports>>>('local-boost', 'getReports', options?.data, supabase);
+export const generateMonthlyReport: typeof Contract.generateMonthlyReport = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.generateMonthlyReport>>>('local-boost', 'generateMonthlyReport', options?.data, supabase);
+export const getSettings: typeof Contract.getSettings = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getSettings>>>('local-boost', 'getSettings', options?.data, supabase);
+export const updateUsageCap: typeof Contract.updateUsageCap = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.updateUsageCap>>>('local-boost', 'updateUsageCap', options?.data, supabase);
+export const getAuditLog: typeof Contract.getAuditLog = (options) => invokeProductFunction<Awaited<ReturnType<typeof Contract.getAuditLog>>>('local-boost', 'getAuditLog', options?.data, supabase);

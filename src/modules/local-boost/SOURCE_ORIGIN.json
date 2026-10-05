@@ -1,0 +1,102 @@
+{
+  "projectName": "Aurora Local Boost",
+  "projectId": "7d4218ea-cdf0-40cf-b8aa-13c6f75a9e24",
+  "sourceCommit": "69eae8c6af7ef31518ccd243ddddaea6d41f53a9",
+  "sourceEditor": "https://lovable.dev/projects/7d4218ea-cdf0-40cf-b8aa-13c6f75a9e24",
+  "exportedAt": "2026-10-05",
+  "exportedTextFileCount": 122,
+  "binariesOmitted": [
+    "public/favicon.ico"
+  ],
+  "environmentFilesOmitted": [
+    ".env"
+  ],
+  "suspectedSecretsOmitted": [],
+  "errors": [],
+  "nativeIntegration": {
+    "framework": "existing Aurora Media React 18 SPA",
+    "backend": "original source project; RLS and source sessions preserved",
+    "serverBoundary": "aurora-product-api; no provider secret or admin client in frontend",
+    "copiedNativeFiles": 24,
+    "rpcOperations": [
+      "getMe",
+      "claimFirstAdmin",
+      "getOverview",
+      "getLocationDetail",
+      "updateChecklistItem",
+      "createOnboarding",
+      "getReviewQueue",
+      "decideReviewResponse",
+      "publishReviewResponse",
+      "getLocalDataOverview",
+      "updateActionStatus",
+      "getReports",
+      "generateMonthlyReport",
+      "getSettings",
+      "updateUsageCap",
+      "getAuditLog"
+    ],
+    "routes": [
+      {
+        "file": "routes/_authenticated/ai-synlighet.tsx",
+        "route": "/_authenticated/ai-synlighet"
+      },
+      {
+        "file": "routes/_authenticated/atgarder.tsx",
+        "route": "/_authenticated/atgarder"
+      },
+      {
+        "file": "routes/_authenticated/citeringar.tsx",
+        "route": "/_authenticated/citeringar"
+      },
+      {
+        "file": "routes/_authenticated/dashboard.tsx",
+        "route": "/_authenticated/dashboard"
+      },
+      {
+        "file": "routes/_authenticated/installningar.tsx",
+        "route": "/_authenticated/installningar"
+      },
+      {
+        "file": "routes/_authenticated/konkurrenter.tsx",
+        "route": "/_authenticated/konkurrenter"
+      },
+      {
+        "file": "routes/_authenticated/logg.tsx",
+        "route": "/_authenticated/logg"
+      },
+      {
+        "file": "routes/_authenticated/onboarding.tsx",
+        "route": "/_authenticated/onboarding"
+      },
+      {
+        "file": "routes/_authenticated/platser.$id.tsx",
+        "route": "/_authenticated/platser/$id"
+      },
+      {
+        "file": "routes/_authenticated/platser.index.tsx",
+        "route": "/_authenticated/platser/"
+      },
+      {
+        "file": "routes/_authenticated/portal.tsx",
+        "route": "/_authenticated/portal"
+      },
+      {
+        "file": "routes/_authenticated/rankning.tsx",
+        "route": "/_authenticated/rankning"
+      },
+      {
+        "file": "routes/_authenticated/rapporter.tsx",
+        "route": "/_authenticated/rapporter"
+      },
+      {
+        "file": "routes/_authenticated/recensioner.tsx",
+        "route": "/_authenticated/recensioner"
+      },
+      {
+        "file": "routes/_authenticated/route.tsx",
+        "route": "/_authenticated"
+      }
+    ]
+  }
+}

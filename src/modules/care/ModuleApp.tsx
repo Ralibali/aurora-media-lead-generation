@@ -1,0 +1,26 @@
+import { Routes,Route,Navigate as GlobalNavigate } from 'react-router-dom';
+import { RouteView,Navigate } from '@/modules/shared/router';
+import ModuleFrame from '@/modules/shared/ModuleFrame';
+import SharedAuthPage from '@/modules/shared/SharedAuthPage';
+import { supabase } from './integrations/supabase/client';
+import {Route as Page0} from "./routes/_authenticated/admin/granskningar";
+import {Route as Page1} from "./routes/_authenticated/admin/incidenter";
+import {Route as Page2} from "./routes/_authenticated/admin/index";
+import {Route as Page3} from "./routes/_authenticated/admin/integrationer";
+import {Route as Page4} from "./routes/_authenticated/admin/kunder";
+import {Route as Page5} from "./routes/_authenticated/admin/onboarding";
+import {Route as Page6} from "./routes/_authenticated/admin/planer";
+import {Route as Page7} from "./routes/_authenticated/admin/portfolj";
+import {Route as Page8} from "./routes/_authenticated/admin/rapporter";
+import {Route as Page9} from "./routes/_authenticated/admin/route";
+import {Route as Page10} from "./routes/_authenticated/admin/sajter/$siteId";
+import {Route as Page11} from "./routes/_authenticated/admin/sajter/index";
+import {Route as Page12} from "./routes/_authenticated/admin/support";
+import {Route as Page13} from "./routes/_authenticated/portal/index";
+import {Route as Page14} from "./routes/_authenticated/portal/rapporter";
+import {Route as Page15} from "./routes/_authenticated/portal/route";
+import {Route as Page16} from "./routes/_authenticated/portal/sajter.$siteId";
+import {Route as Page17} from "./routes/_authenticated/portal/support";
+import {Route as Page18} from "./routes/_authenticated/rapport.$reportId";
+import {Route as Page19} from "./routes/_authenticated/route";
+export default function ModuleApp(){return <ModuleFrame client={supabase} id="care" name="Aurora Care"><Routes><Route index element={<Navigate to="/admin" replace/>}/><Route path="auth" element={<SharedAuthPage name="Aurora Care" client={supabase} destination="/admin"/>}/><Route element={<RouteView route={Page19}/>}><Route path="admin" element={<RouteView route={Page9}/>}><Route path="granskningar" element={<RouteView route={Page0}/>}/><Route path="incidenter" element={<RouteView route={Page1}/>}/><Route index element={<RouteView route={Page2}/>}/><Route path="integrationer" element={<RouteView route={Page3}/>}/><Route path="kunder" element={<RouteView route={Page4}/>}/><Route path="onboarding" element={<RouteView route={Page5}/>}/><Route path="planer" element={<RouteView route={Page6}/>}/><Route path="portfolj" element={<RouteView route={Page7}/>}/><Route path="rapporter" element={<RouteView route={Page8}/>}/><Route path="sajter/:siteId" element={<RouteView route={Page10}/>}/><Route index element={<RouteView route={Page11}/>}/><Route path="support" element={<RouteView route={Page12}/>}/></Route><Route path="portal" element={<RouteView route={Page15}/>}><Route index element={<RouteView route={Page13}/>}/><Route path="rapporter" element={<RouteView route={Page14}/>}/><Route path="sajter/:siteId" element={<RouteView route={Page16}/>}/><Route path="support" element={<RouteView route={Page17}/>}/></Route><Route path="rapport/:reportId" element={<RouteView route={Page18}/>}/></Route><Route path="priser" element={<GlobalNavigate to="/care" replace/>}/><Route path="tjanster" element={<GlobalNavigate to="/care" replace/>}/><Route path="kontakt" element={<GlobalNavigate to="/care" replace/>}/><Route path="vanliga-fragor" element={<GlobalNavigate to="/care" replace/>}/><Route path="*" element={<p className="p-8">Sidan finns inte i tjänsten.</p>}/></Routes></ModuleFrame>;}

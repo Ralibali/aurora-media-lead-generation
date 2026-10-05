@@ -1,0 +1,23 @@
+{
+  "checkedAtUTC": "2026-10-05T16:27:15.287829+00:00",
+  "sourceBackendReachable": true,
+  "sourceSignupEnabled": true,
+  "emailConfirmationRequired": true,
+  "googleProviderEnabled": true,
+  "id": "connect",
+  "counts": {
+    "agents": 0,
+    "auth_users": 0,
+    "calls": 0,
+    "demo_calls": 0,
+    "demo_leads": 0,
+    "demo_organizations": 0,
+    "leads": 0,
+    "organizations": 0
+  },
+  "status": "activation_required",
+  "auth": "Source signup is enabled for email with confirmation required; Google provider enabled. Original form supports signUp; its callback is source origin + /oversikt. The source signup trigger inserts a profile only; it does not grant staff role or create organization membership.",
+  "bootstrap": "Original claimFirstAdmin requires authenticated user id to equal AURORA_BOOTSTRAP_ADMIN_USER_ID and zero existing aurora_admin roles. It uses a server-only source service key. Imported server requires AURORA_CONNECT_AURORA_BOOTSTRAP_ADMIN_USER_ID and AURORA_CONNECT_SUPABASE_SERVICE_ROLE_KEY. Neither was configured/copied by this integration.",
+  "providers": "Dograh contract and Swedish voice calls remain unverified; no live telephony configured by this integration.",
+  "limits": "Read-only source counts/settings and original source inspection. No account, credentials, membership, role, auth settings, email, or provider were created/changed. Native portal preserves password sign-in; signup/callback migration and owner account activation are separate remaining setup."
+}

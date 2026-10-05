@@ -11,6 +11,6 @@ export default defineConfig({
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
   },
   resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
+    alias: { "@": path.resolve(__dirname, "./src"), "npm:zod@3.25.76": "zod", "npm:@supabase/supabase-js@2.104.0": "@supabase/supabase-js" },
   },
 });

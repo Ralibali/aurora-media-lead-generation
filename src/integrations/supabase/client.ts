@@ -3,6 +3,7 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "./types";
 import { brokeredPreviewStorage } from "./previewAuthStorage";
+import { detectAuthSessionFor } from "@/modules/shared/auth-callback";
 
 const FALLBACK_SUPABASE_URL = "https://cyymcdqkpvcvwjoqxbco.supabase.co";
 const FALLBACK_SUPABASE_PUBLISHABLE_KEY =
@@ -21,5 +22,6 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: brokeredPreviewStorage(),
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: detectAuthSessionFor("host"),
   },
 });

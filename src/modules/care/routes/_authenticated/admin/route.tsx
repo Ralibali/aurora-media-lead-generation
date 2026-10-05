@@ -1,0 +1,66 @@
+import { createFileRoute, Navigate, Outlet, useRouterState } from "@/modules/shared/router";
+
+import { AppShell, type NavItem } from "@/modules/care/components/app/AppShell";
+import { LoadingRows } from "@/modules/care/components/common/States";
+import { useViewer } from "@/modules/care/hooks/useViewer";
+import { isAdmin } from "@/modules/care/lib/access";
+
+export const Route = createFileRoute("/_authenticated/admin")({
+  component: AdminLayout,
+});
+
+const items: NavItem[] = [
+  { to: "/admin", label: "Översikt" },
+  { to: "/admin/portfolj", label: "Projektportfölj" },
+  { to: "/admin/sajter", label: "Sajter" },
+  { to: "/admin/kunder", label: "Kunder" },
+  { to: "/admin/incidenter", label: "Incidenter" },
+  { to: "/admin/granskningar", label: "Tillgänglighet & consent" },
+  { to: "/admin/rapporter", label: "Rapporter" },
+  { to: "/admin/support", label: "Supportärenden" },
+  { to: "/admin/onboarding", label: "Ny sajt" },
+  { to: "/admin/planer", label: "Planer och priser" },
+  { to: "/admin/integrationer", label: "Integrationer" },
+];
+
+const titles: Record<string, string> = {
+  "/admin": "Översikt",
+  "/admin/portfolj": "Projektportfölj",
+  "/admin/sajter": "Sajter",
+  "/admin/kunder": "Kunder",
+  "/admin/incidenter": "Incidenter",
+  "/admin/granskningar": "Tillgänglighet & consent",
+  "/admin/rapporter": "Rapporter",
+  "/admin/support": "Supportärenden",
+  "/admin/onboarding": "Ny sajt",
+  "/admin/planer": "Planer och priser",
+  "/admin/integrationer": "Integrationer",
+};
+
+function AdminLayout() {
+  const { viewer, loading } = useViewer();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  if (loading) {
+    return (
+      <div className="mx-auto w-full max-w-4xl p-6">
+        <LoadingRows rows={5} />
+      </div>
+    );
+  }
+  if (!isAdmin(viewer)) return <Navigate to="/portal" replace />;
+
+  const matched = Object.keys(titles)
+    .filter((key) => pathname === key || pathname.startsWith(`${key}/`))
+    .sort((a, b) => b.length - a.length)[0];
+
+  return (
+    <AppShell
+      items={items}
+      title={matched ? (titles[matched] ?? "Administration") : "Administration"}
+      subtitle="Aurora Media AB · administration"
+    >
+      <Outlet />
+    </AppShell>
+  );
+}

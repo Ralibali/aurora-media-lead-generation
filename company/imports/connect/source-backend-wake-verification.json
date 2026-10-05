@@ -1,0 +1,26 @@
+{
+  "checked_at_utc": "2026-10-05T16:27:15.287829+00:00",
+  "source_reachability": [
+    {
+      "product": "connect",
+      "path": "/auth/v1/settings",
+      "status": 200
+    },
+    {
+      "product": "connect",
+      "path": "/rest/v1/plans?limit=0",
+      "status": 200
+    },
+    {
+      "product": "local-boost",
+      "path": "/auth/v1/settings",
+      "status": 200
+    },
+    {
+      "product": "local-boost",
+      "path": "/rest/v1/plans?limit=0",
+      "status": 200
+    }
+  ],
+  "scope": "Source backend wake-up verification only; no account or operational-provider test."
+}

@@ -1,0 +1,22 @@
+{
+  "checkedAtUTC": "2026-10-05T16:27:15.287829+00:00",
+  "sourceBackendReachable": true,
+  "sourceSignupEnabled": true,
+  "emailConfirmationRequired": true,
+  "googleProviderEnabled": true,
+  "id": "local-boost",
+  "counts": {
+    "aurora_admins": 0,
+    "auth_users": 0,
+    "demo_locations": 3,
+    "locations": 3,
+    "organizations": 2,
+    "reports": 2,
+    "reviews": 3
+  },
+  "status": "activation_required",
+  "auth": "Source signup is enabled for email with confirmation required; Google provider enabled. Original form supports signUp with source origin callback. Read-only pg_trigger inspection found no application trigger on auth.users; signup alone does not create a staff role or organization membership.",
+  "bootstrap": "Original claimFirstAdmin requires authenticated user id to equal AURORA_BOOTSTRAP_ADMIN_USER_ID and zero existing aurora_admin roles. It uses a server-only source service key. Imported server requires AURORA_LOCAL_BOOST_AURORA_BOOTSTRAP_ADMIN_USER_ID and AURORA_LOCAL_BOOST_SUPABASE_SERVICE_ROLE_KEY. Neither was configured/copied by this integration.",
+  "providers": "All three locations are explicitly demo. Live local-data, GBP and Sight adapters remain not_configured in source even when secrets exist.",
+  "limits": "Read-only source counts/settings and original source inspection. No account, credentials, membership, role, auth settings, email, or provider were created/changed. Native portal preserves password sign-in; signup/callback migration and owner account activation are separate remaining setup."
+}

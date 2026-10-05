@@ -1,0 +1,18 @@
+id: WP-20261005-aurora-consolidation
+company: Aurora Media AB
+objective: "Move the existing Care, Sight, Connect, Local Boost and Papers workspaces into Aurora Media's existing website and GitHub repository."
+why_now: "Owner explicitly requested consolidation of Aurora Media-related projects and no new Lovable projects."
+evidence:
+  - "Owner instruction 2026-10-05: ta in dom projekten som finns som härör från t ex aurora media in i just aurora media"
+  - "Pinned original source and database schema provenance in company/imports."
+owner: Aurora Media CEO
+skill: site-revenue-experiment
+skill_version: "1.0"
+authority: "COMMIT and EMIT within the requested consolidation; preserve originals and current customer data."
+usage_level: "Existing GitHub repository, existing Lovable deployment, original databases."
+definition_of_done:
+  - "Native modules in the existing React Router application, under /portal."
+  - "Protected operations authenticate against the correct original product database; no owner-password forwarding or cross-product token acceptance."
+  - "Originals preserved; source schemas never applied to the wrong database."
+  - "Checks pass and published frontend/backend are read back."
+expected_artifact: docs/aurora-consolidation-2026-10-05.md
