@@ -1729,6 +1729,276 @@ export type Database = {
           },
         ]
       }
+      support_case_events: {
+        Row: {
+          actor: string
+          case_id: string
+          changed_fields: string[]
+          created_at: string
+          event: string
+          id: number
+          version: number
+        }
+        Insert: {
+          actor: string
+          case_id: string
+          changed_fields?: string[]
+          created_at?: string
+          event: string
+          id?: never
+          version: number
+        }
+        Update: {
+          actor?: string
+          case_id?: string
+          changed_fields?: string[]
+          created_at?: string
+          event?: string
+          id?: never
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_case_events_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "support_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_cases: {
+        Row: {
+          assigned_to: string | null
+          body: string
+          followup_at: string | null
+          id: string
+          kind: string
+          owner_priority: string
+          owner_status: string
+          private_notes: string
+          project_id: string
+          received_at: string
+          reply_draft: string
+          requester_email: string | null
+          requester_name: string | null
+          requester_ref: string | null
+          source_created_at: string
+          source_deleted_at: string | null
+          source_event_id: string
+          source_id: string
+          source_priority: string | null
+          source_record_id: string
+          source_reply: string | null
+          source_revision: number
+          source_status: string | null
+          source_updated_at: string | null
+          title: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          assigned_to?: string | null
+          body: string
+          followup_at?: string | null
+          id?: string
+          kind: string
+          owner_priority?: string
+          owner_status?: string
+          private_notes?: string
+          project_id: string
+          received_at?: string
+          reply_draft?: string
+          requester_email?: string | null
+          requester_name?: string | null
+          requester_ref?: string | null
+          source_created_at: string
+          source_deleted_at?: string | null
+          source_event_id: string
+          source_id: string
+          source_priority?: string | null
+          source_record_id: string
+          source_reply?: string | null
+          source_revision: number
+          source_status?: string | null
+          source_updated_at?: string | null
+          title: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          assigned_to?: string | null
+          body?: string
+          followup_at?: string | null
+          id?: string
+          kind?: string
+          owner_priority?: string
+          owner_status?: string
+          private_notes?: string
+          project_id?: string
+          received_at?: string
+          reply_draft?: string
+          requester_email?: string | null
+          requester_name?: string | null
+          requester_ref?: string | null
+          source_created_at?: string
+          source_deleted_at?: string | null
+          source_event_id?: string
+          source_id?: string
+          source_priority?: string | null
+          source_record_id?: string
+          source_reply?: string | null
+          source_revision?: number
+          source_status?: string | null
+          source_updated_at?: string | null
+          title?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_cases_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_projects"
+            referencedColumns: ["project_id"]
+          },
+          {
+            foreignKeyName: "support_cases_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "support_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_mailbox_connection: {
+        Row: {
+          address: string
+          credential_secret_id: string | null
+          enabled: boolean
+          id: boolean
+          initial_since: string | null
+          initial_through_uid: number | null
+          last_attempt_at: string | null
+          last_error: string | null
+          last_imported_count: number
+          last_success_at: string | null
+          last_uid: number
+          lease_token: string | null
+          lease_until: string | null
+          more_pending: boolean
+          source_id: string | null
+          uid_validity: string | null
+          updated_at: string
+          worker_token_sha256: string
+        }
+        Insert: {
+          address?: string
+          credential_secret_id?: string | null
+          enabled?: boolean
+          id?: boolean
+          initial_since?: string | null
+          initial_through_uid?: number | null
+          last_attempt_at?: string | null
+          last_error?: string | null
+          last_imported_count?: number
+          last_success_at?: string | null
+          last_uid?: number
+          lease_token?: string | null
+          lease_until?: string | null
+          more_pending?: boolean
+          source_id?: string | null
+          uid_validity?: string | null
+          updated_at?: string
+          worker_token_sha256: string
+        }
+        Update: {
+          address?: string
+          credential_secret_id?: string | null
+          enabled?: boolean
+          id?: boolean
+          initial_since?: string | null
+          initial_through_uid?: number | null
+          last_attempt_at?: string | null
+          last_error?: string | null
+          last_imported_count?: number
+          last_success_at?: string | null
+          last_uid?: number
+          lease_token?: string | null
+          lease_until?: string | null
+          more_pending?: boolean
+          source_id?: string | null
+          uid_validity?: string | null
+          updated_at?: string
+          worker_token_sha256?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_mailbox_connection_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "support_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_sources: {
+        Row: {
+          active: boolean
+          connection_state: string
+          created_at: string
+          failed_count: number
+          id: string
+          label: string
+          last_error: string | null
+          original_url: string | null
+          pending_count: number
+          project_id: string
+          source_key: string
+          sync_received_at: string | null
+          token_sha256: string
+        }
+        Insert: {
+          active?: boolean
+          connection_state?: string
+          created_at?: string
+          failed_count?: number
+          id?: string
+          label: string
+          last_error?: string | null
+          original_url?: string | null
+          pending_count?: number
+          project_id: string
+          source_key: string
+          sync_received_at?: string | null
+          token_sha256: string
+        }
+        Update: {
+          active?: boolean
+          connection_state?: string
+          created_at?: string
+          failed_count?: number
+          id?: string
+          label?: string
+          last_error?: string | null
+          original_url?: string | null
+          pending_count?: number
+          project_id?: string
+          source_key?: string
+          sync_received_at?: string | null
+          token_sha256?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_sources_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_projects"
+            referencedColumns: ["project_id"]
+          },
+        ]
+      }
       text_library: {
         Row: {
           blocked_phrases_found: string[]
@@ -1817,6 +2087,48 @@ export type Database = {
           p_source: string
         }
         Returns: boolean
+      }
+      portfolio_update_management: {
+        Args: {
+          p_expected_version: number
+          p_management: Json
+          p_project_id: string
+        }
+        Returns: Json
+      }
+      support_case_payload: { Args: { p_id: string }; Returns: Json }
+      support_ingest_batch: {
+        Args: {
+          p_events: Json
+          p_heartbeat?: Json
+          p_source_id: string
+          p_token_sha256: string
+        }
+        Returns: Json
+      }
+      support_list_cases: { Args: { p_filters?: Json }; Returns: Json }
+      support_mailbox_claim: { Args: never; Returns: Json }
+      support_mailbox_configure: {
+        Args: { p_enabled?: boolean; p_password?: string }
+        Returns: Json
+      }
+      support_mailbox_finish: {
+        Args: {
+          p_error?: string
+          p_imported: number
+          p_initial_since: string
+          p_initial_through_uid: number
+          p_last_uid: number
+          p_lease_token: string
+          p_more: boolean
+          p_uid_validity: string
+        }
+        Returns: boolean
+      }
+      support_mailbox_status: { Args: never; Returns: Json }
+      support_update_case: {
+        Args: { p_expected_version: number; p_id: string; p_patch: Json }
+        Returns: Json
       }
       try_contact_rate_limit: {
         Args: {
