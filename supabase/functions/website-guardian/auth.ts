@@ -1,8 +1,4 @@
-export function equalSecret(a: string, b: string) {
-  let diff = a.length ^ b.length;
-  for (let i = 0; i < b.length; i++) diff |= (a.charCodeAt(i) || 0) ^ b.charCodeAt(i);
-  return !!a && !!b && diff === 0;
-}
+export { equalSecret } from '../_shared/secret.ts';
 
 // Called only AFTER cryptographic signature, issuer, audience and expiry validation.
 export function trustedRunnerClaims(claims: Record<string, unknown>): boolean {

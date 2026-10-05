@@ -1,5 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.104.0';
-import { equalSecret } from '../website-guardian/auth.ts';
+import { equalSecret } from '../_shared/secret.ts';
 import { sha256, validateIngest } from '../_shared/support-validation.ts';
 import { readMailbox } from './imap.ts';
 import { safeMailboxError } from './mailbox.ts';
