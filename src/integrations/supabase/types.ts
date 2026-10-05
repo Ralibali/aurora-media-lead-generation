@@ -1041,6 +1041,106 @@ export type Database = {
           },
         ]
       }
+      guardian_flow_runs: {
+        Row: {
+          attempts: number
+          completed_at: string | null
+          created_at: string
+          details: Json
+          duration_ms: number | null
+          flow_id: string
+          id: string
+          incident_state: string
+          lease_expires_at: string
+          lease_token: string
+          status: string
+          steps_snapshot: Json
+        }
+        Insert: {
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          details?: Json
+          duration_ms?: number | null
+          flow_id: string
+          id?: string
+          incident_state?: string
+          lease_expires_at: string
+          lease_token?: string
+          status?: string
+          steps_snapshot: Json
+        }
+        Update: {
+          attempts?: number
+          completed_at?: string | null
+          created_at?: string
+          details?: Json
+          duration_ms?: number | null
+          flow_id?: string
+          id?: string
+          incident_state?: string
+          lease_expires_at?: string
+          lease_token?: string
+          status?: string
+          steps_snapshot?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guardian_flow_runs_flow_id_fkey"
+            columns: ["flow_id"]
+            isOneToOne: false
+            referencedRelation: "guardian_flows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guardian_flows: {
+        Row: {
+          active: boolean
+          check_interval_minutes: number
+          created_at: string
+          id: string
+          last_run_at: string | null
+          name: string
+          next_run_at: string
+          site_id: string
+          steps: Json
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          check_interval_minutes?: number
+          created_at?: string
+          id?: string
+          last_run_at?: string | null
+          name: string
+          next_run_at?: string
+          site_id: string
+          steps: Json
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          check_interval_minutes?: number
+          created_at?: string
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          next_run_at?: string
+          site_id?: string
+          steps?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guardian_flows_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "guardian_sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guardian_sites: {
         Row: {
           active: boolean
@@ -1688,6 +1788,27 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      guardian_claim_flows: {
+        Args: { p_limit?: number; p_origins?: string[] }
+        Returns: {
+          flow_id: string
+          lease_expires_at: string
+          lease_token: string
+          name: string
+          run_id: string
+          site_id: string
+          site_url: string
+          steps: Json
+        }[]
+      }
+      guardian_complete_flow: {
+        Args: { p_lease_token: string; p_result: Json; p_run_id: string }
+        Returns: Json
+      }
+      guardian_edit_flow: {
+        Args: { p_changes: Json; p_id: string }
+        Returns: undefined
+      }
       portfolio_claim_refresh: {
         Args: {
           p_attempted_at: string
