@@ -1,5 +1,58 @@
 [
   {
+    "slug": "dataagarskap-infor-systemintegration",
+    "title": "Bestäm vilket system som äger varje uppgift inför integrationen",
+    "metaTitle": "Bestäm vilket system som äger varje uppgift inför integrationen",
+    "metaDesc": "Bestäm vilket system som äger varje uppgift innan integrationen byggs. Samla ansvar, motstridiga värden och beslut i en praktisk arbetsmall.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "dataägarskap inför systemintegration",
+    "intro": "En integration behöver mer än en lista över fält som ska skickas mellan system. Verksamheten behöver också veta var en uppgift beslutas, var den får ändras och vad som ska hända när systemen visar olika värden. Annars kan två korrekta kopplingar ändå lämna användarna med motstridiga besked.\n\nBörja med ett litet flöde och några uppgifter som ofta skapar frågor. Den här mallen är ett verksamhetsunderlag inför teknisk utformning. Den väljer ingen plattform och beskriver ingen färdig integration i Aurora Media eller något annat system.\n",
+    "sections": [
+      {
+        "heading": "Välj en konkret uppgift att följa",
+        "content": "Använd ett tydligt exempel, som en intern status eller en kontaktuppgift i ett avgränsat arbetsflöde. Skriv vad fältet betyder och i vilken situation det används. Ta hjälp av en [gemensam ordlista inför integrationen](/blogg/gemensam-ordlista-infor-systemintegration) om samma ord har olika innebörd i systemen.\n\nSkilj uppgifter som ser lika ut men fyller olika syften. Ett arbetsläge i ett internt verktyg kan exempelvis avse något annat än en status som visas för en mottagare. Försök inte bestämma ägarskap för ett fält innan betydelsen är tillräckligt tydlig."
+      },
+      {
+        "heading": "Beskriv vem som får fatta beslut om värdet",
+        "content": "Fråga vilken funktion i verksamheten som ansvarar för att uppgiften är riktig. Beskriv sedan i vilket system den funktionen arbetar med uppgiften. Ett system blir inte automatiskt den bestämmande källan bara för att det är nyast eller har flest kopplingar.\n\nSkriv om olika delar av uppgiften har olika ansvariga. Markera oenighet som en beslutsfråga till rätt person. Integrationsarbetet bör inte behöva fylla luckan genom att gissa vilket team eller vilket system som har företräde."
+      },
+      {
+        "heading": "Samla besluten i en fältlista",
+        "content": "För varje utvald uppgift kan listan innehålla:\n\n- Fältets namn och betydelse i arbetsflödet.\n- Verksamhetens ansvariga för uppgiften.\n- System där det beslutade värdet ska hanteras.\n- Övriga system där en kopia behövs.\n- Var ändringar får initieras enligt beslutad rutin.\n- Hur en motsägelse ska lämnas för bedömning.\n- Öppna frågor som den tekniska utformningen måste lösa.\n\nAnvänd fiktiva eller lämpligt anonymiserade exempel i det gemensamma arbetsunderlaget. Listan ska beskriva informationsflödet, inte bli ännu en plats där verkliga person- eller kunduppgifter sprids."
+      },
+      {
+        "heading": "Gå igenom situationer där värden skiljer sig",
+        "content": "Beskriv vad verksamheten vill ska ske om någon ändrar en uppgift i fel system eller om en överföring blir försenad. Det kan behövas ett tekniskt skydd, en tydligare rutin eller en fråga som lämnas till en ansvarig. Bestäm först det önskade beteendet och låt sedan tekniskt ansvariga bedöma genomförandet.\n\nUndvik en allmän regel om att ”senaste värdet vinner” utan att undersöka vad det betyder i just flödet. En senare tidsstämpel behöver inte representera ett senare verksamhetsbeslut. Skriv ett konkret exempel där skillnaden syns och fråga vilket besked användaren ska kunna lita på."
+      },
+      {
+        "heading": "Använd listan när integrationen ska verifieras",
+        "content": "Gör beslutade situationer till [testfall med verksamhetens egna exempel](/blogg/testfall-infor-systemintegration). Kontrollera både den vanliga ändringen och det fall där systemen visar olika uppgifter. Spara vem som ska bedöma resultatet när en teknisk kontroll inte räcker.\n\nÖppna [AI-kartan](/ai-karta) när ni vill beskriva ert arbetsflöde och nästa behov. Ta med fältlistan och de obesvarade beslutsfrågorna i samtalet. AI-assisterad originalguide med en redaktionell arbetsmall; inga resultat eller automatiska produktfunktioner utlovas."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "gemensam-ordlista-infor-systemintegration",
+      "testfall-infor-systemintegration"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Kartlägg underlaget inför er integration",
+    "ctaText": "Ta med systemlistan och frågorna om vem som ansvarar för varje uppgift.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Verksamhetens beslut om huvudkälla och ansvar för informationsfält inför integration, skilt från gemensam ordlista och tekniska testfall.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-10-06T07:29:13.918894+00:00",
+      "publishedAt": "2026-10-06T07:29:13.918894+00:00"
+    },
+    "publishedDate": "2026-10-06",
+    "updatedDate": "2026-10-06"
+  },
+  {
     "slug": "avsluta-manuell-rutin-efter-automatisering",
     "title": "Bestäm när en manuell rutin kan avslutas efter automatisering",
     "metaTitle": "Bestäm när en manuell rutin kan avslutas efter automatisering",
