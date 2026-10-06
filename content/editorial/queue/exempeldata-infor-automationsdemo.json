@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-10-06T07:48:50.887546+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Earliest 2026-10-08, at least two Stockholm calendar days after the previous original is live. Require fresh current main, complete inventory, sources and previous-article checks. No publication dates while draft.",
+  "sourceReview": {
+    "checkedAt": "2026-10-06T07:48:50.887546+00:00",
+    "distinctIntent": "Ta fram en återanvändbar uppsättning fiktiva verksamhetsexempel som gör ett arbetsflöde begripligt vid demonstration; skilt från tekniska testfall och pilotutvärdering.",
+    "note": "Original manual working guide. Owned product path verified live on Oct6. Recheck current offer and links before publication. No promised automation, customer results or unverified commercial terms."
+  },
+  "article": {
+    "slug": "exempeldata-infor-automationsdemo",
+    "title": "Bygg exempeldata inför en demo av arbetsflödet",
+    "metaTitle": "Bygg exempeldata inför en demo av arbetsflödet",
+    "metaDesc": "Gör en liten uppsättning tydligt fiktiva exempel inför en automationsdemo. Visa normalfall, undantag och önskat resultat utan att blanda in riktiga ärenden.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "exempeldata inför automationsdemo",
+    "intro": "En demo av ett arbetsflöde blir lättare att bedöma när deltagarna kan följa samma exempel från början till slut. Riktiga ärenden är sällan nödvändiga för att visa vad ett fält betyder eller vilken fråga som ska hamna hos en ansvarig. En liten uppsättning tydligt fiktiva exempel ger ett gemensamt underlag för samtalet.\n\nBörja med den situation ni vill förklara. Den här mallen hjälper verksamheten att förbereda demonstrationen. Den beskriver inte en automatisk anonymiseringstjänst och ersätter inte organisationens beslut om vilken information som får användas i ett verktyg.",
+    "sections": [
+      {
+        "heading": "Bestäm vilket beslut demon ska hjälpa till med",
+        "content": "Skriv en konkret fråga, exempelvis om nästa ansvarig får tillräckligt med information för att fortsätta arbetet. Välj sedan de uppgifter som behövs för att visa just det. En omfattande kopia av verksamhetens data gör inte automatiskt demonstrationen tydligare.\n\nAnvänd en [gemensam ordlista](/blogg/gemensam-ordlista-infor-systemintegration) när samma begrepp förekommer i flera system. Om deltagarna tolkar fältet olika behöver betydelsen redas ut innan ni lägger tid på att skapa fler exempel."
+      },
+      {
+        "heading": "Skapa ett sammanhängande normalfall",
+        "content": "Ge det fiktiva ärendet en tydlig beteckning, till exempel DEMO-01. Beskriv startläget, vilka uppgifter som kommer in och vilket besked nästa person ska få. Kontrollera att samma beteckningar används genom hela flödet, så att demon inte råkar byta ärende mitt i berättelsen.\n\nHitta på uppgifterna från grunden när det är möjligt. Märk materialet som exempel och använd inga riktiga kontaktvägar som ett demosystem skulle kunna skicka meddelanden till. Tekniskt ansvariga behöver bestämma hur utskick och andra externa handlingar förhindras i demonstrationsmiljön."
+      },
+      {
+        "heading": "Lägg till två meningsfulla avvikelser",
+        "content": "Välj avvikelser som belyser en fråga verksamheten faktiskt behöver ta ställning till. Ett exempel kan sakna en obligatorisk uppgift; ett annat kan innehålla två motstridiga besked. Beskriv vad ni vill kunna diskutera, utan att påstå att lösningen redan kan hantera situationen.\n\nKopiera inte normalfallet och ändra många saker samtidigt. Då blir det svårt att veta vilken skillnad deltagarna reagerar på. Håll varje exempel till en tydlig fråga och skriv vad som är avsiktligt annorlunda."
+      },
+      {
+        "heading": "Skriv ett facit för samtalet",
+        "content": "För varje exempel: ange vad deltagaren ska se, vilken fråga personen ska kunna besvara och vilka oklarheter som behöver tas vidare. Ett facit behöver inte vara ett färdigt tekniskt beslut. Det kan också visa att en verksamhetsregel ännu saknas.\n\nSkilj visat beteende från önskat beteende under genomgången. Skriv ”önskat resultat” när något bara beskrivs på en bild. Notera vad som faktiskt gick att göra i demon och lämna resten till nästa undersökning. Använd sedan [verksamhetens testfall](/blogg/testfall-infor-systemintegration) när en byggd lösning ska kontrolleras."
+      },
+      {
+        "heading": "Spara exemplen som ett eget underlag",
+        "content": "Ge uppsättningen ett versionsnamn och skriv vilket arbetsflöde den avser. Om något begrepp ändras, uppdatera både exemplet och förklaringen. Håll materialet tydligt åtskilt från riktiga kundärenden så att det inte senare används som verksamhetsdata.\n\nÖppna [AI-kartan](/ai-karta) när ni vill beskriva flödet och vad en demonstration behöver reda ut. AI-assisterad originalguide med en redaktionell arbetsmall. Exemplen är metodförslag, inte kundresultat eller påståenden om färdiga produktfunktioner."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "gemensam-ordlista-infor-systemintegration",
+      "testfall-infor-systemintegration"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Förbered ert arbetsflöde",
+    "ctaText": "Ta med frågan som demonstrationen ska hjälpa er att besvara.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Ta fram en återanvändbar uppsättning fiktiva verksamhetsexempel som gör ett arbetsflöde begripligt vid demonstration; skilt från tekniska testfall och pilotutvärdering.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-10-06T07:48:50.887546+00:00"
+    }
+  }
+}
