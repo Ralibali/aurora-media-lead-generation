@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-10-08T07:55:27.143533+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Earliest 2026-10-10, at least two Stockholm calendar days after the previous original is live. Require fresh current main, inventory, sources and previous-article checks. No publication dates while draft.",
+  "sourceReview": {
+    "checkedAt": "2026-10-08T07:55:27.143533+00:00",
+    "distinctIntent": "Förbereda verksamhetens beslut om representation av fältvärden vid integration, särskilt enheter, datum och saknat värde, skilt från dataägarskap och begreppsdefinitioner.",
+    "note": "Original manual guide. Owned product path verified live on Oct8. Recheck offer and links before publication. No claimed product automation or customer results."
+  },
+  "article": {
+    "slug": "format-enheter-integrationsfalt",
+    "title": "Bestäm format och enheter innan uppgifter flyttas mellan system",
+    "metaTitle": "Bestäm format och enheter innan uppgifter flyttas mellan system",
+    "metaDesc": "Gör datum, belopp, antal och tomma fält begripliga i integrationsunderlaget. En arbetsmall för verksamhetens exempel, regler och öppna frågor.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "format och enheter i integrationsfält",
+    "intro": "Två system kan använda samma ord för ett fält och ändå tolka värdet olika. Ett antal kan avse stycken eller förpackningar, och en tom ruta kan betyda att uppgiften saknas eller ännu inte är tillämplig. Innan integrationen byggs behöver verksamheten beskriva hur värdena ska förstås.\n\nBörja med några uppgifter som faktiskt ska flyttas. Mallen hjälper er att formulera beslut och exempel för den som ska genomföra integrationen. Den väljer inte tekniska standarder åt er och förutsätter ingen viss funktion i systemen. Kontrollera deras aktuella dokumentation tillsammans med ansvarig utförare.",
+    "sections": [
+      {
+        "heading": "Skriv vad värdet mäter",
+        "content": "Ange fältets betydelse och den enhet som hör till värdet. Om ett antal avser förpackningar, beskriv vad som avgör innehållet i en förpackning. Den informationen ska komma från verksamheten eller systemets dokumentation, inte från ett antagande hos den som kopplar ihop systemen.\n\nUtgå gärna från er [gemensamma ordlista](/blogg/gemensam-ordlista-infor-systemintegration). Lägg därefter till ett fiktivt exempel som visar enheten. Ett fält med värdet 12 blir först användbart när mottagaren vet om det handlar om tolv stycken, tolv minuter eller något helt annat."
+      },
+      {
+        "heading": "Skilj saknad uppgift från värdet noll",
+        "content": "Lista vilka tillstånd fältet kan ha. En uppgift kan vara ifylld, okänd, väntande eller inte relevant för det aktuella ärendet. Bestäm vilka av dessa skillnader verksamheten behöver bevara när informationen flyttas, och låt utföraren kontrollera hur systemen kan representera dem.\n\nSätt inte automatiskt noll där en uppgift saknas utan ett uttryckligt beslut om betydelsen. Ett känt antal på noll och ett antal som ingen har kontrollerat är olika besked. Skriv vilket nästa steg som ska ske om mottagaren får en uppgift som ännu inte går att använda."
+      },
+      {
+        "heading": "Visa datum och tid med sammanhang",
+        "content": "Beskriv om fältet avser en kalenderdag, en tidpunkt eller en tidslängd. Använd ett exempel där skillnaden spelar roll, exempelvis ett ärende som registreras nära ett dygnsskifte. Anteckna vilken tidszon som gäller när en faktisk tidpunkt behöver jämföras mellan systemen.\n\nSkilj det användaren ser på skärmen från hur uppgiften lagras och överförs. Verksamhetens uppgift är att förklara betydelsen och det önskade resultatet. Utföraren behöver sedan verifiera ett fungerande tekniskt format mot systemen. En skärmbild ensam visar inte alla regler för överföringen."
+      },
+      {
+        "heading": "Skriv vad som får förändras på vägen",
+        "content": "Bestäm om mellanslag, stora och små bokstäver eller inledande nollor har betydelse för varje uppgift. En referens som ser ut som ett tal kan fortfarande vara en identitet som ska bevaras exakt. Be om konkreta exempel innan någon gör en allmän städning av alla fält.\n\nOm ett värde ska räknas om, beskriv indata, utdata och vem som ansvarar för regeln. Ange även vad som händer när underlaget inte räcker. En integration ska inte behöva gissa en enhet, ett avrundningsbeslut eller en saknad uppgift för att kunna fortsätta."
+      },
+      {
+        "heading": "Gör en liten lista med förväntade resultat",
+        "content": "Skriv ett normalfall, ett saknat värde och ett gränsfall för varje viktig uppgift. Använd tydligt fiktiva uppgifter och ange vad mottagande system ska visa eller lämna för kontroll. Spara öppna frågor separat så att en preliminär idé inte blir ett oavsiktligt krav.\n\nTa med underlaget när ni [öppnar AI-kartan](/ai-karta) för att diskutera ett arbetsflöde. AI-assisterad originalguide med en manuell förberedelsemall. Texten lovar ingen färdig integration, datakonvertering eller automatisk validering. Nästa beslut är vilka betydelser verksamheten kan bekräfta och vilka som behöver utredas."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "exempeldata-infor-automationsdemo",
+      "gemensam-ordlista-infor-systemintegration"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Förbered ert arbetsflöde",
+    "ctaText": "Ta med frågan som demonstrationen ska hjälpa er att besvara.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Förbereda verksamhetens beslut om representation av fältvärden vid integration, särskilt enheter, datum och saknat värde, skilt från dataägarskap och begreppsdefinitioner.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-10-08T07:55:27.143533+00:00"
+    }
+  }
+}
