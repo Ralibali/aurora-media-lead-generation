@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-10-10T08:50:49.988416+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Earliest 2026-10-12, at least two Stockholm calendar days after the previous original is live. Require fresh current main, inventory, sources and previous-article checks. No publication dates while draft.",
+  "sourceReview": {
+    "checkedAt": "2026-10-10T08:50:49.988416+00:00",
+    "distinctIntent": "Definiera en verksamhetsgodkänd manuell reservrutin och återgång för en integrationspaus, skilt från driftkontakt, testfall och permanent avveckling av manuellt arbete.",
+    "note": "Original manual guide. Owned product path verified live on Oct10. Recheck offer and links before publication. No claimed product automation or customer results."
+  },
+  "article": {
+    "slug": "manuell-reservrutin-integrationsstopp",
+    "title": "Beskriv en manuell reservrutin innan integrationen stannar",
+    "metaTitle": "Beskriv en manuell reservrutin innan integrationen stannar",
+    "metaDesc": "Förbered ett begränsat manuellt arbetssätt vid integrationsstopp. Ange startbeslut, referenser och avstämning innan normal drift återupptas.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "manuell reservrutin vid integrationsstopp",
+    "intro": "När två system slutar utbyta uppgifter behöver verksamheten veta vad som får göras medan felet undersöks. Annars kan flera personer börja föra egna listor och senare lägga in samma ärende var för sig. En avgränsad reservrutin ger ett gemensamt arbetssätt att besluta om innan situationen uppstår.\n\nDen här mallen är ett underlag för ansvariga i verksamheten och för systemleverantören. Den ger inga instruktioner för att kringgå behörigheter eller tekniska skydd. Vissa uppgifter kan behöva vänta helt tills ordinarie funktion återkommer. Den bedömningen ska göras av rätt ansvarig för processen.",
+    "sections": [
+      {
+        "heading": "Bestäm vem som får starta reservrutinen",
+        "content": "Beskriv vilken situation rutinen är tänkt för och vem som avgör att den ska användas. Skilj ett bekräftat avbrott från ett enskilt ärende som fortfarande behandlas. Skriv hur deltagarna får veta att rutinen har startat och var beslutet dokumenteras.\n\nAnge också vad rutinen omfattar och vad som uttryckligen lämnas till ansvarig för bedömning. Ett manuellt arbetssätt bör inte bli en ursäkt att ta nya typer av beslut eller flytta information till en plats som verksamheten inte har godkänt. Utgå från befintliga regler för informationshantering och de behörigheter deltagarna faktiskt har."
+      },
+      {
+        "heading": "Samla minsta nödvändiga underlag på en bestämd plats",
+        "content": "Välj ett godkänt underlag där varje berört ärende kan få en referens, tidpunkt, ansvarig och tydlig status. Beskriv vad som redan har gjorts i ordinarie system och vad som bara finns i reservunderlaget. På så sätt går det att skilja väntande arbete från genomförda åtgärder.\n\nSamla inte fler uppgifter än processen behöver. Om en befintlig referens räcker för att hitta ärendet senare behöver hela dess innehåll inte kopieras. Bestäm hur behöriga kollegor kommer åt underlaget och hur det skyddas enligt verksamhetens rutiner. En lista som bara finns hos en frånvarande person är svår att stämma av."
+      },
+      {
+        "heading": "Planera återgången innan något förs tillbaka",
+        "content": "Beskriv vem som bekräftar att integrationen fungerar igen och vilka kontroller som krävs innan reservrutinen avslutas. Alla väntande ärenden behöver inte hanteras samtidigt. Börja med ett avgränsat underlag och kontrollera om någon uppgift redan har kommit fram genom ordinarie flöde.\n\nAnvänd en gemensam status för vad som har jämförts, vad som återstår och vad som behöver utredas. Registrera inte samma åtgärd igen bara för att den finns på reservlistan. Ta hjälp av rutinen för att [kartlägga dubbelregistrering](/blogg/kartlagg-dubbelregistrering-infor-integration) när ni bestämmer vilka referenser som ska användas vid avstämningen."
+      },
+      {
+        "heading": "Prova rutinen med ett fiktivt ärende",
+        "content": "Gå igenom ett påhittat exempel från startbeslut till återgång. Låt en kollega följa instruktionen utan muntliga tillägg och notera var ansvar, status eller referenser blir oklara. Provet ska inte skapa riktiga kundärenden eller ändra produktionsdata. Syftet är att pröva instruktionens begriplighet.\n\nSpara vilka frågor systemleverantören behöver besvara innan rutinen kan godkännas. Ta med processbeskrivningen till [AI-kartan](/ai-karta) när ni undersöker nästa steg i arbetet. AI-assisterad originalguide för manuell beredskap; den utlovar ingen automatisk återställning, köhantering eller dubblettkontroll i någon befintlig tjänst."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "format-enheter-integrationsfalt",
+      "kartlagg-dubbelregistrering-infor-integration"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Förbered ert arbetsflöde",
+    "ctaText": "Ta med en beskrivning av arbetsflödet, dess avbrott och den reservrutin ni behöver bedöma.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Definiera en verksamhetsgodkänd manuell reservrutin och återgång för en integrationspaus, skilt från driftkontakt, testfall och permanent avveckling av manuellt arbete.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-10-10T08:50:49.988416+00:00"
+    }
+  }
+}
