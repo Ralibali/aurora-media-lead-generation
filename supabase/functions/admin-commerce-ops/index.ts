@@ -226,6 +226,23 @@ Deno.serve(async (req) => {
       return json(await list(), 201);
     }
 
+    if (action === "delete_price_watch") {
+      const watchId = clean(body.watch_id, 80);
+      if (!UUID.test(watchId)) return json({ error: "invalid_pricewatch_id" }, 400);
+      const { data: saved, error: savedError } = await db.from("commerce_ops_price_watches")
+        .select("id,provider_watch_id,target_url").eq("id", watchId).eq("store_id", storeId).maybeSingle();
+      if (savedError) throw savedError;
+      if (!saved) return json({ error: "pricewatch_not_found" }, 404);
+      const remote = await providerWatches();
+      const upstream = remote[saved.provider_watch_id] as PriceMonitor | undefined;
+      if (upstream && upstream.url !== saved.target_url)
+        return json({ error: "pricewatch_provider_mismatch" }, 409);
+      if (upstream) await providerRequest("watch/" + encodeURIComponent(saved.provider_watch_id), { method: "DELETE" });
+      const { error } = await db.from("commerce_ops_price_watches").delete().eq("id", saved.id).eq("store_id", storeId);
+      if (error) throw error;
+      return json(await list());
+    }
+
     if (action === "refresh_price_watches") {
       const { data: rows, error: rowsError } = await db.from("commerce_ops_price_watches")
         .select("id,provider_watch_id").eq("store_id", storeId).limit(30);
