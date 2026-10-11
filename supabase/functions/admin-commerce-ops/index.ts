@@ -78,6 +78,53 @@ function extractJson(raw: string) {
   return JSON.parse(cleaned.slice(start, end + 1));
 }
 
+
+type PriceMonitor = { uuid?: string; url?: string; title?: string; last_checked?: number; last_changed?: number; last_error?: string | boolean | null };
+const PUBLIC_TLDS = /\.(se|com|net|org|eu|io|shop|de|dk|no|fi)$/i;
+function validPriceTarget(raw: unknown): string {
+  const value = clean(raw, 1000);
+  let url: URL;
+  try { url = new URL(value); } catch { throw new Error("invalid_pricewatch_url"); }
+  const host = url.hostname.toLowerCase();
+  if (url.protocol !== "https:" || url.port || url.username || url.password
+    || !PUBLIC_TLDS.test(host) || host.includes("..")
+    || host.endsWith(".nip.io") || host.endsWith(".sslip.io")
+    || /^(\d{1,3}\.){3}\d{1,3}$/.test(host) || host.includes(":")) {
+    throw new Error("pricewatch_requires_public_https_product_url");
+  }
+  url.hash = "";
+  return url.toString();
+}
+function providerConfig() {
+  const raw = Deno.env.get("AURORA_PRICEWATCH_API_BASE") ?? "";
+  const key = Deno.env.get("AURORA_PRICEWATCH_API_KEY") ?? "";
+  let url: URL;
+  try { url = new URL(raw); } catch { throw new Error("pricewatch_not_configured"); }
+  if (!key || url.protocol !== "https:" || url.username || url.password || url.search || url.hash)
+    throw new Error("pricewatch_not_configured");
+  const host = url.hostname.toLowerCase();
+  if (!PUBLIC_TLDS.test(host) || /^(\d{1,3}\.){3}\d{1,3}$/.test(host) || host.includes(":"))
+    throw new Error("pricewatch_not_configured");
+  return { origin: url.origin, key };
+}
+async function providerRequest(path: string, init?: RequestInit) {
+  const config = providerConfig();
+  const response = await fetch(config.origin + "/api/v1/" + path, {
+    ...init,
+    redirect: "error",
+    signal: AbortSignal.timeout(12000),
+    headers: { "x-api-key": config.key, "Content-Type": "application/json", ...init?.headers },
+  });
+  if (!response.ok) throw new Error("pricewatch_provider_unavailable_" + response.status);
+  return response;
+}
+async function providerWatches(): Promise<Record<string, PriceMonitor>> {
+  const response = await providerRequest("watch");
+  const data = await response.json();
+  if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("invalid_pricewatch_provider_response");
+  return data as Record<string, PriceMonitor>;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "method_not_allowed" }, 405);
@@ -92,19 +139,22 @@ Deno.serve(async (req) => {
   const action = clean(body.action || "list", 40);
 
   const list = async () => {
-    const [stores, snapshots, changes] = await Promise.all([
+    const [stores, snapshots, changes, priceWatches] = await Promise.all([
       db.from("commerce_ops_stores").select("*").order("created_at", { ascending: true }),
       db.from("commerce_ops_snapshots").select("*").order("period_end", { ascending: false }).limit(500),
       db.from("commerce_ops_changes").select("*").order("created_at", { ascending: false }).limit(500),
+      db.from("commerce_ops_price_watches").select("*").order("created_at", { ascending: false }).limit(300),
     ]);
-    const error = stores.error || snapshots.error || changes.error;
+    const error = stores.error || snapshots.error || changes.error || priceWatches.error;
     if (error) throw error;
     return {
       stores: (stores.data ?? []).map((store) => ({
         ...store,
         snapshots: (snapshots.data ?? []).filter((snapshot) => snapshot.store_id === store.id),
         changes: (changes.data ?? []).filter((change) => change.store_id === store.id),
+        price_watches: (priceWatches.data ?? []).filter((watch) => watch.store_id === store.id),
       })),
+      pricewatch_configured: Boolean(Deno.env.get("AURORA_PRICEWATCH_API_BASE") && Deno.env.get("AURORA_PRICEWATCH_API_KEY")),
     };
   };
 
@@ -131,6 +181,70 @@ Deno.serve(async (req) => {
     const { data: store, error: storeError } = await db.from("commerce_ops_stores").select("*").eq("id", storeId).eq("active", true).maybeSingle();
     if (storeError) throw storeError;
     if (!store) return json({ error: "store_not_found" }, 404);
+
+
+    if (action === "add_price_watch") {
+      const label = clean(body.label, 120);
+      const targetUrl = validPriceTarget(body.target_url);
+      if (!label || label.length > 120) return json({ error: "pricewatch_label_required" }, 400);
+      const { count, error: countError } = await db.from("commerce_ops_price_watches")
+        .select("id", { count: "exact", head: true }).eq("store_id", storeId);
+      if (countError) throw countError;
+      if ((count ?? 0) >= 30) return json({ error: "pricewatch_pilot_limit_30" }, 409);
+      const { data: existing } = await db.from("commerce_ops_price_watches").select("id")
+        .eq("store_id", storeId).eq("target_url", targetUrl).maybeSingle();
+      if (existing) return json({ error: "pricewatch_already_exists" }, 409);
+
+      // Do not scrape from our privileged Edge Function. The dedicated,
+      // isolated changedetection.io instance owns fetching, scheduling and
+      // notifications. Backend key is never returned to the browser.
+      const upstream = await providerWatches();
+      if (Object.values(upstream).some(w => w.url === targetUrl))
+        return json({ error: "pricewatch_url_already_monitored_upstream" }, 409);
+      const externalTitle = "AuroraPW:" + crypto.randomUUID() + ":" + label;
+      await providerRequest("watch", {
+        method: "POST",
+        body: JSON.stringify({
+          url: targetUrl,
+          title: externalTitle,
+          processor: "restock_diff",
+          processor_config_restock_diff: {
+            in_stock_processing: "all_changes",
+            follow_price_changes: true,
+          },
+          time_between_check: { hours: 12 },
+          notification_muted: true,
+        }),
+      });
+      const all = await providerWatches();
+      const matched = Object.entries(all).find(([, watch]) => watch.title === externalTitle && watch.url === targetUrl);
+      if (!matched || !UUID.test(matched[0])) throw new Error("pricewatch_created_but_not_indexed_check_provider");
+      const { error } = await db.from("commerce_ops_price_watches").insert({
+        store_id: storeId, label, target_url: targetUrl, provider_watch_id: matched[0],
+      });
+      if (error) throw error;
+      return json(await list(), 201);
+    }
+
+    if (action === "refresh_price_watches") {
+      const { data: rows, error: rowsError } = await db.from("commerce_ops_price_watches")
+        .select("id,provider_watch_id").eq("store_id", storeId).limit(30);
+      if (rowsError) throw rowsError;
+      const remote = await providerWatches();
+      for (const row of rows ?? []) {
+        const watch = remote[row.provider_watch_id] as PriceMonitor | undefined;
+        const toIso = (value: unknown) => typeof value === "number" && Number.isFinite(value) && value > 0
+          ? new Date(value * 1000).toISOString() : null;
+        const { error } = await db.from("commerce_ops_price_watches").update({
+          last_checked_at: toIso(watch?.last_checked),
+          last_changed_at: toIso(watch?.last_changed),
+          last_error: !watch ? "Saknas hos bevakningstjänsten" :
+            typeof watch.last_error === "string" ? watch.last_error.slice(0, 300) : null,
+        }).eq("id", row.id).eq("store_id", storeId);
+        if (error) throw error;
+      }
+      return json(await list());
+    }
 
     if (action === "import_snapshot") {
       const start = clean(body.period_start, 10);
