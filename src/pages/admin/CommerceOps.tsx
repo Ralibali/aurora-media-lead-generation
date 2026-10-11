@@ -155,6 +155,11 @@ export default function CommerceOps() {
           {watch.last_error && <span role="alert" style={{ color: "#A83B2C", fontSize: 12 }}>
             Motorn rapporterar problem: {watch.last_error}
           </span>}
+          <div><button type="button" className="vk-btn" disabled={busy || !data?.pricewatch_configured}
+            onClick={() => {
+              if (window.confirm("Avsluta bevakningen? Den tas bort både från tjänsten och från denna butik."))
+                void mutate({ action: "delete_price_watch", store_id: selected.id, watch_id: watch.id });
+            }}>Avsluta bevakning</button></div>
         </article>)}
         {!selected.price_watches?.length && <p style={{ fontSize: 13, color: "var(--granbark-mut)" }}>
           Inga bevakade produkter ännu. Börja med 5–10 viktiga konkurrentadresser.
