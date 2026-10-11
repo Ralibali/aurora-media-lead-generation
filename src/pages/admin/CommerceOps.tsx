@@ -13,11 +13,16 @@ type Change = {
   status: "staged" | "approved" | "applied" | "discarded" | "failed";
   source: "operator" | "ai" | "import"; guardrail_notes: string[]; created_at: string;
 };
+type PriceWatch = {
+  id: string; store_id: string; label: string; target_url: string;
+  provider_watch_id: string; last_checked_at: string | null;
+  last_changed_at: string | null; last_error: string | null;
+};
 type CommerceStore = {
   id: string; name: string; platform: string; shop_domain: string | null; currency: string;
-  snapshots: Snapshot[]; changes: Change[];
+  snapshots: Snapshot[]; changes: Change[]; price_watches: PriceWatch[];
 };
-type CommerceData = { stores: CommerceStore[]; analysis?: { staged: number; rejected: string[] } };
+type CommerceData = { stores: CommerceStore[]; pricewatch_configured: boolean; analysis?: { staged: number; rejected: string[] } };
 
 const card: React.CSSProperties = { background: "#fff", border: "1px solid var(--linje)", borderRadius: 12, padding: 18 };
 const input: React.CSSProperties = { width: "100%", border: "1px solid var(--linje)", borderRadius: 8, padding: "9px 10px", fontSize: 13, background: "#fff" };
@@ -30,6 +35,7 @@ export default function CommerceOps() {
   const [selectedId, setSelectedId] = useState("");
   const [storeForm, setStoreForm] = useState({ name: "", platform: "manual", shop_domain: "", currency: "SEK" });
   const [snapshot, setSnapshot] = useState({ period_start: "", period_end: "", sales: "", orders: "", traffic: "", conversion_rate_pct: "", sales_change_pct: "", low_stock_count: "0", slow_movers_count: "0", order_issues_count: "0", note: "" });
+  const [priceWatch, setPriceWatch] = useState({ label: "", target_url: "" });
   const [proposal, setProposal] = useState({ kind: "listing_update", summary: "", rationale: "", target: "", field: "content", before: "", after: "" });
 
   const load = useCallback(async () => {
@@ -100,6 +106,61 @@ export default function CommerceOps() {
         </form>
       </section>}
     </div>}
+
+    {selected && <section style={{ ...card, marginTop: 16 }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "space-between" }}>
+        <div>
+          <p className="vk-mono" style={{ margin: 0, color: "var(--granbark-mut)" }}>AURORA PRICEWATCH · PILOT</p>
+          <h2 style={{ margin: "5px 0", fontSize: 19 }}>Konkurrenters priser och lagerstatus</h2>
+          <p style={{ fontSize: 13, color: "var(--granbark-mut)", maxWidth: 760, margin: 0 }}>
+            Länka utvalda offentliga produktsidor till en ansluten changedetection.io-installation.
+            Motorn bevakar automatiskt var tolfte timme. Senaste kontroll och förändring visas här efter synkning.
+            Prisnivåer och produktmatchning måste kvalitetssäkras innan beslut; inga priser ändras automatiskt.
+          </p>
+        </div>
+        <button className="vk-btn" type="button" disabled={busy || !data?.pricewatch_configured}
+          onClick={() => void mutate({ action: "refresh_price_watches", store_id: selected.id })}>
+          <RefreshCw size={14}/> Synka status
+        </button>
+      </div>
+      {!data?.pricewatch_configured && <p role="status" style={{ marginTop: 12, color: "#A85D1A", fontSize: 13 }}>
+        Prisbevakningsmotorn är inte ansluten. Konfigurera AURORA_PRICEWATCH_API_BASE och AURORA_PRICEWATCH_API_KEY
+        som serverhemligheter innan första bevakningen kan skapas.
+      </p>}
+      <form onSubmit={async (event) => {
+        event.preventDefault();
+        const ok = await mutate({ action: "add_price_watch", store_id: selected.id, ...priceWatch });
+        if (ok) setPriceWatch({ label: "", target_url: "" });
+      }} style={{ display: "grid", gap: 8, gridTemplateColumns: "repeat(auto-fit,minmax(210px,1fr))", marginTop: 16 }}>
+        <input style={input} aria-label="Produkt eller konkurrent" required maxLength={120}
+          placeholder="Produkt / konkurrent" value={priceWatch.label}
+          onChange={event => setPriceWatch(prev => ({ ...prev, label: event.target.value }))}/>
+        <input style={input} aria-label="Konkurrentens produktadress" required type="url"
+          placeholder="https://butik.se/produkt..." value={priceWatch.target_url}
+          onChange={event => setPriceWatch(prev => ({ ...prev, target_url: event.target.value }))}/>
+        <button className="vk-btn vk-btn-primary" disabled={busy || !data?.pricewatch_configured}>
+          <Plus size={14}/> Börja bevaka
+        </button>
+      </form>
+      <div style={{ display: "grid", gap: 8, marginTop: 16 }}>
+        {(selected.price_watches ?? []).map(watch => <article key={watch.id}
+          style={{ border: "1px solid var(--linje)", borderRadius: 10, padding: 12, display: "grid", gap: 6 }}>
+          <strong>{watch.label}</strong>
+          <a href={watch.target_url} target="_blank" rel="noopener noreferrer"
+            style={{ wordBreak: "break-all", fontSize: 12 }}>{watch.target_url} <ExternalLink size={11} style={{ display: "inline" }}/></a>
+          <span style={{ color: "var(--granbark-mut)", fontSize: 12 }}>
+            Senast kontrollerad: {watch.last_checked_at ? new Date(watch.last_checked_at).toLocaleString("sv-SE") : "Inte synkad"}
+            {" · "}Senaste registrerade förändring: {watch.last_changed_at ? new Date(watch.last_changed_at).toLocaleString("sv-SE") : "Okänd"}
+          </span>
+          {watch.last_error && <span role="alert" style={{ color: "#A83B2C", fontSize: 12 }}>
+            Motorn rapporterar problem: {watch.last_error}
+          </span>}
+        </article>)}
+        {!selected.price_watches?.length && <p style={{ fontSize: 13, color: "var(--granbark-mut)" }}>
+          Inga bevakade produkter ännu. Börja med 5–10 viktiga konkurrentadresser.
+        </p>}
+      </div>
+    </section>}
 
     {selected && <section style={{ ...card, marginTop: 16 }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}><div><p className="vk-mono" style={{ margin: 0, color: "var(--granbark-mut)" }}>ÄNDRINGSLEDGER</p><h2 style={{ margin: "5px 0 0", fontSize: 19 }}>Inget sker utan godkännande</h2></div>{data?.analysis && <p style={{ fontSize: 12, color: "var(--granbark-mut)" }}>AI: {data.analysis.staged} förslag sparade, {data.analysis.rejected.length} stoppade av regler.</p>}</div>
