@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-10-14T14:11:00.287414+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Earliest 2026-10-16, at least two Stockholm calendar days after the previous original is live. Require fresh current main, inventory, sources and previous-article checks. No publication dates while draft.",
+  "sourceReview": {
+    "checkedAt": "2026-10-14T14:11:00.287414+00:00",
+    "distinctIntent": "Avgränsa en första integrationsleverans med start, slut och uttryckliga undantag, skilt från kartläggning av dubbelregistrering och senare acceptanstest.",
+    "note": "Original manual guide. Owned product path verified live on Oct14. Recheck offer and links before publication. No claimed product automation or customer results."
+  },
+  "article": {
+    "slug": "avgransa-forsta-systemintegration",
+    "title": "Avgränsa den första systemintegrationen till ett tydligt flöde",
+    "metaTitle": "Avgränsa den första systemintegrationen till ett tydligt flöde",
+    "metaDesc": "Välj en tydlig start och ett tydligt slut för första integrationen. Gör beroenden, undantag och det som väntar synligt innan arbetet beställs.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "avgränsa första systemintegrationen",
+    "intro": "När ett manuellt arbetsflöde ska kopplas ihop är det lätt att ta med allt som ligger i närheten. Ett enkelt steg mellan två system växer till att också omfatta rapporter, historik och flera undantag. Då blir det svårt att avgöra vad den första leveransen faktiskt ska göra.\n\nBörja med ett flöde som går att beskriva från en tydlig start till ett tydligt slut. Avgränsningen är ett beslutsunderlag för verksamheten och den som ska utreda lösningen. Den är inte ett besked om teknisk genomförbarhet, leveranstid eller pris.",
+    "sections": [
+      {
+        "heading": "Skriv en mening med början och slut",
+        "content": "Beskriv vilken verklig händelse som startar flödet, vilka uppgifter som behöver föras vidare och vad som ska vara klart efteråt. Använd verksamhetens egna ord. Om meningen kräver flera olika startpunkter kan ni behöva dela upp arbetet i separata flöden innan ni diskuterar verktyg.\n\nEtt fiktivt exempel är att ett godkänt internt ärende ska bli underlag för en viss mottagande arbetsuppgift. Avgränsningen behöver då säga vad godkänt betyder och vilken uppgift mottagaren ska få. Den behöver inte samtidigt omfatta alla rapporter eller allt äldre material som finns i systemen."
+      },
+      {
+        "heading": "Sätt en tydlig gräns runt första leveransen",
+        "content": "Skriv två korta listor: vad som ingår och vad som uttryckligen väntar. Beskriv gränsen med konkreta händelser och uppgifter, inte med vaga formuleringar som grundläggande funktionalitet. Den som läser underlaget ska kunna avgöra var ett visst önskemål hör hemma utan att gissa.\n\nKontrollera särskilt historiska uppgifter, bilagor, flera mottagare och ändringar efter att ett ärende har skickats vidare. Dessa delar kan kräva egna beslut. Om någon av dem behövs redan från början ska det stå i underlaget, även om det gör att första leveransen måste omprövas."
+      },
+      {
+        "heading": "Gör beroenden och stopp synliga",
+        "content": "Lista vilka personer, åtkomster och besked som behövs för att utreda flödet. Ange ansvarig och vad som ännu inte är bekräftat. Skriv exempelvis att en systemleverantör behöver bekräfta hur ett visst underlag kan läsas, i stället för att förutsätta att en teknisk anslutning redan finns.\n\nBeskriv också vad som ska hända om en uppgift saknas eller om flödet behöver stanna. En första version behöver inte hantera varje undantag automatiskt, men det måste vara tydligt vilka fall som ska lämnas för manuell bedömning. Guiden om [manuell reservrutin vid integrationsstopp](/blogg/manuell-reservrutin-integrationsstopp) hjälper er formulera ett närliggande beslut."
+      },
+      {
+        "heading": "Låt ansvariga pröva avgränsningen",
+        "content": "Gå igenom ett vanligt ärende och ett avvikande exempel tillsammans. Fråga om början, slutet och gränserna fortfarande går att förstå. Om ni behöver ändra omfattningen, skriv vad som tillkom och vilket tidigare antagande som inte höll. Spara gärna en daterad version innan en offert eller teknisk utredning diskuteras.\n\nSamla därefter de öppna frågorna och utse den person som får fatta nästa beslut. [Aurora Medias AI-karta](/ai-karta) kan vara en startpunkt för att beskriva verksamhetens arbete. Den ersätter inte leverantörens tekniska kontroll eller ert beslut om omfattning, men ett avgränsat underlag gör den fortsatta dialogen mer konkret."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "manuell-reservrutin-integrationsstopp",
+      "testfall-infor-systemintegration"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Förbered ert arbetsflöde",
+    "ctaText": "Ta med en avgränsad beskrivning av ert arbetsflöde och de frågor som återstår.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Avgränsa en första integrationsleverans med start, slut och uttryckliga undantag, skilt från kartläggning av dubbelregistrering och senare acceptanstest.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-10-14T14:11:00.287414+00:00"
+    }
+  }
+}
