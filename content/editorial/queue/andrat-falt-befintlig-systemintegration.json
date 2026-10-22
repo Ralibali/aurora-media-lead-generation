@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-10-22T19:25:24.280565+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Earliest 2026-10-24, at least two Stockholm calendar days after the last verified original. Recheck current main, full inventory, sources, product paths and Search Console priorities. No publication dates while draft.",
+  "sourceReview": {
+    "checkedAt": "2026-10-22T19:25:24.280565+00:00",
+    "distinctIntent": "Samla verksamhetens beslutsunderlag inför en fältändring i en redan använd integration, skilt från att bestämma format vid första implementationen.",
+    "note": "Original manual guide; linked owned product path checked in this run. Recheck before publication; no customer results, prices, permissions or unsupported features asserted."
+  },
+  "article": {
+    "slug": "andrat-falt-befintlig-systemintegration",
+    "title": "När ett fält ändras i en befintlig systemintegration",
+    "metaTitle": "När ett fält ändras i en befintlig systemintegration",
+    "metaDesc": "Beskriv förändringen, berörda flöden och öppna beslut innan ett fält byter namn, format eller innebörd i ett system som andra system använder.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "ändrat fält systemintegration",
+    "intro": "Ett fält som ska byta namn eller få en ny innebörd kan också användas av en rapport, en export eller en integration. För verksamheten ser ändringen liten ut, men det är inte säkert att alla mottagare tolkar den på samma sätt. Börja med att beskriva vad som ska ändras och vilka användare som behöver samma besked.\n\nGuiden är en arbetsmall inför teknisk utredning. Den säger inte att ändringen är kompatibel eller kan införas utan avbrott. Det behöver avgöras med aktuell dokumentation och kontroller av den faktiska lösningen.",
+    "sections": [
+      {
+        "heading": "Beskriv före och efter med exempel",
+        "content": "Skriv fältets nuvarande namn, innebörd och ett påhittat exempelvärde. Lägg motsvarande uppgifter för den föreslagna versionen bredvid. Ange om det är etiketten, formatet, tillåtna värden eller själva betydelsen som ändras. Flera av dessa kan ändras samtidigt.\n\nAnvänd inte riktiga kunduppgifter i ett delat arbetsunderlag när exempeldata räcker. Om ni inte vet hur gamla värden ska tolkas efter ändringen, skriv det som en öppen fråga. Ett nytt namn får inte ge sken av att den frågan redan är löst."
+      },
+      {
+        "heading": "Hitta flöden som använder uppgiften",
+        "content": "Be ansvariga identifiera var fältet skapas, läses, visas eller förs vidare. Samla bekräftade beroenden och skilj dem från sådana ni ännu behöver undersöka. Att någon inte känner till en mottagare är inte samma sak som att det saknas mottagare.\n\nAnge vem som kan verifiera varje beroende. Utgå från den gemensamma beskrivningen av [vilket system som äger uppgiften](/blogg/dataagarskap-infor-systemintegration). Ägarskap hjälper er hitta rätt ansvarig, men är inte ett tekniskt bevis på hur alla kopplingar fungerar."
+      },
+      {
+        "heading": "Bestäm vilka frågor som måste avgöras",
+        "content": "Samla frågor om befintliga poster, tomma värden, exporter och användarnas instruktioner. Behöver två versioner hanteras under en övergång? Vem beslutar när den äldre tolkningen får sluta användas? Skriv besluten som frågor tills ansvarig har bekräftat ett svar.\n\nBe den tekniskt ansvariga ange hur förändringen ska prövas och vad som ska hända om kontrollen misslyckas. Föreskriv inte en viss migreringsmetod innan lösningen har granskats. Underlaget ska göra risker och beroenden synliga, inte ersätta genomförandeplanen."
+      },
+      {
+        "heading": "Följ upp med konkreta testfall",
+        "content": "Välj ett vanligt exempel, ett tomt värde och ett äldre värde vars tolkning kan påverkas. Beskriv vad verksamheten förväntar sig att kunna se eller göra i varje fall. Låt ansvarig kontrollera förväntningarna innan de används som acceptanskriterier.\n\nSamla kvarvarande frågor, beslutande person och nästa kontroll i en kort lista. [Aurora Medias AI-karta](/ai-karta) är en ingång för att diskutera arbetsflöden och behov. Den här mallen lovar ingen automatisk analys av integrationer eller särskilt stöd för era system. Kontrollera det aktuella erbjudandet inför en beställning."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "dataagarskap-infor-systemintegration",
+      "format-enheter-integrationsfalt"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Förbered ert arbetsflöde",
+    "ctaText": "Ta med en avgränsad beskrivning av ert arbetsflöde och de frågor som återstår.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Samla verksamhetens beslutsunderlag inför en fältändring i en redan använd integration, skilt från att bestämma format vid första implementationen.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-10-22T19:25:24.280565+00:00"
+    }
+  }
+}
