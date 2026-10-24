@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "status": "draft",
+  "writtenAt": "2026-10-24T07:57:02.890182+00:00",
+  "repository": "Ralibali/aurora-media-lead-generation",
+  "publicationGate": "Tidigast 2026-10-26 och minst två kalenderdagar i Europe/Stockholm efter senaste verkliga originalpublicering. Kontrollera tidigare läsflöde, aktuell main, hela inventeringen, källor och produkt igen. Utkastet har inget publiceringsdatum och får inte importeras i den publika samlingen.",
+  "sourceReview": {
+    "checkedAt": "2026-10-24T07:57:02.890182+00:00",
+    "distinctIntent": "Bestämma den verksamhetsmässiga betydelsen av mottagnings- och bearbetningsbesked i en integration; skilt från fältformat, datägarskap och ändringshantering.",
+    "note": "Egen arbetsmall. Den länkade produktvägen kontrollerad i webbläsare i denna körning; kontrollera på nytt före publicering. Inga påhittade funktioner, resultat eller boendevillkor."
+  },
+  "article": {
+    "slug": "mottagningsbesked-systemintegration",
+    "title": "Mottaget eller färdigt? Bestäm vad integrationsbeskedet betyder",
+    "metaTitle": "Mottaget eller färdigt i en systemintegration?",
+    "metaDesc": "Bestäm vilka besked som visar att uppgifter har kommit fram, kontrollerats och använts. En verksamhetsmall inför diskussionen om integrationen.",
+    "category": "AI & automation",
+    "readMinutes": 4,
+    "keyword": "mottagningsbesked systemintegration",
+    "intro": "När en överföring får ett positivt besked är det lätt att tolka arbetet som färdigt. Men beskedet kan avse ett tidigare steg än det verksamheten väntar på. Den här arbetsmallen, skriven med AI-stöd av ChatGPT, hjälper er bestämma vad olika besked ska betyda i just ert flöde.",
+    "sections": [
+      {
+        "heading": "Börja med nästa arbetsuppgift",
+        "content": "Beskriv vad någon ska kunna göra när integrationen har fungerat. Är det att se en order i mottagande system, lägga den i en arbetskö eller påbörja ett senare moment? Välj ett konkret resultat som går att kontrollera.\n\nSkilj detta resultat från själva överföringen. Att informationen har skickats är inte samma observation som att den visas där personalen behöver den. Skriv ner båda, så blir det lättare att se vilken del ett besked faktiskt beskriver."
+      },
+      {
+        "heading": "Ge beskeden tydliga betydelser",
+        "content": "Gör en liten ordlista för flödet. Exempelvis kan ni vilja skilja på att uppgifter har mottagits, att innehållet har kontrollerats och att det har registrerats för fortsatt arbete. Detta är förslag på begrepp, inte en beskrivning av hur ett visst system redan fungerar.\n\nFör varje begrepp behövs en fråga till den tekniskt ansvariga: vilken händelse ger beskedet, och vad har ännu inte hänt? Be om svar utifrån den aktuella integrationens dokumentation. Kopiera inte betydelsen från ett annat flöde med liknande statusnamn."
+      },
+      {
+        "heading": "Bestäm vilken information mottagaren behöver",
+        "content": "Ett besked behöver gå att koppla till rätt ärende utan att hela innehållet upprepas. Diskutera vilken referens som ska användas, var den syns och hur berörda personer hittar den. Håll exempel fria från verkliga kunduppgifter under planeringen.\n\nLägg till när beskedet avser och var någon kan kontrollera senare status. Om ett ärende behandlas i flera steg behöver ni förstå hur en äldre bekräftelse skiljs från det senaste läget. Utgå från faktiska systemmöjligheter när lösningen beslutas."
+      },
+      {
+        "heading": "Gå igenom ett besked som saknas",
+        "content": "Pröva en tänkt situation där avsändaren inte ser någon bekräftelse. Vem undersöker då om uppgiften kommit fram? Vilket underlag behövs och när lämnas frågan vidare? Skriv ansvar och kontaktväg innan ni bestämmer ett automatiskt återförsök.\n\nFrånvaro av besked visar inte i sig att ingenting har hänt. Låt den tekniska genomgången fastställa hur redan mottagna uppgifter identifieras och hur dubbel behandling förhindras. Mallen ger inga generella väntetider eller löften om att ett nytt försök är riskfritt."
+      },
+      {
+        "heading": "Ta med ordlistan till genomgången",
+        "content": "Samla önskat slutresultat, föreslagna statusbegrepp och de frågor som ännu saknar svar på en sida. Be verksamhetsansvarig och tekniskt ansvarig beskriva samma exempel. Om de menar olika saker med färdigt behöver begreppet preciseras före användning.\n\nAnvänd [AI-kartan](/ai-karta) som ingång till att beskriva ert arbetsflöde. Den ersätter inte verifiering av era systems beteende. Efter genomgången ska det gå att säga vad varje besked bekräftar och vilken nästa åtgärd som faktiskt är möjlig."
+      }
+    ],
+    "faq": [],
+    "relatedSlugs": [
+      "avgransa-forsta-systemintegration",
+      "andrat-falt-befintlig-systemintegration"
+    ],
+    "ctaHref": "/ai-karta",
+    "ctaLabel": "Öppna AI-kartan",
+    "ctaTitle": "Förbered ert arbetsflöde",
+    "ctaText": "Ta med en avgränsad beskrivning av ert arbetsflöde och de frågor som återstår.",
+    "editorial": {
+      "createdWith": "ChatGPT",
+      "aiAssisted": true,
+      "searchIntent": "Bestämma den verksamhetsmässiga betydelsen av mottagnings- och bearbetningsbesked i en integration; skilt från fältformat, datägarskap och ändringshantering.",
+      "sourceUrls": [
+        "https://auroramedia.se/ai-karta"
+      ],
+      "sourceCheckedAt": "2026-10-24T07:57:02.890182+00:00"
+    }
+  }
+}
