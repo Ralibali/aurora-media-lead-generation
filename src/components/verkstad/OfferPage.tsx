@@ -48,6 +48,8 @@ export type OfferPageProps = {
   serviceType: string;
   contactMessage?: string;
   featuredLabel?: string;
+  /** Valfritt interaktivt verktyg som visas direkt efter hero */
+  tool?: { title: string; intro: string; node: ReactNode };
 };
 
 const OfferPage = (props: OfferPageProps) => {
@@ -142,6 +144,17 @@ const OfferPage = (props: OfferPageProps) => {
             </Reveal>
           </div>
         </section>
+
+        {props.tool && (
+          <section className="vk-section" id="verktyg">
+            <div className="vk-wrap" style={{ maxWidth: 820 }}>
+              <p className="vk-mono">Gratis kontroll</p>
+              <h2 style={{ marginTop: 8 }}>{props.tool.title}</h2>
+              <p style={{ marginTop: 8 }}>{props.tool.intro}</p>
+              <div style={{ marginTop: 20 }}>{props.tool.node}</div>
+            </div>
+          </section>
+        )}
 
         <hr className="vk-hair" />
 
