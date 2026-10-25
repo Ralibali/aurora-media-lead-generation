@@ -60,3 +60,8 @@ Use the cheapest sufficient model/tool. Do not run generic audits, status chatte
 ## Safety
 
 Never place secrets, passwords, API keys or production credentials in this repository. Financial, destructive, legal, irreversible and high-risk external actions require explicit owner approval unless a narrower written policy says otherwise.
+
+## Service modules
+
+- Service-line tools (MailGuard, Merchant Rescue, AppLaunch) live as pure logic modules shared by UI, CLI and tests, mounted via `OfferPage`'s `tool` prop; why: one tested source of truth, no duplicate offer templates.
+- Network diagnostics in edge functions may only call fixed, hardcoded hosts (never user-supplied URLs); why: prevents SSRF.
