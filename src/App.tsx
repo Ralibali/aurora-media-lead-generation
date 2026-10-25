@@ -92,6 +92,9 @@ const AuroraLocal = lazy(() => import("./pages/erbjudanden/AuroraLocal"));
 const AuroraStaff = lazy(() => import("./pages/erbjudanden/AuroraStaff"));
 const AuroraVoice = lazy(() => import("./pages/erbjudanden/AuroraVoice"));
 const AuroraOps = lazy(() => import("./pages/erbjudanden/AuroraOps"));
+const AuroraMailGuard = lazy(() => import("./pages/erbjudanden/AuroraMailGuard"));
+const AuroraMerchantRescue = lazy(() => import("./pages/erbjudanden/AuroraMerchantRescue"));
+const AuroraAppLaunch = lazy(() => import("./pages/erbjudanden/AuroraAppLaunch"));
 const Tillganglighet = lazy(() => import("./pages/erbjudanden/Tillganglighet"));
 const CookieSamtycke = lazy(() => import("./pages/erbjudanden/CookieSamtycke"));
 // Verktyg-sidorna lazy-loadas: de drar med sig recharts/jspdf och ska inte
@@ -362,6 +365,21 @@ const seoMap: Record<string, SEOConfig> = {
     description:
       "Löpande WordPress-underhåll: uppdateringar, säkerhetskopior, säkerhetsövervakning, hastighet och supporttid. Fast månadspris, ingen bindningstid.",
     canonical: "https://auroramedia.se/care",
+  },
+  "/mailguard": {
+    title: "Aurora MailGuard – kontrollera SPF, DKIM och DMARC | Aurora Media",
+    description: "Gratis read-only kontroll av MX, SPF, DMARC och DKIM för er domän, med åtgärder på svenska.",
+    canonical: "https://auroramedia.se/mailguard",
+  },
+  "/merchant-rescue": {
+    title: "Aurora Merchant Rescue – migrera till Google Merchant API | Aurora Media",
+    description: "Gratis lokal granskning av Content API for Shopping-anrop med checklista för Merchant API.",
+    canonical: "https://auroramedia.se/merchant-rescue",
+  },
+  "/app-release": {
+    title: "Aurora AppLaunch – release-checklista för Capacitor-appar | Aurora Media",
+    description: "Gratis kontroll av app-ID, signering, behörigheter, target SDK och Apple 4.2-risk.",
+    canonical: "https://auroramedia.se/app-release",
   },
   "/aurora-watch": {
     title: "Aurora Watch – kundflöden och webbövervakning från 299 kr/mån | Aurora Media",
@@ -658,6 +676,9 @@ const App = () => (
               <Route path="/ai-personal" element={<AuroraStaff />} />
               <Route path="/ai-receptionist" element={<AuroraVoice />} />
               <Route path="/aurora-ops" element={<AuroraOps />} />
+              <Route path="/mailguard" element={<AuroraMailGuard />} />
+              <Route path="/merchant-rescue" element={<AuroraMerchantRescue />} />
+              <Route path="/app-release" element={<AuroraAppLaunch />} />
               <Route path="/webbyra-linkoping" element={<WebbyraLinkoping />} />
               <Route path="/webbbyra-linkoping" element={<Navigate to="/webbyra-linkoping" replace />} />
               <Route path="/blogg" element={<Blog />} />
