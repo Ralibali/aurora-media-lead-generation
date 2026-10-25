@@ -107,8 +107,8 @@ export function analyzeDkim(dkim: DnsInput['dkim']): Finding[] {
     const t = tags(rec);
     if (t.has('p') && t.get('p') === '') return { area: 'DKIM' as const, level: 'varning' as const, title: `Selektor ${s}: nyckeln är återkallad`, detail: 'p= är tom, vilket betyder att nyckeln inte ska användas.' };
     if (!t.get('p')) return { area: 'DKIM' as const, level: 'varning' as const, title: `Selektor ${s}: ogiltig post`, detail: 'Ingen publik nyckel (p=) hittades.' };
-    const bits = Math.round((t.get('p')!.replace(/\s/g, '').length * 6) / 8 * 8 / 1.0);
-    const weak = (t.get('k') ?? 'rsa').toLowerCase() === 'rsa' && bits < 1300; // ~1024-bit RSA i base64 ≈ 216 tecken
+    // RSA SPKI i base64: 1024 bitar ≈ 216 tecken, 2048 bitar ≈ 392 tecken.
+    const weak = (t.get('k') ?? 'rsa').toLowerCase() === 'rsa' && t.get('p')!.replace(/\s/g, '').length < 300;
     return weak
       ? { area: 'DKIM' as const, level: 'varning' as const, title: `Selektor ${s}: kort RSA-nyckel`, detail: 'Nyckeln ser ut att vara 1024 bitar eller kortare.', action: 'Rotera till en 2048-bitars nyckel hos e-postleverantören.' }
       : { area: 'DKIM' as const, level: 'ok' as const, title: `Selektor ${s}: publik nyckel publicerad`, detail: 'Nyckeln finns i DNS. Att e-posten faktiskt signeras verifieras först i ett skickat meddelande.' };
