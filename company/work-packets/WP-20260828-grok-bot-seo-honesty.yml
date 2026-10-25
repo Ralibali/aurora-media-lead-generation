@@ -1,0 +1,40 @@
+id: WP-20260828-grok-bot-seo-honesty
+company: Aurora Media AB
+objective: "Make first-byte /grok-bot title, Offer and schema match live waitlist reality."
+why_now: "Live auroramedia.se/grok-bot is a waitlist with gated checkout, but first-byte title/Offer still stated 199 kr and implied buy-now."
+evidence:
+  - "VERIFIED FACT: curl of https://auroramedia.se/grok-bot first-byte title was 'Guide 199 kr | Aurora Media AB' (2026-08-28)."
+  - "VERIFIED FACT: first-byte Product Offer schema included price 199 and 349 SEK with PreOrder."
+  - "VERIFIED FACT: PRODUCT_STATUS is prelaunch; checkout requires live + launch-status ready."
+  - "HYPOTHESIS: a lying price in the search snippet wastes trust."
+owner: Aurora Media CEO
+skill: site-revenue-experiment
+skill_version: "1.0"
+authority: PREPARE
+usage_level: low
+context:
+  include_only:
+    - src/config/aiKontoret.ts
+    - src/pages/GrokBot.tsx
+    - src/App.tsx
+    - scripts/generate-static-pages.mjs
+    - src/test/grok-bot-seo.test.ts
+constraints:
+  - "Existing URL /grok-bot only."
+  - "Do not open checkout."
+  - "Do not add SKUs."
+  - "Do not merge."
+  - "Candidate PR only."
+definition_of_done:
+  - "First-byte title/description/Offer/schema are waitlist-honest when PRODUCT_STATUS is prelaunch."
+  - "No checkout flip and no new SKUs."
+  - "Candidate PR opened, not merged."
+expected_artifact: "company/artifacts/experiments/EXP-20260828-grok-bot-seo-honesty.md"
+measurement:
+  baseline: "Live first-byte title and Product Offers stated 199/349 kr."
+  target: "First-byte snippet and Offer schema state waitlist, not a buyable price."
+  window: UNKNOWN
+stop_conditions:
+  - "Required authority unavailable"
+  - "Evidence invalidates the hypothesis"
+  - "Expected value no longer justifies cost"

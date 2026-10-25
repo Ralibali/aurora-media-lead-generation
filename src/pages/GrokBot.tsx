@@ -12,6 +12,9 @@ import {
   PRODUCT_VERIFIED_ISO,
   PRODUCT_FRESHNESS,
   PRICES,
+  SEO_TITLE,
+  SEO_DESC,
+  buildGrokBotOffers,
   FN_LAUNCH_STATUS,
   FN_VERIFY_SESSION,
   FN_CREATE_CHECKOUT,
@@ -38,10 +41,6 @@ import "@/styles/grokbot.css";
 
 const IS_LIVE = PRODUCT_STATUS === "live";
 const OG_IMAGE = `${SITE_URL}/og-grok-bot.jpg`;
-
-const SEO_TITLE = "AI-KONTORET – Bygg ett AI-drivet företag med Grok Bot | Guide 199 kr";
-const SEO_DESC =
-  "Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups och owner gates – ett AI-kontor som jobbar åt dig. 199 kr.";
 
 /** Bot ≠ prompt – kedjan som gör en prompt till en medarbetare. */
 const CHAIN_STEPS: { t: string; d: string }[] = [
@@ -273,24 +272,7 @@ const GrokBot = () => {
       inLanguage: "sv-SE",
       version: PRODUCT_VERSION,
       dateModified: PRODUCT_UPDATED_ISO,
-      offers: [
-        {
-          "@type": "Offer",
-          name: "AI-KONTORET – guiden",
-          price: PRICES.guide,
-          priceCurrency: "SEK",
-          url: `${SITE_URL}/grok-bot#priser`,
-          availability: IS_LIVE ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
-        },
-        {
-          "@type": "Offer",
-          name: "AI-KONTORET + Prompt Vault (lanseringspaket)",
-          price: PRICES.bundle,
-          priceCurrency: "SEK",
-          url: `${SITE_URL}/grok-bot#priser`,
-          availability: IS_LIVE ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
-        },
-      ],
+      offers: buildGrokBotOffers(PRODUCT_STATUS, SITE_URL),
     },
     {
       "@context": "https://schema.org",
