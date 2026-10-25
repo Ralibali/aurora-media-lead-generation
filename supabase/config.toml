@@ -99,3 +99,6 @@ verify_jwt = false
 
 [functions.admin-support-mailbox]
 verify_jwt = false
+
+[functions.mailguard-check]
+verify_jwt = false
