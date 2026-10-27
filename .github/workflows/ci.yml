@@ -46,6 +46,8 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+      - name: Check PriceWatch / Commerce Ops edge function
+        run: deno check supabase/functions/admin-commerce-ops/index.ts
       - name: Check Aurora Inbox edge function
         run: deno check supabase/functions/admin-managed-channels/index.ts
       - name: Check AI visibility edge function
