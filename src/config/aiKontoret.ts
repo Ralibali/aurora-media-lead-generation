@@ -45,6 +45,20 @@ export const PRODUCT_VERIFIED_ISO = "2026-08-25";
 export const PRODUCT_FRESHNESS =
   "Fakta kontrollerade mot aktuella officiella källor";
 
+// ── First-byte / snippet SEO ────────────────────────────────────────────────
+// Waitlist-läge får inte påstå ett köpbart pris. Live-läget får nämna 199 kr
+// först när PRODUCT_STATUS = "live" (kassan är ändå server-gated).
+export const SEO_TITLE_WAITLIST =
+  "AI-KONTORET – Svensk Grok Bot-guide | Väntelista";
+export const SEO_DESC_WAITLIST =
+  "Svensk guide till Grok Bot: bygg AI-medarbetare med Skills, Routines, Groups och owner gates. Väntelista – få besked när AI-KONTORET släpps.";
+export const SEO_TITLE_LIVE =
+  "AI-KONTORET – Bygg ett AI-drivet företag med Grok Bot | Guide 199 kr";
+export const SEO_DESC_LIVE =
+  "Svenska guiden till Grok Bot: bygg AI-medarbetare och digitala kollegor med Skills, Routines, Groups och owner gates – ett AI-kontor som jobbar åt dig. 199 kr.";
+export const SEO_TITLE = PRODUCT_STATUS === "live" ? SEO_TITLE_LIVE : SEO_TITLE_WAITLIST;
+export const SEO_DESC = PRODUCT_STATUS === "live" ? SEO_DESC_LIVE : SEO_DESC_WAITLIST;
+
 // ── Priser (SEK, konsumentpriser) ───────────────────────────────────────────
 // OBS: dessa värden är endast för visning. Beloppen som debiteras sätts
 // server-side i supabase/functions/_shared/aiKontoret.ts (CATALOG).
@@ -55,6 +69,51 @@ export const PRICES = {
   /** guide + vault köpta separat – används för ärlig bundle-matte (199+199=398) */
   bundleReference: 398,
 } as const;
+
+export type GrokBotOfferJsonLd = {
+  "@type": "Offer";
+  name: string;
+  url: string;
+  availability: string;
+  price?: string;
+  priceCurrency?: string;
+};
+
+/** Priced Offers only when the page is actually selling. Waitlist: no price. */
+export function buildGrokBotOffers(
+  status: "prelaunch" | "live" = PRODUCT_STATUS,
+  siteUrl = "https://auroramedia.se",
+): GrokBotOfferJsonLd[] {
+  if (status !== "live") {
+    return [
+      {
+        "@type": "Offer",
+        name: "Väntelista – lanseringsbesked",
+        url: `${siteUrl}/grok-bot#kop`,
+        availability: "https://schema.org/PreOrder",
+      },
+    ];
+  }
+  const availability = "https://schema.org/InStock";
+  return [
+    {
+      "@type": "Offer",
+      name: "AI-KONTORET – guiden",
+      price: String(PRICES.guide),
+      priceCurrency: "SEK",
+      url: `${siteUrl}/grok-bot#priser`,
+      availability,
+    },
+    {
+      "@type": "Offer",
+      name: "AI-KONTORET + Prompt Vault (lanseringspaket)",
+      price: String(PRICES.bundle),
+      priceCurrency: "SEK",
+      url: `${siteUrl}/grok-bot#priser`,
+      availability,
+    },
+  ];
+}
 
 export type AiKontoretProduct = "guide" | "vault" | "bundle";
 
