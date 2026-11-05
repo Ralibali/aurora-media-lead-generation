@@ -1,0 +1,49 @@
+id: WP-20260825-001
+company: Aurora Media AB
+objective: first qualified åkeri batch
+why_now: "Inbound CRM snapshot 2026-08-25 has no closable pipeline (3 internal contact tests, 9 self/demo AI-karta, 0 genomlysning). Firecrawl glamping/Östergötland rows are blogs. New qualified outbound is the next revenue-growth priority after close-existing-pipeline."
+evidence:
+  - "Lovable DB 2026-08-25 snapshot recorded in company/artifacts/prospects/2026-08-25-inbound-audit.md"
+  - "Public-site qualification of 8 keepers recorded in company/artifacts/prospects/2026-08-25-akeri-batch-1.md"
+  - "Rejects: Kungsbud/Opter, Alvinx, EA Åkeri/Tempcon, Alltransport, T. Malméns, Hisings-Backa, Dannes, entreprenad åkerier, Firecrawl glamping blogs"
+  - "company/workflows/revenue-growth.yml priority: close_qualified_pipeline then create_new_qualified_pipeline"
+owner: Aurora Media Growth & Sales
+skill: b2b-prospect-qualification
+skill_version: "1.0"
+authority: PREPARE
+usage_level: low
+context:
+  include_only:
+    - company/company.yml
+    - company/workflows/revenue-growth.yml
+    - company/skill-registry.yml
+    - company/artifacts/prospects/2026-08-25-akeri-batch-1.md
+    - company/artifacts/prospects/2026-08-25-inbound-audit.md
+    - company/artifacts/prospects/2026-08-25-top3-drafts.md
+    - company/artifacts/prospects/2026-08-25-learning.md
+    - docs/ai-automation-erbjudande.md
+constraints:
+  - "PREPARE only — do not send, publish, or spend"
+  - "Do not change product code, UI, or pricing"
+  - "Do not invent contact emails (JS Åkeri is form/phone only)"
+  - "Do not treat CRM row counts as pipeline"
+  - "Opter/Colix/Transiro or already-digital operators are rejects"
+definition_of_done:
+  - "Durable prospect artifacts exist under company/artifacts/prospects/"
+  - "Eight keeper cards with COMPANY, OBSERVED SIGNAL, WHY FIT, LIKELY PROBLEM (INFERENCE), RELEVANT OFFER, CONTACT ROUTE, EVIDENCE URLs, CONFIDENCE"
+  - "Rejects, unknowns, and next-3 are recorded"
+  - "Inbound audit written from the 2026-08-25 Lovable snapshot"
+  - "Three outreach drafts exist, default ask 20 min AI-genomlysning, From Hej <hej@auroramedia.se>, marked DO NOT SEND"
+  - "Learning note recorded"
+  - "This work packet exists from TEMPLATE.yml"
+  - "Files are on a branch/PR — no product/UI change, no secrets"
+expected_artifact: "company/artifacts/prospects/2026-08-25-akeri-batch-1.md"
+measurement:
+  baseline: "0 qualified external åkeri opportunities in the 2026-08-25 CRM snapshot"
+  target: "8 documented keepers + 3 PREPARE drafts ready for an owner EMIT decision"
+  window: "this PREPARE packet only; send conversion is out of scope until EMIT"
+stop_conditions:
+  - "Required authority unavailable"
+  - "Evidence invalidates the hypothesis"
+  - "Expected value no longer justifies cost"
+  - "EMIT requested without owner gate — stop and do not send"
