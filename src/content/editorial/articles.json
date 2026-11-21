@@ -48,7 +48,8 @@
       "testfall-infor-systemintegration"
     ],
     "ctaTitle": "Beskriv ert flöde",
-    "ctaText": "Ta med exemplen och de obesvarade frågorna till kartläggningen."
+    "ctaText": "Ta med exemplen och de obesvarade frågorna till kartläggningen.",
+    "faq": []
   },
   {
     "slug": "mottagningsbesked-systemintegration",
