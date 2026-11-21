@@ -1,0 +1,132 @@
+/* AURORA.md theme for every verkstad / nordic page.
+   Loaded after verkstad.css; uses `.verkstad .aur` for nordic tokens so it
+   outranks the <style> block NordicLayout injects at runtime. */
+
+.verkstad {
+  --bjork: #f3eadb;
+  --bjork-djup: #eadcc4;
+  --granbark: #1d1b1c;
+  --granbark-mut: #57514a;
+  --gran: #1f45e0;
+  --gran-soft: #dfe5fb;
+  --varsel: #1d1b1c;
+  --varsel-hover: #1f45e0;
+  --linje: #d9c9ad;
+  --film-hot: #ff4d17;
+  --film-hot-text: #b8340a;
+  --film-pink: #f6b3d0;
+  --film-cobalt: #1f45e0;
+  --film-cream: #f3eadb;
+  --film-floor: #e6d6bd;
+  --film-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+}
+.verkstad::before { opacity: .06; }
+
+.verkstad .aur {
+  --ink: #f3eadb;
+  --ink-2: #eadcc4;
+  --ink-soft: #eadcc4;
+  --bone: #1d1b1c;
+  --bone-soft: rgba(29,27,28,.8);
+  --bone-mute: rgba(29,27,28,.6);
+  --bone-faint: rgba(29,27,28,.22);
+  --hair: rgba(29,27,28,.16);
+  --moss: #1f45e0;
+  --moss-soft: #ff4d17;
+  background: var(--ink);
+}
+
+/* ── type: big tight grotesk, serif accents like ".md" ───── */
+.verkstad h1 { font-weight: 800; letter-spacing: -.045em; line-height: .98; }
+.verkstad h2 { font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+.verkstad h3 { letter-spacing: -.025em; }
+.verkstad .vk-mono { color: var(--film-hot-text); text-transform: lowercase; letter-spacing: .04em; }
+.verkstad .vk-hero h1 .accent,
+.verkstad .aur .hero-line .it,
+.verkstad .aur .h2 .it { font-family: var(--film-serif); font-style: normal !important; font-weight: 400; letter-spacing: -.03em; }
+.verkstad .aur .hero-line { font-family: var(--font-display); font-weight: 800; letter-spacing: -.045em; line-height: .98; }
+.verkstad .aur .h2 { font-family: var(--font-display); font-weight: 800; letter-spacing: -.04em; line-height: 1; }
+.verkstad .aur .h3 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.02em; }
+.verkstad .aur .mono { color: var(--film-hot-text); }
+
+/* ── buttons: ink pills that tilt, like cut-outs ────────── */
+.verkstad .vk-btn { border-radius: 999px; font-weight: 600; }
+.verkstad .vk-btn-primary { background: var(--granbark); color: var(--film-cream); }
+.verkstad .vk-btn-primary::after { background: var(--film-cobalt); }
+.verkstad .vk-btn:hover { transform: translateY(-2px) rotate(-1deg); }
+.verkstad .vk-btn-ghost { border-width: 2px; }
+.verkstad .aur .btn { font-family: var(--font-display); font-size: 14px; letter-spacing: 0; font-weight: 600; padding: 13px 20px 13px 22px; }
+.verkstad .aur .btn-moss { background: var(--bone); color: var(--ink); }
+.verkstad .aur .btn-moss:hover { background: var(--film-cobalt); color: var(--film-cream); transform: rotate(-1deg); }
+.verkstad .aur .btn-ghost { border: 2px solid var(--bone); }
+.verkstad a.text-link, .verkstad .aur a.text-link { color: var(--bone, var(--granbark)); border-bottom: 2px solid var(--film-hot); }
+
+/* ── page heroes become the cobalt wall with a sand floor ─ */
+.verkstad .vk-hero,
+.verkstad .vk-tool-hero,
+.verkstad .aur .page-hero {
+  position: relative; isolation: isolate;
+  background: var(--film-cobalt);
+  padding-bottom: calc(clamp(56px, 8vw, 104px) + 56px);
+}
+.verkstad .vk-hero::after,
+.verkstad .vk-tool-hero::after,
+.verkstad .aur .page-hero::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 56px; z-index: -1;
+  background: var(--film-floor);
+}
+.verkstad .aur .page-hero::before { background: none; }
+.verkstad .vk-hero h1, .verkstad .vk-tool-hero h1, .verkstad .vk-tool-hero p:not(.vk-mono),
+.verkstad .vk-hero .vk-hero-sub, .verkstad .vk-tool-hero > .vk-wrap > p,
+.verkstad .vk-hero .vk-hero-micro, .verkstad .vk-hero > .vk-wrap > p,
+.verkstad .vk-hero > .vk-wrap > div > p:not([class*="card"]),
+.verkstad .aur .page-hero .hero-line, .verkstad .aur .page-hero .lead, .verkstad .aur .page-hero .body,
+.verkstad .aur .page-hero > .wrap > p, .verkstad .aur .page-hero > .wrap > div > p {
+  color: var(--film-cream);
+}
+.verkstad .vk-hero .vk-mono, .verkstad .vk-tool-hero .vk-mono, .verkstad .aur .page-hero .mono { color: var(--film-pink); }
+.verkstad .vk-hero .vk-mono::before, .verkstad .vk-tool-hero .vk-mono::before, .verkstad .aur .page-hero .mono::before { content: "### "; opacity: .6; }
+.verkstad .vk-hero h1 .accent, .verkstad .aur .page-hero .hero-line .it { color: var(--film-pink); }
+.verkstad .vk-hero .vk-btn-primary, .verkstad .vk-tool-hero .vk-btn-primary, .verkstad .aur .page-hero .btn-moss { background: var(--film-hot); color: var(--granbark); }
+.verkstad .vk-hero .vk-btn-primary::after { background: var(--film-pink); }
+.verkstad .vk-hero .vk-btn-ghost, .verkstad .vk-tool-hero .vk-btn-ghost, .verkstad .aur .page-hero .btn-ghost { color: var(--film-cream); border-color: var(--film-cream); }
+.verkstad .vk-hero .vk-btn-ghost:hover, .verkstad .aur .page-hero .btn-ghost:hover { background: var(--film-cream); color: var(--granbark); }
+.verkstad .vk-hero a:not(.vk-btn):not([class*="card"]), .verkstad .aur .page-hero a.text-link { color: var(--film-cream); }
+
+/* ── the sticky film header replaces the old nav offsets ── */
+.verkstad .aur { --nav-h: 0px; }
+
+/* ── inline-styled tjänster heroes (style={{...}} needs !important) ── */
+.verkstad .fc-inline-hero {
+  position: relative; isolation: isolate; max-width: none !important;
+  background: var(--film-cobalt);
+  box-shadow: 0 0 0 100vmax var(--film-cobalt); clip-path: inset(0 -100vmax);
+  padding-top: clamp(64px, 8vw, 104px) !important;
+  padding-bottom: calc(clamp(56px, 8vw, 96px) + 56px) !important;
+  margin-bottom: 48px;
+}
+.verkstad .fc-inline-hero::after { content: ""; position: absolute; left: -100vmax; right: -100vmax; bottom: 0; height: 56px; background: var(--film-floor); z-index: -1; }
+.verkstad .fc-inline-hero h1 { color: var(--film-cream) !important; }
+.verkstad .fc-inline-hero h1 em { color: var(--film-pink) !important; font-family: var(--film-serif) !important; font-style: normal !important; font-weight: 400 !important; }
+.verkstad .fc-inline-hero p { color: var(--film-cream) !important; }
+.verkstad .fc-inline-hero > p:first-child { color: var(--film-pink) !important; font-family: var(--font-mono) !important; font-size: 13px !important; letter-spacing: .04em !important; text-transform: lowercase !important; }
+.verkstad .fc-inline-hero > p:first-child::before { content: "### "; opacity: .6; }
+.verkstad .fc-inline-hero .btn-primary { background: var(--film-hot) !important; color: var(--granbark) !important; border-radius: 999px !important; border: 0 !important; }
+.verkstad .fc-inline-hero .btn-ghost { color: var(--film-cream) !important; border: 2px solid var(--film-cream) !important; background: transparent !important; border-radius: 999px !important; }
+/* their body copy used Fraunces/Inter/JetBrains inline; map to the film type system */
+.verkstad main [style*="Fraunces"] { font-family: var(--font-sans) !important; font-weight: 800 !important; letter-spacing: -.04em !important; }
+.verkstad main [style*="Fraunces"] em { font-family: var(--film-serif) !important; font-weight: 400 !important; font-style: normal !important; }
+.verkstad main [style*="'Inter'"] { font-family: var(--font-sans) !important; }
+.verkstad main [style*="JetBrains"] { font-family: var(--font-mono) !important; }
+.verkstad .btn-primary { border-radius: 999px; background: var(--granbark); color: var(--film-cream); }
+.verkstad .btn-primary:hover { background: var(--film-cobalt); color: var(--film-cream); }
+.verkstad .btn-ghost { border-radius: 999px; }
+
+/* ── AI-kartan accents ─────────────────────────────────── */
+.verkstad .aik-h1 em { color: var(--film-cobalt); font-family: var(--film-serif); font-weight: 400; }
+.verkstad .aik-cta-primary { background: var(--granbark) !important; color: var(--film-cream) !important; border-radius: 999px; }
+.verkstad .aik-cta-primary:hover { background: var(--film-cobalt) !important; }
+
+/* inline styles in hero copy read these tokens */
+.verkstad .vk-tool-hero { --granbark-mut: rgba(243,234,219,.86); --gran: var(--film-pink); }
+.verkstad .vk-tool-hero h1 .accent { font-family: var(--film-serif); font-weight: 400; letter-spacing: -.03em; }

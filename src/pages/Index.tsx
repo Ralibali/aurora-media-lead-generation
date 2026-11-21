@@ -1,12 +1,12 @@
-import { CSSProperties, ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, Check, Layers3, MessageSquare, Workflow, X } from "lucide-react";
+import { CSSProperties, ReactNode, useCallback, useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { ArrowRight, ArrowUpRight, Check, Layers3, MessageSquare, Workflow } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useContactModal } from "@/components/ContactModal";
 import { trackEvent } from "@/lib/analytics";
 import { PACKAGES } from "@/data/offers";
-import { VkFooter } from "@/components/verkstad/VerkstadLayout";
-import { Binders, Clock, Envelope, Gear, Hammer, Key, Lightbulb, Paper, PhoneStool, Plug, Ruler, Stamp, SunMark, TinRobot } from "@/components/film/FilmProps";
+import { FILM_INDEX, FilmFooter, FilmHeader, type FilmChapterId } from "@/components/film/FilmChrome";
+import { Binders, Clock, Envelope, Gear, Hammer, Key, Lightbulb, Paper, PhoneStool, Plug, Ruler, Stamp, TinRobot } from "@/components/film/FilmProps";
 import "@/styles/verkstad.css";
 import "@/styles/aurora-film.css";
 
@@ -19,8 +19,7 @@ import "@/styles/aurora-film.css";
 
 type Prop = { el: ReactNode; style: CSSProperties; depth?: number; spin?: number };
 type Chapter = {
-  id: string;
-  title: string;
+  id: FilmChapterId;
   bg: string;
   ink: string;
   floor?: string;
@@ -35,7 +34,7 @@ const HERO = { bg: "#1f45e0", ink: "#f6efe2", floor: "#e6d6bd" };
 
 const CHAPTERS: Chapter[] = [
   {
-    id: "flytta-data", title: "sluta flytta data för hand", bg: "#f3a6c8", ink: "#1d1b1c", floor: "#1f45e0",
+    id: "flytta-data", bg: "#f3a6c8", ink: "#1d1b1c", floor: "#1f45e0",
     lines: ["Varje gång någon kopierar", "från ett mejl", "till ett kalkylblad", "försvinner en bit av eftermiddagen."],
     notes: ["förfrågan som ligger kvar i inkorgen", "samma uppgift i tre system", "kalkylbladet som bara en person förstår", "fakturaunderlag som pusslas ihop på fredag"],
     link: { to: "/ai-automation-foretag", label: "Automation & integrationer" },
@@ -47,7 +46,7 @@ const CHAPTERS: Chapter[] = [
     ],
   },
   {
-    id: "mest-tid", title: "börja med det som stjäl mest tid", bg: "#ff4d17", ink: "#1d1b1c", disc: "#f3eadb",
+    id: "mest-tid", bg: "#ff4d17", ink: "#1d1b1c", disc: "#f3eadb",
     lines: ["Inte det roligaste.", "Inte det mest AI-iga.", "Det som stjäl flest timmar", "varje vecka."],
     notes: ["en process", "ett arbetsflöde", "ett avgränsat första test"],
     link: { to: "/ai-karta/start", label: "Gör gratis AI-kartan" },
@@ -57,7 +56,7 @@ const CHAPTERS: Chapter[] = [
     ],
   },
   {
-    id: "minsta", title: "bygg det minsta som fungerar", bg: "#c7a6f5", ink: "#1d1b1c", floor: "#2f5d3a",
+    id: "minsta", bg: "#c7a6f5", ink: "#1d1b1c", floor: "#2f5d3a",
     lines: ["Prototyp först.", "Riktiga användare sen.", "Hela systemet sist."],
     notes: ["avgränsad prototyp från 4 900 kr exkl. moms", "innehåll och pris i offerten före start"],
     link: { to: "/priser", label: "Se priser & upplägg" },
@@ -67,7 +66,7 @@ const CHAPTERS: Chapter[] = [
     ],
   },
   {
-    id: "ai-nytta", title: "ai där den gör nytta. inte överallt.", bg: "#2f5d3a", ink: "#f3eadb", disc: "#f6c945",
+    id: "ai-nytta", bg: "#2f5d3a", ink: "#f3eadb", disc: "#f6c945",
     lines: ["Ibland räcker ett formulär.", "Ibland en integration.", "Ibland är AI exakt rätt.", "Vi väljer efter uppgiften – inte efter hypen."],
     props: [
       { el: <Gear />, style: { left: "40%", top: "10%", width: "min(20vw, 180px)" }, depth: 30, spin: 220 },
@@ -76,7 +75,7 @@ const CHAPTERS: Chapter[] = [
     ],
   },
   {
-    id: "manniskan", title: "människan godkänner", bg: "#f6c945", ink: "#1d1b1c", floor: "#ff4d17",
+    id: "manniskan", bg: "#f6c945", ink: "#1d1b1c", floor: "#ff4d17",
     lines: ["Automationen förbereder.", "Systemet påminner.", "Du bestämmer."],
     notes: ["förfrågan kommer in", "underlaget samlas", "du granskar och godkänner"],
     props: [
@@ -86,14 +85,14 @@ const CHAPTERS: Chapter[] = [
     ],
   },
   {
-    id: "ni-ager", title: "ni äger det vi bygger", bg: "#1d1b1c", ink: "#f3eadb",
+    id: "ni-ager", bg: "#1d1b1c", ink: "#f3eadb",
     lines: ["Kod. Dokumentation. Överlämning.", "Bestämt i offerten, före start.", "Inga svarta lådor."],
     props: [
       { el: <Key />, style: { left: "24%", top: "38%", width: "min(32vw, 300px)" }, depth: 50, spin: -24 },
     ],
   },
   {
-    id: "mat", title: "mät i timmar, inte i funktioner", bg: "#7cc29a", ink: "#1d1b1c", floor: "#e5392b",
+    id: "mat", bg: "#7cc29a", ink: "#1d1b1c", floor: "#e5392b",
     lines: ["Fler funktioner är inte målet.", "Färre manuella moment är det.", "Vi bestämmer vad vi mäter", "innan vi bygger."],
     props: [
       { el: <Ruler />, style: { left: "12%", top: "18%", width: "min(34vw, 320px)" }, depth: 40, spin: -14 },
@@ -101,7 +100,7 @@ const CHAPTERS: Chapter[] = [
     ],
   },
   {
-    id: "byggare", title: "byggare, inte rådgivare", bg: HERO.bg, ink: HERO.ink, floor: HERO.floor,
+    id: "byggare", bg: HERO.bg, ink: HERO.ink, floor: HERO.floor,
     lines: ["Vi driver egna verksamheter.", "Vi bygger egna produkter.", "Därför vet vi hur det känns", "när systemet ska fungera en vanlig tisdag."],
     notes: ["Stayboost · Bergs Slussar Glamping", "Aurora Transport · körorder till faktura"],
     link: { to: "/arbete", label: "Se våra projekt" },
@@ -126,8 +125,7 @@ const FAQS = [
   { q: "Äger vi koden och vad händer efter lansering?", a: "Ni får projektets kod och dokumentation enligt offerten. Vi kommer överens om drift, support, behörigheter och överlämning före start. Externa tjänster har sina egna licenser och avgifter." },
 ];
 
-const SITE_LINKS: [string, string][] = [["/tjanster", "Tjänster"], ["/priser", "Priser & upplägg"], ["/arbete", "Våra projekt"], ["/ai-karta", "Gratis AI-karta"], ["/verktyg", "Gratis verktyg"], ["/blogg", "Guider & insikter"], ["/portal", "Kundportal"], ["/om", "Om Aurora"], ["/kontakt", "Kontakt"]];
-
+const titleOf = (id: string) => FILM_INDEX.find(c => c.id === id)?.title ?? id;
 const steps = (c: Chapter) => c.lines.length + (c.notes?.length ?? 0) + (c.link ? 1 : 0);
 const vars = (v: Record<string, string | number | undefined>) => v as CSSProperties;
 
@@ -169,7 +167,7 @@ function ChapterScene({ c, index }: { c: Chapter; index: number }) {
           {c.floor && <div className="af-floor" />}
           <div className="af-props">{c.disc && <div className="af-disc" />}<Props props={c.props} /></div>
           <div className="af-copy">
-            <h2 id={`${c.id}-h`} className="af-kicker"><span aria-hidden="true">### </span>{index + 1}. {c.title}</h2>
+            <h2 id={`${c.id}-h`} className="af-kicker"><span aria-hidden="true">### </span>{index + 1}. {titleOf(c.id)}</h2>
             <p className="af-lines">{c.lines.map((l, i) => <span key={l} className="af-line" style={vars({ "--i": i })}>{l} </span>)}</p>
             {c.notes && <ul className="af-notes">{c.notes.map((note, j) => <li key={note} className="af-line" style={vars({ "--i": c.lines.length + j })}><span aria-hidden="true">- </span>{note}</li>)}</ul>}
             {c.link && <Link to={c.link.to} className="af-line af-chip" style={vars({ "--i": n - 1 })} onClick={() => trackEvent("home_film_link_click", { chapter: c.id })}>{c.link.label}<ArrowUpRight size={16} /></Link>}
@@ -183,10 +181,7 @@ function ChapterScene({ c, index }: { c: Chapter; index: number }) {
 export default function Index() {
   const { open } = useContactModal();
   const [active, setActive] = useState(-2);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeCase, setActiveCase] = useState(0);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const selected = USE_CASES[activeCase];
   useFilm(useCallback((i: number) => setActive(i), []));
 
@@ -194,24 +189,19 @@ export default function Index() {
     trackEvent("home_contact_click", { source });
     open({ internalNote: note || `Förfrågan från startsidan: ${source}` });
   };
-  const closeMenu = useCallback(() => { setMenuOpen(false); menuButtonRef.current?.focus(); }, []);
-  useEffect(() => {
-    if (!menuOpen) return;
-    menuRef.current?.querySelector<HTMLElement>("a,button")?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeMenu(); };
-    document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [menuOpen, closeMenu]);
-
-  const jump = (id: string) => {
-    setMenuOpen(false);
+  const jump = useCallback((id: string, instant = false) => {
     const el = document.getElementById(id);
     if (!el) return;
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const offset = el.dataset.film && !reduce ? window.innerHeight * 0.9 : 0;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + offset, behavior: reduce ? "auto" : "smooth" });
-  };
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + offset, behavior: reduce || instant ? "auto" : "smooth" });
+  }, []);
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (!hash) return;
+    const t = window.setTimeout(() => jump(decodeURIComponent(hash.slice(1)), true), 60);
+    return () => window.clearTimeout(t);
+  }, [hash, jump]);
 
   const chapter = active >= 1 ? CHAPTERS[active - 1] : null;
   const headerInk = active === -1 ? "#1d1b1c" : chapter ? chapter.ink : HERO.ink;
@@ -219,32 +209,8 @@ export default function Index() {
   return <>
     <SEO title="AI-system och automation för företag | Aurora Media" description="Mindre manuellt arbete. Mer tid för affären. Aurora Media i Linköping bygger AI-lösningar, integrationer och interna system. Börja med ett kostnadsfritt samtal." canonical="/" jsonLd={{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: FAQS.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }} />
     <div className="af">
-      <a href="#main" className="af-skip">Hoppa till innehåll</a>
-      <header className={`af-header${active === -1 ? " is-solid" : ""}`} style={vars({ "--hdr": headerInk })}>
-        <Link to="/" className="af-brand" aria-label="Aurora Media – startsidan"><SunMark className="af-mark" /><span>AURORA.md</span><i aria-hidden="true" /></Link>
-        <p className="af-now" aria-hidden="true">{chapter ? <><span>###</span> {active}. {chapter.title}</> : null}</p>
-        <div className="af-actions">
-          <button type="button" className="af-cta" onClick={() => contact("film_header")}>Boka samtal</button>
-          <button ref={menuButtonRef} type="button" className="af-index" aria-expanded={menuOpen} aria-controls="af-menu" onClick={() => setMenuOpen(true)}>index <span aria-hidden="true" className="af-burger" /></button>
-        </div>
-      </header>
-
-      {menuOpen && <div id="af-menu" ref={menuRef} className="af-menu" role="dialog" aria-modal="true" aria-label="Index">
-        <button type="button" className="af-menu-close" onClick={closeMenu} aria-label="Stäng index"><X size={22} /></button>
-        <div className="af-menu-grid">
-          <nav aria-label="Kapitel">
-            <p className="af-mono">## manifestet</p>
-            <ol>{CHAPTERS.map((c, i) => <li key={c.id}><button type="button" onClick={() => jump(c.id)}><span>###</span> {i + 1}. {c.title}</button></li>)}
-              <li><button type="button" onClick={() => jump("kom-igang")}><span>##</span> så kommer ni igång</button></li></ol>
-          </nav>
-          <nav aria-label="Huvudmeny">
-            <p className="af-mono">## aurora media</p>
-            <ul>{SITE_LINKS.map(([href, label]) => <li key={href}><Link to={href}>{label}<ArrowUpRight size={16} /></Link></li>)}</ul>
-            <button type="button" className="af-btn" onClick={() => { setMenuOpen(false); contact("film_menu"); }}>Boka ett kostnadsfritt samtal <ArrowRight size={17} /></button>
-            <a className="af-mono af-mail" href="mailto:info@auroramedia.se">info@auroramedia.se</a>
-          </nav>
-        </div>
-      </div>}
+      <FilmHeader variant="film" ink={headerInk} solid={active === -1} onJump={jump}
+        now={chapter ? <><span>###</span> {active}. {titleOf(chapter.id)}</> : null} />
 
       <main id="main">
         <section className="af-hero" data-film="0" aria-labelledby="af-title" style={vars({ "--bg": HERO.bg, "--ink": HERO.ink, "--floor": HERO.floor })}>
@@ -331,7 +297,7 @@ export default function Index() {
           </div>
         </section>
       </main>
-      <div className="verkstad"><VkFooter /></div>
+      <FilmFooter cta={false} />
     </div>
   </>;
 }

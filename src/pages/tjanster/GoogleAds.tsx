@@ -73,19 +73,12 @@ const GoogleAds = () => {
 
   return (
     <div className="verkstad" style={{ minHeight: "100vh" }}>
-      <a
-        href="#main"
-        className="skip-link"
-        style={{ position: "absolute", left: -9999, top: "auto", width: 1, height: 1, overflow: "hidden" }}
-      >
-        Hoppa till innehåll
-      </a>
       <SiteHeader />
       <main id="main">
 
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section
-          className="wrap"
+          className="wrap fc-inline-hero"
           style={{
             paddingTop: "clamp(120px,14vw,160px)",
             paddingBottom: "clamp(64px,8vw,96px)",

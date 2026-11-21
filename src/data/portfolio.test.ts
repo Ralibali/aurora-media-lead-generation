@@ -87,7 +87,7 @@ describe("bergs-slussar-stayboost dependents", () => {
     expect(landingCases).not.toContain("/arbete/goglamping-sweden");
 
     const footer = readFileSync(
-      resolve(__dirname, "../components/verkstad/VerkstadLayout.tsx"),
+      resolve(__dirname, "../components/film/FilmChrome.tsx"),
       "utf8",
     );
     expect(footer).toContain('to="/arbete/bergs-slussar-stayboost">Bergs Slussar Glamping<');
