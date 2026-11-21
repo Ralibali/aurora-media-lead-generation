@@ -1,0 +1,55 @@
+{
+  "slug": "stam-av-poster-efter-systemintegration",
+  "title": "Stäm av posterna efter en systemöverföring",
+  "intro": "En grön överföringsstatus säger inte alltid vilka uppgifter som finns på andra sidan. Gör en avgränsad avstämning med samma urval och tydliga referenser innan verksamheten godkänner resultatet. Texten är skriven med AI-stöd av ChatGPT.",
+  "sections": [
+    {
+      "heading": "Bestäm exakt vilket urval ni jämför",
+      "content": "Skriv vilket flöde och vilken period kontrollen gäller. Ange tidszon, datumgränser och vilka statusar som ska räknas med. Fråga om urvalet bygger på när posten skapades, ändrades eller skickades. Två listor kan visa olika antal för att de använder olika avgränsningar.\n\nSpara inställningarna tillsammans med resultatet. Ta inte bort poster ur en lista bara för att få totalsummorna att stämma. Markera i stället vilka som ligger utanför det överenskomna urvalet och varför."
+    },
+    {
+      "heading": "Jämför referenser, inte bara totalsumman",
+      "content": "Två listor med samma antal kan innehålla olika poster. Be systemansvarig förklara vilken referens som gör det möjligt att koppla ihop en post i källan med motsvarande post hos mottagaren. Gör sedan en lista över matchade, saknade och oväntade referenser.\n\nBestäm först om en post förväntas bli en eller flera poster i nästa system. Om flera rader ska slås ihop behöver jämförelsen följa den regeln. Ett enkelt räkneprov räcker inte när överföringen också förändrar strukturen."
+    },
+    {
+      "heading": "Skilj väntande arbete från verkliga avvikelser",
+      "content": "Kontrollera vilket besked varje system visar. En mottagen överföring kan fortfarande vänta på bearbetning. Skriv tidpunkten för kontrollen och fråga när det är meningsfullt att kontrollera igen. Kalla inte en post för förlorad enbart för att den ännu inte syns i slutvyn.\n\nUndvik att skicka om hela urvalet för att lösa en oklar skillnad. Ta först reda på vad som redan har behandlats och hur återförsök fungerar för den aktuella integrationen. Använd guiden om återförsök bland de relaterade artiklarna som underlag för frågorna."
+    },
+    {
+      "heading": "Ge varje skillnad ett nästa steg",
+      "content": "En avstämningsrad kan innehålla referens, förväntat resultat, observerat resultat, tidpunkt och ansvarig för nästa kontroll. Skriv vilket underlag som behövs för att avsluta frågan. En tom kommentar är inte samma sak som att avvikelsen är löst.\n\nSamla ett anonymiserat exempel innan ni diskuterar förbättringar med en leverantör. [AI-kartan](/ai-karta) kan vara en start för att beskriva arbetsflödet. Den här mallen kräver ingen särskild avstämningsfunktion och lovar inte att ett visst system kan exportera de uppgifter ni behöver."
+    }
+  ],
+  "ctaHref": "/ai-karta",
+  "ctaLabel": "Öppna AI-kartan",
+  "editorial": {
+    "createdWith": "ChatGPT",
+    "aiAssisted": true,
+    "searchIntent": "Kontrollera om rätt poster har överförts inom en bestämd period; skilt från regler för återförsök, fältformat och mottagningsbesked.",
+    "sourceUrls": [
+      "https://auroramedia.se/ai-karta"
+    ],
+    "sourceCheckedAt": null
+  },
+  "status": "draft",
+  "written_at": "2026-11-21T13:52:08.517352+00:00",
+  "metaTitle": "Stäm av posterna efter en systemöverföring",
+  "metaDesc": "En arbetsmall för avstämning efter systemöverföring: jämför samma urval, kontrollera referenser och utred skillnader innan ni godkänner resultatet.",
+  "category": "AI & automation",
+  "readMinutes": 3,
+  "keyword": "avstämning systemintegration",
+  "relatedSlugs": [
+    "mottagningsbesked-systemintegration",
+    "samma-uppgift-skickas-igen-integration"
+  ],
+  "ctaTitle": "Beskriv ert flöde",
+  "ctaText": "Ta med exemplen och de obesvarade frågorna till kartläggningen.",
+  "faq": [],
+  "publication_gate": {
+    "earliest_date": "2026-11-23",
+    "timezone": "Europe/Stockholm",
+    "requires_fresh_inventory_source_product_and_live_checks": true,
+    "note": "Utkast utan publiceringsdatum. Kontrollera verklig senaste publicering före användning."
+  },
+  "review_notes": "Originalutkast av ChatGPT. Källor och produktväg måste läsas på nytt före publicering; inga externa sakpåståenden eller produktfunktioner ska anses godkända genom detta köutkast."
+}
